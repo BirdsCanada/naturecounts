@@ -1,3 +1,10 @@
+
+parse_results <- function(r, type = "results") {
+  if(type == "results") r <- r$results
+  structure(r, class = "data.frame", row.names = seq(along = r[[1]]))
+}
+
+
 #' Pipe operator
 #'
 #' See \code{magrittr::\link[magrittr]{\%>\%}} for details.
