@@ -59,7 +59,7 @@ nc_data_dl <- function(collections, species = NULL,
       f <- list(collection = records$collection[c],
                 startyear = startyear, endyear = endyear,
                 country = country, statprov = statprov,
-                beginRecord = nmax + 1, numRecords = n)
+                startRecord = nmax + 1, numRecords = n)
 
       d <- srv_query("data", table = "get_data",
                      query = list(token = pass_token(token)),
