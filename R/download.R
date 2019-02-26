@@ -17,6 +17,7 @@
 #' @param sql_db Character vector. Name and location of SQLite database to
 #'   either create or add to.
 #' @param format Logical. Format downloaded data?
+#' @param verbose Logical. Display progress messages?
 #'
 #' @return Data frame
 #'
@@ -35,7 +36,7 @@
 nc_data_dl <- function(collections, species = NULL,
                        startyear = NULL, endyear = NULL,
                        location = NULL, country = NULL, statprov = NULL,
-                       token, sql_db = NULL, format = TRUE) {
+                       token, sql_db = NULL, format = TRUE, verbose = TRUE) {
 
   if(missing(collections)) stop("You must specify collections from which to ",
                                 "download the data.", call. = FALSE)
@@ -43,7 +44,7 @@ nc_data_dl <- function(collections, species = NULL,
   if(missing(token)) stop("An authorization token is required to download data.",
                           call. = FALSE)
 
-  message("Collecting available records...")
+  if(verbose) message("Collecting available records...")
   records <- nc_count(collections = collections, country = country,
                       statprov = statprov, startyear = startyear,
                       endyear = endyear, token = token)
@@ -57,9 +58,9 @@ nc_data_dl <- function(collections, species = NULL,
 
   n <- 5000   # max number of records to parse
 
-  message("Downloading records for each collection:")
+  if(verbose) message("Downloading records for each collection:")
   for(c in 1:nrow(records)) {
-    message("  ", records$collection[c])
+    if(verbose) message("  ", records$collection[c])
     d <- data.frame()
     nmax <- 0
     repeat {
@@ -68,6 +69,7 @@ nc_data_dl <- function(collections, species = NULL,
                 country = country, statprov = statprov,
                 beginRecord = nmax, numRecords = n)
 
+      if(verbose) message("    Records ", nmax)
       d1 <- srv_query("data", table = "get_data",
                       query = list(token = pass_token(token)),
                       filter = f) %>%
@@ -88,7 +90,7 @@ nc_data_dl <- function(collections, species = NULL,
 
     # No data for this collection
     if(nrow(d) == 0) {
-      message("    No data for ", records$collection[c],
+      if(verbose) message("    No data for ", records$collection[c],
                           " with these filters")
     }
 

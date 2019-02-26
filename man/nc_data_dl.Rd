@@ -6,7 +6,7 @@
 \usage{
 nc_data_dl(collections, species = NULL, startyear = NULL,
   endyear = NULL, location = NULL, country = NULL, statprov = NULL,
-  token, sql_db = NULL, format = TRUE)
+  token, sql_db = NULL, format = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -32,6 +32,8 @@ codes}
 either create or add to.}
 
 \item{format}{Logical. Format downloaded data?}
+
+\item{verbose}{Logical. Display progress messages?}
 }
 \value{
 Data frame
