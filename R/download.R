@@ -14,6 +14,9 @@
 #' @param statprov Character vector. Filter data to specific states/province
 #'   codes
 #' @param token Character vector. Authorization token.
+#' @param sql_db Character vector. Name and location of SQLite database to
+#'   either create or add to.
+#' @param format Logical. Format downloaded data?
 #'
 #' @return Data frame
 #'
@@ -32,7 +35,7 @@
 nc_data_dl <- function(collections, species = NULL,
                        startyear = NULL, endyear = NULL,
                        location = NULL, country = NULL, statprov = NULL,
-                       token) {
+                       token, sql_db = NULL, format = TRUE) {
 
   if(missing(collections)) stop("You must specify collections from which to ",
                                 "download the data.", call. = FALSE)
@@ -45,41 +48,60 @@ nc_data_dl <- function(collections, species = NULL,
                       statprov = statprov, startyear = startyear,
                       endyear = endyear, token = token)
 
+  # Get/Create database or dataframe
+  if(!is.null(sql_db)) {
+    con <- db_connect(sql_db)
+  } else {
+    all <- data.frame()
+  }
 
   n <- 5000   # max number of records to parse
-  all <- data.frame()
 
   message("Downloading records for each collection:")
   for(c in 1:nrow(records)) {
     message("  ", records$collection[c])
     d <- data.frame()
     nmax <- 0
-    while(nmax < records$nrecords[c]) {
-      message("    Records ", nmax + 1, " to ", n + nmax)
+    repeat {
       f <- list(collection = records$collection[c],
                 startyear = startyear, endyear = endyear,
                 country = country, statprov = statprov,
-                startRecord = nmax + 1, numRecords = n)
+                beginRecord = nmax, numRecords = n)
 
-      d <- srv_query("data", table = "get_data",
-                     query = list(token = pass_token(token)),
-                     filter = f) %>%
-        parse_results() %>%
-        dplyr::bind_rows(d)
+      d1 <- srv_query("data", table = "get_data",
+                      query = list(token = pass_token(token)),
+                      filter = f) %>%
+        parse_results()
 
-      nmax <- nrow(d)
+      # Save the data
+      if(!is.null(sql_db)) {
+        db_insert(con, "naturecounts", d1)
+      } else d <- dplyr::bind_rows(d, d1)
 
-      if(nmax %% n != 0) break # if not a multiplier of download size, then end of records available
-      if(nmax == 0) {
-        d <- data.frame()
-        message("    No data for ", records$collection[c], " with these filters")
+      # End of collection
+      if(nrow(d1) == 0 | nrow(d1) < n) {
         break
       }
+
+      nmax <- max(d1$record_id)
     }
 
-    all <- dplyr::bind_rows(all, d)
+    # No data for this collection
+    if(nrow(d) == 0) {
+      message("    No data for ", records$collection[c],
+                          " with these filters")
+    }
+
+    # Add collection to rest of data
+    if(is.null(sql_db)) all <- dplyr::bind_rows(all, d)
   }
-  all
+
+  if(is.null(sql_db)) {
+    if(format) all <- nc_format(all)
+    return(all)
+  } else {
+    return(con)
+  }
 }
 
 #' Download information about NatureCounts collections

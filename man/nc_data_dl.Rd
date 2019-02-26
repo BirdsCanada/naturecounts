@@ -6,7 +6,7 @@
 \usage{
 nc_data_dl(collections, species = NULL, startyear = NULL,
   endyear = NULL, location = NULL, country = NULL, statprov = NULL,
-  token)
+  token, sql_db = NULL, format = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -27,6 +27,11 @@ IMPLEMENTED)}
 codes}
 
 \item{token}{Character vector. Authorization token.}
+
+\item{sql_db}{Character vector. Name and location of SQLite database to
+either create or add to.}
+
+\item{format}{Logical. Format downloaded data?}
 }
 \value{
 Data frame
