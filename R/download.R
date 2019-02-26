@@ -7,8 +7,10 @@
 #'   download data. "all" downloads data from all available collections
 #' @param species Character vector. Filter data to specific species (NOT
 #'   IMPLEMENTED)
-#' @param startyear Numeric. The starting year of data to download
-#' @param endyear Numeric. The ending year of data to download
+#' @param start_date Character. The starting date of data to download. See
+#'   details for format.
+#' @param end_date Character. The end date of data to download. See details for
+#'   format.
 #' @param location NOT IMPLEMENTED
 #' @param country Character vector. Filter data to specific countries codes
 #' @param statprov Character vector. Filter data to specific states/province
@@ -18,6 +20,12 @@
 #'   either create or add to.
 #' @param format Logical. Format downloaded data?
 #' @param verbose Logical. Display progress messages?
+#'
+#' @details The format of start/end dates is fairly flexible and can be anything
+#'   recognized by \code{\link[lubridate]{lubridate-package}}'s
+#'   \code{\link[lubridate]{ymd}()} function. However, it must have the
+#'   order of year, month, day. Month and day are option: It can be year and
+#'   month (e.g., \code{"2000 May"}), or simply year (e.g., \code{2000}).
 #'
 #' @return Data frame
 #'
@@ -34,7 +42,7 @@
 #'
 
 nc_data_dl <- function(collections, species = NULL,
-                       startyear = NULL, endyear = NULL,
+                       start_date = NULL, end_date = NULL,
                        location = NULL, country = NULL, statprov = NULL,
                        token, sql_db = NULL, format = TRUE, verbose = TRUE) {
 
@@ -43,6 +51,13 @@ nc_data_dl <- function(collections, species = NULL,
 
   if(missing(token)) stop("An authorization token is required to download data.",
                           call. = FALSE)
+
+  # Format dates
+  start_date <- parse_date(start_date)
+  end_date <- parse_date(end_date)
+
+  startyear <- parse_year(start_date)
+  endyear <- parse_year(end_date)
 
   if(verbose) message("Collecting available records...")
   records <- nc_count(collections = collections, country = country,
@@ -66,6 +81,7 @@ nc_data_dl <- function(collections, species = NULL,
     repeat {
       f <- list(collection = records$collection[c],
                 startyear = startyear, endyear = endyear,
+                startday = startday, endday = endday,
                 country = country, statprov = statprov,
                 beginRecord = nmax, numRecords = n)
 

@@ -4,9 +4,10 @@
 \alias{nc_data_dl}
 \title{Download NatureCounts data records}
 \usage{
-nc_data_dl(collections, species = NULL, startyear = NULL,
-  endyear = NULL, location = NULL, country = NULL, statprov = NULL,
-  token, sql_db = NULL, format = TRUE, verbose = TRUE)
+nc_data_dl(collections, species = NULL, start_date = NULL,
+  end_date = NULL, location = NULL, country = NULL,
+  statprov = NULL, token, sql_db = NULL, format = TRUE,
+  verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -15,9 +16,11 @@ download data. "all" downloads data from all available collections}
 \item{species}{Character vector. Filter data to specific species (NOT
 IMPLEMENTED)}
 
-\item{startyear}{Numeric. The starting year of data to download}
+\item{start_date}{Character. The starting date of data to download. See
+details for format.}
 
-\item{endyear}{Numeric. The ending year of data to download}
+\item{end_date}{Character. The end date of data to download. See details for
+format.}
 
 \item{location}{NOT IMPLEMENTED}
 
@@ -41,6 +44,13 @@ Data frame
 \description{
 Download data records from various collections filtered by date and location
 (if provided). An authorization token is required.
+}
+\details{
+The format of start/end dates is fairly flexible and can be anything
+recognized by \code{\link[lubridate]{lubridate-package}}'s
+\code{\link[lubridate]{ymd}()} function. However, it must have the
+order of year, month, day. Month and day are option: It can be year and
+month (e.g., \code{"2000 May"}), or simply year (e.g., \code{2000}).
 }
 \examples{
 
