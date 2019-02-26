@@ -168,6 +168,8 @@ nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
     parse_results() %>%
     dplyr::arrange(collection)
 
+  if(nrow(cnts) == 0) stop("No records for these filters")
+
   if(!is.null(token)) {
     cnts <- srv_query("data", "list_permissions",
                       query = list(token = pass_token(token))) %>%
