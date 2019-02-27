@@ -37,7 +37,11 @@ srv_query <- function(data_type, table, query = NULL, filter = NULL,
   resp <- httr::GET(url, query = query, ua)
 
   # Check for http errors
-  httr::stop_for_status(resp)
+  if(httr::status_code(resp) == 403) {
+    stop("Invalid token, no access", call. = FALSE)
+  } else {
+    httr::stop_for_status(resp)
+  }
 
   # Parse response
   parsed <- resp %>%
