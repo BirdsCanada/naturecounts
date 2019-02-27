@@ -8,7 +8,7 @@ Authors@R: c(
 Description: Access and download data on plant and animal populations from 
     various databases through NatureCounts, a service managed by Bird Studies 
     Canada. 
-License: What license is it under?
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends:
