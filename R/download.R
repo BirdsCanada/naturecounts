@@ -208,14 +208,13 @@ nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
     parse_results() %>%
     dplyr::arrange(collection)
 
-  if(nrow(cnts) == 0) stop("No records for these filters")
-
-  if(show == "available") {
+  if(show == "available" && nrow(cnts) > 0) {
     cnts <- srv_query("data", "list_permissions",
                       token = token) %>%
       parse_results() %>%
       dplyr::semi_join(cnts, ., by = "collection")
   }
+
   cnts
 }
 
