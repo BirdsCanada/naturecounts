@@ -68,6 +68,21 @@ nc_data_dl <- function(collections, species = NULL,
                       endyear = endyear, species = species,
                       token = token)
 
+  # If there are no records to download, see why not and report that to the user
+  if(nrow(records) == 0) {
+
+    # Is it because they don't have permission?
+    no_access <- collections[!collections %in%
+                               nc_permissions(token = token)$collection]
+
+    if(length(no_access) == 0) {
+      stop("No data for these collections with these filters", call. = FALSE)
+    } else {
+      stop("You do not have permission to access these collections (",
+           paste0(no_access, collapse = ", "), ")", call. = FALSE)
+    }
+  }
+
   if(is.null(sql_db) && sum(records$nrecords) > 1000000) {
     message("\nThis is a very large download. Consider using ",
             "a SQLite data base (see the sql_db argument), to prevent ",
