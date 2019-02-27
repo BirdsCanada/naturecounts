@@ -38,19 +38,28 @@ returned.
 }
 \examples{
 
-# Count records available in the Christmas Bird Count and Breeding Bird
-# Survey collections (regardless of permissions)
+# Count all publicly available records:
 
-nc_count(c("CBC", "BBS"))
+\donttest{
+nc_count()
+}
 
-# Count records with data for Manitoba, Canada (regardless of permissions)
+# Count publicly available records for Manitoba, Canada
 
-nc_count(country = "CA", statprov = "MB")
+nc_count(statprov = "MB")
 
-# Count records for all collections you have access to
+# Count all records for all collections you have access to
 
 \dontrun{
 nc_count(token = YOUR_TOKEN)
 }
 
+# Count all public records with barred owls in Ontario
+
+nc_count(species = 7590, statprov = "ON")
+
+# Count records available in the Christmas Bird Count and Breeding Bird
+# Survey collections (regardless of permissions)
+
+nc_count(c("CBC", "BBS"), show = "all")
 }
