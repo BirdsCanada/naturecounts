@@ -64,6 +64,17 @@ nc_data_dl <- function(collections, species = NULL,
                       statprov = statprov, startyear = startyear,
                       endyear = endyear, token = token)
 
+  if(is.null(sql_db) && sum(records$nrecords) > 1000000) {
+    message("\nThis is a very large download. Consider using ",
+            "a SQLite data base (see the sql_db argument), to prevent ",
+            "memory overload or losing your data due to a loss of ",
+            "internet connection during the download.")
+  }
+
+  if(verbose) {
+    message(paste0(capture.output(records), collapse = "\n"))
+  }
+
   # Get/Create database or dataframe
   if(!is.null(sql_db)) {
     con <- db_connect(sql_db)
@@ -73,19 +84,30 @@ nc_data_dl <- function(collections, species = NULL,
 
   n <- 5000   # max number of records to parse
 
-  if(verbose) message("Downloading records for each collection:")
+  f <- list(collection = records$collection[1],
+            startyear = startyear, endyear = endyear,
+           # startday = startday, endday = endday,
+            country = country, statprov = statprov,
+            beginRecord = 0, numRecords = n)
+
+  if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {
     if(verbose) message("  ", records$collection[c])
     d <- data.frame()
     nmax <- 0
-    repeat {
-      f <- list(collection = records$collection[c],
-                startyear = startyear, endyear = endyear,
-                startday = startday, endday = endday,
-                country = country, statprov = statprov,
-                beginRecord = nmax, numRecords = n)
+    f$collection <- records$collection[c]
+    total <- records$nrecords[c]
 
-      if(verbose) message("    Records ", nmax)
+    repeat {
+      if(verbose){
+        from <- nrow(d) + 1
+        to <- as.integer(total - nrow(d))
+        to <- dplyr::if_else(to > n, as.integer(nrow(d) + n), to)
+        message("    Records ", from, " to ", to, " / ", total)
+      }
+
+      f$beginRecord <- nmax
+
       d1 <- srv_query("data", table = "get_data",
                       query = list(token = pass_token(token)),
                       filter = f) %>%
@@ -160,11 +182,13 @@ nc_data_dl <- function(collections, species = NULL,
 nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
                      startyear = NULL, endyear = NULL, token = NULL) {
 
-  cnts <- data.frame()
   cnts <- srv_query("data", "list_collections",
                     query = list(token = pass_token(token)),
                     filter = list(collections = collections,
-                                  country = country, statprov = statprov)) %>%
+                                  startyear = startyear,
+                                  endyear = endyear,
+                                  country = country,
+                                  statprov = statprov)) %>%
     parse_results() %>%
     dplyr::arrange(collection)
 
@@ -174,11 +198,9 @@ nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
     cnts <- srv_query("data", "list_permissions",
                       query = list(token = pass_token(token))) %>%
       parse_results() %>%
-      dplyr::rename(collection = "collection_code") %>%
       dplyr::semi_join(cnts, ., by = "collection")
   }
   cnts
 }
-
 
 
