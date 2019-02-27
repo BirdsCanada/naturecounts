@@ -219,4 +219,9 @@ nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
   cnts
 }
 
+nc_permissions <- function(token = NULL) {
+  srv_query("data", "list_permissions", token = token) %>%
+    parse_results()
+}
+
 
