@@ -26,7 +26,7 @@ test_that("metadata apis are accessible", {
 
   expect_silent(srv_query("metadata", "species_codes_authority"))
 
-  expect_error(srv_query("metadata", "species_codes"))
+  expect_silent(srv_query("metadata", "species_codes"))
   expect_silent(srv_query("metadata", "species_codes", query = list(authority = "BSCDATA")))
   expect_silent(srv_query("metadata", "species_codes", query = list(authority = "")))
 
@@ -36,7 +36,7 @@ test_that("metadata apis are accessible", {
 })
 
 test_that("species metadata", {
-
+  #expect_silent(s <- srv_query("metadata", "species"))
 })
 
 test_that("data retrieval", {
