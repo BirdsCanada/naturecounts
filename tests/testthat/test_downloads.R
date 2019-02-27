@@ -18,3 +18,60 @@ test_that("Get counts for collections", {
   expect_gt(nrow(c), 0)
 
 })
+
+test_that("Counts return permissions", {
+
+  expect_silent(c_public <- nc_count(species = 7590))
+  expect_silent(c_all <- nc_count(species = 7590, show = "all"))
+  expect_gt(sum(c_all$nrecords), sum(c_public$nrecords))
+
+})
+
+test_that("Data download returns data", {
+  expect_message(d <- nc_data_dl(collections = "RCBIOTABASE",
+                                 start_date = 2011, end_date = 2011))
+  expect_is(d, "data.frame")
+  expect_gt(nrow(d), 0)
+  expect_gt(ncol(d), 0)
+  expect_equal(min(as.numeric(d$YearCollected), na.rm = TRUE), 2011)
+  expect_equal(max(as.numeric(d$YearCollected), na.rm = TRUE), 2011)
+})
+
+test_that("Data download arguments", {
+  expect_silent(nc_data_dl(collections = "RCBIOTABASE",
+                           start_date = 2011, end_date = 2011, verbose = FALSE))
+
+})
+
+test_that("Data filters work as expected", {
+  expect_silent(d <- nc_data_dl(collections = "ABBIRDRECS",
+                                species = 7590,
+                                start_date = 2000, end_date = 2000,
+                                verbose = FALSE))
+  expect_equal(unique(d$CommonName), "Barred Owl")
+  expect_equal(min(as.numeric(d$YearCollected), na.rm = TRUE), 2000)
+  expect_equal(max(as.numeric(d$YearCollected), na.rm = TRUE), 2000)
+
+
+  expect_silent(d <- nc_data_dl(collections = "ABBIRDRECS",
+                                species = c(7590, 14280),
+                                start_date = 2000, end_date = 2002,
+                                verbose = FALSE))
+  expect_equal(sort(unique(d$CommonName)),
+               c("Barred Owl", "Black-capped Chickadee"))
+  expect_equal(min(as.numeric(d$YearCollected), na.rm = TRUE), 2000)
+  expect_equal(max(as.numeric(d$YearCollected), na.rm = TRUE), 2002)
+
+})
+
+test_that("Data download returns informative errors", {
+
+  # No permission
+  expect_error(nc_data_dl(collections = "BBS", species = 7590, verbose = FALSE),
+               "You do not have permission")
+
+  # No data
+  expect_error(nc_data_dl(collections = "ABBIRDRECS", start_date = 2018,
+                          verbose = FALSE),
+               "No data for these collections with these filters")
+})

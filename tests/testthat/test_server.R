@@ -29,3 +29,8 @@ test_that("srv_query() applies settings and resets", {
                                     type = "message"))
   expect_length(d, 0)
 })
+
+test_that("srv_query() returns informative errors", {
+  expect_error(srv_query("data", "get_data", token = "hello"),
+               "Invalid token, no access")
+})
