@@ -17,8 +17,8 @@ parse_year <- function(d) {
 }
 
 
-parse_results <- function(r, type = "results") {
-  if(type == "results") r <- r$results
+parse_results <- function(r, results = TRUE) {
+  if(results) r <- r$results
   structure(r, class = "data.frame", row.names = seq(along = r[[1]]))
 }
 
