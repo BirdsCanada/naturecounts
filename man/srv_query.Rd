@@ -5,7 +5,8 @@
 \title{Query NatureCounts server for data}
 \usage{
 srv_query(data_type, table, query = NULL, filter = NULL,
-  api = "https://sandbox.birdscanada.org/api", verbose = FALSE)
+  token = NULL, api = "https://sandbox.birdscanada.org/api",
+  verbose = FALSE)
 }
 \arguments{
 \item{data_type}{character. Base data type, "metadata" or "data"}

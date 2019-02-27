@@ -5,8 +5,7 @@
 #'
 #' @param collections Character vector. The collection codes from which to
 #'   download data. "all" downloads data from all available collections
-#' @param species Character vector. Filter data to specific species (NOT
-#'   IMPLEMENTED)
+#' @param species Character vector. Filter data to specific species
 #' @param start_date Character. The starting date of data to download. See
 #'   details for format.
 #' @param end_date Character. The end date of data to download. See details for
@@ -15,7 +14,8 @@
 #' @param country Character vector. Filter data to specific countries codes
 #' @param statprov Character vector. Filter data to specific states/province
 #'   codes
-#' @param token Character vector. Authorization token.
+#' @param token Character vector. Authorization token, otherwise only public
+#'   data is accessible.
 #' @param sql_db Character vector. Name and location of SQLite database to
 #'   either create or add to.
 #' @param format Logical. Format downloaded data?
@@ -33,24 +33,24 @@
 #'
 #' @examples
 #'
-#' \dontrun{
-#' # Christmas Bird Count data for Manitoba since 2018
-#'
-#' nc_data_dl(collections = "CBC", statprov = "MB",
-#'            startyear = "2018", token = YOUR_TOKEN)
+#' \donttest{
+#' # All observations part of the RCBIOTABASE collection
+#' rcbio <- nc_data_dl(collection = "RCBIOTABASE")
 #' }
+#'
+#' # Observations of black-capped chickadees from RCBIOTABASE collection in 2010
+#' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 7590,
+#'                    start_date = 2010, end_date = 2010)
 #'
 
 nc_data_dl <- function(collections, species = NULL,
                        start_date = NULL, end_date = NULL,
                        location = NULL, country = NULL, statprov = NULL,
-                       token, sql_db = NULL, format = TRUE, verbose = TRUE) {
+                       token = NULL, sql_db = NULL, format = TRUE,
+                       verbose = TRUE) {
 
   if(missing(collections)) stop("You must specify collections from which to ",
                                 "download the data.", call. = FALSE)
-
-  if(missing(token)) stop("An authorization token is required to download data.",
-                          call. = FALSE)
 
   # Format dates
   start_date <- parse_date(start_date)
@@ -59,10 +59,14 @@ nc_data_dl <- function(collections, species = NULL,
   startyear <- parse_year(start_date)
   endyear <- parse_year(end_date)
 
+  startday <- NULL
+  endday <- NULL
+
   if(verbose) message("Collecting available records...")
   records <- nc_count(collections = collections, country = country,
                       statprov = statprov, startyear = startyear,
-                      endyear = endyear, token = token)
+                      endyear = endyear, species = species,
+                      token = token)
 
   if(is.null(sql_db) && sum(records$nrecords) > 1000000) {
     message("\nThis is a very large download. Consider using ",
@@ -88,6 +92,7 @@ nc_data_dl <- function(collections, species = NULL,
             startyear = startyear, endyear = endyear,
            # startday = startday, endday = endday,
             country = country, statprov = statprov,
+            species = species,
             beginRecord = 0, numRecords = n)
 
   if(verbose) message("\nDownloading records for each collection:")
@@ -109,7 +114,8 @@ nc_data_dl <- function(collections, species = NULL,
       f$beginRecord <- nmax
 
       d1 <- srv_query("data", table = "get_data",
-                      query = list(token = pass_token(token)),
+                      token = token,
+                      query = NULL,
                       filter = f) %>%
         parse_results()
 
@@ -154,8 +160,12 @@ nc_data_dl <- function(collections, species = NULL,
 #' @param collections Character vector. Filter to specific collections
 #' @param country Character vector. Filter to specific country codes
 #' @param statprov Character vector. Filter to specific state/province codes
-#' @param startyear NOT IMPLEMENTED
-#' @param endyear NOT IMPLEMENTED
+#' @param startyear Numeric. Filter to this start year
+#' @param endyear Numeric. Filter to this end year
+#' @param species Numeric vector. Filter to these species codes.
+#' @param show Character. Either "all" or "available". "all" returns counts from
+#'   all data sources. "available" only returns counts for data available
+#'   (public or accessible with the token provided).
 #' @param token Character. Authorization token
 #'
 #' @return Data frame
@@ -180,11 +190,17 @@ nc_data_dl <- function(collections, species = NULL,
 #' }
 #'
 nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
-                     startyear = NULL, endyear = NULL, token = NULL) {
+                     species = NULL, startyear = NULL, endyear = NULL,
+                     show = "available", token = NULL) {
+
+  if(!show %in% c("available", "all")) {
+    stop("show must either be 'all' or 'available'", call. = FALSE)
+  }
 
   cnts <- srv_query("data", "list_collections",
-                    query = list(token = pass_token(token)),
+                    token = token,
                     filter = list(collections = collections,
+                                  species = species,
                                   startyear = startyear,
                                   endyear = endyear,
                                   country = country,
@@ -194,9 +210,9 @@ nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
 
   if(nrow(cnts) == 0) stop("No records for these filters")
 
-  if(!is.null(token)) {
+  if(show == "available") {
     cnts <- srv_query("data", "list_permissions",
-                      query = list(token = pass_token(token))) %>%
+                      token = token) %>%
       parse_results() %>%
       dplyr::semi_join(cnts, ., by = "collection")
   }

@@ -11,6 +11,7 @@
 #' @keywords internal
 
 srv_query <- function(data_type, table, query = NULL, filter = NULL,
+                      token = NULL,
                       api = "https://sandbox.birdscanada.org/api",
                       verbose = FALSE) {
 
@@ -22,6 +23,9 @@ srv_query <- function(data_type, table, query = NULL, filter = NULL,
 
   # Build API path
   url <- file.path(api, data_type, table)
+
+  # Add token to query
+  if(!is.null(token)) query <- append(query, list(token = pass_token(token)))
 
   # Add filter to query
   if(!is.null(filter)) {

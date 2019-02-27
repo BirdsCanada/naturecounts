@@ -6,15 +6,14 @@
 \usage{
 nc_data_dl(collections, species = NULL, start_date = NULL,
   end_date = NULL, location = NULL, country = NULL,
-  statprov = NULL, token, sql_db = NULL, format = TRUE,
+  statprov = NULL, token = NULL, sql_db = NULL, format = TRUE,
   verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
 download data. "all" downloads data from all available collections}
 
-\item{species}{Character vector. Filter data to specific species (NOT
-IMPLEMENTED)}
+\item{species}{Character vector. Filter data to specific species}
 
 \item{start_date}{Character. The starting date of data to download. See
 details for format.}
@@ -29,7 +28,8 @@ format.}
 \item{statprov}{Character vector. Filter data to specific states/province
 codes}
 
-\item{token}{Character vector. Authorization token.}
+\item{token}{Character vector. Authorization token, otherwise only public
+data is accessible.}
 
 \item{sql_db}{Character vector. Name and location of SQLite database to
 either create or add to.}
@@ -54,11 +54,13 @@ month (e.g., \code{"2000 May"}), or simply year (e.g., \code{2000}).
 }
 \examples{
 
-\dontrun{
-# Christmas Bird Count data for Manitoba since 2018
-
-nc_data_dl(collections = "CBC", statprov = "MB",
-           startyear = "2018", token = YOUR_TOKEN)
+\donttest{
+# All observations part of the RCBIOTABASE collection
+rcbio <- nc_data_dl(collection = "RCBIOTABASE")
 }
+
+# Observations of black-capped chickadees from RCBIOTABASE collection in 2010
+bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 7590,
+                   start_date = 2010, end_date = 2010)
 
 }
