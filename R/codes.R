@@ -6,7 +6,7 @@
 #' \code{\link{nc_count}()} functions.
 #'
 #' These codes can be browsed directly through the built in objects:
-#' \code{\link{country_stat_prov_codes}} and \code{\link{sp_codes}}
+#' \code{\link{country_statprov_codes}} and \code{\link{sp_codes}}
 #'
 #' @param desc Character. The search term to match
 #' @param type Character. One of "country", "statprov", or "species". The type

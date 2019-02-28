@@ -22,7 +22,7 @@ species. These are then used in the \code{\link{nc_data_dl}()} and
 }
 \details{
 These codes can be browsed directly through the built in objects:
-\code{\link{country_stat_prov_codes}} and \code{\link{sp_codes}}
+\code{\link{country_statprov_codes}} and \code{\link{sp_codes}}
 }
 \examples{
 
