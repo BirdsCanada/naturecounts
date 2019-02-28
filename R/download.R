@@ -120,14 +120,13 @@ nc_data_dl <- function(collections, species = NULL,
     d <- data.frame()
     nmax <- 0
     f$collection <- records$collection[c]
-    total <- records$nrecords[c]
 
     repeat {
       if(verbose){
         from <- nrow(d) + 1
-        to <- as.integer(total - nrow(d))
-        to <- dplyr::if_else(to > n, as.integer(nrow(d) + n), to)
-        message("    Records ", from, " to ", to, " / ", total)
+        to <- as.integer(records$nrecords[c] - nrow(d))
+        to <- dplyr::if_else(to > n, as.integer(nrow(d) + n), records$nrecords[c])
+        message("    Records ", from, " to ", to, " / ", records$nrecords[c])
       }
 
       q$lastRecord <- nmax
