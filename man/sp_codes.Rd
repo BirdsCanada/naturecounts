@@ -4,7 +4,7 @@
 \name{sp_codes}
 \alias{sp_codes}
 \title{List of species codes}
-\format{A data frame with 1210 rows and 5 variables:
+\format{A data frame with 1210 rows and 2 variables:
 \describe{
 \item{species_id}{Numeric species id code for use in filtering data}
 \item{species_code}{4-letter species code}
