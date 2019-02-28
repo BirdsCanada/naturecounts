@@ -2,6 +2,7 @@
 
 export("%>%")
 export(.data)
+export(codes_search)
 export(enexpr)
 export(enexprs)
 export(enquo)

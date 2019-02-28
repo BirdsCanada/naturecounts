@@ -6,8 +6,8 @@
 \title{List of species codes}
 \format{A data frame with 1210 rows and 2 variables:
 \describe{
-\item{species_id}{Numeric species id code for use in filtering data}
-\item{species_code}{4-letter species code}
+\item{species_code}{Numeric species id code for use in filtering data}
+\item{species_alpha}{The 4-letter species alpha code}
 }}
 \usage{
 sp_codes
