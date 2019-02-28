@@ -170,6 +170,9 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
 
   repeat {
 
+    # Are we done?
+    if(is.null(r$requestId)) break
+
     # Update our position
     query$lastRecord <- max(r$results$record_id)
 
@@ -181,9 +184,6 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
 
     # Save the data
     df_db <- nc_data_save(r$results, df_db)
-
-    # Are we done?
-    if(is.null(r$requestId)) break
 
     # Track progress
     coll$progress <- coll$progress + nrow(r$results)
