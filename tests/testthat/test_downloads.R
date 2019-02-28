@@ -64,7 +64,12 @@ test_that("Data filters work as expected", {
 
 })
 
-test_that("Data download returns informative errors", {
+test_that("Data download returns informative errors/messages", {
+
+  # No data for some
+  expect_message(nc_data_dl(collections = c("ABBIRDRECS", "RCBIOTABASE"), start_date = 2010,
+                            species = 7590, verbose = TRUE),
+                 "Not all collections have data that match these filters")
 
   # No permission
   expect_error(nc_data_dl(collections = "BBS", species = 7590, verbose = FALSE),
@@ -73,5 +78,5 @@ test_that("Data download returns informative errors", {
   # No data
   expect_error(nc_data_dl(collections = "ABBIRDRECS", start_date = 2018,
                           verbose = FALSE),
-               "No data for these collections with these filters")
+               "These collections have no data that match these filters")
 })

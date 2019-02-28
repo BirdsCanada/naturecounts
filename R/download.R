@@ -76,11 +76,16 @@ nc_data_dl <- function(collections, species = NULL,
                                nc_permissions(token = token)$collection]
 
     if(length(no_access) == 0) {
-      stop("No data for these collections with these filters", call. = FALSE)
+      stop("These collections have no data that match these filters", call. = FALSE)
     } else {
       stop("You do not have permission to access these collections (",
            paste0(no_access, collapse = ", "), ")", call. = FALSE)
     }
+  } else if(nrow(records) != length(collections)){
+    # What about if not all the collections they want are available?
+    missing <- collections[!collections %in% records$collection]
+    message("Not all collections have data that match these filters (",
+            paste0(missing, collapse = ", "), ")")
   }
 
   if(is.null(sql_db) && sum(records$nrecords) > 1000000) {
@@ -96,77 +101,145 @@ nc_data_dl <- function(collections, species = NULL,
 
   # Get/Create database or dataframe
   if(!is.null(sql_db)) {
-    con <- db_connect(sql_db)
+    df_db <- db_connect(sql_db)
   } else {
-    all <- data.frame()
+    df_db <- data.frame()
   }
 
-  n <- 5000   # max number of records to parse
+  # Query Information
+  query <- list(lastRecord = 0, numRecords = 5000, requestId = NULL)
 
   # Filter information
-  f <- list(collection = records$collection[1],
-            startyear = startyear, endyear = endyear,
-           # startday = startday, endday = endday,
-            country = country, statprov = statprov,
-            species = species)
-
-  # Query Information
-  q <- list(lastRecord = 0, numRecords = n)
+  filter <- list(collection = records$collection[1],
+                 startyear = startyear, endyear = endyear,
+                 # startday = startday, endday = endday,
+                 country = country, statprov = statprov,
+                 species = species)
 
   if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {
-    if(verbose) message("  ", records$collection[c])
 
-    d <- data.frame()
-    nmax <- 0
-    f$collection <- records$collection[c]
+    # Get data for whole collection
+    d <- nc_coll_dl(coll = records[c, ], query, filter, token, df_db, verbose)
 
-    repeat {
-      if(verbose){
-        from <- nrow(d) + 1
-        to <- as.integer(records$nrecords[c] - nrow(d))
-        to <- dplyr::if_else(to > n, as.integer(nrow(d) + n), records$nrecords[c])
-        message("    Records ", from, " to ", to, " / ", records$nrecords[c])
-      }
+    # Add collection to rest of data (if df, not db)
+    if(is.data.frame(df_db)) df_db <- dplyr::bind_rows(df_db, d)
 
-      q$lastRecord <- nmax
-
-      d1 <- srv_query("data", table = "get_data",
-                      token = token,
-                      query = q,
-                      filter = f) %>%
-        parse_results()
-
-      # Save the data
-      if(!is.null(sql_db)) {
-        db_insert(con, "naturecounts", d1)
-      } else d <- dplyr::bind_rows(d, d1)
-
-      # End of collection
-      if(nrow(d1) == 0 | nrow(d1) < n) {
-        break
-      }
-
-      nmax <- max(d1$record_id)
-    }
-
-    # No data for this collection
-    if(nrow(d) == 0) {
-      if(verbose) message("    No data for ", records$collection[c],
-                          " with these filters")
-    }
-
-    # Add collection to rest of data
-    if(is.null(sql_db)) all <- dplyr::bind_rows(all, d)
   }
 
-  if(is.null(sql_db)) {
-    if(format) all <- nc_format(all)
-    return(all)
-  } else {
-    return(con)
-  }
+  if(is.data.frame(df_db)) if(format) df_db <- nc_format(df_db)
+
+  df_db
 }
+
+#' Download all records for a single collection
+#'
+#' This internal function queries and downloads data for a single collection
+#'
+#'
+#' @param coll List. Data frame returned by nc_count() for collection in
+#'   question
+#' @param query List. Queries for server
+#' @param filter List. Filter queries for server
+#' @param token Character. Authorization token
+#' @param df_db Data frame/SQLite database connection. Data source
+#' @param verbose Logical. Display progress messages?
+#'
+#' @return An updated df_db (data.frame), or the database connection (update on
+#'   harddrive)
+#'
+#' @keywords internal
+
+nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
+
+  if(verbose) message("  ", coll$collection)
+  if(verbose) progress_query(0, coll$nrecords, query$numRecords)
+
+  # Update filter
+  filter$collection <- coll$collection
+
+  # Request
+  r <- nc_single_dl(query, filter, token)
+  query$requestId <- r$requestId
+
+  # Save the data
+  df_db <- nc_data_save(r$results, df_db)
+
+  # Loop while we still have data to download
+  coll$progress <- nrow(r$results)
+
+  repeat {
+
+    # Update our position
+    query$lastRecord <- max(r$results$record_id)
+
+    # Track download progress
+    if(verbose) progress_query(coll$progress, coll$nrecords, query$numRecords)
+
+    # Request
+    r <- nc_single_dl(query, filter, token)
+
+    # Save the data
+    df_db <- nc_data_save(r$results, df_db)
+
+    # Are we done?
+    if(is.null(r$requestId)) break
+
+    # Track progress
+    coll$progress <- coll$progress + nrow(r$results)
+  }
+
+  df_db
+}
+
+#' Download single set of records for a single collection
+#'
+#' @param query List. Queries for server
+#' @param filter List. Filter queries for server
+#' @param token Character. Authorization token
+#'
+#' @return the request (a list with 'result' and 'requestId')
+#'
+#' @keywords internal
+
+nc_single_dl <- function(query, filter, token){
+
+  request <- srv_query("data", table = "get_data",
+                       query = query,
+                       filter = filter,
+                       token = token)
+
+  # Parse the data
+  request$results <- parse_results(request)
+
+  request
+}
+
+
+#' Save/Return the data to data frame or databse
+#'
+#' Either save data to database on disk, or bind them into an existing data
+#' frame.
+#'
+#' @param data Data frame. Data to be saved
+#' @param df_db Data frame/SQLite database connection. Where data should be
+#'   saved
+#' @param table Character. If df_db is a database connnection, the database
+#'   table to save to
+#'
+#' @return
+#' @keywords internal
+
+nc_data_save <- function(data, df_db, table = "naturecounts") {
+  if(!is.data.frame(df_db)) {
+    db_insert(df_db, "naturecounts", data)
+  } else {
+    df_db <- dplyr::bind_rows(df_db, data)
+  }
+  df_db
+}
+
+
 
 #' Download information about NatureCounts collections
 #'

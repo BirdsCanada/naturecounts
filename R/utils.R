@@ -22,6 +22,13 @@ parse_results <- function(r, results = TRUE) {
   structure(r, class = "data.frame", row.names = seq(along = r[[1]]))
 }
 
+progress_query <- function(current, max, by) {
+  to <- max - current
+  to <- ifelse(to > by, current + by, max)
+  message("    Records ", current + 1, " to ", to, " / ", max)
+}
+
+
 
 #' Pipe operator
 #'
