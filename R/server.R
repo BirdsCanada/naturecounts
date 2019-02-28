@@ -76,7 +76,7 @@ srv_error <- function(parsed, url, query) {
 filter_json <- function(f) {
   ubox <- c("minlat", "maxlat", "minlong", "maxlong", "startyear",
             "endyear", "startday", "endday", "collection", "request_id",
-            "utmsquare", "beginRecord", "numRecords")
+            "utmsquare")
 
   f[names(f) %in% ubox] <- lapply(f[names(f) %in% ubox], jsonlite::unbox)
   jsonlite::toJSON(f, null = "null")

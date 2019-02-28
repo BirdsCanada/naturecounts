@@ -103,16 +103,20 @@ nc_data_dl <- function(collections, species = NULL,
 
   n <- 5000   # max number of records to parse
 
+  # Filter information
   f <- list(collection = records$collection[1],
             startyear = startyear, endyear = endyear,
            # startday = startday, endday = endday,
             country = country, statprov = statprov,
-            species = species,
-            beginRecord = 0, numRecords = n)
+            species = species)
+
+  # Query Information
+  q <- list(lastRecord = 0, numRecords = n)
 
   if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {
     if(verbose) message("  ", records$collection[c])
+
     d <- data.frame()
     nmax <- 0
     f$collection <- records$collection[c]
@@ -126,11 +130,11 @@ nc_data_dl <- function(collections, species = NULL,
         message("    Records ", from, " to ", to, " / ", total)
       }
 
-      f$beginRecord <- nmax
+      q$lastRecord <- nmax
 
       d1 <- srv_query("data", table = "get_data",
                       token = token,
-                      query = NULL,
+                      query = q,
                       filter = f) %>%
         parse_results()
 
