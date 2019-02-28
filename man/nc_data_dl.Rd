@@ -60,7 +60,11 @@ rcbio <- nc_data_dl(collection = "RCBIOTABASE")
 }
 
 # Observations of black-capped chickadees from RCBIOTABASE collection in 2010
-bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 7590,
+bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
+                   start_date = 2010, end_date = 2010)
+
+# Or filter by species alpha code
+bcch <- nc_data_dl(collection = "RCBIOTABASE", species = "BCCH",
                    start_date = 2010, end_date = 2010)
 
 }

@@ -8,6 +8,7 @@
 \describe{
 \item{species_code}{Numeric species id code for use in filtering data}
 \item{species_alpha}{The 4-letter species alpha code}
+\item{species_name}{English common name}
 }}
 \usage{
 sp_codes

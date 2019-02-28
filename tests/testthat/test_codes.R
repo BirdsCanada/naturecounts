@@ -3,13 +3,13 @@ context("Code searching and conversions")
 test_that("Get codes", {
 
   expect_silent(c1 <- codes_filter(df = sp_codes,
-                                   columns = "species_code",
+                                   columns = "species_alpha",
                                    desc = "BCCH",
-                                   code_column = "species_id"))
+                                   code_column = "species_code"))
   expect_is(c1, "data.frame")
-  expect_gt(nrow(c1), 1)
-  expect_true(c1$species_id == 14280)
-  expect_true(c1$species_code == "BCCH")
+  expect_equal(nrow(c1), 1)
+  expect_true(c1$species_code == 14280)
+  expect_true(c1$species_alpha == "BCCH")
 
   expect_silent(c1 <- codes_filter(
     df = country_statprov_codes,
@@ -18,7 +18,7 @@ test_that("Get codes", {
     code_column = "country_code"))
 
   expect_is(c1, "data.frame")
-  expect_gt(nrow(c1), 1)
+  expect_equal(nrow(c1), 1)
   expect_true(c1$country_code == "BZ")
   expect_true(c1$country_name == "Belize")
 
@@ -29,10 +29,10 @@ test_that("Get codes", {
     code_column = "statprov_code"))
 
   expect_is(c1, "data.frame")
-  expect_gt(nrow(c1), 1)
+  expect_equal(nrow(c1), 1)
   expect_true(c1$country_code == "US")
   expect_true(c1$statprov_code == "CO")
-  expect_true(c1$statprov_code == "Colorado")
+  expect_true(c1$statprov_name == "Colorado")
 })
 
 test_that("Accents ignored in search", {
@@ -43,10 +43,10 @@ test_that("Accents ignored in search", {
     code_column = "statprov_code"))
 
   expect_is(c1, "data.frame")
-  expect_gt(nrow(c1), 1)
+  expect_equal(nrow(c1), 1)
   expect_true(c1$country_code == "MX")
   expect_true(c1$statprov_code == "YP")
-  expect_true(c1$statprov_code == "Yucatán")
+  expect_true(c1$statprov_name == "Yucatán")
 
   expect_silent(c1 <- codes_filter(
     df = country_statprov_codes,
@@ -55,10 +55,10 @@ test_that("Accents ignored in search", {
     code_column = "statprov_code"))
 
   expect_is(c1, "data.frame")
-  expect_gt(nrow(c1), 1)
+  expect_equal(nrow(c1), 1)
   expect_true(c1$country_code == "MX")
   expect_true(c1$statprov_code == "YP")
-  expect_true(c1$statprov_code == "Yucatán")
+  expect_true(c1$statprov_name == "Yucatán")
 })
 
 test_that("Search for multiple matches", {
@@ -78,4 +78,16 @@ test_that("Helper functions works as expected", {
   expect_silent(c <- codes_search("Argentina"))
   expect_silent(c <- codes_search("Northwest", type = "statprov"))
   expect_silent(c <- codes_search("BDOW", type = "species"))
+})
+
+test_that("Code conversion works as expected", {
+  expect_silent(c <- codes_convert("BDOW", "species"))
+  expect_equal(c, 7590)
+
+  expect_silent(c <- codes_convert("Ontario", "statprov"))
+  expect_equal(c, "ON")
+
+  expect_silent(c <- codes_convert("Canada", "country"))
+  expect_equal(c, "CA")
+
 })

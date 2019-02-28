@@ -58,8 +58,14 @@ nc_count(token = YOUR_TOKEN)
 
 nc_count(species = 7590, statprov = "ON")
 
+# Or use actual names
+
+nc_count(species = "BDOW", statprov = "Ontario")
+
 # Count records available in the Christmas Bird Count and Breeding Bird
 # Survey collections (regardless of permissions)
 
 nc_count(c("CBC", "BBS"), show = "all")
+
+
 }

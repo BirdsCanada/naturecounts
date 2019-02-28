@@ -39,7 +39,11 @@
 #' }
 #'
 #' # Observations of black-capped chickadees from RCBIOTABASE collection in 2010
-#' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 7590,
+#' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
+#'                    start_date = 2010, end_date = 2010)
+#'
+#' # Or filter by species alpha code
+#' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = "BCCH",
 #'                    start_date = 2010, end_date = 2010)
 #'
 
@@ -61,6 +65,11 @@ nc_data_dl <- function(collections, species = NULL,
 
   startday <- NULL
   endday <- NULL
+
+  # Convert character to codes
+  species <- codes_convert(species, type = "species")
+  country <- codes_convert(country, type = "country")
+  statprov <- codes_convert(statprov, type = "statprov")
 
   if(verbose) message("Collecting available records...")
   records <- nc_count(collections = collections, country = country,
@@ -285,10 +294,16 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' nc_count(species = 7590, statprov = "ON")
 #'
+#' # Or use actual names
+#'
+#' nc_count(species = "BDOW", statprov = "Ontario")
+#'
 #' # Count records available in the Christmas Bird Count and Breeding Bird
 #' # Survey collections (regardless of permissions)
 #'
 #' nc_count(c("CBC", "BBS"), show = "all")
+#'
+#'
 
 nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
                      species = NULL, startyear = NULL, endyear = NULL,
@@ -298,6 +313,12 @@ nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
     stop("show must either be 'all' or 'available'", call. = FALSE)
   }
 
+  # Convert character to codes
+  species <- codes_convert(species, type = "species")
+  country <- codes_convert(country, type = "country")
+  statprov <- codes_convert(statprov, type = "statprov")
+
+  # Get counts
   cnts <- srv_query("data", "list_collections",
                     token = token,
                     filter = list(collections = collections,
