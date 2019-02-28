@@ -15,6 +15,9 @@ saved}
 \item{table}{Character. If df_db is a database connnection, the database
 table to save to}
 }
+\value{
+Either a data frame or a SQLite database connection
+}
 \description{
 Either save data to database on disk, or bind them into an existing data
 frame.

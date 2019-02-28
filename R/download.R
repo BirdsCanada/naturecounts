@@ -227,7 +227,7 @@ nc_single_dl <- function(query, filter, token){
 #' @param table Character. If df_db is a database connnection, the database
 #'   table to save to
 #'
-#' @return
+#' @return Either a data frame or a SQLite database connection
 #' @keywords internal
 
 nc_data_save <- function(data, df_db, table = "naturecounts") {
