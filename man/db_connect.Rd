@@ -7,8 +7,8 @@
 db_connect(name = paste0("./naturecounts_", Sys.Date()))
 }
 \arguments{
-\item{name}{Character. The file path and name (no extension) of the data base
-to create. By default the data base is created in the current directory and
+\item{name}{Character. The file path and name (no extension) of the database
+to create. By default the database is created in the current directory and
 named "naturecounts_DATE.nc".}
 }
 \value{

@@ -4,8 +4,8 @@
 #' new one and fill with the appropriate table (internally stored empty df
 #' called nc_dbs).
 #'
-#' @param name Character. The file path and name (no extension) of the data base
-#'   to create. By default the data base is created in the current directory and
+#' @param name Character. The file path and name (no extension) of the database
+#'   to create. By default the database is created in the current directory and
 #'   named "naturecounts_DATE.nc".
 #'
 #' @return A RSQLite connection
