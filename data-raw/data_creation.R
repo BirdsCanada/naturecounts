@@ -1,6 +1,12 @@
 # Save user agent as internal object
 ua <- httr::user_agent(agent = "https://github.com/BirdStudiesCanada/NatureCountsAPI")
 
+# Create empty database table
+d <- nc_data_dl(collections = "RCBIOTABASE", species = "BCCH", start_date = 2015)
+readRDS("data-raw/nc_dbs.rds")
+nc_dbs <- list("2018-02-22" = d[0,])
+saveRDS(nc_dbs, "data-raw/nc_dbs.rds")
+
 # Get database versions
 nc_dbs <- readRDS("./data-raw/nc_dbs.rds")
 max_version <- names(nc_dbs) %>%
