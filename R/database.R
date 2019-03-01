@@ -74,11 +74,11 @@ db_insert <- function(con, table, df) {
   temp <- dplyr::copy_to(con, df, temp_name)
 
   # Replace records
-  DBI::dbSendStatement(con,
-                       paste0("REPLACE into ", table,
-                              " select * from ", temp_name))
-  DBI::dbClearResult(con)
+  rs <- DBI::dbSendStatement(con,
+                             paste0("REPLACE into ", table,
+                                    " select * from ", temp_name))
+  DBI::dbClearResult(rs)
 
   # Remove table
-  DBI::dbRemoveTable(con, "temp")
+  DBI::dbRemoveTable(con, temp_name)
 }
