@@ -6,7 +6,8 @@
 #' \code{\link{nc_count}()} functions.
 #'
 #' These codes can be browsed directly through the built in objects:
-#' \code{\link{country_statprov_codes}} and \code{\link{sp_codes}}
+#' \code{\link{country_codes}}, \code{\link{statprov_codes}} and
+#' \code{\link{species_codes}}
 #'
 #' @param desc Character. The search term to match
 #' @param type Character. One of "country", "statprov", or "species". The type
@@ -22,6 +23,7 @@
 #' codes_search("Alberta", type = "statprov") # AB
 #'
 #' codes_search("BCCH", type = "species")     # 14280
+#' codes_search(c("BCCH", "BDOW"), type = "species")  # 14280 and 7590
 #'
 #' \donttest{
 #' # Using the codes
@@ -36,75 +38,79 @@ codes_search <- function(desc, type = "country") {
          call. = FALSE)
   }
 
-  if(type == "country") {
-    codes <- codes_filter(df = country_statprov_codes,
-                          columns = c("country_name", "country_name_fr"),
-                          desc = desc,
-                          code_column = "country_code")
-  } else if(type == "statprov") {
-    codes <- codes_filter(df = country_statprov_codes,
-                          columns = c("statprov_name", "statprov_name_fr",
-                                      "statprov_name_es"),
-                          desc = desc,
-                          code_column = "statprov_code")
-  } else if(type == "species") {
-    codes <- codes_filter(df = sp_codes,
-                          columns = "species_alpha",
-                          desc = desc,
-                          code_column = "species_code")
-  }
-  codes
-}
+  df <- get(paste0(type, "_codes"))
 
-#' Generic code filter
-#'
-#' This function can be reused for other code data frame to search for terms
-#' among several columns and return the corresponding codes.
-#'
-#' Note that by transforming to "Latin-ASCII" we remove accents before pattern
-#' matching, resulting in 'Yucatan' matching 'Yucatán'.
-#'
-#' @param df Data frame. Data frame with code information
-#' @param columns Character vector. Columns in df to be searched
-#' @param desc Character. The character string to search for
-#' @param code_column Character. The name of the column in df that contains the
-#'   code values
-#'
-#' @return df filtered by desc
-#'
-#' @keywords internal
-
-codes_filter <- function(df, columns, desc, code_column) {
   desc <- stringi::stri_trans_general(desc, "Latin-ASCII")
   desc <- paste0("(", paste0(desc, collapse = ")|("), ")")
 
   codes <- df %>%
-    tidyr::gather(type, name, dplyr::one_of(columns)) %>%
+    tidyr::gather(type, name, -dplyr::contains("_code")) %>%
     dplyr::mutate(name = stringi::stri_trans_general(.data$name, "Latin-ASCII")) %>%
     dplyr::filter(
       stringr::str_detect(.data$name,
                           stringr::regex(desc, ignore_case = TRUE))) %>%
-    dplyr::pull(!!code_column) %>%
+    dplyr::pull(!!paste0(type, "_code")) %>%
     unique()
 
-  dplyr::filter(df, !!rlang::sym(code_column) %in% codes)
+  dplyr::filter(df, !!rlang::sym(paste0(type, "_code")) %in% codes)
+}
+
+codes_check <- function(desc) {
+  # If nothing, return as is
+  if(is.null(desc)) return(desc)
+
+  # Get type of code
+  type <- deparse(substitute(desc))
+  m <- ifelse(type == "species", "numeric", "character")
+
+  # Get code data frames
+  df <- get(paste0(type, "_codes"))
+
+  vapply(desc, codes_check_each, type = type, df = df,
+         FUN.VALUE = vector(length = 1, mode = m),
+         USE.NAMES = FALSE)
+}
+
+codes_check_each <- function(desc, type, df) {
+  # If a two character code, conver to upper, just in case
+  if(type != "species" & stringr::str_detect(desc, "^[:alpha:]{2}$")) {
+    desc <- toupper(desc)
+  }
+
+  # Convert to numeric (if possible)
+  desc <- as_numeric(desc)
+
+  # If code, check that correct
+  if((type == "species" & is.numeric(desc)) |
+     (type != "species" & stringr::str_detect(desc, "^[:upper:]{2}$"))) {
+
+    if(!desc %in% dplyr::pull(df, paste0(type, "_code"))) {
+      stop("'", type, "' code not recognized, see the ", paste0(type, "_codes"),
+           " data frame for valid codes", call. = FALSE)
+    }
+    return(desc)
+  }
+
+  # Otherwise try to convert
+  codes_convert(desc, type)
 }
 
 
 codes_convert <- function(desc, type) {
 
-  # If no conversion needed just return as is
-  if(is.null(desc) ||
-     (type == "species" & is.numeric(desc)) ||
-     (type != "species" & nchar(desc) == 2)) return(desc)
-
   c <- codes_search(desc, type) %>%
-    dplyr::select(paste0(type, "_code"), paste0(type, "_name")) %>%
+    dplyr::select(dplyr::contains("_code"),
+                  dplyr::contains("_name"),
+                  dplyr::contains("_alpha")) %>%
     dplyr::distinct()
 
-  if(length(desc) != nrow(c)) {
-    message("Matched '", paste0(desc, collapse = ", "), "' to ",
-            paste0(c[, paste0(type, "_name")], collapse = ", "))
+  if(nrow(c) == 0) {
+    stop("Unable to match '", desc, "' to any codes in the ",
+         paste0(type, "_codes"), " data frame", call. = FALSE)
+  } else if(nrow(c) > 1) {
+    stop("Matched '", desc, "' to ", nrow(c), " codes: \n",
+         capture_df(c), call. = FALSE)
   }
-  c[, paste0(type, "_code")]
+  dplyr::pull(c, paste0(type, "_code"))
 }
+

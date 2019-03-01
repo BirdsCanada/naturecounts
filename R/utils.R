@@ -28,6 +28,18 @@ progress_query <- function(current, max, by) {
   message("    Records ", current + 1, " to ", to, " / ", max)
 }
 
+as_numeric <- function(x) {
+  if(!is.na(suppressWarnings(as.numeric(x)))) x <- as.numeric(x)
+  x
+}
+
+capture_df <- function(x) {
+  o <- utils::capture.output(x[1:6,])
+  if(nrow(x) > 6) o <- c(o, "...")
+  paste0(o, collapse = "\n")
+}
+
+
 
 
 #' Pipe operator

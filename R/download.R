@@ -66,10 +66,10 @@ nc_data_dl <- function(collections, species = NULL,
   startday <- NULL
   endday <- NULL
 
-  # Convert character to codes
-  species <- codes_convert(species, type = "species")
-  country <- codes_convert(country, type = "country")
-  statprov <- codes_convert(statprov, type = "statprov")
+  # Check/Convert character to codes
+  species <- codes_check(species)
+  country <- codes_check(country)
+  statprov <- codes_check(statprov)
 
   if(verbose) message("Collecting available records...")
   records <- nc_count(collections = collections, country = country,
@@ -314,9 +314,9 @@ nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
   }
 
   # Convert character to codes
-  species <- codes_convert(species, type = "species")
-  country <- codes_convert(country, type = "country")
-  statprov <- codes_convert(statprov, type = "statprov")
+  species <- codes_check(species)
+  country <- codes_check(country)
+  statprov <- codes_check(statprov)
 
   # Get counts
   cnts <- srv_query("data", "list_collections",

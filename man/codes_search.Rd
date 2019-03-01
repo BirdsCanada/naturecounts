@@ -22,7 +22,8 @@ species. These are then used in the \code{\link{nc_data_dl}()} and
 }
 \details{
 These codes can be browsed directly through the built in objects:
-\code{\link{country_statprov_codes}} and \code{\link{sp_codes}}
+\code{\link{country_codes}}, \code{\link{statprov_codes}} and
+\code{\link{species_codes}}
 }
 \examples{
 
@@ -32,6 +33,7 @@ codes_search("Yucatan", type = "statprov") # Yucatán
 codes_search("Alberta", type = "statprov") # AB
 
 codes_search("BCCH", type = "species")     # 14280
+codes_search(c("BCCH", "BDOW"), type = "species")  # 14280 and 7590
 
 \donttest{
 # Using the codes
