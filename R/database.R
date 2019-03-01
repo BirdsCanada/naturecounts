@@ -30,10 +30,20 @@ db_connect <- function(name = paste0("./naturecounts_", Sys.Date())) {
     db_check_version(con)
   } else {
     # Create tables
+
+    # Empty naturecounts table
     dplyr::copy_to(con, nc_dbs[["2018-02-22"]],
                    name = "naturecounts", temporary = FALSE)
-    dplyr::copy_to(con, data.frame(version = "2018-02-22"),
+
+    # Version table with current version
+    dplyr::copy_to(con, data.frame(version = max_version),
                    name = "version", temporary = FALSE)
+
+    # Request table with filters and dates
+    dplyr::copy_to(con,
+                   data.frame(date = NA, species = NA, start_date = NA,
+                              end_date = NA, country = NA, statprov = NA)[0,],
+                   name = "download_request", temporary = FALSE)
   }
 
   con
