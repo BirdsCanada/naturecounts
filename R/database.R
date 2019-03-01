@@ -47,10 +47,12 @@ db_check_version <- function(con) {
       lubridate::as_date(version) %>%
       max()
 
-    if(v < max_version) stop("You are using an out-of-date version of ",
-                             "the naturecounts database.", call. = FALSE)
+    if(v < max_version) stop("Your NatureCounts database is out of date ",
+                             "(", v, " vs. ", max_version, ")",
+                             call. = FALSE)
   } else {
-    stop("There is no version information for this database.", call. = FALSE)
+    stop("There is no version information for this database. ",
+         "Are you sure this is a NatureCounts database?", call. = FALSE)
   }
 }
 
