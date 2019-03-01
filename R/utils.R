@@ -34,7 +34,7 @@ as_numeric <- function(x) {
 }
 
 capture_df <- function(x) {
-  o <- utils::capture.output(x[1:6,])
+  o <- utils::capture.output(utils::head(x))
   if(nrow(x) > 6) o <- c(o, "...")
   paste0(o, collapse = "\n")
 }
@@ -86,17 +86,9 @@ NULL
 #' section](https://adv-r.hadley.nz/meta.html) of [Advanced
 #' R](https://adv-r.hadley.nz).
 #'
+#' @importFrom rlang .data
 #' @md
 #' @name     tidyeval
 #' @keywords internal
-#' @importFrom rlang quo quos enquo enquos quo_name sym ensym syms
-#'                   ensyms expr exprs enexpr enexprs .data
-#' @aliases  quo quos enquo enquos quo_name
-#'           sym ensym syms ensyms
-#'           expr exprs enexpr enexprs
-#'           .data
-#' @export   quo quos enquo enquos quo_name
-#' @export   sym ensym syms ensyms
-#' @export   expr enexpr enexprs
 #' @export   .data
 NULL

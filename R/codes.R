@@ -44,7 +44,7 @@ codes_search <- function(desc, type = "country") {
   desc <- paste0("(", paste0(desc, collapse = ")|("), ")")
 
   codes <- df %>%
-    tidyr::gather(type, name, -dplyr::contains("_code")) %>%
+    tidyr::gather("cols", "name", -dplyr::contains("_code")) %>%
     dplyr::mutate(name = stringi::stri_trans_general(.data$name, "Latin-ASCII")) %>%
     dplyr::filter(
       stringr::str_detect(.data$name,

@@ -2,20 +2,6 @@
 % Please edit documentation in R/utils.R
 \name{tidyeval}
 \alias{tidyeval}
-\alias{quo}
-\alias{quos}
-\alias{enquo}
-\alias{enquos}
-\alias{quo_name}
-\alias{sym}
-\alias{ensym}
-\alias{syms}
-\alias{ensyms}
-\alias{expr}
-\alias{exprs}
-\alias{enexpr}
-\alias{enexprs}
-\alias{.data}
 \title{Tidy eval helpers}
 \description{
 \itemize{

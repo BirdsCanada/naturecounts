@@ -104,9 +104,7 @@ nc_data_dl <- function(collections, species = NULL,
             "internet connection during the download.")
   }
 
-  if(verbose) {
-    message(paste0(capture.output(records), collapse = "\n"))
-  }
+  if(verbose) message(capture_df(records))
 
   # Get/Create database or dataframe
   if(!is.null(sql_db)) {
@@ -282,7 +280,9 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' # Count publicly available records for Manitoba, Canada
 #'
+#' \donttest{
 #' nc_count(statprov = "MB")
+#' }
 #'
 #' # Count all records for all collections you have access to
 #'
@@ -291,6 +291,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #' }
 #'
 #' # Count all public records with barred owls in Ontario
+#'
 #'
 #' nc_count(species = 7590, statprov = "ON")
 #'
@@ -301,8 +302,9 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #' # Count records available in the Christmas Bird Count and Breeding Bird
 #' # Survey collections (regardless of permissions)
 #'
+#' \donttest{
 #' nc_count(c("CBC", "BBS"), show = "all")
-#'
+#' }
 #'
 
 nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
@@ -328,7 +330,7 @@ nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
                                   country = country,
                                   statprov = statprov)) %>%
     parse_results() %>%
-    dplyr::arrange(collection)
+    dplyr::arrange(.data$collection)
 
   if(show == "available" && nrow(cnts) > 0) {
     cnts <- srv_query("data", "list_permissions",

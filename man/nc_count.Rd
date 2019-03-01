@@ -46,7 +46,9 @@ nc_count()
 
 # Count publicly available records for Manitoba, Canada
 
+\donttest{
 nc_count(statprov = "MB")
+}
 
 # Count all records for all collections you have access to
 
@@ -55,6 +57,7 @@ nc_count(token = YOUR_TOKEN)
 }
 
 # Count all public records with barred owls in Ontario
+
 
 nc_count(species = 7590, statprov = "ON")
 
@@ -65,7 +68,8 @@ nc_count(species = "BDOW", statprov = "Ontario")
 # Count records available in the Christmas Bird Count and Breeding Bird
 # Survey collections (regardless of permissions)
 
+\donttest{
 nc_count(c("CBC", "BBS"), show = "all")
-
+}
 
 }
