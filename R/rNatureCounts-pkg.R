@@ -6,7 +6,9 @@
     utils::globalVariables(
       # Vars used in Non-Standard Evaluations, declare here to
       # avoid CRAN warnings
-      c(".") # piping requires '.' at times
+      c(".",  # piping requires '.' at times
+        # Define datasets
+        "species_authority", "species_codes", "species_taxonomy")
     )
   invisible()
 }

@@ -4,18 +4,18 @@
 \alias{nc_count}
 \title{Download information about NatureCounts collections}
 \usage{
-nc_count(collections = NULL, country = NULL, statprov = NULL,
-  species = NULL, startyear = NULL, endyear = NULL,
+nc_count(collections = NULL, species = NULL, country = NULL,
+  statprov = NULL, startyear = NULL, endyear = NULL,
   show = "available", token = NULL)
 }
 \arguments{
 \item{collections}{Character vector. Filter to specific collections}
 
+\item{species}{Numeric vector. Numeric species ids (see details)}
+
 \item{country}{Character vector. Filter to specific country codes}
 
 \item{statprov}{Character vector. Filter to specific state/province codes}
-
-\item{species}{Numeric vector. Filter to these species codes.}
 
 \item{startyear}{Numeric. Filter to this start year}
 
@@ -36,38 +36,35 @@ by location (if provided). If authorization is provided, the collections are
 filtered to only those available to the user. Otherwise all collections are
 returned.
 }
+\details{
+Numeric species id codes can determined from the functions
+\code{\link{species_search}()} or \code{\link{species_code_search}()}, or
+by browsing the metadata \code{\link{species_codes}} or
+\code{\link{species_taxonomy}}.
+}
 \examples{
 
 # Count all publicly available records:
-
 \donttest{
 nc_count()
 }
 
 # Count publicly available records for Manitoba, Canada
-
 \donttest{
 nc_count(statprov = "MB")
 }
 
 # Count all records for all collections you have access to
-
 \dontrun{
 nc_count(token = YOUR_TOKEN)
 }
 
 # Count all public records with barred owls in Ontario
-
-
+species_search("barred owl")
 nc_count(species = 7590, statprov = "ON")
-
-# Or use actual names
-
-nc_count(species = "BDOW", statprov = "Ontario")
 
 # Count records available in the Christmas Bird Count and Breeding Bird
 # Survey collections (regardless of permissions)
-
 \donttest{
 nc_count(c("CBC", "BBS"), show = "all")
 }

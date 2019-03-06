@@ -2,42 +2,25 @@
 % Please edit documentation in R/codes.R
 \name{codes_search}
 \alias{codes_search}
-\title{Find country, state/province, or species codes}
+\title{Generic function to match code ids}
 \usage{
-codes_search(desc, type = "country")
+codes_search(desc, df, code_column, columns)
 }
 \arguments{
-\item{desc}{Character. The search term to match}
+\item{desc}{Character. Description to match in the codes}
 
-\item{type}{Character. One of "country", "statprov", or "species". The type
-of code to return.}
+\item{df}{Data frame. Data to look in}
+
+\item{code_column}{Character. Column name which contains the codes}
+
+\item{columns}{Character vector. Column name(s) which contain the values to
+match against the description.}
 }
 \value{
-A data frame with the relevant codes and other information
+data frame of matching rows
 }
 \description{
-Search for the correct codes to identify countries, states/provinces or
-species. These are then used in the \code{\link{nc_data_dl}()} and
-\code{\link{nc_count}()} functions.
+Returns a subset of the data frame where the specified columns match the
+provided description.
 }
-\details{
-These codes can be browsed directly through the built in objects:
-\code{\link{country_codes}}, \code{\link{statprov_codes}} and
-\code{\link{species_codes}}
-}
-\examples{
-
-codes_search("Mexico", type = "country")   # MX
-
-codes_search("Yucatan", type = "statprov") # Yucatán
-codes_search("Alberta", type = "statprov") # AB
-
-codes_search("BCCH", type = "species")     # 14280
-codes_search(c("BCCH", "BDOW"), type = "species")  # 14280 and 7590
-
-\donttest{
-# Using the codes
-nc_count(statprov = "AB", species = "14280", startyear = 2010)
-}
-
-}
+\keyword{internal}

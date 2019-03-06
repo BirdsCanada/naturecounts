@@ -2,8 +2,10 @@
 
 export("%>%")
 export(.data)
-export(codes_search)
+export(location_search)
 export(nc_count)
 export(nc_data_dl)
+export(species_code_search)
+export(species_search)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)

@@ -1,15 +1,31 @@
-#' List of species codes
+#' List of numeric species codes for birds
 #'
-#' A dataset containing a list of species integer id codes matched to 4-letter
-#' codes according to the Birds Studies Canada authority.
+#' A dataset containing a list of numeric species id codes matched to
+#' alphanumeric species codes according to various authorities.
 #'
-#' @format A data frame with 1210 rows and 3 variables:
-#' \describe{
-#'   \item{species_code}{Numeric species id code for use in filtering data}
-#'   \item{species_alpha}{The 4-letter species alpha code}
-#'   \item{species_name}{English common name}
-#' }
+#' @format A data frame with 15709 rows and 34 variables
 "species_codes"
+
+#' List of species authorities for bird species codes
+#'
+#' A dataset containing a list of authorities for various alphanumeric species
+#' codes for birds
+#'
+#' @format A data frame with 31 rows and 4 variables:
+#' \describe{
+#'   \item{authority}{Authority}
+#'   \item{authors}{Authors of the authority}
+#'   \item{year}{Year of the authority}
+#'   \item{version}{Version of the authority}
+#' }
+"species_authority"
+
+#' List of species taxonomy
+#'
+#' A dataset containing a list of species ids associated with taxonomy.
+#'
+#' @format A data frame with 35844 rows and 17 variables
+"species_taxonomy"
 
 #' List of country codes
 #'
@@ -38,3 +54,18 @@
 #'   \item{statprov_name_es}{State/Province name in Spanish}
 #' }
 "statprov_codes"
+
+#' List of subnational codes
+#'
+#' A dataset containing a list of subnational id codes matched to names in
+#' English.
+#'
+#' @format A data frame with 3391 rows and 4 variables:
+#' \describe{
+#'   \item{country_code}{Letter country code for use in filtering data}
+#'   \item{statprov_code}{Letter state/province code for use in filtering data}
+#'   \item{subnat_code}{Letter subnational code for use in filtering data}
+#'   \item{subnat_name}{Subnational area name in English}
+#' }
+"subnat_codes"
+

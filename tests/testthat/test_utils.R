@@ -15,7 +15,7 @@ test_that("capture_df() capture dataframe", {
   expect_silent(capture_df(species_codes[1:3,])) %>%
     expect_is("character") %>%
     expect_length(1) %>%
-    expect_match("[a-zA-Z ]+$")
+    expect_match("[a-zA-Z <>0-9]+$")
 
   expect_silent(capture_df(country_codes)) %>%
     expect_is("character") %>%

@@ -5,11 +5,11 @@
 #'
 #' @param collections Character vector. The collection codes from which to
 #'   download data. "all" downloads data from all available collections
-#' @param species Character vector. Filter data to specific species
+#' @param species Numeric vector. Numeric species ids (see details)
 #' @param start_date Character. The starting date of data to download. See
-#'   details for format.
+#'   details for format
 #' @param end_date Character. The end date of data to download. See details for
-#'   format.
+#'   format
 #' @param location NOT IMPLEMENTED
 #' @param country Character vector. Filter data to specific countries codes
 #' @param statprov Character vector. Filter data to specific states/province
@@ -21,15 +21,18 @@
 #' @param format Logical. Format downloaded data?
 #' @param verbose Logical. Display progress messages?
 #'
-#' @details The format of start/end dates is fairly flexible and can be anything
+#' @details Numeric species id codes can determined from the functions
+#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}, or
+#'   by browsing the metadata \code{\link{species_codes}} or
+#'   \code{\link{species_taxonomy}}.
+#'
+#'   The format of start/end dates is fairly flexible and can be anything
 #'   recognized by \code{\link[lubridate]{lubridate-package}}'s
 #'   \code{\link[lubridate]{ymd}()} function. However, it must have the
 #'   order of year, month, day. Month and day are option: It can be year and
 #'   month (e.g., \code{"2000 May"}), or simply year (e.g., \code{2000}).
 #'
 #' @return Data frame
-#'
-#' @export
 #'
 #' @examples
 #'
@@ -39,13 +42,15 @@
 #' }
 #'
 #' # Observations of black-capped chickadees from RCBIOTABASE collection in 2010
+#' species_search("black-capped chickadee") # Find the species_id
 #' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
 #'                    start_date = 2010, end_date = 2010)
 #'
-#' # Or filter by species alpha code
-#' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = "BCCH",
-#'                    start_date = 2010, end_date = 2010)
+#' # All moose observations with public access
+#' species_search("moose")
+#' moose <- nc_data_dl(collection = "all", species = 133990)
 #'
+#' @export
 
 nc_data_dl <- function(collections, species = NULL,
                        start_date = NULL, end_date = NULL,
@@ -256,11 +261,11 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #' returned.
 #'
 #' @param collections Character vector. Filter to specific collections
+#' @param species Numeric vector. Numeric species ids (see details)
 #' @param country Character vector. Filter to specific country codes
 #' @param statprov Character vector. Filter to specific state/province codes
 #' @param startyear Numeric. Filter to this start year
 #' @param endyear Numeric. Filter to this end year
-#' @param species Numeric vector. Filter to these species codes.
 #' @param show Character. Either "all" or "available". "all" returns counts from
 #'   all data sources. "available" only returns counts for data available
 #'   (public or accessible with the token provided).
@@ -268,47 +273,42 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' @return Data frame
 #'
-#' @export
+#' @details Numeric species id codes can determined from the functions
+#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}, or
+#'   by browsing the metadata \code{\link{species_codes}} or
+#'   \code{\link{species_taxonomy}}.
 #'
 #' @examples
 #'
 #' # Count all publicly available records:
-#'
 #' \donttest{
 #' nc_count()
 #' }
 #'
 #' # Count publicly available records for Manitoba, Canada
-#'
 #' \donttest{
 #' nc_count(statprov = "MB")
 #' }
 #'
 #' # Count all records for all collections you have access to
-#'
 #' \dontrun{
 #' nc_count(token = YOUR_TOKEN)
 #' }
 #'
 #' # Count all public records with barred owls in Ontario
-#'
-#'
+#' species_search("barred owl")
 #' nc_count(species = 7590, statprov = "ON")
-#'
-#' # Or use actual names
-#'
-#' nc_count(species = "BDOW", statprov = "Ontario")
 #'
 #' # Count records available in the Christmas Bird Count and Breeding Bird
 #' # Survey collections (regardless of permissions)
-#'
 #' \donttest{
 #' nc_count(c("CBC", "BBS"), show = "all")
 #' }
 #'
+#' @export
 
-nc_count <- function(collections = NULL, country = NULL, statprov = NULL,
-                     species = NULL, startyear = NULL, endyear = NULL,
+nc_count <- function(collections = NULL, species = NULL, country = NULL,
+                     statprov = NULL, startyear = NULL, endyear = NULL,
                      show = "available", token = NULL) {
 
   if(!show %in% c("available", "all")) {

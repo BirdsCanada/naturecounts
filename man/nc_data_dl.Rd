@@ -13,13 +13,13 @@ nc_data_dl(collections, species = NULL, start_date = NULL,
 \item{collections}{Character vector. The collection codes from which to
 download data. "all" downloads data from all available collections}
 
-\item{species}{Character vector. Filter data to specific species}
+\item{species}{Numeric vector. Numeric species ids (see details)}
 
 \item{start_date}{Character. The starting date of data to download. See
-details for format.}
+details for format}
 
 \item{end_date}{Character. The end date of data to download. See details for
-format.}
+format}
 
 \item{location}{NOT IMPLEMENTED}
 
@@ -46,6 +46,11 @@ Download data records from various collections filtered by date and location
 (if provided). An authorization token is required.
 }
 \details{
+Numeric species id codes can determined from the functions
+\code{\link{species_search}()} or \code{\link{species_code_search}()}, or
+by browsing the metadata \code{\link{species_codes}} or
+\code{\link{species_taxonomy}}.
+
 The format of start/end dates is fairly flexible and can be anything
 recognized by \code{\link[lubridate]{lubridate-package}}'s
 \code{\link[lubridate]{ymd}()} function. However, it must have the
@@ -60,11 +65,12 @@ rcbio <- nc_data_dl(collection = "RCBIOTABASE")
 }
 
 # Observations of black-capped chickadees from RCBIOTABASE collection in 2010
+species_search("black-capped chickadee") # Find the species_id
 bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
                    start_date = 2010, end_date = 2010)
 
-# Or filter by species alpha code
-bcch <- nc_data_dl(collection = "RCBIOTABASE", species = "BCCH",
-                   start_date = 2010, end_date = 2010)
+# All moose observations with public access
+species_search("moose")
+moose <- nc_data_dl(collection = "all", species = 133990)
 
 }

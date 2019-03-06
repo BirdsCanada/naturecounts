@@ -3,18 +3,13 @@
 \docType{data}
 \name{species_codes}
 \alias{species_codes}
-\title{List of species codes}
-\format{A data frame with 1210 rows and 3 variables:
-\describe{
-\item{species_code}{Numeric species id code for use in filtering data}
-\item{species_alpha}{The 4-letter species alpha code}
-\item{species_name}{English common name}
-}}
+\title{List of numeric species codes for birds}
+\format{A data frame with 15709 rows and 34 variables}
 \usage{
 species_codes
 }
 \description{
-A dataset containing a list of species integer id codes matched to 4-letter
-codes according to the Birds Studies Canada authority.
+A dataset containing a list of numeric species id codes matched to
+alphanumeric species codes according to various authorities.
 }
 \keyword{datasets}

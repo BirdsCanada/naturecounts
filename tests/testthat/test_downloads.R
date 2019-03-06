@@ -1,3 +1,4 @@
+# Download Counts -----------------------------------------------------------
 context("Download counts")
 
 test_that("Get counts for collections", {
@@ -26,6 +27,12 @@ test_that("Counts return permissions", {
   expect_gt(sum(c_all$nrecords), sum(c_public$nrecords))
 
 })
+
+
+# Download Data -----------------------------------------------------------
+
+
+context("Download data")
 
 test_that("Data download returns data", {
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE",
