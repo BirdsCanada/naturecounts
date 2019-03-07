@@ -53,19 +53,37 @@ location_search <- function(name, type = "country"){
 #' names.
 #'
 #' @param name Character. The species name to search for
+#' @param show Character. Either "all" or "names" (default). Whether to return
+#'   all taxonomic information or only a subset with species names
+#' @param authority Character. If not NULL (default), return the alphanumeric
+#'   code associated with avian species for this taxonomic authority.
 #'
-#' @return Data frame of species ids and names
+#' @return Data frame of species ids and taxonomic information
 #'
 #' @examples
 #'
 #' species_search("chickadee")
 #' species_search("black-capped chickadee")
 #'
+#' # Add alphanumeric code for BSCDATA authority
+#' species_search("black-capped chickadee", authority = "BSCDATA")
+#'
+#' # Show all taxonomic information
+#' species_search("black-capped chickadee", show = "all")
+#'
 #' # Using the codes
 #' nc_count(species = 14280)
 #'
 #' @export
-species_search <- function(name) {
+species_search <- function(name = NULL, show = "names", authority = NULL) {
+
+  # Argument checks
+  if(!is.null(authority)) check_authority(authority)
+
+  if(!show %in% c("all", "names")) {
+    stop("'show' must be either 'all' or 'names'", call.= FALSE)
+  }
+
   search_columns <- c("scientific_name", "english_name", "french_name")
   ids <- codes_search(name, df = species_taxonomy, code_column = "species_id",
                       columns = search_columns)
@@ -76,6 +94,19 @@ species_search <- function(name) {
          "searching through the species_taxonomy data frame by hand",
          call. = FALSE)
   }
+
+  if(show == "names") {
+    ids <- dplyr::select(ids, "species_id",
+                         dplyr::one_of("scientific_name", "english_name",
+                                       "french_name", "taxon_group"))
+  }
+
+  if(!is.null(authority)) {
+    ids <- dplyr::left_join(ids, dplyr::select(species_codes, "species_id2",
+                                               dplyr::one_of(authority)),
+                            by = c("species_id" = "species_id2"))
+  }
+
 
   ids
 }

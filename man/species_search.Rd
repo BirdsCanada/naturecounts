@@ -4,13 +4,19 @@
 \alias{species_search}
 \title{Find species codes}
 \usage{
-species_search(name)
+species_search(name = NULL, show = "names", authority = NULL)
 }
 \arguments{
 \item{name}{Character. The species name to search for}
+
+\item{show}{Character. Either "all" or "names" (default). Whether to return
+all taxonomic information or only a subset with species names}
+
+\item{authority}{Character. If not NULL (default), return the alphanumeric
+code associated with avian species for this taxonomic authority.}
 }
 \value{
-Data frame of species ids and names
+Data frame of species ids and taxonomic information
 }
 \description{
 Find species id codes by searching for scientific, English and French species
@@ -20,6 +26,12 @@ names.
 
 species_search("chickadee")
 species_search("black-capped chickadee")
+
+# Add alphanumeric code for BSCDATA authority
+species_search("black-capped chickadee", authority = "BSCDATA")
+
+# Show all taxonomic information
+species_search("black-capped chickadee", show = "all")
 
 # Using the codes
 nc_count(species = 14280)
