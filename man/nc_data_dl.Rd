@@ -6,8 +6,7 @@
 \usage{
 nc_data_dl(collections, species = NULL, start_date = NULL,
   end_date = NULL, location = NULL, country = NULL,
-  statprov = NULL, token = NULL, sql_db = NULL, format = TRUE,
-  verbose = TRUE)
+  statprov = NULL, token = NULL, sql_db = NULL, verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -33,8 +32,6 @@ data is accessible.}
 
 \item{sql_db}{Character vector. Name and location of SQLite database to
 either create or add to.}
-
-\item{format}{Logical. Format downloaded data?}
 
 \item{verbose}{Logical. Display progress messages?}
 }

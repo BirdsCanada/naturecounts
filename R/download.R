@@ -18,7 +18,6 @@
 #'   data is accessible.
 #' @param sql_db Character vector. Name and location of SQLite database to
 #'   either create or add to.
-#' @param format Logical. Format downloaded data?
 #' @param verbose Logical. Display progress messages?
 #'
 #' @details Numeric species id codes can determined from the functions
@@ -55,7 +54,7 @@
 nc_data_dl <- function(collections, species = NULL,
                        start_date = NULL, end_date = NULL,
                        location = NULL, country = NULL, statprov = NULL,
-                       token = NULL, sql_db = NULL, format = TRUE,
+                       token = NULL, sql_db = NULL,
                        verbose = TRUE) {
 
   if(missing(collections)) stop("You must specify collections from which to ",
@@ -138,8 +137,6 @@ nc_data_dl <- function(collections, species = NULL,
     if(is.data.frame(df_db)) df_db <- dplyr::bind_rows(df_db, d)
 
   }
-
-  if(is.data.frame(df_db)) if(format) df_db <- nc_format(df_db)
 
   df_db
 }
