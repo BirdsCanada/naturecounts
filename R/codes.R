@@ -5,10 +5,6 @@
 #' sub-national areas. These are then used in the \code{\link{nc_data_dl}()} and
 #' \code{\link{nc_count}()} functions.
 #'
-#' These codes can be browsed directly through the built in objects:
-#' \code{\link{country_codes}}, \code{\link{statprov_codes}} and
-#' \code{\link{subnat_codes}}
-#'
 #' @param name Character. The location name to search for
 #' @param type Character. One of "country", "statprov", or "subnat". The type
 #'   of code to return.
@@ -38,7 +34,7 @@ location_search <- function(name, type = "country"){
          call. = FALSE)
   }
 
-  df <- get(paste0(type, "_codes"))
+  df <- eval(parse(text = paste0(type, "_codes()")))
   columns <- stringr::str_subset(names(df), "name")
 
   codes_search(name, df = df, code_column = paste0(type, "_code"),
@@ -78,14 +74,12 @@ location_search <- function(name, type = "country"){
 species_search <- function(name = NULL, show = "names", authority = NULL) {
 
   # Argument checks
-  if(!is.null(authority)) check_authority(authority)
-
   if(!show %in% c("all", "names")) {
     stop("'show' must be either 'all' or 'names'", call.= FALSE)
   }
 
   search_columns <- c("scientific_name", "english_name", "french_name")
-  ids <- codes_search(name, df = species_taxonomy, code_column = "species_id",
+  ids <- codes_search(name, df = species_taxonomy(), code_column = "species_id",
                       columns = search_columns)
 
   # No rows?
@@ -102,7 +96,8 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
   }
 
   if(!is.null(authority)) {
-    ids <- dplyr::left_join(ids, dplyr::select(species_codes, "species_id2",
+    check_authority(authority)
+    ids <- dplyr::left_join(ids, dplyr::select(species_codes(), "species_id2",
                                                dplyr::one_of(authority)),
                             by = c("species_id" = "species_id2"))
   }
@@ -164,7 +159,7 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
   code_column <- dplyr::if_else(results == "exact", "species_id2", "species_id")
 
   # Return matching rows
-  df <- species_codes %>%
+  df <- species_codes() %>%
     tidyr::gather("authority", "code",
                   -.data$species_id, -.data$rank, -.data$species_id2) %>%
     dplyr::filter(.data$authority %in% !!authority,
@@ -190,7 +185,7 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
 
   # Add in common/scientific names for reference
   dplyr::left_join(ids,
-                   dplyr::select(species_taxonomy, "species_id",
+                   dplyr::select(species_taxonomy(), "species_id",
                                  "scientific_name", "english_name",
                                  "french_name"),
                    by = "species_id")
@@ -243,8 +238,8 @@ codes_check <- function(desc) {
 
   # Get code data frames
   if(type == "species") {
-    df <- species_taxonomy
-  } else df <- get(paste0(type, "_codes"))
+    df <- species_taxonomy()
+  } else df <- eval(parse(text = paste0(type, "_codes()")))
 
   vapply(desc, codes_check_each, type = type, df = df,
          FUN.VALUE = vector(length = 1, mode = m),

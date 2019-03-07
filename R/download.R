@@ -21,9 +21,7 @@
 #' @param verbose Logical. Display progress messages?
 #'
 #' @details Numeric species id codes can determined from the functions
-#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}, or
-#'   by browsing the metadata \code{\link{species_codes}} or
-#'   \code{\link{species_taxonomy}}.
+#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}.
 #'
 #'   The format of start/end dates is fairly flexible and can be anything
 #'   recognized by \code{\link[lubridate]{lubridate-package}}'s
@@ -270,9 +268,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #' @return Data frame
 #'
 #' @details Numeric species id codes can determined from the functions
-#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}, or
-#'   by browsing the metadata \code{\link{species_codes}} or
-#'   \code{\link{species_taxonomy}}.
+#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}.
 #'
 #' @examples
 #'

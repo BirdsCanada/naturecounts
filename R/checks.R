@@ -6,7 +6,7 @@ check_collections <- function(c) {
 }
 
 check_authority <- function(a) {
-  if(!all(a %in% species_authority$authority)) {
+  if(!all(a %in% species_authority()$authority)) {
     stop("'authority' must be one or more of the authorities ",
          "specified in the species_authority data frame.", call. = FALSE)
   }

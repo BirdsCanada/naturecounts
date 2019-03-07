@@ -44,16 +44,16 @@ db_create <- function(con) {
                  unique_indexes = list("record_id"))
 
   # Copy metadata
-  dplyr::copy_to(con, species_taxonomy, temporary = FALSE)
-  dplyr::copy_to(con, species_codes, temporary = FALSE)
-  dplyr::copy_to(con, species_authority, temporary = FALSE)
-  dplyr::copy_to(con, country_codes, temporary = FALSE)
-  dplyr::copy_to(con, statprov_codes, temporary = FALSE)
-  dplyr::copy_to(con, subnat_codes, temporary = FALSE)
+  dplyr::copy_to(con, country_codes(), temporary = FALSE)
+  dplyr::copy_to(con, statprov_codes(), temporary = FALSE)
+  dplyr::copy_to(con, subnat_codes(), temporary = FALSE)
+  dplyr::copy_to(con, species_authority(), temporary = FALSE)
+  dplyr::copy_to(con, species_codes(), temporary = FALSE)
+  dplyr::copy_to(con, species_taxonomy(), temporary = FALSE)
 
   # Create versions table with current versions
   v <- data.frame(Rpackage = as.character(utils::packageVersion("rNatureCounts")),
-                  metadata = rNatureCounts::version_metadata)
+                  metadata = metadata_version())
   dplyr::copy_to(con, v, name = "versions", temporary = FALSE)
 
   # Create empty request table with filters and dates

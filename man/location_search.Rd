@@ -20,11 +20,6 @@ Search for the correct codes to identify countries, states/provinces or
 sub-national areas. These are then used in the \code{\link{nc_data_dl}()} and
 \code{\link{nc_count}()} functions.
 }
-\details{
-These codes can be browsed directly through the built in objects:
-\code{\link{country_codes}}, \code{\link{statprov_codes}} and
-\code{\link{subnat_codes}}
-}
 \examples{
 
 location_search("Mexico", type = "country")   # MX

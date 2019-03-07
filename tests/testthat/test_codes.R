@@ -1,6 +1,6 @@
 context("Code searching and conversions")
 
-test_that("Get codes", {
+test_that("Get location codes", {
 
   expect_is(c1 <- location_search("Belize", type = "country"), "data.frame")
   expect_equal(nrow(c1), 1)
@@ -14,7 +14,7 @@ test_that("Get codes", {
   expect_true(c1$statprov_name == "Colorado")
 })
 
-test_that("Accents ignored in search", {
+test_that("Accents ignored in location search", {
   expect_is(c1 <- location_search("Yucatan", type = "statprov"), "data.frame")
   expect_equal(nrow(c1), 1)
   expect_true(c1$country_code == "MX")
