@@ -4,13 +4,13 @@
 \alias{nc_data_dl}
 \title{Download NatureCounts data records}
 \usage{
-nc_data_dl(collections, species = NULL, start_date = NULL,
+nc_data_dl(collections = NULL, species = NULL, start_date = NULL,
   end_date = NULL, location = NULL, country = NULL,
   statprov = NULL, token = NULL, sql_db = NULL, verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
-download data. "all" downloads data from all available collections}
+download data. NULL (default) downloads data from all available collections}
 
 \item{species}{Numeric vector. Numeric species ids (see details)}
 
@@ -68,6 +68,6 @@ bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
 
 # All moose observations with public access
 species_search("moose")
-moose <- nc_data_dl(collection = "all", species = 133990)
+moose <- nc_data_dl(species = 133990)
 
 }

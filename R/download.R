@@ -4,7 +4,7 @@
 #' (if provided). An authorization token is required.
 #'
 #' @param collections Character vector. The collection codes from which to
-#'   download data. "all" downloads data from all available collections
+#'   download data. NULL (default) downloads data from all available collections
 #' @param species Numeric vector. Numeric species ids (see details)
 #' @param start_date Character. The starting date of data to download. See
 #'   details for format
@@ -47,18 +47,17 @@
 #'
 #' # All moose observations with public access
 #' species_search("moose")
-#' moose <- nc_data_dl(collection = "all", species = 133990)
+#' moose <- nc_data_dl(species = 133990)
 #'
 #' @export
 
-nc_data_dl <- function(collections, species = NULL,
+nc_data_dl <- function(collections = NULL, species = NULL,
                        start_date = NULL, end_date = NULL,
                        location = NULL, country = NULL, statprov = NULL,
                        token = NULL, sql_db = NULL,
                        verbose = TRUE) {
 
-  if(missing(collections)) stop("You must specify collections from which to ",
-                                "download the data.", call. = FALSE)
+  check_collections(collections)
 
   # Format dates
   start_date <- parse_date(start_date)
@@ -308,6 +307,7 @@ nc_count <- function(collections = NULL, species = NULL, country = NULL,
                      statprov = NULL, startyear = NULL, endyear = NULL,
                      show = "available", token = NULL) {
 
+  check_collections(collections)
   if(!show %in% c("available", "all")) {
     stop("show must either be 'all' or 'available'", call. = FALSE)
   }

@@ -122,14 +122,11 @@ species_search <- function(name) {
 species_code_search <- function(code = NULL, authority = "BSCDATA",
                                 results = "all") {
 
+  # Argument checks
+  check_authority(authority)
+
   if(!results %in% c("all", "exact")) {
     stop("'results' must be 'all' or 'exact'", call. = FALSE)
-  }
-
-  # Which columns to search through
-  if(!all(authority %in% species_authority$authority)) {
-    stop("'authority' must be one or more of the authorities ",
-         "specified in the species_authority data frame.", call. = FALSE)
   }
 
   # Where to search
