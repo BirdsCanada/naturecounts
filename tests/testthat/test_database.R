@@ -1,5 +1,7 @@
 context("SQLite Databases")
 
+
+# db_check_version ------------------------------------------------------------
 test_that("db_check_version() works as expected", {
 
   con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
@@ -9,20 +11,26 @@ test_that("db_check_version() works as expected", {
                "There is no version information for this database.")
 
   # Old version
-  DBI::dbWriteTable(con, "version", data.frame(version = "2000-01-01"))
+  DBI::dbWriteTable(con, "versions", data.frame(Rpackage = "0.0.5"))
   expect_error(db_check_version(con),
-               "Your NatureCounts database is out of date \\(2000-01-01 vs. ")
+               "Your NatureCounts database is out of date")
 
   # Current version
-  DBI::dbWriteTable(con, "version", overwrite = TRUE,
-                    value = data.frame(version = as.character(max_version)))
+  v <- data.frame(Rpackage = as.character(packageVersion("rNatureCounts")))
+  DBI::dbWriteTable(con, "versions", overwrite = TRUE, value = v)
   expect_silent(db_check_version(con))
+
+  # Clean up
+  DBI::dbDisconnect(con)
 })
 
-test_that("Empty, default, database created", {
+# db_create ------------------------------------------------------------
+test_that("db_create creates tables in the database", {
 
-  expect_silent(con <- db_connect()) %>%
-    expect_is("SQLiteConnection")
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname =  ":memory:")
+
+  expect_silent(db_create(con))
+  expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Check naturecounts table
   expect_silent(nc <- dplyr::tbl(con, "naturecounts")) %>%
@@ -30,17 +38,16 @@ test_that("Empty, default, database created", {
     expect_named()
 
   expect_silent(nc <- dplyr::collect(nc))
-  expect_true(nrow(nc) == 0)
-  expect_true(ncol(nc) == 170)
+  expect_equal(nrow(nc), 0)
+  expect_gt(ncol(nc), 1)
 
   # Check version table
-  expect_silent(v <- dplyr::tbl(con, "version")) %>%
+  expect_silent(v <- dplyr::tbl(con, "versions")) %>%
     expect_is("tbl_sql") %>%
     expect_named()
 
   expect_silent(v <- dplyr::collect(v))
-  expect_true(nrow(v) >= 1)
-  expect_true(ncol(v) == 1)
+  expect_gte(nrow(v), 1)
 
   # Check request table
   expect_silent(d <- dplyr::tbl(con, "download_request")) %>%
@@ -48,8 +55,22 @@ test_that("Empty, default, database created", {
     expect_named()
 
   expect_silent(d <- dplyr::collect(d))
-  expect_true(nrow(d) == 0)
-  expect_true(ncol(d) == 6)
+  expect_equal(nrow(d), 0)
+  expect_equal(ncol(d),  6)
+
+  # Clean up
+  DBI::dbDisconnect(con)
+})
+
+
+# db_connect --------------------------------------------------------------
+
+test_that("db_connect creates SQLite database file", {
+
+  # Check connection and encoding
+  expect_silent(con <- db_connect()) %>%
+    expect_is("SQLiteConnection")
+  expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Check that file present
   expect_true(file.exists(paste0("naturecounts_", Sys.Date(), ".nc")))
@@ -59,42 +80,20 @@ test_that("Empty, default, database created", {
 
   expect_silent(con <- db_connect()) %>%
     expect_is("SQLiteConnection")
+  expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Clean up
+  DBI::dbDisconnect(con)
   expect_true(file.remove(paste0("naturecounts_", Sys.Date(), ".nc")))
 })
 
-test_that("Empty, named, database created", {
 
+test_that("db_connect creates named SQLite database file", {
+
+  # Check connection and encoding
   expect_silent(con <- db_connect("mydatabase")) %>%
     expect_is("SQLiteConnection")
-
-  # Check naturecounts table
-  expect_silent(nc <- dplyr::tbl(con, "naturecounts")) %>%
-    expect_is("tbl_sql") %>%
-    expect_named()
-
-  expect_silent(nc <- dplyr::collect(nc))
-  expect_true(nrow(nc) == 0)
-  expect_true(ncol(nc) == 170)
-
-  # Check version table
-  expect_silent(v <- dplyr::tbl(con, "version")) %>%
-    expect_is("tbl_sql") %>%
-    expect_named()
-
-  expect_silent(v <- dplyr::collect(v))
-  expect_true(nrow(v) >= 1)
-  expect_true(ncol(v) == 1)
-
-  # Check request table
-  expect_silent(d <- dplyr::tbl(con, "download_request")) %>%
-    expect_is("tbl_sql") %>%
-    expect_named()
-
-  expect_silent(d <- dplyr::collect(d))
-  expect_true(nrow(d) == 0)
-  expect_true(ncol(d) == 6)
+  expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Check that file present
   expect_true(file.exists(paste0("mydatabase.nc")))
@@ -104,11 +103,100 @@ test_that("Empty, named, database created", {
 
   expect_silent(con <- db_connect("mydatabase")) %>%
     expect_is("SQLiteConnection")
+  expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Clean up
+  DBI::dbDisconnect(con)
   expect_true(file.remove(paste0("mydatabase.nc")))
 })
 
-test_that("db_insert overwrites and adds as required", {
 
+# db_insert ---------------------------------------------------------------
+test_that("db_insert add and appends rows", {
+
+  expect_silent(con <- db_connect()) %>%
+    expect_is("SQLiteConnection")
+
+  # Adding data to an empty table
+  expect_silent(db_insert(con, "naturecounts", bcch))
+  expect_silent(nc1 <- dplyr::collect(dplyr::tbl(con, "naturecounts"))) %>%
+    expect_is("tbl")
+
+  # Appending new data to table with data
+  expect_silent(db_insert(con, "naturecounts", bdow))
+  expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts"))) %>%
+    expect_is("tbl")
+
+  expect_equal(nrow(nc2), nrow(bcch) + nrow(bdow))
+
+  # Clean up (leave file for next tests)
+  DBI::dbDisconnect(con)
+})
+
+test_that("db_insert overwrites rows as required", {
+
+  expect_silent(con <- db_connect()) %>%
+    expect_is("SQLiteConnection")
+
+  # Trying to append duplicate data doesn't add anything
+  nc1 <- dplyr::tbl(con, "naturecounts") %>% dplyr::collect()
+  expect_silent(db_insert(con, "naturecounts", bcch))
+  expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
+
+  expect_equal(nc1, nc2)
+
+  # Trying to add new data with same record_id replaces existing data
+  bcch2 <- bcch[1:nrow(bdow),]
+  bcch2$record_id <- bdow$record_id
+
+  expect_silent(db_insert(con, "naturecounts", bcch2))
+  expect_silent(nc3 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
+
+  expect_equal(nrow(nc2), nrow(nc3)) # Same rows
+  expect_false(isTRUE(dplyr::all_equal(nc2, nc3))) # But data has changed
+
+  expect_equal(sort(nc2$record_id), sort(nc3$record_id)) # Not record_ids
+
+  expect_equal(dplyr::filter(nc2, record_id %in% bcch$record_id), # Not bcch
+               dplyr::filter(nc3, record_id %in% bcch$record_id))
+
+  expect_false(isTRUE(dplyr::all_equal(
+    dplyr::filter(nc2, record_id %in% bdow$record_id),   # but bdow has
+    dplyr::filter(nc3, record_id %in% bdow$record_id))))
+
+  # Clean up
+  DBI::dbDisconnect(con)
+  expect_true(file.remove(paste0("naturecounts_", Sys.Date(), ".nc")))
+})
+
+test_that("db_insert adds new cols as required", {
+
+  expect_silent(con <- db_connect()) %>%
+    expect_is("SQLiteConnection")
+
+  n <- DBI::dbListFields(con, "naturecounts")
+
+  # Add data with fewer cols than db
+  expect_silent(db_insert(con, "naturecounts",
+                          dplyr::select(bcch, record_id, ScientificName)))
+  expect_equal(length(n), length(DBI::dbListFields(con, "naturecounts")))
+
+  dplyr::collect(dplyr::tbl(con, "naturecounts")) %>% # All new cols are NA
+    apply(., 2, function(x) all(is.na(x))) %>%
+    sum() %>%
+    expect_equal(length(n) - 2)
+
+  # Add data with more cols than db
+  bcch2 <- dplyr::mutate(bcch, new1 = "test", new2 = 4.56, new3 = 1L)
+  expect_silent(db_insert(con, "naturecounts", bcch2))
+
+  expect_silent(nc <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
+  expect_equal(names(nc), names(bcch2))
+  expect_equal(nrow(nc), nrow(bcch2))
+  expect_equal(dplyr::select(nc, "new1", "new2", "new3"),
+               dplyr::select(bcch2, "new1", "new2", "new3"))
+
+  # Clean up
+  DBI::dbDisconnect(con)
+  expect_true(file.remove(paste0("naturecounts_", Sys.Date(), ".nc")))
 })

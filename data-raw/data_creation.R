@@ -1,18 +1,12 @@
 # Save user agent as internal object
 ua <- httr::user_agent(agent = "https://github.com/BirdStudiesCanada/NatureCountsAPI")
 
-# Create empty database table
-d <- nc_data_dl(collections = "RCBIOTABASE", species = 14280, start_date = 2015)
-nc_dbs <- list("2018-02-22" = d[0,])
-
-# Get database versions
-nc_dbs <- readRDS("./data-raw/nc_dbs.rds")
-max_version <- names(nc_dbs) %>%
-  lubridate::as_date() %>%
-  max()
-
 # Save all internal datasets
-usethis::use_data(ua, nc_dbs, max_version, internal = TRUE, overwrite = TRUE)
+usethis::use_data(ua, internal = TRUE, overwrite = TRUE, )
+
+# Version info ------------------------------------------------------------
+version_metadata <- "2019.1"
+usethis::use_data(version_metadata, internal = FALSE, overwrite = TRUE)
 
 # Get Metadata ------------------------------------------------------------
 
@@ -62,7 +56,9 @@ subnat_codes <- srv_query("metadata", "subnat2") %>%
   dplyr::arrange(country_code, statprov_code, subnat_code)
 usethis::use_data(subnat_codes, internal = FALSE, overwrite = TRUE)
 
-# Create example database
+# Create example databases
 bcch <- nc_data_dl(collections = "RCBIOTABASE", species = 14280)
 usethis::use_data(bcch, internal = FALSE, overwrite = TRUE)
 
+bdow <- nc_data_dl(collections = "RCBIOTABASE", species = 7590)
+usethis::use_data(bdow, internal = FALSE, overwrite = TRUE)

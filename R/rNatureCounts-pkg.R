@@ -8,7 +8,8 @@
       # avoid CRAN warnings
       c(".",  # piping requires '.' at times
         # Define datasets
-        "species_authority", "species_codes", "species_taxonomy")
+        "species_authority", "species_codes", "species_taxonomy",
+        "country_codes", "statprov_codes", "subnat_codes")
     )
   invisible()
 }

@@ -30,36 +30,52 @@ db_connect <- function(name = paste0("./naturecounts_", Sys.Date())) {
     db_check_version(con)
   } else {
     # Create tables
-
-    # Empty naturecounts table
-    dplyr::copy_to(con, nc_dbs[["2018-02-22"]],
-                   name = "naturecounts", temporary = FALSE)
-
-    # Version table with current version
-    dplyr::copy_to(con, data.frame(version = max_version),
-                   name = "version", temporary = FALSE)
-
-    # Request table with filters and dates
-    dplyr::copy_to(con,
-                   data.frame(date = NA, species = NA, start_date = NA,
-                              end_date = NA, country = NA, statprov = NA)[0,],
-                   name = "download_request", temporary = FALSE)
+    db_create(con)
   }
 
   con
 }
 
+db_create <- function(con) {
+  # Download and copy empty naturecounts table
+  d <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
+                  start_date = 2010, end_date = 2019, verbose = FALSE)[0, ]
+  dplyr::copy_to(con, d, name = "naturecounts", temporary = FALSE,
+                 unique_indexes = list("record_id"))
+
+  # Copy metadata
+  dplyr::copy_to(con, species_taxonomy, temporary = FALSE)
+  dplyr::copy_to(con, species_codes, temporary = FALSE)
+  dplyr::copy_to(con, species_authority, temporary = FALSE)
+  dplyr::copy_to(con, country_codes, temporary = FALSE)
+  dplyr::copy_to(con, statprov_codes, temporary = FALSE)
+  dplyr::copy_to(con, subnat_codes, temporary = FALSE)
+
+  # Create versions table with current versions
+  v <- data.frame(Rpackage = as.character(utils::packageVersion("rNatureCounts")),
+                  metadata = rNatureCounts::version_metadata)
+  dplyr::copy_to(con, v, name = "versions", temporary = FALSE)
+
+  # Create empty request table with filters and dates
+  dplyr::copy_to(con,
+                 data.frame(date = NA, species = NA, start_date = NA,
+                            end_date = NA, country = NA, statprov = NA)[0,],
+                 name = "download_request", temporary = FALSE)
+}
+
 db_check_version <- function(con) {
 
-  if("version" %in% DBI::dbListTables(con)) {
-    v <- dplyr::tbl(con, "version") %>%
-      dplyr::pull(version) %>%
-      lubridate::as_date(version) %>%
-      max()
+  if("versions" %in% DBI::dbListTables(con)) {
+    v <- dplyr::tbl(con, "versions") %>%
+      dplyr::collect()
 
-    if(v < max_version) stop("Your NatureCounts database is out of date ",
-                             "(", v, " vs. ", max_version, ")",
-                             call. = FALSE)
+    if(numeric_version(v$Rpackage) < utils::packageVersion("rNatureCounts")) {
+      stop("Your NatureCounts database is out of date. ",
+           "You will need to re-download your data.\n",
+           "(created with package v", v$Rpackage, ", current is v",
+           packageVersion("rNatureCounts"), ")",
+           call. = FALSE)
+    }
   } else {
     stop("There is no version information for this database. ",
          "Are you sure this is a NatureCounts database?", call. = FALSE)
@@ -81,16 +97,42 @@ db_insert <- function(con, table, df) {
 
   if (nrow(df) == 0) return()
 
-  # Create temporary table
+  # Compare columns
+  col_df <- names(df)
+  col_db <- DBI::dbListFields(con, table)
+
+  # Fill new cols in df with NA
+  col_new <- col_db[!col_db %in% col_df]
+  df[, col_new] <- NA
+
+  # Add cols missing from db
+  col_missing <- col_df[!col_df %in% col_db]
+  col_missing <- sql_class(df[, col_missing])
+
+  for(n in names(col_missing)) {
+    DBI::dbExecute(con, paste("ALTER TABLE", table, "ADD COLUMN",
+                              n, col_missing[n]))
+  }
+
+  # Arrange column order to match db
+  df <- df[, DBI::dbListFields(con, table)]
+
+  # Create temporary table in the data frame
   temp_name <- basename(tempfile())
   temp <- dplyr::copy_to(con, df, temp_name)
 
   # Replace records
-  rs <- DBI::dbSendStatement(con,
-                             paste0("REPLACE into ", table,
-                                    " select * from ", temp_name))
-  DBI::dbClearResult(rs)
+  rs <- DBI::dbExecute(con,
+                       paste0("REPLACE into ", table,
+                              " select * from ", temp_name))
 
   # Remove table
   DBI::dbRemoveTable(con, temp_name)
+}
+
+
+sql_class <- function(df) {
+  x <- vapply(df, class, FUN.VALUE = "text")
+  dplyr::if_else(x %in% c("double", "integer", "numeric"), "NUMERIC", "TEXT") %>%
+    rlang::set_names(names(x))
 }
