@@ -1,0 +1,118 @@
+---
+title: "Species Codes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Species codes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, message = FALSE}
+library(rNatureCounts)
+```
+
+In order to download data pertaining to specific species, you'll have to get the species id codes. These are numeric codes that reflect species identity, and in complex cases, take account of subspecies or changes to species identity.
+
+For all species, you can search by scientific, English or French name with the `species_search()` function. 
+
+For birds, you can also search by alphanumeric species codes with the `species_code_search()` function. **Note: ** These alphanumeric codes are _not_ the ones used by `naturecounts`, but are ones used by various taxonomic authorities. This function also gives you the option of returning all species codes (including subspecies, etc.) related to a single species, and is considered a more robust method for ensuring that you do not miss observations.
+
+## Searching by name
+
+The simplest way to determine a species id (and the only way, for non-avian taxa) is to use the `species_search()` function which searches for a species id according to scientifific, English or French name and returns a data frame of taxonomic information for all related hits:
+
+```{r}
+species_search("moose")
+species_search("swallowtail")
+species_search("mesange a tete noire")
+```
+
+These species ids can then be used to download data either directly:
+
+```{r}
+moose <- nc_data_dl(collections = "all", species = 133990)
+```
+
+Or by saving and referencing the data frame:
+```{r}
+moose_id <- species_search("moose")$species_id
+moose <- nc_data_dl(collections = "all", species = moose_id)
+```
+
+This might be considered overkill for a single species, but is useful when you want to download data for multiple species:
+
+```{r}
+chickadee_ids <- species_search("chickadee")$species_id
+chickadees <- nc_data_dl(collections = "all", species = chickadee_ids)
+```
+
+## Searching by alphanumeric code
+
+Taxonomy for bird species has long included various alphanumeric codes from different taxonomic authorities. The codes often include separte codes for recognized subdivisions of the species (subspecies, subpopulations, hybrids, etc.). The `species_code_search()` allows you to search for avian species ids according to these authorities.
+
+### Authorities
+
+The default taxonomic authority used is `BSCDATA`, which uses 4-letter alpha codes:
+```{r}
+species_code_search("BCCH")
+```
+
+The search function is case insensitive:
+```{r}
+species_code_search("bcch")
+```
+
+However, you can search by codes for different authorities, by specifying the appropriate `authority` argument:
+```{r}
+species_code_search(8868, authority = "CBC")
+```
+
+
+### All related subspecies
+
+By default, the `search_species_codes()` returns all species ids related to the search term. 
+
+For example, searching for myrtle warblers (`MYWA`), one of two subspecies of the yellow-rumped warbler (`YRWA`) returns both subspecies and the parent species.
+
+```{r}
+species_code_search("MYWA")
+```
+
+**Note:** Different taxonomic authorities recognize different subgroups.
+
+For example, `BSCDATA` recognizes 4 groups for dark-eyed juncos:
+```{r}
+species_code_search("DEJU")
+```
+
+Whereas `CBC` also recognizes sub group hybrids (and the Guadalupe junco):
+```{r}
+species_code_search("12385", authority = "CBC")
+```
+
+You can search by more than one authority at the same time. Note that your search term only needs to match one authority (not both), and that the information returned reflects both authorities combined.
+
+```{r}
+species_code_search("DEJU", authority = c("BSCDATA", "CBC"))
+```
+
+
+## Exact species
+
+If you do not want all subgroups, you can use the `results = "exact"` argument to return only an exact match.
+
+```{r}
+species_code_search("DEJU", results = "exact")
+species_code_search("ORJU", results = "exact")
+```
+
+
+
