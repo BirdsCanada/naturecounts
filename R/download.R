@@ -55,7 +55,7 @@ nc_data_dl <- function(collections = NULL, species = NULL,
                        token = NULL, sql_db = NULL,
                        verbose = TRUE) {
 
-  check_collections(collections)
+  collections_check(collections)
 
   # Format dates
   start_date <- parse_date(start_date)
@@ -303,7 +303,7 @@ nc_count <- function(collections = NULL, species = NULL, country = NULL,
                      statprov = NULL, startyear = NULL, endyear = NULL,
                      show = "available", token = NULL) {
 
-  check_collections(collections)
+  collections_check(collections)
   if(!show %in% c("available", "all")) {
     stop("show must either be 'all' or 'available'", call. = FALSE)
   }

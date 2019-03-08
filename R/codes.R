@@ -96,12 +96,11 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
   }
 
   if(!is.null(authority)) {
-    check_authority(authority)
+    authority_check(authority)
     ids <- dplyr::left_join(ids, dplyr::select(species_codes(), "species_id2",
                                                dplyr::one_of(authority)),
                             by = c("species_id" = "species_id2"))
   }
-
 
   ids
 }
@@ -149,7 +148,7 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
                                 results = "all") {
 
   # Argument checks
-  check_authority(authority)
+  authority_check(authority)
 
   if(!results %in% c("all", "exact")) {
     stop("'results' must be 'all' or 'exact'", call. = FALSE)
@@ -225,73 +224,3 @@ codes_search <- function(desc, df, code_column, columns) {
 
   dplyr::filter(df, !!rlang::sym(code_column) %in% codes)
 }
-
-
-
-codes_check <- function(desc) {
-  # If nothing, return as is
-  if(is.null(desc)) return(desc)
-
-  # Get type of code
-  type <- deparse(substitute(desc))
-  m <- ifelse(type == "species", "numeric", "character")
-
-  # Get code data frames
-  if(type == "species") {
-    df <- species_taxonomy()
-  } else df <- eval(parse(text = paste0(type, "_codes()")))
-
-  vapply(desc, codes_check_each, type = type, df = df,
-         FUN.VALUE = vector(length = 1, mode = m),
-         USE.NAMES = FALSE)
-}
-
-codes_check_each <- function(desc, type, df) {
-  # If a two character code, conver to upper, just in case
-  if(type != "species" & stringr::str_detect(desc, "^[:alpha:]{2}$")) {
-    desc <- toupper(desc)
-    code_column <- paste0(type, "_code")
-  } else {
-    code_column <- paste0(type, "_id")
-  }
-
-  # Convert to numeric (if possible)
-  desc <- as_numeric(desc)
-
-  # If code, check that correct
-  if((type == "species" & is.numeric(desc)) |
-     (type != "species" & stringr::str_detect(desc, "^[:upper:]{2}$"))) {
-
-    if(!desc %in% dplyr::pull(df, code_column)) {
-      stop("'", type, "' code not found, see the ", type, "_codes",
-           " data frame for valid codes", call. = FALSE)
-    }
-    return(desc)
-
-  # If species, and not numeric, stop
-  } else if(type == "species" & !is.numeric(desc)) {
-    stop("'species' code must be a numeric code ",
-         "(see documentation)", call. = FALSE)
-  }
-
-  # Otherwise try to convert
-  codes_convert(desc, type)
-}
-
-
-codes_convert <- function(desc, type) {
-  c <- location_search(desc, type) %>%
-    dplyr::select(dplyr::contains("_code"),
-                  dplyr::contains("_name")) %>%
-    dplyr::distinct()
-
-  if(nrow(c) == 0) {
-    stop("Unable to match '", desc, "' to any codes in the ",
-         paste0(type, "_codes"), " data frame", call. = FALSE)
-  } else if(nrow(c) > 1) {
-    stop("Matched '", desc, "' to ", nrow(c), " codes: \n",
-         capture_df(c), call. = FALSE)
-  }
-  dplyr::pull(c, paste0(type, "_code"))
-}
-
