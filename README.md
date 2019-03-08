@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rNatureCounts
+# `naturecounts`
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
@@ -11,10 +11,10 @@ Canada.
 
 ## Installation
 
-You can install this developmental version of `rNatureCounts` from
-GitHub with the remotes package:
+You can install this developmental version of `naturecounts` from GitHub
+with the remotes package:
 
 ``` r
 install.packages("remotes")
-install_github("BirdStudiesCanada/rNatureCounts")
+install_github("BirdStudiesCanada/naturecounts")
 ```

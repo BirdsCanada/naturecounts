@@ -16,7 +16,7 @@ test_that("db_check_version() works as expected", {
                "Your NatureCounts database is out of date")
 
   # Current version
-  v <- data.frame(Rpackage = as.character(packageVersion("rNatureCounts")))
+  v <- data.frame(Rpackage = as.character(packageVersion("naturecounts")))
   DBI::dbWriteTable(con, "versions", overwrite = TRUE, value = v)
   expect_silent(db_check_version(con))
 

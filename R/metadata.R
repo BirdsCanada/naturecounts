@@ -12,7 +12,7 @@
 #' @export
 
 nc_metadata <- function(verbose = TRUE) {
-  nc_metadata_generic(system.file("extdata", package = "rNatureCounts"),
+  nc_metadata_generic(system.file("extdata", package = "naturecounts"),
                       verbose = verbose)
 }
 
@@ -22,7 +22,7 @@ metadata_save <- function(data, path, name = deparse(substitute(data))) {
 
 metadata_read <- function(name) {
   readRDS(system.file("extdata", paste0(name, ".rds"),
-                      package = "rNatureCounts"))
+                      package = "naturecounts"))
 }
 
 

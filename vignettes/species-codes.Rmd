@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r, message = FALSE}
-library(rNatureCounts)
+library(naturecounts)
 ```
 
 In order to download data pertaining to specific species, you'll have to get the species id codes. These are numeric codes that reflect species identity, and in complex cases, take account of subspecies or changes to species identity.
