@@ -73,7 +73,7 @@ db_check_version <- function(con) {
       stop("Your NatureCounts database is out of date. ",
            "You will need to re-download your data.\n",
            "(created with package v", v$Rpackage, ", current is v",
-           packageVersion("rNatureCounts"), ")",
+           utils::packageVersion("rNatureCounts"), ")",
            call. = FALSE)
     }
   } else {
