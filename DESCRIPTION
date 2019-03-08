@@ -1,4 +1,4 @@
-Package: rNatureCounts
+Package: naturecounts
 Type: Package
 Title: Access and download data on plant and animal populations from NatureCounts
 Version: 0.1.0
@@ -35,5 +35,5 @@ Suggests:
 Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
-URL: https://github.com/BirdStudiesCanada/rNatureCounts, https://naturecounts.ca
+URL: https://github.com/BirdStudiesCanada/naturecounts, https://naturecounts.ca
 VignetteBuilder: knitr

@@ -1,4 +1,4 @@
 library(testthat)
-library(rNatureCounts)
+library(naturecounts)
 
-test_check("rNatureCounts")
+test_check("naturecounts")

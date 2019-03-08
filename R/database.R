@@ -52,7 +52,7 @@ db_create <- function(con) {
   dplyr::copy_to(con, species_taxonomy(), temporary = FALSE)
 
   # Create versions table with current versions
-  v <- data.frame(Rpackage = as.character(utils::packageVersion("rNatureCounts")),
+  v <- data.frame(Rpackage = as.character(utils::packageVersion("naturecounts")),
                   metadata = metadata_version())
   dplyr::copy_to(con, v, name = "versions", temporary = FALSE)
 
@@ -69,11 +69,11 @@ db_check_version <- function(con) {
     v <- dplyr::tbl(con, "versions") %>%
       dplyr::collect()
 
-    if(numeric_version(v$Rpackage) < utils::packageVersion("rNatureCounts")) {
+    if(numeric_version(v$Rpackage) < utils::packageVersion("naturecounts")) {
       stop("Your NatureCounts database is out of date. ",
            "You will need to re-download your data.\n",
            "(created with package v", v$Rpackage, ", current is v",
-           utils::packageVersion("rNatureCounts"), ")",
+           utils::packageVersion("naturecounts"), ")",
            call. = FALSE)
     }
   } else {

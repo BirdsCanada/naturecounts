@@ -1,6 +1,6 @@
 # Dealing with CRAN Notes due to Non-standard evaluation
-.onLoad <- function(libname = find.package("rNatureCounts"),
-                    pkgname = "rNatureCounts"){
+.onLoad <- function(libname = find.package("naturecounts"),
+                    pkgname = "naturecounts"){
   # CRAN Note avoidance
   if(getRversion() >= "2.15.1")
     utils::globalVariables(
