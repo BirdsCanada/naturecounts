@@ -27,6 +27,9 @@ based on the various alphanumeric codes used by different authorities.
 }
 \examples{
 
+# Show all ids
+species_code_search()
+
 # Get all species ids for house finches
 species_code_search("HOFI")
 

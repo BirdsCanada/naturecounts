@@ -4,7 +4,7 @@
 \alias{location_search}
 \title{Find country, state/province, or sub-national codes}
 \usage{
-location_search(name, type = "country")
+location_search(name = NULL, type = "country")
 }
 \arguments{
 \item{name}{Character. The location name to search for}
@@ -29,6 +29,11 @@ location_search("Alberta", type = "statprov") # AB
 
 location_search("Edmonton", type = "subnat") # CA.AB.11
 location_search("Brandon", type = "subnat")  # CA.MB.07
+
+# Show all codes
+location_search(type = "country")
+location_search(type = "statprov")
+location_search(type = "subnat")
 
 \donttest{
 # Using the codes

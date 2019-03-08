@@ -2,6 +2,15 @@ context("Code searching and conversions")
 
 test_that("Get location codes", {
 
+  expect_silent(location_search(type = "country")) %>%
+    expect_equal(country_codes())
+
+  expect_silent(location_search(type = "statprov")) %>%
+    expect_equal(statprov_codes())
+
+  expect_silent(location_search(type = "subnat")) %>%
+    expect_equal(subnat_codes())
+
   expect_is(c1 <- location_search("Belize", type = "country"), "data.frame")
   expect_equal(nrow(c1), 1)
   expect_true(c1$country_code == "BZ")

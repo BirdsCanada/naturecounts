@@ -24,6 +24,9 @@ names.
 }
 \examples{
 
+# Show all ids
+species_search()
+
 species_search("chickadee")
 species_search("black-capped chickadee")
 

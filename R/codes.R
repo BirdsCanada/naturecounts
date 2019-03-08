@@ -21,6 +21,11 @@
 #' location_search("Edmonton", type = "subnat") # CA.AB.11
 #' location_search("Brandon", type = "subnat")  # CA.MB.07
 #'
+#' # Show all codes
+#' location_search(type = "country")
+#' location_search(type = "statprov")
+#' location_search(type = "subnat")
+#'
 #' \donttest{
 #' # Using the codes
 #' nc_count(statprov = "AB", startyear = 2010)
@@ -28,7 +33,7 @@
 #'
 #' @export
 
-location_search <- function(name, type = "country"){
+location_search <- function(name = NULL, type = "country"){
   if(!type %in% c("country", "statprov", "subnat")) {
     stop("'type' must be one of 'country', 'statprov', or 'subnat'.",
          call. = FALSE)
@@ -37,8 +42,10 @@ location_search <- function(name, type = "country"){
   df <- eval(parse(text = paste0(type, "_codes()")))
   columns <- stringr::str_subset(names(df), "name")
 
-  codes_search(name, df = df, code_column = paste0(type, "_code"),
-               columns = columns)
+  if(!is.null(name)) df <- codes_search(name, df = df,
+                                        code_column = paste0(type, "_code"),
+                                        columns = columns)
+  df
 }
 
 
@@ -57,6 +64,9 @@ location_search <- function(name, type = "country"){
 #' @return Data frame of species ids and taxonomic information
 #'
 #' @examples
+#'
+#' # Show all ids
+#' species_search()
 #'
 #' species_search("chickadee")
 #' species_search("black-capped chickadee")
@@ -78,9 +88,14 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
     stop("'show' must be either 'all' or 'names'", call.= FALSE)
   }
 
-  search_columns <- c("scientific_name", "english_name", "french_name")
-  ids <- codes_search(name, df = species_taxonomy(), code_column = "species_id",
-                      columns = search_columns)
+  ids <- species_taxonomy()
+
+  if(!is.null(name)){
+    search_columns <- c("scientific_name", "english_name", "french_name")
+    ids <- codes_search(name, df = ids,
+                        code_column = "species_id",
+                        columns = search_columns)
+  }
 
   # No rows?
   if(nrow(ids) == 0) {
@@ -122,6 +137,9 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
 #'
 #' @examples
 #'
+#' # Show all ids
+#' species_code_search()
+#'
 #' # Get all species ids for house finches
 #' species_code_search("HOFI")
 #'
@@ -158,7 +176,7 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
   code_column <- dplyr::if_else(results == "exact", "species_id2", "species_id")
 
   # Return matching rows
-  df <- species_codes() %>%
+  ids <- species_codes() %>%
     tidyr::gather("authority", "code",
                   -.data$species_id, -.data$rank, -.data$species_id2) %>%
     dplyr::filter(.data$authority %in% !!authority,
@@ -167,8 +185,9 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
     dplyr::select(-rank) %>%
     dplyr::distinct()
 
-  ids <- codes_search(code, df = df, code_column = code_column,
-                      columns = authority)
+  if(!is.null(code)) ids <- codes_search(code, df = ids,
+                                         code_column = code_column,
+                                         columns = authority)
 
   # No rows?
   if(nrow(ids) == 0) {
