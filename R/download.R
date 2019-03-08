@@ -210,7 +210,7 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
 
 nc_single_dl <- function(query, filter, token){
 
-  request <- srv_query("data", table = "get_data",
+  request <- srv_query(api$data,
                        query = query,
                        filter = filter,
                        token = token)
@@ -314,8 +314,7 @@ nc_count <- function(collections = NULL, species = NULL, country = NULL,
   statprov <- codes_check(statprov)
 
   # Get counts
-  cnts <- srv_query("data", "list_collections",
-                    token = token,
+  cnts <- srv_query(api$collections_count, token = token,
                     filter = list(collections = collections,
                                   species = species,
                                   startyear = startyear,
@@ -326,8 +325,7 @@ nc_count <- function(collections = NULL, species = NULL, country = NULL,
     dplyr::arrange(.data$collection)
 
   if(show == "available" && nrow(cnts) > 0) {
-    cnts <- srv_query("data", "list_permissions",
-                      token = token) %>%
+    cnts <- srv_query(api$permissions, token = token) %>%
       parse_results() %>%
       dplyr::semi_join(cnts, ., by = "collection")
   }
@@ -336,7 +334,7 @@ nc_count <- function(collections = NULL, species = NULL, country = NULL,
 }
 
 nc_permissions <- function(token = NULL) {
-  srv_query("data", "list_permissions", token = token) %>%
+  srv_query(api$permissions, token = token) %>%
     parse_results()
 }
 

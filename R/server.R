@@ -1,18 +1,17 @@
 #' Query NatureCounts server for data
 #'
-#' @param data_type character. Base data type, "metadata" or "data"
-#' @param table character. Table to access.
-#' @param query list. Queries to pass.
-#' @param api character. Base URL for API
+#' @param path character. Path to the table
+#' @param query list. Queries to pass
+#' @param api_url character. Base URL for API
 #' @param verbose logical. Whether or not to return verbose Curl messages
 #'
 #' @return A data frame
 #'
 #' @keywords internal
 
-srv_query <- function(data_type, table, query = NULL, filter = NULL,
+srv_query <- function(path, query = NULL, filter = NULL,
                       token = NULL,
-                      api = "https://sandbox.birdscanada.org/api",
+                      api_url = NULL,
                       verbose = FALSE) {
 
   # Set Curl configuration
@@ -22,7 +21,8 @@ srv_query <- function(data_type, table, query = NULL, filter = NULL,
   if(verbose) httr::set_config(httr::verbose())
 
   # Build API path
-  url <- file.path(api, data_type, table)
+  if(is.null(api_url)) api_url <- api$api
+  url <- file.path(api_url, path)
 
   # Add token to query
   if(!is.null(token)) query <- append(query, list(token = pass_token(token)))

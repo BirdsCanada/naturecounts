@@ -4,18 +4,15 @@
 \alias{srv_query}
 \title{Query NatureCounts server for data}
 \usage{
-srv_query(data_type, table, query = NULL, filter = NULL,
-  token = NULL, api = "https://sandbox.birdscanada.org/api",
-  verbose = FALSE)
+srv_query(path, query = NULL, filter = NULL, token = NULL,
+  api_url = NULL, verbose = FALSE)
 }
 \arguments{
-\item{data_type}{character. Base data type, "metadata" or "data"}
+\item{path}{character. Path to the table}
 
-\item{table}{character. Table to access.}
+\item{query}{list. Queries to pass}
 
-\item{query}{list. Queries to pass.}
-
-\item{api}{character. Base URL for API}
+\item{api_url}{character. Base URL for API}
 
 \item{verbose}{logical. Whether or not to return verbose Curl messages}
 }

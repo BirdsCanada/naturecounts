@@ -30,7 +30,7 @@ nc_metadata_generic <- function(path = "./inst/extdata", verbose = TRUE) {
 
   # Species authorities
   message("Updating species authority...")
-  species_authority <- srv_query("metadata", "species_codes_authority") %>%
+  species_authority <- srv_query(api$species_authority) %>%
     parse_results(results = FALSE) %>%
     dplyr::select("authority", dplyr::everything())
   metadata_save(species_authority, path)
@@ -38,7 +38,7 @@ nc_metadata_generic <- function(path = "./inst/extdata", verbose = TRUE) {
   # Get species codes
   message("Updating species codes...")
   species_codes <- species_authority$authority %>%
-    lapply(., FUN = function(x) srv_query("metadata", "species_codes",
+    lapply(., FUN = function(x) srv_query(api$species_codes,
                                           query = list(authority = x))) %>%
     lapply(parse_results, results = FALSE) %>%
     dplyr::bind_rows() %>%
@@ -50,20 +50,20 @@ nc_metadata_generic <- function(path = "./inst/extdata", verbose = TRUE) {
   metadata_save(species_codes, path)
 
   message("Updating species taxonomy...")
-  species_taxonomy <- srv_query("metadata", "species") %>%
+  species_taxonomy <- srv_query(api$species_taxonomy) %>%
     parse_results(results = FALSE)
   metadata_save(species_taxonomy, path)
 
   # Get country codes
   message("Updating country codes...")
-  country_codes <- srv_query("metadata", "country") %>%
+  country_codes <- srv_query(api$country_codes) %>%
     parse_results(results = FALSE) %>%
     dplyr::arrange(.data$country_code)
   metadata_save(country_codes, path)
 
   # Get province/state codes
   message("Updating state/province codes...")
-  statprov_codes <- srv_query("metadata", "statprov") %>%
+  statprov_codes <- srv_query(api$statprov_codes) %>%
     parse_results(results = FALSE) %>%
     dplyr::select("country_code", "statprov_code", dplyr::everything()) %>%
     dplyr::arrange(.data$country_code, .data$statprov_code)
@@ -71,7 +71,7 @@ nc_metadata_generic <- function(path = "./inst/extdata", verbose = TRUE) {
 
   # Get subnational codes
   message("Updating subnational codes...")
-  subnat_codes <- srv_query("metadata", "subnat2") %>%
+  subnat_codes <- srv_query(api$subnat_codes) %>%
     parse_results(results = FALSE) %>%
     dplyr::select("country_code", "statprov_code", subnat_code = "subnat2_code",
                   subnat_name = "subnat2_name", dplyr::everything()) %>%
