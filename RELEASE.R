@@ -1,0 +1,41 @@
+# Steps/Commands to run before a package release -----------------------------
+
+## Update internal data files
+source("data-raw/data_creation.Rdata-raw.R")
+source("data-raw/data-index.R")
+
+## Documentation
+# Update NEWS
+
+# Check spelling
+dict <- hunspell::dictionary('en_CA')
+devtools::spell_check()
+
+## Finalize package version
+
+## Checks
+devtools::check()     # Local
+
+## Windows checks (particularly if submitting to CRAN)
+devtools::check_win_release() # Win builder
+devtools::check_win_devel()
+devtools::check_win_oldrelease()
+
+## Run in console
+system("cd ..; R CMD build naturecounts")
+system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")
+
+## Push to github
+## Check travis / appveyor
+
+## Check Reverse Dependencies (are there any?)
+#tools::dependsOnPkgs("naturecounts")
+#devtools::revdep()
+
+## Build site (so website uses newest version)
+pkgdown::build_site(lazy = TRUE)
+## Push to github
+
+## Actually release it, create signed release on github
+system("git tag -s v0.1.0 -m 'v0.1.0'")
+system("git push --tags")
