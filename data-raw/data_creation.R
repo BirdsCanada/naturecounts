@@ -5,9 +5,11 @@ ua <- httr::user_agent(agent = "https://github.com/BirdStudiesCanada/NatureCount
 api <- list(
   "api" = "https://sandbox.birdscanada.org/api",
 
+  "version" = "api_version",
+
   "country_codes" = "metadata/country",
   "statprov_codes" = "metadata/statprov",
-  "subnat_codes" = "metadata/subnat2",
+  "subnational2_codes" = "metadata/subnat2",
   "species_authority" = "metadata/species_codes_authority",
   "species_codes" = "metadata/species_codes",
   "species_taxonomy" = "metadata/species",

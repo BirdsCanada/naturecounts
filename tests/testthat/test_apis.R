@@ -32,7 +32,7 @@ test_that("metadata apis are accessible", {
 
   expect_silent(srv_query(api$country_codes))
   expect_silent(srv_query(api$statprov_codes))
-  expect_silent(srv_query(api$subnat_codes))
+  expect_silent(srv_query(api$subnational2_codes))
 })
 
 test_that("species metadata", {
