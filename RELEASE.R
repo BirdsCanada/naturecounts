@@ -1,8 +1,10 @@
 # Steps/Commands to run before a package release -----------------------------
 
 ## Update internal data files
-source("data-raw/data_creation.Rdata-raw.R")
-source("data-raw/data-index.R")
+source("data-raw/data_creation.R")
+
+## Update metadata stored in inst/extdata
+nc_metadata_generic()
 
 ## Documentation
 # Update NEWS
