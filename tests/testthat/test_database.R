@@ -131,6 +131,7 @@ test_that("db_insert add and appends rows", {
 
   # Clean up (leave file for next tests)
   DBI::dbDisconnect(con)
+  expect_true(file.remove(paste0("naturecounts_", Sys.Date(), ".nc")))
 })
 
 test_that("db_insert overwrites rows as required", {
@@ -139,30 +140,23 @@ test_that("db_insert overwrites rows as required", {
     expect_is("SQLiteConnection")
 
   # Trying to append duplicate data doesn't add anything
-  nc1 <- dplyr::tbl(con, "naturecounts") %>% dplyr::collect()
   expect_silent(db_insert(con, "naturecounts", bcch))
-  expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
+  expect_silent(db_insert(con, "naturecounts", bcch))
+  expect_silent(nc1 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
 
-  expect_equal(nc1, nc2)
+  expect_equal(nrow(nc1), nrow(bcch))
 
   # Trying to add new data with same record_id replaces existing data
-  bcch2 <- bcch[1:nrow(bdow),]
-  bcch2$record_id <- bdow$record_id
+  bcch2 <- bdow
+  bcch2$record_id <- bcch$record_id[1:nrow(bcch2)]
 
   expect_silent(db_insert(con, "naturecounts", bcch2))
-  expect_silent(nc3 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
+  expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
 
-  expect_equal(nrow(nc2), nrow(nc3)) # Same rows
-  expect_false(isTRUE(dplyr::all_equal(nc2, nc3))) # But data has changed
+  expect_equal(nrow(nc1), nrow(nc2)) # Same rows
+  expect_false(isTRUE(dplyr::all_equal(nc1, nc2))) # But data has changed
 
-  expect_equal(sort(nc2$record_id), sort(nc3$record_id)) # Not record_ids
-
-  expect_equal(dplyr::filter(nc2, record_id %in% bcch$record_id), # Not bcch
-               dplyr::filter(nc3, record_id %in% bcch$record_id))
-
-  expect_false(isTRUE(dplyr::all_equal(
-    dplyr::filter(nc2, record_id %in% bdow$record_id),   # but bdow has
-    dplyr::filter(nc3, record_id %in% bdow$record_id))))
+  expect_equal(sort(nc1$record_id), sort(nc2$record_id)) # Not record_ids
 
   # Clean up
   DBI::dbDisconnect(con)
