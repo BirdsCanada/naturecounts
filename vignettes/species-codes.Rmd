@@ -27,7 +27,7 @@ For birds, you can also search by alphanumeric species codes with the `species_c
 
 ## Searching by name
 
-The simplest way to determine a species id (and the only way, for non-avian taxa) is to use the `species_search()` function which searches for a species id according to scientifific, English or French name and returns a data frame of taxonomic information for all related hits:
+The simplest way to determine a species id (and the only way, for non-avian taxa) is to use the `species_search()` function which searches for a species id according to scientific, English or French name and returns a data frame of taxonomic information for all related hits:
 
 ```{r}
 species_search("moose")
@@ -56,7 +56,7 @@ chickadees <- nc_data_dl(collections = "all", species = chickadee_ids)
 
 ## Searching by alphanumeric code
 
-Taxonomy for bird species has long included various alphanumeric codes from different taxonomic authorities. The codes often include separte codes for recognized subdivisions of the species (subspecies, subpopulations, hybrids, etc.). The `species_code_search()` allows you to search for avian species ids according to these authorities.
+Taxonomy for bird species has long included various alphanumeric codes from different taxonomic authorities. The codes often include separate codes for recognized subdivisions of the species (subspecies, subpopulations, hybrids, etc.). The `species_code_search()` allows you to search for avian species ids according to these authorities.
 
 ### Authorities
 

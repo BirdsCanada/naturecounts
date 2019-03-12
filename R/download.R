@@ -222,7 +222,7 @@ nc_single_dl <- function(query, filter, token){
 }
 
 
-#' Save/Return the data to data frame or databse
+#' Save/Return the data to data frame or database
 #'
 #' Either save data to database on disk, or bind them into an existing data
 #' frame.
@@ -230,7 +230,7 @@ nc_single_dl <- function(query, filter, token){
 #' @param data Data frame. Data to be saved
 #' @param df_db Data frame/SQLite database connection. Where data should be
 #'   saved
-#' @param table Character. If df_db is a database connnection, the database
+#' @param table Character. If df_db is a database connection, the database
 #'   table to save to
 #'
 #' @return Either a data frame or a SQLite database connection

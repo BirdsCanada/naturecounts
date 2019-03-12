@@ -2,7 +2,7 @@
 % Please edit documentation in R/download.R
 \name{nc_data_save}
 \alias{nc_data_save}
-\title{Save/Return the data to data frame or databse}
+\title{Save/Return the data to data frame or database}
 \usage{
 nc_data_save(data, df_db, table = "naturecounts")
 }
@@ -12,7 +12,7 @@ nc_data_save(data, df_db, table = "naturecounts")
 \item{df_db}{Data frame/SQLite database connection. Where data should be
 saved}
 
-\item{table}{Character. If df_db is a database connnection, the database
+\item{table}{Character. If df_db is a database connection, the database
 table to save to}
 }
 \value{
