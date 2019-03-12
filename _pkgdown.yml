@@ -1,0 +1,17 @@
+development:
+  mode: unreleased
+
+navbar:
+  components:
+    home: ~
+    articles:
+      text: Articles
+      menu:
+        - text: Metadata
+        - text: Species Codes
+          href: articles/species-codes.html
+        - text: -------
+        - text: Tutorials
+template:
+  params:
+    bootswatch: sandstone
