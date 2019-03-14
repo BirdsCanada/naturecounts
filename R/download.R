@@ -14,29 +14,57 @@
 #' @param country Character vector. Filter data to specific countries codes
 #' @param statprov Character vector. Filter data to specific states/province
 #'   codes
+#' @param fields_set Charcter. Set of fields/columns to download. See details.
+#' @param fields Character vector. If `fields_set = custom`, which
+#'   fields/columns to download. See details.
 #' @param token Character vector. Authorization token, otherwise only public
 #'   data is accessible.
 #' @param sql_db Character vector. Name and location of SQLite database to
 #'   either create or add to.
 #' @param verbose Logical. Display progress messages?
 #'
-#' @details Numeric species id codes can determined from the functions
+#' @details
+#'
+#'   **Species ids:**
+#'   Numeric species id codes can determined from the functions
 #'   \code{\link{species_search}()} or \code{\link{species_code_search}()}.
 #'
+#'   **Dates:**
 #'   The format of start/end dates is fairly flexible and can be anything
 #'   recognized by \code{\link[lubridate]{lubridate-package}}'s
 #'   \code{\link[lubridate]{ymd}()} function. However, it must have the
 #'   order of year, month, day. Month and day are option: It can be year and
 #'   month (e.g., \code{"2000 May"}), or simply year (e.g., \code{2000}).
 #'
+#'   **Data Fields/Columns:**
+#'   By default data is downloaded with the `minimum` set of fields/columns.
+#'   However, for more advanced applications, users may wish to specify which
+#'   fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
+#'   keeps track of variables used to augment observation data. There are
+#'   different versions reflecting different collections of variables which can
+#'   be specified for download in one of four ways:
+#'
+#'   1. `fields_set` can be a specific shorthand reflecting a BMDE version:
+#'   `core`, `extended` or `minimum` (default). See [bmde_versions()] to see
+#'   which BMDE version the shorthand refers to.
+#'   2. `fields_set` can be `default` which uses the default BMDE version for a
+#'   particular collection (note that if you download more than one collection,
+#'   the field sets will expand to cover all fields/columns in the combined
+#'   collections)
+#'   3. `fields_set` can be the exact BMDE version. See [bmde_versions()] for
+#'   options.
+#'   4. `fields_set` can be `custom` and the `fields` argument can be a
+#'   character vector specifying the exact fields/columns to return. See
+#'   [bmde_fields()]) for `fields` options
+#'
+#'   Note that in all cases there are a set of fields/columns that are *always*
+#'   returned, no matter what `fields_set` is used.
+#'
 #' @return Data frame
 #'
 #' @examples
-#'
-#' \donttest{
-#' # All observations part of the RCBIOTABASE collection
-#' rcbio <- nc_data_dl(collection = "RCBIOTABASE")
-#' }
+#' \donttest{# All observations part of the RCBIOTABASE collection
+#' rcbio <- nc_data_dl(collection = "RCBIOTABASE")}
 #'
 #' # Observations of black-capped chickadees from RCBIOTABASE collection in 2010
 #' species_search("black-capped chickadee") # Find the species_id
@@ -47,11 +75,18 @@
 #' species_search("moose")
 #' moose <- nc_data_dl(species = 133990)
 #'
+#' # Different fields/columns
+#' moose <- nc_data_dl(species = 133990, fields_set = "core")
+#'
+#' moose <- nc_data_dl(species = 133990, fields_set = "custom",
+#'                     fields = c("Locality", "AllSpeciesReported"))
+#'
 #' @export
 
 nc_data_dl <- function(collections = NULL, species = NULL,
                        start_date = NULL, end_date = NULL,
                        location = NULL, country = NULL, statprov = NULL,
+                       fields_set = "minimum", fields = NULL,
                        token = NULL, sql_db = NULL,
                        verbose = TRUE) {
 
@@ -67,7 +102,7 @@ nc_data_dl <- function(collections = NULL, species = NULL,
   startday <- NULL
   endday <- NULL
 
-  # Check/Convert character to codes
+  # Check codes
   species <- codes_check(species)
   country <- codes_check(country)
   statprov <- codes_check(statprov)
@@ -77,6 +112,14 @@ nc_data_dl <- function(collections = NULL, species = NULL,
                       statprov = statprov, startyear = startyear,
                       endyear = endyear, species = species,
                       token = token)
+
+  # Check fields
+  fields_set <- fields_set_check(fields_set)
+  if(fields_set == "custom") {
+    fields_check(fields)
+  } else if(!is.null(fields)) {
+    message("Ignoring 'fields' argument because 'fields_set' is not 'custom'")
+  }
 
   # If there are no records to download, see why not and report that to the user
   if(nrow(records) == 0) {
@@ -122,7 +165,8 @@ nc_data_dl <- function(collections = NULL, species = NULL,
                  startyear = startyear, endyear = endyear,
                  # startday = startday, endday = endday,
                  country = country, statprov = statprov,
-                 species = species)
+                 species = species, version = fields_set,
+                 fields = fields)
 
   if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {
@@ -338,4 +382,53 @@ nc_permissions <- function(token = NULL) {
     parse_results()
 }
 
+nc_collections <- function() {
+  srv_query(api$collections) %>%
+    parse_results(results = FALSE)
+}
 
+#' Fetch BMDE versions
+#'
+#' In the NatureCounts data base, there are many different types of information,
+#' so by default not all fields/columns are downloaded.
+#'
+#' @return Data frame of version names and descriptions
+#'
+#' @examples
+#' bmde_versions()
+#'
+#' @export
+
+bmde_versions <- function() {
+  srv_query(api$bmde_versions) %>%
+    parse_results(results = FALSE)
+}
+
+#' Fetch BMDE fields for a given version
+#'
+#' In the NatureCounts data base, there are many different types of information,
+#' so by default not all fields/columns are downloaded. Different versions of
+#' field sets exist, each with a different collection of fields/columns. This
+#' function returns the names of the fields/columns included in a particular
+#' version.
+#'
+#' @return Data frame of version names and descriptions
+#'
+#' @examples
+#' # Return fields/columns in the 'minimum' version
+#' bmde_fields()
+#'
+#' # Retrun fields/columns in the 'core' version
+#' bmde_fields(version = "core")
+#'
+#' # Return all possible fields
+#' bmde_fields(version = "extended")
+#'
+#' @export
+
+bmde_fields <- function(version = "minimum") {
+  # Check version
+  version <- fields_set_check(version)
+  srv_query(api$bmde_fields, query = list(version = version)) %>%
+    parse_results(results = FALSE)
+}

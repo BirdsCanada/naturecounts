@@ -40,8 +40,8 @@ test_that("Data download returns data", {
   expect_is(d, "data.frame")
   expect_gt(nrow(d), 0)
   expect_gt(ncol(d), 0)
-  expect_equal(min(as.numeric(d$YearCollected), na.rm = TRUE), 2011)
-  expect_equal(max(as.numeric(d$YearCollected), na.rm = TRUE), 2011)
+  expect_equal(min(as.numeric(d$survey_year), na.rm = TRUE), 2011)
+  expect_equal(max(as.numeric(d$survey_year), na.rm = TRUE), 2011)
 })
 
 test_that("Data download arguments", {
@@ -51,23 +51,39 @@ test_that("Data download arguments", {
 })
 
 test_that("Data filters work as expected", {
-  expect_silent(d <- nc_data_dl(collections = "ABBIRDRECS",
+  expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = 7590,
                                 start_date = 2000, end_date = 2000,
                                 verbose = FALSE))
-  expect_equal(unique(d$CommonName), "Barred Owl")
-  expect_equal(min(as.numeric(d$YearCollected), na.rm = TRUE), 2000)
-  expect_equal(max(as.numeric(d$YearCollected), na.rm = TRUE), 2000)
+  expect_equal(unique(d1$species_id), 7590)
+  expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
+  expect_equal(max(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
 
 
-  expect_silent(d <- nc_data_dl(collections = "ABBIRDRECS",
+  expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = c(7590, 14280),
-                                start_date = 2000, end_date = 2002,
+                                start_date = 2003, end_date = 2004,
                                 verbose = FALSE))
-  expect_equal(sort(unique(d$CommonName)),
-               c("Barred Owl", "Black-capped Chickadee"))
-  expect_equal(min(as.numeric(d$YearCollected), na.rm = TRUE), 2000)
-  expect_equal(max(as.numeric(d$YearCollected), na.rm = TRUE), 2002)
+  expect_equal(sort(unique(d2$species_id)), c(7590, 14280))
+  expect_equal(min(as.numeric(d2$survey_year), na.rm = TRUE), 2003)
+  expect_equal(max(as.numeric(d2$survey_year), na.rm = TRUE), 2004)
+
+  expect_silent(d3 <- nc_data_dl(collections = "ABBIRDRECS",
+                                 species = 7590,
+                                 start_date = 2000, end_date = 2000,
+                                 fields_set = "core",
+                                 verbose = FALSE))
+  expect_equal(nrow(d1), nrow(d3))
+  expect_gt(ncol(d3), ncol(d1))
+
+  expect_silent(d4 <- nc_data_dl(collections = "ABBIRDRECS",
+                                 species = 7590,
+                                 start_date = 2000, end_date = 2000,
+                                 fields_set = "custom", fields = "Locality",
+                                 verbose = FALSE))
+  expect_equal(nrow(d1), nrow(d4))
+  expect_lt(ncol(d4), ncol(d1))
+  expect_true("Locality" %in% names(d4))
 
 })
 
@@ -86,4 +102,10 @@ test_that("Data download returns informative errors/messages", {
   expect_error(nc_data_dl(collections = "ABBIRDRECS", start_date = 2018,
                           verbose = FALSE),
                "These collections have no data that match these filters")
+
+  # Custom field_set without fields
+  expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 7590,
+                          start_date = 2000, end_date = 2000,
+                          fields_set = "custom", verbose = FALSE),
+               "For a custom 'fields_set', specify 'fields'")
 })

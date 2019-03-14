@@ -2,6 +2,8 @@
 
 export("%>%")
 export(.data)
+export(bmde_fields)
+export(bmde_versions)
 export(location_search)
 export(nc_count)
 export(nc_data_dl)

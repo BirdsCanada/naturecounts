@@ -12,6 +12,42 @@ authority_check <- function(a) {
   }
 }
 
+fields_set_check <- function(fields_set) {
+  v <- bmde_versions()
+
+  if(length(fields_set) > 1 || !fields_set %in% c(v$version, "custom")) {
+    if(!fields_set %in% v$shorthand) {
+      stop("'field_set' must be either a 'version' or a 'shorthand' code ",
+           "returned by bmde_version(), or 'custom'", call. = FALSE)
+    }
+    if(fields_set != "custom") {
+      fields_set <- dplyr::filter(v, shorthand == fields_set) %>%
+        dplyr::pull(version)
+    }
+  }
+  fields_set
+}
+
+
+fields_check <- function(fields) {
+  if(is.null(fields)) {
+    stop("For a custom 'fields_set', specify 'fields'",
+         call. = FALSE)
+  } else {
+    # Can't really check, because don't have list of internal fields
+    # col <- nc_collections() %>%
+    #   dplyr::filter(bmdr_code %in% collections) %>%
+    #   dplyr::pull(bmde_version) %>%
+    #   unique()
+    # f <- vapply(col, FUN = function(x) list(bmde_fields(version = x)$field_name),
+    #             FUN.VALUE = list("A")) %>%
+    #   unlist() %>%
+    #   unique()
+    # if(!all(fields %in% f)) {
+    #   problem <- fields[!fields %in% f]
+  }
+}
+
 codes_check <- function(desc) {
   # If nothing, return as is
   if(is.null(desc)) return(desc)

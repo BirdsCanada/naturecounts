@@ -6,7 +6,8 @@
 \usage{
 nc_data_dl(collections = NULL, species = NULL, start_date = NULL,
   end_date = NULL, location = NULL, country = NULL,
-  statprov = NULL, token = NULL, sql_db = NULL, verbose = TRUE)
+  statprov = NULL, fields_set = "minimum", fields = NULL,
+  token = NULL, sql_db = NULL, verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -27,6 +28,11 @@ format}
 \item{statprov}{Character vector. Filter data to specific states/province
 codes}
 
+\item{fields_set}{Charcter. Set of fields/columns to download. See details.}
+
+\item{fields}{Character vector. If \code{fields_set = custom}, which
+fields/columns to download. See details.}
+
 \item{token}{Character vector. Authorization token, otherwise only public
 data is accessible.}
 
@@ -43,21 +49,45 @@ Download data records from various collections filtered by date and location
 (if provided). An authorization token is required.
 }
 \details{
+\strong{Species ids:}
 Numeric species id codes can determined from the functions
 \code{\link{species_search}()} or \code{\link{species_code_search}()}.
 
+\strong{Dates:}
 The format of start/end dates is fairly flexible and can be anything
 recognized by \code{\link[lubridate]{lubridate-package}}'s
 \code{\link[lubridate]{ymd}()} function. However, it must have the
 order of year, month, day. Month and day are option: It can be year and
 month (e.g., \code{"2000 May"}), or simply year (e.g., \code{2000}).
+
+\strong{Data Fields/Columns:}
+By default data is downloaded with the \code{minimum} set of fields/columns.
+However, for more advanced applications, users may wish to specify which
+fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
+keeps track of variables used to augment observation data. There are
+different versions reflecting different collections of variables which can
+be specified for download in one of four ways:
+\enumerate{
+\item \code{fields_set} can be a specific shorthand reflecting a BMDE version:
+\code{core}, \code{extended} or \code{minimum} (default). See \code{\link[=bmde_versions]{bmde_versions()}} to see
+which BMDE version the shorthand refers to.
+\item \code{fields_set} can be \code{default} which uses the default BMDE version for a
+particular collection (note that if you download more than one collection,
+the field sets will expand to cover all fields/columns in the combined
+collections)
+\item \code{fields_set} can be the exact BMDE version. See \code{\link[=bmde_versions]{bmde_versions()}} for
+options.
+\item \code{fields_set} can be \code{custom} and the \code{fields} argument can be a
+character vector specifying the exact fields/columns to return. See
+\code{\link[=bmde_fields]{bmde_fields()}}) for \code{fields} options
+}
+
+Note that in all cases there are a set of fields/columns that are \emph{always}
+returned, no matter what \code{fields_set} is used.
 }
 \examples{
-
-\donttest{
-# All observations part of the RCBIOTABASE collection
-rcbio <- nc_data_dl(collection = "RCBIOTABASE")
-}
+\donttest{# All observations part of the RCBIOTABASE collection
+rcbio <- nc_data_dl(collection = "RCBIOTABASE")}
 
 # Observations of black-capped chickadees from RCBIOTABASE collection in 2010
 species_search("black-capped chickadee") # Find the species_id
@@ -67,5 +97,11 @@ bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
 # All moose observations with public access
 species_search("moose")
 moose <- nc_data_dl(species = 133990)
+
+# Different fields/columns
+moose <- nc_data_dl(species = 133990, fields_set = "core")
+
+moose <- nc_data_dl(species = 133990, fields_set = "custom",
+                    fields = c("Locality", "AllSpeciesReported"))
 
 }

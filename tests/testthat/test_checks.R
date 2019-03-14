@@ -59,3 +59,16 @@ test_that("Code checks work on country", {
   country <- "England"
   expect_error(codes_check(country), "Unable to match 'England' to any codes")
 })
+
+test_that("fields_set_checks correctly", {
+  expect_silent(fields_set_check("minimum"))
+  expect_silent(fields_set_check("extended"))
+  expect_silent(fields_set_check("custom"))
+  expect_silent(fields_set_check("BMDE-BAND-2.00"))
+  expect_error(fields_set_check("BMDE"))
+})
+
+test_that("fields_checks correctly", {
+  expect_silent(fields_check("AllSpeciesReported"))
+  expect_error(fields_check(NULL))
+})
