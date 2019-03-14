@@ -110,7 +110,7 @@ db_insert <- function(con, table, df) {
 
   # Add cols missing from db
   col_missing <- col_df[!col_df %in% col_db]
-  col_missing <- sql_class(df[, col_missing])
+  col_missing <- sql_class(df[col_missing])
 
   for(n in names(col_missing)) {
     DBI::dbExecute(con, paste("ALTER TABLE", table, "ADD COLUMN",
