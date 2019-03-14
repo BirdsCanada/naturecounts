@@ -40,8 +40,11 @@ db_create <- function(con) {
   # Download and copy empty naturecounts table
   d <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
                   start_date = 2010, end_date = 2019, verbose = FALSE)[0, ]
-  dplyr::copy_to(con, d, name = "naturecounts", temporary = FALSE,
-                 unique_indexes = list("record_id"))
+
+  DBI::dbExecute(con, paste0(
+    "CREATE TABLE naturecounts (",
+    paste0(names(d), collapse = ", "), ", ",
+    "PRIMARY KEY(record_id));"))
 
   # Copy metadata
   dplyr::copy_to(con, country_codes(), temporary = FALSE)
