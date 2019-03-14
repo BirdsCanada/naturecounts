@@ -33,14 +33,14 @@ srv_query <- function(path, query = NULL, filter = NULL,
     query <- append(query, list(filter = filter))
   }
 
-  # Send request
-  resp <- httr::GET(url, query = query, ua)
+  # Send request (retry up to three times)
+  resp <- httr::RETRY("GET", url, query = query, ua)
 
   # Check for http errors
   if(httr::status_code(resp) == 403) {
     stop("Invalid token, no access", call. = FALSE)
   } else {
-    httr::stop_for_status(resp)
+    httr::stop_for_status(resp, "access NatureCounts server")
   }
 
   # Parse response
@@ -76,7 +76,7 @@ srv_error <- function(parsed, url, query) {
 filter_json <- function(f) {
   ubox <- c("minlat", "maxlat", "minlong", "maxlong", "startyear",
             "endyear", "startday", "endday", "collection", "request_id",
-            "utmsquare")
+            "utmsquare", "version")
 
   f[names(f) %in% ubox] <- lapply(f[names(f) %in% ubox], jsonlite::unbox)
   jsonlite::toJSON(f, null = "null")

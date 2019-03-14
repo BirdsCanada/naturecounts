@@ -210,6 +210,7 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
 
   # Request
   r <- nc_single_dl(query, filter, token)
+
   query$requestId <- r$requestId
 
   # Save the data
@@ -220,8 +221,8 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
 
   repeat {
 
-    # Are we done?
-    if(is.null(r$requestId)) break
+    # Are we done? (return less than asked)
+    if(nrow(r$results) <= query$numRecords) break
 
     # Update our position
     query$lastRecord <- max(r$results$record_id)
