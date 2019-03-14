@@ -170,9 +170,9 @@ test_that("db_insert adds new cols as required", {
 
   n <- DBI::dbListFields(con, "naturecounts")
 
-  # Add data with fewer cols than db
+  # Add data with fewer cols than db (no new)
   expect_silent(db_insert(con, "naturecounts",
-                          dplyr::select(bcch, record_id, ScientificName)))
+                          dplyr::select(bcch, record_id, collection)))
   expect_equal(length(n), length(DBI::dbListFields(con, "naturecounts")))
 
   dplyr::collect(dplyr::tbl(con, "naturecounts")) %>% # All new cols are NA
