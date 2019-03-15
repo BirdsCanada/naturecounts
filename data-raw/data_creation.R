@@ -26,6 +26,13 @@ api <- list(
   "permissions" = "data/list_permissions"
   )
 
+keys <- list(
+  "country_codes" = "country_code",
+  "statprov_codes" = "statprov_code",
+  "sub_national2_codes" = "subnational2_code",
+  "species_authority" = "authority",
+  #"species_codes" = "species_id2"  # No unique column...
+  "species_taxonomy" = "species_id")
 
 # Save all internal datasets
 usethis::use_data(ua, api, internal = TRUE, overwrite = TRUE)

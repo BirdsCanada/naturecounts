@@ -58,6 +58,15 @@ test_that("db_create creates tables in the database", {
   expect_equal(nrow(d), 0)
   expect_equal(ncol(d),  6)
 
+  # Check metadata tables
+  for(i in c("country_codes", "statprov_codes", "subnational2_codes",
+             "species_codes", "species_authority", "species_taxonomy")) {
+    expect_silent(d <- dplyr::tbl(con, i)) %>%
+      expect_is("tbl_sql")
+    expect_equal(dplyr::collect(d) %>% as.data.frame(),
+                 do.call(i, args = list()))
+  }
+
   # Clean up
   DBI::dbDisconnect(con)
 })

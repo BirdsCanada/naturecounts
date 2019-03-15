@@ -36,23 +36,32 @@ db_connect <- function(name = paste0("./naturecounts_", Sys.Date())) {
   con
 }
 
+db_create_primary <- function(con, df, primary_key) {
+  table <- stringr::str_remove_all(deparse(substitute(df)), "\\(|\\)")
+  qry <- paste0("CREATE TABLE ", table," ([",
+                paste0(names(df), collapse = "], ["), "]")
+  if(!is.null(primary_key)) {
+    qry <- paste0(qry, ", PRIMARY KEY([", primary_key, "]));")
+  } else qry <- paste0(qry, ");")
+
+  DBI::dbExecute(con, qry)
+  db_insert(con, table, df)
+}
+
 db_create <- function(con) {
   # Download and copy empty naturecounts table
-  d <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
-                  start_date = 2010, end_date = 2019, verbose = FALSE)[0, ]
+  naturecounts <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
+                             start_year = 2010, end_year = 2019,
+                             verbose = FALSE)[0, ]
+  db_create_primary(con, naturecounts, primary_key = "record_id")
 
-  DBI::dbExecute(con, paste0(
-    "CREATE TABLE naturecounts (",
-    paste0(names(d), collapse = ", "), ", ",
-    "PRIMARY KEY(record_id));"))
-
-  # Copy metadata
-  dplyr::copy_to(con, country_codes(), temporary = FALSE)
-  dplyr::copy_to(con, statprov_codes(), temporary = FALSE)
-  dplyr::copy_to(con, subnat_codes(), temporary = FALSE)
-  dplyr::copy_to(con, species_authority(), temporary = FALSE)
-  dplyr::copy_to(con, species_codes(), temporary = FALSE)
-  dplyr::copy_to(con, species_taxonomy(), temporary = FALSE)
+  # Copy metadata tables
+  db_create_primary(con, country_codes(), primary_key = keys$country_codes)
+  db_create_primary(con, statprov_codes(), primary_key = keys$statprov_codes)
+  db_create_primary(con, subnational2_codes(), primary_key = keys$sub_national2_codes)
+  db_create_primary(con, species_authority(), primary_key = keys$species_authority)
+  db_create_primary(con, species_codes(), primary_key = NULL)
+  db_create_primary(con, species_taxonomy(), primary_key = keys$species_taxonomy)
 
   # Create versions table with current versions
   v <- data.frame(Rpackage = as.character(utils::packageVersion("naturecounts")),
