@@ -6,21 +6,23 @@
 #' @param collections Character vector. The collection codes from which to
 #'   download data. NULL (default) downloads data from all available collections
 #' @param species Numeric vector. Numeric species ids (see details)
-#' @param start_date Character. The starting date of data to download. See
-#'   details for format
-#' @param end_date Character. The end date of data to download. See details for
-#'   format
+#' @param start_year Numeric. The starting year of data to download
+#' @param end_year Numeric. The ending year of data to download
+#' @param start_season Character/Numeric. The start of the season to download
+#'   (day of year 1-366 or a date that can be converted to day of year)
+#' @param end_season Character/Numeric. The start of the season to download
+#'   (day of year 1-366 or a date that can be converted to day of year)
 #' @param location NOT IMPLEMENTED
 #' @param country Character vector. Filter data to specific countries codes
 #' @param statprov Character vector. Filter data to specific states/province
 #'   codes
 #' @param fields_set Charcter. Set of fields/columns to download. See details.
 #' @param fields Character vector. If `fields_set = custom`, which
-#'   fields/columns to download. See details.
+#'   fields/columns to download. See details
 #' @param token Character vector. Authorization token, otherwise only public
-#'   data is accessible.
+#'   data is accessible
 #' @param sql_db Character vector. Name and location of SQLite database to
-#'   either create or add to.
+#'   either create or add to
 #' @param verbose Logical. Display progress messages?
 #'
 #' @details
@@ -33,8 +35,8 @@
 #'   The format of start/end dates is fairly flexible and can be anything
 #'   recognized by \code{\link[lubridate]{lubridate-package}}'s
 #'   \code{\link[lubridate]{ymd}()} function. However, it must have the
-#'   order of year, month, day. Month and day are option: It can be year and
-#'   month (e.g., \code{"2000 May"}), or simply year (e.g., \code{2000}).
+#'   order of year, month, day. Year is ignored when converting to julian days
+#'   for defining seasons.
 #'
 #'   **Data Fields/Columns:**
 #'   By default data is downloaded with the `minimum` set of fields/columns.
@@ -84,42 +86,26 @@
 #' @export
 
 nc_data_dl <- function(collections = NULL, species = NULL,
-                       start_date = NULL, end_date = NULL,
-                       location = NULL, country = NULL, statprov = NULL,
+                       start_year = NULL, end_year = NULL,
+                       start_season = NULL, end_season = NULL,
+                       location = NULL,
+                       country = NULL, statprov = NULL, subnational2 = NULL,
                        fields_set = "minimum", fields = NULL,
                        token = NULL, sql_db = NULL,
                        verbose = TRUE) {
 
-  collections_check(collections)
+  # Assemble and check filter parameters
+  filter <- filter_create(collections = collections,
+                          start_year = start_year, end_year = end_year,
+                          start_season = start_season, end_season = end_season,
+                          country = country, statprov = statprov,
+                          subnational2 = subnational2,
+                          species = species, fields_set = fields_set,
+                          fields = fields)
 
-  # Format dates
-  start_date <- parse_date(start_date)
-  end_date <- parse_date(end_date)
-
-  startyear <- parse_year(start_date)
-  endyear <- parse_year(end_date)
-
-  startday <- NULL
-  endday <- NULL
-
-  # Check codes
-  species <- codes_check(species)
-  country <- codes_check(country)
-  statprov <- codes_check(statprov)
-
+  # Get available records
   if(verbose) message("Collecting available records...")
-  records <- nc_count(collections = collections, country = country,
-                      statprov = statprov, startyear = startyear,
-                      endyear = endyear, species = species,
-                      token = token)
-
-  # Check fields
-  fields_set <- fields_set_check(fields_set)
-  if(fields_set == "custom") {
-    fields_check(fields)
-  } else if(!is.null(fields)) {
-    message("Ignoring 'fields' argument because 'fields_set' is not 'custom'")
-  }
+  records <- nc_count_internal(filter = filter, token = token)
 
   # If there are no records to download, see why not and report that to the user
   if(nrow(records) == 0) {
@@ -159,14 +145,6 @@ nc_data_dl <- function(collections = NULL, species = NULL,
 
   # Query Information
   query <- list(lastRecord = 0, numRecords = 5000, requestId = NULL)
-
-  # Filter information
-  filter <- list(collection = records$collection[1],
-                 startyear = startyear, endyear = endyear,
-                 # startday = startday, endday = endday,
-                 country = country, statprov = statprov,
-                 species = species, version = fields_set,
-                 fields = fields)
 
   if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {
@@ -263,6 +241,12 @@ nc_single_dl <- function(query, filter, token){
   # Parse the data
   request$results <- parse_results(request)
 
+  # Make sure all have equal row counts
+  rows <- unique(vapply(request$results, FUN = length, FUN.VALUE = c(11)))
+
+  if(length(rows) > 1) stop("Requested data has unequal row counts",
+                            call. = FALSE)
+
   request
 }
 
@@ -344,28 +328,33 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' @export
 
-nc_count <- function(collections = NULL, species = NULL, country = NULL,
-                     statprov = NULL, startyear = NULL, endyear = NULL,
+nc_count <- function(collections = NULL, species = NULL,
+                     country = NULL, statprov = NULL, subnational2 = NULL,
+                     start_year = NULL, end_year = NULL,
+                     start_season = NULL, end_season = NULL,
                      show = "available", token = NULL) {
 
-  collections_check(collections)
   if(!show %in% c("available", "all")) {
     stop("show must either be 'all' or 'available'", call. = FALSE)
   }
 
-  # Convert character to codes
-  species <- codes_check(species)
-  country <- codes_check(country)
-  statprov <- codes_check(statprov)
+  # Filter
+  filter <- filter_create(collections = collections,
+                          start_year = start_year, end_year = end_year,
+                          start_season = start_season, end_season = end_season,
+                          country = country, statprov = statprov,
+                          subnational2 = subnational2,
+                          species = species)
 
   # Get counts
-  cnts <- srv_query(api$collections_count, token = token,
-                    filter = list(collections = collections,
-                                  species = species,
-                                  startyear = startyear,
-                                  endyear = endyear,
-                                  country = country,
-                                  statprov = statprov)) %>%
+  cnts <- nc_count_internal(filter, token, show)
+
+  cnts
+}
+
+nc_count_internal <- function(filter, token, show = "available") {
+
+  cnts <- srv_query(api$collections_count, token = token, filter = filter) %>%
     parse_results() %>%
     dplyr::arrange(.data$collection)
 
@@ -374,9 +363,9 @@ nc_count <- function(collections = NULL, species = NULL, country = NULL,
       parse_results() %>%
       dplyr::semi_join(cnts, ., by = "collection")
   }
-
   cnts
 }
+
 
 nc_permissions <- function(token = NULL) {
   srv_query(api$permissions, token = token) %>%

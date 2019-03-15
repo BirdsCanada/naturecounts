@@ -14,7 +14,7 @@ test_that("Get counts for collections", {
   expect_true(all(c2$collection %in% c("CBC", "BBS")))
   expect_true(all(c2$nrecords < c1$nrecords))
 
-  expect_silent(c <- nc_count(country = "CA", statprov = "MB"))
+  expect_silent(c <- nc_count(statprov = "MB"))
   expect_is(c, "data.frame")
   expect_gt(nrow(c), 0)
 
@@ -36,7 +36,7 @@ context("Download data")
 
 test_that("Data download returns data", {
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE",
-                                 start_date = 2011, end_date = 2011))
+                                 start_year = 2011, end_year = 2011))
   expect_is(d, "data.frame")
   expect_gt(nrow(d), 0)
   expect_gt(ncol(d), 0)
@@ -46,14 +46,14 @@ test_that("Data download returns data", {
 
 test_that("Data download arguments", {
   expect_silent(nc_data_dl(collections = "RCBIOTABASE",
-                           start_date = 2011, end_date = 2011, verbose = FALSE))
+                           start_year = 2011, end_year = 2011, verbose = FALSE))
 
 })
 
 test_that("Data filters work as expected", {
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = 7590,
-                                start_date = 2000, end_date = 2000,
+                                start_year = 2000, end_year = 2000,
                                 verbose = FALSE))
   expect_equal(unique(d1$species_id), 7590)
   expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
@@ -62,7 +62,7 @@ test_that("Data filters work as expected", {
 
   expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = c(7590, 14280),
-                                start_date = 2003, end_date = 2004,
+                                start_year = 2003, end_year = 2004,
                                 verbose = FALSE))
   expect_equal(sort(unique(d2$species_id)), c(7590, 14280))
   expect_equal(min(as.numeric(d2$survey_year), na.rm = TRUE), 2003)
@@ -70,7 +70,7 @@ test_that("Data filters work as expected", {
 
   expect_silent(d3 <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 7590,
-                                 start_date = 2000, end_date = 2000,
+                                 start_year = 2000, end_year = 2000,
                                  fields_set = "core",
                                  verbose = FALSE))
   expect_equal(nrow(d1), nrow(d3))
@@ -78,11 +78,11 @@ test_that("Data filters work as expected", {
 
   expect_silent(d4 <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 7590,
-                                 start_date = 2000, end_date = 2000,
+                                 start_year = 2000, end_year = 2000,
                                  fields_set = "custom", fields = "Locality",
                                  verbose = FALSE))
   expect_equal(nrow(d1), nrow(d4))
-  expect_lt(ncol(d4), ncol(d1))
+  expect_gt(ncol(d4), ncol(d1))
   expect_true("Locality" %in% names(d4))
 
 })
@@ -90,7 +90,8 @@ test_that("Data filters work as expected", {
 test_that("Data download returns informative errors/messages", {
 
   # No data for some
-  expect_message(nc_data_dl(collections = c("ABBIRDRECS", "RCBIOTABASE"), start_date = 2010,
+  expect_message(nc_data_dl(collections = c("ABBIRDRECS", "RCBIOTABASE"),
+                            start_year = 2010,
                             species = 7590, verbose = TRUE),
                  "Not all collections have data that match these filters")
 
@@ -99,13 +100,13 @@ test_that("Data download returns informative errors/messages", {
                "You do not have permission")
 
   # No data
-  expect_error(nc_data_dl(collections = "ABBIRDRECS", start_date = 2018,
+  expect_error(nc_data_dl(collections = "ABBIRDRECS", start_year = 2018,
                           verbose = FALSE),
                "These collections have no data that match these filters")
 
   # Custom field_set without fields
   expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 7590,
-                          start_date = 2000, end_date = 2000,
+                          start_year = 2000, end_year = 2000,
                           fields_set = "custom", verbose = FALSE),
-               "For a custom 'fields_set', specify 'fields'")
+               "Must specify 'fields' if using a custom 'field_set'")
 })

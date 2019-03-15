@@ -5,7 +5,8 @@
 \title{Download information about NatureCounts collections}
 \usage{
 nc_count(collections = NULL, species = NULL, country = NULL,
-  statprov = NULL, startyear = NULL, endyear = NULL,
+  statprov = NULL, subnational2 = NULL, start_year = NULL,
+  end_year = NULL, start_season = NULL, end_season = NULL,
   show = "available", token = NULL)
 }
 \arguments{
@@ -17,15 +18,15 @@ nc_count(collections = NULL, species = NULL, country = NULL,
 
 \item{statprov}{Character vector. Filter to specific state/province codes}
 
-\item{startyear}{Numeric. Filter to this start year}
-
-\item{endyear}{Numeric. Filter to this end year}
-
 \item{show}{Character. Either "all" or "available". "all" returns counts from
 all data sources. "available" only returns counts for data available
 (public or accessible with the token provided).}
 
 \item{token}{Character. Authorization token}
+
+\item{startyear}{Numeric. Filter to this start year}
+
+\item{endyear}{Numeric. Filter to this end year}
 }
 \value{
 Data frame

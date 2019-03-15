@@ -4,9 +4,10 @@
 \alias{nc_data_dl}
 \title{Download NatureCounts data records}
 \usage{
-nc_data_dl(collections = NULL, species = NULL, start_date = NULL,
-  end_date = NULL, location = NULL, country = NULL,
-  statprov = NULL, fields_set = "minimum", fields = NULL,
+nc_data_dl(collections = NULL, species = NULL, start_year = NULL,
+  end_year = NULL, start_season = NULL, end_season = NULL,
+  location = NULL, country = NULL, statprov = NULL,
+  subnational2 = NULL, fields_set = "minimum", fields = NULL,
   token = NULL, sql_db = NULL, verbose = TRUE)
 }
 \arguments{
@@ -15,11 +16,15 @@ download data. NULL (default) downloads data from all available collections}
 
 \item{species}{Numeric vector. Numeric species ids (see details)}
 
-\item{start_date}{Character. The starting date of data to download. See
-details for format}
+\item{start_year}{Numeric. The starting year of data to download}
 
-\item{end_date}{Character. The end date of data to download. See details for
-format}
+\item{end_year}{Numeric. The ending year of data to download}
+
+\item{start_season}{Character/Numeric. The start of the season to download
+(day of year 1-366 or a date that can be converted to day of year)}
+
+\item{end_season}{Character/Numeric. The start of the season to download
+(day of year 1-366 or a date that can be converted to day of year)}
 
 \item{location}{NOT IMPLEMENTED}
 
@@ -31,13 +36,13 @@ codes}
 \item{fields_set}{Charcter. Set of fields/columns to download. See details.}
 
 \item{fields}{Character vector. If \code{fields_set = custom}, which
-fields/columns to download. See details.}
+fields/columns to download. See details}
 
 \item{token}{Character vector. Authorization token, otherwise only public
-data is accessible.}
+data is accessible}
 
 \item{sql_db}{Character vector. Name and location of SQLite database to
-either create or add to.}
+either create or add to}
 
 \item{verbose}{Logical. Display progress messages?}
 }
@@ -57,8 +62,8 @@ Numeric species id codes can determined from the functions
 The format of start/end dates is fairly flexible and can be anything
 recognized by \code{\link[lubridate]{lubridate-package}}'s
 \code{\link[lubridate]{ymd}()} function. However, it must have the
-order of year, month, day. Month and day are option: It can be year and
-month (e.g., \code{"2000 May"}), or simply year (e.g., \code{2000}).
+order of year, month, day. Year is ignored when converting to julian days
+for defining seasons.
 
 \strong{Data Fields/Columns:}
 By default data is downloaded with the \code{minimum} set of fields/columns.

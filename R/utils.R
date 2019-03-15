@@ -1,22 +1,3 @@
-parse_season <- function(d) {
-  if(!is.null(d)) {
-    return(lubridate::yday(lubridate::ymd(paste(1970, d), truncated = 1)))
-  } else return(NULL)
-}
-
-parse_date <- function(d) {
-  if(!is.null(d)) {
-    return(lubridate::ymd(d, truncated = 2))
-  } else return(NULL)
-}
-
-parse_year <- function(d) {
-  if(!is.null(d)) {
-    return(lubridate::year(d))
-  } else return(NULL)
-}
-
-
 parse_results <- function(r, results = TRUE) {
   if(results) r <- r$results
   structure(r, class = "data.frame", row.names = seq(along = r[[1]]))

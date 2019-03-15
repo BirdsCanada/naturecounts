@@ -1,8 +1,35 @@
+year_check <- function(y) {
+  y <- as_numeric(y)
+  if(!is.numeric(y) || y > lubridate::year(Sys.Date()) || y < 1900) {
+    stop("Years must be numbers between 1900 and ",
+         lubridate::year(Sys.Date()), call. = FALSE)
+  }
+  y
+}
+
+season_check <- function(s) {
+  stp <- FALSE
+
+  if(stringr::str_detect(s, "^[:digit:]+$")) s <- as_numeric(s)
+  if(is.numeric(s)) {
+    if(s < 0 | s > 366) stp <- TRUE
+    if(round(s) != s) stp <- TRUE
+  } else {
+    s <- suppressWarnings(lubridate::ymd_hms(s, truncated = 4)) %>%
+      lubridate::yday()
+    if(is.na(s)) stp <- TRUE
+  }
+  if(stp) stop("Seasons must be either a date (YM or YMD), or a julian date ",
+               "(whole numbers between 1 and 366)", call. = FALSE)
+  s
+}
+
 collections_check <- function(c) {
- if(!is.null(c) && !is.character(c)) {
-   stop("'collections' must be either NULL (for all collections) ",
-        "or a character vector of collection names.", call. = FALSE)
- }
+  if(!is.character(c)) {
+    stop("'collections' must be either NULL (for all collections) ",
+         "or a character vector of collection names.", call. = FALSE)
+  }
+  c
 }
 
 authority_check <- function(a) {
@@ -30,30 +57,24 @@ fields_set_check <- function(fields_set) {
 
 
 fields_check <- function(fields) {
-  if(is.null(fields)) {
-    stop("For a custom 'fields_set', specify 'fields'",
-         call. = FALSE)
-  } else {
-    # Can't really check, because don't have list of internal fields
-    # col <- nc_collections() %>%
-    #   dplyr::filter(bmdr_code %in% collections) %>%
-    #   dplyr::pull(bmde_version) %>%
-    #   unique()
-    # f <- vapply(col, FUN = function(x) list(bmde_fields(version = x)$field_name),
-    #             FUN.VALUE = list("A")) %>%
-    #   unlist() %>%
-    #   unique()
-    # if(!all(fields %in% f)) {
-    #   problem <- fields[!fields %in% f]
-  }
+  # Can't really check, because don't have list of internal fields
+  # col <- nc_collections() %>%
+  #   dplyr::filter(bmdr_code %in% collections) %>%
+  #   dplyr::pull(bmde_version) %>%
+  #   unique()
+  # f <- vapply(col, FUN = function(x) list(bmde_fields(version = x)$field_name),
+  #             FUN.VALUE = list("A")) %>%
+  #   unlist() %>%
+  #   unique()
+  # if(!all(fields %in% f)) {
+  #   problem <- fields[!fields %in% f]
+
 }
 
-codes_check <- function(desc) {
-  # If nothing, return as is
-  if(is.null(desc)) return(desc)
+codes_check <- function(desc, type = NULL) {
 
   # Get type of code
-  type <- deparse(substitute(desc))
+  if(is.null(type)) type <- deparse(substitute(desc))
   m <- ifelse(type == "species", "numeric", "character")
 
   # Get code data frames
@@ -115,3 +136,47 @@ codes_convert <- function(desc, type) {
   dplyr::pull(c, paste0(type, "_code"))
 }
 
+
+filter_check <- function(f) {
+  for(i in 1:length(f)) {
+    n <- names(f[i])
+    if(!is.null(f[[i]])) {
+      if(n == "fields_set") f[[i]] <- fields_set_check(f[[i]])
+      if(n == "fields") f[[i]] <- fields_check(f[[i]])
+      if(stringr::str_detect(n, "collection")) f[[i]] <- collections_check(f[[i]])
+      if(stringr::str_detect(n, "_year")) f[[i]] <- year_check(f[[i]])
+      if(stringr::str_detect(n, "_season")) f[[i]] <- season_check(f[[i]])
+      if(stringr::str_detect(n, "country|statprov|species")) {
+        f[[i]] <- codes_check(f[[i]], type = n)
+      }
+    }
+  }
+  f
+}
+
+redundancy_check <- function(f) {
+
+  p <- f[!vapply(f, is.null, logical(1))]
+
+  # Remove redundancy in locations
+  locs <- names(p)[names(p) %in% c("country", "statprov", "subnational2")]
+  if(length(locs) > 1) {
+    locs <- factor(locs, levels = c("country", "statprov", "subnational2")) %>%
+      sort()
+    message("'country', 'statprov' and 'subnational2' are redundant, ",
+            "keeping only '", locs[length(locs)], "'")
+    locs <- locs[-length(locs)]
+    f[as.character(locs)] <- list(NULL)
+  }
+
+  # Only use 'fields' if 'fields_set' == "custom" | MUST have 'fields' if custom
+  if(!is.null(p[['fields']]) &&
+     (is.null(p[['fields_set']]) | p[['fields_set']] != "custom")) {
+    message("Ignoring 'fields' argument because 'fields_set' is not 'custom'")
+    f['fields'] <- list(NULL)
+  } else if(!is.null(p[['fields_set']]) && p[['fields_set']] == "custom" &&
+            is.null(p[['fields']])) {
+    stop("Must specify 'fields' if using a custom 'field_set'", call. = FALSE)
+  }
+  f
+}

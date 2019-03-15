@@ -10,6 +10,7 @@ api <- list(
   "country_codes" = "metadata/country",
   "statprov_codes" = "metadata/statprov",
   "subnational2_codes" = "metadata/subnat2",
+
   "species_authority" = "metadata/species_codes_authority",
   "species_codes" = "metadata/species_codes",
   "species_taxonomy" = "metadata/species",
@@ -23,7 +24,8 @@ api <- list(
 
   "data" = "data/get_data",
   "collections_count" = "data/list_collections",
-  "permissions" = "data/list_permissions"
+  "permissions" = "data/list_permissions",
+  "utm_squares" = "data/utm_squares"
   )
 
 keys <- list(
@@ -34,8 +36,31 @@ keys <- list(
   #"species_codes" = "species_id2"  # No unique column...
   "species_taxonomy" = "species_id")
 
+queries <- dplyr::tribble(
+  ~package_name,  ~api_name,       ~unbox,
+  "min_lat",       "minLat",        TRUE,
+  "max_lat",       "maxLat",        TRUE,
+  "min_long",      "minLong",       TRUE,
+  "max_long",      "maxLong",       TRUE,
+  "start_year",    "startYear",     TRUE,
+  "end_year",      "endYear",       TRUE,
+  "start_season",  "startDay",      TRUE,
+  "end_season",    "endDay",        TRUE,
+  "collection",    "collection",    TRUE,
+  "collections",   "collections",   FALSE, # for collection counts
+  "request_id",    "requestId",     TRUE,
+  "utm_square",    "utmSquare",     TRUE,
+  "fields_set",    "bmdeVersion",   TRUE,
+  "fields",        "fields",        FALSE,
+  "species",       "species",       FALSE,
+  "country",       "country",       FALSE,
+  "statprov",      "statProv",      FALSE,
+  "subnational2",  "subnational2",  FALSE)
+
+
+
 # Save all internal datasets
-usethis::use_data(ua, api, internal = TRUE, overwrite = TRUE)
+usethis::use_data(ua, api, keys, queries, internal = TRUE, overwrite = TRUE)
 
 # Get Example Data ------------------------------------------------------------
 

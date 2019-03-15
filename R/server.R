@@ -73,15 +73,53 @@ srv_error <- function(parsed, url, query) {
 }
 
 
+pass_token <- function(token) {
+  if(is.null(token)) return(token) else return(I(token))
+}
+
+#' Convert filter parameters to JSON
+#'
+#' Converts filter parameters to JSON, first unboxing the parameters which need
+#' to be unboxed. The list of parameters needing to be unbox is stored in the
+#' internal data `queries` which is created by "./data-raw/data_creation.R".
+#'
+#' @param f List. Filter parameters
+#'
+#' @return A JSON object
+#'
+#' @keywords internal
+
 filter_json <- function(f) {
-  ubox <- c("minlat", "maxlat", "minlong", "maxlong", "startyear",
-            "endyear", "startday", "endday", "collection", "request_id",
-            "utmsquare", "version")
+  # Which queries need to be unboxed?
+  ubox <- queries$api_name[queries$unbox]
 
   f[names(f) %in% ubox] <- lapply(f[names(f) %in% ubox], jsonlite::unbox)
   jsonlite::toJSON(f, null = "null")
 }
 
-pass_token <- function(token) {
-  if(is.null(token)) return(token) else return(I(token))
+#' Create filter list
+#'
+#' Creates a filter list from package variables and matches them to api query
+#' names stored in the internal `queries` data. This is created in
+#' "./data-raw/data_creation.R". Also checks parameters for incorrect types and
+#' redundancy
+#'
+#' @param ... The parameters (package-named) to create the filter list with
+#'
+#' @return A list of api-named filter parameters
+#'
+#' @keywords internal
+
+filter_create <- function(...) {
+  f <- list(...)
+
+  # Check parameters redundancy
+  f <- redundancy_check(f)
+
+  # Check parameters validity
+  f <- filter_check(f)
+
+  # Replace names with API names
+  names(f) <- queries$api_name[match(names(f), queries$package_name)]
+  f
 }
