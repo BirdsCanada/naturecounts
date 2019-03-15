@@ -9,8 +9,8 @@ location_search(name = NULL, type = "country")
 \arguments{
 \item{name}{Character. The location name to search for}
 
-\item{type}{Character. One of "country", "statprov", or "subnat". The type
-of code to return.}
+\item{type}{Character. One of "country", "statprov", or "subnational2". The
+type of code to return.}
 }
 \value{
 A data frame with the relevant codes and other information
@@ -27,13 +27,13 @@ location_search("Mexico", type = "country")   # MX
 location_search("Yucatan", type = "statprov") # Yucatán
 location_search("Alberta", type = "statprov") # AB
 
-location_search("Edmonton", type = "subnat") # CA.AB.11
-location_search("Brandon", type = "subnat")  # CA.MB.07
+location_search("Edmonton", type = "subnational2") # CA.AB.11
+location_search("Brandon", type = "subnational2")  # CA.MB.07
 
 # Show all codes
 location_search(type = "country")
 location_search(type = "statprov")
-location_search(type = "subnat")
+location_search(type = "subnational2")
 
 \donttest{
 # Using the codes

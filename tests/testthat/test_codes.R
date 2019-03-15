@@ -181,8 +181,8 @@ test_that("Search for location codes", {
   expect_silent(location_search(type = "statprov")) %>%
     expect_equal(statprov_codes())
 
-  expect_silent(location_search(type = "subnat")) %>%
-    expect_equal(subnat_codes())
+  expect_silent(location_search(type = "subnational2")) %>%
+    expect_equal(subnational2_codes())
 
   expect_is(c1 <- location_search("Belize", type = "country"), "data.frame")
   expect_equal(nrow(c1), 1)

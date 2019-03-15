@@ -1,4 +1,3 @@
-
 #' Find country, state/province, or sub-national codes
 #'
 #' Search for the correct codes to identify countries, states/provinces or
@@ -6,8 +5,8 @@
 #' \code{\link{nc_count}()} functions.
 #'
 #' @param name Character. The location name to search for
-#' @param type Character. One of "country", "statprov", or "subnat". The type
-#'   of code to return.
+#' @param type Character. One of "country", "statprov", or "subnational2". The
+#'   type of code to return.
 #'
 #' @return A data frame with the relevant codes and other information
 #'
@@ -18,13 +17,13 @@
 #' location_search("Yucatan", type = "statprov") # Yucatán
 #' location_search("Alberta", type = "statprov") # AB
 #'
-#' location_search("Edmonton", type = "subnat") # CA.AB.11
-#' location_search("Brandon", type = "subnat")  # CA.MB.07
+#' location_search("Edmonton", type = "subnational2") # CA.AB.11
+#' location_search("Brandon", type = "subnational2")  # CA.MB.07
 #'
 #' # Show all codes
 #' location_search(type = "country")
 #' location_search(type = "statprov")
-#' location_search(type = "subnat")
+#' location_search(type = "subnational2")
 #'
 #' \donttest{
 #' # Using the codes
@@ -34,8 +33,8 @@
 #' @export
 
 location_search <- function(name = NULL, type = "country"){
-  if(!type %in% c("country", "statprov", "subnat")) {
-    stop("'type' must be one of 'country', 'statprov', or 'subnat'.",
+  if(!type %in% c("country", "statprov", "subnational2")) {
+    stop("'type' must be one of 'country', 'statprov', or 'subnational2'.",
          call. = FALSE)
   }
 
