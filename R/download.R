@@ -417,6 +417,8 @@ bmde_versions <- function() {
 #' function returns the names of the fields/columns included in a particular
 #' version.
 #'
+#' @param version Character. BMDE version for which to return fields.
+#'
 #' @return Data frame of version names and descriptions
 #'
 #' @examples

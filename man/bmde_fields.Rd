@@ -6,6 +6,9 @@
 \usage{
 bmde_fields(version = "minimum")
 }
+\arguments{
+\item{version}{Character. BMDE version for which to return fields.}
+}
 \value{
 Data frame of version names and descriptions
 }

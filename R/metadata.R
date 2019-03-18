@@ -12,17 +12,14 @@
 #' @export
 
 nc_metadata <- function(verbose = TRUE) {
-  nc_metadata_generic(system.file("extdata", package = "naturecounts"),
-                      verbose = verbose)
+  nc_metadata_internal(system.file("extdata", package = "naturecounts"),
+                       verbose = verbose)
 }
 
 
 #' Fetch API metadata version
 #'
 #' Returns the current version of the metadata on the API
-#'
-#' @examples
-#' metadata_v_remote()
 #'
 #' @keywords internal
 metadata_v_remote <- function() {
@@ -42,7 +39,7 @@ metadata_read <- function(name) {
 }
 
 
-nc_metadata_generic <- function(path = "./inst/extdata", force = FALSE,
+nc_metadata_internal <- function(path = "./inst/extdata", force = FALSE,
                                 verbose = TRUE) {
 
   # Check if update necessary
@@ -96,9 +93,11 @@ nc_metadata_generic <- function(path = "./inst/extdata", force = FALSE,
     message("Updating subnational codes...")
     subnational2_codes <- srv_query(api$subnational2_codes) %>%
       parse_results(results = FALSE) %>%
-      dplyr::select("country_code", "statprov_code", subnational2_code = "subnat2_code",
+      dplyr::select("country_code", "statprov_code",
+                    subnational2_code = "subnat2_code",
                     subnational2_name = "subnat2_name", dplyr::everything()) %>%
-      dplyr::arrange(.data$country_code, .data$statprov_code, .data$subnational2_code)
+      dplyr::arrange(.data$country_code, .data$statprov_code,
+                     .data$subnational2_code)
     metadata_save(subnational2_codes, path)
 
     # Update metadata version

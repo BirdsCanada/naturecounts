@@ -9,8 +9,4 @@ metadata_v_remote()
 \description{
 Returns the current version of the metadata on the API
 }
-\examples{
-metadata_v_remote()
-
-}
 \keyword{internal}
