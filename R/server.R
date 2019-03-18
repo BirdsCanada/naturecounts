@@ -29,7 +29,7 @@ srv_query <- function(path, query = NULL, filter = NULL,
 
   # Add filter to query
   if(!is.null(filter)) {
-    filter <- filter_json(filter)
+    filter <- to_json(filter)
     query <- append(query, list(filter = filter))
   }
 
@@ -89,60 +89,10 @@ pass_token <- function(token) {
 #'
 #' @keywords internal
 
-filter_json <- function(f) {
+to_json <- function(f) {
   # Which queries need to be unboxed?
   ubox <- queries$api_name[queries$unbox]
 
   f[names(f) %in% ubox] <- lapply(f[names(f) %in% ubox], jsonlite::unbox)
   jsonlite::toJSON(f, null = "null")
 }
-
-#' Create filter list
-#'
-#' Creates a filter list from package variables and matches them to api query
-#' names stored in the internal `queries` data. This is created in
-#' "./data-raw/data_creation.R". Also checks parameters for incorrect types and
-#' redundancy
-#'
-#' @param ... The parameters (package-named) to create the filter list with
-#'
-#' @return A list of api-named filter parameters
-#'
-#' @keywords internal
-
-filter_create <- function(...) {
-  f <- list(...)
-
-  # Check parameters redundancy
-  f <- redundancy_check(f)
-
-  # Unpack arguments
-  f <- filter_unpack(f)
-
-  # Check parameters validity
-  f <- filter_check(f)
-
-  # Replace names with API names
-  names(f) <- queries$api_name[match(names(f), queries$package_name)]
-  f
-}
-
-filter_unpack <- function(f) {
-  f$years <- filter_dup(f$years)
-  f$doy <- filter_dup(f$doy)
-
-  if(!is.null(f$years)) names(f$years) <- c("start_year", "end_year")
-  if(!is.null(f$doy)) names(f$doy) <- c("start_doy", "end_doy")
-  if(!is.null(f$region)) f$region <- unlist(f$region)
-
-  for(i in c("years", "doy", "region")){
-    f <- append(f, unlist(f[[i]]))
-    f <- f[names(f) != i]
-  }
-
-  # Remove missing parameters now that all are named
-  f[which(is.na(f))] <- NULL
-  f
-}
-
-filter_dup <- function(i) if(length(i) == 1) i <- rep(i, 2) else i

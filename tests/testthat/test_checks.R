@@ -115,7 +115,7 @@ test_that("filter_checks correct", {
 
 })
 
-test_that("redundancy_checks correct", {
+test_that("filter_redundancy correct", {
 
   # country/statprov/subnational2 redundancy
   f <- list(collections = "RCBIOTABASE", species = 14280,
@@ -124,7 +124,7 @@ test_that("redundancy_checks correct", {
                           subnational2 = "CA.MB.07"))
   f2 <- f
   f2$region[c('country', 'statprov')] <- list(NULL)
-  expect_message(redundancy_check(f), "keeping only 'subnational2'") %>%
+  expect_message(filter_redundancy(f), "keeping only 'subnational2'") %>%
     expect_equal(f2)
 
   # fields and fields_set != "custom" redundancy
@@ -132,7 +132,7 @@ test_that("redundancy_checks correct", {
             fields_set = "BMDE2.00-min", fields = "CollectionYear")
   f2 <- f
   f2['fields'] <- list(NULL)
-  expect_message(redundancy_check(f), "Ignoring 'fields' argument") %>%
+  expect_message(filter_redundancy(f), "Ignoring 'fields' argument") %>%
     expect_equal(f2)
 
 })
