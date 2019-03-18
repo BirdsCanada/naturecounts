@@ -1,21 +1,25 @@
 #' Download NatureCounts data records
 #'
-#' Download data records from various collections filtered by date and location
-#' (if provided). An authorization token is required.
+#' Download data records from various collections filtered by various options.
+#' In order to ease the load on the server, note that only **three** of
+#' `collections`, `species`, `years`, `doy`, `region`, and `site_type` can be
+#' used in any one request (but see the vignette for filtering your data after
+#' download for more options:
+#' `vignette("filtering_data", package = "naturecounts")`.
 #'
 #' @param collections Character vector. The collection codes from which to
 #'   download data. NULL (default) downloads data from all available collections
 #' @param species Numeric vector. Numeric species ids (see details)
-#' @param start_year Numeric. The starting year of data to download
-#' @param end_year Numeric. The ending year of data to download
-#' @param start_season Character/Numeric. The start of the season to download
-#'   (day of year 1-366 or a date that can be converted to day of year)
-#' @param end_season Character/Numeric. The start of the season to download
-#'   (day of year 1-366 or a date that can be converted to day of year)
-#' @param location NOT IMPLEMENTED
-#' @param country Character vector. Filter data to specific countries codes
-#' @param statprov Character vector. Filter data to specific states/province
-#'   codes
+#' @param years Numeric vector. The start/end years of data to download. Can use
+#'   NA for either start or end, or a single value to return data from a single
+#'   year.
+#' @param doy Character/Numeric vector. The start/end day-of-year to download
+#'   (1-366 or dates that can be converted to day of year). Can use NA for
+#'   either start or end
+#' @param region List. Named list with *one* of the following options:
+#'   `country`, `statprov`, `subnational2`, `bcr`, `iba`, `utm_square`, `bbox`.
+#'   See details
+#' @param site_type Character vector. The type of site to return (e.g., `IBA`).
 #' @param fields_set Charcter. Set of fields/columns to download. See details.
 #' @param fields Character vector. If `fields_set = custom`, which
 #'   fields/columns to download. See details
@@ -27,16 +31,18 @@
 #'
 #' @details
 #'
-#'   **Species ids:**
+#'   **Species ids (`species`):**
 #'   Numeric species id codes can determined from the functions
-#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}.
+#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}. See
+#'   also the vignette for more information
+#'   `vignette("species-codes", package = "naturecounts")`.
 #'
-#'   **Dates:**
-#'   The format of start/end dates is fairly flexible and can be anything
+#'   **Day of Year (`doy`):**
+#'   The format for day of year (`doy`) is fairly flexible and can be anything
 #'   recognized by \code{\link[lubridate]{lubridate-package}}'s
-#'   \code{\link[lubridate]{ymd}()} function. However, it must have the
-#'   order of year, month, day. Year is ignored when converting to julian days
-#'   for defining seasons.
+#'   \code{\link[lubridate]{ymd}()} function. However, it must have the order of
+#'   year, month, day. Note that year is ignored when converting to day of year,
+#'   except that it will result in a 1 day offset for leap years.
 #'
 #'   **Data Fields/Columns:**
 #'   By default data is downloaded with the `minimum` set of fields/columns.
@@ -71,7 +77,10 @@
 #' # Observations of black-capped chickadees from RCBIOTABASE collection in 2010
 #' species_search("black-capped chickadee") # Find the species_id
 #' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
-#'                    start_date = 2010, end_date = 2010)
+#'                    years = 2010)
+#'
+#' # All public bcch observations since 2015
+#' bcch <- nc_data_dl(species = 14280, years = c(2015, NA))
 #'
 #' # All moose observations with public access
 #' species_search("moose")
@@ -85,23 +94,16 @@
 #'
 #' @export
 
-nc_data_dl <- function(collections = NULL, species = NULL,
-                       start_year = NULL, end_year = NULL,
-                       start_season = NULL, end_season = NULL,
-                       location = NULL,
-                       country = NULL, statprov = NULL, subnational2 = NULL,
+nc_data_dl <- function(collections = NULL, species = NULL, years = NULL,
+                       doy = NULL, region = NULL, site_type = NULL,
                        fields_set = "minimum", fields = NULL,
                        token = NULL, sql_db = NULL,
                        verbose = TRUE) {
 
   # Assemble and check filter parameters
-  filter <- filter_create(collections = collections,
-                          start_year = start_year, end_year = end_year,
-                          start_season = start_season, end_season = end_season,
-                          country = country, statprov = statprov,
-                          subnational2 = subnational2,
-                          species = species, fields_set = fields_set,
-                          fields = fields)
+  filter <- filter_create(collections = collections, species = species,
+                          years = years, doy = doy, region = region,
+                          fields_set = fields_set, fields = fields)
 
   # Get available records
   if(verbose) message("Collecting available records...")
@@ -283,12 +285,19 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #' filtered to only those available to the user. Otherwise all collections are
 #' returned.
 #'
-#' @param collections Character vector. Filter to specific collections
+#' @param collections Character vector. The collection codes from which to
+#'   download data. NULL (default) downloads data from all available collections
 #' @param species Numeric vector. Numeric species ids (see details)
-#' @param country Character vector. Filter to specific country codes
-#' @param statprov Character vector. Filter to specific state/province codes
-#' @param startyear Numeric. Filter to this start year
-#' @param endyear Numeric. Filter to this end year
+#' @param years Numeric vector. The start/end years of data to download. Can use
+#'   NA for either start or end, or a single value to return data from a single
+#'   year.
+#' @param doy Character/Numeric vector. The start/end day-of-year to download
+#'   (1-366 or dates that can be converted to day of year). Can use NA for
+#'   either start or end
+#' @param region List. Named list with *one* of the following options:
+#'   `country`, `statprov`, `subnational2`, `bcr`, `iba`, `utm_square`, `bbox`.
+#'   See details
+#' @param site_type Character vector. The type of site to return (e.g., `IBA`).
 #' @param show Character. Either "all" or "available". "all" returns counts from
 #'   all data sources. "available" only returns counts for data available
 #'   (public or accessible with the token provided).
@@ -296,8 +305,20 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' @return Data frame
 #'
-#' @details Numeric species id codes can determined from the functions
-#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}.
+#' @details
+#'
+#'   **Species ids (`species`):**
+#'   Numeric species id codes can determined from the functions
+#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}. See
+#'   also the vignette for more information
+#'   `vignette("species-codes", package = "naturecounts")`.
+#'
+#'   **Day of Year (`doy`):**
+#'   The format for day of year (`doy`) is fairly flexible and can be anything
+#'   recognized by \code{\link[lubridate]{lubridate-package}}'s
+#'   \code{\link[lubridate]{ymd}()} function. However, it must have the order of
+#'   year, month, day. Note that year is ignored when converting to day of year,
+#'   except that it will result in a 1 day offset for leap years.
 #'
 #' @examples
 #'
@@ -308,7 +329,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' # Count publicly available records for Manitoba, Canada
 #' \donttest{
-#' nc_count(statprov = "MB")
+#' nc_count(region = list(statprov = "MB"))
 #' }
 #'
 #' # Count all records for all collections you have access to
@@ -318,20 +339,18 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' # Count all public records with barred owls in Ontario
 #' species_search("barred owl")
-#' nc_count(species = 7590, statprov = "ON")
+#' nc_count(species = 7590, region = list(statprov = "ON"))
 #'
 #' # Count records available in the Christmas Bird Count and Breeding Bird
 #' # Survey collections (regardless of permissions)
 #' \donttest{
-#' nc_count(c("CBC", "BBS"), show = "all")
+#' nc_count(collections = c("CBC", "BBS"), show = "all")
 #' }
 #'
 #' @export
 
-nc_count <- function(collections = NULL, species = NULL,
-                     country = NULL, statprov = NULL, subnational2 = NULL,
-                     start_year = NULL, end_year = NULL,
-                     start_season = NULL, end_season = NULL,
+nc_count <- function(collections = NULL, species = NULL, years = NULL,
+                     doy = NULL, region = NULL, site_type = NULL,
                      show = "available", token = NULL) {
 
   if(!show %in% c("available", "all")) {
@@ -339,12 +358,8 @@ nc_count <- function(collections = NULL, species = NULL,
   }
 
   # Filter
-  filter <- filter_create(collections = collections,
-                          start_year = start_year, end_year = end_year,
-                          start_season = start_season, end_season = end_season,
-                          country = country, statprov = statprov,
-                          subnational2 = subnational2,
-                          species = species)
+  filter <- filter_create(collections = collections, species = species,
+                          years = years, doy = doy, region = region)
 
   # Get counts
   cnts <- nc_count_internal(filter, token, show)

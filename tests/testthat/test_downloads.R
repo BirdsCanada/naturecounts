@@ -8,13 +8,15 @@ test_that("Get counts for collections", {
   expect_gt(nrow(c1), 0)
   expect_true(all(c1$collection %in% c("CBC", "BBS")))
 
-  expect_silent(c2 <- nc_count(c("CBC", "BBS"), statprov = "MB", show = "all"))
+  expect_silent(c2 <- nc_count(c("CBC", "BBS"),
+                               region = list(statprov = "MB"),
+                               show = "all"))
   expect_is(c2, "data.frame")
   expect_gt(nrow(c2), 0)
   expect_true(all(c2$collection %in% c("CBC", "BBS")))
   expect_true(all(c2$nrecords < c1$nrecords))
 
-  expect_silent(c <- nc_count(statprov = "MB"))
+  expect_silent(c <- nc_count(region = list(statprov = "MB")))
   expect_is(c, "data.frame")
   expect_gt(nrow(c), 0)
 
@@ -35,8 +37,7 @@ test_that("Counts return permissions", {
 context("Download data")
 
 test_that("Data download returns data", {
-  expect_message(d <- nc_data_dl(collections = "RCBIOTABASE",
-                                 start_year = 2011, end_year = 2011))
+  expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011))
   expect_is(d, "data.frame")
   expect_gt(nrow(d), 0)
   expect_gt(ncol(d), 0)
@@ -45,15 +46,14 @@ test_that("Data download returns data", {
 })
 
 test_that("Data download arguments", {
-  expect_silent(nc_data_dl(collections = "RCBIOTABASE",
-                           start_year = 2011, end_year = 2011, verbose = FALSE))
+  expect_silent(nc_data_dl(collections = "RCBIOTABASE", years = 2011,
+                           verbose = FALSE))
 
 })
 
 test_that("Data filters work as expected", {
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
-                                species = 7590,
-                                start_year = 2000, end_year = 2000,
+                                species = 7590, years = 2000,
                                 verbose = FALSE))
   expect_equal(unique(d1$species_id), 7590)
   expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
@@ -62,27 +62,25 @@ test_that("Data filters work as expected", {
 
   expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = c(7590, 14280),
-                                start_year = 2003, end_year = 2004,
+                                years = c(2003, 2004),
                                 verbose = FALSE))
   expect_equal(sort(unique(d2$species_id)), c(7590, 14280))
   expect_equal(min(as.numeric(d2$survey_year), na.rm = TRUE), 2003)
   expect_equal(max(as.numeric(d2$survey_year), na.rm = TRUE), 2004)
 
   expect_silent(d3 <- nc_data_dl(collections = "ABBIRDRECS",
-                                 species = 7590,
-                                 start_year = 2000, end_year = 2000,
+                                 species = 7590, years = 2000,
                                  fields_set = "core",
                                  verbose = FALSE))
   expect_equal(nrow(d1), nrow(d3))
   expect_gt(ncol(d3), ncol(d1))
 
   expect_silent(d4 <- nc_data_dl(collections = "ABBIRDRECS",
-                                 species = 7590,
-                                 start_year = 2000, end_year = 2000,
+                                 species = 7590, years = 2000,
                                  fields_set = "custom", fields = "Locality",
                                  verbose = FALSE))
   expect_equal(nrow(d1), nrow(d4))
-  expect_gt(ncol(d4), ncol(d1))
+  expect_lt(ncol(d4), ncol(d1))
   expect_true("Locality" %in% names(d4))
 
 })
@@ -91,7 +89,7 @@ test_that("Data download returns informative errors/messages", {
 
   # No data for some
   expect_message(nc_data_dl(collections = c("ABBIRDRECS", "RCBIOTABASE"),
-                            start_year = 2010,
+                            years = 2010,
                             species = 7590, verbose = TRUE),
                  "Not all collections have data that match these filters")
 
@@ -100,13 +98,13 @@ test_that("Data download returns informative errors/messages", {
                "You do not have permission")
 
   # No data
-  expect_error(nc_data_dl(collections = "ABBIRDRECS", start_year = 2018,
+  expect_error(nc_data_dl(collections = "ABBIRDRECS", years = 2018,
                           verbose = FALSE),
                "These collections have no data that match these filters")
 
   # Custom field_set without fields
   expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 7590,
-                          start_year = 2000, end_year = 2000,
+                          years = 2000,
                           fields_set = "custom", verbose = FALSE),
                "Must specify 'fields' if using a custom 'field_set'")
 })

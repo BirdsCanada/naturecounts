@@ -7,7 +7,8 @@ year_check <- function(y) {
   y
 }
 
-season_check <- function(s) {
+doy_check <- function(s) {
+
   stp <- FALSE
 
   if(stringr::str_detect(s, "^[:digit:]+$")) s <- as_numeric(s)
@@ -19,8 +20,8 @@ season_check <- function(s) {
       lubridate::yday()
     if(is.na(s)) stp <- TRUE
   }
-  if(stp) stop("Seasons must be either a date (YM or YMD), or a julian date ",
-               "(whole numbers between 1 and 366)", call. = FALSE)
+  if(stp) stop("Day of year must be either a date (YM or YMD), ",
+               "or a whole number (1-366)", call. = FALSE)
   s
 }
 
@@ -48,7 +49,7 @@ fields_set_check <- function(fields_set) {
            "returned by bmde_version(), or 'custom'", call. = FALSE)
     }
     if(fields_set != "custom") {
-      fields_set <- dplyr::filter(v, shorthand == fields_set) %>%
+      fields_set <- dplyr::filter(v, .data$shorthand == fields_set) %>%
         dplyr::pull(version)
     }
   }
@@ -68,7 +69,7 @@ fields_check <- function(fields) {
   #   unique()
   # if(!all(fields %in% f)) {
   #   problem <- fields[!fields %in% f]
-
+  fields
 }
 
 codes_check <- function(desc, type = NULL) {
@@ -140,15 +141,13 @@ codes_convert <- function(desc, type) {
 filter_check <- function(f) {
   for(i in 1:length(f)) {
     n <- names(f[i])
-    if(!is.null(f[[i]])) {
-      if(n == "fields_set") f[[i]] <- fields_set_check(f[[i]])
-      if(n == "fields") f[[i]] <- fields_check(f[[i]])
-      if(stringr::str_detect(n, "collection")) f[[i]] <- collections_check(f[[i]])
-      if(stringr::str_detect(n, "_year")) f[[i]] <- year_check(f[[i]])
-      if(stringr::str_detect(n, "_season")) f[[i]] <- season_check(f[[i]])
-      if(stringr::str_detect(n, "country|statprov|species")) {
-        f[[i]] <- codes_check(f[[i]], type = n)
-      }
+    if(n == "fields_set") f[[i]] <- fields_set_check(f[[i]])
+    if(n == "fields") f[[i]] <- fields_check(f[[i]])
+    if(stringr::str_detect(n, "collection")) f[[i]] <- collections_check(f[[i]])
+    if(stringr::str_detect(n, "_year")) f[[i]] <- year_check(f[[i]])
+    if(stringr::str_detect(n, "_doy")) f[[i]] <- doy_check(f[[i]])
+    if(stringr::str_detect(n, "country|statprov|species")) {
+      f[[i]] <- codes_check(f[[i]], type = n)
     }
   }
   f
@@ -156,26 +155,48 @@ filter_check <- function(f) {
 
 redundancy_check <- function(f) {
 
-  p <- f[!vapply(f, is.null, logical(1))]
+  f <- f[!vapply(f, is.null, logical(1))]
 
-  # Remove redundancy in locations
-  locs <- names(p)[names(p) %in% c("country", "statprov", "subnational2")]
-  if(length(locs) > 1) {
-    locs <- factor(locs, levels = c("country", "statprov", "subnational2")) %>%
-      sort()
-    message("'country', 'statprov' and 'subnational2' are redundant, ",
-            "keeping only '", locs[length(locs)], "'")
-    locs <- locs[-length(locs)]
-    f[as.character(locs)] <- list(NULL)
+  # Detect too many parameters
+  if(length(f[!names(f) %in% c("fields", "fields_set")]) > 3) {
+  stop("Only 3 arguments from `collections`, `species`, `years`, `doy`, ",
+       "`region`, and `site_type` are permited. Remove ", length(f) - 3,
+       " arguments and try again.", call. = FALSE)
+  }
+
+  # Detect redundancy in regions
+  if(!is.null(f$region)) {
+
+    if(!is.list(f$region) || is.null(names(f$region))) {
+      stop("'regions' must be a named list", call. = FALSE)
+    }
+
+    region <- f$region
+    if(length(region) > 1) {
+      # If country/statprov/subnational2, take the smallest unit
+      if(all(names(region) %in% c("country", "statprov", "subnational2"))) {
+        locs <- factor(names(region),
+                       levels = c("country", "statprov", "subnational2")) %>%
+          sort()
+        message("'country', 'statprov' and 'subnational2' are redundant, ",
+                "keeping only '", locs[length(locs)], "'")
+        locs <- locs[-length(locs)]
+        f$region[as.character(locs)] <- list(NULL)
+
+      } else {
+        stop("'region' can only be one of 'country', 'statprov', ",
+             "'subnational2', 'bcr', 'iba', 'utm_square', or 'bbox'")
+      }
+    }
   }
 
   # Only use 'fields' if 'fields_set' == "custom" | MUST have 'fields' if custom
-  if(!is.null(p[['fields']]) &&
-     (is.null(p[['fields_set']]) | p[['fields_set']] != "custom")) {
+  if(!is.null(f[['fields']]) &&
+     (is.null(f[['fields_set']]) | f[['fields_set']] != "custom")) {
     message("Ignoring 'fields' argument because 'fields_set' is not 'custom'")
     f['fields'] <- list(NULL)
-  } else if(!is.null(p[['fields_set']]) && p[['fields_set']] == "custom" &&
-            is.null(p[['fields']])) {
+  } else if(!is.null(f[['fields_set']]) && f[['fields_set']] == "custom" &&
+            is.null(f[['fields']])) {
     stop("Must specify 'fields' if using a custom 'field_set'", call. = FALSE)
   }
   f

@@ -116,6 +116,9 @@ filter_create <- function(...) {
   # Check parameters redundancy
   f <- redundancy_check(f)
 
+  # Unpack arguments
+  f <- filter_unpack(f)
+
   # Check parameters validity
   f <- filter_check(f)
 
@@ -123,3 +126,23 @@ filter_create <- function(...) {
   names(f) <- queries$api_name[match(names(f), queries$package_name)]
   f
 }
+
+filter_unpack <- function(f) {
+  f$years <- filter_dup(f$years)
+  f$doy <- filter_dup(f$doy)
+
+  if(!is.null(f$years)) names(f$years) <- c("start_year", "end_year")
+  if(!is.null(f$doy)) names(f$doy) <- c("start_doy", "end_doy")
+  if(!is.null(f$region)) f$region <- unlist(f$region)
+
+  for(i in c("years", "doy", "region")){
+    f <- append(f, unlist(f[[i]]))
+    f <- f[names(f) != i]
+  }
+
+  # Remove missing parameters now that all are named
+  f[which(is.na(f))] <- NULL
+  f
+}
+
+filter_dup <- function(i) if(length(i) == 1) i <- rep(i, 2) else i

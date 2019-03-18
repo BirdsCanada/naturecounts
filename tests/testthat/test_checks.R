@@ -82,20 +82,20 @@ test_that("year_check correct", {
   expect_error(year_check(2050), er)
 })
 
-test_that("season_check correct", {
-  expect_silent(season_check(1)) %>% expect_equal(1)
-  expect_silent(season_check("1")) %>% expect_equal(1)
-  expect_silent(season_check("2010-04-01")) %>% expect_equal(91)
-  expect_silent(season_check("2010-04")) %>% expect_equal(91)
+test_that("doy_check correct", {
+  expect_silent(doy_check(1)) %>% expect_equal(1)
+  expect_silent(doy_check("1")) %>% expect_equal(1)
+  expect_silent(doy_check("2010-04-01")) %>% expect_equal(91)
+  expect_silent(doy_check("2010-04")) %>% expect_equal(91)
 
-  er <- paste0("Seasons must be either a date \\(YM or YMD\\), ",
-               "or a julian date \\(whole numbers between 1 and 366\\)")
-  expect_error(season_check(-300), er)
-  expect_error(season_check(367), er)
-  expect_error(season_check(4.5), er)
-  expect_error(season_check(2010), er)
-  expect_error(season_check("2010"), er)
-  expect_error(season_check("hello"), er)
+  er <- paste0("Day of year must be either a date \\(YM or YMD\\), ",
+               "or a whole number \\(1-366\\)")
+  expect_error(doy_check(-300), er)
+  expect_error(doy_check(367), er)
+  expect_error(doy_check(4.5), er)
+  expect_error(doy_check(2010), er)
+  expect_error(doy_check("2010"), er)
+  expect_error(doy_check("hello"), er)
 })
 
 test_that("filter_checks correct", {
@@ -119,9 +119,11 @@ test_that("redundancy_checks correct", {
 
   # country/statprov/subnational2 redundancy
   f <- list(collections = "RCBIOTABASE", species = 14280,
-            country = "CA", statprov = "ON", subnational2 = "CA.MB.07")
+            region = list(country = "CA",
+                          statprov = "ON",
+                          subnational2 = "CA.MB.07"))
   f2 <- f
-  f2[c('country', 'statprov')] <- list(NULL)
+  f2$region[c('country', 'statprov')] <- list(NULL)
   expect_message(redundancy_check(f), "keeping only 'subnational2'") %>%
     expect_equal(f2)
 

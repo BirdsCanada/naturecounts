@@ -4,29 +4,35 @@
 \alias{nc_count}
 \title{Download information about NatureCounts collections}
 \usage{
-nc_count(collections = NULL, species = NULL, country = NULL,
-  statprov = NULL, subnational2 = NULL, start_year = NULL,
-  end_year = NULL, start_season = NULL, end_season = NULL,
-  show = "available", token = NULL)
+nc_count(collections = NULL, species = NULL, years = NULL,
+  doy = NULL, region = NULL, site_type = NULL, show = "available",
+  token = NULL)
 }
 \arguments{
-\item{collections}{Character vector. Filter to specific collections}
+\item{collections}{Character vector. The collection codes from which to
+download data. NULL (default) downloads data from all available collections}
 
 \item{species}{Numeric vector. Numeric species ids (see details)}
 
-\item{country}{Character vector. Filter to specific country codes}
+\item{years}{Numeric vector. The start/end years of data to download. Can use
+NA for either start or end, or a single value to return data from a single
+year.}
 
-\item{statprov}{Character vector. Filter to specific state/province codes}
+\item{doy}{Character/Numeric vector. The start/end day-of-year to download
+(1-366 or dates that can be converted to day of year). Can use NA for
+either start or end}
+
+\item{region}{List. Named list with \emph{one} of the following options:
+\code{country}, \code{statprov}, \code{subnational2}, \code{bcr}, \code{iba}, \code{utm_square}, \code{bbox}.
+See details}
+
+\item{site_type}{Character vector. The type of site to return (e.g., \code{IBA}).}
 
 \item{show}{Character. Either "all" or "available". "all" returns counts from
 all data sources. "available" only returns counts for data available
 (public or accessible with the token provided).}
 
 \item{token}{Character. Authorization token}
-
-\item{startyear}{Numeric. Filter to this start year}
-
-\item{endyear}{Numeric. Filter to this end year}
 }
 \value{
 Data frame
@@ -38,8 +44,18 @@ filtered to only those available to the user. Otherwise all collections are
 returned.
 }
 \details{
+\strong{Species ids (\code{species}):}
 Numeric species id codes can determined from the functions
-\code{\link{species_search}()} or \code{\link{species_code_search}()}.
+\code{\link{species_search}()} or \code{\link{species_code_search}()}. See
+also the vignette for more information
+\code{vignette("species-codes", package = "naturecounts")}.
+
+\strong{Day of Year (\code{doy}):}
+The format for day of year (\code{doy}) is fairly flexible and can be anything
+recognized by \code{\link[lubridate]{lubridate-package}}'s
+\code{\link[lubridate]{ymd}()} function. However, it must have the order of
+year, month, day. Note that year is ignored when converting to day of year,
+except that it will result in a 1 day offset for leap years.
 }
 \examples{
 
@@ -50,7 +66,7 @@ nc_count()
 
 # Count publicly available records for Manitoba, Canada
 \donttest{
-nc_count(statprov = "MB")
+nc_count(region = list(statprov = "MB"))
 }
 
 # Count all records for all collections you have access to
@@ -60,12 +76,12 @@ nc_count(token = YOUR_TOKEN)
 
 # Count all public records with barred owls in Ontario
 species_search("barred owl")
-nc_count(species = 7590, statprov = "ON")
+nc_count(species = 7590, region = list(statprov = "ON"))
 
 # Count records available in the Christmas Bird Count and Breeding Bird
 # Survey collections (regardless of permissions)
 \donttest{
-nc_count(c("CBC", "BBS"), show = "all")
+nc_count(collections = c("CBC", "BBS"), show = "all")
 }
 
 }

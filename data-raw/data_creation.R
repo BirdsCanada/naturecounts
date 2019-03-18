@@ -44,8 +44,8 @@ queries <- dplyr::tribble(
   "max_long",      "maxLong",       TRUE,
   "start_year",    "startYear",     TRUE,
   "end_year",      "endYear",       TRUE,
-  "start_season",  "startDay",      TRUE,
-  "end_season",    "endDay",        TRUE,
+  "start_doy",  "startDay",      TRUE,
+  "end_doy",    "endDay",        TRUE,
   "collection",    "collection",    TRUE,
   "collections",   "collections",   FALSE, # for collection counts
   "request_id",    "requestId",     TRUE,
@@ -56,7 +56,6 @@ queries <- dplyr::tribble(
   "country",       "country",       FALSE,
   "statprov",      "statProv",      FALSE,
   "subnational2",  "subnational2",  FALSE)
-
 
 
 # Save all internal datasets
