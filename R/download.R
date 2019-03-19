@@ -17,7 +17,7 @@
 #'   (1-366 or dates that can be converted to day of year). Can use NA for
 #'   either start or end
 #' @param region List. Named list with *one* of the following options:
-#'   `country`, `statprov`, `subnational2`, `bcr`, `iba`, `utm_square`, `bbox`.
+#'   `country`, `statprov`, `subnational2`, `bcr`, `iba`, `utm_squares`, `bbox`.
 #'   See details
 #' @param site_type Character vector. The type of site to return (e.g., `IBA`).
 #' @param fields_set Charcter. Set of fields/columns to download. See details.
@@ -53,17 +53,17 @@
 #'   be specified for download in one of four ways:
 #'
 #'   1. `fields_set` can be a specific shorthand reflecting a BMDE version:
-#'   `core`, `extended` or `minimum` (default). See [bmde_versions()] to see
+#'   `core`, `extended` or `minimum` (default). See [meta_bmde_versions()] to see
 #'   which BMDE version the shorthand refers to.
 #'   2. `fields_set` can be `default` which uses the default BMDE version for a
 #'   particular collection (note that if you download more than one collection,
 #'   the field sets will expand to cover all fields/columns in the combined
 #'   collections)
-#'   3. `fields_set` can be the exact BMDE version. See [bmde_versions()] for
-#'   options.
+#'   3. `fields_set` can be the exact BMDE version. See [meta_bmde_versions()]
+#'   for options.
 #'   4. `fields_set` can be `custom` and the `fields` argument can be a
 #'   character vector specifying the exact fields/columns to return. See
-#'   [bmde_fields()]) for `fields` options
+#'   [meta_bmde_fields()]) for potential `fields` values.
 #'
 #'   Note that in all cases there are a set of fields/columns that are *always*
 #'   returned, no matter what `fields_set` is used.
@@ -81,6 +81,8 @@
 #'
 #' # All public bcch observations since 2015
 #' bcch <- nc_data_dl(species = 14280, years = c(2015, NA))
+#'
+#' bcch <- nc_data_dl(species = 14280, doy = c(200, 300))
 #'
 #' # All moose observations with public access
 #' species_search("moose")
@@ -241,7 +243,7 @@ nc_single_dl <- function(query, filter, token){
                        token = token)
 
   # Parse the data
-  request$results <- parse_results(request)
+  request$results <- parse_results(request, results = TRUE)
 
   # Make sure all have equal row counts
   rows <- unique(vapply(request$results, FUN = length, FUN.VALUE = c(11)))
@@ -295,7 +297,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'   (1-366 or dates that can be converted to day of year). Can use NA for
 #'   either start or end
 #' @param region List. Named list with *one* of the following options:
-#'   `country`, `statprov`, `subnational2`, `bcr`, `iba`, `utm_square`, `bbox`.
+#'   `country`, `statprov`, `subnational2`, `bcr`, `iba`, `utm_squares`, `bbox`.
 #'   See details
 #' @param site_type Character vector. The type of site to return (e.g., `IBA`).
 #' @param show Character. Either "all" or "available". "all" returns counts from
@@ -370,12 +372,12 @@ nc_count <- function(collections = NULL, species = NULL, years = NULL,
 nc_count_internal <- function(filter, token, show = "available") {
 
   cnts <- srv_query(api$collections_count, token = token, filter = filter) %>%
-    parse_results() %>%
+    parse_results(results = TRUE) %>%
     dplyr::arrange(.data$collection)
 
   if(show == "available" && nrow(cnts) > 0) {
     cnts <- srv_query(api$permissions, token = token) %>%
-      parse_results() %>%
+      parse_results(results = TRUE) %>%
       dplyr::semi_join(cnts, ., by = "collection")
   }
   cnts
@@ -384,58 +386,5 @@ nc_count_internal <- function(filter, token, show = "available") {
 
 nc_permissions <- function(token = NULL) {
   srv_query(api$permissions, token = token) %>%
-    parse_results()
-}
-
-nc_collections <- function() {
-  srv_query(api$collections) %>%
-    parse_results(results = FALSE)
-}
-
-#' Fetch BMDE versions
-#'
-#' In the NatureCounts data base, there are many different types of information,
-#' so by default not all fields/columns are downloaded.
-#'
-#' @return Data frame of version names and descriptions
-#'
-#' @examples
-#' bmde_versions()
-#'
-#' @export
-
-bmde_versions <- function() {
-  srv_query(api$bmde_versions) %>%
-    parse_results(results = FALSE)
-}
-
-#' Fetch BMDE fields for a given version
-#'
-#' In the NatureCounts data base, there are many different types of information,
-#' so by default not all fields/columns are downloaded. Different versions of
-#' field sets exist, each with a different collection of fields/columns. This
-#' function returns the names of the fields/columns included in a particular
-#' version.
-#'
-#' @param version Character. BMDE version for which to return fields.
-#'
-#' @return Data frame of version names and descriptions
-#'
-#' @examples
-#' # Return fields/columns in the 'minimum' version
-#' bmde_fields()
-#'
-#' # Retrun fields/columns in the 'core' version
-#' bmde_fields(version = "core")
-#'
-#' # Return all possible fields
-#' bmde_fields(version = "extended")
-#'
-#' @export
-
-bmde_fields <- function(version = "minimum") {
-  # Check version
-  version <- fields_set_check(version)
-  srv_query(api$bmde_fields, query = list(version = version)) %>%
-    parse_results(results = FALSE)
+    parse_results(results = TRUE)
 }

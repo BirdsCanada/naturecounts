@@ -1,40 +1,47 @@
 # Save user agent as internal object
-ua <- httr::user_agent(agent = "https://github.com/BirdStudiesCanada/NatureCountsAPI")
+ua <- httr::user_agent(agent = "https://github.com/BirdStudiesCanada/naturecounts")
 
 # API URLs
-api <- list(
-  "api" = "https://sandbox.birdscanada.org/api",
+meta_info <- dplyr::tribble(
+  ~package_name,         ~api_url,                              ~primary_keys,
+  "api",                 "https://sandbox.birdscanada.org/api", NA,
 
-  "version" = "api_version",
+  "auth",                "/data/authenticate",                  NA,
 
-  "country_codes" = "metadata/country",
-  "statprov_codes" = "metadata/statprov",
-  "subnational2_codes" = "metadata/subnat2",
+  "version",             "api_version",                         NA,
 
-  "species_authority" = "metadata/species_codes_authority",
-  "species_codes" = "metadata/species_codes",
-  "species_taxonomy" = "metadata/species",
+  "country_codes",       "metadata/country",                    "country_code",
+  "statprov_codes",      "metadata/statprov",                   "statprov_code",
+  "subnational2_codes",  "metadata/subnat2",                "subnational2_code",
 
-  "bmde_versions" = "metadata/bmde_versions",
-  "bmde_fields" = "metadata/bmde_fields",
-  "projects" = "metadata/projects",
-  "projects_meta" = "metadata/projects_metadata",
+  "bcr_codes",           "metadata/bcr",                        "bcr_code",
+  "iba_codes",           "metadata/iba_sites",                  "iba_code",
+  "utm_squares",         "data/utm_squares",                    NA,
 
-  "collections" = "metadata/collections",
+  "species_authority",   "metadata/species_codes_authority",    "authority",
+  "species_codes",       "metadata/species_codes",              NA, # No unique
+  "species_taxonomy",    "metadata/species",                    "species_id",
 
-  "data" = "data/get_data",
-  "collections_count" = "data/list_collections",
-  "permissions" = "data/list_permissions",
-  "utm_squares" = "data/utm_squares"
+  "bmde_versions",       "metadata/bmde_versions",              "version",
+  "bmde_fields",         "metadata/bmde_fields",                "field_name",
+  "projects",            "metadata/projects",                   "project_id",
+  "projects_meta",       "metadata/projects_metadata",          "project_id",
+
+  "collections",         "metadata/collections",                "collection",
+  "breeding_codes",      "metadata/breeding_codes",             "breeding_code",
+  "project_protocols",   "metadata/protocols",                  "protocol_id",
+  "protocol_types",      "metadata/protocol_type",              "protocol_type",
+
+  "data",                "data/get_data",                       "record_id",
+  "collections_count",   "data/list_collections",               "collection",
+  "permissions",         "data/list_permissions",               "collection"
   )
 
-keys <- list(
-  "country_codes" = "country_code",
-  "statprov_codes" = "statprov_code",
-  "sub_national2_codes" = "subnational2_code",
-  "species_authority" = "authority",
-  #"species_codes" = "species_id2"  # No unique column...
-  "species_taxonomy" = "species_id")
+api <- as.list(meta_info$api_url)
+names(api) <- meta_info$package_name
+
+keys <- as.list(meta_info$primary_keys)
+names(keys) <- meta_info$package_name
 
 queries <- dplyr::tribble(
   ~package_name,  ~api_name,       ~unbox,
@@ -44,12 +51,12 @@ queries <- dplyr::tribble(
   "max_long",      "maxLong",       TRUE,
   "start_year",    "startYear",     TRUE,
   "end_year",      "endYear",       TRUE,
-  "start_doy",  "startDay",      TRUE,
-  "end_doy",    "endDay",        TRUE,
+  "start_doy",     "startDay",      TRUE,
+  "end_doy",       "endDay",        TRUE,
   "collection",    "collection",    TRUE,
   "collections",   "collections",   FALSE, # for collection counts
   "request_id",    "requestId",     TRUE,
-  "utm_square",    "utmSquare",     TRUE,
+  "utm_squares",   "utmSquare",     FALSE,
   "fields_set",    "bmdeVersion",   TRUE,
   "fields",        "fields",        FALSE,
   "species",       "species",       FALSE,

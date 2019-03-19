@@ -25,6 +25,19 @@ doy_check <- function(s) {
   s
 }
 
+utm_check <- function(u) {
+  u_all <- meta_utm_squares()
+  n <- u %in% u_all$utm_square
+  if(sum(!n) > 0) {
+    bad <- u[!n]
+    mx <- dplyr::if_else(length(bad) <= 3, length(bad), 3L)
+    bad <- paste0("'", paste0(bad[1:mx], collapse = "', '"), "'")
+    if(mx < sum(!n)) bad <- paste0(bad, ", ...")
+    stop("Invalid 'utm_squares' provided (", bad, ")", call. = FALSE)
+  }
+  u
+}
+
 collections_check <- function(c) {
   if(!is.character(c)) {
     stop("'collections' must be either NULL (for all collections) ",
@@ -34,19 +47,19 @@ collections_check <- function(c) {
 }
 
 authority_check <- function(a) {
-  if(!all(a %in% species_authority()$authority)) {
+  if(!all(a %in% meta_species_authority()$authority)) {
     stop("'authority' must be one or more of the authorities ",
-         "specified in the species_authority data frame.", call. = FALSE)
+         "specified in the meta_species_authority data frame.", call. = FALSE)
   }
 }
 
 fields_set_check <- function(fields_set) {
-  v <- bmde_versions()
+  v <- meta_bmde_versions()
 
   if(length(fields_set) > 1 || !fields_set %in% c(v$version, "custom")) {
     if(!fields_set %in% v$shorthand) {
       stop("'field_set' must be either a 'version' or a 'shorthand' code ",
-           "returned by bmde_version(), or 'custom'", call. = FALSE)
+           "returned by meta_bmde_version(), or 'custom'", call. = FALSE)
     }
     if(fields_set != "custom") {
       fields_set <- dplyr::filter(v, .data$shorthand == fields_set) %>%
@@ -61,9 +74,9 @@ fields_check <- function(fields) {
   # Can't really check, because don't have list of internal fields
   # col <- nc_collections() %>%
   #   dplyr::filter(bmdr_code %in% collections) %>%
-  #   dplyr::pull(bmde_version) %>%
+  #   dplyr::pull(meta_bmde_version) %>%
   #   unique()
-  # f <- vapply(col, FUN = function(x) list(bmde_fields(version = x)$field_name),
+  # f <- vapply(col, FUN = function(x) list(meta_bmde_fields(version = x)$field_name),
   #             FUN.VALUE = list("A")) %>%
   #   unlist() %>%
   #   unique()
@@ -80,8 +93,8 @@ codes_check <- function(desc, type = NULL) {
 
   # Get code data frames
   if(type == "species") {
-    df <- species_taxonomy()
-  } else df <- eval(parse(text = paste0(type, "_codes()")))
+    df <- meta_species_taxonomy()
+  } else df <- eval(parse(text = paste0("meta_", type, "_codes()")))
 
   vapply(desc, codes_check_each, type = type, df = df,
          FUN.VALUE = vector(length = 1, mode = m),
@@ -105,8 +118,8 @@ codes_check_each <- function(desc, type, df) {
      (type != "species" & stringr::str_detect(desc, "^[:upper:]{2}$"))) {
 
     if(!desc %in% dplyr::pull(df, code_column)) {
-      stop("'", type, "' code not found, see the ", type, "_codes",
-           " data frame for valid codes", call. = FALSE)
+      stop("'", type, "' code not found, see meta_", type, "_codes() ",
+           "for valid codes", call. = FALSE)
     }
     return(desc)
 
@@ -122,14 +135,14 @@ codes_check_each <- function(desc, type, df) {
 
 
 codes_convert <- function(desc, type) {
-  c <- location_search(desc, type) %>%
+  c <- region_search(desc, type) %>%
     dplyr::select(dplyr::contains("_code"),
                   dplyr::contains("_name")) %>%
     dplyr::distinct()
 
   if(nrow(c) == 0) {
-    stop("Unable to match '", desc, "' to any codes in the ",
-         paste0(type, "_codes"), " data frame", call. = FALSE)
+    stop("Unable to match '", desc, "' to any codes in ",
+         paste0("meta_", type, "_codes()"), call. = FALSE)
   } else if(nrow(c) > 1) {
     stop("Matched '", desc, "' to ", nrow(c), " codes: \n",
          capture_df(c), call. = FALSE)

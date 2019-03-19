@@ -23,7 +23,7 @@ year.}
 either start or end}
 
 \item{region}{List. Named list with \emph{one} of the following options:
-\code{country}, \code{statprov}, \code{subnational2}, \code{bcr}, \code{iba}, \code{utm_square}, \code{bbox}.
+\code{country}, \code{statprov}, \code{subnational2}, \code{bcr}, \code{iba}, \code{utm_squares}, \code{bbox}.
 See details}
 
 \item{site_type}{Character vector. The type of site to return (e.g., \code{IBA}).}

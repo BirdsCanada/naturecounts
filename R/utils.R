@@ -1,4 +1,4 @@
-parse_results <- function(r, results = TRUE) {
+parse_results <- function(r, results = FALSE) {
   if(results) r <- r$results
   structure(r, class = "data.frame", row.names = seq(along = r[[1]]))
 }

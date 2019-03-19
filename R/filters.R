@@ -61,6 +61,7 @@ filter_check <- function(f) {
     n <- names(f[i])
     if(n == "fields_set") f[[i]] <- fields_set_check(f[[i]])
     if(n == "fields") f[[i]] <- fields_check(f[[i]])
+    if(n == "utm_squares") f[[i]] <- utm_check(f[[i]])
     if(stringr::str_detect(n, "collection")) f[[i]] <- collections_check(f[[i]])
     if(stringr::str_detect(n, "_year")) f[[i]] <- year_check(f[[i]])
     if(stringr::str_detect(n, "_doy")) f[[i]] <- doy_check(f[[i]])

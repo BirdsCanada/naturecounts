@@ -37,10 +37,12 @@ db_connect <- function(name = paste0("./naturecounts_", Sys.Date())) {
 }
 
 db_create_primary <- function(con, df, primary_key) {
-  table <- stringr::str_remove_all(deparse(substitute(df)), "\\(|\\)")
+  table <- stringr::str_remove_all(deparse(substitute(df)), "\\(|\\)") %>%
+    stringr::str_remove("meta_")
+
   qry <- paste0("CREATE TABLE ", table," ([",
                 paste0(names(df), collapse = "], ["), "]")
-  if(!is.null(primary_key)) {
+  if(!is.na(primary_key)) {
     qry <- paste0(qry, ", PRIMARY KEY([", primary_key, "]));")
   } else qry <- paste0(qry, ");")
 
@@ -52,26 +54,30 @@ db_create <- function(con) {
   # Download and copy empty naturecounts table
   naturecounts <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
                              years = 2010, verbose = FALSE)[0, ]
-  db_create_primary(con, naturecounts, primary_key = "record_id")
+  db_create_primary(con, naturecounts, primary_key = keys$data)
 
-  # Copy metadata tables
-  db_create_primary(con, country_codes(), primary_key = keys$country_codes)
-  db_create_primary(con, statprov_codes(), primary_key = keys$statprov_codes)
-  db_create_primary(con, subnational2_codes(), primary_key = keys$sub_national2_codes)
-  db_create_primary(con, species_authority(), primary_key = keys$species_authority)
-  db_create_primary(con, species_codes(), primary_key = NULL)
-  db_create_primary(con, species_taxonomy(), primary_key = keys$species_taxonomy)
+  # Copy metadata tables (12/15)
+
+  db_create_primary(con, meta_country_codes(), primary_key = keys$country_codes)
+  db_create_primary(con, meta_statprov_codes(), primary_key = keys$statprov_codes)
+  db_create_primary(con, meta_subnational2_codes(), primary_key = keys$subnational2_codes)
+  db_create_primary(con, meta_iba_codes(), primary_key = keys$iba_codes)
+  db_create_primary(con, meta_bcr_codes(), primary_key = keys$bcr_codes)
+  db_create_primary(con, meta_species_authority(), primary_key = keys$species_authority)
+  db_create_primary(con, meta_species_codes(), primary_key = keys$species_codes)
+  db_create_primary(con, meta_species_taxonomy(), primary_key = keys$species_taxonomy)
+  db_create_primary(con, meta_collections(), primary_key = keys$collections)
+  db_create_primary(con, meta_breeding_codes(), primary_key = keys$breeding_codes)
+  db_create_primary(con, meta_project_protocols(), primary_key = keys$project_protocols)
+  db_create_primary(con, meta_protocol_types(), primary_key = keys$protocol_types)
+
+  # No utm_squares, bmde_version, bmde_fields
 
   # Create versions table with current versions
   v <- data.frame(Rpackage = as.character(utils::packageVersion("naturecounts")),
                   metadata = metadata_v_local())
   dplyr::copy_to(con, v, name = "versions", temporary = FALSE)
 
-  # Create empty request table with filters and dates
-  dplyr::copy_to(con,
-                 data.frame(date = NA, species = NA, start_date = NA,
-                            end_date = NA, country = NA, statprov = NA)[0,],
-                 name = "download_request", temporary = FALSE)
 }
 
 db_check_version <- function(con) {

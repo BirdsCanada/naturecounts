@@ -1,44 +1,51 @@
-#' Find country, state/province, or sub-national codes
+#' Find country, state/province, subnational2, IBA, or BCR codes
 #'
-#' Search for the correct codes to identify countries, states/provinces or
-#' sub-national areas. These are then used in the \code{\link{nc_data_dl}()} and
+#' Search for the correct codes to identify countries, states/provinces,
+#' subnational2 areas, Important Bird Areas (IBA), or Bird Conservation Regions
+#' (BCR). These are then used in the \code{\link{nc_data_dl}()} and
 #' \code{\link{nc_count}()} functions.
 #'
 #' @param name Character. The location name to search for
-#' @param type Character. One of "country", "statprov", or "subnational2". The
-#'   type of code to return.
+#' @param type Character. One of "country", "statprov", "subnational2", "iba",
+#'   or "bcr". The type of information to return.
 #'
 #' @return A data frame with the relevant codes and other information
 #'
 #' @examples
 #'
-#' location_search("Mexico", type = "country")   # MX
+#' region_search("Mexico", type = "country")   # MX
 #'
-#' location_search("Yucatan", type = "statprov") # Yucatán
-#' location_search("Alberta", type = "statprov") # AB
+#' region_search("Yucatan", type = "statprov") # Yucatán
+#' region_search("Alberta", type = "statprov") # AB
 #'
-#' location_search("Edmonton", type = "subnational2") # CA.AB.11
-#' location_search("Brandon", type = "subnational2")  # CA.MB.07
+#' region_search("Edmonton", type = "subnational2") # CA.AB.11
+#' region_search("Brandon", type = "subnational2")  # CA.MB.07
+#'
+#' region_search("hays reservoir", type = "iba") # AB075
+#' region_search("rainforest", type = "bcr")     # 5
+#'
 #'
 #' # Show all codes
-#' location_search(type = "country")
-#' location_search(type = "statprov")
-#' location_search(type = "subnational2")
+#' region_search(type = "country")
+#' region_search(type = "statprov")
+#' region_search(type = "subnational2")
+#' region_search(type = "iba")
+#' region_search(type = "bcr")
 #'
 #' \donttest{
 #' # Using the codes
-#' nc_count(statprov = "AB", startyear = 2010)
+#' nc_count(region = list(statprov = "AB"), years = 2010)
 #' }
 #'
 #' @export
 
-location_search <- function(name = NULL, type = "country"){
-  if(!type %in% c("country", "statprov", "subnational2")) {
-    stop("'type' must be one of 'country', 'statprov', or 'subnational2'.",
-         call. = FALSE)
+region_search <- function(name = NULL, type = "country"){
+  if(!type %in% c("country", "statprov", "subnational2", "iba", "bcr")) {
+    stop("'type' must be one of 'country', 'statprov', 'subnational2', ",
+         "'iba', or 'bcr'", call. = FALSE)
   }
 
-  df <- eval(parse(text = paste0(type, "_codes()")))
+  df <- eval(parse(text = paste0("meta_", type, "_codes()")))
   columns <- stringr::str_subset(names(df), "name")
 
   if(!is.null(name)) df <- codes_search(name, df = df,
@@ -46,7 +53,6 @@ location_search <- function(name = NULL, type = "country"){
                                         columns = columns)
   df
 }
-
 
 
 #' Find species codes
@@ -87,7 +93,7 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
     stop("'show' must be either 'all' or 'names'", call.= FALSE)
   }
 
-  ids <- species_taxonomy()
+  ids <- meta_species_taxonomy()
 
   if(!is.null(name)){
     search_columns <- c("scientific_name", "english_name", "french_name")
@@ -111,7 +117,7 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
 
   if(!is.null(authority)) {
     authority_check(authority)
-    ids <- dplyr::left_join(ids, dplyr::select(species_codes(), "species_id2",
+    ids <- dplyr::left_join(ids, dplyr::select(meta_species_codes(), "species_id2",
                                                dplyr::one_of(authority)),
                             by = c("species_id" = "species_id2"))
   }
@@ -175,7 +181,7 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
   code_column <- dplyr::if_else(results == "exact", "species_id2", "species_id")
 
   # Return matching rows
-  ids <- species_codes() %>%
+  ids <- meta_species_codes() %>%
     tidyr::gather("authority", "code",
                   -.data$species_id, -.data$rank, -.data$species_id2) %>%
     dplyr::filter(.data$authority %in% !!authority,
@@ -202,7 +208,7 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
 
   # Add in common/scientific names for reference
   dplyr::left_join(ids,
-                   dplyr::select(species_taxonomy(), "species_id",
+                   dplyr::select(meta_species_taxonomy(), "species_id",
                                  "scientific_name", "english_name",
                                  "french_name"),
                    by = "species_id")
