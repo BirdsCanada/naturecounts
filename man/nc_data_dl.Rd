@@ -49,7 +49,7 @@ Data frame
 Download data records from various collections filtered by various options.
 In order to ease the load on the server, note that only \strong{three} of
 \code{collections}, \code{species}, \code{years}, \code{doy}, \code{region}, and \code{site_type} can be
-used in any one request (but see the vignette for filtering your data after
+used in any one request. See the vignette for filtering your data after
 download for more options:
 \code{vignette("filtering_data", package = "naturecounts")}.
 }

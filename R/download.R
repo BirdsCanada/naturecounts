@@ -3,7 +3,7 @@
 #' Download data records from various collections filtered by various options.
 #' In order to ease the load on the server, note that only **three** of
 #' `collections`, `species`, `years`, `doy`, `region`, and `site_type` can be
-#' used in any one request (but see the vignette for filtering your data after
+#' used in any one request. See the vignette for filtering your data after
 #' download for more options:
 #' `vignette("filtering_data", package = "naturecounts")`.
 #'
