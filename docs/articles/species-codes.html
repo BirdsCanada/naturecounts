@@ -47,6 +47,15 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/articles/mapping-observations.html">Mapping Observations</a>
+    </li>
+    <li>
+      <a href="../articles/articles/region.html">Getting data by region</a>
+    </li>
+    <li>
+      <a href="../articles/filtering_data.html">Filtering data</a>
+    </li>
+    <li>
       <a href="../articles/species-codes.html">Species Codes</a>
     </li>
   </ul>
@@ -76,7 +85,7 @@
     <div class="page-header toc-ignore">
       <h1>Species Codes</h1>
             
-            <h4 class="date">2019-03-12</h4>
+            <h4 class="date">2019-03-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/species-codes.Rmd"><code>vignettes/species-codes.Rmd</code></a></small>
       <div class="hidden name"><code>species-codes.Rmd</code></div>
@@ -335,6 +344,85 @@
 <a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;               english_name              french_name</span></a>
 <a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; 1 Dark-eyed Junco (Oregon) Junco ardoisé [oreganus]</span></a></code></pre></div>
 </div>
+<div id="advanced-searches" class="section level2">
+<h2 class="hasAnchor">
+<a href="#advanced-searches" class="anchor"></a>Advanced searches</h2>
+<p>If you have a very specific type of search you’d like to do, you may be better off using the <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> function from the <code>dplyr</code> package.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;     filter, lag</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a></code></pre></div>
+<p>For example, let’s assume you’re interested in collecting species codes for in the Muridae family.</p>
+<p>We can get the entire species list by omitting a search term, and also return all taxonomic information available with the <code>show = "all"</code> argument.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">all &lt;-<span class="st"> </span><span class="kw"><a href="../reference/species_search.html">species_search</a></span>(<span class="dt">show =</span> <span class="st">"all"</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(all)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt;   species_id       concept_id          scientific_name species_status</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; 1          0 74B5AA0128689718                      N/A             NA</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt; 2         10 42D72AE118D2DE82            Tinamus major              1</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt; 3         20 66C31E09F8C285D6   Nothocercus bonapartei              1</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt; 4         30 39DD9DD76680A7F0        Crypturellus soui              1</span></a>
+<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt; 5         40 AAB5CEED3FC9EDE1 Crypturellus cinnamomeus              1</span></a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt; 6         50 5183B60E14DE99FD    Crypturellus boucardi              1</span></a>
+<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt;   added_dt           english_name          french_name   phylum</span></a>
+<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt; 1     &lt;NA&gt;        No observations   Aucune observation     &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt; 2     &lt;NA&gt;          Great Tinamou        Grand Tinamou Chordata</span></a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt; 3     &lt;NA&gt;       Highland Tinamou Tinamou de Bonaparte Chordata</span></a>
+<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt; 4     &lt;NA&gt;         Little Tinamou         Tinamou soui Chordata</span></a>
+<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; 5     &lt;NA&gt;        Thicket Tinamou     Tinamou cannelle Chordata</span></a>
+<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; 6     &lt;NA&gt; Slaty-breasted Tinamou   Tinamou de Boucard Chordata</span></a>
+<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt;   family_french_name group_id  order_taxon taxon_group sort_order class</span></a>
+<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt; 1 Aucune observation    99999         &lt;NA&gt;       BIRDS     999999  &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb15-19" data-line-number="19"><span class="co">#&gt; 2               &lt;NA&gt;        3 Tinamiformes       BIRDS         17  Aves</span></a>
+<a class="sourceLine" id="cb15-20" data-line-number="20"><span class="co">#&gt; 3               &lt;NA&gt;        3 Tinamiformes       BIRDS         10  Aves</span></a>
+<a class="sourceLine" id="cb15-21" data-line-number="21"><span class="co">#&gt; 4               &lt;NA&gt;        3 Tinamiformes       BIRDS         22  Aves</span></a>
+<a class="sourceLine" id="cb15-22" data-line-number="22"><span class="co">#&gt; 5               &lt;NA&gt;        3 Tinamiformes       BIRDS         39  Aves</span></a>
+<a class="sourceLine" id="cb15-23" data-line-number="23"><span class="co">#&gt; 6               &lt;NA&gt;        3 Tinamiformes       BIRDS         36  Aves</span></a>
+<a class="sourceLine" id="cb15-24" data-line-number="24"><span class="co">#&gt;   family_name concept_source family_english_name</span></a>
+<a class="sourceLine" id="cb15-25" data-line-number="25"><span class="co">#&gt; 1        &lt;NA&gt;        avibase     No observations</span></a>
+<a class="sourceLine" id="cb15-26" data-line-number="26"><span class="co">#&gt; 2   Tinamidae        avibase            Tinamous</span></a>
+<a class="sourceLine" id="cb15-27" data-line-number="27"><span class="co">#&gt; 3   Tinamidae        avibase            Tinamous</span></a>
+<a class="sourceLine" id="cb15-28" data-line-number="28"><span class="co">#&gt; 4   Tinamidae        avibase            Tinamous</span></a>
+<a class="sourceLine" id="cb15-29" data-line-number="29"><span class="co">#&gt; 5   Tinamidae        avibase            Tinamous</span></a>
+<a class="sourceLine" id="cb15-30" data-line-number="30"><span class="co">#&gt; 6   Tinamidae        avibase            Tinamous</span></a></code></pre></div>
+<p>Now we can search for the family</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">mice_ids &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(all, family_name <span class="op">==</span><span class="st"> "Muridae"</span>)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(mice_ids)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#&gt;   species_id       concept_id     scientific_name species_status added_dt</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; 1     139860 CA7511C47A77B567  Alticola albicauda              1     &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; 2     139870 20968C4C26EBF16E Alticola argentatus              1     &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt; 3     139880 45B93B3397553E4A  Alticola barakshin              1     &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt; 4     139890 85588495C41CCF64   Alticola lemminus              1     &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; 5     139900 4BEBDB13A8E2F028   Alticola macrotis              1     &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt; 6     139910 FBE48923651EFBA5    Alticola montosa              1     &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt;   english_name french_name   phylum family_french_name group_id</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt; 1         &lt;NA&gt;        &lt;NA&gt; Chordata            Muridae     2111</span></a>
+<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt; 2         &lt;NA&gt;        &lt;NA&gt; Chordata            Muridae     2111</span></a>
+<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt; 3         &lt;NA&gt;        &lt;NA&gt; Chordata            Muridae     2111</span></a>
+<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co">#&gt; 4         &lt;NA&gt;        &lt;NA&gt; Chordata            Muridae     2111</span></a>
+<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="co">#&gt; 5         &lt;NA&gt;        &lt;NA&gt; Chordata            Muridae     2111</span></a>
+<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt; 6         &lt;NA&gt;        &lt;NA&gt; Chordata            Muridae     2111</span></a>
+<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co">#&gt;   order_taxon taxon_group sort_order    class family_name concept_source</span></a>
+<a class="sourceLine" id="cb16-18" data-line-number="18"><span class="co">#&gt; 1    Rodentia     MAMMALS     139860 Mammalia     Muridae        avibase</span></a>
+<a class="sourceLine" id="cb16-19" data-line-number="19"><span class="co">#&gt; 2    Rodentia     MAMMALS     139870 Mammalia     Muridae        avibase</span></a>
+<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="co">#&gt; 3    Rodentia     MAMMALS     139880 Mammalia     Muridae        avibase</span></a>
+<a class="sourceLine" id="cb16-21" data-line-number="21"><span class="co">#&gt; 4    Rodentia     MAMMALS     139890 Mammalia     Muridae        avibase</span></a>
+<a class="sourceLine" id="cb16-22" data-line-number="22"><span class="co">#&gt; 5    Rodentia     MAMMALS     139900 Mammalia     Muridae        avibase</span></a>
+<a class="sourceLine" id="cb16-23" data-line-number="23"><span class="co">#&gt; 6    Rodentia     MAMMALS     139910 Mammalia     Muridae        avibase</span></a>
+<a class="sourceLine" id="cb16-24" data-line-number="24"><span class="co">#&gt;   family_english_name</span></a>
+<a class="sourceLine" id="cb16-25" data-line-number="25"><span class="co">#&gt; 1             Muridae</span></a>
+<a class="sourceLine" id="cb16-26" data-line-number="26"><span class="co">#&gt; 2             Muridae</span></a>
+<a class="sourceLine" id="cb16-27" data-line-number="27"><span class="co">#&gt; 3             Muridae</span></a>
+<a class="sourceLine" id="cb16-28" data-line-number="28"><span class="co">#&gt; 4             Muridae</span></a>
+<a class="sourceLine" id="cb16-29" data-line-number="29"><span class="co">#&gt; 5             Muridae</span></a>
+<a class="sourceLine" id="cb16-30" data-line-number="30"><span class="co">#&gt; 6             Muridae</span></a></code></pre></div>
+<p>Finally we can download all observations of these species, by passing the <code>species_id</code>s to the <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code> function</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">mice &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> mice_ids<span class="op">$</span>species_id, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -345,6 +433,7 @@
 <li><a href="#searching-by-name">Searching by name</a></li>
       <li><a href="#searching-by-alphanumeric-code">Searching by alphanumeric code</a></li>
       <li><a href="#exact-species">Exact species</a></li>
+      <li><a href="#advanced-searches">Advanced searches</a></li>
       </ul>
 </div>
       </div>

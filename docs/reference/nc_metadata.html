@@ -80,6 +80,15 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/articles/mapping-observations.html">Mapping Observations</a>
+    </li>
+    <li>
+      <a href="../articles/articles/region.html">Getting data by region</a>
+    </li>
+    <li>
+      <a href="../articles/filtering_data.html">Filtering data</a>
+    </li>
+    <li>
       <a href="../articles/species-codes.html">Species Codes</a>
     </li>
   </ul>
@@ -109,7 +118,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Update NatureCounts metadata files</h1>
-    <small class="dont-index">Source: <a href='https://github.com/BirdStudiesCanada/naturecounts/blob/master/R/metadata.R'><code>R/metadata.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/BirdStudiesCanada/naturecounts/blob/master/R/metadata_utils.R'><code>R/metadata_utils.R</code></a></small>
     <div class="hidden name"><code>nc_metadata.Rd</code></div>
     </div>
 
@@ -119,11 +128,20 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>nc_metadata</span>(<span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>nc_metadata</span>(<span class='kw'>force</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>utm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>force</th>
+      <td><p>Logical. Force update even if the remote version matches local?</p></td>
+    </tr>
+    <tr>
+      <th>utm</th>
+      <td><p>Logical. Update <code>[utm_squares]()</code> as well? <strong>WARNING</strong>: This is a
+large and timeconsuming download!</p></td>
+    </tr>
     <tr>
       <th>verbose</th>
       <td><p>Logical. Show progress messages?</p></td>
@@ -133,7 +151,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-</div><div class='input'><span class='fu'>nc_metadata</span>()</div><div class='output co'>#&gt; <span class='message'>Updating species authority...</span></div><div class='output co'>#&gt; <span class='message'>Updating species codes...</span></div><div class='output co'>#&gt; <span class='message'>Updating species taxonomy...</span></div><div class='output co'>#&gt; <span class='message'>Updating country codes...</span></div><div class='output co'>#&gt; <span class='message'>Updating state/province codes...</span></div><div class='output co'>#&gt; <span class='message'>Updating subnational codes...</span></div><div class='output co'>#&gt; <span class='message'>Metadata version updated from 2019.1 to 2019.1</span></div></pre>
+</div><div class='input'><span class='fu'>nc_metadata</span>()</div><div class='output co'>#&gt; <span class='message'>Updating species authority...</span></div><div class='output co'>#&gt; <span class='message'>Updating species codes...</span></div><div class='output co'>#&gt; <span class='message'>Updating species taxonomy...</span></div><div class='output co'>#&gt; <span class='message'>Updating country codes...</span></div><div class='output co'>#&gt; <span class='message'>Updating state/province codes...</span></div><div class='output co'>#&gt; <span class='message'>Updating subnational codes...</span></div><div class='output co'>#&gt; <span class='message'>Updating IBA codes...</span></div><div class='output co'>#&gt; <span class='message'>Updating BCR codes...</span></div><div class='output co'>#&gt; <span class='message'>Metadata version updated to 2019.01</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

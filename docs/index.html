@@ -49,6 +49,15 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/articles/mapping-observations.html">Mapping Observations</a>
+    </li>
+    <li>
+      <a href="articles/articles/region.html">Getting data by region</a>
+    </li>
+    <li>
+      <a href="articles/filtering_data.html">Filtering data</a>
+    </li>
+    <li>
       <a href="articles/species-codes.html">Species Codes</a>
     </li>
   </ul>
@@ -92,6 +101,62 @@
 <p>You can install this developmental version of <code>naturecounts</code> from GitHub with the remotes package:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">install_github</span>(<span class="st">"BirdStudiesCanada/naturecounts"</span>)</a></code></pre></div>
+</div>
+<div id="usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(naturecounts)</a></code></pre></div>
+<div id="fetching-data-counts" class="section level3">
+<h3 class="hasAnchor">
+<a href="#fetching-data-counts" class="anchor"></a>Fetching data counts</h3>
+<p>Use the <code><a href="reference/nc_count.html">nc_count()</a></code> function to return all public collections and the number of observations in each.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="reference/nc_count.html">nc_count</a></span>()</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt;     collection nrecords</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; 1     ABATLAS1   123364</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; 2     ABATLAS2   201398</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 3   ABBIRDRECS   357264</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; 4        BGRMM      476</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; 5   EBUTTERFLY    34473</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 6      IMMP_A2       24</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 7      IMMP_BW       19</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; 8         IMQC      761</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; 9         MLMP      425</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; 10          MM     4343</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 11        PMMM        5</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 12 RCBIOTABASE    12598</span></a></code></pre></div>
+<p>If you have a <a href="https://www.birdscanada.org/birdmon/default/register.jsp">NatureCounts username</a> you can supply it with the <code>username</code> argument (you will be prompted for a password). <code><a href="reference/nc_count.html">nc_count()</a></code> will now return all the records you have access to.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="reference/nc_count.html">nc_count</a></span>(<span class="dt">username =</span> <span class="st">"my_user_name"</span>)</a></code></pre></div>
+</div>
+<div id="fetching-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#fetching-data" class="anchor"></a>Fetching data</h3>
+<p>Fetch all observations of moose which are publically available to a local data frame.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">moose &lt;-<span class="st"> </span><span class="kw"><a href="reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">133990</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; Collecting available records...</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;    collection nrecords</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; 1 RCBIOTABASE        2</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; Downloading records for each collection:</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;   RCBIOTABASE</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;     Records 1 to 2 / 2</span></a></code></pre></div>
+<p>Alternatively, save the downloaded data as a SQLite database (<code>moose.nc</code>).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">moose &lt;-<span class="st"> </span><span class="kw"><a href="reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">133990</span>, <span class="dt">sql_db =</span> <span class="st">"moose"</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; Collecting available records...</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;    collection nrecords</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; 1 RCBIOTABASE        2</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Downloading records for each collection:</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;   RCBIOTABASE</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;     Records 1 to 2 / 2</span></a></code></pre></div>
+<blockquote>
+<p>See the article on <a href="articles/species-codes.html">Species Codes</a> to determine which codes to use.</p>
+</blockquote>
+</div>
+<div id="metadata" class="section level3">
+<h3 class="hasAnchor">
+<a href="#metadata" class="anchor"></a>Metadata</h3>
+<p>NatureCounts includes a great deal of metadata which can be accessed through the functions with the <code>meta_</code> prefix. See the <a href="reference/meta.html">Meta Documentation</a> for specifics.</p>
+</div>
 </div>
 </div>
   </div>
