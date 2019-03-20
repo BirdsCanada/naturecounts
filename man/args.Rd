@@ -18,7 +18,7 @@ year.}
 either start or end}
 
 \item{region}{List. Named list with \emph{one} of the following options:
-\code{country}, \code{statprov}, \code{subnational2}, \code{bcr}, \code{iba}, \code{utm_squares}, \code{bbox}.
+\code{country}, \code{statprov}, \code{subnational2}, \code{iba}, \code{bcr}, \code{utm_squares}, \code{bbox}.
 See details}
 
 \item{site_type}{Character vector. The type of site to return (e.g., \code{IBA}).}
@@ -39,11 +39,12 @@ also the vignette for more information
 
 \section{Day of Year (\code{doy})}{
 
-The format for day of year (\code{doy}) is fairly flexible and can be anything
-recognized by \code{\link[lubridate]{lubridate-package}}'s
-\code{\link[lubridate]{ymd}()} function. However, it must have the order of
-year, month, day. Note that year is ignored when converting to day of year,
-except that it will result in a 1 day offset for leap years.
+The format for day of year (\code{doy}) is fairly flexible and can be a whole
+number between 1 and 366 or anything recognized by
+\code{\link[lubridate]{lubridate-package}}'s \code{\link[lubridate]{ymd}()}
+function. However, it must have the order of year, month, day. Note that
+year is ignored when converting to day of year, except that it will result
+in a 1 day offset for leap years.
 }
 
 \section{Regions (\code{region})}{

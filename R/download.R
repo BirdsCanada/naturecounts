@@ -10,7 +10,7 @@
 #'   (1-366 or dates that can be converted to day of year). Can use NA for
 #'   either start or end
 #' @param region List. Named list with *one* of the following options:
-#'   `country`, `statprov`, `subnational2`, `bcr`, `iba`, `utm_squares`, `bbox`.
+#'   `country`, `statprov`, `subnational2`, `iba`, `bcr`, `utm_squares`, `bbox`.
 #'   See details
 #' @param site_type Character vector. The type of site to return (e.g., `IBA`).
 #' @param token Character vector. Authorization token, otherwise only public
@@ -23,11 +23,12 @@
 #'   `vignette("species-codes", package = "naturecounts")`.
 #'
 #' @section Day of Year (`doy`):
-#'   The format for day of year (`doy`) is fairly flexible and can be anything
-#'   recognized by \code{\link[lubridate]{lubridate-package}}'s
-#'   \code{\link[lubridate]{ymd}()} function. However, it must have the order of
-#'   year, month, day. Note that year is ignored when converting to day of year,
-#'   except that it will result in a 1 day offset for leap years.
+#'   The format for day of year (`doy`) is fairly flexible and can be a whole
+#'   number between 1 and 366 or anything recognized by
+#'   \code{\link[lubridate]{lubridate-package}}'s \code{\link[lubridate]{ymd}()}
+#'   function. However, it must have the order of year, month, day. Note that
+#'   year is ignored when converting to day of year, except that it will result
+#'   in a 1 day offset for leap years.
 #'
 #' @section Regions (`region`):
 #'   Regions are defined by codes reflecting the country, state/province,
