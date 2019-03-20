@@ -69,6 +69,16 @@ meta_project_protocols <- function() {
     parse_results()
 }
 
+#' @describeIn meta Projects ids, names, websites, and descriptions
+#' @export
+meta_projects <- function() {
+  p1 <- srv_query(api$projects) %>%
+    parse_results()
+  p2 <- srv_query(api$projects_meta) %>%
+    parse_results()
+  dplyr::left_join(p1, p2, by = c("project_id", "project_code",
+                                  "project_name", "project_name_fr"))
+}
 
 #' @describeIn meta Protocol types and descriptions
 #' @export

@@ -56,7 +56,7 @@ db_create <- function(con) {
                              years = 2010, verbose = FALSE)[0, ]
   db_create_primary(con, naturecounts, primary_key = keys$data)
 
-  # Copy metadata tables (12/15)
+  # Copy metadata tables (13/17)
 
   db_create_primary(con, meta_country_codes(), primary_key = keys$country_codes)
   db_create_primary(con, meta_statprov_codes(), primary_key = keys$statprov_codes)
@@ -67,11 +67,13 @@ db_create <- function(con) {
   db_create_primary(con, meta_species_codes(), primary_key = keys$species_codes)
   db_create_primary(con, meta_species_taxonomy(), primary_key = keys$species_taxonomy)
   db_create_primary(con, meta_collections(), primary_key = keys$collections)
+  db_create_primary(con, meta_projects(), primary_key = keys$projects)
   db_create_primary(con, meta_breeding_codes(), primary_key = keys$breeding_codes)
   db_create_primary(con, meta_project_protocols(), primary_key = keys$project_protocols)
   db_create_primary(con, meta_protocol_types(), primary_key = keys$protocol_types)
 
   # No utm_squares, bmde_version, bmde_fields
+  # projects_meta included in projects
 
   # Create versions table with current versions
   v <- data.frame(Rpackage = as.character(utils::packageVersion("naturecounts")),

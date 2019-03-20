@@ -14,6 +14,7 @@
 \alias{meta_collections}
 \alias{meta_breeding_codes}
 \alias{meta_project_protocols}
+\alias{meta_projects}
 \alias{meta_protocol_types}
 \alias{meta_bmde_versions}
 \alias{meta_bmde_fields}
@@ -42,6 +43,8 @@ meta_collections()
 meta_breeding_codes()
 
 meta_project_protocols()
+
+meta_projects()
 
 meta_protocol_types()
 
@@ -88,6 +91,8 @@ the \code{\link[=nc_metadata]{nc_metadata()}} function. Others are downloaded as
 \item \code{meta_breeding_codes}: Breeding codes and descriptions
 
 \item \code{meta_project_protocols}: Project protocols
+
+\item \code{meta_projects}: Projects ids, names, websites, and descriptions
 
 \item \code{meta_protocol_types}: Protocol types and descriptions
 
