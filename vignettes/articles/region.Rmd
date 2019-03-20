@@ -1,0 +1,395 @@
+---
+title: "Getting data by region"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include = FALSE}
+library(here)
+
+eval_nc <- FALSE
+
+options(width = 100)
+```
+
+```{r}
+library(naturecounts)
+```
+
+In the main data download functions for `naturecounts`, `nc_data_dl()` and `nc_count()`, you have the option of filtering data by `region`. In this article we will explore the various ways of specifying regional filters.
+
+## In short
+
+`region` must be a named list with **one** of the following:
+
+- `country` - Country code (e.g., `CA` for Canada)
+- `statprov` - State/province code (e.g., `MB` for Manitoba)
+- `subnational2` - Subnational (type 2) code (e.g., `CA.MB.07` for the Brandon Area)
+- `iba` - Important Bird Areas (IBA) code (e.g., `AB001` for Beaverhill Lake in Alberta)
+- `bcr` - [Bird Conservation Regions](https://www.birdscanada.org/research/gislab/index.jsp?targetpg=bcr&targetpg=bcr) (e.g., `2` for Western Alaska)
+- `utm_squares` - UTM square code (e.g., `10UFE96` for a grid in Alberta)
+- `bbox` - Bounding box coordinates (e.g., `c(left = -101.097223, bottom = 50.494717, right = -99.511239, top = 51.027557)` for a box containing Riding Mountain National Park in Manitoba)
+
+To use the `region` argument:
+
+```{r, eval = eval_nc}
+nc_count(region = list(bbox = c(left = -101.097223, bottom = 50.494717, 
+                                right = -99.511239, top = 51.027557)))
+```
+
+
+## In Detail - Codes
+
+### Country
+
+**Search by name** (English or French)
+```{r}
+region_search("États-Unis", type = "country")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_country_codes()
+```
+
+**Use the resulting code(s)**
+```{r, eval = eval_nc}
+nc_count(region = list(country = c("US", "CA")))
+```
+
+
+### State/Province
+
+**Search by name** (English, French, or Spanish)
+```{r}
+region_search("Distrito de Colombia", type = "statprov")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_statprov_codes()
+```
+
+**Use the resulting code(s)**
+```{r, eval = eval_nc}
+nc_count(region = list(statprov = c("DC", "MB")))
+```
+
+
+### Subnational regions (type 2)
+
+**Search by name**  
+Language depends on location: 
+- Mexico = Spanish
+- USA = English
+- Quebec = French
+- Rest of Canada = English
+
+```{r}
+region_search("Montreal", type = "subnational2")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_subnational2_codes()
+```
+
+**Use the resulting code(s)**
+```{r, eval = eval_nc}
+nc_count(region = list(subnational2 = c("CA-QC-MR", "CA-ON-TO")))
+```
+
+
+### Important Bird Areas (IBA)
+
+- These are Canadian designations
+
+**Search by name** (English or French)
+
+```{r}
+region_search("oak hammock", type = "iba")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_iba_codes()
+```
+
+**Use the resulting code(s)**
+```{r, eval = eval_nc}
+nc_count(region = list(iba = c("MB010", "AB011")))
+```
+
+### Bird Conservation Regions (BCR)
+
+**Search by name** (English, French, or Spanish)
+
+```{r}
+region_search("rainforest", type = "bcr")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_bcr_codes()
+```
+
+**Use the resulting code(s)**
+```{r, eval = eval_nc}
+nc_count(region = list(bcr = c(5, 2)))
+```
+
+
+## In Detail - Exploring regions
+
+In this section we'll go over how to use spatial data to more precisely define regional filters.
+
+We'll be using the [`tidyverse`](http://tidyverse.org) packages `dplyr` and `ggplot2` for data manipulation and plotting, respectively. We'll use the `gridExtra` to combine figures. We'll use the `sf` package for working with spatial data, and the `rnaturalearth` package to get example spatial data.
+
+```{r, message = FALSE}
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+library(sf)
+library(rnaturalearth)
+```
+
+If you have your own spatial data files that you would like to read into R, we recommend reading the [Reading, Writing and Converting Simple Features Vignette](https://r-spatial.github.io/sf/articles/sf2.html) from the [`sf` website](https://r-spatial.github.io/sf/).
+
+First we'll get some spatial objects for our explorations from the `rnaturalearth` package. A map of Canada and a map of Ontario, both transformed from CRS 4326 (unprojected lat/lon) to 3347 (NAD83 Statistics Canada).
+
+```{r}
+canada <- ne_states(country = "canada", returnclass = "sf") %>%
+  st_transform(3347)
+
+ontario <- ne_states(country = "Canada", returnclass = "sf") %>%
+  filter(name == "Ontario") %>%
+  st_transform(3347)
+```
+
+```{r}
+ggplot() + 
+  theme_bw() + 
+  geom_sf(data = canada) +                  # Map of Canada 
+  geom_sf(data = ontario, fill = "orange")  # Map of Ontario
+```
+
+### Important Bird Areas
+To get a visual idea of where different Important Bird Areas are, let's plot them on our map of Canada.
+
+First we need to grab the IBA data frame and convert it to a spatial object. Because the data contains lat/lon, we assign it to CRS 4326 for GPS lat/lon data, and then convert it to match the crs of our maps.
+
+```{r}
+iba <- meta_iba_codes() %>%
+  st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+  st_transform(3347)
+
+ggplot() +
+  theme_bw() +
+  geom_sf(data = canada) +
+  geom_sf(data = iba)
+```
+
+If you want to narrow in on only one province, filter the map of Canada and the IBA data frame:
+
+```{r}
+yk <- filter(canada, gn_name == "Yukon")
+iba_yk <- filter(iba, statprov == "YK")
+
+ggplot() + 
+  theme_bw() +
+  geom_sf(data = yk) +
+  geom_sf(data = iba_yk) +
+  geom_sf_text(data = iba_yk, aes(label = iba_code), size = 3, vjust = -0.5)
+```
+
+
+### Filtering to a shape file
+
+Often you might be interested only in observations which fall within a very specific geographic area. While the `nc_data_dl()` function cannot take a shapefile as an argument, you can use shape files to specify either the `utm_squares` or the `bbox` (bounding box) surrounding your area of interest. After the download, you can then trip the resulting observations to your original shape file.
+
+#### UTM Squares
+
+In the following example, let's assume that you wish to concentrate only on observations from *urban* areas in Ontario, Canada. 
+
+We'll download that data with the `rnaturalearth` package and save it to the working directory (".")
+
+```{r, eval = FALSE}
+ne_download(scale = 10, type = "urban_areas", returnclass = "sf", 
+            destdir = ".", load = FALSE) 
+```
+
+```{r, echo = FALSE, eval = FALSE}
+# Run once by hand, not needed again
+ne_download(scale = 10, type = "urban_areas", returnclass = "sf", 
+            destdir = here("vignettes/articles/region_files"), load = FALSE) 
+```
+
+Now that we've saved it, we can load it for use.
+
+```{r, eval = FALSE}
+urban <- ne_load(scale = 10, type = "urban_areas", returnclass = "sf", 
+                 destdir = ".")
+```
+
+```{r, echo = FALSE}
+urban <- ne_load(scale = 10, type = "urban_areas", returnclass = "sf", 
+                 destdir = here("vignettes/articles/region_files"))
+```
+
+First we'll transform it to the 3347 CRS and filter it to contain only Ontario, but clipping it to our map of Ontario. `st_join(spatial1, spatial2, left = FALSE)` means inner join, resulting in clipping.
+
+```{r}
+urban_ontario <- urban %>%
+  st_transform(3347) %>%
+  st_join(ontario, left = FALSE)
+
+ggplot() +
+  theme_bw() +
+  geom_sf(data = ontario) +
+  geom_sf(data = urban_ontario, fill = "orange")
+```
+
+Now to filter your observations to urban areas, the first step would be to get all the UTM squares which overlap these areas. We can do this collecting the UTM squares with `meta_utm_squares()` and then filtering these to include only those that overlap these urban areas.
+
+```{r}
+utm_on <- meta_utm_squares() %>%
+  filter(statprov_code == "ON") %>%
+  st_transform(3347) %>%  # Transform to match urban CRS
+  st_join(urban_ontario, left = FALSE) %>%
+  distinct() # To omit duplicates of 1+ urban area on a given UTM Square
+
+ggplot() +
+  theme_bw() + 
+  geom_sf(data = ontario) +
+  geom_sf(data = utm_on, fill = "red") +
+  geom_sf(data = urban_ontario, fill = "blue", alpha = 0.5)
+
+```
+
+It's a bit tricky to see exactly what's going on, so let's zoom in a bit.
+
+However, it's also a bit tricky to zoom when we're using a non-lat/lon CRS because the units are unintuitive. So let's specify the limits we want, then transform them in the CRS we're using and use that to set our limits.
+```{r}
+zoom <- data.frame(lon = c(-81, -78, -81, -78),
+                   lat = c(43, 43, 45, 45)) %>%
+  st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+  st_transform(3347) %>%
+  st_bbox()
+zoom
+```
+
+For convinience, we'll use the `grid.arrange()` function from the gridExtra to line up the figures side-by-side so we can get a really good look at what we're doing.
+```{r}
+grid.arrange(
+  ggplot() +
+    theme_bw() + 
+    geom_sf(data = ontario) +
+    geom_sf(data = urban_ontario, fill = "blue", alpha = 0.5) +
+    coord_sf(xlim = zoom[c(1,3)], ylim = zoom[c(2,4)]),
+  ggplot() +
+    theme_bw() + 
+    geom_sf(data = ontario) +
+    geom_sf(data = utm_on, fill = "red", alpha = 0.5) +
+    geom_sf(data = urban_ontario, fill = "blue", alpha = 0.5) +
+    coord_sf(xlim = zoom[c(1,3)], ylim = zoom[c(2,4)]),
+  nrow = 1)
+```
+
+So now we can see that the `utm_squares` we've selected overlap all our urban areas. Now we can download the observations for all of these areas:
+
+```{r, eval = eval_nc}
+obs <- nc_data_dl(region = list(utm_squares = utm_on$utm_square))
+```
+
+Finally, we do clip the resulting observations to the exact urban areas:
+
+```{r, eval = eval_nc}
+obs <- st_as_sf(obs, coords = c("lon", "lat"), crs = 4326) %>%
+  st_transfor(crs = 3347)
+  st_join(distinct(urban_ontario), left = "FALSE")
+
+ggplot() +
+  theme_bw() + 
+  geom_sf(data = ontario) +
+  geom_sf(data = urban_ontario, fill = "blue", alpha = 0.5) +
+  geom_sf(data = obs) +
+  coord_sf(xlim = zoom[c(1,3)], ylim = zoom[c(2,4)])
+```
+
+
+#### Bounding Box
+
+In this example, we'll gather all observations for Jasper National Park in Alberta, Canada.
+
+First we'll download and extract the shapefiles available from the [Alberta Parks](https://www.albertaparks.ca/albertaparksca/library/downloadable-data-sets/) website.
+
+```{r, echo = FALSE, eval = FALSE}
+# Run once, then you don't need to run it again
+download.file(url = "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip",
+              destfile = here("vignettes/articles/region_files/alberta_parks.zip"))
+unzip(here("vignettes/articles/region_files/alberta_parks.zip"), 
+      exdir = here("vignettes/articles/region_files/"))
+```
+
+```{r, eval = FALSE}
+url <- "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip"
+download.file(url = url)
+unzip("parks_and_protected_areas_alberta.zip")
+
+parks <- st_read("Parks_Protected_Areas_Alberta.shp")
+```
+
+```{r echo = FALSE}
+parks <- st_read(here("vignettes/articles/region_files/Parks_Protected_Areas_Alberta.shp"))
+```
+
+Now we'll get a background map of Alberta and a spatial file of just Jasper.
+
+```{r}
+alberta <- ne_states(country = "Canada", returnclass = "sf") %>%
+  filter(name == "Alberta") %>%
+  st_transform(3347)
+
+jasper <- filter(parks, NAME == "Jasper")
+```
+
+Let's see what that all looks like.
+
+```{r}
+ggplot() +
+  theme_bw() +
+  geom_sf(data = alberta) +
+  geom_sf(data = parks, fill = "lightyellow") +
+  geom_sf(data = jasper, fill = "orange")
+```
+
+Using a bounding box is a good way to download observations only from the Jasper area. But remember that the bounding box coordinates used by `nc_data_dl()` are in lat/lon, so we'll have to back transform.
+
+```{r}
+b <- jasper %>%
+  st_transform(4326) %>%
+  st_bbox()
+b
+```
+
+We can give this directly to our `nc_data_dl()` function.
+
+```{r, eval = eval_nc}
+obs <- nc_data_dl(region = list(bbox = b))
+```
+
+Finally we clip the observations to the exact area of Jasper.
+
+```{r, eval = eval_nc}
+obs <- st_as_sf(obs, coords = c("lon", "lat"), crs = 4326) %>%
+  st_transform(3347) %>%
+  st_join(distinct(jasper), left = FALSE)
+
+ggplot() +
+  theme_bw() +
+  geom_sf(data = jasper) +
+  geom_sf(data = obs)
+```
+

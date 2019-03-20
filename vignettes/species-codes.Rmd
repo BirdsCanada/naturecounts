@@ -114,5 +114,33 @@ species_code_search("DEJU", results = "exact")
 species_code_search("ORJU", results = "exact")
 ```
 
+## Advanced searches
+
+If you have a very specific type of search you'd like to do, you may be better off using the `filter()` function from the `dplyr` package.
+
+```{r}
+library(dplyr)
+```
+
+For example, let's assume you're interested in collecting species codes for in the Muridae family.
+
+We can get the entire species list by omitting a search term, and also return all taxonomic information available with the `show = "all"` argument.
+
+```{r}
+all <- species_search(show = "all")
+head(all)
+```
+
+Now we can search for the family
+```{r}
+mice_ids <- filter(all, family_name == "Muridae")
+head(mice_ids)
+```
+
+Finally we can download all observations of these species, by passing the `species_id`s to the `nc_data_dl()` function
+
+```{r, eval = FALSE}
+mice <- nc_data_dl(species = mice_ids$species_id, verbose = TRUE)
+```
 
 

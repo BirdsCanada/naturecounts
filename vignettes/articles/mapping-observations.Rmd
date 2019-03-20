@@ -1,0 +1,71 @@
+---
+title: "Mapping Observations"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+---
+
+```{r setup, include = FALSE}
+```
+
+In this article we'll go walk through how to create various types of maps of the observations downloaded with `naturecounts` to get a sence of the spatial distribution.
+
+To do so we're going to use the following packages:
+
+```{r, message = FALSE}
+library(naturecounts)
+library(sf)
+library(rnaturalearth)
+library(ggmap)
+library(dplyr)
+```
+
+First we'll use download some data:
+
+```{r, cache = TRUE}
+barred_owls <- nc_data_dl(species = 7590, region = list(statprov = "AB"))
+head(barred_owls)
+```
+
+The quickest way to look at the spatial distribution is probably to use Stamen maps through the `ggmap` package.
+
+First let's get an idea of how many distinct points there are (often multiple observations are recorded for the same location).
+```{r}
+nrow(barred_owls)
+
+select(barred_owls, longitude, latitude) %>%
+  distinct() %>%
+  count()
+```
+
+Next let's convert our data to spatial data so we can extrac the spatial extent. Note that we're using CRS 4326 because that's the CRS for GPS lat/lon data.
+```{r}
+barred_owls_sf <- st_as_sf(barred_owls, coords = c("longitude", "latitude"), crs = 4326)
+st_bbox(barred_owls_sf)
+```
+
+So we have 259 sites for 1420 observations, lets take a look at the distribution. First we get the baselayer map.
+```{r}
+map <- get_stamenmap(bbox = as.numeric(st_bbox(barred_owls_sf)), zoom = 5)
+```
+
+Now we can add our observations. Note that for ggmap, we'll use non-sf data frame.
+```{r}
+ggmap(map) + 
+  geom_point(data = barred_owls, aes(x = longitude, y = latitude))
+```
+
+Let's count our observations for each site
+```{r}
+ggmap(map) + 
+  geom_count(data = barred_owls, aes(x = longitude, y = latitude))
+```
+
+If we want to get fancy we can also create interactive maps using the `leaflet` or `mapview` packages.
+
+```{r}
+library(mapview)
+
+mapview(barred_owls_sf, zcol = "survey_year", at = seq(1965, 2005, by = 10))
+
+```
+
