@@ -45,7 +45,11 @@ filter_unpack <- function(f) {
   }
 
   if(!is.null(f$region)) {
-    f[[names(f$region)]] <- f$region[[1]]
+    if(names(f$region) == "bbox") {
+      bbox <- unlist(f$region[1])
+      names(bbox) <- c("bbox_left", "bbox_bottom", "bbox_right", "bbox_top")
+      f <- append(f, bbox)
+    } else f[[names(f$region)]] <- f$region[[1]]
     f <- f[names(f) != "region"]
   }
 
@@ -65,6 +69,7 @@ filter_check <- function(f) {
     if(stringr::str_detect(n, "collection")) f[[i]] <- collections_check(f[[i]])
     if(stringr::str_detect(n, "_year")) f[[i]] <- year_check(f[[i]])
     if(stringr::str_detect(n, "_doy")) f[[i]] <- doy_check(f[[i]])
+    if(stringr::str_detect(n, "bbox")) f[[i]] <- bbox_check(f[[i]], type = n)
     if(stringr::str_detect(n, "country|statprov|species")) {
       f[[i]] <- codes_check(f[[i]], type = n)
     }

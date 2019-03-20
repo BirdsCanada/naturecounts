@@ -38,6 +38,19 @@ utm_check <- function(u) {
   u
 }
 
+bbox_check <- function(b, type) {
+ if(type %in% c("bbox_left", "bbox_right")) {
+   if(abs(b) > 180) stop("Bounding box longitude ('left'/'right' bound) ",
+                         "must be a number between -180 and 180", call. = FALSE)
+ } else if (type %in% c("bbox_top", "bbox_bottom")) {
+   if(abs(b) > 90) stop("Bounding box latitude ('top'/'bottom' bound) ",
+                        "must be a number between -90 and 90", call. = FALSE)
+ } else {
+   stop("Invalid name for bbox coordinate", call. = FALSE)
+ }
+  b
+}
+
 collections_check <- function(c) {
   if(!is.character(c)) {
     stop("'collections' must be either NULL (for all collections) ",

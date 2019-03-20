@@ -122,6 +122,10 @@ bcch <- nc_data_dl(species = 14280, years = c(2015, NA))
 
 bcch <- nc_data_dl(species = 14280, doy = c(200, 300))
 
+bcch <- nc_data_dl(species = 14280,
+                   region = list(bbox = c(left = -145, bottom = 45,
+                                          right = -100, top = 60)))
+
 # All moose observations with public access
 species_search("moose")
 moose <- nc_data_dl(species = 133990)

@@ -57,6 +57,10 @@ queries <- dplyr::tribble(
   "collections",   "collections",   FALSE, # for collection counts
   "request_id",    "requestId",     TRUE,
   "utm_squares",   "utmSquare",     FALSE,
+  "bbox_left",     "minLong",       TRUE,
+  "bbox_bottom",   "minLat",        TRUE,
+  "bbox_right",    "maxLong",       TRUE,
+  "bbox_top",      "maxLat",        TRUE,
   "fields_set",    "bmdeVersion",   TRUE,
   "fields",        "fields",        FALSE,
   "species",       "species",       FALSE,
