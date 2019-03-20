@@ -142,8 +142,8 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
         lapply(parse_results, results = FALSE) %>%
         dplyr::bind_rows() %>%
         dplyr::rename("geometry" = "square_wkt") %>%
-        sf::st_as_sf(., wkt = "square_wkt")
-      metadata_save(utm_squares, path)
+        sf::st_as_sf(., wkt = "geometry", crs = 3347)
+      metadata_save(utm_squares, path, compress = "xz")
     }
 
     # Update metadata version
