@@ -1,11 +1,4 @@
-#' Download NatureCounts data records
-#'
-#' Download data records from various collections filtered by various options.
-#' In order to ease the load on the server, note that only **three** of
-#' `collections`, `species`, `years`, `doy`, `region`, and `site_type` can be
-#' used in any one request. See the vignette for filtering your data after
-#' download for more options:
-#' `vignette("filtering_data", package = "naturecounts")`.
+#' Specify common parameters for `nc_data_dl` and `nc_count`
 #'
 #' @param collections Character vector. The collection codes from which to
 #'   download data. NULL (default) downloads data from all available collections
@@ -20,31 +13,56 @@
 #'   `country`, `statprov`, `subnational2`, `bcr`, `iba`, `utm_squares`, `bbox`.
 #'   See details
 #' @param site_type Character vector. The type of site to return (e.g., `IBA`).
-#' @param fields_set Charcter. Set of fields/columns to download. See details.
-#' @param fields Character vector. If `fields_set = custom`, which
-#'   fields/columns to download. See details
 #' @param token Character vector. Authorization token, otherwise only public
 #'   data is accessible
-#' @param sql_db Character vector. Name and location of SQLite database to
-#'   either create or add to
-#' @param verbose Logical. Display progress messages?
 #'
-#' @details
-#'
-#'   **Species ids (`species`):**
+#' @section Species ids (`species`):
 #'   Numeric species id codes can determined from the functions
 #'   \code{\link{species_search}()} or \code{\link{species_code_search}()}. See
 #'   also the vignette for more information
 #'   `vignette("species-codes", package = "naturecounts")`.
 #'
-#'   **Day of Year (`doy`):**
+#' @section Day of Year (`doy`):
 #'   The format for day of year (`doy`) is fairly flexible and can be anything
 #'   recognized by \code{\link[lubridate]{lubridate-package}}'s
 #'   \code{\link[lubridate]{ymd}()} function. However, it must have the order of
 #'   year, month, day. Note that year is ignored when converting to day of year,
 #'   except that it will result in a 1 day offset for leap years.
 #'
-#'   **Data Fields/Columns:**
+#' @section Regions (`region`):
+#'   Regions are defined by codes reflecting the country, state/province,
+#'   subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
+#'   Regions (BCR) (see [region_search()] for codes). They can also be defined
+#'   by providing specific UTM squares to download or a bounding box area which
+#'   specifyings the min/max longitude and min/max latitude (`bbox`). See the
+#'   article on regional filtering for more detail:
+#'   <http://BirdStudiesCanada.github.io/naturecounts/articles/region.html>
+#'
+#' @name args
+NULL
+
+#' Download NatureCounts data records
+#'
+#' Download data records from various collections filtered by various options.
+#' In order to ease the load on the server, note that only **three** of
+#' `collections`, `species`, `years`, `doy`, `region`, and `site_type` can be
+#' used in any one request. See the vignette for filtering your data after
+#' download for more options:
+#' `vignette("filtering_data", package = "naturecounts")`.
+#'
+#' @param fields_set Charcter. Set of fields/columns to download. See details.
+#' @param fields Character vector. If `fields_set = custom`, which
+#'   fields/columns to download. See details
+#' @param sql_db Character vector. Name and location of SQLite database to
+#'   either create or add to
+#' @param verbose Logical. Display progress messages?
+#'
+#' @inheritParams args
+#' @inheritSection args Species ids (`species`)
+#' @inheritSection args Day of Year (`doy`)
+#' @inheritSection args Regions (`region`)
+#'
+#' @section Data Fields/Columns:
 #'   By default data is downloaded with the `minimum` set of fields/columns.
 #'   However, for more advanced applications, users may wish to specify which
 #'   fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
@@ -287,40 +305,16 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #' filtered to only those available to the user. Otherwise all collections are
 #' returned.
 #'
-#' @param collections Character vector. The collection codes from which to
-#'   download data. NULL (default) downloads data from all available collections
-#' @param species Numeric vector. Numeric species ids (see details)
-#' @param years Numeric vector. The start/end years of data to download. Can use
-#'   NA for either start or end, or a single value to return data from a single
-#'   year.
-#' @param doy Character/Numeric vector. The start/end day-of-year to download
-#'   (1-366 or dates that can be converted to day of year). Can use NA for
-#'   either start or end
-#' @param region List. Named list with *one* of the following options:
-#'   `country`, `statprov`, `subnational2`, `bcr`, `iba`, `utm_squares`, `bbox`.
-#'   See details
-#' @param site_type Character vector. The type of site to return (e.g., `IBA`).
 #' @param show Character. Either "all" or "available". "all" returns counts from
 #'   all data sources. "available" only returns counts for data available
 #'   (public or accessible with the token provided).
-#' @param token Character. Authorization token
+#'
+#' @inheritParams args
+#' @inheritSection args Species ids (`species`)
+#' @inheritSection args Day of Year (`doy`)
+#' @inheritSection args Regions (`region`)
 #'
 #' @return Data frame
-#'
-#' @details
-#'
-#'   **Species ids (`species`):**
-#'   Numeric species id codes can determined from the functions
-#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}. See
-#'   also the vignette for more information
-#'   `vignette("species-codes", package = "naturecounts")`.
-#'
-#'   **Day of Year (`doy`):**
-#'   The format for day of year (`doy`) is fairly flexible and can be anything
-#'   recognized by \code{\link[lubridate]{lubridate-package}}'s
-#'   \code{\link[lubridate]{ymd}()} function. However, it must have the order of
-#'   year, month, day. Note that year is ignored when converting to day of year,
-#'   except that it will result in a 1 day offset for leap years.
 #'
 #' @examples
 #'

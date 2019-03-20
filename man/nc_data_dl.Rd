@@ -53,21 +53,8 @@ used in any one request. See the vignette for filtering your data after
 download for more options:
 \code{vignette("filtering_data", package = "naturecounts")}.
 }
-\details{
-\strong{Species ids (\code{species}):}
-Numeric species id codes can determined from the functions
-\code{\link{species_search}()} or \code{\link{species_code_search}()}. See
-also the vignette for more information
-\code{vignette("species-codes", package = "naturecounts")}.
+\section{Data Fields/Columns}{
 
-\strong{Day of Year (\code{doy}):}
-The format for day of year (\code{doy}) is fairly flexible and can be anything
-recognized by \code{\link[lubridate]{lubridate-package}}'s
-\code{\link[lubridate]{ymd}()} function. However, it must have the order of
-year, month, day. Note that year is ignored when converting to day of year,
-except that it will result in a 1 day offset for leap years.
-
-\strong{Data Fields/Columns:}
 By default data is downloaded with the \code{minimum} set of fields/columns.
 However, for more advanced applications, users may wish to specify which
 fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
@@ -92,6 +79,35 @@ character vector specifying the exact fields/columns to return. See
 Note that in all cases there are a set of fields/columns that are \emph{always}
 returned, no matter what \code{fields_set} is used.
 }
+
+\section{Species ids (\code{species})}{
+
+Numeric species id codes can determined from the functions
+\code{\link{species_search}()} or \code{\link{species_code_search}()}. See
+also the vignette for more information
+\code{vignette("species-codes", package = "naturecounts")}.
+}
+
+\section{Day of Year (\code{doy})}{
+
+The format for day of year (\code{doy}) is fairly flexible and can be anything
+recognized by \code{\link[lubridate]{lubridate-package}}'s
+\code{\link[lubridate]{ymd}()} function. However, it must have the order of
+year, month, day. Note that year is ignored when converting to day of year,
+except that it will result in a 1 day offset for leap years.
+}
+
+\section{Regions (\code{region})}{
+
+Regions are defined by codes reflecting the country, state/province,
+subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
+Regions (BCR) (see \code{\link[=region_search]{region_search()}} for codes). They can also be defined
+by providing specific UTM squares to download or a bounding box area which
+specifyings the min/max longitude and min/max latitude (\code{bbox}). See the
+article on regional filtering for more detail:
+\url{http://BirdStudiesCanada.github.io/naturecounts/articles/region.html}
+}
+
 \examples{
 \donttest{# All observations part of the RCBIOTABASE collection
 rcbio <- nc_data_dl(collection = "RCBIOTABASE")}
