@@ -17,6 +17,8 @@ filter_create <- function(...) {
   # Check parameters redundancy
   f <- filter_redundancy(f)
 
+  if(length(f) == 0) return(f)
+
   # Unpack arguments
   f <- filter_unpack(f)
 
