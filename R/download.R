@@ -139,16 +139,19 @@ nc_data_dl <- function(collections = NULL, species = NULL, years = NULL,
   if(nrow(records) == 0) {
 
     # Is it because they don't have permission?
-    no_access <- collections[!collections %in%
-                               nc_permissions(token = token)$collection]
+    if(!is.null(collections)) {
+      no_access <- collections[!collections %in%
+                                 nc_permissions(token = token)$collection]
+    } else no_access <- 0
 
     if(length(no_access) == 0) {
-      stop("These collections have no data that match these filters", call. = FALSE)
+      stop("These collections have no data that match these filters",
+           call. = FALSE)
     } else {
       stop("You do not have permission to access these collections (",
            paste0(no_access, collapse = ", "), ")", call. = FALSE)
     }
-  } else if(nrow(records) != length(collections)){
+  } else if(!is.null(collections) && nrow(records) != length(collections)){
     # What about if not all the collections they want are available?
     missing <- collections[!collections %in% records$collection]
     message("Not all collections have data that match these filters (",
