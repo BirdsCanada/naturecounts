@@ -22,7 +22,52 @@ Access and download data on plant and animal populations from various databases 
 
 You can install this developmental version of `naturecounts` from GitHub with the remotes package:
 
-``` r
+```{r eval = FALSE}
 install.packages("remotes")
 install_github("BirdStudiesCanada/naturecounts")
 ```
+
+## Usage
+
+```{r}
+library(naturecounts)
+```
+
+
+### Fetching data counts
+
+Use the `nc_count()` function to return all public collections and the number of observations in each.
+
+```{r}
+nc_count()
+```
+
+If you have a [NatureCounts username](https://www.birdscanada.org/birdmon/default/register.jsp) you can supply it with the `username` argument (you will be prompted for a password). `nc_count()` will now return all the records you have access to.
+
+```{r, eval = FALSE}
+nc_count(username = "my_user_name")
+```
+
+### Fetching data
+
+Fetch all observations of moose which are publically available to a local data frame.
+```{r}
+moose <- nc_data_dl(species = 133990)
+```
+
+Alternatively, save the downloaded data as a SQLite database (`moose.nc`).
+
+```{r}
+moose <- nc_data_dl(species = 133990, sql_db = "moose")
+```
+
+```{r cleanup, include = FALSE}
+file.remove("moose.nc")
+```
+
+
+> See the article on [Species Codes](articles/species-codes.html) to determine which codes to use.
+
+### Metadata
+
+NatureCounts includes a great deal of metadata which can be accessed through the functions with the `meta_` prefix. See the [Meta Documentation](reference/meta.html) for specifics.
