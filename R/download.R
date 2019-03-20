@@ -39,6 +39,7 @@
 #'   article on regional filtering for more detail:
 #'   <http://BirdStudiesCanada.github.io/naturecounts/articles/region.html>
 #'
+#' @keywords internal
 #' @name args
 NULL
 
