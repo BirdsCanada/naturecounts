@@ -195,11 +195,7 @@ nc_data_dl <- function(collections = NULL, species = NULL, years = NULL,
   for(c in 1:nrow(records)) {
 
     # Get data for whole collection
-    d <- nc_coll_dl(coll = records[c, ], query, filter, token, df_db, verbose)
-
-    # Add collection to rest of data (if df, not db)
-    if(is.data.frame(df_db)) df_db <- dplyr::bind_rows(df_db, d)
-
+    df_db <- nc_coll_dl(coll = records[c, ], query, filter, token, df_db, verbose)
   }
 
   df_db
