@@ -50,12 +50,19 @@ test_that("db_create creates tables in the database", {
   expect_gte(nrow(v), 1)
 
   # Check metadata tables
-  for(i in c("country_codes", "statprov_codes", "subnational2_codes",
-             "species_codes", "species_authority", "species_taxonomy")) {
-    expect_silent(d <- dplyr::tbl(con, i)) %>%
+  funs <- ls("package:naturecounts") %>%
+    stringr::str_subset("^meta_") %>%
+    stringr::str_remove("^meta_")
+  funs <- funs[!stringr::str_detect(funs, "(bmde)|(utm)")]
+
+  expect_true(all(c(funs, "naturecounts", "versions") %in%
+                    DBI::dbListTables(con)))
+
+  for(m in funs) {
+    expect_silent(d <- dplyr::tbl(con, m)) %>%
       expect_is("tbl_sql")
     expect_equal(dplyr::collect(d) %>% as.data.frame(),
-                 do.call(paste0("meta_", i), args = list()))
+                 do.call(paste0("meta_", m), args = list()))
   }
 
   # Clean up

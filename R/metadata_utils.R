@@ -3,20 +3,18 @@
 #' Updates the local copies of meta data used by the package.
 #'
 #' @param force Logical. Force update even if the remote version matches local?
-#' @param utm Logical. Update `[utm_squares]()` as well? **WARNING**: This is a
-#'   large and timeconsuming download!
+#' @param utm Logical. Update [meta_utm_squares()] as well? **WARNING**: This is a
+#'   large and time consuming download!
 #' @param verbose Logical. Show progress messages?
 #'
 #' @examples
+#' \donttest{nc_metadata()}
 #'
-#' \donttest{
-#' nc_metadata()
-#' }
 #' @export
 
 nc_metadata <- function(force = FALSE, utm = FALSE, verbose = TRUE) {
   nc_metadata_internal(system.file("extdata", package = "naturecounts"),
-                       utm = utm, verbose = verbose)
+                       force = force, utm = utm, verbose = verbose)
 }
 
 
@@ -49,7 +47,12 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
                                  utm = FALSE, verbose = TRUE) {
 
   # Check if update necessary
-  if(!force && metadata_v_local() == metadata_v_remote()) {
+  # (either no version file, force = TRUE, or out of date)
+
+  if(all(class(try(metadata_v_local(), silent = TRUE)) != "try-error") &&
+    !force &&
+    metadata_v_local() == metadata_v_remote()) {
+
     message("Local metadata already up-to-date with server")
 
   } else {
@@ -63,17 +66,12 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
 
     # Get species codes
     message("Updating species codes...")
-    species_codes <- species_authority$authority %>%
-      lapply(., FUN = function(x) srv_query(api$species_codes,
-                                            query = list(authority = x))) %>%
-      lapply(parse_results, results = FALSE) %>%
-      dplyr::bind_rows() %>%
+    species_codes <- srv_query(api$species_codes) %>%
+      parse_results(results = FALSE) %>%
       dplyr::mutate(species_id2 = dplyr::if_else(is.na(.data$species_id2),
                                                  .data$species_id,
-                                                 .data$species_id2)) %>%
-      tidyr::spread("authority", "species_code") %>%
-      as.data.frame()
-    metadata_save(species_codes, path)
+                                                 .data$species_id2))
+    metadata_save(species_codes, path = path)
 
     message("Updating species taxonomy...")
     species_taxonomy <- srv_query(api$species_taxonomy) %>%
@@ -111,18 +109,14 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
     iba_codes <- srv_query(api$iba_codes) %>%
       parse_results(results = FALSE) %>%
       dplyr::rename_all(tolower) %>%
-      dplyr::rename("iba_code" = "iba_site", "statprov" = "province",
-                    "bcr_code" = "bcr_region",
-                    "iba_name" = "nat_name", "iba_name_fr" = "fr_nat_name") %>%
-      dplyr::select("iba_code", dplyr::everything())
+      dplyr::select("iba_site", dplyr::everything())
     metadata_save(iba_codes, path)
 
     # Get BCA codes
     message("Updating BCR codes...")
     bcr_codes <- srv_query(api$bcr_codes) %>%
       parse_results(results = FALSE) %>%
-      dplyr::rename_all(tolower) %>%
-      dplyr::rename("bcr_code" = "bcr")
+      dplyr::rename_all(tolower)
     metadata_save(bcr_codes, path)
 
     if(utm) {
@@ -147,11 +141,9 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
     }
 
     # Update metadata version
-    message("Metadata version updated to ",
-            metadata_v_local <- metadata_v_remote())
-    metadata_save(metadata_v_local, path)
+    message("Metadata version updated to ", metadata_v_remote())
+    metadata_save(metadata_v_remote(), name = "metadata_v_local", path = path)
   }
 }
 
-# Version --------------------------------------------------------
-metadata_v_local <- function() metadata_read("metadata_v_local")
+metadata_v_local <- function() {metadata_read("metadata_v_local")}

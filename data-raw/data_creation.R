@@ -14,12 +14,12 @@ meta_info <- dplyr::tribble(
   "statprov_codes",      "metadata/statprov",                   "statprov_code",
   "subnational2_codes",  "metadata/subnat2",                "subnational2_code",
 
-  "bcr_codes",           "metadata/bcr",                        "bcr_code",
-  "iba_codes",           "metadata/iba_sites",                  "iba_code",
+  "bcr_codes",           "metadata/bcr",                        "bcr",
+  "iba_codes",           "metadata/iba_sites",                  "iba_site",
   "utm_squares",         "data/utm_squares",                    NA,
 
   "species_authority",   "metadata/species_codes_authority",    "authority",
-  "species_codes",       "metadata/species_codes",              NA, # No unique
+  "species_codes",       "metadata/species_codes",  list("species_code", "authority"),
   "species_taxonomy",    "metadata/species",                    "species_id",
 
   "bmde_versions",       "metadata/bmde_versions",              "version",

@@ -100,8 +100,8 @@ test_that("Species code returns all with no code", {
   expect_silent(species_code_search() %>%
                   dplyr::arrange(.data$species_id, .data$BSCDATA)) %>%
     expect_equal(meta_species_codes() %>%
-                   dplyr::filter(!is.na(!!rlang::sym("BSCDATA"))) %>%
-                   dplyr::select(species_id = "species_id2", "BSCDATA") %>%
+                   dplyr::filter(.data$authority == "BSCDATA") %>%
+                   dplyr::select(species_id = "species_id2", "BSCDATA" = "species_code") %>%
                    dplyr::left_join(meta_species_taxonomy() %>%
                                       dplyr::select("species_id",
                                                     "scientific_name",
@@ -184,14 +184,37 @@ test_that("Search for region codes", {
   expect_silent(region_search(type = "subnational2")) %>%
     expect_equal(meta_subnational2_codes())
 
-  expect_is(c1 <- region_search("Belize", type = "country"), "data.frame")
-  expect_equal(nrow(c1), 1)
-  expect_true(c1$country_code == "BZ")
-  expect_true(c1$country_name == "Belize")
+  expect_silent(region_search(type = "iba")) %>%
+    expect_equal(meta_iba_codes())
 
-  expect_is(c1 <- region_search("Colorado", type = "statprov"), "data.frame")
-  expect_equal(nrow(c1), 1)
-  expect_true(c1$country_code == "US")
-  expect_true(c1$statprov_code == "CO")
-  expect_true(c1$statprov_name == "Colorado")
+  expect_silent(region_search(type = "bcr")) %>%
+    expect_equal(meta_bcr_codes())
+
+  expect_is(r <- region_search("Belize", type = "country"), "data.frame")
+  expect_equal(nrow(r), 1)
+  expect_equal(r$country_code, "BZ")
+  expect_equal(r$country_name, "Belize")
+
+  expect_is(r <- region_search("Colorado", type = "statprov"), "data.frame")
+  expect_equal(nrow(r), 1)
+  expect_equal(r$country_cod, "US")
+  expect_equal(r$statprov_code, "CO")
+  expect_equal(r$statprov_name, "Colorado")
+
+  expect_is(r <- region_search("Brandon", type = "subnational2"), "data.frame")
+  expect_equal(nrow(r), 1)
+  expect_equal(r$country_code, "CA")
+  expect_equal(r$statprov_code, "MB")
+  expect_equal(r$subnational2_code, "CA.MB.07")
+
+  expect_is(r <- region_search("Chappice", type = "iba"), "data.frame")
+  expect_equal(nrow(r), 1)
+  expect_equal(r$statprov, "AB")
+  expect_equal(r$iba_site, "AB112")
+  expect_equal(r$iba_name, "Chappice Lake")
+
+  expect_is(r <- region_search("Boreal Taiga", type = "bcr"), "data.frame")
+  expect_equal(nrow(r), 1)
+  expect_equal(r$bcr, 6)
+  expect_equal(r$bcr_name, "Boreal Taiga Plains")
 })

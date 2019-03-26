@@ -45,13 +45,16 @@ region_search <- function(name = NULL, type = "country"){
          "'iba', or 'bcr'", call. = FALSE)
   }
 
+
   df <- eval(parse(text = paste0("meta_", type, "_codes()")))
   columns <- stringr::str_subset(names(df), "name")
 
-  if(!is.null(name)) df <- codes_search(name, df = df,
-                                        code_column = paste0(type, "_code"),
-                                        columns = columns)
-  df
+  if(!is.null(name)) {
+    df <- codes_search(name, df = df,
+                       code_column = keys[[paste0(type, "_codes")]],
+                       columns = columns)
+  }
+    df
 }
 
 
@@ -117,9 +120,11 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
 
   if(!is.null(authority)) {
     authority_check(authority)
-    ids <- dplyr::left_join(ids, dplyr::select(meta_species_codes(), "species_id2",
-                                               dplyr::one_of(authority)),
-                            by = c("species_id" = "species_id2"))
+    auth <- meta_species_codes() %>%
+      dplyr::filter(.data$authority == authority) %>%
+      dplyr::select("species_id2", !!authority := "species_code")
+
+    ids <- dplyr::left_join(ids, auth, by = c("species_id" = "species_id2"))
   }
 
   ids
@@ -137,6 +142,8 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
 #' @param results Character. "all" returns codes for all related species
 #'   (including subspecies and main species). "exact" returns only the code for
 #'   exact species indicated by the code.
+#'
+#' @details Species ids returned reflect both species and sub-species levels.
 #'
 #' @return A data frame of numeric species id codes and names
 #'
@@ -182,11 +189,8 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
 
   # Return matching rows
   ids <- meta_species_codes() %>%
-    tidyr::gather("authority", "code",
-                  -.data$species_id, -.data$rank, -.data$species_id2) %>%
-    dplyr::filter(.data$authority %in% !!authority,
-                  !is.na(.data$code)) %>%
-    tidyr::spread("authority", "code") %>%
+    dplyr::filter(.data$authority %in% !!authority) %>%
+    tidyr::spread("authority", "species_code") %>%
     dplyr::select(-rank) %>%
     dplyr::distinct()
 

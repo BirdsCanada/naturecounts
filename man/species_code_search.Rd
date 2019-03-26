@@ -25,6 +25,9 @@ A data frame of numeric species id codes and names
 This is an advanced function for returning all Bird-related species id codes
 based on the various alphanumeric codes used by different authorities.
 }
+\details{
+Species ids returned reflect both species and sub-species levels.
+}
 \examples{
 
 # Show all ids

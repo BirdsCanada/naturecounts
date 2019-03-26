@@ -42,8 +42,9 @@ db_create_primary <- function(con, df, primary_key) {
 
   qry <- paste0("CREATE TABLE ", table," ([",
                 paste0(names(df), collapse = "], ["), "]")
-  if(!is.na(primary_key)) {
-    qry <- paste0(qry, ", PRIMARY KEY([", primary_key, "]));")
+  if(all(!is.na(primary_key))) {
+    qry <- paste0(qry, ", PRIMARY KEY([",
+                  paste0(primary_key, collapse = "], ["), "]));")
   } else qry <- paste0(qry, ");")
 
   DBI::dbExecute(con, qry)
@@ -57,7 +58,6 @@ db_create <- function(con) {
   db_create_primary(con, naturecounts, primary_key = keys$data)
 
   # Copy metadata tables (13/17)
-
   db_create_primary(con, meta_country_codes(), primary_key = keys$country_codes)
   db_create_primary(con, meta_statprov_codes(), primary_key = keys$statprov_codes)
   db_create_primary(con, meta_subnational2_codes(), primary_key = keys$subnational2_codes)

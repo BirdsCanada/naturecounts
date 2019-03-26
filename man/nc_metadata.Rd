@@ -9,8 +9,8 @@ nc_metadata(force = FALSE, utm = FALSE, verbose = TRUE)
 \arguments{
 \item{force}{Logical. Force update even if the remote version matches local?}
 
-\item{utm}{Logical. Update \code{[utm_squares]()} as well? \strong{WARNING}: This is a
-large and timeconsuming download!}
+\item{utm}{Logical. Update \code{\link[=meta_utm_squares]{meta_utm_squares()}} as well? \strong{WARNING}: This is a
+large and time consuming download!}
 
 \item{verbose}{Logical. Show progress messages?}
 }
@@ -18,8 +18,6 @@ large and timeconsuming download!}
 Updates the local copies of meta data used by the package.
 }
 \examples{
+\donttest{nc_metadata()}
 
-\donttest{
-nc_metadata()
-}
 }
