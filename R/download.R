@@ -13,8 +13,17 @@
 #'   `country`, `statprov`, `subnational2`, `iba`, `bcr`, `utm_squares`, `bbox`.
 #'   See details
 #' @param site_type Character vector. The type of site to return (e.g., `IBA`).
-#' @param token Character vector. Authorization token, otherwise only public
-#'   data is accessible
+#' @param username Character vector. Username for <http://naturecounts.ca>. If
+#'   provided, the user will be prompted for a password. If left NULL, only
+#'   public collections will be returned.
+#'
+#' @section NatureCounts account:
+#'   All public data is available without a username/password. However, to
+#'   access private/semi-public projects/collections you must [sign up for a
+#'   free NatureCounts
+#'   account](https://www.birdscanada.org/birdmon/default/register.jsp) and
+#'   [register for the projects you'd like to
+#'   access](https://www.birdscanada.org/birdmon/default/projects.jsp).
 #'
 #' @section Species ids (`species`):
 #'   Numeric species id codes can determined from the functions
@@ -42,6 +51,7 @@
 #' @keywords internal
 #' @name args
 NULL
+# args ------------------
 
 #' Download NatureCounts data records
 #'
@@ -60,6 +70,7 @@ NULL
 #' @param verbose Logical. Display progress messages?
 #'
 #' @inheritParams args
+#' @inheritSection args NatureCounts account
 #' @inheritSection args Species ids (`species`)
 #' @inheritSection args Day of Year (`doy`)
 #' @inheritSection args Regions (`region`)
@@ -123,13 +134,16 @@ NULL
 nc_data_dl <- function(collections = NULL, species = NULL, years = NULL,
                        doy = NULL, region = NULL, site_type = NULL,
                        fields_set = "minimum", fields = NULL,
-                       token = NULL, sql_db = NULL,
+                       username = NULL, sql_db = NULL,
                        verbose = TRUE) {
 
   # Assemble and check filter parameters
   filter <- filter_create(collections = collections, species = species,
                           years = years, doy = doy, region = region,
                           fields_set = fields_set, fields = fields)
+
+  # Authorization
+  token <- srv_auth(username)
 
   # Get available records
   if(verbose) message("Collecting available records...")
@@ -319,6 +333,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'   (public or accessible with the token provided).
 #'
 #' @inheritParams args
+#' @inheritSection args NatureCounts account
 #' @inheritSection args Species ids (`species`)
 #' @inheritSection args Day of Year (`doy`)
 #' @inheritSection args Regions (`region`)
@@ -339,7 +354,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' # Count all records for all collections you have access to
 #' \dontrun{
-#' nc_count(token = YOUR_TOKEN)
+#' nc_count(username = "YOUR_USERNAME")
 #' }
 #'
 #' # Count all public records with barred owls in Ontario
@@ -356,7 +371,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 
 nc_count <- function(collections = NULL, species = NULL, years = NULL,
                      doy = NULL, region = NULL, site_type = NULL,
-                     show = "available", token = NULL) {
+                     show = "available", username = NULL) {
 
   if(!show %in% c("available", "all")) {
     stop("show must either be 'all' or 'available'", call. = FALSE)
@@ -365,6 +380,10 @@ nc_count <- function(collections = NULL, species = NULL, years = NULL,
   # Filter
   filter <- filter_create(collections = collections, species = species,
                           years = years, doy = doy, region = region)
+
+
+  # Authorization
+  token <- srv_auth(username)
 
   # Get counts
   cnts <- nc_count_internal(filter, token, show)

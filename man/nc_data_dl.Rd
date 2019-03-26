@@ -6,7 +6,7 @@
 \usage{
 nc_data_dl(collections = NULL, species = NULL, years = NULL,
   doy = NULL, region = NULL, site_type = NULL,
-  fields_set = "minimum", fields = NULL, token = NULL,
+  fields_set = "minimum", fields = NULL, username = NULL,
   sql_db = NULL, verbose = TRUE)
 }
 \arguments{
@@ -34,8 +34,9 @@ See details}
 \item{fields}{Character vector. If \code{fields_set = custom}, which
 fields/columns to download. See details}
 
-\item{token}{Character vector. Authorization token, otherwise only public
-data is accessible}
+\item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
+provided, the user will be prompted for a password. If left NULL, only
+public collections will be returned.}
 
 \item{sql_db}{Character vector. Name and location of SQLite database to
 either create or add to}
@@ -78,6 +79,13 @@ character vector specifying the exact fields/columns to return. See
 
 Note that in all cases there are a set of fields/columns that are \emph{always}
 returned, no matter what \code{fields_set} is used.
+}
+
+\section{NatureCounts account}{
+
+All public data is available without a username/password. However, to
+access private/semi-public projects/collections you must \href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up for a free NatureCounts account} and
+\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register for the projects you'd like to access}.
 }
 
 \section{Species ids (\code{species})}{

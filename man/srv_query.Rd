@@ -5,7 +5,7 @@
 \title{Query NatureCounts server for data}
 \usage{
 srv_query(path, query = NULL, filter = NULL, token = NULL,
-  auth = NULL, api_url = NULL, verbose = FALSE)
+  api_url = NULL, verbose = FALSE)
 }
 \arguments{
 \item{path}{character. Path to the table}

@@ -10,8 +10,7 @@
 #' @keywords internal
 
 srv_query <- function(path, query = NULL, filter = NULL,
-                      token = NULL,
-                      api_url = NULL,
+                      token = NULL, api_url = NULL,
                       verbose = FALSE) {
 
   # Set Curl configuration
@@ -33,12 +32,12 @@ srv_query <- function(path, query = NULL, filter = NULL,
     query <- append(query, list(filter = filter))
   }
 
-  # Send request (retry up to three times)
-  resp <- httr::RETRY("GET", url, query = query, ua)
+  # Send request
+  resp <- httr::POST(url, body = query, encode = "form", ua)
 
   # Check for http errors
   if(httr::status_code(resp) == 403) {
-    stop("Invalid token, no access", call. = FALSE)
+    stop("Invalid authorization, no access", call. = FALSE)
   } else {
     httr::stop_for_status(resp, "access NatureCounts server")
   }
@@ -71,6 +70,50 @@ srv_error <- function(parsed, url, query) {
          call. = FALSE)
   }
 }
+
+#' Fetch authorization token
+#'
+#' For a given username, check to see if we already have a token in the storage
+#' environment `srv_auth_env`, otherwise prompt safely for password and fetch a
+#' token from the NatureCounts server.
+#'
+#' @param username Character vector. Username for <http://naturecounts.ca>. If
+#'   provided, the user will be prompted for a password. If left NULL, only
+#'   public collections will be returned.
+#'
+#' @return Token character string
+
+srv_auth <- function(username) {
+
+  if(is.null(username)) {
+    # Username supplied?
+    token <- NULL
+
+  } else if(exists(username, envir = srv_auth_env)) {
+    # See if username associated with token in storage
+    token <- get(username, envir = srv_auth_env)
+
+  } else {
+    # Otherwise prompt for password
+    p <- askpass::askpass(prompt = paste0("Please enter password for ",
+                                          "NatureCounts user '", username, "'"))
+
+    if(is.null(p)) stop("Password required for user ", username, call. = FALSE)
+
+    # Fetch token from server
+    token <- srv_query(path = api$auth,
+                       query = list(username = username, password = p))$token
+
+    # Save token to storage
+    assign(username, token, envir = srv_auth_env)
+  }
+
+  token
+}
+
+# Environment for password storage
+srv_auth_env <- new.env()
+
 
 
 pass_token <- function(token) {

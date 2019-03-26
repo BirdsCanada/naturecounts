@@ -6,7 +6,7 @@
 \usage{
 nc_count(collections = NULL, species = NULL, years = NULL,
   doy = NULL, region = NULL, site_type = NULL, show = "available",
-  token = NULL)
+  username = NULL)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -32,8 +32,9 @@ See details}
 all data sources. "available" only returns counts for data available
 (public or accessible with the token provided).}
 
-\item{token}{Character vector. Authorization token, otherwise only public
-data is accessible}
+\item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
+provided, the user will be prompted for a password. If left NULL, only
+public collections will be returned.}
 }
 \value{
 Data frame
@@ -44,6 +45,13 @@ by location (if provided). If authorization is provided, the collections are
 filtered to only those available to the user. Otherwise all collections are
 returned.
 }
+\section{NatureCounts account}{
+
+All public data is available without a username/password. However, to
+access private/semi-public projects/collections you must \href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up for a free NatureCounts account} and
+\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register for the projects you'd like to access}.
+}
+
 \section{Species ids (\code{species})}{
 
 Numeric species id codes can determined from the functions
@@ -87,7 +95,7 @@ nc_count(region = list(statprov = "MB"))
 
 # Count all records for all collections you have access to
 \dontrun{
-nc_count(token = YOUR_TOKEN)
+nc_count(username = "YOUR_USERNAME")
 }
 
 # Count all public records with barred owls in Ontario

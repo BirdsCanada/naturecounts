@@ -23,12 +23,20 @@ See details}
 
 \item{site_type}{Character vector. The type of site to return (e.g., \code{IBA}).}
 
-\item{token}{Character vector. Authorization token, otherwise only public
-data is accessible}
+\item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
+provided, the user will be prompted for a password. If left NULL, only
+public collections will be returned.}
 }
 \description{
 Specify common parameters for \code{nc_data_dl} and \code{nc_count}
 }
+\section{NatureCounts account}{
+
+All public data is available without a username/password. However, to
+access private/semi-public projects/collections you must \href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up for a free NatureCounts account} and
+\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register for the projects you'd like to access}.
+}
+
 \section{Species ids (\code{species})}{
 
 Numeric species id codes can determined from the functions
