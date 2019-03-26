@@ -17,7 +17,7 @@ devtools::spell_check()
 ## Finalize package version
 
 ## Checks
-devtools::check()     # Local
+devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
 
 ## Windows checks (particularly if submitting to CRAN)
 devtools::check_win_release() # Win builder
