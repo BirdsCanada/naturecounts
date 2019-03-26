@@ -4,7 +4,8 @@
 \alias{db_connect}
 \title{Connect to or create a SQLite database}
 \usage{
-db_connect(name = paste0("./naturecounts_", Sys.Date()))
+db_connect(name = paste0("./naturecounts_", Sys.Date()),
+  verbose = TRUE)
 }
 \arguments{
 \item{name}{Character. The file path and name (no extension) of the database

@@ -18,7 +18,8 @@
 #'   db_connect()
 #' }
 
-db_connect <- function(name = paste0("./naturecounts_", Sys.Date())) {
+db_connect <- function(name = paste0("./naturecounts_", Sys.Date()),
+                       verbose = TRUE) {
 
   con <- DBI::dbConnect(RSQLite::SQLite(),
                         dbname = paste0(name, ".nc"))
@@ -26,10 +27,13 @@ db_connect <- function(name = paste0("./naturecounts_", Sys.Date())) {
   t <- DBI::dbListTables(con)
 
   if("naturecounts" %in% t) {
+    if(verbose) message("Connecting to database '", name, ".nc'")
     # Check version
     db_check_version(con)
   } else {
     # Create tables
+    if(verbose) message("Database '", name,
+                        ".nc' does not exist, creating it...")
     db_create(con)
   }
 

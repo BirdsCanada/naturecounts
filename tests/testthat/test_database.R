@@ -75,7 +75,8 @@ test_that("db_create creates tables in the database", {
 test_that("db_connect creates SQLite database file", {
 
   # Check connection and encoding
-  expect_silent(con <- db_connect()) %>%
+  expect_message(con <- db_connect(),
+                 "Database '.\\/naturecounts_2019-03-26.nc' does not exist") %>%
     expect_is("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
@@ -85,7 +86,8 @@ test_that("db_connect creates SQLite database file", {
   # Check that can re-connect to existing database
   DBI::dbDisconnect(con)
 
-  expect_silent(con <- db_connect()) %>%
+  expect_message(con <- db_connect(),
+                 "Connecting to database './naturecounts_2019-03-26.nc'") %>%
     expect_is("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
@@ -98,7 +100,7 @@ test_that("db_connect creates SQLite database file", {
 test_that("db_connect creates named SQLite database file", {
 
   # Check connection and encoding
-  expect_silent(con <- db_connect("mydatabase")) %>%
+  expect_silent(con <- db_connect("mydatabase", verbose = FALSE)) %>%
     expect_is("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
@@ -108,7 +110,7 @@ test_that("db_connect creates named SQLite database file", {
   # Check that can re-connect to existing database
   DBI::dbDisconnect(con)
 
-  expect_silent(con <- db_connect("mydatabase")) %>%
+  expect_silent(con <- db_connect("mydatabase", verbose = FALSE)) %>%
     expect_is("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
@@ -121,7 +123,7 @@ test_that("db_connect creates named SQLite database file", {
 # db_insert ---------------------------------------------------------------
 test_that("db_insert add and appends rows", {
 
-  expect_silent(con <- db_connect()) %>%
+  expect_silent(con <- db_connect(verbose = FALSE)) %>%
     expect_is("SQLiteConnection")
 
   # Adding data to an empty table
@@ -143,7 +145,7 @@ test_that("db_insert add and appends rows", {
 
 test_that("db_insert overwrites rows as required", {
 
-  expect_silent(con <- db_connect()) %>%
+  expect_silent(con <- db_connect(verbose = FALSE)) %>%
     expect_is("SQLiteConnection")
 
   # Trying to append duplicate data doesn't add anything
@@ -172,7 +174,7 @@ test_that("db_insert overwrites rows as required", {
 
 test_that("db_insert adds new cols as required", {
 
-  expect_silent(con <- db_connect()) %>%
+  expect_silent(con <- db_connect(verbose = FALSE)) %>%
     expect_is("SQLiteConnection")
 
   n <- DBI::dbListFields(con, "naturecounts")

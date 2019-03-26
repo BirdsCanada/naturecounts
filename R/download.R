@@ -183,7 +183,7 @@ nc_data_dl <- function(collections = NULL, species = NULL, years = NULL,
 
   # Get/Create database or dataframe
   if(!is.null(sql_db)) {
-    df_db <- db_connect(sql_db)
+    df_db <- db_connect(sql_db, verbose = verbose)
   } else {
     df_db <- data.frame()
   }
