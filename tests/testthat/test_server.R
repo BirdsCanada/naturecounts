@@ -32,5 +32,5 @@ test_that("srv_query() applies settings and resets", {
 
 test_that("srv_query() returns informative errors", {
   expect_error(srv_query(api$data, token = "hello"),
-               "Invalid token, no access")
+               "Invalid authorization, no access")
 })
