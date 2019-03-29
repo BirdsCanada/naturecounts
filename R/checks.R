@@ -84,17 +84,15 @@ fields_set_check <- function(fields_set) {
 
 
 fields_check <- function(fields) {
-  # Can't really check, because don't have list of internal fields
-  # col <- nc_collections() %>%
-  #   dplyr::filter(bmdr_code %in% collections) %>%
-  #   dplyr::pull(meta_bmde_version) %>%
-  #   unique()
-  # f <- vapply(col, FUN = function(x) list(meta_bmde_fields(version = x)$field_name),
-  #             FUN.VALUE = list("A")) %>%
-  #   unlist() %>%
-  #   unique()
-  # if(!all(fields %in% f)) {
-  #   problem <- fields[!fields %in% f]
+  f <- meta_bmde_fields(version = NULL) %>%
+    dplyr::pull(local_name) %>%
+    unique()
+
+  w <- fields[!fields %in% f]
+  if(length(w) > 0) {
+    stop("Some arguments in 'fields' are invalid (", paste0(w, collapse = ","),
+    "). See meta_bmde_fields() for valid options", call. = FALSE)
+  }
   fields
 }
 

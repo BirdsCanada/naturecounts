@@ -75,6 +75,7 @@ test_that("fields_set_check correct", {
 # BMDE Fields -------------------------------------------------------------
 test_that("fields_check correct", {
   expect_silent(fields_check("AllSpeciesReported"))
+  expect_error(fields_check("allspeciesReported"))
 })
 
 

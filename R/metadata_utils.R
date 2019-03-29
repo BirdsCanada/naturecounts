@@ -140,6 +140,18 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
       metadata_save(utm_squares, path, compress = "xz")
     }
 
+    # Get BMDE fields
+    message("Updating BMDE Field list...")
+    bmde_fields <- meta_bmde_versions() %>%
+      dplyr::pull(version) %>%
+      lapply(X = ., FUN = function(x) {
+        srv_query(api$bmde_fields, query = list(version = x)) %>%
+          parse_results()
+      }) %>%
+      do.call('rbind', .) %>%
+      dplyr::select(-field_name)
+    metadata_save(bmde_fields, path)
+
     # Update metadata version
     message("Metadata version updated to ", metadata_v_remote())
     metadata_save(metadata_v_remote(), name = "metadata_v_local", path = path)

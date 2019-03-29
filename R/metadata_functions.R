@@ -103,7 +103,8 @@ meta_bmde_versions <- function() {
 #'   used by which project, and [nc_data_dl()] for more details on downloading
 #'   data with a given set of fields/columns.
 #'
-#' @param version Character. BMDE version for which to return fields
+#' @param version Character. BMDE version for which to return fields. NULL
+#'   returns all versions
 #'
 #' @examples
 #' # Return fields/columns in the 'minimum' version
@@ -117,7 +118,10 @@ meta_bmde_versions <- function() {
 #' @export
 meta_bmde_fields <- function(version = "minimum") {
   # Check version
-  version <- fields_set_check(version)
-  srv_query(api$bmde_fields, query = list(version = version)) %>%
-    parse_results()
+  f <- metadata_read("bmde_fields")
+  if(!is.null(version)) {
+    version <- fields_set_check(version)
+    f <- dplyr::filter(f, .data$version == !!version)
+  }
+  f
 }
