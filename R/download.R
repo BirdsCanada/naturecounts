@@ -240,9 +240,8 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
   coll$progress <- nrow(r$results)
 
   repeat {
-
     # Are we done? (return less than asked)
-    if(nrow(r$results) <= query$numRecords) break
+    if(nrow(r$results) < query$numRecords) break
 
     # Update our position
     query$lastRecord <- max(r$results$record_id)
@@ -389,7 +388,6 @@ nc_count <- function(collections = NULL, species = NULL, years = NULL,
 }
 
 nc_count_internal <- function(filter, token, show = "available") {
-
   cnts <- srv_query(api$collections_count, token = token, filter = filter) %>%
     parse_results(results = TRUE) %>%
     dplyr::arrange(.data$collection)

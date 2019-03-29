@@ -85,6 +85,20 @@ test_that("Data filters work as expected", {
 
 })
 
+test_that("Pagination", {
+  # Get data and messages
+  expect_silent(m <- capture_messages(
+    d <- nc_data_dl(collections = "RCBIOTABASE")))
+
+  # Expect pagination over three pages
+  expect_gt(sum(stringr::str_count(m, "Records")), 1)
+
+  # Expect more than one page (5000 records)
+  expect_gt(nrow(d), 5000)
+
+})
+
+
 test_that("Data download returns informative errors/messages", {
 
   # No data for some
