@@ -32,8 +32,18 @@ srv_query <- function(path, query = NULL, filter = NULL,
     query <- append(query, list(filter = filter))
   }
 
-  # Send request
-  resp <- httr::POST(url, body = query, encode = "form", ua)
+  # Send request (try twice if first fails, unless it was a forced failure)
+  resp <- try(httr::POST(url, body = query, encode = "form", ua),
+              silent = TRUE)
+  if(class(resp) == "try-error") {
+    if(stringr::str_detect(resp, "aborted by an application callback")){
+      stop(resp, call. = FALSE)
+    } else {
+      #message("Ooops, error on first try, retrying...\nError: ",
+      #        as.character(resp))
+      resp <- httr::POST(url, body = query, encode = "form", ua)
+    }
+  }
 
   # Check for http errors
   if(httr::status_code(resp) == 403) {
