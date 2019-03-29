@@ -5,13 +5,14 @@
 #' "./data-raw/data_creation.R". Also checks parameters for incorrect types and
 #' redundancy
 #'
-#' @param ... The parameters (package-named) to create the filter list with
+#' @param verbose Logical. Display progress messages?
+#' @param ... The parameters (package names) to create the filter list with
 #'
 #' @return A list of api-named filter parameters
 #'
 #' @keywords internal
 
-filter_create <- function(...) {
+filter_create <- function(verbose, ...) {
   f <- list(...)
 
   # Check parameters redundancy
@@ -28,6 +29,14 @@ filter_create <- function(...) {
   # Check names
   if(any(!names(f) %in% queries$package_name)) {
     stop("Unknown parameters", call. = FALSE)
+  }
+
+  # Report filters
+  if(verbose) {
+    f_msg <- lapply(f, function(x) paste0(x, collapse = ", "))
+    f_msg <- paste0("(", f_msg, ")")
+    f_msg <- paste0(paste0(names(f), " ", f_msg), collapse = "; ")
+    message("Using filters: ", f_msg)
   }
 
   # Replace names with API names
@@ -63,6 +72,7 @@ filter_unpack <- function(f) {
 filter_dup <- function(i) if(length(i) == 1) i <- rep(i, 2) else i
 
 filter_check <- function(f) {
+
   for(i in 1:length(f)) {
     n <- names(f[i])
     if(n == "fields_set") f[[i]] <- fields_set_check(f[[i]])

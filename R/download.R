@@ -138,7 +138,8 @@ nc_data_dl <- function(collections = NULL, species = NULL, years = NULL,
                        verbose = TRUE) {
 
   # Assemble and check filter parameters
-  filter <- filter_create(collections = collections, species = species,
+  filter <- filter_create(verbose = verbose,
+                          collections = collections, species = species,
                           years = years, doy = doy, region = region,
                           fields_set = fields_set, fields = fields)
 

@@ -4,10 +4,12 @@
 \alias{filter_create}
 \title{Create filter list}
 \usage{
-filter_create(...)
+filter_create(verbose, ...)
 }
 \arguments{
-\item{...}{The parameters (package-named) to create the filter list with}
+\item{verbose}{Logical. Display progress messages?}
+
+\item{...}{The parameters (package names) to create the filter list with}
 }
 \value{
 A list of api-named filter parameters
