@@ -5,6 +5,8 @@ test_that("Code conversion works as expected", {
   expect_equal(codes_convert("Canada", "country"), "CA")
 })
 
+
+# Species -----------------------------------------------------------------
 test_that("Code checks work on species", {
 
   species <- 7590
@@ -28,6 +30,8 @@ test_that("Code checks work on species", {
 
 })
 
+
+# Country -----------------------------------------------------------------
 test_that("Code checks work on country", {
 
   country <- "CA"
@@ -57,6 +61,8 @@ test_that("Code checks work on country", {
   expect_error(codes_check(country), "Unable to match 'England' to any codes")
 })
 
+
+# Fields set (BMDE version) -----------------------------------------------
 test_that("fields_set_check correct", {
   expect_silent(fields_set_check("minimum"))
   expect_silent(fields_set_check("extended"))
@@ -65,10 +71,14 @@ test_that("fields_set_check correct", {
   expect_error(fields_set_check("BMDE"))
 })
 
+
+# BMDE Fields -------------------------------------------------------------
 test_that("fields_check correct", {
   expect_silent(fields_check("AllSpeciesReported"))
 })
 
+
+# Year --------------------------------------------------------------------
 test_that("year_check correct", {
   expect_silent(year_check(2000)) %>%
     expect_is("numeric")
@@ -82,6 +92,8 @@ test_that("year_check correct", {
   expect_error(year_check(2050), er)
 })
 
+
+# Day of Year -------------------------------------------------------------
 test_that("doy_check correct", {
   expect_silent(doy_check(1)) %>% expect_equal(1)
   expect_silent(doy_check("1")) %>% expect_equal(1)
@@ -98,6 +110,8 @@ test_that("doy_check correct", {
   expect_error(doy_check("hello"), er)
 })
 
+
+# Filter checks -----------------------------------------------------------
 test_that("filter_checks correct", {
   expect_equal(filter_check(list(country = "Canada")), list(country = "CA"))
   expect_equal(filter_check(list(statprov = "Manitoba")), list(statprov = "MB"))
@@ -115,6 +129,8 @@ test_that("filter_checks correct", {
 
 })
 
+
+# Filter redundancy -------------------------------------------------------
 test_that("filter_redundancy correct", {
 
   # country/statprov/subnational2 redundancy
