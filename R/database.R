@@ -27,12 +27,13 @@ db_connect <- function(name = paste0("./naturecounts_", Sys.Date()),
   t <- DBI::dbListTables(con)
 
   if("naturecounts" %in% t) {
-    if(verbose) message("Connecting to database '", name, ".nc'")
+    if(verbose) message("\nDatabase '", name,
+                        ".nc' already exists, connection to it...")
     # Check version
     db_check_version(con)
   } else {
     # Create tables
-    if(verbose) message("Database '", name,
+    if(verbose) message("\nDatabase '", name,
                         ".nc' does not exist, creating it...")
     db_create(con)
   }
