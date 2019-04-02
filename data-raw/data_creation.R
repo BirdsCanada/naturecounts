@@ -61,12 +61,15 @@ queries <- dplyr::tribble(
   "bbox_bottom",   "minLat",        TRUE,
   "bbox_right",    "maxLong",       TRUE,
   "bbox_top",      "maxLat",        TRUE,
+  "iba",           "iba",           FALSE,
+  "bcr",           "bcr",           FALSE,
   "fields_set",    "bmdeVersion",   TRUE,
   "fields",        "fields",        FALSE,
   "species",       "species",       FALSE,
   "country",       "country",       FALSE,
   "statprov",      "statProv",      FALSE,
-  "subnational2",  "subnational2",  FALSE)
+  "subnational2",  "subnational2",  FALSE,
+  "site_type",     "siteType",      TRUE)
 
 
 # Save all internal datasets
