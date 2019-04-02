@@ -141,6 +141,7 @@ nc_data_dl <- function(collections = NULL, species = NULL, years = NULL,
   filter <- filter_create(verbose = verbose,
                           collections = collections, species = species,
                           years = years, doy = doy, region = region,
+                          site_type = site_type,
                           fields_set = fields_set, fields = fields)
 
   # Authorization
