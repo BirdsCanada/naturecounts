@@ -33,30 +33,28 @@ install_github("BirdStudiesCanada/naturecounts")
 library(naturecounts)
 ```
 
+### Fetching counts
 
-### Fetching data counts
-
-Use the `nc_count()` function to return all public collections and the number of observations in each.
+Use the `nc_count()` function to return collections and the number of observations in each for which you have access (here returns all **public** collections).
 
 ```{r}
 nc_count()
 ```
 
-If you have a [NatureCounts username](https://www.birdscanada.org/birdmon/default/register.jsp) you can supply it with the `username` argument (you will be prompted for a password). `nc_count()` will now return all the records you have access to.
+Use the `show = "all"` argument to show counts for all collections available (public or otherwise).
 
-```{r, eval = FALSE}
-nc_count(username = "my_user_name")
+```{r}
+nc_count(show = "all")
 ```
 
 ### Fetching data
 
-Fetch all observations of moose which are publically available to a local data frame.
+Fetch all observations of moose which are **publically** available to a local data frame.
 ```{r}
 moose <- nc_data_dl(species = 133990)
 ```
 
 Alternatively, save the downloaded data as a SQLite database (`moose.nc`).
-
 ```{r}
 moose <- nc_data_dl(species = 133990, sql_db = "moose")
 ```
@@ -65,8 +63,28 @@ moose <- nc_data_dl(species = 133990, sql_db = "moose")
 file.remove("moose.nc")
 ```
 
+### Authorizations
 
-> See the article on [Species Codes](articles/species-codes.html) to determine which codes to use.
+By default `nc_count()` and `nc_data_dl()` return public data which is available without a username/password. However, to access private/semi-public projects/collections you must [sign up](https://www.birdscanada.org/birdmon/default/profile.jsp) for a free NatureCounts account and [register](https://www.birdscanada.org/birdmon/default/projects.jsp) for the projects you'd like to access. Once registered, you can use the `username` argument (you will be prompted for a password) for both `nc_count()` and `nc_data_dl()`, which will then return a different set of records.
+
+```{r, eval = FALSE}
+nc_count(username = "my_user_name")
+moose <- nc_data_dl(species = 133990, username = "my_user_name")
+```
+
+### More advanced options
+
+`nc_count()` and `nc_data_dl()` have a variety of arguments that allow you to filter the counts/data prior to downloading. These options include `collections`, `species`, `years`, `doy` (day-of-year), `region`, and `site_type` (users can specify up to 3 of these). For `nc_data_dl()` you have the additional arguments `fields_set` and `fields` with which you can customize which fields/columns to include in your download.
+
+See the function examples (`[nc_count()](https://birdstudiescanada.github.io/naturecounts/reference/nc_count.html)`, `[nc_data_dl()](https://birdstudiescanada.github.io/naturecounts/reference/nc_data_dl.html)`) the following articles for more information on these filters:
+
+- Collections
+- [Species Codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+- [Regional Codes](https://birdstudiescanada.github.io/naturecounts/articles/region-codes.html)
+- [IBAs and BCRs (regions)](https://birdstudiescanada.github.io/naturecounts/articles/region-areas.html)
+- [Using spatial data to filter observations](https://birdstudiescanada.github.io/naturecounts/articles/region-spatial.html)
+
+We also have an [article on post-filtering your data](https://birdstudiescanada.github.io/naturecounts/articles/articles/filtering-data.html)
 
 ### Metadata
 
