@@ -53,7 +53,8 @@ meta_bmde_versions()
 meta_bmde_fields(version = "minimum")
 }
 \arguments{
-\item{version}{Character. BMDE version for which to return fields}
+\item{version}{Character. BMDE version for which to return fields. NULL
+returns all versions}
 }
 \value{
 Data frame
