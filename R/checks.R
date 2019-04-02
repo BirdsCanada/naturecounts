@@ -51,6 +51,34 @@ bbox_check <- function(b, type) {
   b
 }
 
+iba_check <- function(i) {
+  i <- toupper(i)
+  w <- i[!i %in% meta_iba_codes()$iba_site]
+
+  if(length(w) > 0) {
+    stop("Some arguments in 'iba' are invalid (", paste0(w, collapse = ","),
+         "). See 'iba_site' in 'meta_iba_codes()' for valid options",
+         call. = FALSE)
+  }
+  paste0("IBA.", i) # To match API expectations
+}
+
+bcr_check <- function(b) {
+
+  b <- as_numeric(b)
+
+  w <- b[!b %in% meta_bcr_codes()$bcr]
+
+  if(length(w) > 0) {
+    stop("Some arguments in 'bcr' are invalid (", paste0(w, collapse = ","),
+         "). See 'bcr' in 'meta_bcr_codes()' for valid options",
+         call. = FALSE)
+  }
+
+  b <- sprintf("%02d", b) # Convert to dual digit
+  paste0("BCR.", b) # To match API expectations
+}
+
 collections_check <- function(c) {
   if(!is.character(c)) {
     stop("'collections' must be either NULL (for all collections) ",
