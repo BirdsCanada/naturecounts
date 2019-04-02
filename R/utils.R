@@ -9,9 +9,19 @@ progress_query <- function(current, max, by) {
   message("    Records ", current + 1, " to ", to, " / ", max)
 }
 
+
+#' Convert to numeric if possible
+#'
+#' If possible, converts to numeric, otherwise returns unchanged.
+#'
+#' @param x Vector of values to be converted
+#'
+#' @keywords internal
+
 as_numeric <- function(x) {
-  if(!is.na(suppressWarnings(as.numeric(x)))) x <- as.numeric(x)
-  x
+  x1 <- suppressWarnings(as.numeric(x))
+  x1[is.na(x1)] <- x[is.na(x1)]
+  x1
 }
 
 capture_df <- function(x) {
