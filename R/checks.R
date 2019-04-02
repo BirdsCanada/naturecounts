@@ -90,7 +90,7 @@ collections_check <- function(c) {
 authority_check <- function(a) {
   if(!all(a %in% meta_species_authority()$authority)) {
     stop("'authority' must be one or more of the authorities ",
-         "specified in the meta_species_authority data frame.", call. = FALSE)
+         "specified in 'meta_species_authority()'.", call. = FALSE)
   }
 }
 
@@ -100,7 +100,7 @@ fields_set_check <- function(fields_set) {
   if(length(fields_set) > 1 || !fields_set %in% c(v$version, "custom")) {
     if(!fields_set %in% v$shorthand) {
       stop("'field_set' must be either a 'version' or a 'shorthand' code ",
-           "returned by meta_bmde_version(), or 'custom'", call. = FALSE)
+           "returned by 'meta_bmde_version()', or 'custom'", call. = FALSE)
     }
     if(fields_set != "custom") {
       fields_set <- dplyr::filter(v, .data$shorthand == fields_set) %>%
@@ -119,7 +119,7 @@ fields_check <- function(fields) {
   w <- fields[!fields %in% f]
   if(length(w) > 0) {
     stop("Some arguments in 'fields' are invalid (", paste0(w, collapse = ","),
-    "). See meta_bmde_fields() for valid options", call. = FALSE)
+    "). See 'meta_bmde_fields()' for valid options", call. = FALSE)
   }
   fields
 }
