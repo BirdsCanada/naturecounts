@@ -84,16 +84,20 @@ returned, no matter what \code{fields_set} is used.
 \section{NatureCounts account}{
 
 All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must \href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up for a free NatureCounts account} and
-\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register for the projects you'd like to access}.
+access private/semi-public projects/collections you must
+\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up}
+for a free NatureCounts account and
+\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register}
+for the projects you'd like to access.
 }
 
 \section{Species ids (\code{species})}{
 
 Numeric species id codes can determined from the functions
 \code{\link{species_search}()} or \code{\link{species_code_search}()}. See
-also the vignette for more information
-\code{vignette("species-codes", package = "naturecounts")}.
+also the \link{species codes}
+(https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+for more information.
 }
 
 \section{Day of Year (\code{doy})}{
@@ -113,8 +117,9 @@ subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 Regions (BCR) (see \code{\link[=region_search]{region_search()}} for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifyings the min/max longitude and min/max latitude (\code{bbox}). See the
-article on regional filtering for more detail:
-\url{http://BirdStudiesCanada.github.io/naturecounts/articles/region.html}
+article on \link{regional filters}
+(http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
+for more information.
 }
 
 \examples{

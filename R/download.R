@@ -19,17 +19,18 @@
 #'
 #' @section NatureCounts account:
 #'   All public data is available without a username/password. However, to
-#'   access private/semi-public projects/collections you must [sign up for a
-#'   free NatureCounts
-#'   account](https://www.birdscanada.org/birdmon/default/register.jsp) and
-#'   [register for the projects you'd like to
-#'   access](https://www.birdscanada.org/birdmon/default/projects.jsp).
+#'   access private/semi-public projects/collections you must
+#'   [sign up](https://www.birdscanada.org/birdmon/default/register.jsp)
+#'   for a free NatureCounts account and
+#'   [register](https://www.birdscanada.org/birdmon/default/projects.jsp)
+#'   for the projects you'd like to access.
 #'
 #' @section Species ids (`species`):
 #'   Numeric species id codes can determined from the functions
 #'   \code{\link{species_search}()} or \code{\link{species_code_search}()}. See
-#'   also the vignette for more information
-#'   `vignette("species-codes", package = "naturecounts")`.
+#'   also the [species codes]
+#'   (https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+#'   for more information.
 #'
 #' @section Day of Year (`doy`):
 #'   The format for day of year (`doy`) is fairly flexible and can be a whole
@@ -45,8 +46,9 @@
 #'   Regions (BCR) (see [region_search()] for codes). They can also be defined
 #'   by providing specific UTM squares to download or a bounding box area which
 #'   specifyings the min/max longitude and min/max latitude (`bbox`). See the
-#'   article on regional filtering for more detail:
-#'   <http://BirdStudiesCanada.github.io/naturecounts/articles/region.html>
+#'   article on [regional filters]
+#'   (http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
+#'   for more information.
 #'
 #' @keywords internal
 #' @name args
