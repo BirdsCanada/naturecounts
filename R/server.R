@@ -45,13 +45,6 @@ srv_query <- function(path, query = NULL, filter = NULL,
     }
   }
 
-  # Check for http errors
-  if(httr::status_code(resp) == 403) {
-    stop("Invalid authorization, no access", call. = FALSE)
-  } else {
-    httr::stop_for_status(resp, "access NatureCounts server")
-  }
-
   # Parse response
   parsed <- resp %>%
     httr::content(as = "text") %>%
@@ -60,6 +53,13 @@ srv_query <- function(path, query = NULL, filter = NULL,
   # Check for server errors
   srv_error(parsed, url, filter)
 
+  # Check for http errors
+  if(httr::status_code(resp) == 403) {
+    stop("Invalid authorization, no access", call. = FALSE)
+  } else {
+    httr::stop_for_status(resp, "access NatureCounts server")
+  }
+
   # Reset Curl settings
   httr::reset_config()
 
@@ -67,7 +67,7 @@ srv_query <- function(path, query = NULL, filter = NULL,
 }
 
 srv_error <- function(parsed, url, filter) {
-  if(any(stringr::str_detect(names(parsed), "error"))) {
+  if(any(stringr::str_detect(names(parsed), "rror"))) {
     if(!is.null(filter)) {
       f <- jsonlite::fromJSON(filter, simplifyVector = TRUE)
       f <- paste0("\n Query: ",
