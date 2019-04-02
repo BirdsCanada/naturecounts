@@ -6,7 +6,7 @@
 \usage{
 nc_count(collections = NULL, species = NULL, years = NULL,
   doy = NULL, region = NULL, site_type = NULL, show = "available",
-  username = NULL)
+  username = NULL, verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to

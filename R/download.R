@@ -367,15 +367,17 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 
 nc_count <- function(collections = NULL, species = NULL, years = NULL,
                      doy = NULL, region = NULL, site_type = NULL,
-                     show = "available", username = NULL) {
+                     show = "available", username = NULL, verbose = TRUE) {
 
   if(!show %in% c("available", "all")) {
     stop("show must either be 'all' or 'available'", call. = FALSE)
   }
 
-  # Filter
-  filter <- filter_create(collections = collections, species = species,
-                          years = years, doy = doy, region = region)
+  # Assemble and check filter parameters
+  filter <- filter_create(verbose = verbose,
+                          collections = collections, species = species,
+                          years = years, doy = doy, region = region,
+                          site_type = site_type)
 
 
   # Authorization
