@@ -19,3 +19,4 @@ For a given username, check to see if we already have a token in the storage
 environment \code{srv_auth_env}, otherwise prompt safely for password and fetch a
 token from the NatureCounts server.
 }
+\keyword{internal}

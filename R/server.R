@@ -95,6 +95,8 @@ srv_error <- function(parsed, url, filter) {
 #'   public collections will be returned.
 #'
 #' @return Token character string
+#'
+#' @keywords internal
 
 srv_auth <- function(username) {
 
