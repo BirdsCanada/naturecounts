@@ -20,7 +20,7 @@ progress_query <- function(current, max, by) {
 
 as_numeric <- function(x) {
   x1 <- suppressWarnings(as.numeric(x))
-  x1[is.na(x1)] <- x[is.na(x1)]
+  if(any(is.na(x1))) x1[is.na(x1)] <- x[is.na(x1)]
   x1
 }
 
