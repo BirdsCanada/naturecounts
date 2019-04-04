@@ -3,20 +3,20 @@ context("Download counts")
 
 test_that("Get counts for collections", {
 
-  expect_silent(c1 <- nc_count(c("CBC", "BBS"), show = "all"))
+  expect_message(c1 <- nc_count(c("CBC", "BBS"), show = "all"), "Using filters")
   expect_is(c1, "data.frame")
   expect_gt(nrow(c1), 0)
   expect_true(all(c1$collection %in% c("CBC", "BBS")))
 
   expect_silent(c2 <- nc_count(c("CBC", "BBS"),
                                region = list(statprov = "MB"),
-                               show = "all"))
+                               show = "all", verbose = FALSE))
   expect_is(c2, "data.frame")
   expect_gt(nrow(c2), 0)
   expect_true(all(c2$collection %in% c("CBC", "BBS")))
   expect_true(all(c2$nrecords < c1$nrecords))
 
-  expect_silent(c <- nc_count(region = list(statprov = "MB")))
+  expect_silent(c <- nc_count(region = list(statprov = "MB"), verbose = FALSE))
   expect_is(c, "data.frame")
   expect_gt(nrow(c), 0)
 
@@ -24,8 +24,8 @@ test_that("Get counts for collections", {
 
 test_that("Counts return permissions", {
 
-  expect_silent(c_public <- nc_count(species = 7590))
-  expect_silent(c_all <- nc_count(species = 7590, show = "all"))
+  expect_silent(c_public <- nc_count(species = 7590, verbose = FALSE))
+  expect_silent(c_all <- nc_count(species = 7590, show = "all", verbose = FALSE))
   expect_gt(sum(c_all$nrecords), sum(c_public$nrecords))
 
 })
