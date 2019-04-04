@@ -76,7 +76,7 @@ test_that("db_connect creates SQLite database file", {
 
   # Check connection and encoding
   expect_message(con <- db_connect(),
-                 "Database '.\\/naturecounts_2019-03-26.nc' does not exist") %>%
+                 "Database '.\\/naturecounts_[0-9-]{10}.nc' does not exist") %>%
     expect_is("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
@@ -87,7 +87,7 @@ test_that("db_connect creates SQLite database file", {
   DBI::dbDisconnect(con)
 
   expect_message(con <- db_connect(),
-                 "Connecting to database './naturecounts_2019-03-26.nc'") %>%
+                 "Database './naturecounts_[0-9-]{10}.nc' already exists") %>%
     expect_is("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
