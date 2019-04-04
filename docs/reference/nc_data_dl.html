@@ -75,31 +75,19 @@ vignette(&quot;filtering_data&quot;, package = &quot;naturecounts&quot;)." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+  <a href="../index.html">
+    <span class="fa fa-home"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/articles/mapping-observations.html">Mapping Observations</a>
-    </li>
-    <li>
-      <a href="../articles/articles/region.html">Getting data by region</a>
-    </li>
-    <li>
-      <a href="../articles/filtering_data.html">Filtering data</a>
-    </li>
-    <li>
-      <a href="../articles/species-codes.html">Species Codes</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../articles/index.html">Articles</a>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
@@ -134,13 +122,13 @@ In order to ease the load on the server, note that only <strong>three</strong> o
 <code>collections</code>, <code>species</code>, <code>years</code>, <code>doy</code>, <code>region</code>, and <code>site_type</code> can be
 used in any one request. See the vignette for filtering your data after
 download for more options:
-<code><a href='../articles/filtering_data.html'>vignette("filtering_data", package = "naturecounts")</a></code>.</p>
+<code>vignette("filtering_data", package = "naturecounts")</code>.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>nc_data_dl</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>years</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>doy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>site_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fields_set</span> <span class='kw'>=</span> <span class='st'>"minimum"</span>, <span class='kw'>fields</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>fields_set</span> <span class='kw'>=</span> <span class='st'>"minimum"</span>, <span class='kw'>fields</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>sql_db</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -187,9 +175,10 @@ See details</p></td>
 fields/columns to download. See details</p></td>
     </tr>
     <tr>
-      <th>token</th>
-      <td><p>Character vector. Authorization token, otherwise only public
-data is accessible</p></td>
+      <th>username</th>
+      <td><p>Character vector. Username for <a href='http://naturecounts.ca'>http://naturecounts.ca</a>. If
+provided, the user will be prompted for a password. If left NULL, only
+public collections will be returned.</p></td>
     </tr>
     <tr>
       <th>sql_db</th>
@@ -231,13 +220,24 @@ character vector specifying the exact fields/columns to return. See
     <p>Note that in all cases there are a set of fields/columns that are <em>always</em>
 returned, no matter what <code>fields_set</code> is used.</p>
     
+    <h2 class="hasAnchor" id="naturecounts-account"><a class="anchor" href="#naturecounts-account"></a>NatureCounts account</h2>
+
+    
+    <p>All public data is available without a username/password. However, to
+access private/semi-public projects/collections you must
+<a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a>
+for a free NatureCounts account and
+<a href='https://www.birdscanada.org/birdmon/default/projects.jsp'>register</a>
+for the projects you'd like to access.</p>
+    
     <h2 class="hasAnchor" id="species-ids-species-"><a class="anchor" href="#species-ids-species-"></a>Species ids (<code>species</code>)</h2>
 
     
     <p>Numeric species id codes can determined from the functions
 <code><a href='species_search.html'>species_search</a>()</code> or <code><a href='species_code_search.html'>species_code_search</a>()</code>. See
-also the vignette for more information
-<code><a href='../articles/species-codes.html'>vignette("species-codes", package = "naturecounts")</a></code>.</p>
+also the species codes
+(https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+for more information.</p>
     
     <h2 class="hasAnchor" id="day-of-year-doy-"><a class="anchor" href="#day-of-year-doy-"></a>Day of Year (<code>doy</code>)</h2>
 
@@ -257,15 +257,16 @@ subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 Regions (BCR) (see <code><a href='region_search.html'>region_search()</a></code> for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifyings the min/max longitude and min/max latitude (<code>bbox</code>). See the
-article on regional filtering for more detail:
-<a href='http://BirdStudiesCanada.github.io/naturecounts/articles/region.html'>http://BirdStudiesCanada.github.io/naturecounts/articles/region.html</a></p>
+article on regional filters
+(http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
+for more information.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># All observations part of the RCBIOTABASE collection</span>
-<span class='no'>rcbio</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='st'>"RCBIOTABASE"</span>)</div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
+<span class='no'>rcbio</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='st'>"RCBIOTABASE"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (RCBIOTABASE); fields_set (BMDE2.00-min)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
 #&gt; <span class='message'>1 RCBIOTABASE    12598</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 5000 / 12598</span></div><div class='input'>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 5000 / 12598</span></div><div class='output co'>#&gt; <span class='message'>    Records 5001 to 10000 / 12598</span></div><div class='output co'>#&gt; <span class='message'>    Records 10001 to 12598 / 12598</span></div><div class='input'>
 <span class='co'># Observations of black-capped chickadees from RCBIOTABASE collection in 2010</span>
 <span class='fu'><a href='species_search.html'>species_search</a></span>(<span class='st'>"black-capped chickadee"</span>) <span class='co'># Find the species_id</span></div><div class='output co'>#&gt;   species_id                           scientific_name
 #&gt; 1      14280                      Poecile atricapillus
@@ -282,14 +283,14 @@ article on regional filtering for more detail:
 #&gt; 2 Hybride Mésange de Caroline x M. à tête noire       BIRDS
 #&gt; 3        Mésange de Caroline ou M. à tête noire       BIRDS
 #&gt; 4    Hybride Mésange à tête noire x M. bicolore       BIRDS</div><div class='input'><span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='st'>"RCBIOTABASE"</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>,
-                   <span class='kw'>years</span> <span class='kw'>=</span> <span class='fl'>2010</span>)</div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
+                   <span class='kw'>years</span> <span class='kw'>=</span> <span class='fl'>2010</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (RCBIOTABASE); species (14280); fields_set (BMDE2.00-min); start_year (2010); end_year (2010)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
 #&gt; <span class='message'>1 RCBIOTABASE        7</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 7 / 7</span></div><div class='input'>
 <span class='co'># All public bcch observations since 2015</span>
-<span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>, <span class='kw'>years</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2015</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>Not all collections have data that match these filters ()</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
+<span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>, <span class='kw'>years</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2015</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; <span class='message'>Using filters: species (14280); fields_set (BMDE2.00-min); start_year (2015)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
 #&gt; <span class='message'>1 RCBIOTABASE        2</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2 / 2</span></div><div class='input'>
-<span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>, <span class='kw'>doy</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>200</span>, <span class='fl'>300</span>))</div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>Not all collections have data that match these filters ()</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
+<span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>, <span class='kw'>doy</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>200</span>, <span class='fl'>300</span>))</div><div class='output co'>#&gt; <span class='message'>Using filters: species (14280); fields_set (BMDE2.00-min); start_doy (200); end_doy (300)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
 #&gt; <span class='message'>1    ABATLAS1       55</span>
 #&gt; <span class='message'>2    ABATLAS2      565</span>
 #&gt; <span class='message'>3  ABBIRDRECS      223</span>
@@ -297,22 +298,22 @@ article on regional filtering for more detail:
 #&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 55 / 55</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 565 / 565</span></div><div class='output co'>#&gt; <span class='message'>  ABBIRDRECS</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 223 / 223</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 17 / 17</span></div><div class='input'>
 <span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>,
                    <span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>bbox</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='kw'>left</span> <span class='kw'>=</span> -<span class='fl'>145</span>, <span class='kw'>bottom</span> <span class='kw'>=</span> <span class='fl'>45</span>,
-                                          <span class='kw'>right</span> <span class='kw'>=</span> -<span class='fl'>100</span>, <span class='kw'>top</span> <span class='kw'>=</span> <span class='fl'>60</span>)))</div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>Not all collections have data that match these filters ()</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+                                          <span class='kw'>right</span> <span class='kw'>=</span> -<span class='fl'>100</span>, <span class='kw'>top</span> <span class='kw'>=</span> <span class='fl'>60</span>)))</div><div class='output co'>#&gt; <span class='message'>Using filters: species (14280); fields_set (BMDE2.00-min); bbox_left (-145); bbox_bottom (45); bbox_right (-100); bbox_top (60)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
 #&gt; <span class='message'>1   ABATLAS1     1314</span>
 #&gt; <span class='message'>2   ABATLAS2     3773</span>
 #&gt; <span class='message'>3 ABBIRDRECS     2931</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 1314 / 1314</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 3773 / 3773</span></div><div class='output co'>#&gt; <span class='message'>  ABBIRDRECS</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2931 / 2931</span></div><div class='input'>
 <span class='co'># All moose observations with public access</span>
 <span class='fu'><a href='species_search.html'>species_search</a></span>(<span class='st'>"moose"</span>)</div><div class='output co'>#&gt;   species_id scientific_name english_name french_name taxon_group
-#&gt; 1     133990     Alces alces        Moose        &lt;NA&gt;     MAMMALS</div><div class='input'><span class='no'>moose</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>133990</span>)</div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>Not all collections have data that match these filters ()</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
+#&gt; 1     133990     Alces alces        Moose        &lt;NA&gt;     MAMMALS</div><div class='input'><span class='no'>moose</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>133990</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (133990); fields_set (BMDE2.00-min)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
 #&gt; <span class='message'>1 RCBIOTABASE        2</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2 / 2</span></div><div class='input'>
 <span class='co'># Different fields/columns</span>
-<span class='no'>moose</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>133990</span>, <span class='kw'>fields_set</span> <span class='kw'>=</span> <span class='st'>"core"</span>)</div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>Not all collections have data that match these filters ()</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
+<span class='no'>moose</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>133990</span>, <span class='kw'>fields_set</span> <span class='kw'>=</span> <span class='st'>"core"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (133990); fields_set (BMDE2.00)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
 #&gt; <span class='message'>1 RCBIOTABASE        2</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2 / 2</span></div><div class='input'>
 <span class='no'>moose</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>133990</span>, <span class='kw'>fields_set</span> <span class='kw'>=</span> <span class='st'>"custom"</span>,
-                    <span class='kw'>fields</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Locality"</span>, <span class='st'>"AllSpeciesReported"</span>))</div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>Not all collections have data that match these filters ()</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
+                    <span class='kw'>fields</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Locality"</span>, <span class='st'>"AllSpeciesReported"</span>))</div><div class='output co'>#&gt; <span class='message'>Using filters: species (133990); fields_set (custom); fields (Locality, AllSpeciesReported)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>   collection nrecords</span>
 #&gt; <span class='message'>1 RCBIOTABASE        2</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2 / 2</span></div><div class='input'>
 </div></pre>
@@ -325,6 +326,8 @@ article on regional filtering for more detail:
       <li><a href="#value">Value</a></li>
 
       <li><a href="#data-fields-columns">Data Fields/Columns</a></li>
+
+      <li><a href="#naturecounts-account">NatureCounts account</a></li>
 
       <li><a href="#species-ids-species-">Species ids (<code>species</code>)</a></li>
 

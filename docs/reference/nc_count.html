@@ -73,31 +73,19 @@ returned." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+  <a href="../index.html">
+    <span class="fa fa-home"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/articles/mapping-observations.html">Mapping Observations</a>
-    </li>
-    <li>
-      <a href="../articles/articles/region.html">Getting data by region</a>
-    </li>
-    <li>
-      <a href="../articles/filtering_data.html">Filtering data</a>
-    </li>
-    <li>
-      <a href="../articles/species-codes.html">Species Codes</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../articles/index.html">Articles</a>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
@@ -136,7 +124,7 @@ returned.</p>
 
     <pre class="usage"><span class='fu'>nc_count</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>years</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>doy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>site_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>show</span> <span class='kw'>=</span> <span class='st'>"available"</span>,
-  <span class='kw'>token</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>username</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,9 +167,10 @@ all data sources. "available" only returns counts for data available
 (public or accessible with the token provided).</p></td>
     </tr>
     <tr>
-      <th>token</th>
-      <td><p>Character vector. Authorization token, otherwise only public
-data is accessible</p></td>
+      <th>username</th>
+      <td><p>Character vector. Username for <a href='http://naturecounts.ca'>http://naturecounts.ca</a>. If
+provided, the user will be prompted for a password. If left NULL, only
+public collections will be returned.</p></td>
     </tr>
     </table>
     
@@ -189,13 +178,24 @@ data is accessible</p></td>
 
     <p>Data frame</p>
     
+    <h2 class="hasAnchor" id="naturecounts-account"><a class="anchor" href="#naturecounts-account"></a>NatureCounts account</h2>
+
+    
+    <p>All public data is available without a username/password. However, to
+access private/semi-public projects/collections you must
+<a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a>
+for a free NatureCounts account and
+<a href='https://www.birdscanada.org/birdmon/default/projects.jsp'>register</a>
+for the projects you'd like to access.</p>
+    
     <h2 class="hasAnchor" id="species-ids-species-"><a class="anchor" href="#species-ids-species-"></a>Species ids (<code>species</code>)</h2>
 
     
     <p>Numeric species id codes can determined from the functions
 <code><a href='species_search.html'>species_search</a>()</code> or <code><a href='species_code_search.html'>species_code_search</a>()</code>. See
-also the vignette for more information
-<code><a href='../articles/species-codes.html'>vignette("species-codes", package = "naturecounts")</a></code>.</p>
+also the species codes
+(https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+for more information.</p>
     
     <h2 class="hasAnchor" id="day-of-year-doy-"><a class="anchor" href="#day-of-year-doy-"></a>Day of Year (<code>doy</code>)</h2>
 
@@ -215,8 +215,9 @@ subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 Regions (BCR) (see <code><a href='region_search.html'>region_search()</a></code> for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifyings the min/max longitude and min/max latitude (<code>bbox</code>). See the
-article on regional filtering for more detail:
-<a href='http://BirdStudiesCanada.github.io/naturecounts/articles/region.html'>http://BirdStudiesCanada.github.io/naturecounts/articles/region.html</a></p>
+article on regional filters
+(http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
+for more information.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -227,23 +228,21 @@ article on regional filtering for more detail:
 #&gt; 2     ABATLAS2   201398
 #&gt; 3   ABBIRDRECS   357264
 #&gt; 4        BGRMM      476
-#&gt; 5   EBUTTERFLY    34473
-#&gt; 6      IMMP_A2       24
-#&gt; 7      IMMP_BW       19
-#&gt; 8         IMQC      761
-#&gt; 9         MLMP      425
-#&gt; 10          MM     4343
-#&gt; 11        PMMM        5
-#&gt; 12 RCBIOTABASE    12598</div><div class='input'>
+#&gt; 5      IMMP_A2       24
+#&gt; 6      IMMP_BW       19
+#&gt; 7         IMQC      761
+#&gt; 8         MLMP      425
+#&gt; 9           MM     4343
+#&gt; 10        PMMM        5
+#&gt; 11 RCBIOTABASE    12598</div><div class='input'>
 # Count publicly available records for Manitoba, Canada
-</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>statprov</span> <span class='kw'>=</span> <span class='st'>"MB"</span>))</div><div class='output co'>#&gt;   collection nrecords
+</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>statprov</span> <span class='kw'>=</span> <span class='st'>"MB"</span>))</div><div class='output co'>#&gt; <span class='message'>Using filters: statprov (MB)</span></div><div class='output co'>#&gt;   collection nrecords
 #&gt; 1 ABBIRDRECS      357
-#&gt; 2 EBUTTERFLY      347
-#&gt; 3       IMQC       26
-#&gt; 4         MM       53</div><div class='input'>
+#&gt; 2       IMQC       26
+#&gt; 3         MM       53</div><div class='input'>
 # Count all records for all collections you have access to
 </div><span class='co'># NOT RUN {</span>
-<span class='fu'>nc_count</span>(<span class='kw'>token</span> <span class='kw'>=</span> <span class='no'>YOUR_TOKEN</span>)
+<span class='fu'>nc_count</span>(<span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"YOUR_USERNAME"</span>)
 <span class='co'># }</span><div class='input'>
 <span class='co'># Count all public records with barred owls in Ontario</span>
 <span class='fu'><a href='species_search.html'>species_search</a></span>(<span class='st'>"barred owl"</span>)</div><div class='output co'>#&gt;    species_id                            scientific_name
@@ -290,11 +289,11 @@ article on regional filtering for more detail:
 #&gt; 11 Égothèle de Bennett [bennettii ou wiedenfeldi]       BIRDS
 #&gt; 12                Égothèle de Bennett (terborghi)       BIRDS
 #&gt; 13                 Égothèle de Bennett (plumifer)       BIRDS
-#&gt; 14                            Égothèle de Bennett       BIRDS</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>7590</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>statprov</span> <span class='kw'>=</span> <span class='st'>"ON"</span>))</div><div class='output co'>#&gt;    collection nrecords
+#&gt; 14                            Égothèle de Bennett       BIRDS</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>7590</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>statprov</span> <span class='kw'>=</span> <span class='st'>"ON"</span>))</div><div class='output co'>#&gt; <span class='message'>Using filters: species (7590); statprov (ON)</span></div><div class='output co'>#&gt;    collection nrecords
 #&gt; 1 RCBIOTABASE       44</div><div class='input'>
 # Count records available in the Christmas Bird Count and Breeding Bird
 # Survey collections (regardless of permissions)
-</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"CBC"</span>, <span class='st'>"BBS"</span>), <span class='kw'>show</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</div><div class='output co'>#&gt;   collection nrecords
+</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"CBC"</span>, <span class='st'>"BBS"</span>), <span class='kw'>show</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (CBC, BBS)</span></div><div class='output co'>#&gt;   collection nrecords
 #&gt; 1        BBS  5735895
 #&gt; 2        CBC  7570427</div><div class='input'>
 </div></pre>
@@ -305,6 +304,8 @@ article on regional filtering for more detail:
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#naturecounts-account">NatureCounts account</a></li>
 
       <li><a href="#species-ids-species-">Species ids (<code>species</code>)</a></li>
 

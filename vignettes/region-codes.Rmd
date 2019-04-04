@@ -1,0 +1,168 @@
+---
+title: "Region Codes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{"Region Codes"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+library(here)
+options(width = 100)
+knitr::opts_chunk$set(out.width = "60%", fig.width = 6, fig.asp = 1, fig.align = "center")
+```
+
+```{r}
+library(naturecounts)
+```
+
+In the main data download functions for `naturecounts`, `nc_data_dl()` and `nc_count()`, you have the option of filtering data by `region`. In this article we will explore the various ways of specifying regional filters.
+
+For more details regarding spatial limits to regions, see the articles:
+
+- [Mapping observations](https://birdstudiescanada.github.io/naturecounts/articles/articles/mapping-observations.html)
+- [IBAs and BCRs](region-areas.html)
+- [Using spatial data to filter observations](region-spatial.html)
+
+## In short
+
+`region` must be a named list with **one** of the following:
+
+- `country` - Country code (e.g., `CA` for Canada)
+- `statprov` - State/province code (e.g., `MB` for Manitoba)
+- `subnational2` - Subnational (type 2) code (e.g., `CA.MB.07` for the Brandon Area)
+- `iba` - Important Bird Areas (IBA) code (e.g., `AB001` for Beaverhill Lake in Alberta)
+- `bcr` - [Bird Conservation Regions](https://www.birdscanada.org/research/gislab/index.jsp?targetpg=bcr&targetpg=bcr) (e.g., `2` for Western Alaska)
+- `utm_squares` - UTM square code (e.g., `10UFE96` for a grid in Alberta)
+- `bbox` - Bounding box coordinates (e.g., `c(left = -101.097223, bottom = 50.494717, right = -99.511239, top = 51.027557)` for a box containing Riding Mountain National Park in Manitoba)
+
+To use the `region` argument:
+
+```{r}
+nc_count(region = list(statprov = "NB"))
+```
+
+
+## In Detail - Codes
+
+### Country
+
+**Search by name** (English or French)
+```{r country}
+region_search("États-Unis", type = "country")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_country_codes()
+```
+
+**Use the resulting code(s)**
+```{r, eval = FALSE}
+nc_count(region = list(country = c("US", "CA")))
+```
+
+
+### State/Province
+
+**Search by name** (English, French, or Spanish)
+```{r statprov}
+region_search("Distrito de Colombia", type = "statprov")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_statprov_codes()
+```
+
+**Use the resulting code(s)**
+```{r}
+nc_count(region = list(statprov = c("DC", "MB")))
+```
+
+
+### Subnational regions (type 2)
+
+**Search by name**  
+Language depends on location: 
+- Mexico = Spanish
+- USA = English
+- Quebec = French
+- Rest of Canada = English
+
+```{r subnational}
+region_search("Montreal", type = "subnational2")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_subnational2_codes()
+```
+
+**Use the resulting code(s)**
+```{r}
+nc_count(region = list(subnational2 = c("CA-QC-MR", "CA-ON-TO")))
+```
+
+
+### Important Bird Areas (IBA)
+
+- These are Canadian designations
+
+**Search by name** (English or French)
+
+```{r iba}
+region_search("oak hammock", type = "iba")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_iba_codes()
+```
+
+**Use the resulting code(s)**
+```{r}
+nc_count(region = list(iba = c("MB010", "AB011")))
+```
+
+### Bird Conservation Regions (BCR)
+
+**Search by name** (English, French, or Spanish)
+
+```{r bcr}
+region_search("rainforest", type = "bcr")
+```
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_bcr_codes()
+```
+
+**Use the resulting code(s)**
+```{r}
+nc_count(region = list(bcr = c(5, 2)))
+```
+
+### UTM Squares
+
+**Browse the code list**
+```{r, eval = FALSE}
+meta_utm_squares()
+```
+
+**Use the resulting code(s)**
+```{r}
+nc_count(region = list(utm_squares = "18TUR35"))
+```
+
+### Bounding Box
+
+Bounding box reflects latitude and longitude limits.
+
+**Use the resulting code(s)**
+```{r}
+nc_count(region = list(bbox = c(left = -125, bottom = 45, 
+                                right = -100, top = 50)))
+```

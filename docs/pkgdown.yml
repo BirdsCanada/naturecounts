@@ -3,7 +3,9 @@ pkgdown: 1.3.0
 pkgdown_sha: ~
 articles:
   mapping-observations: articles/mapping-observations.html
-  region: articles/region.html
-  filtering_data: filtering_data.html
+  filtering-data: filtering-data.html
+  region-areas: region-areas.html
+  region-codes: region-codes.html
+  region-spatial: region-spatial.html
   species-codes: species-codes.html
 

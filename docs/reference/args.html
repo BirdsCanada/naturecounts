@@ -70,31 +70,19 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+  <a href="../index.html">
+    <span class="fa fa-home"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/articles/mapping-observations.html">Mapping Observations</a>
-    </li>
-    <li>
-      <a href="../articles/articles/region.html">Getting data by region</a>
-    </li>
-    <li>
-      <a href="../articles/filtering_data.html">Filtering data</a>
-    </li>
-    <li>
-      <a href="../articles/species-codes.html">Species Codes</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../articles/index.html">Articles</a>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
@@ -164,19 +152,31 @@ See details</p></td>
       <td><p>Character vector. The type of site to return (e.g., <code>IBA</code>).</p></td>
     </tr>
     <tr>
-      <th>token</th>
-      <td><p>Character vector. Authorization token, otherwise only public
-data is accessible</p></td>
+      <th>username</th>
+      <td><p>Character vector. Username for <a href='http://naturecounts.ca'>http://naturecounts.ca</a>. If
+provided, the user will be prompted for a password. If left NULL, only
+public collections will be returned.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="naturecounts-account"><a class="anchor" href="#naturecounts-account"></a>NatureCounts account</h2>
+
+    
+    <p>All public data is available without a username/password. However, to
+access private/semi-public projects/collections you must
+<a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a>
+for a free NatureCounts account and
+<a href='https://www.birdscanada.org/birdmon/default/projects.jsp'>register</a>
+for the projects you'd like to access.</p>
     
     <h2 class="hasAnchor" id="species-ids-species-"><a class="anchor" href="#species-ids-species-"></a>Species ids (<code>species</code>)</h2>
 
     
     <p>Numeric species id codes can determined from the functions
 <code><a href='species_search.html'>species_search</a>()</code> or <code><a href='species_code_search.html'>species_code_search</a>()</code>. See
-also the vignette for more information
-<code><a href='../articles/species-codes.html'>vignette("species-codes", package = "naturecounts")</a></code>.</p>
+also the species codes
+(https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+for more information.</p>
     
     <h2 class="hasAnchor" id="day-of-year-doy-"><a class="anchor" href="#day-of-year-doy-"></a>Day of Year (<code>doy</code>)</h2>
 
@@ -196,8 +196,9 @@ subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 Regions (BCR) (see <code><a href='region_search.html'>region_search()</a></code> for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifyings the min/max longitude and min/max latitude (<code>bbox</code>). See the
-article on regional filtering for more detail:
-<a href='http://BirdStudiesCanada.github.io/naturecounts/articles/region.html'>http://BirdStudiesCanada.github.io/naturecounts/articles/region.html</a></p>
+article on regional filters
+(http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
+for more information.</p>
     
 
   </div>
@@ -206,6 +207,8 @@ article on regional filtering for more detail:
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#naturecounts-account">NatureCounts account</a></li>
+
       <li><a href="#species-ids-species-">Species ids (<code>species</code>)</a></li>
 
       <li><a href="#day-of-year-doy-">Day of Year (<code>doy</code>)</a></li>

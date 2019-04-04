@@ -71,31 +71,19 @@ based on the various alphanumeric codes used by different authorities." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+  <a href="../index.html">
+    <span class="fa fa-home"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/articles/mapping-observations.html">Mapping Observations</a>
-    </li>
-    <li>
-      <a href="../articles/articles/region.html">Getting data by region</a>
-    </li>
-    <li>
-      <a href="../articles/filtering_data.html">Filtering data</a>
-    </li>
-    <li>
-      <a href="../articles/species-codes.html">Species Codes</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../articles/index.html">Articles</a>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
@@ -157,6 +145,10 @@ exact species indicated by the code.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame of numeric species id codes and names</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Species ids returned reflect both species and sub-species levels.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -3580,45 +3572,45 @@ exact species indicated by the code.</p></td>
 <span class='co'># Use the Christmas Bird Count authority</span>
 <span class='fu'>species_code_search</span>(<span class='fl'>11609</span>, <span class='kw'>authority</span> <span class='kw'>=</span> <span class='st'>"CBC"</span>)</div><div class='output co'>#&gt;   species_id   CBC                        scientific_name
 #&gt; 1      16610 11609                     Setophaga coronata
-#&gt; 2      16630 11611            Setophaga coronata auduboni
-#&gt; 3      16620 11610            Setophaga coronata coronata
+#&gt; 2      16620 11610            Setophaga coronata coronata
+#&gt; 3      16630 11611            Setophaga coronata auduboni
 #&gt; 4      40770 11612 Setophaga coronata coronata x auduboni
 #&gt; 5      40771 11613          Setophaga coronata nigrifrons
 #&gt; 6      40772 11614            Setophaga coronata goldmani
 #&gt;                                 english_name
 #&gt; 1                      Yellow-rumped Warbler
-#&gt; 2          Yellow-rumped Warbler (Audubon's)
-#&gt; 3             Yellow-rumped Warbler (Myrtle)
+#&gt; 2             Yellow-rumped Warbler (Myrtle)
+#&gt; 3          Yellow-rumped Warbler (Audubon's)
 #&gt; 4 Yellow-rumped Warbler (Myrtle x Audubon's)
 #&gt; 5        Yellow-rumped Warbler (West Mexico)
 #&gt; 6          Yellow-rumped Warbler (Goldman's)
 #&gt;                                       french_name
 #&gt; 1                       Paruline à croupion jaune
-#&gt; 2            Paruline à croupion jaune (auduboni)
-#&gt; 3            Paruline à croupion jaune (coronata)
+#&gt; 2            Paruline à croupion jaune (coronata)
+#&gt; 3            Paruline à croupion jaune (auduboni)
 #&gt; 4 Paruline à croupion jaune (coronata x auduboni)
 #&gt; 5          Paruline à croupion jaune (nigrifrons)
 #&gt; 6            Paruline à croupion jaune (goldmani)</div><div class='input'>
 <span class='co'># Look in more than one authority (note that the code only needs to match on</span>
 <span class='co'># of the authorities)</span>
 <span class='fu'>species_code_search</span>(<span class='st'>"MYWA"</span>, <span class='kw'>authority</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"BCMA"</span>, <span class='st'>"CBC"</span>))</div><div class='output co'>#&gt;   species_id BCMA   CBC                        scientific_name
-#&gt; 1      16610 YRWA 11609                     Setophaga coronata
-#&gt; 2      16630 AUWA 11611            Setophaga coronata auduboni
-#&gt; 3      16620 MYWA 11610            Setophaga coronata coronata
+#&gt; 1      16630 AUWA 11611            Setophaga coronata auduboni
+#&gt; 2      16620 MYWA 11610            Setophaga coronata coronata
+#&gt; 3      16610 YRWA 11609                     Setophaga coronata
 #&gt; 4      40770 &lt;NA&gt; 11612 Setophaga coronata coronata x auduboni
 #&gt; 5      40771 &lt;NA&gt; 11613          Setophaga coronata nigrifrons
 #&gt; 6      40772 &lt;NA&gt; 11614            Setophaga coronata goldmani
 #&gt;                                 english_name
-#&gt; 1                      Yellow-rumped Warbler
-#&gt; 2          Yellow-rumped Warbler (Audubon's)
-#&gt; 3             Yellow-rumped Warbler (Myrtle)
+#&gt; 1          Yellow-rumped Warbler (Audubon's)
+#&gt; 2             Yellow-rumped Warbler (Myrtle)
+#&gt; 3                      Yellow-rumped Warbler
 #&gt; 4 Yellow-rumped Warbler (Myrtle x Audubon's)
 #&gt; 5        Yellow-rumped Warbler (West Mexico)
 #&gt; 6          Yellow-rumped Warbler (Goldman's)
 #&gt;                                       french_name
-#&gt; 1                       Paruline à croupion jaune
-#&gt; 2            Paruline à croupion jaune (auduboni)
-#&gt; 3            Paruline à croupion jaune (coronata)
+#&gt; 1            Paruline à croupion jaune (auduboni)
+#&gt; 2            Paruline à croupion jaune (coronata)
+#&gt; 3                       Paruline à croupion jaune
 #&gt; 4 Paruline à croupion jaune (coronata x auduboni)
 #&gt; 5          Paruline à croupion jaune (nigrifrons)
 #&gt; 6            Paruline à croupion jaune (goldmani)</div><div class='input'>
@@ -3630,6 +3622,8 @@ exact species indicated by the code.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

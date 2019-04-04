@@ -67,31 +67,19 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+  <a href="../index.html">
+    <span class="fa fa-home"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/articles/mapping-observations.html">Mapping Observations</a>
-    </li>
-    <li>
-      <a href="../articles/articles/region.html">Getting data by region</a>
-    </li>
-    <li>
-      <a href="../articles/filtering_data.html">Filtering data</a>
-    </li>
-    <li>
-      <a href="../articles/species-codes.html">Species Codes</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../articles/index.html">Articles</a>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
@@ -128,29 +116,11 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-accessing-data" class="hasAnchor"><a href="#section-accessing-data" class="anchor"></a>Accessing Data</h2>
+          <p class="section-desc"><p>Main functions of <code>naturecounts</code> for accessing data or counts or updating local metadata from the NatureCounts server</p></p>
         </th>
       </tr>
       <tr>
-        
-        <td>
-          <p><code><a href="bcch.html">bcch</a></code> </p>
-        </td>
-        <td><p>Example black-capped chickadee data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bdow.html">bdow</a></code> </p>
-        </td>
-        <td><p>Example barred owl data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="meta.html">meta_country_codes()</a></code> <code><a href="meta.html">meta_statprov_codes()</a></code> <code><a href="meta.html">meta_subnational2_codes()</a></code> <code><a href="meta.html">meta_iba_codes()</a></code> <code><a href="meta.html">meta_bcr_codes()</a></code> <code><a href="meta.html">meta_utm_squares()</a></code> <code><a href="meta.html">meta_species_authority()</a></code> <code><a href="meta.html">meta_species_codes()</a></code> <code><a href="meta.html">meta_species_taxonomy()</a></code> <code><a href="meta.html">meta_collections()</a></code> <code><a href="meta.html">meta_breeding_codes()</a></code> <code><a href="meta.html">meta_project_protocols()</a></code> <code><a href="meta.html">meta_projects()</a></code> <code><a href="meta.html">meta_protocol_types()</a></code> <code><a href="meta.html">meta_bmde_versions()</a></code> <code><a href="meta.html">meta_bmde_fields()</a></code> </p>
-        </td>
-        <td><p>Metadata</p></td>
-      </tr><tr>
         
         <td>
           <p><code><a href="nc_count.html">nc_count()</a></code> </p>
@@ -168,7 +138,29 @@
           <p><code><a href="nc_metadata.html">nc_metadata()</a></code> </p>
         </td>
         <td><p>Update NatureCounts metadata files</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-metadata" class="hasAnchor"><a href="#section-metadata" class="anchor"></a>Metadata</h2>
+          <p class="section-desc"><p>Functions for returning metadata</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="meta.html">meta_country_codes()</a></code> <code><a href="meta.html">meta_statprov_codes()</a></code> <code><a href="meta.html">meta_subnational2_codes()</a></code> <code><a href="meta.html">meta_iba_codes()</a></code> <code><a href="meta.html">meta_bcr_codes()</a></code> <code><a href="meta.html">meta_utm_squares()</a></code> <code><a href="meta.html">meta_species_authority()</a></code> <code><a href="meta.html">meta_species_codes()</a></code> <code><a href="meta.html">meta_species_taxonomy()</a></code> <code><a href="meta.html">meta_collections()</a></code> <code><a href="meta.html">meta_breeding_codes()</a></code> <code><a href="meta.html">meta_project_protocols()</a></code> <code><a href="meta.html">meta_projects()</a></code> <code><a href="meta.html">meta_protocol_types()</a></code> <code><a href="meta.html">meta_bmde_versions()</a></code> <code><a href="meta.html">meta_bmde_fields()</a></code> </p>
+        </td>
+        <td><p>Metadata</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-searching-through-metadata" class="hasAnchor"><a href="#section-searching-through-metadata" class="anchor"></a>Searching through Metadata</h2>
+          <p class="section-desc"><p>Functions for searching through metadata</p></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
           <p><code><a href="region_search.html">region_search()</a></code> </p>
@@ -187,6 +179,40 @@
         </td>
         <td><p>Find species codes</p></td>
       </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-helper-functions" class="hasAnchor"><a href="#section-helper-functions" class="anchor"></a>Helper functions</h2>
+          <p class="section-desc"><p>Functions for formating, cleaning or transforming downloaded data</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="format_dates.html">format_dates()</a></code> </p>
+        </td>
+        <td><p>Add date and day-of-year field/columns to data</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data" class="hasAnchor"><a href="#section-data" class="anchor"></a>Data</h2>
+          <p class="section-desc"><p>Included example data sets</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="bcch.html">bcch</a></code> </p>
+        </td>
+        <td><p>Example black-capped chickadee data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="bdow.html">bdow</a></code> </p>
+        </td>
+        <td><p>Example barred owl data</p></td>
+      </tr>
     </tbody>
     </table>
   </div>
@@ -194,7 +220,11 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-accessing-data">Accessing Data</a></li>
+      <li><a href="#section-metadata">Metadata</a></li>
+      <li><a href="#section-searching-through-metadata">Searching through Metadata</a></li>
+      <li><a href="#section-helper-functions">Helper functions</a></li>
+      <li><a href="#section-data">Data</a></li>
     </ul>
   </div>
 </div>

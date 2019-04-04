@@ -52,6 +52,8 @@ test_that("Data download arguments", {
 })
 
 test_that("Data filters work as expected", {
+
+  # single collection/species/year/
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = 7590, years = 2000,
                                 verbose = FALSE))
@@ -59,7 +61,7 @@ test_that("Data filters work as expected", {
   expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
   expect_equal(max(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
 
-
+  # mult species/year
   expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = c(7590, 14280),
                                 years = c(2003, 2004),
@@ -68,6 +70,7 @@ test_that("Data filters work as expected", {
   expect_equal(min(as.numeric(d2$survey_year), na.rm = TRUE), 2003)
   expect_equal(max(as.numeric(d2$survey_year), na.rm = TRUE), 2004)
 
+  # fields set
   expect_silent(d3 <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 7590, years = 2000,
                                  fields_set = "core",
@@ -75,6 +78,7 @@ test_that("Data filters work as expected", {
   expect_equal(nrow(d1), nrow(d3))
   expect_gt(ncol(d3), ncol(d1))
 
+  # custom fields
   expect_silent(d4 <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 7590, years = 2000,
                                  fields_set = "custom", fields = "Locality",
@@ -82,6 +86,13 @@ test_that("Data filters work as expected", {
   expect_equal(nrow(d1), nrow(d4))
   expect_lt(ncol(d4), ncol(d1))
   expect_true("Locality" %in% names(d4))
+})
+
+test_that("Data filters Day of year", {
+  # Summer
+  expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
+                                 doy = c(120, 140),
+                                 verbose = FALSE))
 
 })
 

@@ -38,20 +38,20 @@ species_search("mesange a tete noire")
 These species ids can then be used to download data either directly:
 
 ```{r}
-moose <- nc_data_dl(collections = "all", species = 133990)
+moose <- nc_data_dl(collections = "all", species = 133990, verbose = FALSE)
 ```
 
 Or by saving and referencing the data frame:
 ```{r}
 moose_id <- species_search("moose")$species_id
-moose <- nc_data_dl(collections = "all", species = moose_id)
+moose <- nc_data_dl(collections = "all", species = moose_id, verbose = FALSE)
 ```
 
 This might be considered overkill for a single species, but is useful when you want to download data for multiple species:
 
 ```{r}
 chickadee_ids <- species_search("chickadee")$species_id
-chickadees <- nc_data_dl(collections = "all", species = chickadee_ids)
+chickadees <- nc_data_dl(collections = "all", species = chickadee_ids, verbose = FALSE)
 ```
 
 ## Searching by alphanumeric code
@@ -135,12 +135,14 @@ Now we can search for the family
 ```{r}
 mice_ids <- filter(all, family_name == "Muridae")
 head(mice_ids)
+length(mice_ids$species_id)
 ```
 
-Finally we can download all observations of these species, by passing the `species_id`s to the `nc_data_dl()` function
+So there are a **lot** of muridae species! But probably not that many in the actual database. We can download all available observations of these species, by passing the `species_id`s to the `nc_data_dl()` function.
 
-```{r, eval = FALSE}
-mice <- nc_data_dl(species = mice_ids$species_id, verbose = TRUE)
+```{r}
+mice <- nc_data_dl(species = mice_ids$species_id, verbose = FALSE)
+mice
 ```
 
-
+Only 2 observations!

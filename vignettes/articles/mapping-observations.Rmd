@@ -5,9 +5,12 @@ output: rmarkdown::html_vignette
 ---
 
 ```{r setup, include = FALSE}
+library(here)
 ```
 
-In this article we'll go walk through how to create various types of maps of the observations downloaded with `naturecounts` to get a sence of the spatial distribution.
+In this article we'll walk through how to create various types of maps of the observations downloaded with `naturecounts` to get a sense of the spatial distribution.
+
+## Setup
 
 To do so we're going to use the following packages:
 
@@ -17,15 +20,17 @@ library(sf)
 library(rnaturalearth)
 library(ggmap)
 library(dplyr)
+library(mapview)
 ```
 
 First we'll use download some data:
 
-```{r, cache = TRUE}
+```{r}
 barred_owls <- nc_data_dl(species = 7590, region = list(statprov = "AB"))
 head(barred_owls)
 ```
 
+## Simple Maps
 The quickest way to look at the spatial distribution is probably to use Stamen maps through the `ggmap` package.
 
 First let's get an idea of how many distinct points there are (often multiple observations are recorded for the same location).
@@ -34,38 +39,171 @@ nrow(barred_owls)
 
 select(barred_owls, longitude, latitude) %>%
   distinct() %>%
-  count()
+  nrow()
 ```
 
-Next let's convert our data to spatial data so we can extrac the spatial extent. Note that we're using CRS 4326 because that's the CRS for GPS lat/lon data.
+So we have `r nrow(unique(barred_owls[, c("longitude", "latitude")]))` sites for `r nrow(barred_owls)` observations.
+
+Next let's convert our data to spatial data so we can extract the spatial extent. Note that we're using CRS EPSG code of 4326 because that's reflects unprojected, GPS data in lat/lon.
 ```{r}
-barred_owls_sf <- st_as_sf(barred_owls, coords = c("longitude", "latitude"), crs = 4326)
+barred_owls_sf <- st_as_sf(barred_owls, 
+                           coords = c("longitude", "latitude"), crs = 4326)
+```
+
+We can extract the spatial extent (**b**ounding **box**) with the `st_bbox()` function.
+
+```{r}
 st_bbox(barred_owls_sf)
 ```
 
-So we have 259 sites for 1420 observations, lets take a look at the distribution. First we get the baselayer map.
+Now we're ready to make a map of the distribution of observations. First we get the baselayer map.
 ```{r}
 map <- get_stamenmap(bbox = as.numeric(st_bbox(barred_owls_sf)), zoom = 5)
 ```
 
-Now we can add our observations. Note that for ggmap, we'll use non-sf data frame.
+Now we can add our observations. Note that for `ggmap`, we'll use non-sf data frame.
 ```{r}
 ggmap(map) + 
   geom_point(data = barred_owls, aes(x = longitude, y = latitude))
 ```
 
-Let's count our observations for each site
+Let's count our observations for each site.
 ```{r}
 ggmap(map) + 
   geom_count(data = barred_owls, aes(x = longitude, y = latitude))
 ```
 
-If we want to get fancy we can also create interactive maps using the `leaflet` or `mapview` packages.
-
+### Interactive Maps
+If we want to get fancy we can also create interactive maps using the `mapview` packages (see also the [`leaflet` for R package](https://rstudio.github.io/leaflet/)).
 ```{r}
-library(mapview)
-
-mapview(barred_owls_sf, zcol = "survey_year", at = seq(1965, 2005, by = 10))
-
+mapview(barred_owls_sf, zcol = "survey_year", at = seq(1965, 2005, by = 10),
+        map.types = "Esri.WorldImagery")
 ```
 
+### More Complex Maps
+
+For more complex, or detailed maps, we can use a variety of spatial data files to layer our data over maps of the area.
+
+For this we'll get some outlines of Canada and it's Provinces and Territories from `rnaturalearth`.
+
+```{r}
+canada <- ne_states(country = "canada", returnclass = "sf") %>%
+  st_transform(3347)
+
+ggplot() +
+  theme_bw() +
+  geom_sf(data = canada)
+```
+
+
+Let's add our observations (note that the data are transformed to match the projection of the first layer, here the `canada` data).
+```{r}
+ggplot() +
+  theme_bw() +
+  geom_sf(data = canada) +
+  geom_sf(data = barred_owls_sf, size = 0.5)
+```
+
+We can also focus on Alberta
+
+```{r}
+ab <- filter(canada, name == "Alberta")
+
+ggplot() +
+  theme_bw() +
+  geom_sf(data = ab) +
+  geom_sf(data = barred_owls_sf, size = 0.5)
+```
+
+Perhaps we should see how many of these observations were made in parks. 
+
+First we'll download and extract the Park shapefiles available from the [Alberta Parks](https://www.albertaparks.ca/albertaparksca/library/downloadable-data-sets/) website.
+
+```{r, echo = FALSE, eval = !file.exists("vignettes/articles/article_files/Parks_Protected_Areas_Alberta.shp")}
+# Run if don't have shapefile
+download.file(url = "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip",
+              destfile = here("vignettes/articles/article_files/alberta_parks.zip"))
+unzip(here("vignettes/articles/article_files/alberta_parks.zip"), 
+      exdir = here("vignettes/articles/article_files/"))
+```
+
+```{r, eval = FALSE}
+url <- "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip"
+download.file(url = url)
+unzip("parks_and_protected_areas_alberta.zip")
+
+parks <- st_read("Parks_Protected_Areas_Alberta.shp")
+```
+
+```{r echo = FALSE}
+parks <- st_read(here("vignettes/articles/article_files/Parks_Protected_Areas_Alberta.shp"))
+```
+
+Add this layer to our plot.
+
+```{r}
+ggplot() +
+  theme_bw() +
+  geom_sf(data = ab) +
+  geom_sf(data = parks, colour = "darkgreen", fill = "forestgreen") +
+  geom_sf(data = barred_owls_sf, size = 0.5)
+```
+
+Well it's actually a bit difficult to tell, there are lots of small parks! 
+
+To solve this problem, we can merge our observations with the parks and plot those inside parks separately from those outside parks.
+
+First we'll transform our observation data to match the CRS of `parks`, then we'll join the park information to our observations, based on whether the observations overlap a park polygon (by default this is a left join), and finally we'll create a new column `outside_park` that is a category for out or in the park, based on whether the observation was joined to a park name (`OC_NAME`).
+
+```{r}
+barred_owls_sf <- barred_owls_sf %>%
+  st_transform(st_crs(parks)) %>%
+  st_join(parks) %>%
+  mutate(outside_park = if_else(is.na(OC_NAME), "Outside Park", "Inside Park"))
+```
+
+And now we can see that there are quite a few, if not more, observations outside of parks than in.
+```{r}
+ggplot() +
+  theme_bw() +
+  geom_sf(data = ab) +
+  geom_sf(data = parks, colour = "darkgreen", fill = "forestgreen") +
+  geom_sf(data = barred_owls_sf, size = 1) +
+  facet_wrap(~outside_park)
+```
+
+We might also be interested in observations over time.
+
+First we'll bin our yearly observations
+```{r}
+barred_owls_sf <- mutate(barred_owls_sf, 
+                         years = cut(survey_year, 
+                                     breaks = seq(1960, 2010, 10), 
+                                     labels = seq(1960, 2000, 10), right = FALSE))
+```
+
+We'll also want to see how many sample years there are per decade.
+```{r}
+years <- barred_owls_sf %>%
+  group_by(years) %>%
+  summarize(n = length(unique(survey_year)))
+```
+
+
+Now we can see how Barred Owl observations change over the years
+
+```{r}
+ggplot() +
+  theme_bw() +
+  geom_sf(data = ab) +
+  geom_sf(data = parks, colour = "darkgreen", fill = "forestgreen") +
+  geom_sf(data = barred_owls_sf, size = 1.5) +
+  geom_sf_text(data = years, x = 4427134, y = 2965275, hjust = 0, vjust = 1, 
+               aes(label = paste0("n = ", n))) +
+  facet_wrap(~years)
+```
+
+## See Also
+
+- [Using spatial data to filter observations](region_spatial.html)
+- [Exploring regional filters](region_areas.html)
