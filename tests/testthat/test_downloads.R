@@ -91,9 +91,20 @@ test_that("Data filters work as expected", {
 test_that("Data filters Day of year", {
   # Summer
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
+                                 species = 15770,
                                  doy = c(120, 140),
                                  verbose = FALSE))
+  expect_silent(d1 <- format_dates(d1))
+  expect_gte(min(d1$doy), 120)
+  expect_lte(max(d1$doy), 140)
 
+  # winter
+  # expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
+  #                                species = 15770,
+  #                                verbose = TRUE))
+  # expect_silent(d1 <- format_dates(d1))
+  # expect_gte(min(d1$doy), 120)
+  # expect_lte(max(d1$doy), 140)
 })
 
 test_that("Pagination", {
