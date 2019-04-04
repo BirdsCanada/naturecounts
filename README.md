@@ -131,7 +131,7 @@ the following articles for more information on these filters:
 
   - Collections
   - [Species
-    Codes](https://birdstudiescanada.github.io/naturecounts/docs/articles/species-codes.html)
+    Codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
   - [Regional
     Codes](https://birdstudiescanada.github.io/naturecounts/articles/region-codes.html)
   - [IBAs and BCRs
@@ -146,4 +146,5 @@ data](https://birdstudiescanada.github.io/naturecounts/articles/filtering-data.h
 
 NatureCounts includes a great deal of metadata which can be accessed
 through the functions with the `meta_` prefix. See the [Meta
-Documentation](reference/meta.html) for specifics.
+Documentation](https://birdstudiescanada.github.io/naturecounts/reference/meta.html)
+for specifics.

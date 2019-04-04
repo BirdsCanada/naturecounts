@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
-Access and download data on plant and animal populations from various databases through NatureCounts, a service managed by Bird Studies Canada. 
+Access and download data on plant and animal populations from various databases through NatureCounts, a service managed by Bird Studies Canada.
 
 ## Installation
 
@@ -80,7 +80,7 @@ moose <- nc_data_dl(species = 133990, username = "my_user_name")
 See the function examples ([`nc_count()`](https://birdstudiescanada.github.io/naturecounts/reference/nc_count.html), [`nc_data_dl()`](https://birdstudiescanada.github.io/naturecounts/reference/nc_data_dl.html)) the following articles for more information on these filters:
 
 - Collections
-- [Species Codes](https://birdstudiescanada.github.io/naturecounts/docs/articles/species-codes.html)
+- [Species Codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
 - [Regional Codes](https://birdstudiescanada.github.io/naturecounts/articles/region-codes.html)
 - [IBAs and BCRs (regions)](https://birdstudiescanada.github.io/naturecounts/articles/region-areas.html)
 - [Using spatial data to filter observations](https://birdstudiescanada.github.io/naturecounts/articles/region-spatial.html)
@@ -89,4 +89,4 @@ We also have an [article on post-filtering your data](https://birdstudiescanada.
 
 ### Metadata
 
-NatureCounts includes a great deal of metadata which can be accessed through the functions with the `meta_` prefix. See the [Meta Documentation](reference/meta.html) for specifics.
+NatureCounts includes a great deal of metadata which can be accessed through the functions with the `meta_` prefix. See the [Meta Documentation](https://birdstudiescanada.github.io/naturecounts/reference/meta.html) for specifics.
