@@ -1,5 +1,7 @@
 context("Metadata")
 
+
+# Metadata update ---------------------------------------------------------
 test_that("Metadata updates", {
   # Get original file dates
   loc <- list.files(system.file("extdata", package = "naturecounts"),
@@ -33,6 +35,8 @@ test_that("Metadata updates", {
 
 })
 
+
+# Access Metadata ---------------------------------------------------------
 test_that("Metadata functions accessible", {
 
   # Get all the metadata functions
