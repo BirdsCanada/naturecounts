@@ -51,30 +51,30 @@ meta_species_taxonomy <- function() {metadata_read("species_taxonomy")}
 #' @describeIn meta Collections names and descriptions
 #' @export
 meta_collections <- function() {
-  srv_query(api$collections) %>%
+  srv_query(api$collections, timeout = 30) %>%
     parse_results()
 }
 
 #' @describeIn meta Breeding codes and descriptions
 #' @export
 meta_breeding_codes <- function() {
-  srv_query(api$breeding_codes) %>%
+  srv_query(api$breeding_codes, timeout = 30) %>%
     parse_results()
 }
 
 #' @describeIn meta Project protocols
 #' @export
 meta_project_protocols <- function() {
-  srv_query(api$project_protocols) %>%
+  srv_query(api$project_protocols, timeout = 30) %>%
     parse_results()
 }
 
 #' @describeIn meta Projects ids, names, websites, and descriptions
 #' @export
 meta_projects <- function() {
-  p1 <- srv_query(api$projects) %>%
+  p1 <- srv_query(api$projects, timeout = 30) %>%
     parse_results()
-  p2 <- srv_query(api$projects_meta) %>%
+  p2 <- srv_query(api$projects_meta, timeout = 30) %>%
     parse_results()
   dplyr::left_join(p1, p2, by = c("project_id", "project_code",
                                   "project_name", "project_name_fr"))
@@ -83,7 +83,7 @@ meta_projects <- function() {
 #' @describeIn meta Protocol types and descriptions
 #' @export
 meta_protocol_types <- function() {
-  srv_query(api$protocol_types) %>%
+  srv_query(api$protocol_types, timeout = 30) %>%
     parse_results()
 }
 
@@ -93,7 +93,7 @@ meta_protocol_types <- function() {
 #'   more details.
 #' @export
 meta_bmde_versions <- function() {
-  srv_query(api$bmde_versions) %>%
+  srv_query(api$bmde_versions, timeout = 30) %>%
     parse_results()
 }
 

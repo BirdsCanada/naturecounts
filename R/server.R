@@ -10,13 +10,12 @@
 #' @keywords internal
 
 srv_query <- function(path, query = NULL, filter = NULL,
-                      token = NULL, api_url = NULL,
+                      token = NULL, api_url = NULL, timeout = 300,
                       verbose = FALSE) {
 
   # Set Curl configuration
   httr::set_config(httr::content_type_json())
   httr::set_config(httr::accept_json())
-  httr::set_config(httr::timeout(300))
   if(verbose) httr::set_config(httr::verbose())
 
   # Build API path
@@ -33,15 +32,17 @@ srv_query <- function(path, query = NULL, filter = NULL,
   }
 
   # Send request (try twice if first fails, unless it was a forced failure)
-  resp <- try(httr::POST(url, body = query, encode = "form", ua),
-              silent = TRUE)
+  resp <- try(httr::POST(url, body = query, encode = "form",
+                         ua, httr::timeout(timeout)),
+            silent = TRUE)
   if(class(resp) == "try-error") {
     if(stringr::str_detect(resp, "aborted by an application callback")){
       stop(resp, call. = FALSE)
     } else {
       #message("Ooops, error on first try, retrying...\nError: ",
       #        as.character(resp))
-      resp <- httr::POST(url, body = query, encode = "form", ua)
+      resp <- httr::POST(url, body = query, encode = "form",
+                         ua, httr::timeout(timeout))
     }
   }
 
