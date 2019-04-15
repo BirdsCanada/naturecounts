@@ -4,14 +4,19 @@
 \alias{nc_data_dl}
 \title{Download NatureCounts data records}
 \usage{
-nc_data_dl(collections = NULL, species = NULL, years = NULL,
-  doy = NULL, region = NULL, site_type = NULL,
+nc_data_dl(collections = NULL, project_ids = NULL, species = NULL,
+  years = NULL, doy = NULL, region = NULL, site_type = NULL,
   fields_set = "minimum", fields = NULL, username = NULL,
   sql_db = NULL, verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
 download data. NULL (default) downloads data from all available collections}
+
+\item{project_ids}{Character/Numeric vector. The \code{project id}s from which to
+download data. First the collections associated with a \code{project_id} are
+determined, and then data is downloaded for each collection. If both
+\code{collections} and \code{project_ids} are supplied, they are combined.}
 
 \item{species}{Numeric vector. Numeric species ids (see details)}
 
@@ -49,9 +54,9 @@ Data frame
 \description{
 Download data records from various collections filtered by various options.
 In order to ease the load on the server, note that only \strong{three} of
-\code{collections}, \code{species}, \code{years}, \code{doy}, \code{region}, and \code{site_type} can be
-used in any one request. See the vignette for filtering your data after
-download for more options:
+\code{collections}/\code{project_ids}, \code{species}, \code{years}, \code{doy}, \code{region}, and
+\code{site_type} can be used in any one request. See the vignette for filtering
+your data after download for more options:
 \code{vignette("filtering_data", package = "naturecounts")}.
 }
 \section{Data Fields/Columns}{
@@ -123,10 +128,13 @@ for more information.
 }
 
 \examples{
-\donttest{# All observations part of the RCBIOTABASE collection
-rcbio <- nc_data_dl(collection = "RCBIOTABASE")}
+# All observations part of the RCBIOTABASE collection
+rcbio <- nc_data_dl(collections = "RCBIOTABASE")
 
-# Observations of black-capped chickadees from RCBIOTABASE collection in 2010
+\donttest{# All observations part of project_id 1042
+p1042 <- nc_data_dl(project_ids = 1042)}
+
+# Public obs of black-capped chickadees from RCBIOTABASE collection in 2010
 species_search("black-capped chickadee") # Find the species_id
 bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
                    years = 2010)

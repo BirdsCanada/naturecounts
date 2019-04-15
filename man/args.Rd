@@ -7,6 +7,11 @@
 \item{collections}{Character vector. The collection codes from which to
 download data. NULL (default) downloads data from all available collections}
 
+\item{project_ids}{Character/Numeric vector. The \code{project id}s from which to
+download data. First the collections associated with a \code{project_id} are
+determined, and then data is downloaded for each collection. If both
+\code{collections} and \code{project_ids} are supplied, they are combined.}
+
 \item{species}{Numeric vector. Numeric species ids (see details)}
 
 \item{years}{Numeric vector. The start/end years of data to download. Can use

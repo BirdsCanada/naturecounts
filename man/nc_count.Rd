@@ -4,13 +4,18 @@
 \alias{nc_count}
 \title{Download information about NatureCounts collections}
 \usage{
-nc_count(collections = NULL, species = NULL, years = NULL,
-  doy = NULL, region = NULL, site_type = NULL, show = "available",
-  username = NULL, verbose = TRUE)
+nc_count(collections = NULL, project_ids = NULL, species = NULL,
+  years = NULL, doy = NULL, region = NULL, site_type = NULL,
+  show = "available", username = NULL, verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
 download data. NULL (default) downloads data from all available collections}
+
+\item{project_ids}{Character/Numeric vector. The \code{project id}s from which to
+download data. First the collections associated with a \code{project_id} are
+determined, and then data is downloaded for each collection. If both
+\code{collections} and \code{project_ids} are supplied, they are combined.}
 
 \item{species}{Numeric vector. Numeric species ids (see details)}
 

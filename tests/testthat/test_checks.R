@@ -5,6 +5,43 @@ test_that("Code conversion works as expected", {
   expect_equal(codes_convert("Canada", "country"), "CA")
 })
 
+# Collections -------------------------------------------------------------
+test_that("Code checks work on collections", {
+
+  expect_silent(collections_check("ABATLAS1")) %>%
+    expect_is("character") %>%
+    expect_equal("ABATLAS1")
+
+  expect_silent(collections_check(c("ABATLAS1", "ABBIRDRECS", "RCBIOTABASE"))) %>%
+    expect_is("character") %>%
+    expect_equal(c("ABATLAS1", "ABBIRDRECS", "RCBIOTABASE"))
+
+  expect_error(collections_check("my_favourite_collection"),
+               "'collections' must be either NULL \\(for all collections\\)")
+  expect_error(collections_check(1042),
+               "'collections' must be either NULL \\(for all collections\\)")
+})
+
+# Projects -------------------------------------------------------------
+test_that("Code checks work on project_ids", {
+
+  expect_silent(projects_check(1042)) %>%
+    expect_is("character") %>%
+    expect_equal(c("ABATLAS1", "ABATLAS2", "ABBIRDRECS"))
+
+  expect_silent(projects_check(1042, "RCBIOTABASE")) %>%
+    expect_is("character") %>%
+    expect_equal(c("ABATLAS1", "ABATLAS2", "ABBIRDRECS", "RCBIOTABASE"))
+
+  expect_silent(projects_check("1042")) %>%
+    expect_is("character") %>%
+    expect_equal(c("ABATLAS1", "ABATLAS2", "ABBIRDRECS"))
+
+  expect_error(projects_check("my_favourite_collection"),
+               "'project_ids' must be either NULL or a vector of valid")
+  expect_error(projects_check("ABATLAS1"),
+               "'project_ids' must be either NULL or a vector of valid")
+})
 
 # Species -----------------------------------------------------------------
 test_that("Code checks work on species", {

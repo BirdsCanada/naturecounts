@@ -2,6 +2,10 @@
 #'
 #' @param collections Character vector. The collection codes from which to
 #'   download data. NULL (default) downloads data from all available collections
+#' @param project_ids Character/Numeric vector. The `project id`s from which to
+#'   download data. First the collections associated with a `project_id` are
+#'   determined, and then data is downloaded for each collection. If both
+#'   `collections` and `project_ids` are supplied, they are combined.
 #' @param species Numeric vector. Numeric species ids (see details)
 #' @param years Numeric vector. The start/end years of data to download. Can use
 #'   NA for either start or end, or a single value to return data from a single
@@ -59,9 +63,9 @@ NULL
 #'
 #' Download data records from various collections filtered by various options.
 #' In order to ease the load on the server, note that only **three** of
-#' `collections`, `species`, `years`, `doy`, `region`, and `site_type` can be
-#' used in any one request. See the vignette for filtering your data after
-#' download for more options:
+#' `collections`/`project_ids`, `species`, `years`, `doy`, `region`, and
+#' `site_type` can be used in any one request. See the vignette for filtering
+#' your data after download for more options:
 #' `vignette("filtering_data", package = "naturecounts")`.
 #'
 #' @param fields_set Charcter. Set of fields/columns to download. See details.
@@ -104,10 +108,13 @@ NULL
 #' @return Data frame
 #'
 #' @examples
-#' \donttest{# All observations part of the RCBIOTABASE collection
-#' rcbio <- nc_data_dl(collection = "RCBIOTABASE")}
+#' # All observations part of the RCBIOTABASE collection
+#' rcbio <- nc_data_dl(collections = "RCBIOTABASE")
 #'
-#' # Observations of black-capped chickadees from RCBIOTABASE collection in 2010
+#' \donttest{# All observations part of project_id 1042
+#' p1042 <- nc_data_dl(project_ids = 1042)}
+#'
+#' # Public obs of black-capped chickadees from RCBIOTABASE collection in 2010
 #' species_search("black-capped chickadee") # Find the species_id
 #' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
 #'                    years = 2010)
@@ -133,11 +140,15 @@ NULL
 #'
 #' @export
 
-nc_data_dl <- function(collections = NULL, species = NULL, years = NULL,
+nc_data_dl <- function(collections = NULL, project_ids = NULL,
+                       species = NULL, years = NULL,
                        doy = NULL, region = NULL, site_type = NULL,
                        fields_set = "minimum", fields = NULL,
                        username = NULL, sql_db = NULL,
                        verbose = TRUE) {
+
+  # Check/convert project_ids to collections
+  collections <- projects_check(project_ids, collections)
 
   # Assemble and check filter parameters
   filter <- filter_create(verbose = verbose,
@@ -368,13 +379,16 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' @export
 
-nc_count <- function(collections = NULL, species = NULL, years = NULL,
-                     doy = NULL, region = NULL, site_type = NULL,
+nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
+                     years = NULL, doy = NULL, region = NULL, site_type = NULL,
                      show = "available", username = NULL, verbose = TRUE) {
 
   if(!show %in% c("available", "all")) {
     stop("show must either be 'all' or 'available'", call. = FALSE)
   }
+
+  # Check/convert project_ids to collections
+  collections <- projects_check(project_ids, collections)
 
   # Assemble and check filter parameters
   filter <- filter_create(verbose = verbose,

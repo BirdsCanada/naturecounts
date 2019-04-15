@@ -79,10 +79,28 @@ bcr_check <- function(b) {
   paste0("BCR.", b) # To match API expectations
 }
 
+projects_check <- function(project_ids, collections = NULL) {
+  if(!is.null(project_ids)) {
+    c1 <- meta_collections() %>%
+      dplyr::filter(project_id %in% project_ids)
+
+    if(nrow(c1) == 0) {
+      stop("'project_ids' must be either NULL or a vector of valid ",
+           "'project_id's specified in 'meta_collections()'", call. = FALSE)
+    }
+    c1 <- unique(c(c1$collection, collections))
+  } else c1 <- collections
+  c1
+}
+
 collections_check <- function(c) {
-  if(!is.character(c)) {
+  c1 <- meta_collections() %>%
+    dplyr::filter(collection %in% c)
+
+  if(!is.character(c) || nrow(c1) == 0) {
     stop("'collections' must be either NULL (for all collections) ",
-         "or a character vector of collection names.", call. = FALSE)
+         "or a character vector of valid 'collection' names specified ",
+         "in 'meta_collections()'.", call. = FALSE)
   }
   c
 }

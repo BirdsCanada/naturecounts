@@ -61,6 +61,13 @@ test_that("Data filters work as expected", {
   expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
   expect_equal(max(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
 
+  # single project_id
+  expect_silent(d1 <- nc_data_dl(project_ids = 1030,
+                                 species = 7590, years = 2000,
+                                 verbose = FALSE))
+  expect_equal(unique(d1$collection), "RCBIOTABASE")
+  expect_equal(unique(d1$project_id), 1030)
+
   # mult species/year
   expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = c(7590, 14280),
