@@ -176,14 +176,14 @@ nc_data_dl <- function(collections = NULL, species = NULL, years = NULL,
             paste0(missing, collapse = ", "), ")")
   }
 
+  if(verbose) message(capture_df(records))
+
   if(is.null(sql_db) && sum(records$nrecords) > 1000000) {
     warning("\nThis is a very large download. Consider using ",
-            "a SQLite database (see the sql_db argument), to prevent ",
+            "a SQLite database (see the sql_db argument),\n to prevent ",
             "memory overload or losing your data due to a loss of ",
-            "connection during the download.")
+            "connection during the download.", call. = FALSE, immediate. = TRUE)
   }
-
-  if(verbose) message(capture_df(records))
 
   # Get/Create database or dataframe
   if(!is.null(sql_db)) {
