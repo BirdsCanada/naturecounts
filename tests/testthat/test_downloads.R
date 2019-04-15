@@ -131,7 +131,7 @@ test_that("Data download returns informative errors/messages", {
 
   # No permission
   expect_error(nc_data_dl(collections = "BBS", species = 7590, verbose = FALSE),
-               "You do not have permission")
+               "You do not have permission to access these collections")
 
   # No data
   expect_error(nc_data_dl(collections = "ABBIRDRECS", years = 2018,

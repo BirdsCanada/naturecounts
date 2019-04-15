@@ -11,7 +11,7 @@ test_that("srv_query() returns data", {
   expect_is(d, "list")
   expect_gt(length(d), 0)
 
-  expect_error(srv_query("metadat/hello"), "Not Found \\(HTTP 404\\)")
+  expect_error(srv_query("metadat/hello"), "Service not found")
 })
 
 test_that("srv_query() applies settings and resets", {
@@ -32,5 +32,5 @@ test_that("srv_query() applies settings and resets", {
 
 test_that("srv_query() returns informative errors", {
   expect_error(srv_query(api$data, token = "hello"),
-               "Invalid authorization, no access")
+               "Authorization required")
 })
