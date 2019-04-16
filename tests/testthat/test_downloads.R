@@ -1,4 +1,4 @@
-# Download Counts -----------------------------------------------------------
+# Counts - General ----------------------------------------------------
 context("Download counts")
 
 test_that("Get counts for collections", {
@@ -31,8 +31,7 @@ test_that("Counts return permissions", {
 })
 
 
-# Download Data -----------------------------------------------------------
-
+# Data - General -----------------------------------------------------
 
 context("Download data")
 
@@ -50,6 +49,9 @@ test_that("Data download arguments", {
                            verbose = FALSE))
 
 })
+
+
+# Data - Filters ----------------------------------------------------------
 
 test_that("Data filters work as expected", {
 
@@ -95,6 +97,9 @@ test_that("Data filters work as expected", {
   expect_true("Locality" %in% names(d4))
 })
 
+
+# Data - DOY ----------------------------------------------------------
+
 test_that("Data filters Day of year", {
   # Summer
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
@@ -128,6 +133,9 @@ test_that("Data filters Day of year", {
   expect_equal(dplyr::arrange(d, record_id), dplyr::arrange(d2, record_id))
 })
 
+
+# Data - Pagination -------------------------------------------------------
+
 test_that("Pagination", {
   # Get data and messages
   expect_silent(m <- capture_messages(
@@ -141,6 +149,8 @@ test_that("Pagination", {
 
 })
 
+
+# Data - Errors/Messages --------------------------------------------------
 
 test_that("Data download returns informative errors/messages", {
 
