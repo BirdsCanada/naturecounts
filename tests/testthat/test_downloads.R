@@ -106,12 +106,26 @@ test_that("Data filters Day of year", {
   expect_lte(max(d1$doy), 140)
 
   # winter
-  # expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
-  #                                species = 15770,
-  #                                verbose = TRUE))
-  # expect_silent(d1 <- format_dates(d1))
-  # expect_gte(min(d1$doy), 120)
-  # expect_lte(max(d1$doy), 140)
+
+  expect_silent(d <- nc_data_dl(collections = "ABBIRDRECS",
+                                 species = 15770,
+                                 doy = c(300, 20),
+                                 verbose = FALSE))
+  expect_silent(d <- format_dates(d))
+  expect_true(all(d$doy >= 300 | d$doy <= 20))
+
+  # Winter same as two separate requests
+  expect_silent(da <- nc_data_dl(collections = "ABBIRDRECS",
+                                 species = 15770,
+                                 doy = c(300, NA),
+                                 verbose = FALSE))
+  expect_silent(db <- nc_data_dl(collections = "ABBIRDRECS",
+                                 species = 15770,
+                                 doy = c(NA, 20),
+                                 verbose = FALSE))
+  d2 <- dplyr::bind_rows(da, db) %>%
+    format_dates()
+  expect_equal(dplyr::arrange(d, record_id), dplyr::arrange(d2, record_id))
 })
 
 test_that("Pagination", {
