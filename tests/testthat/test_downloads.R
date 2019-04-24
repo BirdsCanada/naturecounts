@@ -104,6 +104,24 @@ test_that("Data filters work as expected", {
   expect_true("Locality" %in% names(d4))
 })
 
+test_that("Filter region works as expected", {
+  # IBA
+  expect_silent(d <- nc_data_dl(region = list(iba = "AB001"),
+                                username = "sample", verbose = FALSE))
+  expect_equal(unique(d$iba_site), "AB001")
+
+  # BCR
+  expect_silent(d <- nc_data_dl(region = list(bcr = 3),
+                                username = "sample", verbose = FALSE))
+  expect_equal(unique(d$bcr), 3)
+
+  # Province
+  expect_silent(d <- nc_data_dl(region = list(statprov = "PE"),
+                                username = "sample", verbose = FALSE))
+  expect_equal(unique(d$statprov_code), "PE")
+
+})
+
 test_that("Filter site_type works as expected", {
   expect_silent(d <- nc_data_dl(region = list(statprov = "PE"),
                                 site_type = "IBA", username = "sample",

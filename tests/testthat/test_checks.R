@@ -148,6 +148,18 @@ test_that("doy_check correct", {
   expect_error(doy_check("hello"), er)
 })
 
+# IBA ---------------------------------------------------------------
+test_that("iba_check correct", {
+  for(s in c("AB001", "ab001", "YK007")) expect_silent(iba_check(s))
+  for(s in c("A001", "AB999", "YK000")) expect_error(iba_check(s))
+})
+
+# BCR ---------------------------------------------------------------
+test_that("bcr_check correct", {
+  for(s in c("1", 10, 67)) expect_silent(bcr_check(s))
+  for(s in c("bcr.1", "99", 100)) expect_error(bcr_check(s))
+})
+
 # Site Type ---------------------------------------------------------------
 test_that("site_type_check correct", {
   for(s in c("IBA", "iba", "iBA")) expect_silent(site_type_check(s))
@@ -161,6 +173,9 @@ test_that("filter_checks correct", {
   expect_error(filter_check(list(species = "BCCH")))
   expect_equal(filter_check(list(start_year = "2011")), list(start_year = 2011))
   expect_error(filter_check(list(end_year = "1811")))
+  expect_error(filter_check(list(iba = "1811")))
+  expect_error(filter_check(list(bcr = "hello")))
+  expect_error(filter_check(list(site_type = "bcr")))
 
   f <- list(collections = "RCBIOTABASE", species = 14280,
             country = "CA", statprov = "ON", subnational2 = "CA.MB.07")
