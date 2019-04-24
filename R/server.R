@@ -64,7 +64,8 @@ srv_query <- function(path, query = NULL, filter = NULL,
 }
 
 srv_error <- function(parsed, url, filter) {
-  if(any(stringr::str_detect(names(parsed), "ErrorMsgs"))) {
+
+  if(any(stringr::str_detect(names(parsed), "errorMsgs"))) {
     if(!is.null(filter)) {
       f <- jsonlite::fromJSON(filter, simplifyVector = TRUE)
       f <- paste0("\n Query: ",
@@ -73,7 +74,7 @@ srv_error <- function(parsed, url, filter) {
                          collapse = "; "))
     } else f <- ""
 
-    e <- paste0(parsed$ErrorMsgs, collapse = "; ")
+    e <- paste0(parsed$errorMsgs, collapse = "; ")
 
     stop("NatureCounts API request returned an error ",
          "\n Message: '", e, "'",
