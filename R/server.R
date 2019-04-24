@@ -100,27 +100,37 @@ srv_error <- function(parsed, url, filter) {
 
 srv_auth <- function(username) {
 
-  if(is.null(username)) {
-    # Username supplied?
-    token <- NULL
+  username_check(username)
 
-  } else if(exists(username, envir = srv_auth_env)) {
+  if(!exists("nc_usernames", envir = srv_auth_env)) {
+    nc_usernames <- list()
+  } else nc_usernames <- get("nc_usernames", envir = srv_auth_env)
+
+  if(is.null(username)) {
+    token <- NULL
+  } else if(username %in% names(nc_usernames)) {
     # See if username associated with token in storage
-    token <- get(username, envir = srv_auth_env)
+      token <- get("nc_usernames", envir = srv_auth_env)[[username]]
 
   } else {
-    # Otherwise prompt for password
-    p <- askpass::askpass(prompt = paste0("Please enter password for ",
-                                          "NatureCounts user '", username, "'"))
+    if(username != "sample") {
+      # Otherwise prompt for password
+      password <- askpass::askpass(
+        prompt = paste0("Please enter password for ",
+                        "NatureCounts user '", username, "'"))
+    } else password <- "sample"
 
-    if(is.null(p)) stop("Password required for user ", username, call. = FALSE)
+    if(is.null(password)) stop("Password required for user ", username,
+                               call. = FALSE)
 
     # Fetch token from server
-    token <- srv_query(path = api$auth,
-                       query = list(username = username, password = p))$token
+    token <- srv_query(
+      path = api$auth,
+      query = list(username = username, password = password))$token
 
     # Save token to storage
-    assign(username, token, envir = srv_auth_env)
+    nc_usernames[[username]] <- token
+    assign("nc_usernames", nc_usernames, envir = srv_auth_env)
   }
 
   token
@@ -129,7 +139,13 @@ srv_auth <- function(username) {
 # Environment for password storage
 srv_auth_env <- new.env()
 
-
+# list usernames
+nc_users <- function() {
+  if(!exists("nc_usernames", envir = srv_auth_env)) {
+    nc_usernames <- list()
+  } else nc_usernames <- get("nc_usernames", envir = srv_auth_env)
+  names(nc_usernames)
+}
 
 pass_token <- function(token) {
   if(is.null(token)) return(token) else return(I(token))
