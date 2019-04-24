@@ -1,0 +1,1 @@
+file.remove(list.files(".nc"))
