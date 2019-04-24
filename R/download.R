@@ -20,6 +20,7 @@
 #' @param username Character vector. Username for <http://naturecounts.ca>. If
 #'   provided, the user will be prompted for a password. If left NULL, only
 #'   public collections will be returned.
+#' @param verbose Logical. Display progress messages?
 #'
 #' @section NatureCounts account:
 #'   All public data is available without a username/password. However, to
@@ -54,34 +55,7 @@
 #'   (http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
 #'   for more information.
 #'
-#' @keywords internal
-#' @name args
-NULL
-# args ------------------
-
-#' Download NatureCounts data records
-#'
-#' Download data records from various collections filtered by various options.
-#' In order to ease the load on the server, note that only **three** of
-#' `collections`/`project_ids`, `species`, `years`, `doy`, `region`, and
-#' `site_type` can be used in any one request. See the vignette for filtering
-#' your data after download for more options:
-#' `vignette("filtering_data", package = "naturecounts")`.
-#'
-#' @param fields_set Charcter. Set of fields/columns to download. See details.
-#' @param fields Character vector. If `fields_set = custom`, which
-#'   fields/columns to download. See details
-#' @param sql_db Character vector. Name and location of SQLite database to
-#'   either create or add to
-#' @param verbose Logical. Display progress messages?
-#'
-#' @inheritParams args
-#' @inheritSection args NatureCounts account
-#' @inheritSection args Species ids (`species`)
-#' @inheritSection args Day of Year (`doy`)
-#' @inheritSection args Regions (`region`)
-#'
-#' @section Data Fields/Columns:
+#' @section Data Fields/Columns (`fields_set` and `fields`):
 #'   By default data is downloaded with the `minimum` set of fields/columns.
 #'   However, for more advanced applications, users may wish to specify which
 #'   fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
@@ -104,6 +78,33 @@ NULL
 #'
 #'   Note that in all cases there are a set of fields/columns that are *always*
 #'   returned, no matter what `fields_set` is used.
+#'
+#' @keywords internal
+#' @name args
+NULL
+# args ------------------
+
+#' Download NatureCounts data records
+#'
+#' Download data records from various collections filtered by various options.
+#' In order to ease the load on the server, note that only **three** of
+#' `collections`/`project_ids`, `species`, `years`, `doy`, `region`, and
+#' `site_type` can be used in any one request. See the vignette for filtering
+#' your data after download for more options:
+#' `vignette("filtering_data", package = "naturecounts")`.
+#'
+#' @param fields_set Charcter. Set of fields/columns to download. See details.
+#' @param fields Character vector. If `fields_set = custom`, which
+#'   fields/columns to download. See details
+#' @param sql_db Character vector. Name and location of SQLite database to
+#'   either create or add to
+#'
+#' @inheritParams args
+#' @inheritSection args NatureCounts account
+#' @inheritSection args Species ids (`species`)
+#' @inheritSection args Day of Year (`doy`)
+#' @inheritSection args Regions (`region`)
+#' @inheritSection args Data Fields/Columns (`fields_set` and `fields`)
 #'
 #' @return Data frame
 #'

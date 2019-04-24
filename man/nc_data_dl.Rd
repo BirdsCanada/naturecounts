@@ -59,33 +59,6 @@ In order to ease the load on the server, note that only \strong{three} of
 your data after download for more options:
 \code{vignette("filtering_data", package = "naturecounts")}.
 }
-\section{Data Fields/Columns}{
-
-By default data is downloaded with the \code{minimum} set of fields/columns.
-However, for more advanced applications, users may wish to specify which
-fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
-keeps track of variables used to augment observation data. There are
-different versions reflecting different collections of variables which can
-be specified for download in one of four ways:
-\enumerate{
-\item \code{fields_set} can be a specific shorthand reflecting a BMDE version:
-\code{core}, \code{extended} or \code{minimum} (default). See \code{\link[=meta_bmde_versions]{meta_bmde_versions()}} to see
-which BMDE version the shorthand refers to.
-\item \code{fields_set} can be \code{default} which uses the default BMDE version for a
-particular collection (note that if you download more than one collection,
-the field sets will expand to cover all fields/columns in the combined
-collections)
-\item \code{fields_set} can be the exact BMDE version. See \code{\link[=meta_bmde_versions]{meta_bmde_versions()}}
-for options.
-\item \code{fields_set} can be \code{custom} and the \code{fields} argument can be a
-character vector specifying the exact fields/columns to return. See
-\code{\link[=meta_bmde_fields]{meta_bmde_fields()}}) for potential \code{fields} values.
-}
-
-Note that in all cases there are a set of fields/columns that are \emph{always}
-returned, no matter what \code{fields_set} is used.
-}
-
 \section{NatureCounts account}{
 
 All public data is available without a username/password. However, to
@@ -125,6 +98,33 @@ specifyings the min/max longitude and min/max latitude (\code{bbox}). See the
 article on \link{regional filters}
 (http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
 for more information.
+}
+
+\section{Data Fields/Columns (\code{fields_set} and \code{fields})}{
+
+By default data is downloaded with the \code{minimum} set of fields/columns.
+However, for more advanced applications, users may wish to specify which
+fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
+keeps track of variables used to augment observation data. There are
+different versions reflecting different collections of variables which can
+be specified for download in one of four ways:
+\enumerate{
+\item \code{fields_set} can be a specific shorthand reflecting a BMDE version:
+\code{core}, \code{extended} or \code{minimum} (default). See \code{\link[=meta_bmde_versions]{meta_bmde_versions()}} to see
+which BMDE version the shorthand refers to.
+\item \code{fields_set} can be \code{default} which uses the default BMDE version for a
+particular collection (note that if you download more than one collection,
+the field sets will expand to cover all fields/columns in the combined
+collections)
+\item \code{fields_set} can be the exact BMDE version. See \code{\link[=meta_bmde_versions]{meta_bmde_versions()}}
+for options.
+\item \code{fields_set} can be \code{custom} and the \code{fields} argument can be a
+character vector specifying the exact fields/columns to return. See
+\code{\link[=meta_bmde_fields]{meta_bmde_fields()}}) for potential \code{fields} values.
+}
+
+Note that in all cases there are a set of fields/columns that are \emph{always}
+returned, no matter what \code{fields_set} is used.
 }
 
 \examples{

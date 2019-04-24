@@ -40,6 +40,8 @@ the username provided. If no username is provided, defaults to "all".}
 \item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.}
+
+\item{verbose}{Logical. Display progress messages?}
 }
 \value{
 Data frame
