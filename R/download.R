@@ -173,7 +173,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
     if(!is.null(collections)) {
       no_access <- collections[!collections %in%
                                  nc_permissions(token = token)$collection]
-    } else no_access <- 0
+    } else no_access <- c()
 
     if(length(no_access) == 0) {
       stop("These collections have no data that match these filters",
