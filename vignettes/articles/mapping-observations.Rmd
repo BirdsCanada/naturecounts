@@ -4,10 +4,6 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 ---
 
-```{r setup, include = FALSE}
-library(here)
-```
-
 In this article we'll walk through how to create various types of maps of the observations downloaded with `naturecounts` to get a sense of the spatial distribution.
 
 ## Setup
@@ -122,9 +118,9 @@ First we'll download and extract the Park shapefiles available from the [Alberta
 ```{r, echo = FALSE, eval = !file.exists("vignettes/articles/article_files/Parks_Protected_Areas_Alberta.shp")}
 # Run if don't have shapefile
 download.file(url = "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip",
-              destfile = here("vignettes/articles/article_files/alberta_parks.zip"))
-unzip(here("vignettes/articles/article_files/alberta_parks.zip"), 
-      exdir = here("vignettes/articles/article_files/"))
+              destfile = here::here("vignettes/articles/article_files/alberta_parks.zip"))
+unzip(here::here("vignettes/articles/article_files/alberta_parks.zip"), 
+      exdir = here::here("vignettes/articles/article_files/"))
 ```
 
 ```{r, eval = FALSE}
@@ -136,7 +132,7 @@ parks <- st_read("Parks_Protected_Areas_Alberta.shp")
 ```
 
 ```{r echo = FALSE}
-parks <- st_read(here("vignettes/articles/article_files/Parks_Protected_Areas_Alberta.shp"))
+parks <- st_read(here::here("vignettes/articles/article_files/Parks_Protected_Areas_Alberta.shp"))
 ```
 
 Add this layer to our plot.
@@ -206,3 +202,4 @@ ggplot() +
 ## See Also
 
 - [Using spatial data to filter observations](region-spatial.html)
+- [Exploring regional filters](../region-areas.html)

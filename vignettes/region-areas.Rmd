@@ -9,7 +9,6 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
-library(here)
 options(width = 100)
 knitr::opts_chunk$set(out.width = "60%", fig.width = 6, fig.asp = 1, fig.align = "center")
 ```

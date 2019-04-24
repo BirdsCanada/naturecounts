@@ -8,11 +8,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-library(here)
-```
-
-
 The `naturecounts` package restricts users to three types of data filters in order not to overload the NatureCounts server. However, it is fairly straightforward to apply data filters after the download. 
 
 In this vignette we will go over several different types of filtering using the `tidyverse` collection of packages. In particular, we will make extensive use of the `filter()` function from the `dplyr` package. For more information about this function, see the chapater on [Data Transformations](https://r4ds.had.co.nz/transform.html#filter-rows-with-filter) in R for Data Science by Hadley Wickham and Garrett Grolemund.
