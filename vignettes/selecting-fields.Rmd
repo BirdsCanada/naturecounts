@@ -1,0 +1,97 @@
+---
+title: "Selecting columns and fields to download"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Selecting columns and fields to download}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, message = FALSE}
+library(naturecounts)
+library(dplyr)
+```
+
+In `naturecounts`, by default default data is downloaded with a specific set of fields/columns. However, for more advanced applications, users may wish to specify which fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema keeps track of variables used to augment observation data. There are different versions reflecting different collections of variables. 
+
+
+## BMDE versions
+
+There are several ways to get more information about these different field/columns sets.
+
+1. You can get a list of the different versions with the `meta_bmde_versions()` function.
+```{r}
+meta_bmde_versions()
+```
+
+2. You can get a list of the specific fields/columns included in each version using the `meta_bmde_fields()` function
+```{r}
+meta_bmde_fields(version = "BMDE-BAND-2.00") %>%
+  head()
+```
+
+3. You can see which BMDE versions are used by different collections by looking at the metadata associated with that collection.
+```{r}
+meta_collections() %>% 
+  head()
+```
+
+## Specifying fields by version
+
+By default, the `BMDE2.00-min` or `minimum` BMDE version is used when downloading data, but you can specify other versions with either the version name, or the shorthand.
+
+```{r}
+cardinals <- nc_data_dl(species = 19360, fields_set = "core", username = "sample")
+names(cardinals)
+```
+
+## Basic fields
+
+Note that there are extra fields/columns downloaded in every request, which are **in addition** to the BMDE fields. These are additional, basic, indexed fields used in the database. 
+
+You can figure out exactly which fields these are, by removing all the fields from the `core` BMDE field set.
+
+```{r}
+names(cardinals)[!names(cardinals) %in% meta_bmde_fields(version = "core")$local_name]
+```
+
+
+## Custom fields 
+
+The basic fields will **always** be included in any data request. However, you can choose which fields/columns to include in addition to these basic fields, by specifying `fields_set = custom`, and listing all additional `fields`.
+
+```{r}
+cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
+                        fields = c("Sex", "SamplingEventIdentifier"), 
+                        username = "sample")
+head(cardinals)
+```
+
+## Adding specific fields to a BMDE version
+
+In a more complex example, if you wished to download data with the `minimum` set of BMDE fields, but including a couple of extra fields, you could combine the core fields with the extras you want, and pass them on as a custom field set.
+
+For example, first collect the minimum field/column names.
+
+```{r}
+my_fields <- meta_bmde_fields(version = "minimum")$local_name
+my_fields
+```
+
+Then add in the extra fields.
+
+```{r}
+my_fields <- c(my_fields, "Sex", "LifeStage")
+my_fields
+```
+
+Now download the data.
+
+```{r}
+cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
+                        fields = my_fields, username = "sample")
+head(cardinals)
+```
+
+Great!
