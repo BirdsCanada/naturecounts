@@ -9,7 +9,6 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-library(here)
 options(width = 100)
 knitr::opts_chunk$set(out.width = "60%", fig.width = 6, fig.asp = 1, fig.align = "center")
 ```
@@ -71,7 +70,8 @@ Unless you're downloading hundreds of thousands of records, it is often faster t
 For example, if you wanted to collect all public observations in Winnipeg, Manitoba, it would be easiest to first download all observations for Manitoba.
 
 ```{r}
-obs <- nc_data_dl(region = list(statprov = "MB"), verbose = FALSE)
+obs <- nc_data_dl(region = list(statprov = "MB"), 
+                  verbose = FALSE, username = "sample")
 ```
 
 Now we'll get a polygon representing Winnipeg, MB.
@@ -104,10 +104,10 @@ ne_download(scale = 10, type = "urban_areas", returnclass = "sf",
             destdir = ".", load = FALSE) 
 ```
 
-```{r, echo = FALSE, eval = !file.exists(here("vignettes/region-spatial_files/ne_10m_urban_areas.shp"))}
+```{r, echo = FALSE, eval = !file.exists(here::here("vignettes/region-spatial_files/ne_10m_urban_areas.shp"))}
 # Run only if shape file not available
 ne_download(scale = 10, type = "urban_areas", returnclass = "sf", 
-            destdir = here("vignettes/region-spatial_files"), load = FALSE) 
+            destdir = here::here("vignettes/region-spatial_files"), load = FALSE) 
 ```
 
 Now that we've saved it, we can load it for use.
@@ -119,7 +119,7 @@ urban <- ne_load(scale = 10, type = "urban_areas", returnclass = "sf",
 
 ```{r, echo = FALSE}
 urban <- ne_load(scale = 10, type = "urban_areas", returnclass = "sf", 
-                 destdir = here("vignettes/region-spatial_files"))
+                 destdir = here::here("vignettes/region-spatial_files"))
 ```
 
 First we'll transform it to the 3347 CRS and clip the urban areas to match the borders of Ontario (`st_insection(spatial1, spatial2)`). Here we only care about the geometry of Ontario, not any other data (`st_geometry(ontario)`).
@@ -184,8 +184,9 @@ grid.arrange(
 
 So now we can see that the `utm_squares` we've selected overlap all our urban areas. Now we can download the observations for all of these areas:
 
-```{}
-obs <- nc_data_dl(region = list(utm_squares = utm_on$utm_square), verbose = FALSE)
+```{r}
+obs <- nc_data_dl(region = list(utm_squares = utm_on$utm_square), 
+                  verbose = FALSE, username = "sample")
 ```
 
 Finally, we do clip the resulting observations to the exact urban areas:
@@ -212,12 +213,12 @@ In this example, we'll gather all observations for Jasper National Park in Alber
 
 First we'll download and extract the shapefiles available from the [Alberta Parks](https://www.albertaparks.ca/albertaparksca/library/downloadable-data-sets/) website.
 
-```{r, echo = FALSE, eval = !file.exists("vignettes/region-spatial_files/Parks_Protected_Areas_Alberta.shp")}
+```{r, echo = FALSE, eval = !file.exists(here::here("vignettes/region-spatial_files/Parks_Protected_Areas_Alberta.shp"))}
 # Run if don't have shapefile
 download.file(url = "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip",
-              destfile = here("vignettes/region-spatial_files/alberta_parks.zip"))
-unzip(here("vignettes/region-spatial_files/alberta_parks.zip"), 
-      exdir = here("vignettes/region-spatial_files/"))
+              destfile = here::here("vignettes/region-spatial_files/alberta_parks.zip"))
+unzip(here::here("vignettes/region-spatial_files/alberta_parks.zip"), 
+      exdir = here::here("vignettes/region-spatial_files/"))
 ```
 
 ```{r, eval = FALSE}
@@ -229,7 +230,7 @@ parks <- st_read("Parks_Protected_Areas_Alberta.shp")
 ```
 
 ```{r echo = FALSE}
-parks <- st_read(here("vignettes/region-spatial_files/Parks_Protected_Areas_Alberta.shp"))
+parks <- st_read(here::here("vignettes/region-spatial_files/Parks_Protected_Areas_Alberta.shp"))
 ```
 
 Now we'll get a background map of Alberta and a spatial file of just Jasper.
@@ -265,7 +266,7 @@ b
 We can give this directly to our `nc_data_dl()` function.
 
 ```{r}
-obs <- nc_data_dl(region = list(bbox = b), verbose = FALSE)
+obs <- nc_data_dl(region = list(bbox = b), verbose = FALSE, username = "sample")
 ```
 
 Finally we clip the observations to the exact area of Jasper.

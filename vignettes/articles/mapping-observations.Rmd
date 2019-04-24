@@ -205,5 +205,4 @@ ggplot() +
 
 ## See Also
 
-- [Using spatial data to filter observations](region_spatial.html)
-- [Exploring regional filters](region_areas.html)
+- [Using spatial data to filter observations](region-spatial.html)

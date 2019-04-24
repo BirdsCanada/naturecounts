@@ -69,7 +69,7 @@ articles:
     desc: How-to articles describing common tasks
     contents:
       - '`region-areas`'
-      - '`region-spatial`'
+      - '`articles/region-spatial`'
       - '`filtering-data`'
       - '`articles/mapping-observations`'
 
