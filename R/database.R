@@ -59,7 +59,8 @@ db_create_primary <- function(con, df, primary_key) {
 db_create <- function(con) {
   # Download and copy empty naturecounts table
   naturecounts <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
-                             years = 2010, verbose = FALSE)[0, ]
+                             years = 2010, username = "sample",
+                             verbose = FALSE)[0, ]
   db_create_primary(con, naturecounts, primary_key = keys$data)
 
   # Copy metadata tables (13/17)

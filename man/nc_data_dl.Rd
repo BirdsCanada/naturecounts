@@ -6,8 +6,8 @@
 \usage{
 nc_data_dl(collections = NULL, project_ids = NULL, species = NULL,
   years = NULL, doy = NULL, region = NULL, site_type = NULL,
-  fields_set = "minimum", fields = NULL, username = NULL,
-  sql_db = NULL, verbose = TRUE)
+  fields_set = "minimum", fields = NULL, username, sql_db = NULL,
+  verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -129,33 +129,35 @@ for more information.
 
 \examples{
 # All observations part of the RCBIOTABASE collection
-rcbio <- nc_data_dl(collections = "RCBIOTABASE")
+rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample")
 
-\donttest{# All observations part of project_id 1042
-p1042 <- nc_data_dl(project_ids = 1042)}
+\donttest{# All observations part of project_id 1042 accessible by "sample"
+p1042 <- nc_data_dl(project_ids = 1042, username = "sample")}
 
-# Public obs of black-capped chickadees from RCBIOTABASE collection in 2010
+# Black-capped chickadees from RCBIOTABASE collection in 2010
 species_search("black-capped chickadee") # Find the species_id
 bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
-                   years = 2010)
+                   years = 2010, username = "sample")
 
-# All public bcch observations since 2015
-bcch <- nc_data_dl(species = 14280, years = c(2015, NA))
+# All bcch observations since 2015 accessible to user "sample"
+bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample")
 
-bcch <- nc_data_dl(species = 14280, doy = c(200, 300))
+bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample")
 
-bcch <- nc_data_dl(species = 14280,
+bcch <- nc_data_dl(species = 14280, username = "sample",
                    region = list(bbox = c(left = -145, bottom = 45,
                                           right = -100, top = 60)))
 
 # All moose observations with public access
 species_search("moose")
-moose <- nc_data_dl(species = 133990)
+moose <- nc_data_dl(species = 133990, username = "sample")
 
 # Different fields/columns
-moose <- nc_data_dl(species = 133990, fields_set = "core")
+moose <- nc_data_dl(species = 133990, fields_set = "core",
+                    username = "sample")
 
 moose <- nc_data_dl(species = 133990, fields_set = "custom",
-                    fields = c("Locality", "AllSpeciesReported"))
+                    fields = c("Locality", "AllSpeciesReported"),
+                    username = "sample")
 
 }

@@ -1,3 +1,8 @@
+username_check <- function(u) {
+  if(missing(u)) stop("A 'username' is needed to download data",
+                      call. = FALSE)
+}
+
 year_check <- function(y) {
   y <- as_numeric(y)
   if(!is.numeric(y) || y > lubridate::year(Sys.Date()) || y < 1900) {

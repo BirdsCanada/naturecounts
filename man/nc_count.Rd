@@ -34,8 +34,8 @@ See details}
 \item{site_type}{Character vector. The type of site to return (e.g., \code{IBA}).}
 
 \item{show}{Character. Either "all" or "available". "all" returns counts from
-all data sources. "available" only returns counts for data available
-(public or accessible with the token provided).}
+all data sources. "available" only returns counts for data available for
+the username provided. If no username is provided, defaults to "all".}
 
 \item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
 provided, the user will be prompted for a password. If left NULL, only
@@ -103,19 +103,19 @@ nc_count()
 nc_count(region = list(statprov = "MB"))
 }
 
-# Count all records for all collections you have access to
+# Count all records for all collections user "sample" has access to
 \dontrun{
-nc_count(username = "YOUR_USERNAME")
+nc_count(username = "sample")
 }
 
-# Count all public records with barred owls in Ontario
+# Count records with barred owls in Ontario
 species_search("barred owl")
-nc_count(species = 7590, region = list(statprov = "ON"))
+nc_count(species = 7590, region = list(statprov = "ON"), username = "sample")
 
-# Count records available in the Christmas Bird Count and Breeding Bird
-# Survey collections (regardless of permissions)
+# Count all records available in the Christmas Bird Count and Breeding Bird
+# Survey collections (regardless of user permissions)
 \donttest{
-nc_count(collections = c("CBC", "BBS"), show = "all")
+nc_count(collections = c("CBC", "BBS"), show = "all", username = "sample")
 }
 
 }

@@ -33,13 +33,15 @@ library(lubridate)
 
 **Downloading data directly to a Data Frame**
 ```{r}
-chickadee_df <- nc_data_dl(species = c(14270, 14280, 14290), verbose = FALSE)
+chickadee_df <- nc_data_dl(species = c(14270, 14280, 14290), verbose = FALSE,
+                           username = "sample")
 ```
 
 **Downloading data to a SQLite DataBase (`chickadee.nc`)**
 ```{r, echo = -1}
 if(file.exists("chickadee.nc")) file.remove("chickadee.nc")
-con <- nc_data_dl(species = c(14270, 14280, 14290), sql_db = "chickadee", verbose = FALSE)
+con <- nc_data_dl(species = c(14270, 14280, 14290), sql_db = "chickadee", 
+                  verbose = FALSE, username = "sample")
 chickadee_db <- tbl(con, "naturecounts")
 ```
 
