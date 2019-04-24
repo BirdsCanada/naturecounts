@@ -119,7 +119,7 @@ species_code_search("ORJU", results = "exact")
 
 If you have a very specific type of search you'd like to do, you may be better off using the `filter()` function from the `dplyr` package.
 
-```{r}
+```{r, message = FALSE}
 library(dplyr)
 ```
 
