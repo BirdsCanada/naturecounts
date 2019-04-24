@@ -104,6 +104,13 @@ test_that("Data filters work as expected", {
   expect_true("Locality" %in% names(d4))
 })
 
+test_that("Filter site_type works as expected", {
+  expect_silent(d <- nc_data_dl(region = list(statprov = "PE"),
+                                site_type = "IBA", username = "sample",
+                                verbose = FALSE))
+  expect_true(all(d$iba_site != "N/A"))
+  expect_true(all(stringr::str_detect(d$iba_site, "^PE")))
+})
 
 # Data - DOY ----------------------------------------------------------
 

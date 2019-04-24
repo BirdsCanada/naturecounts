@@ -84,6 +84,13 @@ bcr_check <- function(b) {
   paste0("BCR.", b) # To match API expectations
 }
 
+site_type_check <- function(site_type) {
+  if(toupper(site_type) != "IBA") {
+    stop("'site_type' must be either NULL or 'IBA'", call. = FALSE)
+  }
+  toupper(site_type)
+}
+
 projects_check <- function(project_ids, collections = NULL) {
   if(!is.null(project_ids)) {
     c1 <- meta_collections() %>%

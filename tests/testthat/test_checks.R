@@ -148,6 +148,11 @@ test_that("doy_check correct", {
   expect_error(doy_check("hello"), er)
 })
 
+# Site Type ---------------------------------------------------------------
+test_that("site_type_check correct", {
+  for(s in c("IBA", "iba", "iBA")) expect_silent(site_type_check(s))
+  for(s in c("I", NA, "AB001")) expect_error(site_type_check(s))
+})
 
 # Filter checks -----------------------------------------------------------
 test_that("filter_checks correct", {

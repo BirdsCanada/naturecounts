@@ -80,6 +80,7 @@ filter_check <- function(f) {
     if(n == "utm_squares") f[[i]] <- utm_check(f[[i]])
     if(n == "iba") f[[i]] <- iba_check(f[[i]])
     if(n == "bcr") f[[i]] <- bcr_check(f[[i]])
+    if(n == "site_type") f[[i]] <- site_type_check(f[[i]])
     if(stringr::str_detect(n, "collection")) f[[i]] <- collections_check(f[[i]])
     if(stringr::str_detect(n, "_year")) f[[i]] <- year_check(f[[i]])
     if(stringr::str_detect(n, "_doy")) f[[i]] <- doy_check(f[[i]])
