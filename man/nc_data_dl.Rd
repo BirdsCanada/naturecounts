@@ -46,7 +46,7 @@ public collections will be returned.}
 \item{sql_db}{Character vector. Name and location of SQLite database to
 either create or add to}
 
-\item{verbose}{Logical. Display progress messages?}
+\item{verbose}{Logical. Show messages?}
 }
 \value{
 Data frame

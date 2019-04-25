@@ -41,7 +41,7 @@ the username provided. If no username is provided, defaults to "all".}
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.}
 
-\item{verbose}{Logical. Display progress messages?}
+\item{verbose}{Logical. Show messages?}
 }
 \value{
 Data frame
