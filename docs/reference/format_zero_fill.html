@@ -192,8 +192,8 @@ species.</p>
 
 <span class='co'># Zero fill by all species present</span>
 <span class='no'>rc_all_zeros</span> <span class='kw'>&lt;-</span> <span class='fu'>format_zero_fill</span>(<span class='no'>rc_dates</span>)</div><div class='output co'>#&gt; <span class='message'>Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
-<span class='co'># Zero fill only for only Monarch Butterflies</span>
-<span class='no'>pei_monarchs</span> <span class='kw'>&lt;-</span> <span class='fu'>format_zero_fill</span>(<span class='no'>pei_dates</span>, <span class='no'>species</span> <span class='kw'>==</span> <span class='st'>"252456"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in format_zero_fill(pei_dates, species == "252456"): object 'pei_dates' not found</span></div><div class='input'>
+<span class='co'># Zero fill only for Canada Goose</span>
+<span class='no'>rc_goose</span> <span class='kw'>&lt;-</span> <span class='fu'>format_zero_fill</span>(<span class='no'>rc_dates</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='st'>"230"</span>)</div><div class='output co'>#&gt; <span class='message'>Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -127,8 +127,8 @@ format_dates_db <- function(db, overwrite) {
 #' # Zero fill by all species present
 #' rc_all_zeros <- format_zero_fill(rc_dates)
 #'
-#' # Zero fill only for only Monarch Butterflies
-#' pei_monarchs <- format_zero_fill(pei_dates, species == "252456")
+#' # Zero fill only for Canada Goose
+#' rc_goose <- format_zero_fill(rc_dates, species = "230")
 #'
 #' @export
 format_zero_fill <- function(df_db, by = "event", species = "all",
