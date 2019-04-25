@@ -29,22 +29,29 @@ library(naturecounts)
 
 Use the `nc_count()` function to return collections and the number of
 observations in each for which you have access (here returns all
-**public** collections).
+collections associated with username **sample**).
 
 ``` r
-nc_count()
-#>     collection nrecords
-#> 1     ABATLAS1   123364
-#> 2     ABATLAS2   201398
-#> 3   ABBIRDRECS   357264
-#> 4        BGRMM      476
-#> 5      IMMP_A2       24
-#> 6      IMMP_BW       19
-#> 7         IMQC      761
-#> 8         MLMP      425
-#> 9           MM     4343
-#> 10        PMMM        5
-#> 11 RCBIOTABASE    12598
+nc_count(username = "sample")
+#>      collection nrecords
+#> 1      ABATLAS1   123364
+#> 2      ABATLAS2   201398
+#> 3    ABBIRDRECS   357264
+#> 4         BGRMM      476
+#> 5    EBUTTERFLY    26192
+#> 6          IMMP       43
+#> 7       IMMP_A2       24
+#> 8       IMMP_BW       19
+#> 9          IMQC      761
+#> 10         MEXU     3251
+#> 11         MLMP      802
+#> 12           MM     4343
+#> 13 MONARCHWATCH   145665
+#> 14         PMMM        5
+#> 15  RCBIOTABASE    12598
+#> 16      SAMPLE1     1000
+#> 17      SAMPLE2     1000
+#> 18         WMMM     8981
 ```
 
 Use the `show = "all"` argument to show counts for all collections
@@ -64,11 +71,11 @@ nc_count(show = "all") %>%
 
 ### Fetching data
 
-Fetch all observations of moose which are **publicly** available to a
-local data frame.
+Fetch all observations of moose which are available to user **sample**
+into a local data frame.
 
 ``` r
-moose <- nc_data_dl(species = 133990)
+moose <- nc_data_dl(species = 133990, username = "sample")
 #> Using filters: species (133990); fields_set (BMDE2.00-min)
 #> Collecting available records...
 #>    collection nrecords
@@ -83,7 +90,7 @@ Alternatively, save the downloaded data as a SQLite database
 (`moose.nc`).
 
 ``` r
-moose <- nc_data_dl(species = 133990, sql_db = "moose")
+moose <- nc_data_dl(species = 133990, sql_db = "moose", username = "sample")
 #> Using filters: species (133990); fields_set (BMDE2.00-min)
 #> Collecting available records...
 #>    collection nrecords
@@ -98,9 +105,7 @@ moose <- nc_data_dl(species = 133990, sql_db = "moose")
 
 ### Authorizations
 
-By default `nc_count()` and `nc_data_dl()` return public data which is
-available without a username/password. However, to access
-private/semi-public projects/collections you must [sign
+To access private/semi-public projects/collections you must [sign
 up](https://www.birdscanada.org/birdmon/default/profile.jsp) for a free
 NatureCounts account and
 [register](https://www.birdscanada.org/birdmon/default/projects.jsp) for

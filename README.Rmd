@@ -35,10 +35,10 @@ library(naturecounts)
 
 ### Fetching counts
 
-Use the `nc_count()` function to return collections and the number of observations in each for which you have access (here returns all **public** collections).
+Use the `nc_count()` function to return collections and the number of observations in each for which you have access (here returns all collections associated with username **sample**).
 
 ```{r}
-nc_count()
+nc_count(username = "sample")
 ```
 
 Use the `show = "all"` argument to show counts for all collections available (public or otherwise).
@@ -50,14 +50,14 @@ nc_count(show = "all") %>%
 
 ### Fetching data
 
-Fetch all observations of moose which are **publicly** available to a local data frame.
+Fetch all observations of moose which are available to user **sample** into a local data frame.
 ```{r}
-moose <- nc_data_dl(species = 133990)
+moose <- nc_data_dl(species = 133990, username = "sample")
 ```
 
 Alternatively, save the downloaded data as a SQLite database (`moose.nc`).
 ```{r}
-moose <- nc_data_dl(species = 133990, sql_db = "moose")
+moose <- nc_data_dl(species = 133990, sql_db = "moose", username = "sample")
 ```
 
 ```{r cleanup, include = FALSE}
@@ -66,7 +66,7 @@ file.remove("moose.nc")
 
 ### Authorizations
 
-By default `nc_count()` and `nc_data_dl()` return public data which is available without a username/password. However, to access private/semi-public projects/collections you must [sign up](https://www.birdscanada.org/birdmon/default/profile.jsp) for a free NatureCounts account and [register](https://www.birdscanada.org/birdmon/default/projects.jsp) for the projects you'd like to access. Once registered, you can use the `username` argument (you will be prompted for a password) for both `nc_count()` and `nc_data_dl()`, which will then return a different set of records.
+To access private/semi-public projects/collections you must [sign up](https://www.birdscanada.org/birdmon/default/profile.jsp) for a free NatureCounts account and [register](https://www.birdscanada.org/birdmon/default/projects.jsp) for the projects you'd like to access. Once registered, you can use the `username` argument (you will be prompted for a password) for both `nc_count()` and `nc_data_dl()`, which will then return a different set of records.
 
 ```{r, eval = FALSE}
 nc_count(username = "my_user_name")

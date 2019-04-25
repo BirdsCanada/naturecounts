@@ -73,7 +73,7 @@
     <div class="page-header toc-ignore">
       <h1>Filtering data after download</h1>
             
-            <h4 class="date">2019-04-04</h4>
+            <h4 class="date">2019-04-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/filtering-data.Rmd"><code>vignettes/filtering-data.Rmd</code></a></small>
       <div class="hidden name"><code>filtering-data.Rmd</code></div>
@@ -94,10 +94,12 @@
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lubridate)</a></code></pre></div>
 <p><strong>Downloading data directly to a Data Frame</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">chickadee_df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">14270</span>, <span class="dv">14280</span>, <span class="dv">14290</span>), <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">chickadee_df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">14270</span>, <span class="dv">14280</span>, <span class="dv">14290</span>), <span class="dt">verbose =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">                           <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
 <p><strong>Downloading data to a SQLite DataBase (<code>chickadee.nc</code>)</strong></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">14270</span>, <span class="dv">14280</span>, <span class="dv">14290</span>), <span class="dt">sql_db =</span> <span class="st">"chickadee"</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">chickadee_db &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span>(con, <span class="st">"naturecounts"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">14270</span>, <span class="dv">14280</span>, <span class="dv">14290</span>), <span class="dt">sql_db =</span> <span class="st">"chickadee"</span>, </a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">                  <span class="dt">verbose =</span> <span class="ot">FALSE</span>, <span class="dt">username =</span> <span class="st">"sample"</span>)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">chickadee_db &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span>(con, <span class="st">"naturecounts"</span>)</a></code></pre></div>
 <p>Or, if starting a new session with an existing SQLite database, first create the connection to the database</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">con &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/DBI/topics/dbConnect">dbConnect</a></span>(RSQLite<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/RSQLite/topics/SQLite">SQLite</a></span>(), <span class="dt">dbname =</span> <span class="st">"chickadee.nc"</span>)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">chickadee_db &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span>(con, <span class="st">"naturecounts"</span>)</a></code></pre></div>
@@ -158,7 +160,9 @@
 ## 1 ABATLAS1   
 ## 2 ABATLAS2   
 ## 3 ABBIRDRECS 
-## 4 RCBIOTABASE</code></pre>
+## 4 RCBIOTABASE
+## 5 SAMPLE1    
+## 6 SAMPLE2</code></pre>
 <p>2a) Filter the categories you wish to keep</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">alberta_atlas &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(chickadee_db, </a>
 <a class="sourceLine" id="cb13-2" data-line-number="2">                        collection <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"ABATLAS1"</span>, <span class="st">"ABATLAS2"</span>))</a></code></pre></div>
@@ -177,7 +181,9 @@
 ##   collection
 ##   &lt;chr&gt;     
 ## 1 ABATLAS1  
-## 2 ABATLAS2</code></pre>
+## 2 ABATLAS2  
+## 3 SAMPLE1   
+## 4 SAMPLE2</code></pre>
 </div>
 <div id="numerical-filters" class="section level2">
 <h2 class="hasAnchor">
@@ -205,7 +211,7 @@
 ## #   [/home/steffi/Projects/Business/BSC/NatureCounts/naturecounts/vignettes/chickadee.nc]
 ##     min   max
 ##   &lt;int&gt; &lt;int&gt;
-## 1  1968  2017</code></pre>
+## 1  1968  2019</code></pre>
 <p>2a) Filter the variable to the range you wish to keep (note that the <code>,</code> is an implied <code>&amp;</code>)</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">recent &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(chickadee_db, survey_year <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2015</span>)</a></code></pre></div>
 <p>2b) Filter the variable to the range you wish to exclude with <code>!</code> (note that here we need to use the <code>&amp;</code> explicitly)</p>
@@ -222,7 +228,7 @@
 ## #   [/home/steffi/Projects/Business/BSC/NatureCounts/naturecounts/vignettes/chickadee.nc]
 ##     min   max
 ##   &lt;int&gt; &lt;int&gt;
-## 1  1968  2017</code></pre>
+## 1  1968  2019</code></pre>
 </div>
 <div id="date-filters" class="section level2">
 <h2 class="hasAnchor">
@@ -244,7 +250,7 @@
 ## #   [/home/steffi/Projects/Business/BSC/NatureCounts/naturecounts/vignettes/chickadee.nc]
 ##   min        max       
 ##   &lt;chr&gt;      &lt;chr&gt;     
-## 1 1968-05-26 2017-01-30</code></pre>
+## 1 1968-05-26 2019-01-30</code></pre>
 <p>2a) Filter the variable to the range you wish to keep (note that the <code>,</code> is an implied <code>&amp;</code>)</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">field_season &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(chickadee_db, date <span class="op">&gt;=</span><span class="st"> "2010-05-10"</span>, date <span class="op">&lt;=</span><span class="st"> "2010-09-21"</span>)</a></code></pre></div>
 <p>2b) Filter the variable to the range you wish to exclude with <code>!</code> (note that here we need to use the <code>&amp;</code> explicitly)</p>

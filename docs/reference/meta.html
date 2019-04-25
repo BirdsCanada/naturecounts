@@ -200,44 +200,44 @@ data with a given set of fields/columns.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Return fields/columns in the 'minimum' version</span>
-<span class='fu'>meta_bmde_fields</span>()</div><div class='output co'>#&gt;    field_order      version              local_name              field_name
-#&gt; 1            1 BMDE2.00-min  GlobalUniqueIdentifier  GlobalUniqueIdentifier
-#&gt; 2            2 BMDE2.00-min           CatalogNumber           CatalogNumber
-#&gt; 3            3 BMDE2.00-min                Locality                Locality
-#&gt; 4            4 BMDE2.00-min           TimeCollected           TimeCollected
-#&gt; 5            5 BMDE2.00-min         CollectorNumber         CollectorNumber
-#&gt; 6            6 BMDE2.00-min             FieldNumber             FieldNumber
-#&gt; 7            7 BMDE2.00-min                 Remarks                 Remarks
-#&gt; 8            8 BMDE2.00-min             ProjectCode             ProjectCode
-#&gt; 9            9 BMDE2.00-min            ProtocolType            ProtocolType
-#&gt; 10          10 BMDE2.00-min            ProtocolCode            ProtocolCode
-#&gt; 11          11 BMDE2.00-min             ProtocolURL             ProtocolURL
-#&gt; 12          12 BMDE2.00-min    SurveyAreaIdentifier    SurveyAreaIdentifier
-#&gt; 13          13 BMDE2.00-min SamplingEventIdentifier SamplingEventIdentifier
-#&gt; 14          14 BMDE2.00-min  SamplingEventStructure  SamplingEventStructure
-#&gt; 15          15 BMDE2.00-min         RouteIdentifier         RouteIdentifier
-#&gt; 16          16 BMDE2.00-min TimeObservationsStarted TimeObservationsStarted
-#&gt; 17          17 BMDE2.00-min   TimeObservationsEnded   TimeObservationsEnded
-#&gt; 18          18 BMDE2.00-min         DurationInHours         DurationInHours
-#&gt; 19          19 BMDE2.00-min     TimeIntervalStarted     TimeIntervalStarted
-#&gt; 20          20 BMDE2.00-min       TimeIntervalEnded       TimeIntervalEnded
-#&gt; 21          21 BMDE2.00-min   TimeIntervalsAdditive   TimeIntervalsAdditive
-#&gt; 22          22 BMDE2.00-min       NumberOfObservers       NumberOfObservers
-#&gt; 23          23 BMDE2.00-min          NoObservations          NoObservations
-#&gt; 24          24 BMDE2.00-min        ObservationCount        ObservationCount
-#&gt; 25          25 BMDE2.00-min   ObservationDescriptor   ObservationDescriptor
-#&gt; 26          26 BMDE2.00-min       ObservationCount2       ObservationCount2
-#&gt; 27          27 BMDE2.00-min  ObservationDescriptor2  ObservationDescriptor2
-#&gt; 28          28 BMDE2.00-min       ObservationCount3       ObservationCount3
-#&gt; 29          29 BMDE2.00-min  ObservationDescriptor3  ObservationDescriptor3
-#&gt; 30          30 BMDE2.00-min       ObservationCount4       ObservationCount4
-#&gt; 31          31 BMDE2.00-min  ObservationDescriptor4  ObservationDescriptor4
-#&gt; 32          32 BMDE2.00-min       ObservationCount5       ObservationCount5
-#&gt; 33          33 BMDE2.00-min  ObservationDescriptor5  ObservationDescriptor5
-#&gt; 34          34 BMDE2.00-min       ObservationCount6       ObservationCount6
-#&gt; 35          35 BMDE2.00-min  ObservationDescriptor6  ObservationDescriptor6
-#&gt; 36          36 BMDE2.00-min  AllIndividualsReported  AllIndividualsReported
-#&gt; 37          37 BMDE2.00-min      AllSpeciesReported      AllSpeciesReported</div><div class='input'>
+<span class='fu'>meta_bmde_fields</span>()</div><div class='output co'>#&gt;    field_order      version              local_name
+#&gt; 1            1 BMDE2.00-min  GlobalUniqueIdentifier
+#&gt; 2            2 BMDE2.00-min           CatalogNumber
+#&gt; 3            3 BMDE2.00-min                Locality
+#&gt; 4            4 BMDE2.00-min           TimeCollected
+#&gt; 5            5 BMDE2.00-min         CollectorNumber
+#&gt; 6            6 BMDE2.00-min             FieldNumber
+#&gt; 7            7 BMDE2.00-min                 Remarks
+#&gt; 8            8 BMDE2.00-min             ProjectCode
+#&gt; 9            9 BMDE2.00-min            ProtocolType
+#&gt; 10          10 BMDE2.00-min            ProtocolCode
+#&gt; 11          11 BMDE2.00-min             ProtocolURL
+#&gt; 12          12 BMDE2.00-min    SurveyAreaIdentifier
+#&gt; 13          13 BMDE2.00-min SamplingEventIdentifier
+#&gt; 14          14 BMDE2.00-min  SamplingEventStructure
+#&gt; 15          15 BMDE2.00-min         RouteIdentifier
+#&gt; 16          16 BMDE2.00-min TimeObservationsStarted
+#&gt; 17          17 BMDE2.00-min   TimeObservationsEnded
+#&gt; 18          18 BMDE2.00-min         DurationInHours
+#&gt; 19          19 BMDE2.00-min     TimeIntervalStarted
+#&gt; 20          20 BMDE2.00-min       TimeIntervalEnded
+#&gt; 21          21 BMDE2.00-min   TimeIntervalsAdditive
+#&gt; 22          22 BMDE2.00-min       NumberOfObservers
+#&gt; 23          23 BMDE2.00-min          NoObservations
+#&gt; 24          24 BMDE2.00-min        ObservationCount
+#&gt; 25          25 BMDE2.00-min   ObservationDescriptor
+#&gt; 26          26 BMDE2.00-min       ObservationCount2
+#&gt; 27          27 BMDE2.00-min  ObservationDescriptor2
+#&gt; 28          28 BMDE2.00-min       ObservationCount3
+#&gt; 29          29 BMDE2.00-min  ObservationDescriptor3
+#&gt; 30          30 BMDE2.00-min       ObservationCount4
+#&gt; 31          31 BMDE2.00-min  ObservationDescriptor4
+#&gt; 32          32 BMDE2.00-min       ObservationCount5
+#&gt; 33          33 BMDE2.00-min  ObservationDescriptor5
+#&gt; 34          34 BMDE2.00-min       ObservationCount6
+#&gt; 35          35 BMDE2.00-min  ObservationDescriptor6
+#&gt; 36          36 BMDE2.00-min  AllIndividualsReported
+#&gt; 37          37 BMDE2.00-min      AllSpeciesReported</div><div class='input'>
 <span class='co'># Retrun fields/columns in the 'core' version</span>
 <span class='fu'>meta_bmde_fields</span>(<span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"core"</span>)</div><div class='output co'>#&gt;     field_order  version                             local_name
 #&gt; 1             1 BMDE2.00                 GlobalUniqueIdentifier
@@ -408,177 +408,7 @@ data with a given set of fields/columns.</p></li>
 #&gt; 166         166 BMDE2.00                     HabitatDescription
 #&gt; 167         167 BMDE2.00                               Remarks2
 #&gt; 168         168 BMDE2.00                     LastModifiedAction
-#&gt; 169         169 BMDE2.00                     RecordReviewStatus
-#&gt;                                 field_name
-#&gt; 1                   GlobalUniqueIdentifier
-#&gt; 2                         DateLastModified
-#&gt; 3                            BasisOfRecord
-#&gt; 4                          InstitutionCode
-#&gt; 5                           CollectionCode
-#&gt; 6                            CatalogNumber
-#&gt; 7                           ScientificName
-#&gt; 8                              HigherTaxon
-#&gt; 9                                  Kingdom
-#&gt; 10                                  Phylum
-#&gt; 11                                   Class
-#&gt; 12                                   Order
-#&gt; 13                                  Family
-#&gt; 14                                   Genus
-#&gt; 15                         SpecificEpithet
-#&gt; 16                       InfraspecificRank
-#&gt; 17                    InfraspecificEpithet
-#&gt; 18                    ScientificNameAuthor
-#&gt; 19                 IdentificationQualifier
-#&gt; 20                         HigherGeography
-#&gt; 21                               Continent
-#&gt; 22                               WaterBody
-#&gt; 23                             IslandGroup
-#&gt; 24                                  Island
-#&gt; 25                                 Country
-#&gt; 26                           StateProvince
-#&gt; 27                                  County
-#&gt; 28                                Locality
-#&gt; 29                MinimumElevationInMeters
-#&gt; 30                MaximumElevationInMeters
-#&gt; 31                    MinimumDepthInMeters
-#&gt; 32                    MaximumDepthInMeters
-#&gt; 33                         DecimalLatitude
-#&gt; 34                        DecimalLongitude
-#&gt; 35                           GeodeticDatum
-#&gt; 36           CoordinateUncertaintyInMeters
-#&gt; 37                           YearCollected
-#&gt; 38                          MonthCollected
-#&gt; 39                            DayCollected
-#&gt; 40                           TimeCollected
-#&gt; 41                               JulianDay
-#&gt; 42                               Collector
-#&gt; 43                                     Sex
-#&gt; 44                               LifeStage
-#&gt; 45                                ImageURL
-#&gt; 46                      RelatedInformation
-#&gt; 47                         CollectorNumber
-#&gt; 48                             FieldNumber
-#&gt; 49                              FieldNotes
-#&gt; 50               OriginalCoordinatesSystem
-#&gt; 51                         LatLongComments
-#&gt; 52                      GeoreferenceMethod
-#&gt; 53                  GeoreferenceReferences
-#&gt; 54          GeoreferenceVerificationStatus
-#&gt; 55                                 Remarks
-#&gt; 56                            FootprintWKT
-#&gt; 57                            FootprintSRS
-#&gt; 58                             ProjectCode
-#&gt; 59                            ProtocolType
-#&gt; 60                            ProtocolCode
-#&gt; 61                 ProtocolSpeciesTargeted
-#&gt; 62                       ProtocolReference
-#&gt; 63                             ProtocolURL
-#&gt; 64                    SurveyAreaIdentifier
-#&gt; 65                          SurveyAreaSize
-#&gt; 66             SurveyAreaPercentageCovered
-#&gt; 67                         SurveyAreaShape
-#&gt; 68                SurveyAreaLongAxisLength
-#&gt; 69               SurveyAreaShortAxisLength
-#&gt; 70           SurveyAreaLongAxisOrientation
-#&gt; 71                        CoordinatesScope
-#&gt; 72                 SamplingEventIdentifier
-#&gt; 73                  SamplingEventStructure
-#&gt; 74                         RouteIdentifier
-#&gt; 75                 TimeObservationsStarted
-#&gt; 76                   TimeObservationsEnded
-#&gt; 77                         DurationInHours
-#&gt; 78                     TimeIntervalStarted
-#&gt; 79                       TimeIntervalEnded
-#&gt; 80                   TimeIntervalsAdditive
-#&gt; 81                       NumberOfObservers
-#&gt; 82                      EffortMeasurement1
-#&gt; 83                            EffortUnits1
-#&gt; 84                      EffortMeasurement2
-#&gt; 85                            EffortUnits2
-#&gt; 86                      EffortMeasurement3
-#&gt; 87                            EffortUnits3
-#&gt; 88                      EffortMeasurement4
-#&gt; 89                            EffortUnits4
-#&gt; 90                      EffortMeasurement5
-#&gt; 91                            EffortUnits5
-#&gt; 92                      EffortMeasurement6
-#&gt; 93                            EffortUnits6
-#&gt; 94                      EffortMeasurement7
-#&gt; 95                            EffortUnits7
-#&gt; 96                      EffortMeasurement8
-#&gt; 97                            EffortUnits8
-#&gt; 98                      EffortMeasurement9
-#&gt; 99                            EffortUnits9
-#&gt; 100                    EffortMeasurement10
-#&gt; 101                          EffortUnits10
-#&gt; 102                    EffortMeasurement11
-#&gt; 103                          EffortUnits11
-#&gt; 104                    EffortMeasurement12
-#&gt; 105                          EffortUnits12
-#&gt; 106                    EffortMeasurement13
-#&gt; 107                          EffortUnits13
-#&gt; 108                    EffortMeasurement14
-#&gt; 109                          EffortUnits14
-#&gt; 110                    EffortMeasurement15
-#&gt; 111                          EffortUnits15
-#&gt; 112                    EffortMeasurement16
-#&gt; 113                          EffortUnits16
-#&gt; 114                    EffortMeasurement17
-#&gt; 115                          EffortUnits17
-#&gt; 116                    EffortMeasurement18
-#&gt; 117                          EffortUnits18
-#&gt; 118                         NoObservations
-#&gt; 119                   DistanceFromObserver
-#&gt; 120                DistanceFromObserverMin
-#&gt; 121                DistanceFromObserverMax
-#&gt; 122                      DistanceFromStart
-#&gt; 123                       BearingInDegrees
-#&gt; 124                SpecimenDecimalLatitude
-#&gt; 125               SpecimenDecimalLongitude
-#&gt; 126                  SpecimenGeodeticDatum
-#&gt; 127                        SpecimenUTMZone
-#&gt; 128                    SpecimenUTMNorthing
-#&gt; 129                     SpecimenUTMEasting
-#&gt; 130                       ObservationCount
-#&gt; 131                  ObservationDescriptor
-#&gt; 132                      ObservationCount2
-#&gt; 133                 ObservationDescriptor2
-#&gt; 134                      ObservationCount3
-#&gt; 135                 ObservationDescriptor3
-#&gt; 136                      ObservationCount4
-#&gt; 137                 ObservationDescriptor4
-#&gt; 138                      ObservationCount5
-#&gt; 139                 ObservationDescriptor5
-#&gt; 140                      ObservationCount6
-#&gt; 141                 ObservationDescriptor6
-#&gt; 142                        ObsCountAtLeast
-#&gt; 143                         ObsCountAtMost
-#&gt; 144                        ObservationDate
-#&gt; 145                  DateUncertaintyInDays
-#&gt; 146                 AllIndividualsReported
-#&gt; 147                     AllSpeciesReported
-#&gt; 148                                UTMZone
-#&gt; 149                            UTMNorthing
-#&gt; 150                             UTMEasting
-#&gt; 151 CoordinatesUncertaintyInDecimalDegrees
-#&gt; 152                             CommonName
-#&gt; 153                      RecordPermissions
-#&gt; 154                   MultiScientificName1
-#&gt; 155                   MultiScientificName2
-#&gt; 156                   MultiScientificName3
-#&gt; 157                   MultiScientificName4
-#&gt; 158                   MultiScientificName5
-#&gt; 159                   MultiScientificName6
-#&gt; 160              TaxonomicAuthorityAuthors
-#&gt; 161              TaxonomicAuthorityVersion
-#&gt; 162                 TaxonomicAuthorityYear
-#&gt; 163                            SpeciesCode
-#&gt; 164                         TaxonConceptID
-#&gt; 165                  BreedingBirdAtlasCode
-#&gt; 166                     HabitatDescription
-#&gt; 167                               Remarks2
-#&gt; 168                     LastModifiedAction
-#&gt; 169                     RecordReviewStatus</div><div class='input'>
+#&gt; 169         169 BMDE2.00                     RecordReviewStatus</div><div class='input'>
 <span class='co'># Return all possible fields</span>
 <span class='fu'>meta_bmde_fields</span>(<span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"extended"</span>)</div><div class='output co'>#&gt;     field_order      version                             local_name
 #&gt; 1             1 BMDE2.00-ext                 GlobalUniqueIdentifier
@@ -845,273 +675,7 @@ data with a given set of fields/columns.</p></li>
 #&gt; 262         262 BMDE2.00-ext                    AuxiliaryMarkerType
 #&gt; 263         263 BMDE2.00-ext                  AuxiliaryMarkerNumber
 #&gt; 264         264 BMDE2.00-ext                     LastModifiedAction
-#&gt; 265         265 BMDE2.00-ext                     RecordReviewStatus
-#&gt;                                 field_name
-#&gt; 1                   GlobalUniqueIdentifier
-#&gt; 2                         DateLastModified
-#&gt; 3                            BasisOfRecord
-#&gt; 4                            InstitutionID
-#&gt; 5                          InstitutionCode
-#&gt; 6                           CollectionCode
-#&gt; 7                            CatalogNumber
-#&gt; 8                           ScientificName
-#&gt; 9                              HigherTaxon
-#&gt; 10                                 Kingdom
-#&gt; 11                                  Phylum
-#&gt; 12                                   Class
-#&gt; 13                                   Order
-#&gt; 14                                  Family
-#&gt; 15                                   Genus
-#&gt; 16                         SpecificEpithet
-#&gt; 17                       InfraspecificRank
-#&gt; 18                    InfraspecificEpithet
-#&gt; 19                    ScientificNameAuthor
-#&gt; 20                 IdentificationQualifier
-#&gt; 21                         HigherGeography
-#&gt; 22                               Continent
-#&gt; 23                               WaterBody
-#&gt; 24                             IslandGroup
-#&gt; 25                                  Island
-#&gt; 26                                 Country
-#&gt; 27                           StateProvince
-#&gt; 28                                  County
-#&gt; 29                                Locality
-#&gt; 30                MinimumElevationInMeters
-#&gt; 31                MaximumElevationInMeters
-#&gt; 32                    MinimumDepthInMeters
-#&gt; 33                    MaximumDepthInMeters
-#&gt; 34                         DecimalLatitude
-#&gt; 35                        DecimalLongitude
-#&gt; 36                           GeodeticDatum
-#&gt; 37           CoordinateUncertaintyInMeters
-#&gt; 38                           YearCollected
-#&gt; 39                          MonthCollected
-#&gt; 40                            DayCollected
-#&gt; 41                           TimeCollected
-#&gt; 42                               JulianDay
-#&gt; 43                               Collector
-#&gt; 44                                     Sex
-#&gt; 45                               LifeStage
-#&gt; 46                                ImageURL
-#&gt; 47                      RelatedInformation
-#&gt; 48                         CollectorNumber
-#&gt; 49                             FieldNumber
-#&gt; 50                              FieldNotes
-#&gt; 51               OriginalCoordinatesSystem
-#&gt; 52                         LatLongComments
-#&gt; 53                      GeoreferenceMethod
-#&gt; 54                  GeoreferenceReferences
-#&gt; 55          GeoreferenceVerificationStatus
-#&gt; 56                                 Remarks
-#&gt; 57                            FootprintWKT
-#&gt; 58                            FootprintSRS
-#&gt; 59                             ProjectCode
-#&gt; 60                            ProtocolType
-#&gt; 61                            ProtocolCode
-#&gt; 62                 ProtocolSpeciesTargeted
-#&gt; 63                       ProtocolReference
-#&gt; 64                             ProtocolURL
-#&gt; 65                    SurveyAreaIdentifier
-#&gt; 66                          SurveyAreaSize
-#&gt; 67             SurveyAreaPercentageCovered
-#&gt; 68                         SurveyAreaShape
-#&gt; 69                SurveyAreaLongAxisLength
-#&gt; 70               SurveyAreaShortAxisLength
-#&gt; 71           SurveyAreaLongAxisOrientation
-#&gt; 72                        CoordinatesScope
-#&gt; 73                 SamplingEventIdentifier
-#&gt; 74                  SamplingEventStructure
-#&gt; 75                         RouteIdentifier
-#&gt; 76                 TimeObservationsStarted
-#&gt; 77                   TimeObservationsEnded
-#&gt; 78                         DurationInHours
-#&gt; 79                     TimeIntervalStarted
-#&gt; 80                       TimeIntervalEnded
-#&gt; 81                   TimeIntervalsAdditive
-#&gt; 82                       NumberOfObservers
-#&gt; 83                      EffortMeasurement1
-#&gt; 84                            EffortUnits1
-#&gt; 85                      EffortMeasurement2
-#&gt; 86                            EffortUnits2
-#&gt; 87                      EffortMeasurement3
-#&gt; 88                            EffortUnits3
-#&gt; 89                      EffortMeasurement4
-#&gt; 90                            EffortUnits4
-#&gt; 91                      EffortMeasurement5
-#&gt; 92                            EffortUnits5
-#&gt; 93                      EffortMeasurement6
-#&gt; 94                            EffortUnits6
-#&gt; 95                      EffortMeasurement7
-#&gt; 96                            EffortUnits7
-#&gt; 97                      EffortMeasurement8
-#&gt; 98                            EffortUnits8
-#&gt; 99                      EffortMeasurement9
-#&gt; 100                           EffortUnits9
-#&gt; 101                    EffortMeasurement10
-#&gt; 102                          EffortUnits10
-#&gt; 103                    EffortMeasurement11
-#&gt; 104                          EffortUnits11
-#&gt; 105                    EffortMeasurement12
-#&gt; 106                          EffortUnits12
-#&gt; 107                    EffortMeasurement13
-#&gt; 108                          EffortUnits13
-#&gt; 109                    EffortMeasurement14
-#&gt; 110                          EffortUnits14
-#&gt; 111                    EffortMeasurement15
-#&gt; 112                          EffortUnits15
-#&gt; 113                    EffortMeasurement16
-#&gt; 114                          EffortUnits16
-#&gt; 115                    EffortMeasurement17
-#&gt; 116                          EffortUnits17
-#&gt; 117                    EffortMeasurement18
-#&gt; 118                          EffortUnits18
-#&gt; 119                         NoObservations
-#&gt; 120                   DistanceFromObserver
-#&gt; 121                DistanceFromObserverMin
-#&gt; 122                DistanceFromObserverMax
-#&gt; 123                      DistanceFromStart
-#&gt; 124                       BearingInDegrees
-#&gt; 125                SpecimenDecimalLatitude
-#&gt; 126               SpecimenDecimalLongitude
-#&gt; 127                  SpecimenGeodeticDatum
-#&gt; 128                        SpecimenUTMZone
-#&gt; 129                    SpecimenUTMNorthing
-#&gt; 130                     SpecimenUTMEasting
-#&gt; 131                       ObservationCount
-#&gt; 132                  ObservationDescriptor
-#&gt; 133                      ObservationCount2
-#&gt; 134                 ObservationDescriptor2
-#&gt; 135                      ObservationCount3
-#&gt; 136                 ObservationDescriptor3
-#&gt; 137                      ObservationCount4
-#&gt; 138                 ObservationDescriptor4
-#&gt; 139                      ObservationCount5
-#&gt; 140                 ObservationDescriptor5
-#&gt; 141                      ObservationCount6
-#&gt; 142                 ObservationDescriptor6
-#&gt; 143                      ObservationCount7
-#&gt; 144                 ObservationDescriptor7
-#&gt; 145                      ObservationCount8
-#&gt; 146                 ObservationDescriptor8
-#&gt; 147                      ObservationCount9
-#&gt; 148                 ObservationDescriptor9
-#&gt; 149                     ObservationCount10
-#&gt; 150                ObservationDescriptor10
-#&gt; 151                     ObservationCount11
-#&gt; 152                ObservationDescriptor11
-#&gt; 153                     ObservationCount12
-#&gt; 154                ObservationDescriptor12
-#&gt; 155                     ObservationCount13
-#&gt; 156                ObservationDescriptor13
-#&gt; 157                     ObservationCount14
-#&gt; 158                ObservationDescriptor14
-#&gt; 159                        ObsCountAtLeast
-#&gt; 160                         ObsCountAtMost
-#&gt; 161                        ObservationDate
-#&gt; 162                  DateUncertaintyInDays
-#&gt; 163                 AllIndividualsReported
-#&gt; 164                     AllSpeciesReported
-#&gt; 165                                UTMZone
-#&gt; 166                            UTMNorthing
-#&gt; 167                             UTMEasting
-#&gt; 168 CoordinatesUncertaintyInDecimalDegrees
-#&gt; 169                             CommonName
-#&gt; 170                      RecordPermissions
-#&gt; 171                   MultiScientificName1
-#&gt; 172                   MultiScientificName2
-#&gt; 173                   MultiScientificName3
-#&gt; 174                   MultiScientificName4
-#&gt; 175                   MultiScientificName5
-#&gt; 176                   MultiScientificName6
-#&gt; 177              TaxonomicAuthorityAuthors
-#&gt; 178              TaxonomicAuthorityVersion
-#&gt; 179                 TaxonomicAuthorityYear
-#&gt; 180                            SpeciesCode
-#&gt; 181                         TaxonConceptID
-#&gt; 182                  BreedingBirdAtlasCode
-#&gt; 183                     HabitatDescription
-#&gt; 184                               Remarks2
-#&gt; 185                         DateIdentified
-#&gt; 186                           IdentifiedBy
-#&gt; 187                  AssociatedOccurrences
-#&gt; 188                       MeasurementType1
-#&gt; 189                      MeasurementValue1
-#&gt; 190                   MeasurementAccuracy1
-#&gt; 191                       MeasurementUnit1
-#&gt; 192               MeasurementDeterminedBy1
-#&gt; 193                     MeasurementMethod1
-#&gt; 194                       MeasurementType2
-#&gt; 195                      MeasurementValue2
-#&gt; 196                   MeasurementAccuracy2
-#&gt; 197                       MeasurementUnit2
-#&gt; 198               MeasurementDeterminedBy2
-#&gt; 199                     MeasurementMethod2
-#&gt; 200                       MeasurementType3
-#&gt; 201                      MeasurementValue3
-#&gt; 202                   MeasurementAccuracy3
-#&gt; 203                       MeasurementUnit3
-#&gt; 204               MeasurementDeterminedBy3
-#&gt; 205                     MeasurementMethod3
-#&gt; 206                       MeasurementType4
-#&gt; 207                      MeasurementValue4
-#&gt; 208                   MeasurementAccuracy4
-#&gt; 209                       MeasurementUnit4
-#&gt; 210               MeasurementDeterminedBy4
-#&gt; 211                     MeasurementMethod4
-#&gt; 212                       MeasurementType5
-#&gt; 213                      MeasurementValue5
-#&gt; 214                   MeasurementAccuracy5
-#&gt; 215                       MeasurementUnit5
-#&gt; 216               MeasurementDeterminedBy5
-#&gt; 217                     MeasurementMethod5
-#&gt; 218                       MeasurementType6
-#&gt; 219                      MeasurementValue6
-#&gt; 220                   MeasurementAccuracy6
-#&gt; 221                       MeasurementUnit6
-#&gt; 222               MeasurementDeterminedBy6
-#&gt; 223                     MeasurementMethod6
-#&gt; 224                       MeasurementType7
-#&gt; 225                      MeasurementValue7
-#&gt; 226                   MeasurementAccuracy7
-#&gt; 227                       MeasurementUnit7
-#&gt; 228               MeasurementDeterminedBy7
-#&gt; 229                     MeasurementMethod7
-#&gt; 230                       MeasurementType8
-#&gt; 231                      MeasurementValue8
-#&gt; 232                   MeasurementAccuracy8
-#&gt; 233                       MeasurementUnit8
-#&gt; 234               MeasurementDeterminedBy8
-#&gt; 235                     MeasurementMethod8
-#&gt; 236                       MeasurementType9
-#&gt; 237                      MeasurementValue9
-#&gt; 238                   MeasurementAccuracy9
-#&gt; 239                       MeasurementUnit9
-#&gt; 240               MeasurementDeterminedBy9
-#&gt; 241                     MeasurementMethod9
-#&gt; 242                      MeasurementType10
-#&gt; 243                     MeasurementValue10
-#&gt; 244                  MeasurementAccuracy10
-#&gt; 245                      MeasurementUnit10
-#&gt; 246              MeasurementDeterminedBy10
-#&gt; 247                    MeasurementMethod10
-#&gt; 248                      MeasurementType11
-#&gt; 249                     MeasurementValue11
-#&gt; 250                  MeasurementAccuracy11
-#&gt; 251                      MeasurementUnit11
-#&gt; 252              MeasurementDeterminedBy11
-#&gt; 253                    MeasurementMethod11
-#&gt; 254                      MeasurementType12
-#&gt; 255                     MeasurementValue12
-#&gt; 256                  MeasurementAccuracy12
-#&gt; 257                      MeasurementUnit12
-#&gt; 258              MeasurementDeterminedBy12
-#&gt; 259                    MeasurementMethod12
-#&gt; 260                      PrimaryMarkerType
-#&gt; 261                    PrimaryMarkerNumber
-#&gt; 262                    AuxiliaryMarkerType
-#&gt; 263                  AuxiliaryMarkerNumber
-#&gt; 264                     LastModifiedAction
-#&gt; 265                     RecordReviewStatus</div></pre>
+#&gt; 265         265 BMDE2.00-ext                     RecordReviewStatus</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

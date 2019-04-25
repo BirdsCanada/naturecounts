@@ -22,7 +22,8 @@ library(mapview)
 First we'll use download some data:
 
 ```{r}
-barred_owls <- nc_data_dl(species = 7590, region = list(statprov = "AB"))
+barred_owls <- nc_data_dl(species = 7590, region = list(statprov = "AB"), 
+                          username = "sample")
 head(barred_owls)
 ```
 

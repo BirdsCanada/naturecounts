@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Specify common parameters for <code>nc_data_dl</code> and <code>nc_count</code> — args • naturecounts</title>
+<title>Common arguments for <code>nc_data_dl</code> and <code>nc_count</code> — args • naturecounts</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Specify common parameters for <code>nc_data_dl</code> and <code>nc_count</code> — args" />
+<meta property="og:title" content="Common arguments for <code>nc_data_dl</code> and <code>nc_count</code> — args" />
 
-<meta property="og:description" content="Specify common parameters for nc_data_dl and nc_count" />
+<meta property="og:description" content="Common arguments for nc_data_dl and nc_count" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -105,14 +105,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Specify common parameters for <code>nc_data_dl</code> and <code>nc_count</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/BirdStudiesCanada/naturecounts/blob/master/R/download.R'><code>R/download.R</code></a></small>
+    <h1>Common arguments for <code>nc_data_dl</code> and <code>nc_count</code></h1>
+    <small class="dont-index">Source: <a href='https://github.com/BirdStudiesCanada/naturecounts/blob/master/R/common_docs.R'><code>R/common_docs.R</code></a></small>
     <div class="hidden name"><code>args.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Specify common parameters for <code>nc_data_dl</code> and <code>nc_count</code></p>
+    <p>Common arguments for <code>nc_data_dl</code> and <code>nc_count</code></p>
     
     </div>
 
@@ -124,6 +124,13 @@
       <th>collections</th>
       <td><p>Character vector. The collection codes from which to
 download data. NULL (default) downloads data from all available collections</p></td>
+    </tr>
+    <tr>
+      <th>project_ids</th>
+      <td><p>Character/Numeric vector. The <code>project id</code>s from which to
+download data. First the collections associated with a <code>project_id</code> are
+determined, and then data is downloaded for each collection. If both
+<code>collections</code> and <code>project_ids</code> are supplied, they are combined.</p></td>
     </tr>
     <tr>
       <th>species</th>
@@ -200,6 +207,31 @@ article on regional filters
 (http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
 for more information.</p>
     
+    <h2 class="hasAnchor" id="data-fields-columns-fields-set-and-fields-"><a class="anchor" href="#data-fields-columns-fields-set-and-fields-"></a>Data Fields/Columns (<code>fields_set</code> and <code>fields</code>)</h2>
+
+    
+    <p>By default data is downloaded with the <code>minimum</code> set of fields/columns.
+However, for more advanced applications, users may wish to specify which
+fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
+keeps track of variables used to augment observation data. There are
+different versions reflecting different collections of variables which can
+be specified for download in one of four ways:</p><ol>
+<li><p><code>fields_set</code> can be a specific shorthand reflecting a BMDE version:
+<code>core</code>, <code>extended</code> or <code>minimum</code> (default). See <code><a href='meta.html'>meta_bmde_versions()</a></code> to see
+which BMDE version the shorthand refers to.</p></li>
+<li><p><code>fields_set</code> can be <code>default</code> which uses the default BMDE version for a
+particular collection (note that if you download more than one collection,
+the field sets will expand to cover all fields/columns in the combined
+collections)</p></li>
+<li><p><code>fields_set</code> can be the exact BMDE version. See <code><a href='meta.html'>meta_bmde_versions()</a></code>
+for options.</p></li>
+<li><p><code>fields_set</code> can be <code>custom</code> and the <code>fields</code> argument can be a
+character vector specifying the exact fields/columns to return. See
+<code><a href='meta.html'>meta_bmde_fields()</a></code>) for potential <code>fields</code> values.</p></li>
+</ol>
+    <p>Note that in all cases there are a set of fields/columns that are <em>always</em>
+returned, no matter what <code>fields_set</code> is used.</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -214,6 +246,8 @@ for more information.</p>
       <li><a href="#day-of-year-doy-">Day of Year (<code>doy</code>)</a></li>
 
       <li><a href="#regions-region-">Regions (<code>region</code>)</a></li>
+
+      <li><a href="#data-fields-columns-fields-set-and-fields-">Data Fields/Columns (<code>fields_set</code> and <code>fields</code>)</a></li>
           </ul>
 
   </div>
