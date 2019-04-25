@@ -19,8 +19,8 @@ progress_query <- function(current, max, by) {
 #' @keywords internal
 
 as_numeric <- function(x) {
-  x1 <- suppressWarnings(as.numeric(x))
-  if(any(is.na(x1))) x1[is.na(x1)] <- x[is.na(x1)]
+  x1 <- suppressWarnings(as.numeric(as.character(x)))
+  if(any(!is.na(x[is.na(x1)]))) x1[is.na(x1)] <- x[is.na(x1)]
   x1
 }
 

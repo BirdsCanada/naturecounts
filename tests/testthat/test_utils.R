@@ -4,6 +4,7 @@ test_that("as_numeric() converts to numeric if possible", {
   expect_is(as_numeric(13), "numeric")
   expect_is(as_numeric("13"), "numeric")
   expect_is(as_numeric("aa"), "character")
+  expect_is(as_numeric(c(NA, "13")), "numeric")
 })
 
 test_that("capture_df() capture dataframe", {
