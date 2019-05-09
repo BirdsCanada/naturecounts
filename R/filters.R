@@ -33,9 +33,7 @@ filter_create <- function(verbose, ...) {
 
   # Report filters
   if(verbose) {
-    f_msg <- lapply(f, function(x) paste0(x, collapse = ", "))
-    f_msg <- paste0("(", f_msg, ")")
-    f_msg <- paste0(paste0(names(f), " ", f_msg), collapse = "; ")
+    f_msg <- filter_to_str(f)
     message("Using filters: ", f_msg)
   }
 
@@ -43,6 +41,14 @@ filter_create <- function(verbose, ...) {
   names(f) <- queries$api_name[match(names(f), queries$package_name)]
   f
 }
+
+filter_to_str <- function(f) {
+  names(f) <- stringr::str_remove(names(f), "filter_")
+  f_msg <- lapply(f, function(x) paste0(x, collapse = ", "))
+  f_msg <- paste0("(", f_msg, ")")
+  paste0(paste0(names(f), " ", f_msg), collapse = "; ")
+}
+
 
 filter_unpack <- function(f) {
   f$years <- filter_dup(f$years)
