@@ -21,6 +21,7 @@
 #' @param username Character vector. Username for <http://naturecounts.ca>. If
 #'   provided, the user will be prompted for a password. If left NULL, only
 #'   public collections will be returned.
+#' @param verbose Logical. Show messages?
 #'
 #' @section NatureCounts account:
 #'   All public data is available without a username/password. However, to
@@ -81,13 +82,4 @@
 #'
 #' @keywords internal
 #' @name args
-NULL
-
-# verbose ------------------
-#' Common arguments for many functions
-#'
-#' @param verbose Logical. Show messages?
-#'
-#' @keywords internal
-#' @name verbose
 NULL

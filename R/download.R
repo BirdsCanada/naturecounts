@@ -14,7 +14,6 @@
 #'   either create or add to
 #'
 #' @inheritParams args
-#' @inheritParams verbose
 #' @inheritSection args NatureCounts account
 #' @inheritSection args Species ids (`species`)
 #' @inheritSection args Day of Year (`doy`)
@@ -263,7 +262,6 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'   the username provided. If no username is provided, defaults to "all".
 #'
 #' @inheritParams args
-#' @inheritParams verbose
 #' @inheritSection args NatureCounts account
 #' @inheritSection args Species ids (`species`)
 #' @inheritSection args Day of Year (`doy`)

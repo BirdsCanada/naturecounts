@@ -97,7 +97,7 @@ format_dates_db <- function(db, overwrite) {
 #' @param extra_cols Character vector. Extra columns/fields uniquely associated
 #'   with `by` to keep in the data (all columns not in `by`, `species`, `fill`,
 #'   or `extra_cols` will be omitted from the result.
-#' @inheritParams verbose
+#' @inheritParams args
 #'
 #' @details `by` refers to the combination of columns which are used to detect
 #'   missing values. When `by = "event"`, `project_id`, `collection`, `date`,

@@ -31,6 +31,8 @@ See details}
 \item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.}
+
+\item{verbose}{Logical. Show messages?}
 }
 \description{
 Common arguments for \code{nc_data_dl} and \code{nc_count}
