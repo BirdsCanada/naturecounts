@@ -62,7 +62,8 @@ test_that("db_create creates tables in the database", {
     expect_silent(d <- dplyr::tbl(con, m)) %>%
       expect_is("tbl_sql")
     expect_equal(dplyr::collect(d) %>% as.data.frame(),
-                 do.call(paste0("meta_", m), args = list()))
+                 do.call(paste0("meta_", m), args = list()),
+                 label = m)
   }
 
   # Clean up
