@@ -3,6 +3,30 @@ parse_results <- function(r, results = FALSE) {
   structure(r, class = "data.frame", row.names = seq(along = r[[1]]))
 }
 
+parse_request <- function(request) {
+  tibble::tibble(request) %>%
+    dplyr::mutate(request_id = names(request),
+                  request = unname(request),
+                  collections = purrr::map(request, ~list_to_df(.$collections, type = "collections")),
+                  filters = purrr::map_chr(request, ~filter_to_str(.$filters)),
+                  requestOrigin = purrr::map_chr(request, ~null_to_na(.$requestOrigin)),
+                  requestLabel = purrr::map_chr(request, ~null_to_na(.$requestLabel))) %>%
+    tidyr::unnest(collections) %>%
+    dplyr::select(request_id, requestOrigin, requestLabel, collections, approved, recordCount, filters)
+}
+
+
+list_to_df <- function(l, type) {
+  df <- data.frame()
+  for(i in 1:length(l)) {
+    df <- dplyr::bind_rows(df, dplyr::mutate(tibble::as_tibble(l[[i]]),
+                                             !!type := names(l)[i]))
+  }
+  df
+}
+
+null_to_na <- function(x) dplyr::if_else(is.null(x), as.character(NA), x)
+
 progress_query <- function(current, max, by) {
   to <- max - current
   to <- ifelse(to > by, current + by, max)
