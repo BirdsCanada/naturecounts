@@ -1,5 +1,6 @@
 username_check <- function(u) {
-  if(missing(u)) stop("A 'username' is needed to download data",
+  if(missing(u)) stop("A 'username' is needed to access the server\n  ",
+                      "(consider username = 'sample' for testing)",
                       call. = FALSE)
 }
 
