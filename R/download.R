@@ -80,6 +80,8 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   # Get available records
   if(verbose) message("Collecting available records...")
   records <- nc_count_internal(filter = filter, token = token)
+  requestId <- records$requestId
+  records <- records$results
 
   # If there are no records to download, see why not and report that to the user
   if(nrow(records) == 0) {
@@ -121,7 +123,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   }
 
   # Query Information
-  query <- list(lastRecord = 0, numRecords = 5000, requestId = NULL)
+  query <- list(lastRecord = 0, numRecords = 5000, requestId = requestId)
 
   if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {
@@ -311,6 +313,9 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
     message("Without a username, using 'show = \"all\"'")
   }
 
+  # Username check and Authorization
+  token <- srv_auth(username)
+
   # Check/convert project_ids to collections
   collections <- projects_check(project_ids, collections)
 
@@ -320,26 +325,25 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                           years = years, doy = doy, region = region,
                           site_type = site_type)
 
-  # Username check and Authorization
-  token <- srv_auth(username)
-
   # Get counts
   cnts <- nc_count_internal(filter, token, show)
 
-  cnts
+  cnts[['results']]
 }
 
 nc_count_internal <- function(filter, token, show = "available") {
-  cnts <- srv_query(api$collections_count, token = token, filter = filter) %>%
+  cnts <- srv_query(api$collections_count, token = token, filter = filter)
+
+  requestId <- cnts$requestId
+
+  cnts <- cnts %>%
     parse_results(results = TRUE) %>%
     dplyr::arrange(.data$collection)
 
   if(show == "available" && nrow(cnts) > 0) {
-    cnts <- srv_query(api$permissions, token = token) %>%
-      parse_results(results = TRUE) %>%
-      dplyr::semi_join(cnts, ., by = "collection")
+    cnts <- dplyr::filter(cnts, .data$access == "yes")
   }
-  cnts
+  list(results = cnts, requestId = requestId)
 }
 
 
