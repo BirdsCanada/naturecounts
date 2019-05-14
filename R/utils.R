@@ -12,7 +12,14 @@ parse_request <- function(request) {
                   requestOrigin = purrr::map_chr(request, ~null_to_na(.$requestOrigin)),
                   requestLabel = purrr::map_chr(request, ~null_to_na(.$requestLabel))) %>%
     tidyr::unnest(collections) %>%
-    dplyr::select(request_id, requestOrigin, requestLabel, collections, approved, recordCount, filters)
+    dplyr::select(request_id, requestOrigin, requestLabel,
+                  collection = collections,
+                  approved,
+                  nrecords = recordCount,
+                  filters) %>%
+    dplyr::mutate(nrecords = as_numeric(nrecords)) %>%
+    dplyr::arrange(request_id) %>%
+    as.data.frame()
 }
 
 
@@ -49,7 +56,7 @@ as_numeric <- function(x) {
 }
 
 capture_df <- function(x) {
-  o <- utils::capture.output(utils::head(x))
+  o <- utils::capture.output(utils::head(as.data.frame(x)))
   if(nrow(x) > 6) o <- c(o, "...")
   paste0(o, collapse = "\n")
 }

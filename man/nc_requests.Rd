@@ -7,7 +7,7 @@
 nc_requests(request_id = NULL, username)
 }
 \arguments{
-\item{request_id}{Numeric. Specific request id to return status of.}
+\item{request_id}{Numeric. Specific request id to check or download.}
 
 \item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
 provided, the user will be prompted for a password. If left NULL, only
@@ -19,21 +19,28 @@ data frame
 \description{
 List pending or completed data requests for a given user.
 }
-\details{
-There are two types of data requests: ones made through the api
-(i.e. \code{naturecounts} R package) and those made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form}.
+\section{\code{request_id}'s}{
+
+There are two types of data requests: ones made through the api (i.e. this
+\code{naturecounts} R package) and those made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form}. Each
+request generates a request id which identifies the filter set and
+collections requested.
 
 Requests made through this package via the \code{\link[=nc_data_dl]{nc_data_dl()}} function only
 return data the user has access to. If data was successfully downloaded, the
-user can see the request details with this function.
+user can see the request details with the \code{\link[=nc_requests]{nc_requests()}} function.
 
 Requests made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} may
-include collections to which the user does not have access. This function
+include collections to which the user does not have access. \code{\link[=nc_requests]{nc_requests()}}
 will list the requests along with the approval status (either 'approved' or
-'pending')
-}
-\examples{
+'pending').
 
+Any approved request id can be downloaded by suppling the \code{request_id} to
+\code{\link[=nc_data_dl]{nc_data_dl()}} (e.g., \code{nc_data_dl(request_id = 152000, username = "USER")}).
+}
+
+\examples{
 nc_requests(username = "sample")
+nc_requests(username = "sample", request_id = 152446)
 
 }

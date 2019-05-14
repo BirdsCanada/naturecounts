@@ -19,6 +19,7 @@
 #' @inheritSection args Day of Year (`doy`)
 #' @inheritSection args Regions (`region`)
 #' @inheritSection args Data Fields/Columns (`fields_set` and `fields`)
+#' @inheritSection args `request_id`'s
 #'
 #' @return Data frame
 #'
@@ -55,17 +56,52 @@
 #'                     fields = c("Locality", "AllSpeciesReported"),
 #'                     username = "sample")
 #'
+#' \dontrun{
+#' # All collections by request id
+#' my_data <- nc_data_dl(request_id = 000000, username = "USER")
+#'
+#' # Specific collection by request id
+#' my_data <- nc_data_dl(collections = "ABATLAS1",
+#'                       request_id = 000000, username = "USER")
+#' }
+#'
 #' @export
 
 nc_data_dl <- function(collections = NULL, project_ids = NULL,
                        species = NULL, years = NULL,
                        doy = NULL, region = NULL, site_type = NULL,
                        fields_set = "minimum", fields = NULL,
-                       username, sql_db = NULL,
+                       username, request_id = NULL, sql_db = NULL,
                        verbose = TRUE) {
 
-  # Check/convert project_ids to collections
+  # Username check and Authorization
+  token <- srv_auth(username)
+
+  # Check/convert project_ids to collections (collections checked in filter)
   collections <- projects_check(project_ids, collections)
+
+  # If request_id provided, check, and ignore other filter values
+  if(!is.null(request_id)) {
+
+    if(any(!is.null(c(species, years, doy, region, site_type)))) {
+      message("Donwloading previously logged request_id ",
+              "(ignoring filters 'species', 'years', 'doy', ",
+              "'region', and 'site_type')")
+      species <- years <- doy <- region <- site_type <- NULL
+    }
+
+    requests <- nc_requests_internal(request_id, token)
+
+    if(!is.null(collections)) {
+      if(any(!collections %in% requests$collection)) {
+        stop("Some 'collections' were not included in the original request and ",
+             "cannot be downloaded with this 'request_id'", call. = FALSE)
+      }
+      requests <- dplyr::filter(requests, collection %in% collections)
+    } else {
+      collections <- requests$collection
+    }
+  }
 
   # Assemble and check filter parameters
   filter <- filter_create(verbose = verbose,
@@ -74,14 +110,16 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
                           site_type = site_type,
                           fields_set = fields_set, fields = fields)
 
-  # Username check and Authorization
-  token <- srv_auth(username)
-
   # Get available records
   if(verbose) message("Collecting available records...")
-  records <- nc_count_internal(filter = filter, token = token)
-  requestId <- records$requestId
-  records <- records$results
+
+  if(!is.null(request_id)) {
+    records <- dplyr::select(requests, collection, nrecords)
+  } else {
+    records <- nc_count_internal(filter = filter, token = token)
+    request_id <- records$requestId
+    records <- records$results
+  }
 
   # If there are no records to download, see why not and report that to the user
   if(nrow(records) == 0) {
@@ -123,7 +161,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   }
 
   # Query Information
-  query <- list(lastRecord = 0, numRecords = 5000, requestId = requestId)
+  query <- list(lastRecord = 0, numRecords = 5000, requestId = request_id)
 
   if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {
@@ -131,6 +169,9 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
     # Get data for whole collection
     df_db <- nc_coll_dl(coll = records[c, ], query, filter, token, df_db, verbose)
   }
+
+  # Clear the web request id
+  srv_query(api$release_request_id, query = query['requestId'], token = token)
 
   df_db
 }
@@ -163,8 +204,6 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
 
   # Request
   r <- nc_single_dl(query, filter, token)
-
-  query$requestId <- r$requestId
 
   # Save the data
   df_db <- nc_data_save(r$results, df_db)

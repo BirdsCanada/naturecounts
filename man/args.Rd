@@ -32,6 +32,8 @@ See details}
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.}
 
+\item{request_id}{Numeric. Specific request id to check or download.}
+
 \item{verbose}{Logical. Show messages?}
 }
 \description{
@@ -40,11 +42,11 @@ Common arguments for \code{nc_data_dl} and \code{nc_count}
 \section{NatureCounts account}{
 
 All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must
-\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up}
-for a free NatureCounts account and
-\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register}
-for the projects you'd like to access.
+access private/semi-public projects/collections you must \href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up} for a free
+NatureCounts account and
+\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register} for
+the projects you'd like to access. See the \code{request_id} section for more
+information.
 }
 
 \section{Species ids (\code{species})}{
@@ -103,6 +105,26 @@ character vector specifying the exact fields/columns to return. See
 
 Note that in all cases there are a set of fields/columns that are \emph{always}
 returned, no matter what \code{fields_set} is used.
+}
+
+\section{\code{request_id}'s}{
+
+There are two types of data requests: ones made through the api (i.e. this
+\code{naturecounts} R package) and those made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form}. Each
+request generates a request id which identifies the filter set and
+collections requested.
+
+Requests made through this package via the \code{\link[=nc_data_dl]{nc_data_dl()}} function only
+return data the user has access to. If data was successfully downloaded, the
+user can see the request details with the \code{\link[=nc_requests]{nc_requests()}} function.
+
+Requests made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} may
+include collections to which the user does not have access. \code{\link[=nc_requests]{nc_requests()}}
+will list the requests along with the approval status (either 'approved' or
+'pending').
+
+Any approved request id can be downloaded by suppling the \code{request_id} to
+\code{\link[=nc_data_dl]{nc_data_dl()}} (e.g., \code{nc_data_dl(request_id = 152000, username = "USER")}).
 }
 
 \keyword{internal}

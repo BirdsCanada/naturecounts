@@ -6,8 +6,8 @@
 \usage{
 nc_data_dl(collections = NULL, project_ids = NULL, species = NULL,
   years = NULL, doy = NULL, region = NULL, site_type = NULL,
-  fields_set = "minimum", fields = NULL, username, sql_db = NULL,
-  verbose = TRUE)
+  fields_set = "minimum", fields = NULL, username, request_id = NULL,
+  sql_db = NULL, verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -43,6 +43,8 @@ fields/columns to download. See details}
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.}
 
+\item{request_id}{Numeric. Specific request id to check or download.}
+
 \item{sql_db}{Character vector. Name and location of SQLite database to
 either create or add to}
 
@@ -62,11 +64,11 @@ your data after download for more options:
 \section{NatureCounts account}{
 
 All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must
-\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up}
-for a free NatureCounts account and
-\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register}
-for the projects you'd like to access.
+access private/semi-public projects/collections you must \href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up} for a free
+NatureCounts account and
+\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register} for
+the projects you'd like to access. See the \code{request_id} section for more
+information.
 }
 
 \section{Species ids (\code{species})}{
@@ -127,6 +129,26 @@ Note that in all cases there are a set of fields/columns that are \emph{always}
 returned, no matter what \code{fields_set} is used.
 }
 
+\section{\code{request_id}'s}{
+
+There are two types of data requests: ones made through the api (i.e. this
+\code{naturecounts} R package) and those made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form}. Each
+request generates a request id which identifies the filter set and
+collections requested.
+
+Requests made through this package via the \code{\link[=nc_data_dl]{nc_data_dl()}} function only
+return data the user has access to. If data was successfully downloaded, the
+user can see the request details with the \code{\link[=nc_requests]{nc_requests()}} function.
+
+Requests made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} may
+include collections to which the user does not have access. \code{\link[=nc_requests]{nc_requests()}}
+will list the requests along with the approval status (either 'approved' or
+'pending').
+
+Any approved request id can be downloaded by suppling the \code{request_id} to
+\code{\link[=nc_data_dl]{nc_data_dl()}} (e.g., \code{nc_data_dl(request_id = 152000, username = "USER")}).
+}
+
 \examples{
 # All observations part of the RCBIOTABASE collection
 rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample")
@@ -159,5 +181,14 @@ moose <- nc_data_dl(species = 133990, fields_set = "core",
 moose <- nc_data_dl(species = 133990, fields_set = "custom",
                     fields = c("Locality", "AllSpeciesReported"),
                     username = "sample")
+
+\dontrun{
+# All collections by request id
+my_data <- nc_data_dl(request_id = 000000, username = "USER")
+
+# Specific collection by request id
+my_data <- nc_data_dl(collections = "ABATLAS1",
+                      request_id = 000000, username = "USER")
+}
 
 }

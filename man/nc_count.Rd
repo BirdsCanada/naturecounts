@@ -55,11 +55,11 @@ returned.
 \section{NatureCounts account}{
 
 All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must
-\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up}
-for a free NatureCounts account and
-\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register}
-for the projects you'd like to access.
+access private/semi-public projects/collections you must \href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up} for a free
+NatureCounts account and
+\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register} for
+the projects you'd like to access. See the \code{request_id} section for more
+information.
 }
 
 \section{Species ids (\code{species})}{
