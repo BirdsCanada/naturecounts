@@ -137,7 +137,7 @@ ggplot() +
 
 Now to filter your observations to urban areas, the first step would be to get all the UTM squares which overlap these areas. We can do this collecting the UTM squares with `meta_utm_squares()` and then filtering these to include only those that overlap these urban areas.
 
-Once again, we only care about the actual geometries of urban_ontario, not about any of it's features, so we use `distinct()` to return distinct polygons without any other columns. Finally we use `unique()` at the end to remove any duplicates (i.e. utm_squares that overlap more than 1 urban polygon. Note that you must use `unique()` and not `distinct()` (which works on regular data frames, but here removes all data attributes). 
+Once again, we only care about the actual geometries of `urban_ontario`, not about any of it's features, so we use `distinct()` to return distinct polygons without any other columns. Finally we use `unique()` at the end to remove any duplicates (i.e. `utm_squares` that overlap more than 1 urban polygon. Note that you must use `unique()` and not `distinct()` (which works on regular data frames, but here removes all data attributes). 
 
 ```{r}
 utm_on <- meta_utm_squares() %>%
@@ -165,7 +165,7 @@ zoom <- data.frame(lon = c(-81, -78, -81, -78),
 zoom
 ```
 
-For convinience, we'll use the `grid.arrange()` function from the gridExtra to line up the figures side-by-side so we can get a really good look at what we're doing.
+For convenience, we'll use the `grid.arrange()` function from the gridExtra to line up the figures side-by-side so we can get a really good look at what we're doing.
 ```{r}
 grid.arrange(
   ggplot() +

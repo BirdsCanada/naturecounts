@@ -5,7 +5,7 @@ source("data-raw/data_creation.R")
 
 ## Update metadata stored in inst/extdata
 # - Utm codes take a VERY long time to update!
-nc_metadata_generic(force = TRUE, utm = FALSE)
+nc_metadata_internal(force = TRUE, utm = FALSE)
 
 ## Documentation
 # Update NEWS

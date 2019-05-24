@@ -35,7 +35,7 @@ include collections to which the user does not have access. \code{\link[=nc_requ
 will list the requests along with the approval status (either 'approved' or
 'pending').
 
-Any approved request id can be downloaded by suppling the \code{request_id} to
+Any approved request id can be downloaded by supplying the \code{request_id} to
 \code{\link[=nc_data_dl]{nc_data_dl()}} (e.g., \code{nc_data_dl(request_id = 152000, username = "USER")}).
 }
 

@@ -10,7 +10,7 @@ vignette: >
 
 The `naturecounts` package restricts users to three types of data filters in order not to overload the NatureCounts server. However, it is fairly straightforward to apply data filters after the download. 
 
-In this vignette we will go over several different types of filtering using the `tidyverse` collection of packages. In particular, we will make extensive use of the `filter()` function from the `dplyr` package. For more information about this function, see the chapater on [Data Transformations](https://r4ds.had.co.nz/transform.html#filter-rows-with-filter) in R for Data Science by Hadley Wickham and Garrett Grolemund.
+In this vignette we will go over several different types of filtering using the `tidyverse` collection of packages. In particular, we will make extensive use of the `filter()` function from the `dplyr` package. For more information about this function, see the chapter on [Data Transformations](https://r4ds.had.co.nz/transform.html#filter-rows-with-filter) in R for Data Science by Hadley Wickham and Garrett Grolemund.
 
 For each example, we will show case how to filter your data either directly downloaded as a data frame, or obtained from a SQLite database.
 
@@ -87,7 +87,7 @@ Unless stated otherwise, in the following examples, we demonstrate code that wor
 The simplest way to filter your data is to pick out categories to include or exclude. In each case there are three steps.
 
 1. What are the categories available?
-2. Filter the categores you a) wish to keep, or b) wish to exclude
+2. Filter the categories you a) wish to keep, or b) wish to exclude
 3. Confirm the results
 
 These steps work for categories such as `collection`, `species`, `survey_year`, `iba_site`, `bcr` or any variable that can be expressed as a category.

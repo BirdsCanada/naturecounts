@@ -7,7 +7,7 @@
 #' your data after download for more options:
 #' `vignette("filtering_data", package = "naturecounts")`.
 #'
-#' @param fields_set Charcter. Set of fields/columns to download. See details.
+#' @param fields_set Character. Set of fields/columns to download. See details.
 #' @param fields Character vector. If `fields_set = custom`, which
 #'   fields/columns to download. See details
 #' @param sql_db Character vector. Name and location of SQLite database to

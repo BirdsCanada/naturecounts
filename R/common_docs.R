@@ -53,7 +53,7 @@
 #'   subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 #'   Regions (BCR) (see [region_search()] for codes). They can also be defined
 #'   by providing specific UTM squares to download or a bounding box area which
-#'   specifyings the min/max longitude and min/max latitude (`bbox`). See the
+#'   specifys the min/max longitude and min/max latitude (`bbox`). See the
 #'   article on [regional filters]
 #'   (http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
 #'   for more information.
@@ -99,7 +99,7 @@
 #' will list the requests along with the approval status (either 'approved' or
 #' 'pending').
 #'
-#' Any approved request id can be downloaded by suppling the `request_id` to
+#' Any approved request id can be downloaded by supplying the `request_id` to
 #' [nc_data_dl()] (e.g., `nc_data_dl(request_id = 152000, username = "USER")`).
 #'
 #'
