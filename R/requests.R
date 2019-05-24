@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' nc_requests(username = "sample")
-#' nc_requests(username = "sample", request_id = 152446)
+#' nc_requests(request_id = 152446, username = "sample")
 #'
 #' @export
 nc_requests <- function(request_id = NULL, username) {

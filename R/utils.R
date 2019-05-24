@@ -7,15 +7,15 @@ parse_request <- function(request) {
   tibble::tibble(request) %>%
     dplyr::mutate(request_id = names(request),
                   request = unname(request),
-                  collections = purrr::map(request, ~list_to_df(.$collections, type = "collections")),
+                  collection = purrr::map(request, ~list_to_df(.$collection, type = "collection")),
                   filters = purrr::map_chr(request, ~filter_to_str(.$filters)),
                   requestOrigin = purrr::map_chr(request, ~null_to_na(.$requestOrigin)),
                   requestLabel = purrr::map_chr(request, ~null_to_na(.$requestLabel))) %>%
-    tidyr::unnest(collections) %>%
+    tidyr::unnest(collection) %>%
     dplyr::select(request_id, requestOrigin, requestLabel,
-                  collection = collections,
-                  approved,
-                  nrecords = recordCount,
+                  collection,
+                  status = approved,
+                  nrecords,
                   filters) %>%
     dplyr::mutate(nrecords = as_numeric(nrecords)) %>%
     dplyr::arrange(request_id) %>%

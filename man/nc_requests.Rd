@@ -41,6 +41,6 @@ Any approved request id can be downloaded by supplying the \code{request_id} to
 
 \examples{
 nc_requests(username = "sample")
-nc_requests(username = "sample", request_id = 152446)
+nc_requests(request_id = 152446, username = "sample")
 
 }
