@@ -12,6 +12,8 @@
 #'   fields/columns to download. See details
 #' @param sql_db Character vector. Name and location of SQLite database to
 #'   either create or add to
+#' @param warn Logical. Interactive warning if request more than 1,000,000
+#'   records to download.
 #'
 #' @inheritParams args
 #' @inheritSection args NatureCounts account
@@ -72,7 +74,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
                        doy = NULL, region = NULL, site_type = NULL,
                        fields_set = "minimum", fields = NULL,
                        username, request_id = NULL, sql_db = NULL,
-                       verbose = TRUE) {
+                       warn = TRUE, verbose = TRUE) {
 
   # Username check and Authorization
   token <- srv_auth(username)
@@ -144,13 +146,22 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
             paste0(missing, collapse = ", "), ")")
   }
 
-  if(verbose) message(capture_df(records))
+  if(verbose) message(capture_df(records),
+                      "\nTotal records: ",
+                      format(sum(records$nrecords), scientific = FALSE,
+                             big.mark = ","))
 
-  if(is.null(sql_db) && sum(records$nrecords) > 1000000) {
-    warning("\nThis is a very large download. Consider using ",
-            "a SQLite database (see the sql_db argument),\n to prevent ",
-            "memory overload or losing your data due to a loss of ",
-            "connection during the download.", call. = FALSE, immediate. = TRUE)
+  if(warn == TRUE && sum(records$nrecords) > 1000000) {
+    msg <- "This is a large download (> 1,000,000 records). "
+    if(is.null(sql_db)) msg <- paste0(msg,
+                                      "Consider using a SQLite data ",
+                                      "base with 'sql_db'. ")
+    msg <- paste0(msg,
+                  "\nAre you sure you wish to proceed? ",
+                  "(To always proceed use 'warn = FALSE')")
+
+    choice <- utils::menu(choices = c("Yes", "No"), title = msg)
+    if(choice == 2) return(message(""))
   }
 
   # Get/Create database or dataframe
