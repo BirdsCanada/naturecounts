@@ -28,7 +28,7 @@ db_connect <- function(name = paste0("./naturecounts_", Sys.Date()),
 
   if("naturecounts" %in% t) {
     if(verbose) message("\nDatabase '", name,
-                        ".nc' already exists, connection to it...")
+                        ".nc' already exists, connecting to it...")
     # Check version
     db_check_version(con)
   } else {
