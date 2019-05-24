@@ -65,9 +65,8 @@ information.
 \section{Species ids (\code{species})}{
 
 Numeric species id codes can determined from the functions
-\code{\link{species_search}()} or \code{\link{species_code_search}()}. See
-also the \link{species codes}
-(https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+\code{\link[=species_search]{species_search()}} or \code{\link[=species_code_search]{species_code_search()}}. See
+also the \href{https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html}{species codes}
 for more information.
 }
 
@@ -88,8 +87,7 @@ subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 Regions (BCR) (see \code{\link[=region_search]{region_search()}} for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifys the min/max longitude and min/max latitude (\code{bbox}). See the
-article on \link{regional filters}
-(http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
+article on \href{http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html}{regional filters}
 for more information.
 }
 

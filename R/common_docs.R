@@ -35,9 +35,8 @@
 #'
 #' @section Species ids (`species`):
 #'   Numeric species id codes can determined from the functions
-#'   \code{\link{species_search}()} or \code{\link{species_code_search}()}. See
-#'   also the [species codes]
-#'   (https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+#'   [species_search()] or [species_code_search()]. See
+#'   also the [species codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
 #'   for more information.
 #'
 #' @section Day of Year (`doy`):
@@ -54,8 +53,7 @@
 #'   Regions (BCR) (see [region_search()] for codes). They can also be defined
 #'   by providing specific UTM squares to download or a bounding box area which
 #'   specifys the min/max longitude and min/max latitude (`bbox`). See the
-#'   article on [regional filters]
-#'   (http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
+#'   article on [regional filters](http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
 #'   for more information.
 #'
 #' @section Data Fields/Columns (`fields_set` and `fields`):

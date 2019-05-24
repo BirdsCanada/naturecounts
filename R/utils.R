@@ -4,7 +4,7 @@ parse_results <- function(r, results = FALSE) {
 }
 
 parse_request <- function(request) {
-  tibble::tibble(request) %>%
+  dplyr::tibble(request) %>%
     dplyr::mutate(request_id = names(request),
                   request = unname(request),
                   collection = purrr::map(request, ~list_to_df(.$collection, type = "collection")),
@@ -26,7 +26,7 @@ parse_request <- function(request) {
 list_to_df <- function(l, type) {
   df <- data.frame()
   for(i in 1:length(l)) {
-    df <- dplyr::bind_rows(df, dplyr::mutate(tibble::as_tibble(l[[i]]),
+    df <- dplyr::bind_rows(df, dplyr::mutate(dplyr::as_tibble(l[[i]]),
                                              !!type := names(l)[i]))
   }
   df
