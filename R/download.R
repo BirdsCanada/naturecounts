@@ -182,7 +182,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   }
 
   # Clear the web request id
-  if(username != "sample") srv_query(api$release_request_id, query = query['requestId'], token = token)
+  srv_query(api$release_request_id, query = query['requestId'], token = token)
 
   df_db
 }
