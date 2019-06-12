@@ -10,7 +10,7 @@
 #' @keywords internal
 
 srv_query <- function(path, query = NULL, filter = NULL,
-                      token = NULL, api_url = NULL, timeout = 300,
+                      token = NULL, api_url = NULL, timeout = 120,
                       verbose = FALSE) {
 
   # Set Curl configuration
@@ -38,6 +38,15 @@ srv_query <- function(path, query = NULL, filter = NULL,
   if(class(resp) == "try-error") {
     if(stringr::str_detect(resp, "aborted by an application callback")){
       stop(resp, call. = FALSE)
+    } else if (stringr::str_detect(resp, "Timeout was reached")) {
+      message("The server did not respond within ", timeout, "s. Trying again...")
+      resp <- try(httr::POST(url, body = query, encode = "form",
+                             ua, httr::timeout(timeout)),
+                  silent = TRUE)
+      if(stringr::str_detect(resp, "Timeout was reached")) {
+       stop("No server response. The server is unreachable at this moment, ",
+            "please try again later.", call. = FALSE)
+      }
     } else {
       #message("Ooops, error on first try, retrying...\nError: ",
       #        as.character(resp))
@@ -126,7 +135,8 @@ srv_auth <- function(username) {
     # Fetch token from server
     token <- srv_query(
       path = api$auth,
-      query = list(username = username, password = password))$token
+      query = list(username = username, password = password),
+      timeout = 30)$token
 
     # Save token to storage
     nc_usernames[[username]] <- token

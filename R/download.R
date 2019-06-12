@@ -260,7 +260,8 @@ nc_single_dl <- function(query, filter, token){
   request <- srv_query(api$data,
                        query = query,
                        filter = filter,
-                       token = token)
+                       token = token,
+                       timeout = 60)
 
   # Parse the data
   request$results <- parse_results(request, results = TRUE)
@@ -382,7 +383,8 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
 }
 
 nc_count_internal <- function(filter, token, show = "available") {
-  cnts <- srv_query(api$collections_count, token = token, filter = filter)
+  cnts <- srv_query(api$collections_count, token = token, filter = filter,
+                    timeout = 60)
 
   requestId <- cnts$requestId
 
@@ -398,6 +400,6 @@ nc_count_internal <- function(filter, token, show = "available") {
 
 
 nc_permissions <- function(token = NULL) {
-  srv_query(api$permissions, token = token) %>%
+  srv_query(api$permissions, token = token, timeout = 30) %>%
     parse_results(results = TRUE)
 }
