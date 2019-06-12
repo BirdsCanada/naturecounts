@@ -44,8 +44,7 @@ srv_query <- function(path, query = NULL, filter = NULL,
                              ua, httr::timeout(timeout)),
                   silent = TRUE)
       if(stringr::str_detect(resp, "Timeout was reached")) {
-       stop("No server response. The server is unreachable at this moment, ",
-            "please try again later.", call. = FALSE)
+       stop("The server is not responding, please try again later.", call. = FALSE)
       }
     } else {
       #message("Ooops, error on first try, retrying...\nError: ",
