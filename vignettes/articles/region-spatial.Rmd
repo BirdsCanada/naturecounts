@@ -2,10 +2,6 @@
 title: "Using spatial data to filter observations"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Using spatial data to filter observations}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
@@ -182,11 +178,11 @@ grid.arrange(
   nrow = 1)
 ```
 
-So now we can see that the `utm_squares` we've selected overlap all our urban areas. Now we can download the observations for all of these areas:
+So now we can see that the `utm_squares` we've selected overlap all our urban areas. Now we can download the observations for all of these areas. Because it can take time for the server to process so many `utm_squares`, we'll increase the timeout to 5 minutes.
 
 ```{r}
 obs <- nc_data_dl(region = list(utm_squares = utm_on$utm_square), 
-                  verbose = FALSE, username = "sample")
+                  verbose = FALSE, username = "sample", timeout = 300)
 ```
 
 Finally, we do clip the resulting observations to the exact urban areas:
