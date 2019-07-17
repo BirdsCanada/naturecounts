@@ -73,9 +73,18 @@ queries <- dplyr::tribble(
   "subnational2",  "subnational2",  FALSE,
   "site_type",     "siteType",      TRUE)
 
+# Testing Data ------------------------------------------------------------
+test_rc <- nc_data_dl(collections = "RCBIOTABASE", fields_set = "core",
+                      username = "sample") %>%
+  dplyr::filter(CommonName %in% c("Monarch",
+                                  "Black Swallowtail",
+                                  "Red Admiral"),
+                AllSpeciesReported == "Yes") %>%
+  dplyr::mutate(presence = as.numeric(ObservationCount > 0)) %>%
+  format_dates()
 
 # Save all internal datasets
-usethis::use_data(ua, api, keys, queries, internal = TRUE, overwrite = TRUE)
+usethis::use_data(ua, api, keys, queries, test_rc, internal = TRUE, overwrite = TRUE)
 
 # Get Example Data ------------------------------------------------------------
 
@@ -87,3 +96,5 @@ usethis::use_data(bcch, internal = FALSE, overwrite = TRUE)
 bdow <- nc_data_dl(collections = "RCBIOTABASE", species = 7590,
                    username = "sample")
 usethis::use_data(bdow, internal = FALSE, overwrite = TRUE)
+
+
