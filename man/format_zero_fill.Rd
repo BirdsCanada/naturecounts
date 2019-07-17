@@ -4,15 +4,16 @@
 \alias{format_zero_fill}
 \title{Zero-fill data}
 \usage{
-format_zero_fill(df_db, by = "event", species = "all",
-  fill = "ObservationCount", extra_cols = NULL, verbose = TRUE)
+format_zero_fill(df_db, by = "SamplingEventIdentifier",
+  species = "all", fill = "ObservationCount", extra_species = NULL,
+  warn = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{df_db}{Either data frame or a connection to database with
-\code{naturecounts} table}
+\code{naturecounts} table (a data frame is returned).}
 
-\item{by}{Character vector. Either "event" or a vector of specific column
-names to fill by (see details)}
+\item{by}{Character vector. By default, "SamplingEventIdentifier" or a vector
+of specific column names to fill by (see details)}
 
 \item{species}{Character vector. Either "all", for species in the data, or a
 vector of species ID codes to fill in.}
@@ -20,9 +21,12 @@ vector of species ID codes to fill in.}
 \item{fill}{Character. The column name to fill in. Defaults to
 "ObservationCount".}
 
-\item{extra_cols}{Character vector. Extra columns/fields uniquely associated
-with \code{by} to keep in the data (all columns not in \code{by}, \code{species}, \code{fill},
-or \code{extra_cols} will be omitted from the result.}
+\item{extra_species}{Character vector. Extra columns/fields uniquely
+associated with \code{species_id} to keep in the data (all columns not in \code{by},
+\code{species}, \code{fill}, or \code{extra_species} will be omitted from the result).}
+
+\item{warn}{Logical. If TRUE, stop zero-filling if >100 species and >1000
+unique sampling events. If FALSE, ignore and proceed.}
 
 \item{verbose}{Logical. Show messages?}
 }
@@ -30,12 +34,12 @@ or \code{extra_cols} will be omitted from the result.}
 Data frame
 }
 \description{
-Zero-fill data
+Zero-fill the species presence data by adding zero observation counts
+(absences) data to an existing naturecounts dataset.
 }
 \details{
 \code{by} refers to the combination of columns which are used to detect
-missing values. When \code{by = "event"}, \code{project_id}, \code{collection}, \code{date},
-and \code{SamplingEventIdentifier} are used. Otherwise
+missing values. By default \code{SamplingEventIdentifier} is used. Otherwise
 users can specify their own combination of columns.
 
 If \code{species} is supplied, all records will be used to determine observation
@@ -53,13 +57,17 @@ rc <- nc_data_dl(collection = "RCBIOTABASE", username = "sample")
 library(dplyr) # For filter function
 rc <- filter(rc, AllSpeciesReported == "Yes")
 
-# Add dates
-rc_dates <- format_dates(rc)
-
 # Zero fill by all species present
-rc_all_zeros <- format_zero_fill(rc_dates)
+rc_all_zeros <- format_zero_fill(rc)
 
 # Zero fill only for Canada Goose
-rc_goose <- format_zero_fill(rc_dates, species = "230")
+rc_goose <- format_zero_fill(rc, species = "230")
+
+# Keep species-specific variables
+rc_goose <- format_zero_fill(rc, species = "230", extra_species = "CommonName")
+
+# Keep sampling-event-specific variables (keep 'SamplingEventIdentifier')
+rc_goose <- format_zero_fill(rc, by = c("SamplingEventIdentifier",
+                                        "latitude", "longitude"))
 
 }

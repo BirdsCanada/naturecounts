@@ -1,0 +1,175 @@
+---
+title: "Zero-filling data"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{"Zero-filling data"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+After downloading population data, many analyses require that you have records not only of when/where species *were* detected, but also where they *were not* detected. While NatureCounts generally contains records of species presence, we can infer species absence when a species was not detected in a Sampling Event (unique `SamplingEventIdentifier`), provided that all species were reported for that Sampling Event (i.e. that `AllSpeciesReported` is "Yes").
+
+To make things simpler, we have included the `format_zero_fill()` function.
+
+## Setup
+
+### Packages
+
+```{r, message = FALSE}
+library(naturecounts)
+library(dplyr)
+library(ggplot2)
+library(ggmap)
+```
+
+### Download data
+
+We'll use the 'core' version of BMDE fields so that we include `CommonName` for convenience.
+```{r, results = "asis"}
+rc <- nc_data_dl(collections = "RCBIOTABASE", fields_set = "core",
+                 species = c(252456, 252494, 252491),
+                 username = "sample")
+
+```
+
+### Initial Exploration
+
+Let's take a look at the butterfly species observations we have
+```{r}
+count(rc, CommonName)
+```
+
+How many sampling events?
+
+```{r}
+count(rc, SamplingEventIdentifier)
+```
+
+Lot's of sampling events too. But some are missing (`NA`).
+
+Were all species reported?
+
+```{r}
+count(rc, AllSpeciesReported)
+```
+
+Sometimes, but not all the time.
+
+Finally, let's take a peak at the observations recorded for these three species
+
+```{r}
+ggplot(data = rc, aes(x = CommonName, y = as.numeric(ObservationCount))) +
+  geom_boxplot() +
+  labs(title = "Number of individuals observed")
+```
+
+```{r}
+ggplot(data = rc, aes(x = CommonName)) +
+  geom_bar() +
+  labs(title = "Number of sampling events the species was observed")
+```
+
+To better understand these populations, it would be helpful to know not only when these species were observed, but also when they were not.
+
+## Zero-Filling
+
+Because zero-filling requires that all species are reported (how can you know if a species was or was not observed, if it wasn't reported?), `format_zero_fill` will return an error if some of the records are not valid.
+
+```{r, error = TRUE}
+rc_filled <- format_zero_fill(rc)
+```
+
+Therefore, the first thing we need to do is limit our data to only `SamplingEventIdentifiers` where all species were recorded.
+
+**Note** that `AllSpeciesReported` may not always be strictly true, as bird identification events (e.g., Christmas Bird Counts) may report all *bird* species, but would probably not report all mammalian species, plants, etc. and vice versa.
+
+```{r}
+rc_all_species <- filter(rc, AllSpeciesReported == "Yes")
+count(rc_all_species, AllSpeciesReported)
+```
+
+Now we can fill in all species missing from other sampling events.
+
+```{r}
+rc_filled <- format_zero_fill(rc_all_species)
+head(rc_filled)
+```
+
+
+```{r}
+ggplot(data = rc_filled, aes(x = factor(species_id), fill = ObservationCount > 0)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Number of sampling events the species was observed")
+```
+
+It might be more helpull to use common names, but through the process of zero-filling, extra columns have been removed.
+
+
+## Keep other important columns
+
+To keep other columns associated with species id, specify them with the `extra_species` argument.
+
+```{r}
+rc_filled <- format_zero_fill(rc_all_species, 
+                              extra_species = c("CommonName", "ScientificName"))
+head(rc_filled)
+```
+
+To keep other columns associated with the sampling event, specify them, in addition to the sampling event id, in the `by` argument. By default, `SamplingEventIdentifier` is used to identify specific sampling events.
+
+```{r}
+rc_filled <- format_zero_fill(rc_all_species, 
+                              by = c("SamplingEventIdentifier", "latitude", "longitude"),
+                              extra_species = c("CommonName", "ScientificName"))
+head(rc_filled)
+```
+
+
+## Zero-filling `by` other variables
+
+Sampling events aren't the only way of zero-filling data. Perhaps you're only interested in whether a species has/has not been observed in a particular location.
+
+```{r}
+rc_loc_filled <- format_zero_fill(rc_all_species, 
+                                  by = "utm_square")
+head(rc_loc_filled)
+```
+
+The message about summarizing multiple observations means that we have multiple observations per `utm_square`. This example isn't large enough to be slowed down much, but in larger examples, it can be much faster to simplify the dataset first.
+
+```{r}
+rc_sum <- rc_all_species %>%
+  group_by(utm_square, species_id, AllSpeciesReported) %>%
+  summarize(ObservationCount = sum(as.numeric(ObservationCount), na.rm = TRUE))
+head(rc_sum)
+```
+
+Now if we zero-fill this data set, we get a zero-filled, aggregated dataset.
+
+```{r}
+rc_sum_filled <- format_zero_fill(rc_sum, by = "utm_square")
+head(rc_sum_filled)
+```
+
+## Filling specific species
+Up to now in these examples we've been filling all the species present in the data, but often you might be only interested in one or two species. We can specify which species with the `species` argument.
+
+```{r}
+rc_sp_filled <- format_zero_fill(rc_all_species, species = "252456")
+head(rc_sp_filled)
+```
+
+## Filling other variables
+By default `format_zero_fill()` adds 0's to the `ObservationCount` column, but you can specify any column to zero fill.
+
+For example, if you wanted to deal only with Presence/Absence you could create a new `presence` column and zero-fill this column.
+```{r}
+rc_presence <- rc_all_species %>%
+  select(species_id, AllSpeciesReported, ObservationCount, SamplingEventIdentifier) %>%
+  mutate(presence = if_else(as.numeric(ObservationCount) > 0, TRUE, FALSE))
+head(rc_presence)
+
+rc_presence_filled <- format_zero_fill(rc_presence, fill = "presence")
+head(rc_presence_filled)
+```

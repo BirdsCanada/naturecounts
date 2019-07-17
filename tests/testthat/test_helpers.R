@@ -1,5 +1,7 @@
 context("Helper/Formating functions")
 
+
+# format_dates() ----------------------------------------------------------
 test_that("format_dates() with data frame", {
   for(i in 1:2) {
     if(i == 1) i <- bcch else i <- bdow
@@ -66,123 +68,179 @@ test_that("format_dates() overwrite", {
   file.remove("bcch.nc")
 })
 
-test_that("format_zero_fill() with data frame", {
 
-  # No zeros to add
-  bcch_dates <- format_dates(bcch)
 
-  expect_message(b <- format_zero_fill(bcch_dates),
-                 "Converted 'fill' column") %>%
-    expect_is("data.frame") %>%
-    expect_length(6)
-  expect_true(dplyr::all_equal(
-    b, dplyr::select(bcch_dates, names(b)) %>%
-      dplyr::mutate(ObservationCount = as_numeric(ObservationCount))))
+# format_zero_fill() ------------------------------------------------------
 
-  # Expect two species for each combo
-  both_dates <- format_dates(rbind(bcch, bdow))
-  expect_false(all(dplyr::count(both_dates, SamplingEventIdentifier, project_id,
-                                collection, date)$n == 2))
-  expect_silent(b <- format_zero_fill(both_dates, verbose = FALSE)) %>%
-    expect_is("data.frame") %>%
-    expect_length(6)
-  expect_true(all(dplyr::count(b, SamplingEventIdentifier, project_id,
-                               collection, date)$n == 2))
+test_that("format_zero_fill() checks for columns", {
+  t1 <- data.frame(species_id = 1,
+                   ObservationCount = 1,
+                   AllSpeciesReported = "Yes",
+                   SamplingEventIdentifier = 2)
+  expect_silent(format_zero_fill(t1))
+
+  t1 <- data.frame(species_id = 1,
+                   ObservationCount = 1,
+                   AllSpeciesReported = "Yes")
+  expect_error(format_zero_fill(t1), "'by' columns must be present in the data")
+
+  t1 <- data.frame(species_id = 1,
+                   ObservationCount = 1)
+  expect_error(format_zero_fill(t1), "'AllSpeciesReported' must be present")
+
+  t1 <- data.frame(species_id = 1)
+  expect_error(format_zero_fill(t1),
+               "'fill' column \\('ObservationCount'\\) is missing from the data")
+
+  t1 <- data.frame()
+  expect_error(format_zero_fill(t1), "'species_id' must be present")
 })
 
-test_that("format_zero_fill() single missing species", {
-  both_dates <- format_dates(rbind(bcch, bdow))
-  expect_equal(unique(both_dates$species_id), c(14280, 7590))
-  expect_silent(b <- format_zero_fill(both_dates, species = 19360,
-                                      verbose = FALSE)) %>%
-    expect_is("data.frame")
-  expect_equal(nrow(b),
-               both_dates %>%
-                 dplyr::select(project_id, collection, date,
-                               SamplingEventIdentifier) %>%
-                 dplyr::distinct() %>%
-                 nrow())
-  expect_equal(unique(b$species_id), 19360)
+test_that("format_zero_fill() checks AllIndividualsReported", {
+  rc1 <- test_rc
+  expect_silent(format_zero_fill(rc1, verbose = FALSE))
+  rc1$AllSpeciesReported[3:7] <- "No"
+  expect_error(format_zero_fill(rc1), "must be present and 'Yes'")
+})
 
+test_that("format_zero_fill() detects NA Sampling Events", {
+  rc1 <- dplyr::filter(test_rc, AllSpeciesReported == "Yes")[1:100,]
+  expect_silent(a <- format_zero_fill(rc1, verbose = FALSE))
+
+  rc1$SamplingEventIdentifier[rc1$SamplingEventIdentifier == "RCBIOTABASE-5553-1"] <- NA
+  expect_message(b <- format_zero_fill(rc1),
+                 "There are missing values in 'by'")
+
+  expect_equal(nrow(a), nrow(b))
+  expect_true("RCBIOTABASE-5553-1" %in% a$SamplingEventIdentifier)
+  expect_false("RCBIOTABASE-5553-1" %in% b$SamplingEventIdentifier)
+})
+
+
+test_that("format_zero_fill() adds zeros", {
+
+  # No zeros to add
+  t1 <- data.frame(SamplingEventIdentifier = c(1:10),
+                   AllSpeciesReported = "Yes",
+                   species_id = 1,
+                   ObservationCount = "1")
+  expect_message(format_zero_fill(t1), "Converted 'fill' column")
+
+  # Add zeros
+  t1 <- data.frame(SamplingEventIdentifier = c(1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2),
+                   AllSpeciesReported = "Yes",
+                   species_id = c(1, 2, 2, 3, 3, 2, 1, 2, 2, 3, 3, 2),
+                   ObservationCount = c(3, 1, 1, 6, 8, 4, 3, 1, 1, 6, 8, 4))
+  texp <- dplyr::select(t1, -AllSpeciesReported) %>%
+    rbind(data.frame(SamplingEventIdentifier = c(1, 2),
+                     species_id = c(3, 1),
+                     ObservationCount = 0)) %>%
+    dplyr::arrange(SamplingEventIdentifier, species_id)
+  expect_message(format_zero_fill(t1), "multiple observations") %>%
+    expect_equal(texp)
+})
+
+test_that("format_zero_fill() adds zeros in real example", {
+
+  # Expect missing events before fill, filled events after (for three species)
+  rc2 <- dplyr::filter(test_rc,
+                       CommonName %in% c("Monarch",
+                                         "Black Swallowtail",
+                                         "Red Admiral"),
+                       AllSpeciesReported == "Yes")
+
+  expect_false(all(dplyr::count(rc2, SamplingEventIdentifier)$n == 3))
+  expect_silent(rc2_fill <- format_zero_fill(rc2, verbose = FALSE)) %>%
+    expect_is("data.frame") %>%
+    expect_length(3)
+  expect_true(all(dplyr::count(rc2_fill, SamplingEventIdentifier)$n == 3))
+
+  # Expect that keep SamplingEvents, but lose other species present
+  rc1 <- dplyr::filter(test_rc,
+                       CommonName %in% c("Monarch",
+                                         "Black Swallowtail",
+                                         "Red Admiral"),
+                       AllSpeciesReported == "Yes")
+
+  expect_equal(unique(rc1$species_id), c(252456, 252491, 252494))
+  expect_silent(rc1_fill <- format_zero_fill(rc1, species = 19360,
+                                             verbose = FALSE)) %>%
+    expect_is("data.frame")
+  expect_equal(nrow(rc1_fill),
+               length(unique(rc1$SamplingEventIdentifier)))
+  expect_equal(unique(rc1_fill$species_id), 19360)
+  expect_equal(0, sum(rc1_fill$ObservationCount))
 })
 
 test_that("format_zero_fill() by", {
-  both_dates <- format_dates(rbind(bcch, bdow)) %>%
-    dplyr::filter(!is.na(DurationInHours)) # Omit odd duplicates for testing
-
-  # Event
-  expect_silent(format_zero_fill(both_dates, by = "event", verbose = FALSE)) %>%
-    expect_named(c("project_id", "collection", "date", "SamplingEventIdentifier",
-                   "species_id", "ObservationCount"))
+  rc1 <- dplyr::filter(test_rc,
+                       CommonName %in% c("Monarch",
+                                         "Black Swallowtail",
+                                         "Red Admiral"),
+                       AllSpeciesReported == "Yes")
 
   # Custom
-  expect_silent(b <- format_zero_fill(both_dates, verbose = FALSE,
-                                      by = c("collection", "date",
-                                             "Locality", "DurationInHours"))) %>%
+  expect_silent(rc1_filled <- format_zero_fill(rc1, verbose = FALSE,
+                                               by = c("collection",
+                                                      "date",
+                                                      "Locality",
+                                                      "DurationInHours"))) %>%
     expect_named(c("collection", "date", "Locality", "DurationInHours",
                    "species_id", "ObservationCount"))
-  expect_true(nrow(b) > 0)
+  expect_true(nrow(rc1_filled) > 0)
 
   # Custom warning
-  expect_warning(b <- format_zero_fill(both_dates,
-                                      by = c("collection", "Locality")),
-                 "There is more than one observation per species") %>%
+  expect_message(rc1_filled <- format_zero_fill(rc1,
+                                                by = c("collection", "Locality")),
+                 "multiple observations") %>%
     expect_named(c("collection", "Locality",
                    "species_id", "ObservationCount"))
-  expect_true(nrow(b) > 0)
+  expect_true(nrow(rc1_filled) > 0)
 })
 
 test_that("format_zero_fill() different 'fill' columns", {
-  both_dates <- format_dates(rbind(bcch, bdow)) %>%
+  rc1 <- dplyr::filter(test_rc,
+                       CommonName %in% c("Monarch",
+                                         "Black Swallowtail",
+                                         "Red Admiral"),
+                       AllSpeciesReported == "Yes") %>%
     dplyr::mutate(presence = as.numeric(ObservationCount > 0))
 
   # Different fill column
-  expect_silent(b1 <- format_zero_fill(both_dates, fill = "presence")) %>%
-    expect_named(c("project_id", "collection", "date", "SamplingEventIdentifier",
-                   "species_id", "presence"))
-  expect_equal(unique(b1$presence), c(1, 0))
-  expect_gt(nrow(b1), nrow(bcch))
-  expect_gt(nrow(b1), nrow(bdow))
-
-  # diff column but same result
-  expect_silent(b2 <- format_zero_fill(both_dates, verbose = FALSE)) %>%
-    expect_named(c("project_id", "collection", "date", "SamplingEventIdentifier",
-                   "species_id", "ObservationCount"))
-  expect_equal(nrow(b1), nrow(b2))
+  expect_silent(rc1_filled <- format_zero_fill(rc1, fill = "presence")) %>%
+    expect_named(c("SamplingEventIdentifier", "species_id", "presence"))
+  expect_equal(unique(rc1_filled$presence), c(1, 0))
+  expect_gt(nrow(rc1_filled), nrow(rc1))
 })
 
-test_that("format_zero_fill() extra columns", {
-  both_dates <- format_dates(rbind(bcch, bdow))
-
+test_that("format_zero_fill() extra species columns", {
   # only 6 original columns
-  expect_silent(b1 <- format_zero_fill(both_dates, verbose = FALSE)) %>%
-    expect_length(6)
+  expect_silent(b1 <- format_zero_fill(test_rc, verbose = FALSE)) %>%
+    expect_length(3)
 
   # Add two new
-  expect_silent(b2 <- format_zero_fill(both_dates, verbose = FALSE,
-                                       extra_cols = c("doy", "Locality"))) %>%
-    expect_length(8)
+  expect_silent(b2 <- format_zero_fill(test_rc, verbose = FALSE,
+                                       extra_species = c("CommonName", "Class"))) %>%
+    expect_length(5)
 
   # But the rest is the same
   expect_true(all.equal(b1, dplyr::select(b2, names(b1))))
 
   # Doesn't add non-relevant columns
-  expect_error(format_zero_fill(both_dates, extra_cols = "species"),
-               "Some 'extra_cols' are not in the data")
-  expect_error(format_zero_fill(both_dates, extra_cols = "species_id"),
-               "'species_id' cannot be in 'extra_cols'")
-  expect_message(format_zero_fill(both_dates, extra_cols = "record_id"),
-                 "Ignoring 'extra_cols' columns not uniquely associated")
+  expect_error(format_zero_fill(test_rc, extra_species = "species"),
+               "Some 'extra_species' are not in the data")
+  expect_message(format_zero_fill(test_rc, extra_species = "species_id")) %>%
+    expect_equal(b1)
+  expect_message(format_zero_fill(test_rc, extra_species = "record_id"),
+                 "Ignoring 'extra_species' columns")
 })
 
 
 test_that("format_zero_fill() with SQLite database", {
   bcch_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
-                         sql_db = "bcch", username = "sample") %>%
-    format_dates()
+                         sql_db = "bcch", username = "sample")
   bdow_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 7590,
-                         sql_db = "bdow", username = "sample") %>%
-    format_dates()
+                         sql_db = "bdow", username = "sample")
 
   # No zeros to add
   expect_message(b <- format_zero_fill(bcch_sql),
@@ -190,8 +248,8 @@ test_that("format_zero_fill() with SQLite database", {
     expect_is("data.frame")
 
   expect_true(dplyr::all_equal(
-    dplyr::mutate(b, date = lubridate::as_date(date)),
-    dplyr::select(format_dates(bcch), names(b)) %>%
+    b,
+    dplyr::select(bcch, names(b)) %>%
       dplyr::mutate(ObservationCount = as.numeric(ObservationCount))))
 
 
@@ -215,6 +273,10 @@ test_that("format_zero_fill() with SQLite database", {
   file.remove(c("bcch.nc", "bdow.nc"))
 })
 
-test_that("format_zero_fill() error checks", {
+test_that("format_zero_fill() checks for size", {
+  temp <- expand.grid(species_id = 1:1100, SamplingEventIdentifier = 1:5001) %>%
+    dplyr::mutate(ObservationCount = 1, AllSpeciesReported = "Yes")
 
+    expect_error(format_zero_fill(temp), "You are trying to zero-fill over")
+    expect_silent(format_zero_fill(temp, warn = FALSE))
 })

@@ -70,14 +70,14 @@ ggmap(map) +
   geom_count(data = barred_owls, aes(x = longitude, y = latitude))
 ```
 
-### Interactive Maps
+## Interactive Maps
 If we want to get fancy we can also create interactive maps using the `mapview` packages (see also the [`leaflet` for R package](https://rstudio.github.io/leaflet/)).
 ```{r}
 mapview(barred_owls_sf, zcol = "survey_year", at = seq(1965, 2005, by = 10),
         map.types = "Esri.WorldImagery")
 ```
 
-### More Complex Maps
+## More Complex Maps
 
 For more complex, or detailed maps, we can use a variety of spatial data files to layer our data over maps of the area.
 
@@ -199,6 +199,39 @@ ggplot() +
                aes(label = paste0("n = ", n))) +
   facet_wrap(~years)
 ```
+
+## Presence/Absence
+
+We can also use some of the `naturecounts` helper functions to create presence/absence maps. 
+
+Here we download data from the `RCBIOTABASE` collection, make sure to keep only observations where all species and the location were reported, create a new `presence` column which is either TRUE, FALSE, or NA. Finally we use the `format_zero_fill()` function to fill in sampling events where cardinals (`species_id` 19360) were not detected (presence would then be 0).
+
+```{r}
+cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "sample") %>%
+  filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) %>%
+  mutate(presence = as.numeric(ObservationCount) > 0) %>%
+  format_zero_fill(species = 19360,
+                   by = c("SamplingEventIdentifier", "latitude", "longitude"),
+                   fill = "presence")
+
+head(cardinals)
+```
+
+Now that we have our presence/absence data for cardinals, we can create a map.
+```{r}
+cardinals_sf <- st_as_sf(cardinals, coords = c("longitude", "latitude"))
+
+map <- get_stamenmap(bbox = as.numeric(st_bbox(cardinals_sf)), zoom = 8)
+
+ggmap(map, base_layer = ggplot(data = cardinals)) +
+  geom_count(alpha = 0.75,
+             aes(x = longitude, y = latitude, colour = factor(presence))) +
+  scale_colour_manual(name = "Presence/Absence", values = c("yellow", "purple"), 
+                      labels = c("1" = "Present", "0" = "Absent")) +
+  scale_size_continuous(name = "Number of Sampling Events", range = c(1, 20)) +
+  labs(title = paste0("Presence/Absence of Cardinals in the RCBIOTABASE collection"))
+```
+
 
 ## See Also
 

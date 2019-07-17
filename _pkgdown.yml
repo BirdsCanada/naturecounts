@@ -41,6 +41,7 @@ reference:
       - nc_count
       - nc_data_dl
       - nc_metadata
+      - nc_requests
   - title: "Metadata"
     desc: "Functions for returning metadata"
     contents:
@@ -53,6 +54,7 @@ reference:
     desc: "Functions for formating, cleaning or transforming downloaded data"
     contents:
       - format_dates
+      - format_zero_fill
   - title: "Data"
     desc: "Included example data sets"
     contents:
@@ -73,6 +75,11 @@ articles:
       - '`filtering-data`'
       - '`articles/mapping-observations`'
       - '`selecting-fields`'
+#      - '`articles/climate-data`'
+  - title: Formating
+    desc: How to format downloaded data
+    contents:
+      - '`format-zero-fill`'
 
 template:
   params:

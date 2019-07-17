@@ -86,22 +86,26 @@ format_dates_db <- function(db, overwrite) {
 
 #' Zero-fill data
 #'
+#' Zero-fill the species presence data by adding zero observation counts
+#' (absences) data to an existing naturecounts dataset.
+#'
 #' @param df_db Either data frame or a connection to database with
-#'   `naturecounts` table
-#' @param by Character vector. Either "event" or a vector of specific column
-#'   names to fill by (see details)
+#'   `naturecounts` table (a data frame is returned).
+#' @param by Character vector. By default, "SamplingEventIdentifier" or a vector
+#'   of specific column names to fill by (see details)
 #' @param species Character vector. Either "all", for species in the data, or a
 #'   vector of species ID codes to fill in.
 #' @param fill Character. The column name to fill in. Defaults to
 #'   "ObservationCount".
-#' @param extra_cols Character vector. Extra columns/fields uniquely associated
-#'   with `by` to keep in the data (all columns not in `by`, `species`, `fill`,
-#'   or `extra_cols` will be omitted from the result.
+#' @param extra_species Character vector. Extra columns/fields uniquely
+#'   associated with `species_id` to keep in the data (all columns not in `by`,
+#'   `species`, `fill`, or `extra_species` will be omitted from the result).
+#' @param warn Logical. If TRUE, stop zero-filling if >100 species and >1000
+#'   unique sampling events. If FALSE, ignore and proceed.
 #' @inheritParams args
 #'
 #' @details `by` refers to the combination of columns which are used to detect
-#'   missing values. When `by = "event"`, `project_id`, `collection`, `date`,
-#'   and `SamplingEventIdentifier` are used. Otherwise
+#'   missing values. By default `SamplingEventIdentifier` is used. Otherwise
 #'   users can specify their own combination of columns.
 #'
 #'   If `species` is supplied, all records will be used to determine observation
@@ -121,24 +125,29 @@ format_dates_db <- function(db, overwrite) {
 #' library(dplyr) # For filter function
 #' rc <- filter(rc, AllSpeciesReported == "Yes")
 #'
-#' # Add dates
-#' rc_dates <- format_dates(rc)
-#'
 #' # Zero fill by all species present
-#' rc_all_zeros <- format_zero_fill(rc_dates)
+#' rc_all_zeros <- format_zero_fill(rc)
 #'
 #' # Zero fill only for Canada Goose
-#' rc_goose <- format_zero_fill(rc_dates, species = "230")
+#' rc_goose <- format_zero_fill(rc, species = "230")
+#'
+#' # Keep species-specific variables
+#' rc_goose <- format_zero_fill(rc, species = "230", extra_species = "CommonName")
+#'
+#' # Keep sampling-event-specific variables (keep 'SamplingEventIdentifier')
+#' rc_goose <- format_zero_fill(rc, by = c("SamplingEventIdentifier",
+#'                                         "latitude", "longitude"))
 #'
 #' @export
-format_zero_fill <- function(df_db, by = "event", species = "all",
-                             fill = "ObservationCount", extra_cols = NULL,
-                             verbose = TRUE) {
+format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
+                             species = "all", fill = "ObservationCount",
+                             extra_species = NULL,
+                             warn = TRUE, verbose = TRUE) {
 
   # SQLite Connections must become dataframes
-  if(class(df_db) == "SQLiteConnection") {
+  if(any(class(df_db) == "SQLiteConnection")) {
 
-    if(verbose) message("Cannot work directly on SQLite database connections, ",
+    if(verbose) message(" - Cannot work directly on SQLite database connections, ",
                         "collecting data into a data frame...")
 
     if(!"naturecounts" %in% DBI::dbListTables(df_db)) {
@@ -153,82 +162,55 @@ format_zero_fill <- function(df_db, by = "event", species = "all",
     df <- df_db
   }
 
+  # Species ids present?
+  if(!"species_id" %in% names(df)) {
+    stop("Column 'species_id' must be present", call. = FALSE)
+  }
+
+  # fill columns present?
+  if(length(fill) > 1) stop("'fill' can only be one column", .call = FALSE)
+  if(!fill %in% names(df)) {
+    stop("'fill' column ('", fill, "') is missing from the data", call. = FALSE)
+  }
   # All species reported?
-  if(!"AllSpeciesReported" %in% names(df)) {
-    stop("Column 'AllSpeciesReported' must be present", call. = FALSE)
-  } else if(any(is.na(df$AllSpeciesReported) || df$AllSpeciesReported != "Yes")) {
-    stop("Cannot zero-fill if not all species were reported ",
-         "(column 'AllSpeciesReported' needs to be 'Yes')", call. = FALSE)
+  if(!"AllSpeciesReported" %in% names(df) ||
+     any(is.na(df$AllSpeciesReported)) ||
+     any(df$AllSpeciesReported != "Yes")) {
+    stop("Column 'AllSpeciesReported' must be present and 'Yes'", call. = FALSE)
   }
 
   # Select grouping columns
-  if(length(by) == 1) {
+  if(any(!by %in% names(df))) {
+    stop("'by' columns must be present in the ",
+         "data (missing: ",
+         paste0(by[!by %in% names(df)], collapse = ", "), ")", call. = FALSE)
+  }
 
-    by_cols <- c("project_id", "collection", "date")
-
-    if(by == "event") {
-      by <- c(by_cols, "SamplingEventIdentifier")
-    }
-
-    if(any(!by %in% names(df))) {
-      if(!"date" %in% names(df)) {
-        date_msg <- " See 'format_date()' to add the 'date' column."
-      } else date_msg <- ""
-      stop("To zero-fill by event, columns ", paste0(by, collapse = ", "),
-           " must be present in the data.", date_msg, call. = FALSE)
-    }
-
-  } else {
-    if(any(!by %in% names(df))) {
-      stop("To zero-fill by specific columns, they must be present in the ",
-           "data (some are missing: ",
-           paste0(by[!by %in% names(df)], collapse = ", "), ")", call. = FALSE)
-    }
-    if("species_id" %in% by) {
-      stop("The column 'species_id' cannot be in 'by'", call. = FALSE)
-    }
+  if("species_id" %in% by) {
+    stop("The column 'species_id' cannot be in 'by'", call. = FALSE)
   }
 
   # Keep extra columns completely associated with 'by'
-  if(!is.null(extra_cols)) {
+  if(!is.null(extra_species)) {
 
-    if("species_id" %in% extra_cols) {
-      stop("'species_id' cannot be in 'extra_cols'", call. = FALSE)
-    }
-
-    if(any(!extra_cols %in% names(df))) {
-      stop("Some 'extra_cols' are not in the data (",
-           paste0(extra_cols[!extra_cols %in% names(df)], collapse = ", "),
+    if(any(!extra_species %in% names(df))) {
+      stop("Some 'extra_species' are not in the data (",
+           paste0(extra_species[!extra_species %in% names(df)], collapse = ", "),
            ")", call. = FALSE)
     }
 
-    extra_keep <- find_unique(df, by, extra_cols)
+    extra_keep <- find_unique(df, "species_id", extra_species)
 
-    if(!all(extra_cols %in% extra_keep)) {
+    if(!all(extra_species %in% extra_keep)) {
       if(verbose) {
-        message("Ignoring 'extra_cols' columns not uniquely ",
-                "associated with the fill columns (",
-                paste0(extra_cols[!extra_cols %in% extra_keep], collapse = ", "),
-                ")")
+        message(" - Ignoring 'extra_species' columns (",
+                paste0(extra_species[!extra_species %in% extra_keep], collapse = ", "),
+                ") not uniquely ",
+                "associated with the 'species_id' column")
       }
     }
-
-    by <- c(by, extra_keep)
-    by <- by[by != "species_id"]
-  }
-
-  # Check if any by columns all NA
-  na <- vector()
-  for(i in by) na <- c(na, length(na.omit(df[[i]])))
-  if(any(na == 0)) stop("At least one column in 'by' has no non-NA values (",
-                        paste0(by[na == 0], collapse = ", "), ")", call. = FALSE)
-
-  # Check if more than one observation per unique column set
-  if(any(dplyr::count(df, !!!rlang::syms(c(by, "species_id")))$n > 1)) {
-   warning("There is more than one observation per species per set of ",
-           "'by' columns.\nConsider filtering your data or adding more ",
-           "identifier columns to 'by'",
-           call. = FALSE)
+    extra_species <- dplyr::select(df, "species_id", extra_keep) %>%
+      dplyr::distinct()
   }
 
   # Select species ids
@@ -238,6 +220,27 @@ format_zero_fill <- function(df_db, by = "event", species = "all",
     species <- codes_check(species)
   }
 
+  # Check how many species/events there are
+  if(warn && length(species) > 1000 && nrow(unique(df[by])) > 5000) {
+    stop("You are trying to zero-fill over 1000 species with over 5000 ",
+         "sampling events. This could take a while! ",
+         "To ignore this warning and proceed, set 'warn = FALSE'",
+         call. = FALSE)
+  }
+
+  # Check if more than one observation per unique column set
+  if(verbose &&
+     any(dplyr::count(df, !!!rlang::syms(c(by, "species_id")))$n > 1)) {
+    message(" - Consider summarizing multiple observations per set of 'by' ",
+            "before zero-filling to increase speed")
+  }
+
+  # Check for missing by values
+  if(verbose && any(is.na(df[by]))) {
+    message(" - There are missing values in 'by'. ",
+            "These are classified as a single event")
+  }
+
   # Convert fill column to numeric
   if(!is.numeric(df[[fill]])) {
     orig <- class(df[[fill]])
@@ -245,26 +248,27 @@ format_zero_fill <- function(df_db, by = "event", species = "all",
     if(!is.numeric(df[[fill]])) {
       stop("'fill' column cannot be converted to numeric", call. = FALSE)
     }
-    if(verbose) message("Converted 'fill' column (", fill, ") from ",
+    if(verbose) message(" - Converted 'fill' column (", fill, ") from ",
                         orig, " to numeric")
   }
   fill <- as.list(rlang::set_names(0, fill))
 
-  df %>%
+  df_filled <- df %>%
     dplyr::select(by, "species_id", names(fill)) %>%
-    dplyr::mutate(species_id = factor(species_id, levels = species)) %>%
     dplyr::group_by(!!!rlang::syms(by)) %>%
-    tidyr::complete(species_id, fill = fill) %>%
-    dplyr::mutate(species_id = as.integer(as.character(species_id))) %>%
-    dplyr::filter(!is.na(species_id)) %>%
-    as.data.frame()
+    tidyr::complete(species_id = species, fill = fill)
+
+  if(!is.null(extra_species)) {
+    df_filled <- dplyr::left_join(df_filled, extra_species, by = "species_id")
+  }
+
+  as.data.frame(df_filled)
 }
 
 
 # Grab extra columns also unique to 'by'
 find_unique <- function(df, by, extra){
-  extra <- names(df)[names(df) %in% extra]
   extra[sapply(extra, FUN = function(x) {
-    nrow(unique(cbind(df[, by], df[, x]))) == nrow(unique(df[, by]))
+    nrow(unique(cbind(df[by], df[x]))) == nrow(unique(df[by]))
   })]
 }
