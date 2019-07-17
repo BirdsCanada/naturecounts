@@ -34,6 +34,9 @@ public collections will be returned.}
 
 \item{request_id}{Numeric. Specific request id to check or download.}
 
+\item{timeout}{Numeric. Number of seconds before connecting to the server
+times out.}
+
 \item{verbose}{Logical. Show messages?}
 }
 \description{

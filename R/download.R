@@ -74,7 +74,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
                        doy = NULL, region = NULL, site_type = NULL,
                        fields_set = "minimum", fields = NULL,
                        username, request_id = NULL, sql_db = NULL,
-                       warn = TRUE, verbose = TRUE) {
+                       warn = TRUE, timeout = 60, verbose = TRUE) {
 
   # Username check and Authorization
   token <- srv_auth(username)
@@ -118,7 +118,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   if(!is.null(request_id)) {
     records <- dplyr::select(requests, collection, nrecords)
   } else {
-    records <- nc_count_internal(filter = filter, token = token)
+    records <- nc_count_internal(filter = filter, timeout = timeout, token = token)
     request_id <- records$requestId
     records <- records$results
   }
@@ -178,11 +178,13 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   for(c in 1:nrow(records)) {
 
     # Get data for whole collection
-    df_db <- nc_coll_dl(coll = records[c, ], query, filter, token, df_db, verbose)
+    df_db <- nc_coll_dl(coll = records[c, ], query, filter,
+                        timeout, token, df_db, verbose)
   }
 
   # Clear the web request id
-  srv_query(api$release_request_id, query = query['requestId'], token = token)
+  srv_query(api$release_request_id, query = query['requestId'],
+            timeout = timeout, token = token)
 
   df_db
 }
@@ -205,7 +207,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
 #'
 #' @keywords internal
 
-nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
+nc_coll_dl <- function(coll, query, filter, timeout, token, df_db, verbose) {
 
   if(verbose) message("  ", coll$collection)
   if(verbose) progress_query(0, coll$nrecords, query$numRecords)
@@ -214,7 +216,7 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
   filter$collection <- coll$collection
 
   # Request
-  r <- nc_single_dl(query, filter, token)
+  r <- nc_single_dl(query, filter, timeout, token)
 
   # Save the data
   df_db <- nc_data_save(r$results, df_db)
@@ -233,7 +235,7 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
     if(verbose) progress_query(coll$progress, coll$nrecords, query$numRecords)
 
     # Request
-    r <- nc_single_dl(query, filter, token)
+    r <- nc_single_dl(query, filter, timeout, token)
 
     # Save the data
     df_db <- nc_data_save(r$results, df_db)
@@ -255,13 +257,13 @@ nc_coll_dl <- function(coll, query, filter, token, df_db, verbose) {
 #'
 #' @keywords internal
 
-nc_single_dl <- function(query, filter, token){
+nc_single_dl <- function(query, filter, timeout, token){
 
   request <- srv_query(api$data,
                        query = query,
                        filter = filter,
                        token = token,
-                       timeout = 60)
+                       timeout = timeout)
 
   # Parse the data
   request$results <- parse_results(request, results = TRUE)
@@ -353,7 +355,8 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 
 nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                      years = NULL, doy = NULL, region = NULL, site_type = NULL,
-                     show = "available", username = NULL, verbose = TRUE) {
+                     show = "available", username = NULL, timeout = 30,
+                     verbose = TRUE) {
 
   if(!show %in% c("available", "all")) {
     stop("show must either be 'all' or 'available'", call. = FALSE)
@@ -377,14 +380,14 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                           site_type = site_type)
 
   # Get counts
-  cnts <- nc_count_internal(filter, token, show)
+  cnts <- nc_count_internal(filter, timeout, token, show)
 
   cnts[['results']]
 }
 
-nc_count_internal <- function(filter, token, show = "available") {
+nc_count_internal <- function(filter, timeout, token, show = "available") {
   cnts <- srv_query(api$collections_count, token = token, filter = filter,
-                    timeout = 60)
+                    timeout = timeout)
 
   requestId <- cnts$requestId
 

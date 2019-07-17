@@ -6,7 +6,8 @@
 \usage{
 nc_count(collections = NULL, project_ids = NULL, species = NULL,
   years = NULL, doy = NULL, region = NULL, site_type = NULL,
-  show = "available", username = NULL, verbose = TRUE)
+  show = "available", username = NULL, timeout = 30,
+  verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -40,6 +41,9 @@ the username provided. If no username is provided, defaults to "all".}
 \item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.}
+
+\item{timeout}{Numeric. Number of seconds before connecting to the server
+times out.}
 
 \item{verbose}{Logical. Show messages?}
 }

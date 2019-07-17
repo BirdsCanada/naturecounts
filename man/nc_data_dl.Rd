@@ -7,7 +7,7 @@
 nc_data_dl(collections = NULL, project_ids = NULL, species = NULL,
   years = NULL, doy = NULL, region = NULL, site_type = NULL,
   fields_set = "minimum", fields = NULL, username, request_id = NULL,
-  sql_db = NULL, warn = TRUE, verbose = TRUE)
+  sql_db = NULL, warn = TRUE, timeout = 60, verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -50,6 +50,9 @@ either create or add to}
 
 \item{warn}{Logical. Interactive warning if request more than 1,000,000
 records to download.}
+
+\item{timeout}{Numeric. Number of seconds before connecting to the server
+times out.}
 
 \item{verbose}{Logical. Show messages?}
 }

@@ -4,7 +4,7 @@
 \alias{nc_coll_dl}
 \title{Download all records for a single collection}
 \usage{
-nc_coll_dl(coll, query, filter, token, df_db, verbose)
+nc_coll_dl(coll, query, filter, timeout, token, df_db, verbose)
 }
 \arguments{
 \item{coll}{List. Data frame returned by nc_count() for collection in

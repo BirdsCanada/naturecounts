@@ -22,6 +22,8 @@
 #'   provided, the user will be prompted for a password. If left NULL, only
 #'   public collections will be returned.
 #' @param request_id Numeric. Specific request id to check or download.
+#' @param timeout Numeric. Number of seconds before connecting to the server
+#'   times out.
 #' @param verbose Logical. Show messages?
 #'
 #' @section NatureCounts account:

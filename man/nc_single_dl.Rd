@@ -4,7 +4,7 @@
 \alias{nc_single_dl}
 \title{Download single set of records for a single collection}
 \usage{
-nc_single_dl(query, filter, token)
+nc_single_dl(query, filter, timeout, token)
 }
 \arguments{
 \item{query}{List. Queries for server}
