@@ -38,8 +38,3 @@ test_that("metadata apis are accessible", {
 test_that("species metadata", {
   expect_silent(s <- srv_query(api$species_taxonomy))
 })
-
-test_that("data retrieval", {
-
-})
-
