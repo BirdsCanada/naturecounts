@@ -114,3 +114,8 @@ NULL
 #' @keywords internal
 #' @export   .data
 NULL
+
+nc_deprecate <- function(new){
+  .Deprecated(msg = paste0(as.character(sys.call(sys.parent()))[1L],
+                           " is deprecated, use ", new, " instead"))
+}

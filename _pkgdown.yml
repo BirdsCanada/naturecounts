@@ -49,7 +49,7 @@ reference:
   - title: "Searching through Metadata"
     desc: "Functions for searching through metadata"
     contents:
-      - ends_with("_search")
+      - starts_with("search_")
   - title: "Helper functions"
     desc: "Functions for formating, cleaning or transforming downloaded data"
     contents:

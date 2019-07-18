@@ -33,7 +33,7 @@
 #' p1042 <- nc_data_dl(project_ids = 1042, username = "sample")}
 #'
 #' # Black-capped chickadees from RCBIOTABASE collection in 2010
-#' species_search("black-capped chickadee") # Find the species_id
+#' search_species("black-capped chickadee") # Find the species_id
 #' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
 #'                    years = 2010, username = "sample")
 #'
@@ -47,7 +47,7 @@
 #'                                           right = -100, top = 60)))
 #'
 #' # All moose observations with public access
-#' species_search("moose")
+#' search_species("moose")
 #' moose <- nc_data_dl(species = 133990, username = "sample")
 #'
 #' # Different fields/columns
@@ -342,7 +342,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #' }
 #'
 #' # Count records with barred owls in Ontario
-#' species_search("barred owl")
+#' search_species("barred owl")
 #' nc_count(species = 7590, region = list(statprov = "ON"), username = "sample")
 #'
 #' # Count all records available in the Christmas Bird Count and Breeding Bird

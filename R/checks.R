@@ -205,7 +205,7 @@ codes_check_each <- function(desc, type, df) {
 
 
 codes_convert <- function(desc, type) {
-  c <- region_search(desc, type) %>%
+  c <- search_region(desc, type) %>%
     dplyr::select(dplyr::contains("_code"),
                   dplyr::contains("_name")) %>%
     dplyr::distinct()

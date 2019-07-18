@@ -5,6 +5,8 @@
 #' (BCR). These are then used in the \code{\link{nc_data_dl}()} and
 #' \code{\link{nc_count}()} functions.
 #'
+#' `region_search()` is deprecated in favour of `search_region()`
+#'
 #' @param name Character. The location name to search for
 #' @param type Character. One of "country", "statprov", "subnational2", "iba",
 #'   or "bcr". The type of information to return.
@@ -13,33 +15,34 @@
 #'
 #' @examples
 #'
-#' region_search("Mexico", type = "country")   # MX
+#' search_region("Mexico", type = "country")   # MX
 #'
-#' region_search("Yucatan", type = "statprov") # Yucatán
-#' region_search("Alberta", type = "statprov") # AB
+#' search_region("Yucatan", type = "statprov") # Yucatán
+#' search_region("Alberta", type = "statprov") # AB
 #'
-#' region_search("Edmonton", type = "subnational2") # CA.AB.11
-#' region_search("Brandon", type = "subnational2")  # CA.MB.07
+#' search_region("Edmonton", type = "subnational2") # CA.AB.11
+#' search_region("Brandon", type = "subnational2")  # CA.MB.07
 #'
-#' region_search("hays reservoir", type = "iba") # AB075
-#' region_search("rainforest", type = "bcr")     # 5
+#' search_region("hays reservoir", type = "iba") # AB075
+#' search_region("rainforest", type = "bcr")     # 5
 #'
 #'
 #' # Show all codes
-#' region_search(type = "country")
-#' region_search(type = "statprov")
-#' region_search(type = "subnational2")
-#' region_search(type = "iba")
-#' region_search(type = "bcr")
+#' search_region(type = "country")
+#' search_region(type = "statprov")
+#' search_region(type = "subnational2")
+#' search_region(type = "iba")
+#' search_region(type = "bcr")
 #'
 #' \donttest{
 #' # Using the codes
 #' nc_count(region = list(statprov = "AB"), years = 2010)
 #' }
 #'
+#' @aliases region_search
 #' @export
 
-region_search <- function(name = NULL, type = "country"){
+search_region <- function(name = NULL, type = "country"){
   if(!type %in% c("country", "statprov", "subnational2", "iba", "bcr")) {
     stop("'type' must be one of 'country', 'statprov', 'subnational2', ",
          "'iba', or 'bcr'", call. = FALSE)
@@ -50,7 +53,7 @@ region_search <- function(name = NULL, type = "country"){
   columns <- stringr::str_subset(names(df), "name")
 
   if(!is.null(name)) {
-    df <- codes_search(name, df = df,
+    df <- search_codes(name, df = df,
                        code_column = keys[[paste0(type, "_codes")]],
                        columns = columns)
   }
@@ -63,6 +66,8 @@ region_search <- function(name = NULL, type = "country"){
 #' Find species id codes by searching for scientific, English and French species
 #' names.
 #'
+#' `species_search()` is deprecated in favour of `search_species()`
+#'
 #' @param name Character. The species name to search for
 #' @param show Character. Either "all" or "names" (default). Whether to return
 #'   all taxonomic information or only a subset with species names
@@ -74,22 +79,24 @@ region_search <- function(name = NULL, type = "country"){
 #' @examples
 #'
 #' # Show all ids
-#' species_search()
+#' search_species()
 #'
-#' species_search("chickadee")
-#' species_search("black-capped chickadee")
+#' search_species("chickadee")
+#' search_species("black-capped chickadee")
 #'
 #' # Add alphanumeric code for BSCDATA authority
-#' species_search("black-capped chickadee", authority = "BSCDATA")
+#' search_species("black-capped chickadee", authority = "BSCDATA")
 #'
 #' # Show all taxonomic information
-#' species_search("black-capped chickadee", show = "all")
+#' search_species("black-capped chickadee", show = "all")
 #'
 #' # Using the codes
 #' nc_count(species = 14280)
 #'
+#' @aliases species_search
+#'
 #' @export
-species_search <- function(name = NULL, show = "names", authority = NULL) {
+search_species <- function(name = NULL, show = "names", authority = NULL) {
 
   # Argument checks
   if(!show %in% c("all", "names")) {
@@ -100,7 +107,7 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
 
   if(!is.null(name)){
     search_columns <- c("scientific_name", "english_name", "french_name")
-    ids <- codes_search(name, df = ids,
+    ids <- search_codes(name, df = ids,
                         code_column = "species_id",
                         columns = search_columns)
   }
@@ -135,6 +142,8 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
 #' This is an advanced function for returning all Bird-related species id codes
 #' based on the various alphanumeric codes used by different authorities.
 #'
+#' `species_code_search()` is deprecated in favour of `search_species_code()`
+#'
 #' @param code Vector. Character or numeric code indicating a species for a
 #'   given authority.
 #' @param authority Character. The authority to compare codes against (defaults
@@ -150,31 +159,33 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
 #' @examples
 #'
 #' # Show all ids
-#' species_code_search()
+#' search_species_code()
 #'
 #' # Get all species ids for house finches
-#' species_code_search("HOFI")
+#' search_species_code("HOFI")
 #'
 #' # Get all species ids for Dark-eyed Juncos
-#' species_code_search("DEJU")
+#' search_species_code("DEJU")
 #'
 #' # Get all species ids related to Yellow-rumped Warbler (Myrtle)
 #' # NOTE! This includes Audubon's and the main, Yellow-rumped Warbler species
-#' species_code_search("MYWA")
+#' search_species_code("MYWA")
 #'
 #' # Get ONLY specific id related to Yellow-rumped Warbler (Myrtle)
-#' species_code_search("MYWA", results = "exact")
+#' search_species_code("MYWA", results = "exact")
 #'
 #' # Use the Christmas Bird Count authority
-#' species_code_search(11609, authority = "CBC")
+#' search_species_code(11609, authority = "CBC")
 #'
 #' # Look in more than one authority (note that the code only needs to match on
 #' # of the authorities)
-#' species_code_search("MYWA", authority = c("BCMA", "CBC"))
+#' search_species_code("MYWA", authority = c("BCMA", "CBC"))
+#'
+#' @aliases species_code_search
 #'
 #' @export
 
-species_code_search <- function(code = NULL, authority = "BSCDATA",
+search_species_code <- function(code = NULL, authority = "BSCDATA",
                                 results = "all") {
 
   # Argument checks
@@ -194,7 +205,7 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
     dplyr::select(-rank) %>%
     dplyr::distinct()
 
-  if(!is.null(code)) ids <- codes_search(code, df = ids,
+  if(!is.null(code)) ids <- search_codes(code, df = ids,
                                          code_column = code_column,
                                          columns = authority)
 
@@ -234,7 +245,7 @@ species_code_search <- function(code = NULL, authority = "BSCDATA",
 #'
 #' @keywords internal
 
-codes_search <- function(desc, df, code_column, columns) {
+search_codes <- function(desc, df, code_column, columns) {
 
   desc <- stringi::stri_trans_general(desc, "Latin-ASCII") %>%
     stringr::str_replace("-|_", " ")
@@ -252,3 +263,23 @@ codes_search <- function(desc, df, code_column, columns) {
 
   dplyr::filter(df, !!rlang::sym(code_column) %in% codes)
 }
+
+#' @export
+region_search <- function(name = NULL, type = "country"){
+  nc_deprecate("search_region")
+  search_region(name, type)
+}
+
+#' @export
+species_search <- function(name = NULL, show = "names", authority = NULL) {
+  nc_deprecate("search_species")
+  search_species(name, show, authority)
+}
+
+#' @export
+species_code_search <- function(code = NULL, authority = "BSCDATA",
+                                results = "all") {
+  nc_deprecate("search_species_code")
+  search_species_code(code, authority, results)
+}
+

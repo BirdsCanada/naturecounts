@@ -69,7 +69,7 @@ information.
 \section{Species ids (\code{species})}{
 
 Numeric species id codes can determined from the functions
-\code{\link[=species_search]{species_search()}} or \code{\link[=species_code_search]{species_code_search()}}. See
+\code{\link[=search_species]{search_species()}} or \code{\link[=search_species_code]{search_species_code()}}. See
 also the \href{https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html}{species codes}
 for more information.
 }
@@ -88,7 +88,7 @@ in a 1 day offset for leap years.
 
 Regions are defined by codes reflecting the country, state/province,
 subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
-Regions (BCR) (see \code{\link[=region_search]{region_search()}} for codes). They can also be defined
+Regions (BCR) (see \code{\link[=search_region]{search_region()}} for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifys the min/max longitude and min/max latitude (\code{bbox}). See the
 article on \href{http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html}{regional filters}
@@ -113,7 +113,7 @@ nc_count(username = "sample")
 }
 
 # Count records with barred owls in Ontario
-species_search("barred owl")
+search_species("barred owl")
 nc_count(species = 7590, region = list(statprov = "ON"), username = "sample")
 
 # Count all records available in the Christmas Bird Count and Breeding Bird

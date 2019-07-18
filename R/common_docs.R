@@ -37,7 +37,7 @@
 #'
 #' @section Species ids (`species`):
 #'   Numeric species id codes can determined from the functions
-#'   [species_search()] or [species_code_search()]. See
+#'   [search_species()] or [search_species_code()]. See
 #'   also the [species codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
 #'   for more information.
 #'
@@ -52,9 +52,9 @@
 #' @section Regions (`region`):
 #'   Regions are defined by codes reflecting the country, state/province,
 #'   subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
-#'   Regions (BCR) (see [region_search()] for codes). They can also be defined
+#'   Regions (BCR) (see [search_region()] for codes). They can also be defined
 #'   by providing specific UTM squares to download or a bounding box area which
-#'   specifys the min/max longitude and min/max latitude (`bbox`). See the
+#'   specifies the min/max longitude and min/max latitude (`bbox`). See the
 #'   article on [regional filters](http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
 #'   for more information.
 #'

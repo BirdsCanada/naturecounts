@@ -80,7 +80,7 @@ information.
 \section{Species ids (\code{species})}{
 
 Numeric species id codes can determined from the functions
-\code{\link[=species_search]{species_search()}} or \code{\link[=species_code_search]{species_code_search()}}. See
+\code{\link[=search_species]{search_species()}} or \code{\link[=search_species_code]{search_species_code()}}. See
 also the \href{https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html}{species codes}
 for more information.
 }
@@ -99,7 +99,7 @@ in a 1 day offset for leap years.
 
 Regions are defined by codes reflecting the country, state/province,
 subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
-Regions (BCR) (see \code{\link[=region_search]{region_search()}} for codes). They can also be defined
+Regions (BCR) (see \code{\link[=search_region]{search_region()}} for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifys the min/max longitude and min/max latitude (\code{bbox}). See the
 article on \href{http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html}{regional filters}
@@ -161,7 +161,7 @@ rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample")
 p1042 <- nc_data_dl(project_ids = 1042, username = "sample")}
 
 # Black-capped chickadees from RCBIOTABASE collection in 2010
-species_search("black-capped chickadee") # Find the species_id
+search_species("black-capped chickadee") # Find the species_id
 bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
                    years = 2010, username = "sample")
 
@@ -175,7 +175,7 @@ bcch <- nc_data_dl(species = 14280, username = "sample",
                                           right = -100, top = 60)))
 
 # All moose observations with public access
-species_search("moose")
+search_species("moose")
 moose <- nc_data_dl(species = 133990, username = "sample")
 
 # Different fields/columns

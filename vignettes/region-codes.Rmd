@@ -50,7 +50,7 @@ nc_count(region = list(statprov = "NB"))
 
 **Search by name** (English or French)
 ```{r country}
-region_search("États-Unis", type = "country")
+search_region("États-Unis", type = "country")
 ```
 
 **Browse the code list**
@@ -68,7 +68,7 @@ nc_count(region = list(country = c("US", "CA")))
 
 **Search by name** (English, French, or Spanish)
 ```{r statprov}
-region_search("Distrito de Colombia", type = "statprov")
+search_region("Distrito de Colombia", type = "statprov")
 ```
 
 **Browse the code list**
@@ -92,7 +92,7 @@ Language depends on location:
 - Rest of Canada = English
 
 ```{r subnational}
-region_search("Montreal", type = "subnational2")
+search_region("Montreal", type = "subnational2")
 ```
 
 **Browse the code list**
@@ -113,7 +113,7 @@ nc_count(region = list(subnational2 = c("CA-QC-MR", "CA-ON-TO")))
 **Search by name** (English or French)
 
 ```{r iba}
-region_search("oak hammock", type = "iba")
+search_region("oak hammock", type = "iba")
 ```
 
 **Browse the code list**
@@ -131,7 +131,7 @@ nc_count(region = list(iba = c("MB010", "AB011")))
 **Search by name** (English, French, or Spanish)
 
 ```{r bcr}
-region_search("rainforest", type = "bcr")
+search_region("rainforest", type = "bcr")
 ```
 
 **Browse the code list**
