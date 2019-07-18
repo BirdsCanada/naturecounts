@@ -30,6 +30,7 @@ Imports:
     tidyr (>= 0.8.2)
 Suggests: 
     ggplot2,
+    ggmap,
     here,
     knitr,
     mapview,
