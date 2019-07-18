@@ -12,6 +12,7 @@ nc_metadata_internal(force = TRUE, utm = FALSE)
 
 # Check spelling
 dict <- hunspell::dictionary('en_CA')
+spelling::update_wordlist()
 devtools::spell_check()
 
 ## Finalize package version

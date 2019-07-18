@@ -76,7 +76,7 @@ Regions are defined by codes reflecting the country, state/province,
 subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 Regions (BCR) (see \code{\link[=search_region]{search_region()}} for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
-specifys the min/max longitude and min/max latitude (\code{bbox}). See the
+specifies the min/max longitude and min/max latitude (\code{bbox}). See the
 article on \href{http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html}{regional filters}
 for more information.
 }

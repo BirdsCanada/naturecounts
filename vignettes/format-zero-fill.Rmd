@@ -103,7 +103,7 @@ ggplot(data = rc_filled, aes(x = factor(species_id), fill = ObservationCount > 0
   labs(title = "Number of sampling events the species was observed")
 ```
 
-It might be more helpull to use common names, but through the process of zero-filling, extra columns have been removed.
+It might be more helpful to use common names, but through the process of zero-filling, extra columns have been removed.
 
 
 ## Keep other important columns
