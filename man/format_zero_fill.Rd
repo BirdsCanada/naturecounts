@@ -50,8 +50,9 @@ presence/absence), will be converted to a list of 0's for the individual
 species.
 }
 \examples{
-# Download data
-rc <- nc_data_dl(collection = "RCBIOTABASE", username = "sample")
+# Download data (with "core" fields to include 'CommonName')
+rc <- nc_data_dl(collection = "RCBIOTABASE", fields_set = "core",
+               username = "sample")
 
 # Remove casual observations (i.e. 'AllSpeciesReported' = "No")
 library(dplyr) # For filter function
