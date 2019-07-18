@@ -9,7 +9,8 @@
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Access and download data on plant and animal populations from NatureCounts">
+<script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
+<meta property="og:title" content="Access and download data on plant and animal populations from NatureCounts">
 <meta property="og:description" content="Access and download data on plant and animal populations from 
     various databases through NatureCounts, a service managed by Bird Studies 
     Canada. ">
@@ -99,25 +100,23 @@
 <a href="#fetching-counts" class="anchor"></a>Fetching counts</h3>
 <p>Use the <code><a href="reference/nc_count.html">nc_count()</a></code> function to return collections and the number of observations in each for which you have access (here returns all collections associated with username <strong>sample</strong>).</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="reference/nc_count.html">nc_count</a></span>(<span class="dt">username =</span> <span class="st">"sample"</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt;      collection nrecords</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; 1      ABATLAS1   123364</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; 2      ABATLAS2   201398</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 3    ABBIRDRECS   357264</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; 4         BGRMM      476</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; 5    EBUTTERFLY    26192</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 6          IMMP       43</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 7       IMMP_A2       24</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; 8       IMMP_BW       19</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; 9          IMQC      761</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; 10         MEXU     3251</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 11         MLMP      802</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 12           MM     4343</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; 13 MONARCHWATCH   145665</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; 14         PMMM        5</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; 15  RCBIOTABASE    12598</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; 16      SAMPLE1     1000</span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; 17      SAMPLE2     1000</span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; 18         WMMM     8981</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt;    access   collection nrecords</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; 1     yes     ABATLAS1   123364</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; 2     yes     ABATLAS2   201398</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 3     yes   ABBIRDRECS   357264</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; 4     yes        BGRMM      476</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; 5     yes   EBUTTERFLY    26192</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 6     yes         IMMP       43</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 7     yes      IMMP_A2       24</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; 8     yes      IMMP_BW       19</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; 9     yes         IMQC      761</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; 10    yes         MEXU     3251</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 11    yes         MLMP      802</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 12    yes           MM     4343</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; 13    yes MONARCHWATCH   145665</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; 14    yes         PMMM        5</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; 15    yes  RCBIOTABASE    12598</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; 16    yes         WMMM     8981</span></a></code></pre></div>
 <p>Use the <code>show = "all"</code> argument to show counts for all collections available (public or otherwise).</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="reference/nc_count.html">nc_count</a></span>(<span class="dt">show =</span> <span class="st">"all"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>()</a>
@@ -136,24 +135,26 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">moose &lt;-<span class="st"> </span><span class="kw"><a href="reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">133990</span>, <span class="dt">username =</span> <span class="st">"sample"</span>)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; Using filters: species (133990); fields_set (BMDE2.00-min)</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; Collecting available records...</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt;    collection nrecords</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; 1 RCBIOTABASE        2</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; Downloading records for each collection:</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;   RCBIOTABASE</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;     Records 1 to 2 / 2</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt;   access  collection nrecords</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; 1    yes RCBIOTABASE        2</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; Total records: 2</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; Downloading records for each collection:</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;   RCBIOTABASE</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;     Records 1 to 2 / 2</span></a></code></pre></div>
 <p>Alternatively, save the downloaded data as a SQLite database (<code>moose.nc</code>).</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">moose &lt;-<span class="st"> </span><span class="kw"><a href="reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">133990</span>, <span class="dt">sql_db =</span> <span class="st">"moose"</span>, <span class="dt">username =</span> <span class="st">"sample"</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; Using filters: species (133990); fields_set (BMDE2.00-min)</span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Collecting available records...</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;    collection nrecords</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 1 RCBIOTABASE        2</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; Database 'moose.nc' does not exist, creating it...</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; Downloading records for each collection:</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;   RCBIOTABASE</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;     Records 1 to 2 / 2</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;   access  collection nrecords</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 1    yes RCBIOTABASE        2</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Total records: 2</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; Database 'moose.nc' does not exist, creating it...</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; Downloading records for each collection:</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;   RCBIOTABASE</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;     Records 1 to 2 / 2</span></a></code></pre></div>
 </div>
 <div id="authorizations" class="section level3">
 <h3 class="hasAnchor">

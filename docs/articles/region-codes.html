@@ -9,7 +9,8 @@
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Region Codes">
+<script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Region Codes">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -73,7 +74,7 @@
     <div class="page-header toc-ignore">
       <h1>Region Codes</h1>
             
-            <h4 class="date">2019-04-25</h4>
+            <h4 class="date">2019-07-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/region-codes.Rmd"><code>vignettes/region-codes.Rmd</code></a></small>
       <div class="hidden name"><code>region-codes.Rmd</code></div>
@@ -132,9 +133,10 @@
 ## 15   MBBA2PC_SAR        7
 ## 16       MBBA2RC     6908
 ## 17            MM       42
-## 18     NESTWATCH    28864
-## 19           PFW   121567
-## 20    PRISM-ACSS    42030</code></pre>
+## 18      MMPBIRDS    49816
+## 19     NESTWATCH    28864
+## 20           PFW   128219
+## 21    PRISM-ACSS    42094</code></pre>
 </div>
 <div id="in-detail---codes" class="section level2">
 <h2 class="hasAnchor">
@@ -143,7 +145,7 @@
 <h3 class="hasAnchor">
 <a href="#country" class="anchor"></a>Country</h3>
 <p><strong>Search by name</strong> (English or French)</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/region_search.html">region_search</a></span>(<span class="st">"États-Unis"</span>, <span class="dt">type =</span> <span class="st">"country"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/search_region.html">search_region</a></span>(<span class="st">"États-Unis"</span>, <span class="dt">type =</span> <span class="st">"country"</span>)</a></code></pre></div>
 <pre><code>##   country_code                         country_name                        country_name_fr
 ## 1           UM United States Minor Outlying Islands Îles mineures éloignées des États-Unis
 ## 2           US                        United States                             États-Unis
@@ -157,7 +159,7 @@
 <h3 class="hasAnchor">
 <a href="#stateprovince" class="anchor"></a>State/Province</h3>
 <p><strong>Search by name</strong> (English, French, or Spanish)</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../reference/region_search.html">region_search</a></span>(<span class="st">"Distrito de Colombia"</span>, <span class="dt">type =</span> <span class="st">"statprov"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../reference/search_region.html">search_region</a></span>(<span class="st">"Distrito de Colombia"</span>, <span class="dt">type =</span> <span class="st">"statprov"</span>)</a></code></pre></div>
 <pre><code>##   country_code statprov_code     statprov_name_es        statprov_name     statprov_name_fr
 ## 1           US            DC Distrito de Colombia District of Columbia District de Columbia</code></pre>
 <p><strong>Browse the code list</strong></p>
@@ -189,7 +191,7 @@
 ## 20    MONARCHWATCH       54
 ## 21       NESTWATCH     4553
 ## 22       OISEAUXQC        2
-## 23             PFW   103573
+## 23             PFW   110414
 ## 24     PFW-US-EAST     9133</code></pre>
 </div>
 <div id="subnational-regions-type-2" class="section level3">
@@ -197,7 +199,7 @@
 <a href="#subnational-regions-type-2" class="anchor"></a>Subnational regions (type 2)</h3>
 <p><strong>Search by name</strong><br>
 Language depends on location: - Mexico = Spanish - USA = English - Quebec = French - Rest of Canada = English</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/region_search.html">region_search</a></span>(<span class="st">"Montreal"</span>, <span class="dt">type =</span> <span class="st">"subnational2"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/search_region.html">search_region</a></span>(<span class="st">"Montreal"</span>, <span class="dt">type =</span> <span class="st">"subnational2"</span>)</a></code></pre></div>
 <pre><code>##   country_code statprov_code subnational2_code              subnational2_name ebird_code
 ## 1           CA            QC          CA.QC.MR Communauté-Urbaine-de-Montréal   CA-QC-MR</code></pre>
 <p><strong>Browse the code list</strong></p>
@@ -221,32 +223,32 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 ## 12             BCATLAS1PC   260647
 ## 13             BCATLAS1RC    21884
 ## 14                BCBEACH     7263
-## 15                  BCCWS   329523
-## 16                   BCMA     4311
+## 15                  BCCWS   346475
+## 16                   BCMA    11291
 ## 17                 BCOWLS    27149
 ## 18                  BGRMM      476
 ## 19              BIRDSOFBC   498444
 ## 20                    CBC  7570427
 ## 21         CMMN-BAND-LPBO  1168735
 ## 22           CMMN-DET-ABO    85569
-## 23          CMMN-DET-ACBO    26716
-## 24           CMMN-DET-BBO    69928
+## 23          CMMN-DET-ACBO    28386
+## 24           CMMN-DET-BBO    72759
 ## 25          CMMN-DET-BPBO    88397
 ## 26          CMMN-DET-DMBO    88280
-## 27           CMMN-DET-HBO   263059
+## 27           CMMN-DET-HBO   271674
 ## 28           CMMN-DET-IBS    29736
 ## 29          CMMN-DET-IPBO    49741
-## 30          CMMN-DET-LMBO    56571
+## 30          CMMN-DET-LMBO    57432
 ## 31          CMMN-DET-LPBO  1073798
-## 32         CMMN-DET-LSLBO   108383
+## 32         CMMN-DET-LSLBO   114040
 ## 33          CMMN-DET-MGBO    80063
-## 34          CMMN-DET-MIBO     8355
-## 35           CMMN-DET-MNO    66401
+## 34          CMMN-DET-MIBO    10804
+## 35           CMMN-DET-MNO    69732
 ## 36           CMMN-DET-OOT   106146
 ## 37         CMMN-DET-PEPBO   131973
 ## 38          CMMN-DET-PIBO   116763
 ## 39          CMMN-DET-RPBO   131972
-## 40          CMMN-DET-TCBO   130618
+## 40          CMMN-DET-TCBO   136565
 ## 41         CMMN-DET-TLBBS    28037
 ## 42          CMMN-DET-TLBO    29722
 ## 43        CMMN-DET-TTPBRS    97635
@@ -283,7 +285,7 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 ## 74                   MEXU     3251
 ## 75                   MLMP      802
 ## 76                     MM     4343
-## 77               MMPBIRDS   366668
+## 77               MMPBIRDS   425826
 ## 78               MMPFROGS    88438
 ## 79           MONARCHWATCH   145665
 ## 80            Naturalista       30
@@ -298,17 +300,17 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 ## 89                   OBFS   324560
 ## 90              OISEAUXQC   666963
 ## 91                 ONOWLS    40449
-## 92                    PFW  3616772
+## 92                    PFW  3841194
 ## 93            PFW-US-EAST  8651432
 ## 94            PFW-US-WEST  5631851
 ## 95                   PMMM        5
-## 96             PRISM-ACSS   117139
-## 97              PRISM-OSS    47456
-## 98              PRISM-PSS     1817
-## 99    QCATLAS_NORTH_BE_DO     7043
-## 100  QCATLAS_NORTH_BE_RAW    19095
-## 101 QCATLAS_NORTH_BE_SUMM    12305
-## 102      QCATLAS_NORTH_PC     8239
+## 96             PRISM-ACSS   117227
+## 97              PRISM-OSS    47542
+## 98              PRISM-PSS     3305
+## 99    QCATLAS_NORTH_BE_DO    19747
+## 100  QCATLAS_NORTH_BE_RAW    35599
+## 101 QCATLAS_NORTH_BE_SUMM    23601
+## 102      QCATLAS_NORTH_PC    21579
 ## 103        QCATLAS1BE_RAW   198816
 ## 104       QCATLAS1BE_SUMM   136333
 ## 105         QCATLAS2BE_DO   283034
@@ -318,16 +320,13 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 ## 109            QCATLAS2RC    39390
 ## 110                QCOWLS    11195
 ## 111           RCBIOTABASE    12598
-## 112               SAMPLE1     1000
-## 113               SAMPLE2     1000
-## 114              SAR-RSHA    27696
-## 115         SKATLAS1BE_DO    99872
-## 116       SKATLAS1BE_SUMM    42203
-## 117            SKATLAS1PC    27916
-## 118            SWIFTWATCH    10624
-## 119                  WMMM     8981
-## 120                  WPWI     3012
-## 121            WRNIGHTJAR     2754</code></pre>
+## 112              SAR-RSHA    27696
+## 113         SKATLAS1BE_DO    99872
+## 114       SKATLAS1BE_SUMM    42203
+## 115            SKATLAS1PC    27916
+## 116            SWIFTWATCH    10624
+## 117                  WMMM     8981
+## 118                  WPWI     3012</code></pre>
 </div>
 <div id="important-bird-areas-iba" class="section level3">
 <h3 class="hasAnchor">
@@ -336,7 +335,7 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 <li>These are Canadian designations</li>
 </ul>
 <p><strong>Search by name</strong> (English or French)</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="../reference/region_search.html">region_search</a></span>(<span class="st">"oak hammock"</span>, <span class="dt">type =</span> <span class="st">"iba"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="../reference/search_region.html">search_region</a></span>(<span class="st">"oak hammock"</span>, <span class="dt">type =</span> <span class="st">"iba"</span>)</a></code></pre></div>
 <pre><code>##   iba_site           iba_name_fr latitude statprov area_ha alt_min              iba_name
 ## 1    MB010 Oak Hammock Marsh WMA 50.18958       MB   67.56     233 Oak Hammock Marsh WMA
 ##   nearest_town bcr ncc_region alt_max longitude status
@@ -351,7 +350,7 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 ## 1         ABATLAS1      130
 ## 2         ABATLAS2       99
 ## 3       ABBIRDRECS        9
-## 4      EBIRD-CA-PR   106688
+## 4      EBIRD-CA-PR   106697
 ## 5    EBIRD-CA-SENS       37
 ## 6       EBUTTERFLY        3
 ## 7    MBATLAS1BE_DO      309
@@ -365,7 +364,7 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 <h3 class="hasAnchor">
 <a href="#bird-conservation-regions-bcr" class="anchor"></a>Bird Conservation Regions (BCR)</h3>
 <p><strong>Search by name</strong> (English, French, or Spanish)</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw"><a href="../reference/region_search.html">region_search</a></span>(<span class="st">"rainforest"</span>, <span class="dt">type =</span> <span class="st">"bcr"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw"><a href="../reference/search_region.html">search_region</a></span>(<span class="st">"rainforest"</span>, <span class="dt">type =</span> <span class="st">"bcr"</span>)</a></code></pre></div>
 <pre><code>##   bcr                    bcr_name                        bcr_name_es
 ## 1   5 Northern Pacific Rainforest Bosque Lluvioso del Pacífico Norte
 ##                                        bcr_name_fr
@@ -385,25 +384,23 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 ## 6       BCATLAS1PC    52256
 ## 7       BCATLAS1RC     6309
 ## 8          BCBEACH     6576
-## 9            BCCWS   328950
-## 10            BCMA     4286
-## 11          BCOWLS     6248
-## 12       BIRDSOFBC   250134
-## 13             CBC   421925
-## 14   CMMN-DET-RPBO   131972
-## 15     EBIRD-CA-BC  6950444
-## 16     EBIRD-CA-NO       18
-## 17   EBIRD-CA-SENS     1463
-## 18      EBUTTERFLY      344
-## 19            GBBC    71691
-## 20       HAWKCOUNT      249
-## 21            IMQC        1
-## 22              MM        1
-## 23       NESTWATCH    14790
-## 24             PFW   206743
-## 25     PFW-US-WEST   648740
-## 26            WMMM      267
-## 27      WRNIGHTJAR      519</code></pre>
+## 9            BCCWS   345902
+## 10          BCOWLS     6248
+## 11       BIRDSOFBC   250134
+## 12             CBC   421925
+## 13   CMMN-DET-RPBO   131972
+## 14     EBIRD-CA-BC  6950444
+## 15     EBIRD-CA-NO       18
+## 16   EBIRD-CA-SENS     1463
+## 17      EBUTTERFLY      344
+## 18            GBBC    71691
+## 19       HAWKCOUNT      249
+## 20            IMQC        1
+## 21              MM        1
+## 22       NESTWATCH    14790
+## 23             PFW   209613
+## 24     PFW-US-WEST   648740
+## 25            WMMM      267</code></pre>
 </div>
 <div id="utm-squares" class="section level3">
 <h3 class="hasAnchor">
@@ -449,8 +446,8 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 ## 10      BCATLAS1PC    56786
 ## 11      BCATLAS1RC     7154
 ## 12         BCBEACH     4932
-## 13           BCCWS   293941
-## 14            BCMA     4286
+## 13           BCCWS   306009
+## 14            BCMA    11266
 ## 15          BCOWLS    10094
 ## 16       BIRDSOFBC   299880
 ## 17             CBC   427924
@@ -472,13 +469,12 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 ## 33            MLMP        2
 ## 34              MM        3
 ## 35       NESTWATCH    34683
-## 36             PFW   412339
+## 36             PFW   438323
 ## 37     PFW-US-WEST   640683
 ## 38   SKATLAS1BE_DO    25401
 ## 39 SKATLAS1BE_SUMM    10277
 ## 40      SKATLAS1PC     7798
-## 41            WMMM      518
-## 42      WRNIGHTJAR     1658</code></pre>
+## 41            WMMM      518</code></pre>
 </div>
 </div>
   </div>

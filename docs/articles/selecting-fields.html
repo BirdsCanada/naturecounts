@@ -9,7 +9,8 @@
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Selecting columns and fields to download">
+<script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Selecting columns and fields to download">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -73,7 +74,7 @@
     <div class="page-header toc-ignore">
       <h1>Selecting columns and fields to download</h1>
             
-            <h4 class="date">2019-04-25</h4>
+            <h4 class="date">2019-07-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/selecting-fields.Rmd"><code>vignettes/selecting-fields.Rmd</code></a></small>
       <div class="hidden name"><code>selecting-fields.Rmd</code></div>
@@ -164,13 +165,12 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">cardinals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">19360</span>, <span class="dt">fields_set =</span> <span class="st">"core"</span>, <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
 <pre><code>## Using filters: species (19360); fields_set (BMDE2.00)</code></pre>
 <pre><code>## Collecting available records...</code></pre>
-<pre><code>##    collection nrecords
-## 1    ABATLAS1        2
-## 2    ABATLAS2       13
-## 3  ABBIRDRECS        1
-## 4 RCBIOTABASE       40
-## 5     SAMPLE1       27
-## 6     SAMPLE2       16</code></pre>
+<pre><code>##   access  collection nrecords
+## 1    yes    ABATLAS1        2
+## 2    yes    ABATLAS2       13
+## 3    yes  ABBIRDRECS        1
+## 4    yes RCBIOTABASE       40
+## Total records: 56</code></pre>
 <pre><code>## 
 ## Downloading records for each collection:</code></pre>
 <pre><code>##   ABATLAS1</code></pre>
@@ -181,11 +181,7 @@
 <pre><code>##     Records 1 to 1 / 1</code></pre>
 <pre><code>##   RCBIOTABASE</code></pre>
 <pre><code>##     Records 1 to 40 / 40</code></pre>
-<pre><code>##   SAMPLE1</code></pre>
-<pre><code>##     Records 1 to 27 / 27</code></pre>
-<pre><code>##   SAMPLE2</code></pre>
-<pre><code>##     Records 1 to 16 / 16</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cardinals)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cardinals)</a></code></pre></div>
 <pre><code>##   [1] "GlobalUniqueIdentifier"                
 ##   [2] "EffortUnits7"                          
 ##   [3] "EffortUnits8"                          
@@ -381,7 +377,7 @@
 <a href="#basic-fields" class="anchor"></a>Basic fields</h2>
 <p>Note that there are extra fields/columns downloaded in every request, which are <strong>in addition</strong> to the BMDE fields. These are additional, basic, indexed fields used in the database.</p>
 <p>You can figure out exactly which fields these are, by removing all the fields from the <code>core</code> BMDE field set.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cardinals)[<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cardinals) <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="../reference/meta.html">meta_bmde_fields</a></span>(<span class="dt">version =</span> <span class="st">"core"</span>)<span class="op">$</span>local_name]</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cardinals)[<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cardinals) <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="../reference/meta.html">meta_bmde_fields</a></span>(<span class="dt">version =</span> <span class="st">"core"</span>)<span class="op">$</span>local_name]</a></code></pre></div>
 <pre><code>##  [1] "statprov_code"     "species_id"        "utm_square"       
 ##  [4] "latitude"          "bcr"               "survey_year"      
 ##  [7] "breeding_rank"     "project_id"        "longitude"        
@@ -394,18 +390,17 @@
 <h2 class="hasAnchor">
 <a href="#custom-fields" class="anchor"></a>Custom fields</h2>
 <p>The basic fields will <strong>always</strong> be included in any data request. However, you can choose which fields/columns to include in addition to these basic fields, by specifying <code>fields_set = custom</code>, and listing all additional <code>fields</code>.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">cardinals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">19360</span>, <span class="dt">fields_set =</span> <span class="st">"custom"</span>, </a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">                        <span class="dt">fields =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Sex"</span>, <span class="st">"SamplingEventIdentifier"</span>), </a>
-<a class="sourceLine" id="cb29-3" data-line-number="3">                        <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">cardinals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">19360</span>, <span class="dt">fields_set =</span> <span class="st">"custom"</span>, </a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">                        <span class="dt">fields =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Sex"</span>, <span class="st">"SamplingEventIdentifier"</span>), </a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">                        <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
 <pre><code>## Using filters: species (19360); fields_set (custom); fields (Sex, SamplingEventIdentifier)</code></pre>
 <pre><code>## Collecting available records...</code></pre>
-<pre><code>##    collection nrecords
-## 1    ABATLAS1        2
-## 2    ABATLAS2       13
-## 3  ABBIRDRECS        1
-## 4 RCBIOTABASE       40
-## 5     SAMPLE1       27
-## 6     SAMPLE2       16</code></pre>
+<pre><code>##   access  collection nrecords
+## 1    yes    ABATLAS1        2
+## 2    yes    ABATLAS2       13
+## 3    yes  ABBIRDRECS        1
+## 4    yes RCBIOTABASE       40
+## Total records: 56</code></pre>
 <pre><code>## 
 ## Downloading records for each collection:</code></pre>
 <pre><code>##   ABATLAS1</code></pre>
@@ -416,11 +411,7 @@
 <pre><code>##     Records 1 to 1 / 1</code></pre>
 <pre><code>##   RCBIOTABASE</code></pre>
 <pre><code>##     Records 1 to 40 / 40</code></pre>
-<pre><code>##   SAMPLE1</code></pre>
-<pre><code>##     Records 1 to 27 / 27</code></pre>
-<pre><code>##   SAMPLE2</code></pre>
-<pre><code>##     Records 1 to 16 / 16</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(cardinals)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(cardinals)</a></code></pre></div>
 <pre><code>##   species_id utm_square SiteCode Sex latitude SamplingEventIdentifier
 ## 1      19360    11UPT60     3103  NA 51.47389                   C0107
 ## 2      19360    11UPT60     3103  NA 51.47389                   C0119
@@ -455,8 +446,8 @@
 <a href="#adding-specific-fields-to-a-bmde-version" class="anchor"></a>Adding specific fields to a BMDE version</h2>
 <p>In a more complex example, if you wished to download data with the <code>minimum</code> set of BMDE fields, but including a couple of extra fields, you could combine the core fields with the extras you want, and pass them on as a custom field set.</p>
 <p>For example, first collect the minimum field/column names.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">my_fields &lt;-<span class="st"> </span><span class="kw"><a href="../reference/meta.html">meta_bmde_fields</a></span>(<span class="dt">version =</span> <span class="st">"minimum"</span>)<span class="op">$</span>local_name</a>
-<a class="sourceLine" id="cb48-2" data-line-number="2">my_fields</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">my_fields &lt;-<span class="st"> </span><span class="kw"><a href="../reference/meta.html">meta_bmde_fields</a></span>(<span class="dt">version =</span> <span class="st">"minimum"</span>)<span class="op">$</span>local_name</a>
+<a class="sourceLine" id="cb40-2" data-line-number="2">my_fields</a></code></pre></div>
 <pre><code>##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          
 ##  [3] "Locality"                "TimeCollected"          
 ##  [5] "CollectorNumber"         "FieldNumber"            
@@ -477,8 +468,8 @@
 ## [35] "ObservationDescriptor6"  "AllIndividualsReported" 
 ## [37] "AllSpeciesReported"</code></pre>
 <p>Then add in the extra fields.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">my_fields &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(my_fields, <span class="st">"Sex"</span>, <span class="st">"LifeStage"</span>)</a>
-<a class="sourceLine" id="cb50-2" data-line-number="2">my_fields</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">my_fields &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(my_fields, <span class="st">"Sex"</span>, <span class="st">"LifeStage"</span>)</a>
+<a class="sourceLine" id="cb42-2" data-line-number="2">my_fields</a></code></pre></div>
 <pre><code>##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          
 ##  [3] "Locality"                "TimeCollected"          
 ##  [5] "CollectorNumber"         "FieldNumber"            
@@ -500,17 +491,16 @@
 ## [37] "AllSpeciesReported"      "Sex"                    
 ## [39] "LifeStage"</code></pre>
 <p>Now download the data.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">cardinals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">19360</span>, <span class="dt">fields_set =</span> <span class="st">"custom"</span>, </a>
-<a class="sourceLine" id="cb52-2" data-line-number="2">                        <span class="dt">fields =</span> my_fields, <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">cardinals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">19360</span>, <span class="dt">fields_set =</span> <span class="st">"custom"</span>, </a>
+<a class="sourceLine" id="cb44-2" data-line-number="2">                        <span class="dt">fields =</span> my_fields, <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
 <pre><code>## Using filters: species (19360); fields_set (custom); fields (GlobalUniqueIdentifier, CatalogNumber, Locality, TimeCollected, CollectorNumber, FieldNumber, Remarks, ProjectCode, ProtocolType, ProtocolCode, ProtocolURL, SurveyAreaIdentifier, SamplingEventIdentifier, SamplingEventStructure, RouteIdentifier, TimeObservationsStarted, TimeObservationsEnded, DurationInHours, TimeIntervalStarted, TimeIntervalEnded, TimeIntervalsAdditive, NumberOfObservers, NoObservations, ObservationCount, ObservationDescriptor, ObservationCount2, ObservationDescriptor2, ObservationCount3, ObservationDescriptor3, ObservationCount4, ObservationDescriptor4, ObservationCount5, ObservationDescriptor5, ObservationCount6, ObservationDescriptor6, AllIndividualsReported, AllSpeciesReported, Sex, LifeStage)</code></pre>
 <pre><code>## Collecting available records...</code></pre>
-<pre><code>##    collection nrecords
-## 1    ABATLAS1        2
-## 2    ABATLAS2       13
-## 3  ABBIRDRECS        1
-## 4 RCBIOTABASE       40
-## 5     SAMPLE1       27
-## 6     SAMPLE2       16</code></pre>
+<pre><code>##   access  collection nrecords
+## 1    yes    ABATLAS1        2
+## 2    yes    ABATLAS2       13
+## 3    yes  ABBIRDRECS        1
+## 4    yes RCBIOTABASE       40
+## Total records: 56</code></pre>
 <pre><code>## 
 ## Downloading records for each collection:</code></pre>
 <pre><code>##   ABATLAS1</code></pre>
@@ -521,11 +511,7 @@
 <pre><code>##     Records 1 to 1 / 1</code></pre>
 <pre><code>##   RCBIOTABASE</code></pre>
 <pre><code>##     Records 1 to 40 / 40</code></pre>
-<pre><code>##   SAMPLE1</code></pre>
-<pre><code>##     Records 1 to 27 / 27</code></pre>
-<pre><code>##   SAMPLE2</code></pre>
-<pre><code>##     Records 1 to 16 / 16</code></pre>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(cardinals)</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(cardinals)</a></code></pre></div>
 <pre><code>##                  GlobalUniqueIdentifier FieldNumber DurationInHours
 ## 1 URN:NatureAlberta:ABATLAS1:C0107-NOCA          NA            &lt;NA&gt;
 ## 2 URN:NatureAlberta:ABATLAS1:C0119-NOCA          NA            &lt;NA&gt;

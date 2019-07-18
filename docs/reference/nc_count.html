@@ -30,6 +30,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 <meta property="og:title" content="Download information about NatureCounts collections — nc_count" />
 
 <meta property="og:description" content="Download the number of records available for different collections filtered
@@ -124,7 +126,8 @@ returned.</p>
 
     <pre class="usage"><span class='fu'>nc_count</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>project_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>years</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>doy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>site_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>show</span> <span class='kw'>=</span> <span class='st'>"available"</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>show</span> <span class='kw'>=</span> <span class='st'>"available"</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>30</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,6 +183,11 @@ provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.</p></td>
     </tr>
     <tr>
+      <th>timeout</th>
+      <td><p>Numeric. Number of seconds before connecting to the server
+times out.</p></td>
+    </tr>
+    <tr>
       <th>verbose</th>
       <td><p>Logical. Show messages?</p></td>
     </tr>
@@ -193,19 +201,18 @@ public collections will be returned.</p></td>
 
     
     <p>All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must
-<a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a>
-for a free NatureCounts account and
-<a href='https://www.birdscanada.org/birdmon/default/projects.jsp'>register</a>
-for the projects you'd like to access.</p>
+access private/semi-public projects/collections you must <a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a> for a free
+NatureCounts account and
+<a href='https://www.birdscanada.org/birdmon/default/projects.jsp'>register</a> for
+the projects you'd like to access. See the <code>request_id</code> section for more
+information.</p>
     
     <h2 class="hasAnchor" id="species-ids-species-"><a class="anchor" href="#species-ids-species-"></a>Species ids (<code>species</code>)</h2>
 
     
     <p>Numeric species id codes can determined from the functions
-<code><a href='species_search.html'>species_search</a>()</code> or <code><a href='species_code_search.html'>species_code_search</a>()</code>. See
-also the species codes
-(https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+<code><a href='search_species.html'>search_species()</a></code> or <code><a href='search_species_code.html'>search_species_code()</a></code>. See
+also the <a href='https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html'>species codes</a>
 for more information.</p>
     
     <h2 class="hasAnchor" id="day-of-year-doy-"><a class="anchor" href="#day-of-year-doy-"></a>Day of Year (<code>doy</code>)</h2>
@@ -223,11 +230,10 @@ in a 1 day offset for leap years.</p>
     
     <p>Regions are defined by codes reflecting the country, state/province,
 subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
-Regions (BCR) (see <code><a href='region_search.html'>region_search()</a></code> for codes). They can also be defined
+Regions (BCR) (see <code><a href='search_region.html'>search_region()</a></code> for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
-specifyings the min/max longitude and min/max latitude (<code>bbox</code>). See the
-article on regional filters
-(http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html)
+specifies the min/max longitude and min/max latitude (<code>bbox</code>). See the
+article on <a href='http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html'>regional filters</a>
 for more information.</p>
     
 
@@ -249,32 +255,32 @@ for more information.</p>
 #&gt; 12             BCATLAS1PC   260647
 #&gt; 13             BCATLAS1RC    21884
 #&gt; 14                BCBEACH     7263
-#&gt; 15                  BCCWS   329523
-#&gt; 16                   BCMA     4311
+#&gt; 15                  BCCWS   346475
+#&gt; 16                   BCMA    11291
 #&gt; 17                 BCOWLS    27149
 #&gt; 18                  BGRMM      476
 #&gt; 19              BIRDSOFBC   498444
 #&gt; 20                    CBC  7570427
 #&gt; 21         CMMN-BAND-LPBO  1168735
 #&gt; 22           CMMN-DET-ABO    85569
-#&gt; 23          CMMN-DET-ACBO    26716
-#&gt; 24           CMMN-DET-BBO    69928
+#&gt; 23          CMMN-DET-ACBO    28386
+#&gt; 24           CMMN-DET-BBO    72759
 #&gt; 25          CMMN-DET-BPBO    88397
 #&gt; 26          CMMN-DET-DMBO    88280
-#&gt; 27           CMMN-DET-HBO   263059
+#&gt; 27           CMMN-DET-HBO   271674
 #&gt; 28           CMMN-DET-IBS    29736
 #&gt; 29          CMMN-DET-IPBO    49741
-#&gt; 30          CMMN-DET-LMBO    56571
+#&gt; 30          CMMN-DET-LMBO    57432
 #&gt; 31          CMMN-DET-LPBO  1073798
-#&gt; 32         CMMN-DET-LSLBO   108383
+#&gt; 32         CMMN-DET-LSLBO   114040
 #&gt; 33          CMMN-DET-MGBO    80063
-#&gt; 34          CMMN-DET-MIBO     8355
-#&gt; 35           CMMN-DET-MNO    66401
+#&gt; 34          CMMN-DET-MIBO    10804
+#&gt; 35           CMMN-DET-MNO    69732
 #&gt; 36           CMMN-DET-OOT   106146
 #&gt; 37         CMMN-DET-PEPBO   131973
 #&gt; 38          CMMN-DET-PIBO   116763
 #&gt; 39          CMMN-DET-RPBO   131972
-#&gt; 40          CMMN-DET-TCBO   130618
+#&gt; 40          CMMN-DET-TCBO   136565
 #&gt; 41         CMMN-DET-TLBBS    28037
 #&gt; 42          CMMN-DET-TLBO    29722
 #&gt; 43        CMMN-DET-TTPBRS    97635
@@ -311,7 +317,7 @@ for more information.</p>
 #&gt; 74                   MEXU     3251
 #&gt; 75                   MLMP      802
 #&gt; 76                     MM     4343
-#&gt; 77               MMPBIRDS   366668
+#&gt; 77               MMPBIRDS   425826
 #&gt; 78               MMPFROGS    88438
 #&gt; 79           MONARCHWATCH   145665
 #&gt; 80            Naturalista       30
@@ -326,17 +332,17 @@ for more information.</p>
 #&gt; 89                   OBFS   324560
 #&gt; 90              OISEAUXQC   666963
 #&gt; 91                 ONOWLS    40449
-#&gt; 92                    PFW  3616772
+#&gt; 92                    PFW  3841194
 #&gt; 93            PFW-US-EAST  8651432
 #&gt; 94            PFW-US-WEST  5631851
 #&gt; 95                   PMMM        5
-#&gt; 96             PRISM-ACSS   117139
-#&gt; 97              PRISM-OSS    47456
-#&gt; 98              PRISM-PSS     1817
-#&gt; 99    QCATLAS_NORTH_BE_DO     7043
-#&gt; 100  QCATLAS_NORTH_BE_RAW    19095
-#&gt; 101 QCATLAS_NORTH_BE_SUMM    12305
-#&gt; 102      QCATLAS_NORTH_PC     8239
+#&gt; 96             PRISM-ACSS   117227
+#&gt; 97              PRISM-OSS    47542
+#&gt; 98              PRISM-PSS     3305
+#&gt; 99    QCATLAS_NORTH_BE_DO    19747
+#&gt; 100  QCATLAS_NORTH_BE_RAW    35599
+#&gt; 101 QCATLAS_NORTH_BE_SUMM    23601
+#&gt; 102      QCATLAS_NORTH_PC    21579
 #&gt; 103        QCATLAS1BE_RAW   198816
 #&gt; 104       QCATLAS1BE_SUMM   136333
 #&gt; 105         QCATLAS2BE_DO   283034
@@ -346,16 +352,13 @@ for more information.</p>
 #&gt; 109            QCATLAS2RC    39390
 #&gt; 110                QCOWLS    11195
 #&gt; 111           RCBIOTABASE    12598
-#&gt; 112               SAMPLE1     1000
-#&gt; 113               SAMPLE2     1000
-#&gt; 114              SAR-RSHA    27696
-#&gt; 115         SKATLAS1BE_DO    99872
-#&gt; 116       SKATLAS1BE_SUMM    42203
-#&gt; 117            SKATLAS1PC    27916
-#&gt; 118            SWIFTWATCH    10624
-#&gt; 119                  WMMM     8981
-#&gt; 120                  WPWI     3012
-#&gt; 121            WRNIGHTJAR     2754</div><div class='input'>
+#&gt; 112              SAR-RSHA    27696
+#&gt; 113         SKATLAS1BE_DO    99872
+#&gt; 114       SKATLAS1BE_SUMM    42203
+#&gt; 115            SKATLAS1PC    27916
+#&gt; 116            SWIFTWATCH    10624
+#&gt; 117                  WMMM     8981
+#&gt; 118                  WPWI     3012</div><div class='input'>
 # Count publicly available records for Manitoba, Canada
 </div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>statprov</span> <span class='kw'>=</span> <span class='st'>"MB"</span>))</div><div class='output co'>#&gt; <span class='message'>Without a username, using 'show = "all"'</span></div><div class='output co'>#&gt; <span class='message'>Using filters: statprov (MB)</span></div><div class='output co'>#&gt;         collection nrecords
 #&gt; 1       ABBIRDRECS      357
@@ -380,13 +383,13 @@ for more information.</p>
 #&gt; 20    MONARCHWATCH       24
 #&gt; 21       NESTWATCH     4553
 #&gt; 22       OISEAUXQC        2
-#&gt; 23             PFW   103573</div><div class='input'>
+#&gt; 23             PFW   110414</div><div class='input'>
 # Count all records for all collections user "sample" has access to
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'>nc_count</span>(<span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)
 <span class='co'># }</span><div class='input'>
 <span class='co'># Count records with barred owls in Ontario</span>
-<span class='fu'><a href='species_search.html'>species_search</a></span>(<span class='st'>"barred owl"</span>)</div><div class='output co'>#&gt;    species_id                            scientific_name
+<span class='fu'><a href='search_species.html'>search_species</a></span>(<span class='st'>"barred owl"</span>)</div><div class='output co'>#&gt;    species_id                            scientific_name
 #&gt; 1        7590                                Strix varia
 #&gt; 2        7595                 Strix occidentalis x varia
 #&gt; 3       32704                            Strix hylophila
@@ -430,14 +433,13 @@ for more information.</p>
 #&gt; 11 Égothèle de Bennett [bennettii ou wiedenfeldi]       BIRDS
 #&gt; 12                Égothèle de Bennett (terborghi)       BIRDS
 #&gt; 13                 Égothèle de Bennett (plumifer)       BIRDS
-#&gt; 14                            Égothèle de Bennett       BIRDS</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>7590</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>statprov</span> <span class='kw'>=</span> <span class='st'>"ON"</span>), <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (7590); statprov (ON)</span></div><div class='output co'>#&gt;    collection nrecords
-#&gt; 1 RCBIOTABASE       44
-#&gt; 2     SAMPLE2        1</div><div class='input'>
+#&gt; 14                            Égothèle de Bennett       BIRDS</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>7590</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>statprov</span> <span class='kw'>=</span> <span class='st'>"ON"</span>), <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (7590); statprov (ON)</span></div><div class='output co'>#&gt;   access  collection nrecords
+#&gt; 1    yes RCBIOTABASE       44</div><div class='input'>
 # Count all records available in the Christmas Bird Count and Breeding Bird
 # Survey collections (regardless of user permissions)
-</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"CBC"</span>, <span class='st'>"BBS"</span>), <span class='kw'>show</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (CBC, BBS)</span></div><div class='output co'>#&gt;   collection nrecords
-#&gt; 1        BBS  5735895
-#&gt; 2        CBC  7570427</div><div class='input'>
+</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"CBC"</span>, <span class='st'>"BBS"</span>), <span class='kw'>show</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (CBC, BBS)</span></div><div class='output co'>#&gt;   access collection nrecords
+#&gt; 1     no        BBS  5735895
+#&gt; 2     no        CBC  7570427</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

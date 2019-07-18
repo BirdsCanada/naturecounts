@@ -9,7 +9,8 @@
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Species Codes">
+<script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Species Codes">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -73,7 +74,7 @@
     <div class="page-header toc-ignore">
       <h1>Species Codes</h1>
             
-            <h4 class="date">2019-04-25</h4>
+            <h4 class="date">2019-07-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/species-codes.Rmd"><code>vignettes/species-codes.Rmd</code></a></small>
       <div class="hidden name"><code>species-codes.Rmd</code></div>
@@ -84,16 +85,16 @@
     
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(naturecounts)</a></code></pre></div>
 <p>In order to download data pertaining to specific species, you’ll have to get the species id codes. These are numeric codes that reflect species identity, and in complex cases, take account of subspecies or changes to species identity.</p>
-<p>For all species, you can search by scientific, English or French name with the <code><a href="../reference/species_search.html">species_search()</a></code> function.</p>
-<p>For birds, you can also search by alphanumeric species codes with the <code><a href="../reference/species_code_search.html">species_code_search()</a></code> function. <strong>Note: </strong> These alphanumeric codes are <em>not</em> the ones used by <code>naturecounts</code>, but are ones used by various taxonomic authorities. This function also gives you the option of returning all species codes (including subspecies, etc.) related to a single species, and is considered a more robust method for ensuring that you do not miss observations.</p>
+<p>For all species, you can search by scientific, English or French name with the <code><a href="../reference/search_species.html">search_species()</a></code> function.</p>
+<p>For birds, you can also search by alphanumeric species codes with the <code><a href="../reference/search_species_code.html">search_species_code()</a></code> function. <strong>Note: </strong> These alphanumeric codes are <em>not</em> the ones used by <code>naturecounts</code>, but are ones used by various taxonomic authorities. This function also gives you the option of returning all species codes (including subspecies, etc.) related to a single species, and is considered a more robust method for ensuring that you do not miss observations.</p>
 <div id="searching-by-name" class="section level2">
 <h2 class="hasAnchor">
 <a href="#searching-by-name" class="anchor"></a>Searching by name</h2>
-<p>The simplest way to determine a species id (and the only way, for non-avian taxa) is to use the <code><a href="../reference/species_search.html">species_search()</a></code> function which searches for a species id according to scientific, English or French name and returns a data frame of taxonomic information for all related hits:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="../reference/species_search.html">species_search</a></span>(<span class="st">"moose"</span>)</a>
+<p>The simplest way to determine a species id (and the only way, for non-avian taxa) is to use the <code><a href="../reference/search_species.html">search_species()</a></code> function which searches for a species id according to scientific, English or French name and returns a data frame of taxonomic information for all related hits:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="../reference/search_species.html">search_species</a></span>(<span class="st">"moose"</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt;   species_id scientific_name english_name french_name taxon_group</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; 1     133990     Alces alces        Moose        &lt;NA&gt;     MAMMALS</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="../reference/species_search.html">species_search</a></span>(<span class="st">"swallowtail"</span>)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="../reference/search_species.html">search_species</a></span>(<span class="st">"swallowtail"</span>)</a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt;   species_id     scientific_name               english_name</span></a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 1     252492     Battus philenor       Pipevine Swallowtail</span></a>
 <a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; 2     252493 Eurytides marcellus          Zebra Swallowtail</span></a>
@@ -112,7 +113,7 @@
 <a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; 6   Papillon tigré de l'Est    BUTTERFL</span></a>
 <a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; 7  Papillon tigré du Canada    BUTTERFL</span></a>
 <a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; 8       Papillon carolinien    BUTTERFL</span></a>
-<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="kw"><a href="../reference/species_search.html">species_search</a></span>(<span class="st">"mesange a tete noire"</span>)</a>
+<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="kw"><a href="../reference/search_species.html">search_species</a></span>(<span class="st">"mesange a tete noire"</span>)</a>
 <a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt;   species_id                           scientific_name</span></a>
 <a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">#&gt; 1      14280                      Poecile atricapillus</span></a>
 <a class="sourceLine" id="cb2-26" data-line-number="26"><span class="co">#&gt; 2      40932            Poecile atricapillus x gambeli</span></a>
@@ -134,34 +135,34 @@
 <p>These species ids can then be used to download data either directly:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">moose &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">133990</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>, <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
 <p>Or by saving and referencing the data frame:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">moose_id &lt;-<span class="st"> </span><span class="kw"><a href="../reference/species_search.html">species_search</a></span>(<span class="st">"moose"</span>)<span class="op">$</span>species_id</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">moose_id &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_species.html">search_species</a></span>(<span class="st">"moose"</span>)<span class="op">$</span>species_id</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">moose &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> moose_id, <span class="dt">verbose =</span> <span class="ot">FALSE</span>, <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
 <p>This might be considered overkill for a single species, but is useful when you want to download data for multiple species:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">chickadee_ids &lt;-<span class="st"> </span><span class="kw"><a href="../reference/species_search.html">species_search</a></span>(<span class="st">"chickadee"</span>)<span class="op">$</span>species_id</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">chickadee_ids &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_species.html">search_species</a></span>(<span class="st">"chickadee"</span>)<span class="op">$</span>species_id</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">chickadees &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> chickadee_ids, </a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">                         <span class="dt">verbose =</span> <span class="ot">FALSE</span>, <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
 </div>
 <div id="searching-by-alphanumeric-code" class="section level2">
 <h2 class="hasAnchor">
 <a href="#searching-by-alphanumeric-code" class="anchor"></a>Searching by alphanumeric code</h2>
-<p>Taxonomy for bird species has long included various alphanumeric codes from different taxonomic authorities. The codes often include separate codes for recognized subdivisions of the species (subspecies, subpopulations, hybrids, etc.). The <code><a href="../reference/species_code_search.html">species_code_search()</a></code> allows you to search for avian species ids according to these authorities.</p>
+<p>Taxonomy for bird species has long included various alphanumeric codes from different taxonomic authorities. The codes often include separate codes for recognized subdivisions of the species (subspecies, subpopulations, hybrids, etc.). The <code><a href="../reference/search_species_code.html">search_species_code()</a></code> allows you to search for avian species ids according to these authorities.</p>
 <div id="authorities" class="section level3">
 <h3 class="hasAnchor">
 <a href="#authorities" class="anchor"></a>Authorities</h3>
 <p>The default taxonomic authority used is <code>BSCDATA</code>, which uses 4-letter alpha codes:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/species_code_search.html">species_code_search</a></span>(<span class="st">"BCCH"</span>)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/search_species_code.html">search_species_code</a></span>(<span class="st">"BCCH"</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt;   species_id BSCDATA      scientific_name           english_name</span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; 1      14280    BCCH Poecile atricapillus Black-capped Chickadee</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;            french_name</span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 1 Mésange à tête noire</span></a></code></pre></div>
 <p>The search function is case insensitive:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/species_code_search.html">species_code_search</a></span>(<span class="st">"bcch"</span>)</a>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/search_species_code.html">search_species_code</a></span>(<span class="st">"bcch"</span>)</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt;   species_id BSCDATA      scientific_name           english_name</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; 1      14280    BCCH Poecile atricapillus Black-capped Chickadee</span></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt;            french_name</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; 1 Mésange à tête noire</span></a></code></pre></div>
 <p>However, you can search by codes for different authorities, by specifying the appropriate <code>authority</code> argument:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/species_code_search.html">species_code_search</a></span>(<span class="dv">8868</span>, <span class="dt">authority =</span> <span class="st">"CBC"</span>)</a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/search_species_code.html">search_species_code</a></span>(<span class="dv">8868</span>, <span class="dt">authority =</span> <span class="st">"CBC"</span>)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt;   species_id  CBC      scientific_name           english_name</span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; 1      14280 8868 Poecile atricapillus Black-capped Chickadee</span></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt;            french_name</span></a>
@@ -172,7 +173,7 @@
 <a href="#all-related-subspecies" class="anchor"></a>All related subspecies</h3>
 <p>By default, the <code>search_species_codes()</code> returns all species ids related to the search term.</p>
 <p>For example, searching for myrtle warblers (<code>MYWA</code>), one of two subspecies of the yellow-rumped warbler (<code>YRWA</code>) returns both subspecies and the parent species.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/species_code_search.html">species_code_search</a></span>(<span class="st">"MYWA"</span>)</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/search_species_code.html">search_species_code</a></span>(<span class="st">"MYWA"</span>)</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt;   species_id BSCDATA             scientific_name</span></a>
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; 1      16610    YRWA          Setophaga coronata</span></a>
 <a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; 2      16620    MYWA Setophaga coronata coronata</span></a>
@@ -183,7 +184,7 @@
 <a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt; 3 Yellow-rumped Warbler (Audubon's) Paruline à croupion jaune (auduboni)</span></a></code></pre></div>
 <p><strong>Note:</strong> Different taxonomic authorities recognize different subgroups.</p>
 <p>For example, <code>BSCDATA</code> recognizes 4 groups for dark-eyed juncos:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../reference/species_code_search.html">species_code_search</a></span>(<span class="st">"DEJU"</span>)</a>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../reference/search_species_code.html">search_species_code</a></span>(<span class="st">"DEJU"</span>)</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt;   species_id BSCDATA                                  scientific_name</span></a>
 <a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; 1      42218    DEJU                                   Junco hyemalis</span></a>
 <a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; 2      19090    SCJU Junco hyemalis hyemalis/carolinensis/cismontanus</span></a>
@@ -200,7 +201,7 @@
 <a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; 3                              Junco ardoisé [oreganus]</span></a>
 <a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt; 4                               Junco ardoisé (mearnsi)</span></a></code></pre></div>
 <p>Whereas <code>CBC</code> also recognizes sub group hybrids (and the Guadalupe junco):</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/species_code_search.html">species_code_search</a></span>(<span class="st">"12385"</span>, <span class="dt">authority =</span> <span class="st">"CBC"</span>)</a>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/search_species_code.html">search_species_code</a></span>(<span class="st">"12385"</span>, <span class="dt">authority =</span> <span class="st">"CBC"</span>)</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt;    species_id   CBC                                  scientific_name</span></a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; 1       42218 12385                                   Junco hyemalis</span></a>
 <a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; 2       19090 12386 Junco hyemalis hyemalis/carolinensis/cismontanus</span></a>
@@ -238,7 +239,7 @@
 <a class="sourceLine" id="cb11-36" data-line-number="36"><span class="co">#&gt; 10                              Junco ardoisé (dorsalis)</span></a>
 <a class="sourceLine" id="cb11-37" data-line-number="37"><span class="co">#&gt; 11                                    Junco de Guadalupe</span></a></code></pre></div>
 <p>You can search by more than one authority at the same time. Note that your search term only needs to match one authority (not both), and that the information returned reflects both authorities combined.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/species_code_search.html">species_code_search</a></span>(<span class="st">"DEJU"</span>, <span class="dt">authority =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"BSCDATA"</span>, <span class="st">"CBC"</span>))</a>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/search_species_code.html">search_species_code</a></span>(<span class="st">"DEJU"</span>, <span class="dt">authority =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"BSCDATA"</span>, <span class="st">"CBC"</span>))</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt;    species_id BSCDATA   CBC</span></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; 1       42218    DEJU 12385</span></a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; 2       19100    ORJU 12389</span></a>
@@ -293,10 +294,10 @@
 <h2 class="hasAnchor">
 <a href="#exact-species" class="anchor"></a>Exact species</h2>
 <p>If you do not want all subgroups, you can use the <code>results = "exact"</code> argument to return only an exact match.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="../reference/species_code_search.html">species_code_search</a></span>(<span class="st">"DEJU"</span>, <span class="dt">results =</span> <span class="st">"exact"</span>)</a>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="../reference/search_species_code.html">search_species_code</a></span>(<span class="st">"DEJU"</span>, <span class="dt">results =</span> <span class="st">"exact"</span>)</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt;   species_id BSCDATA scientific_name    english_name   french_name</span></a>
 <a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; 1      42218    DEJU  Junco hyemalis Dark-eyed Junco Junco ardoisé</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="kw"><a href="../reference/species_code_search.html">species_code_search</a></span>(<span class="st">"ORJU"</span>, <span class="dt">results =</span> <span class="st">"exact"</span>)</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="kw"><a href="../reference/search_species_code.html">search_species_code</a></span>(<span class="st">"ORJU"</span>, <span class="dt">results =</span> <span class="st">"exact"</span>)</a>
 <a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt;   species_id BSCDATA                 scientific_name</span></a>
 <a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt; 1      19100    ORJU Junco hyemalis [oreganus Group]</span></a>
 <a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;               english_name              french_name</span></a>
@@ -309,7 +310,7 @@
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a></code></pre></div>
 <p>For example, let’s assume you’re interested in collecting species codes for in the Muridae family.</p>
 <p>We can get the entire species list by omitting a search term, and also return all taxonomic information available with the <code>show = "all"</code> argument.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">all &lt;-<span class="st"> </span><span class="kw"><a href="../reference/species_search.html">species_search</a></span>(<span class="dt">show =</span> <span class="st">"all"</span>)</a>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">all &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_species.html">search_species</a></span>(<span class="dt">show =</span> <span class="st">"all"</span>)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(all)</a>
 <a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt;   species_id       concept_id          scientific_name species_status</span></a>
 <a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; 1          0 74B5AA0128689718                      N/A             NA</span></a>
