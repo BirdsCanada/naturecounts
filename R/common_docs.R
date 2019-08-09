@@ -21,6 +21,10 @@
 #' @param username Character vector. Username for <http://naturecounts.ca>. If
 #'   provided, the user will be prompted for a password. If left NULL, only
 #'   public collections will be returned.
+#' @param info Character vector. Short description of reason for the download.
+#'   E.g., "COSEWIC report", "Impact Assessment Study", "School project", etc.
+#'   This kind of information helps NatureCounts.ca justify the utility of the
+#'   database. Required unless resuming/re-downloaded with a `request_id`.
 #' @param request_id Numeric. Specific request id to check or download.
 #' @param timeout Numeric. Number of seconds before connecting to the server
 #'   times out.

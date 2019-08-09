@@ -27,44 +27,51 @@
 #'
 #' @examples
 #' # All observations part of the RCBIOTABASE collection
-#' rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample")
+#' rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample",
+#'                     info = "example")
 #'
 #' \donttest{# All observations part of project_id 1042 accessible by "sample"
-#' p1042 <- nc_data_dl(project_ids = 1042, username = "sample")}
+#' p1042 <- nc_data_dl(project_ids = 1042, username = "sample",
+#'                     info = "example")}
 #'
 #' # Black-capped chickadees from RCBIOTABASE collection in 2010
 #' search_species("black-capped chickadee") # Find the species_id
-#' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
-#'                    years = 2010, username = "sample")
+#' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280, years = 2010,
+#'                    username = "sample", info = "example")
 #'
 #' # All bcch observations since 2015 accessible to user "sample"
-#' bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample")
+#' bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
+#'                     info = "example")
 #'
-#' bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample")
+#' bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample",
+#'                     info = "example")
 #'
 #' bcch <- nc_data_dl(species = 14280, username = "sample",
 #'                    region = list(bbox = c(left = -145, bottom = 45,
-#'                                           right = -100, top = 60)))
+#'                                           right = -100, top = 60)),
+#'                     info = "example")
 #'
 #' # All moose observations with public access
 #' search_species("moose")
-#' moose <- nc_data_dl(species = 133990, username = "sample")
+#' moose <- nc_data_dl(species = 133990, username = "sample", info = "example")
 #'
 #' # Different fields/columns
 #' moose <- nc_data_dl(species = 133990, fields_set = "core",
-#'                     username = "sample")
+#'                     username = "sample", info = "example")
 #'
 #' moose <- nc_data_dl(species = 133990, fields_set = "custom",
 #'                     fields = c("Locality", "AllSpeciesReported"),
-#'                     username = "sample")
+#'                     username = "sample", info = "example")
 #'
 #' \dontrun{
 #' # All collections by request id
-#' my_data <- nc_data_dl(request_id = 000000, username = "USER")
+# my_data <- nc_data_dl(request_id = 000000, username = "USER",
+#                       info = "MY REASON")
 #'
 #' # Specific collection by request id
 #' my_data <- nc_data_dl(collections = "ABATLAS1",
-#'                       request_id = 000000, username = "USER")
+#'                       request_id = 000000, username = "USER",
+#'                       info = "MY REASON")
 #' }
 #'
 #' @export
@@ -73,8 +80,9 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
                        species = NULL, years = NULL,
                        doy = NULL, region = NULL, site_type = NULL,
                        fields_set = "minimum", fields = NULL,
-                       username, request_id = NULL, sql_db = NULL,
-                       warn = TRUE, timeout = 60, verbose = TRUE) {
+                       username, info = NULL, request_id = NULL,
+                       sql_db = NULL, warn = TRUE, timeout = 60,
+                       verbose = TRUE) {
 
   # Username check and Authorization
   token <- srv_auth(username)
@@ -84,6 +92,8 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
 
   # If request_id provided, check, and ignore other filter values
   if(!is.null(request_id)) {
+
+    info <- NULL # No info if using a previous id
 
     if(any(!is.null(c(species, years, doy, region, site_type)))) {
       message("Donwloading previously logged request_id ",
@@ -103,6 +113,9 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
     } else {
       collections <- requests$collection
     }
+  } else {
+    # If no request id, check for info
+    info_check(info)
   }
 
   # Assemble and check filter parameters
@@ -172,7 +185,8 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   }
 
   # Query Information
-  query <- list(lastRecord = 0, numRecords = 5000, requestId = request_id)
+  query <- list(lastRecord = 0, numRecords = 5000, requestId = request_id,
+                info = info)
 
   if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {

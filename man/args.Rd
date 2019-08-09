@@ -32,6 +32,11 @@ See details}
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.}
 
+\item{info}{Character vector. Short description of reason for the download.
+E.g., "COSEWIC report", "Impact Assessment Study", "School project", etc.
+This kind of information helps NatureCounts.ca justify the utility of the
+database. Required unless resuming/re-downloaded with a \code{request_id}.}
+
 \item{request_id}{Numeric. Specific request id to check or download.}
 
 \item{timeout}{Numeric. Number of seconds before connecting to the server

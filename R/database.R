@@ -56,12 +56,19 @@ db_create_primary <- function(con, df, primary_key) {
   db_insert(con, table, df)
 }
 
-db_create <- function(con) {
+# This function is used internally to create a database for use by the db_create function
+db_create_empty <- function(con) {
   # Download and copy empty naturecounts table
   naturecounts <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
                              years = 2010, username = "sample",
+                             info = "nc: create database",
                              verbose = FALSE)[0, ]
   db_create_primary(con, naturecounts, primary_key = keys$data)
+}
+
+db_create <- function(con) {
+
+  db_create_empty(con)
 
   # Copy metadata tables (13/17)
   db_create_primary(con, meta_country_codes(), primary_key = keys$country_codes)

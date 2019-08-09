@@ -6,8 +6,9 @@
 \usage{
 nc_data_dl(collections = NULL, project_ids = NULL, species = NULL,
   years = NULL, doy = NULL, region = NULL, site_type = NULL,
-  fields_set = "minimum", fields = NULL, username, request_id = NULL,
-  sql_db = NULL, warn = TRUE, timeout = 60, verbose = TRUE)
+  fields_set = "minimum", fields = NULL, username, info = NULL,
+  request_id = NULL, sql_db = NULL, warn = TRUE, timeout = 60,
+  verbose = TRUE)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
@@ -42,6 +43,11 @@ fields/columns to download. See details}
 \item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.}
+
+\item{info}{Character vector. Short description of reason for the download.
+E.g., "COSEWIC report", "Impact Assessment Study", "School project", etc.
+This kind of information helps NatureCounts.ca justify the utility of the
+database. Required unless resuming/re-downloaded with a \code{request_id}.}
 
 \item{request_id}{Numeric. Specific request id to check or download.}
 
@@ -155,44 +161,49 @@ Any approved request id can be downloaded by supplying the \code{request_id} to
 
 \examples{
 # All observations part of the RCBIOTABASE collection
-rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample")
+rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample",
+                    info = "example")
 
 \donttest{# All observations part of project_id 1042 accessible by "sample"
-p1042 <- nc_data_dl(project_ids = 1042, username = "sample")}
+p1042 <- nc_data_dl(project_ids = 1042, username = "sample",
+                    info = "example")}
 
 # Black-capped chickadees from RCBIOTABASE collection in 2010
 search_species("black-capped chickadee") # Find the species_id
-bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280,
-                   years = 2010, username = "sample")
+bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280, years = 2010,
+                   username = "sample", info = "example")
 
 # All bcch observations since 2015 accessible to user "sample"
-bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample")
+bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
+                    info = "example")
 
-bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample")
+bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample",
+                    info = "example")
 
 bcch <- nc_data_dl(species = 14280, username = "sample",
                    region = list(bbox = c(left = -145, bottom = 45,
-                                          right = -100, top = 60)))
+                                          right = -100, top = 60)),
+                    info = "example")
 
 # All moose observations with public access
 search_species("moose")
-moose <- nc_data_dl(species = 133990, username = "sample")
+moose <- nc_data_dl(species = 133990, username = "sample", info = "example")
 
 # Different fields/columns
 moose <- nc_data_dl(species = 133990, fields_set = "core",
-                    username = "sample")
+                    username = "sample", info = "example")
 
 moose <- nc_data_dl(species = 133990, fields_set = "custom",
                     fields = c("Locality", "AllSpeciesReported"),
-                    username = "sample")
+                    username = "sample", info = "example")
 
 \dontrun{
 # All collections by request id
-my_data <- nc_data_dl(request_id = 000000, username = "USER")
 
 # Specific collection by request id
 my_data <- nc_data_dl(collections = "ABATLAS1",
-                      request_id = 000000, username = "USER")
+                      request_id = 000000, username = "USER",
+                      info = "MY REASON")
 }
 
 }

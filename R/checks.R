@@ -155,6 +155,12 @@ fields_check <- function(fields) {
   fields
 }
 
+info_check <- function(info) {
+  if(is.null(info) || !is.character(info)) {
+    stop("'info' is required text, if not using a 'request_id'.")
+  }
+}
+
 codes_check <- function(desc, type = NULL) {
 
   # Get type of code

@@ -42,7 +42,8 @@ meta_collections() %>%
 By default, the `BMDE2.00-min` or `minimum` BMDE version is used when downloading data, but you can specify other versions with either the version name, or the shorthand.
 
 ```{r}
-cardinals <- nc_data_dl(species = 19360, fields_set = "core", username = "sample")
+cardinals <- nc_data_dl(species = 19360, fields_set = "core", 
+                        username = "sample", info = "vignette")
 names(cardinals)
 ```
 
@@ -64,7 +65,7 @@ The basic fields will **always** be included in any data request. However, you c
 ```{r}
 cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
                         fields = c("Sex", "SamplingEventIdentifier"), 
-                        username = "sample")
+                        username = "sample", info = "vignette")
 head(cardinals)
 ```
 
@@ -90,7 +91,8 @@ Now download the data.
 
 ```{r}
 cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
-                        fields = my_fields, username = "sample")
+                        fields = my_fields, username = "sample", 
+                        info = "vignette")
 head(cardinals)
 ```
 

@@ -29,7 +29,7 @@ We'll use the 'core' version of BMDE fields so that we include `CommonName` for 
 ```{r, results = "asis"}
 rc <- nc_data_dl(collections = "RCBIOTABASE", fields_set = "core",
                  species = c(252456, 252494, 252491),
-                 username = "sample")
+                 username = "sample", info = "vignette")
 
 ```
 
