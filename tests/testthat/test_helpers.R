@@ -19,10 +19,10 @@ test_that("format_dates() with SQLite database", {
   for(i in 1:2) {
     if(i == 1) {
       i <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
-                      sql_db = "bcch", username = "sample")
+                      sql_db = "bcch", username = "sample", info = "nc_test")
     } else if(i == 2) {
       i <- nc_data_dl(collections = "RCBIOTABASE", species = 7590,
-                      sql_db = "bdow", username = "sample")
+                      sql_db = "bdow", username = "sample", info = "nc_test")
     }
     expect_silent(f <- format_dates(i)) %>%
       expect_is("SQLiteConnection")
@@ -52,7 +52,7 @@ test_that("format_dates() overwrite", {
 
   # SQL
   s <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
-                  sql_db = "bcch", username = "sample")
+                  sql_db = "bcch", username = "sample", info = "nc_test")
   expect_silent(format_dates(s))
   expect_error(format_dates(s), "'date' field already exists")
   f1 <- dplyr::tbl(s, "naturecounts") %>% dplyr::collect()
@@ -238,9 +238,9 @@ test_that("format_zero_fill() extra species columns", {
 
 test_that("format_zero_fill() with SQLite database", {
   bcch_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
-                         sql_db = "bcch", username = "sample")
+                         sql_db = "bcch", username = "sample", info = "nc_test")
   bdow_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 7590,
-                         sql_db = "bdow", username = "sample")
+                         sql_db = "bdow", username = "sample", info = "nc_test")
 
   # No zeros to add
   expect_message(b <- format_zero_fill(bcch_sql),

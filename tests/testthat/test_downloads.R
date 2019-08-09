@@ -43,7 +43,7 @@ context("Download data")
 
 test_that("Data download returns data", {
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,
-                                 username = "sample"))
+                                 username = "sample", info = "nc_test"))
   expect_is(d, "data.frame")
   expect_gt(nrow(d), 0)
   expect_gt(ncol(d), 0)
@@ -53,7 +53,8 @@ test_that("Data download returns data", {
 
 test_that("Data download arguments", {
   expect_silent(nc_data_dl(collections = "RCBIOTABASE", years = 2011,
-                           username = "sample", verbose = FALSE))
+                           username = "sample", verbose = FALSE,
+                           info = "nc_test"))
 
 })
 
@@ -65,14 +66,16 @@ test_that("Data filters work as expected", {
   # single project_id
   expect_silent(d <- nc_data_dl(project_ids = 1030,
                                  species = 7590, years = 2000,
-                                 username = "sample", verbose = FALSE))
+                                 username = "sample", verbose = FALSE,
+                                 info = "nc_test"))
   expect_equal(unique(d$collection), "RCBIOTABASE")
   expect_equal(unique(d$project_id), 1030)
 
   # single collection/species/year/
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = 7590, years = 2000,
-                                username = "sample", verbose = FALSE))
+                                username = "sample", verbose = FALSE,
+                                info = "nc_test"))
   expect_equal(unique(d1$species_id), 7590)
   expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
   expect_equal(max(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
@@ -81,7 +84,8 @@ test_that("Data filters work as expected", {
   expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = c(7590, 14280),
                                 years = c(2003, 2004),
-                                username = "sample", verbose = FALSE))
+                                username = "sample", verbose = FALSE,
+                                info = "nc_test"))
   expect_equal(sort(unique(d2$species_id)), c(7590, 14280))
   expect_equal(min(as.numeric(d2$survey_year), na.rm = TRUE), 2003)
   expect_equal(max(as.numeric(d2$survey_year), na.rm = TRUE), 2004)
@@ -90,7 +94,8 @@ test_that("Data filters work as expected", {
   expect_silent(d3 <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 7590, years = 2000,
                                  fields_set = "core",
-                                 username = "sample", verbose = FALSE))
+                                 username = "sample", verbose = FALSE,
+                                 info = "nc_test"))
   expect_equal(nrow(d1), nrow(d3))
   expect_gt(ncol(d3), ncol(d1))
 
@@ -98,7 +103,8 @@ test_that("Data filters work as expected", {
   expect_silent(d4 <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 7590, years = 2000,
                                  fields_set = "custom", fields = "Locality",
-                                 username = "sample", verbose = FALSE))
+                                 username = "sample", verbose = FALSE,
+                                 info = "nc_test"))
   expect_equal(nrow(d1), nrow(d4))
   expect_lt(ncol(d4), ncol(d1))
   expect_true("Locality" %in% names(d4))
@@ -107,17 +113,20 @@ test_that("Data filters work as expected", {
 test_that("Filter region works as expected", {
   # IBA
   expect_silent(d <- nc_data_dl(region = list(iba = "AB001"),
-                                username = "sample", verbose = FALSE))
+                                username = "sample", verbose = FALSE,
+                                info = "nc_test"))
   expect_equal(unique(d$iba_site), "AB001")
 
   # BCR
   expect_silent(d <- nc_data_dl(region = list(bcr = 3),
-                                username = "sample", verbose = FALSE))
+                                username = "sample", verbose = FALSE,
+                                info = "nc_test"))
   expect_equal(unique(d$bcr), 3)
 
   # Province
   expect_silent(d <- nc_data_dl(region = list(statprov = "PE"),
-                                username = "sample", verbose = FALSE))
+                                username = "sample", verbose = FALSE,
+                                info = "nc_test"))
   expect_equal(unique(d$statprov_code), "PE")
 
 })
@@ -125,7 +134,7 @@ test_that("Filter region works as expected", {
 test_that("Filter site_type works as expected", {
   expect_silent(d <- nc_data_dl(region = list(statprov = "PE"),
                                 site_type = "IBA", username = "sample",
-                                verbose = FALSE))
+                                verbose = FALSE, info = "nc_test"))
   expect_true(all(d$iba_site != "N/A"))
   expect_true(all(stringr::str_detect(d$iba_site, "^PE")))
 })
@@ -137,7 +146,8 @@ test_that("Data filters Day of year", {
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 15770,
                                  doy = c(120, 140),
-                                 username = "sample", verbose = FALSE))
+                                 username = "sample", verbose = FALSE,
+                                 info = "nc_test"))
   expect_silent(d1 <- format_dates(d1))
   expect_gte(min(d1$doy), 120)
   expect_lte(max(d1$doy), 140)
@@ -147,7 +157,8 @@ test_that("Data filters Day of year", {
   expect_silent(d <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 15770,
                                  doy = c(300, 20),
-                                username = "sample", verbose = FALSE))
+                                username = "sample", verbose = FALSE,
+                                info = "nc_test"))
   expect_silent(d <- format_dates(d))
   expect_true(all(d$doy >= 300 | d$doy <= 20))
 
@@ -155,11 +166,13 @@ test_that("Data filters Day of year", {
   expect_silent(da <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 15770,
                                  doy = c(300, NA),
-                                 username = "sample", verbose = FALSE))
+                                 username = "sample", verbose = FALSE,
+                                 info = "nc_test"))
   expect_silent(db <- nc_data_dl(collections = "ABBIRDRECS",
                                  species = 15770,
                                  doy = c(NA, 20),
-                                 username = "sample", verbose = FALSE))
+                                 username = "sample", verbose = FALSE,
+                                 info = "nc_test"))
   d2 <- dplyr::bind_rows(da, db) %>%
     format_dates()
   expect_equal(dplyr::arrange(d, record_id), dplyr::arrange(d2, record_id))
@@ -171,7 +184,8 @@ test_that("Data filters Day of year", {
 test_that("Pagination", {
   # Get data and messages
   expect_silent(m <- capture_messages(
-    d <- nc_data_dl(collections = "RCBIOTABASE", username = "sample")))
+    d <- nc_data_dl(collections = "RCBIOTABASE", username = "sample",
+                    info = "nc_test")))
 
   # Expect pagination over three pages
   expect_gt(sum(stringr::str_count(m, "Records")), 1)
@@ -189,22 +203,32 @@ test_that("Data download returns informative errors/messages", {
   # No data for some
   expect_message(nc_data_dl(collections = c("ABBIRDRECS", "RCBIOTABASE"),
                             years = 2010, species = 7590,
-                            username = "sample", verbose = TRUE),
+                            username = "sample", verbose = TRUE,
+                            info = "nc_test"),
                  "Not all collections have data that match these filters")
 
   # No permission
   expect_error(nc_data_dl(collections = "BBS", species = 7590,
-                          username = "sample", verbose = FALSE),
+                          username = "sample", verbose = FALSE,
+                          info = "nc_test"),
                "You do not have permission to access these collections")
 
   # No data
   expect_error(nc_data_dl(collections = "ABBIRDRECS", years = 2018,
-                          username = "sample", verbose = FALSE),
+                          username = "sample", verbose = FALSE,
+                          info = "nc_test"),
                "These collections have no data that match these filters")
 
   # Custom field_set without fields
   expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 7590,
                           years = 2000, fields_set = "custom",
-                          username = "sample", verbose = FALSE),
+                          username = "sample", verbose = FALSE,
+                          info = "nc_test"),
                "Must specify 'fields' if using a custom 'field_set'")
+
+  # No info
+  expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 7590,
+                          years = 2000, fields_set = "custom",
+                          username = "sample", verbose = FALSE),
+               "'info' is required text if not using a 'request_id'")
 })

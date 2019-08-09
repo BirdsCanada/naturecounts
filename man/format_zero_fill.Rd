@@ -52,7 +52,7 @@ species.
 \examples{
 # Download data (with "core" fields to include 'CommonName')
 rc <- nc_data_dl(collection = "RCBIOTABASE", fields_set = "core",
-                 username = "sample", info = "example")
+                 username = "sample", info = "nc_example")
 
 # Remove casual observations (i.e. 'AllSpeciesReported' = "No")
 library(dplyr) # For filter function

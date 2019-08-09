@@ -157,7 +157,7 @@ fields_check <- function(fields) {
 
 info_check <- function(info) {
   if(is.null(info) || !is.character(info)) {
-    stop("'info' is required text, if not using a 'request_id'.")
+    stop("'info' is required text if not using a 'request_id'", call. = FALSE)
   }
 }
 

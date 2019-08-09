@@ -39,14 +39,14 @@ These species ids can then be used to download data either directly:
 
 ```{r}
 moose <- nc_data_dl(species = 133990, verbose = FALSE, 
-                    username = "sample", info = "vignette")
+                    username = "sample", info = "nc_vignette")
 ```
 
 Or by saving and referencing the data frame:
 ```{r}
 moose_id <- search_species("moose")$species_id
 moose <- nc_data_dl(species = moose_id, verbose = FALSE, 
-                    username = "sample", info = "vignette")
+                    username = "sample", info = "nc_vignette")
 ```
 
 This might be considered overkill for a single species, but is useful when you want to download data for multiple species:
@@ -54,7 +54,7 @@ This might be considered overkill for a single species, but is useful when you w
 ```{r}
 chickadee_ids <- search_species("chickadee")$species_id
 chickadees <- nc_data_dl(species = chickadee_ids, verbose = FALSE, 
-                         username = "sample", info = "vignette")
+                         username = "sample", info = "nc_vignette")
 ```
 
 ## Searching by alphanumeric code
@@ -145,7 +145,7 @@ So there are a **lot** of muridae species! But probably not that many in the act
 
 ```{r}
 mice <- nc_data_dl(species = mice_ids$species_id, 
-                   verbose = FALSE, username = "sample", info = "vignette")
+                   verbose = FALSE, username = "sample", info = "nc_vignette")
 mice
 ```
 
