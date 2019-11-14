@@ -30,9 +30,22 @@ test_that("Get counts for collections", {
 
 test_that("Counts return permissions", {
 
-  expect_silent(c_public <- nc_count(species = 7590, verbose = FALSE, username = "sample"))
-  expect_silent(c_all <- nc_count(species = 7590, show = "all", verbose = FALSE))
-  expect_gt(sum(c_all$nrecords), sum(c_public$nrecords))
+  expect_silent(c_sample <- nc_count(species = 7590,
+                                     verbose = FALSE, username = "sample"))
+  expect_silent(c_sample_all <- nc_count(species = 7590, show = "all",
+                                         verbose = FALSE, username = "sample"))
+  expect_silent(c_all <- nc_count(species = 7590, show = "all",
+                                  verbose = FALSE))
+  expect_gt(sum(c_all$nrecords), sum(c_sample$nrecords))
+
+  expect_named(c_sample, c("collection", "nrecords", "akn_level", "access"))
+
+  expect_equal(unique(c_sample[["access"]]), "full")
+  expect_equal(unique(c_sample[["akn_level"]]), 5)
+
+  expect_equal(sort(unique(c_sample_all[["access"]])),
+               c("by request", "full", "none"))
+  expect_equal(sort(unique(c_sample_all[["akn_level"]])), 2:5)
 
 })
 
@@ -208,8 +221,8 @@ test_that("Data download returns informative errors/messages", {
                  "Not all collections have data that match these filters")
 
   # No permission
-  expect_error(nc_data_dl(collections = "BBS", species = 7590,
-                          username = "sample", verbose = FALSE,
+  expect_error(nc_data_dl(collections = "ATOWLS",
+                          username = "sample", verbose = TRUE,
                           info = "nc_test"),
                "You do not have permission to access these collections")
 

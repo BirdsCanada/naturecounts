@@ -21,9 +21,9 @@
 #' @inheritSection args Day of Year (`doy`)
 #' @inheritSection args Regions (`region`)
 #' @inheritSection args Data Fields/Columns (`fields_set` and `fields`)
-#' @inheritSection args `request_id`'s
+#' @inheritSection args Access and `request_id`s
 #'
-#' @return Data frame
+#' @return Data frame or connection to SQLite database
 #'
 #' @examples
 #' # All observations part of the RCBIOTABASE collection
@@ -323,8 +323,15 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' Download the number of records available for different collections filtered
 #' by location (if provided). If authorization is provided, the collections are
-#' filtered to only those available to the user. Otherwise all collections are
-#' returned.
+#' filtered to only those available to the user (unless using `show = "all"`).
+#' Without authorization all collections are returned.
+#'
+#' The `akn_level` column describes the level of data access for that collection
+#' (see [descriptions
+#' online](https://sandbox.birdscanada.org/birdmon/default/nc_access_levels.jsp)).
+#' The `access` column describes the accessibility of a collection for a given
+#' username (or no access if no username supplied). See the section on Access
+#' and `request_id`s for more details.
 #'
 #' @param show Character. Either "all" or "available". "all" returns counts from
 #'   all data sources. "available" only returns counts for data available for
@@ -335,8 +342,11 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #' @inheritSection args Species ids (`species`)
 #' @inheritSection args Day of Year (`doy`)
 #' @inheritSection args Regions (`region`)
+#' @inheritSection args Access and `request_id`s
 #'
 #' @return Data frame
+#'
+#' @seealso [nc_requests()]
 #'
 #' @examples
 #'
@@ -394,9 +404,21 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                           site_type = site_type)
 
   # Get counts
-  cnts <- nc_count_internal(filter, timeout, token, show)
+  cnts <- nc_count_internal(filter, timeout, token, show)[['results']]
 
-  cnts[['results']]
+  if(!"access" %in% names(cnts)) cnts <- dplyr::mutate(cnts, access = "no")
+
+  # Add access codes
+  meta_collections() %>%
+    dplyr::select("collection", "akn_level") %>%
+    dplyr::left_join(cnts, ., by = "collection") %>%
+    # Clarify access type
+    dplyr::mutate(access = dplyr::case_when(
+      .data$access == "yes" ~ "full",
+      .data$akn_level >= 3 ~ "by request",
+      TRUE ~ "none")) %>%
+    dplyr::select("collection", "nrecords", "akn_level",
+                  "access")
 }
 
 nc_count_internal <- function(filter, timeout, token, show = "available") {

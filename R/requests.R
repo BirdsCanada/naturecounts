@@ -3,7 +3,7 @@
 #' List pending or completed data requests for a given user.
 #'
 #' @inheritParams args
-#' @inheritSection args `request_id`'s
+#' @inheritSection args Access and `request_id`s
 #'
 #' @return data frame
 #'
