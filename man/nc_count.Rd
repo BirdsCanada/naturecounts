@@ -6,7 +6,7 @@
 \usage{
 nc_count(collections = NULL, project_ids = NULL, species = NULL,
   years = NULL, doy = NULL, region = NULL, site_type = NULL,
-  show = "available", username = NULL, timeout = 30,
+  show = "available", username = NULL, timeout = 120,
   verbose = TRUE)
 }
 \arguments{

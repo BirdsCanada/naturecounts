@@ -7,7 +7,7 @@
 nc_data_dl(collections = NULL, project_ids = NULL, species = NULL,
   years = NULL, doy = NULL, region = NULL, site_type = NULL,
   fields_set = "minimum", fields = NULL, username, info = NULL,
-  request_id = NULL, sql_db = NULL, warn = TRUE, timeout = 60,
+  request_id = NULL, sql_db = NULL, warn = TRUE, timeout = 120,
   verbose = TRUE)
 }
 \arguments{

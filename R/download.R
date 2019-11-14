@@ -81,7 +81,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
                        doy = NULL, region = NULL, site_type = NULL,
                        fields_set = "minimum", fields = NULL,
                        username, info = NULL, request_id = NULL,
-                       sql_db = NULL, warn = TRUE, timeout = 60,
+                       sql_db = NULL, warn = TRUE, timeout = 120,
                        verbose = TRUE) {
 
   # Username check and Authorization
@@ -379,7 +379,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 
 nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                      years = NULL, doy = NULL, region = NULL, site_type = NULL,
-                     show = "available", username = NULL, timeout = 30,
+                     show = "available", username = NULL, timeout = 120,
                      verbose = TRUE) {
 
   if(!show %in% c("available", "all")) {
