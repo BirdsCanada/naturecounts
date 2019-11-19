@@ -1,0 +1,128 @@
+---
+title: "Data Access"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data Access}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, message = FALSE}
+library(naturecounts)
+```
+
+## Understanding Data Access
+All downloads in `naturecounts` require a free NatureCounts account ([sign up here](https://www.birdscanada.org/birdmon/default/register.jsp)). 
+
+Not all data hosted by NatureCounts is immediately available to users. Different data sets have different access levels (also called `akn_levels`). A full description of these different levels is available from the [NatureCounts site](https://www.birdscanada.org/birdmon/default/nc_access_levels.jsp).
+
+Briefly, there are five levels and the R package `naturecounts` can potentially access three of these levels.
+
+Data at **access level 5** are considered public data and are available to all users. 
+
+Data at **access levels 4 and 3** are private/semi-public projects/collections. To access this data you must request access (see Requesting Access, below).
+
+Data at **access level 2** is visible in counts returned by `nc_count()` and in metadata returned by `meta_collections()` , etc., but is not downloadable through the `naturecounts` R package.
+
+Data at **access level 1** is not visible through the `naturecounts` R package.
+
+## Requesting Access
+
+You can request access to **full** or **partial** datasets at levels 3 and 4 through the NatureCounts [data request page](https://www.birdscanada.org/birdmon/default/searchquery.jsp). To request **partial** access, choose the filters and walk through the steps. To request **full** access, choose the collection and check the "Full access?" box in Step 2.
+
+Once a request has been submitted it has to be approved by the appropriate data custodian. 
+
+## What Do I Have Access To?
+
+To see what you have access to you can use two functions: `nc_count()` and `nc_requests()`.
+
+### Full Access - `nc_count()`
+You can see which data you have **full** access to (i.e. you have access to all data within a specific collection) with the `nc_count()` function.
+
+```{r}
+nc_count(username = "sample")
+```
+
+To see which data you do not (currently) have access to, use the `show = "all"` argument.
+
+```{r}
+nc_count(username = "sample", show = "all")
+```
+
+Data where `access` is "by request" is available through the online request portal. Data where `access` is "none" is available as counts, but not accessible as a download of raw data.
+
+### Partial Access - `nc_requests()`
+You can see which data you have **partial** access to (i.e. you have requested access to part of a collection or part of a series of collections through the online portal) with the `nc_requests()` function. 
+
+```{r, eval = FALSE}
+nc_requests(username = "USER")
+```
+
+An example of the output you might see: 
+```
+  request_id requestOrigin                     requestLabel      collection   status nrecords
+1     155882           web                    steffi's test          QCOWLS  pending    12640
+2     155886           web                 steffi's test SK   SKATLAS1BE_DO approved    99872
+3     155886           web                 steffi's test SK SKATLAS1BE_SUMM approved    42203
+4     155886           web                 steffi's test SK      SKATLAS1PC approved    27916
+5     155888           web steffi's test partial projects 1     PFW-US-EAST  pending   368672
+6     155888           web steffi's test partial projects 1     PFW-US-WEST  pending   282745
+7     155889           web steffi's test partial projects 2     PFW-US-EAST  pending     1269
+8     155889           web steffi's test partial projects 2     PFW-US-WEST  pending     4080
+                                                                  filters
+1                                       date_type (s); project ('QCOWLS')
+2 date_type (s); project ('SKATLAS1BE_DO','SKATLAS1BE_SUMM','SKATLAS1PC')
+3 date_type (s); project ('SKATLAS1BE_DO','SKATLAS1BE_SUMM','SKATLAS1PC')
+4 date_type (s); project ('SKATLAS1BE_DO','SKATLAS1BE_SUMM','SKATLAS1PC')
+5   date_type (s); project ('PFW-US-EAST','PFW-US-WEST'); species (14280)
+6   date_type (s); project ('PFW-US-EAST','PFW-US-WEST'); species (14280)
+7   date_type (s); project ('PFW-US-EAST','PFW-US-WEST'); species (14320)
+8   date_type (s); project ('PFW-US-EAST','PFW-US-WEST'); species (14320)
+```
+
+The `status` field/column shows which requests have been `approved`, are `pending` or have been `declined`.
+
+## How Do I Download Accessible Data?
+
+### Full Access
+Data to which you have full access can be directly downloaded via the `nc_data_dl()` function.
+
+```{r, eval = FALSE}
+moose <- nc_data_dl(species = 133990, username = "sample", info = "nc_example")
+```
+
+Note that `request_id`s are created for `web` requests (above) and are also created for `api` requests: data downloaded via the `nc_data_dl()` function if a `request_id` was not provided.
+
+For example, the previous download created an `api` `request_id`. To see `request_id`s created through this R package, use the argument `type = "api"` in `nc_requests()`.
+```{r}
+nc_requests(username = "sample", type = "api")[1,]
+```
+
+This data can be redownloaded (more quickly) by using this stored `request_id`.
+```{r, eval = FALSE}
+moose <- nc_data_dl(request_id = 152446, username = "sample")
+```
+
+
+## How Do I Download Specially Requested Data?
+
+Approved requests can either be downloaded by hand from the website, or the `request_id` can be used to download data with the `nc_data_dl()` function.
+```{r, eval = FALSE}
+nc_requests(username = "USER")
+```
+
+```
+  request_id requestOrigin                     requestLabel      collection   status nrecords
+2     155886           web                 steffi's test SK   SKATLAS1BE_DO approved    99872
+3     155886           web                 steffi's test SK SKATLAS1BE_SUMM approved    42203
+4     155886           web                 steffi's test SK      SKATLAS1PC approved    27916
+                                                                  filters
+2 date_type (s); project ('SKATLAS1BE_DO','SKATLAS1BE_SUMM','SKATLAS1PC')
+3 date_type (s); project ('SKATLAS1BE_DO','SKATLAS1BE_SUMM','SKATLAS1PC')
+4 date_type (s); project ('SKATLAS1BE_DO','SKATLAS1BE_SUMM','SKATLAS1PC')
+```
+
+```{r, eval = FALSE}
+sask <- nc_data_dl(request_id = 155886, username = "USER")
+```
