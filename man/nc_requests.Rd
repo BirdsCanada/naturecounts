@@ -4,10 +4,13 @@
 \alias{nc_requests}
 \title{Check on status of data requests}
 \usage{
-nc_requests(request_id = NULL, username)
+nc_requests(request_id = NULL, type = "web", username)
 }
 \arguments{
 \item{request_id}{Numeric. Specific request id to check or download.}
+
+\item{type}{Character One of "web", "api", or "all" specifying which types of
+request to return (defaults to "web").}
 
 \item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
 provided, the user will be prompted for a password. If left NULL, only

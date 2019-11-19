@@ -2,6 +2,8 @@
 #'
 #' List pending or completed data requests for a given user.
 #'
+#' @param type Character One of "web", "api", or "all" specifying which types of
+#'   request to return (defaults to "web").
 #' @inheritParams args
 #' @inheritSection args Access and `request_id`s
 #'
@@ -12,13 +14,20 @@
 #' nc_requests(request_id = 152446, username = "sample")
 #'
 #' @export
-nc_requests <- function(request_id = NULL, username) {
+nc_requests <- function(request_id = NULL, type = "web", username) {
 
   # Username check and Authorization
   token <- srv_auth(username)
 
+  # Check type
+  if(!type %in% c("web", "api", "all")) {
+    stop("'type' must be one of 'web', 'api', or 'all'", call. = FALSE)
+  }
+
   # Get list
-  nc_requests_internal(request_id, token)
+  r <- nc_requests_internal(request_id, token)
+  if(type != "all") r <- dplyr::filter(r, .data$requestOrigin == type)
+  r
 }
 
 nc_requests_internal <- function(request_id, token) {
