@@ -252,12 +252,17 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
     if(verbose) message(" - Converted 'fill' column (", fill, ") from ",
                         orig, " to numeric")
   }
-  fill <- as.list(rlang::set_names(0, fill))
+
+  df_by <- df %>%
+    dplyr::select(by) %>%
+    dplyr::distinct() %>%
+    tidyr::expand(!!!rlang::syms(by), species_id = species)
 
   df_filled <- df %>%
-    dplyr::select(by, "species_id", names(fill)) %>%
-    dplyr::group_by(!!!rlang::syms(by)) %>%
-    tidyr::complete(species_id = species, fill = fill)
+    dplyr::select(by, "species_id", fill) %>%
+    dplyr::filter(.data$species_id %in% species) %>%
+    dplyr::left_join(df_by, ., by = c(by, "species_id")) %>%
+    dplyr::mutate(!!fill := tidyr::replace_na(!!rlang::sym(fill), 0))
 
   if(!is.null(extra_species)) {
     df_filled <- dplyr::left_join(df_filled, extra_species, by = "species_id")

@@ -166,9 +166,9 @@ test_that("format_zero_fill() adds zeros in real example", {
   expect_silent(rc1_fill <- format_zero_fill(rc1, species = 19360,
                                              verbose = FALSE)) %>%
     expect_is("data.frame")
+  expect_equal(unique(rc1_fill$species_id), 19360)
   expect_equal(nrow(rc1_fill),
                length(unique(rc1$SamplingEventIdentifier)))
-  expect_equal(unique(rc1_fill$species_id), 19360)
   expect_equal(0, sum(rc1_fill$ObservationCount))
 })
 
