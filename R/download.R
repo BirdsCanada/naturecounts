@@ -131,7 +131,8 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   if(!is.null(request_id)) {
     records <- dplyr::select(requests, collection, nrecords)
   } else {
-    records <- nc_count_internal(filter = filter, timeout = timeout, token = token)
+    records <- nc_count_internal(filter = filter, timeout = timeout, token = token,
+                                 info = info)
     request_id <- records$requestId
     records <- records$results
   }
@@ -185,8 +186,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   }
 
   # Query Information
-  query <- list(lastRecord = 0, numRecords = 5000, requestId = request_id,
-                info = info)
+  query <- list(lastRecord = 0, numRecords = 5000, requestId = request_id)
 
   if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {
@@ -421,8 +421,10 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                   "access")
 }
 
-nc_count_internal <- function(filter, timeout, token, show = "available") {
-  cnts <- srv_query(api$collections_count, token = token, filter = filter,
+nc_count_internal <- function(filter, timeout, token,
+                              show = "available", info = NULL) {
+  cnts <- srv_query(api$collections_count, token = token,
+                    query = list(info = info), filter = filter,
                     timeout = timeout)
 
   requestId <- cnts$requestId
