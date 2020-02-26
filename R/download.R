@@ -433,9 +433,9 @@ nc_count_internal <- function(filter, timeout, token,
     parse_results(results = TRUE) %>%
     dplyr::arrange(.data$collection)
 
-  if(show == "available" && nrow(cnts) > 0) {
-    cnts <- dplyr::filter(cnts, .data$access == "yes")
-  }
+  # if(show == "available" && nrow(cnts) > 0) {
+  #   cnts <- dplyr::filter(cnts, .data$access == "yes")
+  # }
   list(results = cnts, requestId = requestId)
 }
 
