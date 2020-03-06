@@ -9,6 +9,7 @@ test_that("Get counts for collections", {
   expect_is(c1, "data.frame")
   expect_gt(nrow(c1), 0)
   expect_true(all(c1$collection %in% c("CBC", "BBS")))
+  expect_true(all(c1$access %in% c("full", "no access")))
 
   expect_silent(c2 <- nc_count(c("CBC", "BBS"), region = list(statprov = "MB"),
                                show = "all", verbose = FALSE))
@@ -25,7 +26,6 @@ test_that("Get counts for collections", {
                                verbose = FALSE)) %>%
     expect_is("data.frame")
   expect_equal(c1, c2)
-
 })
 
 test_that("Counts return permissions", {
@@ -36,17 +36,22 @@ test_that("Counts return permissions", {
                                          verbose = FALSE, username = "sample"))
   expect_silent(c_all <- nc_count(species = 7590, show = "all",
                                   verbose = FALSE))
-  expect_gt(sum(c_all$nrecords), sum(c_sample$nrecords))
+  expect_gt(sum(c_all$nrecords, na.rm = TRUE), sum(c_sample$nrecords, na.rm = TRUE))
 
-  expect_named(c_sample, c("collection", "nrecords", "akn_level", "access"))
+  expect_named(c_sample, c("collection", "akn_level", "access", "nrecords"),
+               ignore.order = TRUE)
 
   expect_equal(unique(c_sample[["access"]]), "full")
-  expect_equal(unique(c_sample[["akn_level"]]), 5)
+  expect_equal(unique(c_sample[["akn_level"]]), c(5,0))
 
   expect_equal(sort(unique(c_sample_all[["access"]])),
-               c("by request", "full", "none"))
+               c("by request", "full", "no access"))
   expect_equal(sort(unique(c_sample_all[["akn_level"]])), 2:5)
 
+})
+
+test_that("Counts error when no data returned", {
+  expect_error(nc_count(collections = "steffi"), "No counts for these filters")
 })
 
 
@@ -220,11 +225,17 @@ test_that("Data download returns informative errors/messages", {
                             info = "nc_test"),
                  "Not all collections have data that match these filters")
 
+  expect_error(nc_data_dl(collections = "ABBIRDRECS",
+                            years = 2010, species = 7590,
+                            username = "sample", verbose = TRUE,
+                            info = "nc_test"),
+                 "These collections have no data that match these filters")
+
   # No permission
   expect_error(nc_data_dl(collections = "ATOWLS",
                           username = "sample", verbose = TRUE,
                           info = "nc_test"),
-               "You do not have permission to access these collections")
+               "No access to collection\\(s\\): ATOWLS")
 
   # No data
   expect_error(nc_data_dl(collections = "ABBIRDRECS", years = 2018,
