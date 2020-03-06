@@ -30,7 +30,7 @@ nc_requests <- function(request_id = NULL, type = "web", username) {
   r
 }
 
-nc_requests_internal <- function(request_id, token) {
+nc_requests_internal <- function(request_id = NULL, token) {
   req <- srv_query(api$list_requests, query = c(requestId = request_id),
                    token = token)
   if(length(req$requests) > 0 ){
