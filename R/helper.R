@@ -210,7 +210,8 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                 "associated with the 'species_id' column")
       }
     }
-    extra_species <- dplyr::select(df, "species_id", extra_keep) %>%
+    extra_species <- dplyr::select(df, "species_id",
+                                   tidyselect::all_of(extra_keep)) %>%
       dplyr::distinct()
   }
 
@@ -254,12 +255,14 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
   }
 
   df_by <- df %>%
-    dplyr::select(by) %>%
+    dplyr::select(tidyselect::all_of(by)) %>%
     dplyr::distinct() %>%
     tidyr::expand(!!!rlang::syms(by), species_id = species)
 
   df_filled <- df %>%
-    dplyr::select(by, "species_id", fill) %>%
+    dplyr::select(tidyselect::all_of(by),
+                  "species_id",
+                  tidyselect::all_of(fill)) %>%
     dplyr::filter(.data$species_id %in% species) %>%
     dplyr::left_join(df_by, ., by = c(by, "species_id")) %>%
     dplyr::mutate(!!fill := tidyr::replace_na(!!rlang::sym(fill), 0))
