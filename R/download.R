@@ -89,6 +89,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
 
   # Check/convert project_ids to collections (collections checked in filter)
   collections <- projects_check(project_ids, collections)
+  collections <- collections_check(collections, token)
 
   # If request_id provided, check, and ignore other filter values
   if(!is.null(request_id)) {
@@ -134,7 +135,9 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
     records <- nc_count_internal(filter = filter, timeout = timeout, token = token,
                                  info = info)
     request_id <- records$requestId
-    records <- records$results
+    # Filter records to collections available
+    records <- records$results %>%
+      dplyr::filter(collection %in% nc_permissions_internal(token)$collection)
   }
 
   # If there are no records to download, see why not and report that to the user
@@ -143,7 +146,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
     # Is it because they don't have permission?
     if(!is.null(collections)) {
       no_access <- collections[!collections %in%
-                                 nc_permissions(token = token)$collection]
+                                 nc_permissions_internal(token)$collection]
     } else no_access <- c()
 
     if(length(no_access) == 0) {
@@ -396,6 +399,7 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
 
   # Check/convert project_ids to collections
   collections <- projects_check(project_ids, collections)
+  if(!is.null(token)) collections <- collections_check(collections, token)
 
   # Assemble and check filter parameters
   filter <- filter_create(verbose = verbose,
@@ -404,26 +408,40 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                           site_type = site_type)
 
   # Get counts
-  cnts <- nc_count_internal(filter, timeout, token, show)[['results']]
+  cnts <- nc_count_internal(filter, timeout, token)[['results']]
 
-  if(!"access" %in% names(cnts)) cnts <- dplyr::mutate(cnts, access = "no")
+  if(length(filter) > 0 && nrow(cnts) == 0) stop("No counts for these filters", call. = FALSE)
 
-  # Add access codes
-  meta_collections() %>%
-    dplyr::select("collection", "akn_level") %>%
-    dplyr::left_join(cnts, ., by = "collection") %>%
-    # Clarify access type
+  p <- nc_permissions_internal(token, timeout) %>%
+    dplyr::mutate(access = "full")
+
+  # Add access codes and counts for unavailable collections
+  if(show == "all") {
+    p <- meta_collections() %>%
+      dplyr::select("collection", "akn_level") %>%
+      dplyr::full_join(p, ., by = c("collection", "akn_level"))
+
+    if(length(filter) > 0){
+      p <- dplyr::right_join(p, cnts, by = "collection")
+    } else {
+      p <- dplyr::full_join(p, cnts, by = "collection")
+    }
+  }
+
+  # Add counts for available collections
+  if(show == "available") p <- dplyr::left_join(p, cnts, by = "collection")
+
+  # Clarify access type
+  p %>%
     dplyr::mutate(access = dplyr::case_when(
-      .data$access == "yes" ~ "full",
-      .data$akn_level >= 3 ~ "by request",
-      .data$akn_level < 3 ~ "none",
-      TRUE ~ as.character(NA))) %>%
-    dplyr::select("collection", "nrecords", "akn_level",
-                  "access")
+      .data$access == "full" ~ "full",
+      is.na(.data$access) & .data$akn_level >= 3 ~ "by request",
+      is.na(.data$access) & .data$akn_level < 3 ~ "no access")) %>%
+    dplyr::arrange(.data$collection)
 }
 
-nc_count_internal <- function(filter, timeout, token,
-                              show = "available", info = NULL) {
+nc_count_internal <- function(filter, timeout, token, info = NULL) {
+
   cnts <- srv_query(api$collections_count, token = token,
                     query = list(info = info), filter = filter,
                     timeout = timeout)
@@ -432,16 +450,39 @@ nc_count_internal <- function(filter, timeout, token,
 
   cnts <- cnts %>%
     parse_results(results = TRUE) %>%
+    dplyr::select("collection", "nrecords") %>%
     dplyr::arrange(.data$collection)
 
-  # if(show == "available" && nrow(cnts) > 0) {
-  #   cnts <- dplyr::filter(cnts, .data$access == "yes")
-  # }
   list(results = cnts, requestId = requestId)
 }
 
-
-nc_permissions <- function(token = NULL) {
-  srv_query(api$permissions, token = token, timeout = 30) %>%
-    parse_results(results = TRUE)
+#' Download list of accessible collections
+#'
+#' Returns a list of collections accessible by 'username'.
+#'
+#' @inheritParams args
+#' @inheritSection args NatureCounts account
+#'
+#' @examples
+#'
+#' nc_permissions()
+#' nc_permissions(username = "sample")
+#'
+#' @export
+nc_permissions <- function(username = NULL, timeout = 60) {
+  token <- srv_auth(username)
+  nc_permissions_internal(token, timeout) %>%
+    dplyr::pull(collection)
 }
+
+nc_permissions_internal <- function(token, timeout = 60) {
+  srv_query(api$permissions, token = token, timeout = timeout) %>%
+    parse_results(results = TRUE) %>%
+    dplyr::select("collection", "akn_level")
+}
+
+# Cache function results
+nc_permissions_internal <- memoise::memoise(nc_permissions_internal,
+                                            ~memoise::timeout(24 * 60 * 60))
+
+
