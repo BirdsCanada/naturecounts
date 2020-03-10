@@ -3,7 +3,7 @@
 ## Fields returned by the API
 
 #### Desired behaviour
-Required and extra fields returned by the API are expected and treated, respectively, as follows:returned by the API are treated as follows
+Required and extra fields returned by the API are expected and treated, respectively, as follows:
 
 Function           | API Entry Point           | Required fields            | Extra fields
 ------------------ |-------------------------- | -------------------------- | ------------
@@ -12,7 +12,7 @@ Function           | API Entry Point           | Required fields            | Ex
 `nc_count()`       | `metadata/collections`    |  `collection`, `akn_level` | Ignored
 `nc_permissions()` | `data/list_permissions`   |  `collection`, `akn_level` | Ignored
 `srv_auth()`       | `data/authenticate`       |  `token`                   | Ignored
-`nc_data_dl()`     | `data/release_request_id` |  None                      | Ignored
+`nc_data_dl()`     | `data/release_request_id` |  None (close request only) | Ignored
 `nc_data_dl()`     | `data/get_data`           |  Any                       | Added
 `meta_XXX()`       | `metadata/XXX`            |  Any                       | Added
 
@@ -29,7 +29,7 @@ Function           | API Entry Point           | Required fields            | Ex
 
 #### Coding Principles
 - In package, after accessing the API, explictly `select()` the fields/columns expected. This way extra fields won't break existing code 
-  - Missing fields will, but at least it will break the code early!
-  - Do **not** do this for data downloads (i.e. `nc_single_dl()`) or metadata downloads (i.e. `meta_XXX()`)
-  - If using a `meta_XXX()` download in internal function, always `select()` the fields required
+  - Missing fields **will** the code, but at least they will break the code early!
+  - Do **not** do this for data downloads (i.e. `nc_single_dl()` under `nc_data_dl()`) or metadata downloads (i.e. `meta_XXX()`)
+  - **Unless**, using a `meta_XXX()` download internally. Then always `select()` the fields required
   
