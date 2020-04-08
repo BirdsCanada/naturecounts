@@ -436,7 +436,9 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
     dplyr::mutate(access = dplyr::case_when(
       .data$access == "full" ~ "full",
       is.na(.data$access) & .data$akn_level >= 3 ~ "by request",
-      is.na(.data$access) & .data$akn_level < 3 ~ "no access")) %>%
+      is.na(.data$access) & .data$akn_level < 3 ~ "no access"),
+      nrecords = dplyr::if_else(.data$akn_level >= 2 & is.na(.data$nrecords),
+                                0L, nrecords)) %>%
     dplyr::arrange(.data$collection)
 }
 
