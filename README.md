@@ -1,4 +1,12 @@
 
+<!-- badges: start -->
+
+[![Travis build
+status](https://travis-ci.org/BirdStudiesCanada/naturecounts.svg?branch=master)](https://travis-ci.org/BirdStudiesCanada/naturecounts)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/BirdStudiesCanada/naturecounts?branch=master&svg=true)](https://ci.appveyor.com/project/BirdStudiesCanada/naturecounts)
+<!-- badges: end -->
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # `naturecounts`
