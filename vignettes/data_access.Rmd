@@ -105,7 +105,7 @@ For example, the previous download created an `api` `request_id`. To see `reques
 nc_requests(username = "sample", type = "api")[1,]
 ```
 
-This data can be redownloaded (more quickly) by using this stored `request_id`.
+This data can be re-downloaded (more quickly) by using this stored `request_id`.
 ```{r, eval = FALSE}
 moose <- nc_data_dl(request_id = 152446, username = "sample")
 ```
