@@ -17,15 +17,14 @@ All downloads in `naturecounts` require a free NatureCounts account ([sign up he
 
 Not all data hosted by NatureCounts is immediately available to users. Different data sets have different access levels (also called `akn_levels`). A full description of these different levels is available from the [NatureCounts site](https://www.birdscanada.org/birdmon/default/nc_access_levels.jsp).
 
-Briefly, there are five levels and the R package `naturecounts` can potentially access three of these levels.
+Briefly, there are five levels and the R package `naturecounts` can potentially access three of these levels (for most users).
 
 Data at **access level 5** are considered public data and are available to all users. 
-
 Data at **access levels 4 and 3** are private/semi-public projects/collections. To access this data you must request access (see Requesting Access, below).
 
-Data at **access level 2** is visible in counts returned by `nc_count()` and in metadata returned by `meta_collections()` , etc., but is not downloadable through the `naturecounts` R package.
+Data at **access level 2** are visible in counts returned by `nc_count()` and in metadata returned by `meta_collections()` , etc., but are not downloadable through `nc_data_dl()` in the `naturecounts` R package without special permissions.
 
-Data at **access level 1** is not visible through the `naturecounts` R package.
+Data at **access level 1** are not visible through the `naturecounts` R package without special permissions.
 
 ## Requesting Access
 
@@ -35,22 +34,29 @@ Once a request has been submitted it has to be approved by the appropriate data 
 
 ## What Do I Have Access To?
 
-To see what you have access to you can use two functions: `nc_count()` and `nc_requests()`.
+To see what you have access to you can use three functions: `nc_permissions()`, `nc_count()` and `nc_requests()`.
 
-### Full Access - `nc_count()`
-You can see which data you have **full** access to (i.e. you have access to all data within a specific collection) with the `nc_count()` function.
+### Full Access - `nc_permissions()` or `nc_count()`
+You can see which data you have **full** access to (i.e. you have access to all data within a specific collection) with either the `nc_permissions()` or `nc_count()` functions.
 
+To get a list of collections to which you have access, use the `nc_permissions()` function.
+
+```{r}
+nc_permissions(username = "sample")
+```
+
+To additionally get the amount of data in each of these collections, user the `nc_count()` function.
 ```{r}
 nc_count(username = "sample")
 ```
 
 To see which data you do not (currently) have access to, use the `show = "all"` argument.
-
 ```{r}
 nc_count(username = "sample", show = "all")
 ```
 
-Data where `access` is "by request" is available through the online request portal. Data where `access` is "none" is available as counts, but not accessible as a download of raw data.
+Data where `access` is "by request" is available through the online request portal. 
+Data where `access` is "no access" may be available as counts, but is not generally accessible as a download of raw data.
 
 ### Partial Access - `nc_requests()`
 You can see which data you have **partial** access to (i.e. you have requested access to part of a collection or part of a series of collections through the online portal) with the `nc_requests()` function. 
@@ -59,7 +65,7 @@ You can see which data you have **partial** access to (i.e. you have requested a
 nc_requests(username = "USER")
 ```
 
-An example of the output you might see: 
+An example of the output you might see:
 ```
   request_id requestOrigin                     requestLabel      collection   status nrecords
 1     155882           web                    steffi's test          QCOWLS  pending    12640
@@ -104,10 +110,12 @@ This data can be redownloaded (more quickly) by using this stored `request_id`.
 moose <- nc_data_dl(request_id = 152446, username = "sample")
 ```
 
+Note that the "sample" user account no longer stores api requests, but you can still recover old requests as examples.
 
 ## How Do I Download Specially Requested Data?
 
 Approved requests can either be downloaded by hand from the website, or the `request_id` can be used to download data with the `nc_data_dl()` function.
+
 ```{r, eval = FALSE}
 nc_requests(username = "USER")
 ```
