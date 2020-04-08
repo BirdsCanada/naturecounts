@@ -148,10 +148,10 @@ test_that("Filter region works as expected", {
   expect_equal(unique(d$iba_site), "AB001")
 
   # BCR
-  expect_silent(d <- nc_data_dl(region = list(bcr = 3),
+  expect_silent(d <- nc_data_dl(region = list(bcr = 2),
                                 username = "sample", verbose = FALSE,
                                 info = "nc_test"))
-  expect_equal(unique(d$bcr), 3)
+  expect_equal(unique(d$bcr), 2)
 
   # Province
   expect_silent(d <- nc_data_dl(region = list(statprov = "PE"),
