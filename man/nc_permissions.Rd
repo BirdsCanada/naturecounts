@@ -4,12 +4,15 @@
 \alias{nc_permissions}
 \title{Download list of accessible collections}
 \usage{
-nc_permissions(username = NULL)
+nc_permissions(username = NULL, timeout = 60)
 }
 \arguments{
 \item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.}
+
+\item{timeout}{Numeric. Number of seconds before connecting to the server
+times out.}
 }
 \description{
 Returns a list of collections accessible by 'username'.

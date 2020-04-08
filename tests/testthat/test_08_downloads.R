@@ -1,6 +1,18 @@
 # Counts - General ----------------------------------------------------
 context("Download counts")
 
+test_that("Get permissions for user", {
+  expect_silent(p <- nc_permissions())
+  expect_type(p, "character")
+  expect_gt(length(p), 1)
+
+  expect_silent(p1 <- nc_permissions(username = "sample"))
+  expect_type(p1, "character")
+  expect_gt(length(p1), 1)
+  expect_gt(length(p1), length(p))
+})
+
+
 test_that("Get counts for collections", {
 
   # Entire collection
