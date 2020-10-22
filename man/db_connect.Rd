@@ -19,7 +19,4 @@ Connect to an existing database, or, if the database doesn't exist, create a
 new one and fill with the appropriate table (internally stored empty df
 called nc_dbs).
 }
-\examples{
-
-}
 \keyword{internal}

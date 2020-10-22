@@ -12,8 +12,6 @@
 #'
 #' @keywords internal
 #'
-#' @examples
-#'
 
 db_connect <- function(name = paste0("./naturecounts_", Sys.Date()),
                        verbose = TRUE) {
