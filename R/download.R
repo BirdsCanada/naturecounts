@@ -399,7 +399,7 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
 
   # Check/convert project_ids to collections
   collections <- projects_check(project_ids, collections)
-  if(!is.null(token)) collections <- collections_check(collections, token)
+  if(!is.null(token) & show == "available") collections <- collections_check(collections, token)
 
   # Assemble and check filter parameters
   filter <- filter_create(verbose = verbose,
