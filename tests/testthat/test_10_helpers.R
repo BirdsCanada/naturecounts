@@ -238,13 +238,13 @@ test_that("format_zero_fill() extra species columns", {
 
 test_that("format_zero_fill() extra events columns", {
 
-  expect_silent(b1 <- format_zero_fill(test_rc, verbose = FALSE)) %>%
-    expect_length(3)
+  expect_silent(b1 <- format_zero_fill(test_rc, verbose = FALSE))
+  expect_length(b1, 3)
 
   # Add two new
   expect_silent(b2 <- format_zero_fill(test_rc, verbose = FALSE,
-                                       extra_event = c("latitude", "longitude"))) %>%
-    expect_length(5)
+                                       extra_event = c("latitude", "longitude")))
+  expect_length(b2, 5)
 
   # But the rest is the same
   expect_true(all.equal(b1, dplyr::select(b2, names(b1))))
