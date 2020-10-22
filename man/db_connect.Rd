@@ -21,8 +21,5 @@ called nc_dbs).
 }
 \examples{
 
-\donttest{
-  db_connect()
-}
 }
 \keyword{internal}
