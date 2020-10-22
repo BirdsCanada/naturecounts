@@ -44,10 +44,10 @@ format_dates_df <- function(df, overwrite) {
          call. = FALSE)
   }
   dplyr::mutate(df,
-                date = lubridate::ymd(paste(survey_year,
-                                            survey_month,
-                                            survey_day)),
-                doy = lubridate::yday(date))
+                date = lubridate::ymd(paste(.data$survey_year,
+                                            .data$survey_month,
+                                            .data$survey_day)),
+                doy = lubridate::yday(.data$date))
 }
 
 format_dates_db <- function(db, overwrite) {

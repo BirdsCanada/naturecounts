@@ -15,6 +15,10 @@ dict <- hunspell::dictionary('en_CA')
 devtools::spell_check()
 spelling::update_wordlist()
 
+# Update README.Rmd
+# Compile README.md
+# REBUILD!
+rmarkdown::render("README.Rmd")
 
 ## Finalize package version
 
@@ -33,11 +37,8 @@ system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")
 ## Push to github
 ## Check travis / appveyor
 
-## Check Reverse Dependencies (are there any?)
-#tools::dependsOnPkgs("naturecounts")
-#devtools::revdep()
-
 ## Build site (so website uses newest version)
+## BUILD PACKAGE FIRST
 pkgdown::build_site(lazy = TRUE)
 ## Push to github
 

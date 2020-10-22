@@ -31,17 +31,16 @@
 #' @param verbose Logical. Show messages?
 #'
 #' @section NatureCounts account:
-#'   All public data is available with a username/password ([sign
-#'   up](https://www.birdscanada.org/birdmon/default/register.jsp) for a free
-#'   NatureCounts account). However, to access private/semi-public
+#'   All public data is available with a username/password
+#'   ([sign up](https://www.birdscanada.org/birdmon/default/register.jsp)
+#'   for a free NatureCounts account). However, to access private/semi-public
 #'   projects/collections you must request access. See the Access and
 #'   `request_id`s section for more information.
 #'
 #' @section Species ids (`species`):
 #'   Numeric species id codes can determined from the functions
 #'   [search_species()] or [search_species_code()]. See also the article on
-#'   [species
-#'   codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+#'   [species codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
 #'   for more information.
 #'
 #' @section Day of Year (`doy`):
@@ -106,7 +105,7 @@
 #' requests can be reviewed with the [nc_requests()] function.
 #'
 #' To download data with "full" access, users can either specify filters, or if
-#' they are repeating a download, can use the `request_id` from [nc_reqeusts()].
+#' they are repeating a download, can use the `request_id` from [nc_requests()].
 #'
 #' Otherwise, if the user doesn't have "full" access, they must supply an
 #' approved `request_id` to the [nc_data_dl()] function (e.g.,

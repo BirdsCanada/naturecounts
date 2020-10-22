@@ -110,7 +110,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
         stop("Some 'collections' were not included in the original request and ",
              "cannot be downloaded with this 'request_id'", call. = FALSE)
       }
-      requests <- dplyr::filter(requests, collection %in% collections)
+      requests <- dplyr::filter(requests, .data$collection %in% collections)
     } else {
       collections <- requests$collection
     }
@@ -130,14 +130,14 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   if(verbose) message("Collecting available records...")
 
   if(!is.null(request_id)) {
-    records <- dplyr::select(requests, collection, nrecords)
+    records <- dplyr::select(requests, "collection", "nrecords")
   } else {
-    records <- nc_count_internal(filter = filter, timeout = timeout, token = token,
-                                 info = info)
+    records <- nc_count_internal(filter = filter, timeout = timeout,
+                                 token = token, info = info)
     request_id <- records$requestId
     # Filter records to collections available
     records <- records$results %>%
-      dplyr::filter(collection %in% nc_permissions_internal(token)$collection)
+      dplyr::filter(.data$collection %in% nc_permissions_internal(token)$collection)
   }
 
   # If there are no records to download, see why not and report that to the user
@@ -438,7 +438,7 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
       is.na(.data$access) & .data$akn_level >= 3 ~ "by request",
       is.na(.data$access) & .data$akn_level < 3 ~ "no access"),
       nrecords = dplyr::if_else(.data$akn_level >= 2 & is.na(.data$nrecords),
-                                0L, nrecords)) %>%
+                                0L, .data$nrecords)) %>%
     dplyr::arrange(.data$collection)
 }
 
@@ -474,7 +474,7 @@ nc_count_internal <- function(filter, timeout, token, info = NULL) {
 nc_permissions <- function(username = NULL, timeout = 60) {
   token <- srv_auth(username)
   nc_permissions_internal(token, timeout) %>%
-    dplyr::pull(collection)
+    dplyr::pull(.data$collection)
 }
 
 nc_permissions_internal <- function(token, timeout = 60) {

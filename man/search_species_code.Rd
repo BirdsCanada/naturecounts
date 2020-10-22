@@ -5,8 +5,7 @@
 \alias{species_code_search}
 \title{Search for bird species id codes by alphanumeric codes}
 \usage{
-search_species_code(code = NULL, authority = "BSCDATA",
-  results = "all")
+search_species_code(code = NULL, authority = "BSCDATA", results = "all")
 }
 \arguments{
 \item{code}{Vector. Character or numeric code indicating a species for a

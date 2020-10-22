@@ -42,7 +42,7 @@ identifies the filter set and collections requested. Details of all of
 requests can be reviewed with the \code{\link[=nc_requests]{nc_requests()}} function.
 
 To download data with "full" access, users can either specify filters, or if
-they are repeating a download, can use the \code{request_id} from \code{\link[=nc_reqeusts]{nc_reqeusts()}}.
+they are repeating a download, can use the \code{request_id} from \code{\link[=nc_requests]{nc_requests()}}.
 
 Otherwise, if the user doesn't have "full" access, they must supply an
 approved \code{request_id} to the \code{\link[=nc_data_dl]{nc_data_dl()}} function (e.g.,

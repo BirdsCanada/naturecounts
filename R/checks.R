@@ -95,7 +95,7 @@ site_type_check <- function(site_type) {
 projects_check <- function(project_ids, collections = NULL) {
   if(!is.null(project_ids)) {
     c1 <- meta_collections() %>%
-      dplyr::filter(project_id %in% project_ids)
+      dplyr::filter(.data$project_id %in% project_ids)
 
     if(nrow(c1) == 0) {
       stop("'project_ids' must be either NULL or a vector of valid ",
@@ -165,7 +165,7 @@ fields_set_check <- function(fields_set) {
 
 fields_check <- function(fields) {
   f <- meta_bmde_fields(version = NULL) %>%
-    dplyr::pull(local_name) %>%
+    dplyr::pull(.data$local_name) %>%
     unique()
 
   w <- fields[!fields %in% f]

@@ -4,8 +4,15 @@
 \alias{srv_query}
 \title{Query NatureCounts server for data}
 \usage{
-srv_query(path, query = NULL, filter = NULL, token = NULL,
-  api_url = NULL, timeout = 120, verbose = FALSE)
+srv_query(
+  path,
+  query = NULL,
+  filter = NULL,
+  token = NULL,
+  api_url = NULL,
+  timeout = 120,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{path}{character. Path to the table}

@@ -191,7 +191,8 @@ test_that("db_insert adds new cols as required", {
     expect_equal(length(n) - 2)
 
   # Add data with more cols than db
-  bcch2 <- dplyr::mutate(bcch, new1 = "test", new2 = 4.56, new3 = 1L)
+  bcch2 <- dplyr::mutate(bcch, new1 = "test", new2 = 4.56, new3 = 1L) %>%
+    dplyr::as_tibble()
   expect_silent(db_insert(con, "naturecounts", bcch2))
 
   expect_silent(nc <- dplyr::collect(dplyr::tbl(con, "naturecounts")))

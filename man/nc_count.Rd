@@ -4,16 +4,25 @@
 \alias{nc_count}
 \title{Download information about NatureCounts collections}
 \usage{
-nc_count(collections = NULL, project_ids = NULL, species = NULL,
-  years = NULL, doy = NULL, region = NULL, site_type = NULL,
-  show = "available", username = NULL, timeout = 120,
-  verbose = TRUE)
+nc_count(
+  collections = NULL,
+  project_ids = NULL,
+  species = NULL,
+  years = NULL,
+  doy = NULL,
+  region = NULL,
+  site_type = NULL,
+  show = "available",
+  username = NULL,
+  timeout = 120,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
 download data. NULL (default) downloads data from all available collections}
 
-\item{project_ids}{Character/Numeric vector. The \code{project id}s from which to
+\item{project_ids}{Character/Numeric vector. The \verb{project id}s from which to
 download data. First the collections associated with a \code{project_id} are
 determined, and then data is downloaded for each collection. If both
 \code{collections} and \code{project_ids} are supplied, they are combined.}
@@ -65,8 +74,9 @@ and \code{request_id}s for more details.
 }
 \section{NatureCounts account}{
 
-All public data is available with a username/password (\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up} for a free
-NatureCounts account). However, to access private/semi-public
+All public data is available with a username/password
+(\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up}
+for a free NatureCounts account). However, to access private/semi-public
 projects/collections you must request access. See the Access and
 \code{request_id}s section for more information.
 }
@@ -120,7 +130,7 @@ identifies the filter set and collections requested. Details of all of
 requests can be reviewed with the \code{\link[=nc_requests]{nc_requests()}} function.
 
 To download data with "full" access, users can either specify filters, or if
-they are repeating a download, can use the \code{request_id} from \code{\link[=nc_reqeusts]{nc_reqeusts()}}.
+they are repeating a download, can use the \code{request_id} from \code{\link[=nc_requests]{nc_requests()}}.
 
 Otherwise, if the user doesn't have "full" access, they must supply an
 approved \code{request_id} to the \code{\link[=nc_data_dl]{nc_data_dl()}} function (e.g.,

@@ -1,17 +1,17 @@
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# `naturecounts`
+
 <!-- badges: start -->
 
 [![Travis build
 status](https://travis-ci.org/BirdStudiesCanada/naturecounts.svg?branch=master)](https://travis-ci.org/BirdStudiesCanada/naturecounts)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/BirdStudiesCanada/naturecounts?branch=master&svg=true)](https://ci.appveyor.com/project/BirdStudiesCanada/naturecounts)
-<!-- badges: end -->
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# `naturecounts`
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
 
 Access and download data on plant and animal populations from various
 databases through NatureCounts, a service managed by Bird Studies
@@ -56,7 +56,7 @@ nc_count(username = "sample")
 #> 12        BCATLAS1PC         5   full   260647
 #> 13              BCMA         5   full    11291
 #> 14             BGRMM         5   full      476
-#> 15      CMMN-DET-HBO         5   full   274839
+#> 15      CMMN-DET-HBO         5   full   274872
 #> 16     CMMN-DET-RUTH         5   full        0
 #> 17     CMMN-DET-SELK         5   full        0
 #> 18     CMMN-DET-VLBO         5   full    56287
@@ -114,7 +114,7 @@ nc_count(show = "all") %>%
 #> 3 ABBIRDRECS         5       full   357264
 #> 4     ABOWLS         4 by request        0
 #> 5      ATBBS         4 by request        0
-#> 6     ATOWLS         4 by request     2778
+#> 6     ATOWLS         4 by request    25192
 ```
 
 ### Fetching data
