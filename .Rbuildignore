@@ -6,3 +6,4 @@
 ^\.Rproj\.user$
 ^RELEASE.R$
 ^pkgdown$
+^appveyor\.yml$
