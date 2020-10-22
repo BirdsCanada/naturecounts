@@ -236,6 +236,29 @@ test_that("format_zero_fill() extra species columns", {
 })
 
 
+test_that("format_zero_fill() extra events columns", {
+
+  expect_silent(b1 <- format_zero_fill(test_rc, verbose = FALSE)) %>%
+    expect_length(3)
+
+  # Add two new
+  expect_silent(b2 <- format_zero_fill(test_rc, verbose = FALSE,
+                                       extra_event = c("latitude", "longitude"))) %>%
+    expect_length(5)
+
+  # But the rest is the same
+  expect_true(all.equal(b1, dplyr::select(b2, names(b1))))
+
+  # Doesn't add non-existin columns
+  expect_error(format_zero_fill(test_rc, extra_event = "test"),
+               "Some 'extra_event' are not in the data")
+
+  # Ignores non unique columns
+  expect_message(format_zero_fill(test_rc, extra_event = "record_id"),
+                 "Ignoring 'extra_event' columns")
+})
+
+
 test_that("format_zero_fill() with SQLite database", {
   bcch_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
                          sql_db = "bcch", username = "sample", info = "nc_test")

@@ -99,7 +99,12 @@ format_dates_db <- function(db, overwrite) {
 #'   "ObservationCount".
 #' @param extra_species Character vector. Extra columns/fields uniquely
 #'   associated with `species_id` to keep in the data (all columns not in `by`,
-#'   `species`, `fill`, or `extra_species` will be omitted from the result).
+#'   `species`, `fill`, `extra_species`, or `extra_event` will be omitted from
+#'   the result).
+#' @param extra_event Character vector. Extra columns/fields uniquely associated
+#'   with the Sampling Event (the field defined by `by`) to keep in the data
+#'   (all columns not in `by`, `species`, `fill`, `extra_species`, or
+#'   `extra_event`) will be omitted from the result).
 #' @param warn Logical. If TRUE, stop zero-filling if >100 species and >1000
 #'   unique sampling events. If FALSE, ignore and proceed.
 #' @inheritParams args
@@ -135,14 +140,24 @@ format_dates_db <- function(db, overwrite) {
 #' # Keep species-specific variables
 #' rc_goose <- format_zero_fill(rc, species = "230", extra_species = "CommonName")
 #'
-#' # Keep sampling-event-specific variables (keep 'SamplingEventIdentifier')
-#' rc_goose <- format_zero_fill(rc, by = c("SamplingEventIdentifier",
-#'                                         "latitude", "longitude"))
+#' # Keep sampling-event-specific variables
+#' rc_coords <- format_zero_fill(rc, extra_event = c("latitude", "longitude"))
+#'
+#' # By species, keeping extra species variables and event variables
+#' rc_goose_coords <- format_zero_fill(rc, species = "230",
+#'                                     extra_species = "CommonName",
+#'                                     extra_event = c("latitude", "longitude"))
+#'
+#' # Only return event information
+#' rc_events <- format_zero_fill(rc, fill = NA,
+#'                               extra_event = c("latitude", "longitude"))
+#'
 #'
 #' @export
 format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                              species = "all", fill = "ObservationCount",
                              extra_species = NULL,
+                             extra_event = NULL,
                              warn = TRUE, verbose = TRUE) {
 
   # SQLite Connections must become dataframes
@@ -170,7 +185,7 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
 
   # fill columns present?
   if(length(fill) > 1) stop("'fill' can only be one column", .call = FALSE)
-  if(!fill %in% names(df)) {
+  if(!fill %in% names(df) && !is.na(fill)) {
     stop("'fill' column ('", fill, "') is missing from the data", call. = FALSE)
   }
   # All species reported?
@@ -244,7 +259,7 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
   }
 
   # Convert fill column to numeric
-  if(!is.numeric(df[[fill]])) {
+  if(!is.numeric(df[[fill]]) && !is.na(fill)) {
     orig <- class(df[[fill]])
     df[[fill]] <- as_numeric(df[[fill]])
     if(!is.numeric(df[[fill]])) {
@@ -254,21 +269,53 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                         orig, " to numeric")
   }
 
+
+  # Get extra events columns
+  if(!is.null(extra_event)) {
+
+    if(any(!extra_event %in% names(df))) {
+      stop("Some 'extra_event' are not in the data (",
+           paste0(extra_event[!extra_event %in% names(df)], collapse = ", "),
+           ")", call. = FALSE)
+    }
+    extra_keep <- find_unique(df, by, extra_event)
+    if(!all(extra_event %in% extra_keep)) {
+      if(verbose) {
+        message(" - Ignoring 'extra_event' columns (",
+                paste0(extra_event[!extra_event %in% extra_keep], collapse = ", "),
+                ") not uniquely ",
+                "associated with the '", by, "' column")
+      }
+    }
+    extra_event <- dplyr::select(df, by,
+                                 tidyselect::all_of(extra_keep)) %>%
+      dplyr::distinct()
+  }
+
   df_by <- df %>%
     dplyr::select(tidyselect::all_of(by)) %>%
     dplyr::distinct() %>%
     tidyr::expand(!!!rlang::syms(by), species_id = species)
 
-  df_filled <- df %>%
-    dplyr::select(tidyselect::all_of(by),
-                  "species_id",
-                  tidyselect::all_of(fill)) %>%
-    dplyr::filter(.data$species_id %in% species) %>%
-    dplyr::left_join(df_by, ., by = c(by, "species_id")) %>%
-    dplyr::mutate(!!fill := tidyr::replace_na(!!rlang::sym(fill), 0))
+  if(!is.na(fill)) {
+    df_filled <- df %>%
+      dplyr::select(tidyselect::all_of(by),
+                    "species_id",
+                    tidyselect::all_of(fill)) %>%
+      dplyr::filter(.data$species_id %in% species) %>%
+      dplyr::left_join(df_by, ., by = c(by, "species_id")) %>%
+      dplyr::mutate(!!fill := tidyr::replace_na(!!rlang::sym(fill), 0))
+  } else {
+    df_filled <- dplyr::select(df, tidyselect::all_of(by)) %>%
+      dplyr::distinct()
+  }
 
   if(!is.null(extra_species)) {
     df_filled <- dplyr::left_join(df_filled, extra_species, by = "species_id")
+  }
+
+  if(!is.null(extra_event)) {
+    df_filled <- dplyr::left_join(df_filled, extra_event, by = by)
   }
 
   as.data.frame(df_filled)
