@@ -119,41 +119,201 @@ nc_count(show = "all") %>%
 
 ### Fetching data
 
-Fetch all observations of moose which are available to user **sample**
-into a local data frame. The `info` parameter is a short description of
-what the data is being downloaded for.
+Fetch all observations of bittern which are available to user **sample**
+into a local data frame.
+
+First find the species id
 
 ``` r
-moose <- nc_data_dl(species = 133990, username = "sample", 
+search_species("American Bittern")
+#>   species_id       scientific_name     english_name      french_name
+#> 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique
+#>   taxon_group
+#> 1       BIRDS
+```
+
+Use this id with `nc_data_dl()`. The `info` parameter is a short
+description of what the data is being downloaded for.
+
+``` r
+bittern <- nc_data_dl(species = 2490, username = "sample", 
                     info = "readme_example")
-#> Using filters: species (133990); fields_set (BMDE2.00-min)
+#> Using filters: species (2490); fields_set (BMDE2.00-min)
 #> Collecting available records...
-#>    collection nrecords
-#> 1 RCBIOTABASE        2
-#> Total records: 2
+#>      collection nrecords
+#> 1      ABATLAS1      231
+#> 2      ABATLAS2      140
+#> 3    ABBIRDRECS      299
+#> 4           BBS     7200
+#> 5     BBS50-CAN     6234
+#> 6 BBS50-US-EAST      653
+#> ...
+#> Total records: 36,108
 #> 
 #> Downloading records for each collection:
+#>   ABATLAS1
+#>     Records 1 to 231 / 231
+#>   ABATLAS2
+#>     Records 1 to 140 / 140
+#>   ABBIRDRECS
+#>     Records 1 to 299 / 299
+#>   BBS
+#>     Records 1 to 5000 / 7200
+#>     Records 5001 to 7200 / 7200
+#>   BBS50-CAN
+#>     Records 1 to 5000 / 6234
+#>     Records 5001 to 6234 / 6234
+#>   BBS50-US-EAST
+#>     Records 1 to 653 / 653
+#>   BBS50-US-WEST
+#>     Records 1 to 4000 / 4000
+#>   BCATLAS1BE_DO
+#>     Records 1 to 8 / 8
+#>   BCATLAS1BE_RAW
+#>     Records 1 to 99 / 99
+#>   BCATLAS1BE_SUMM
+#>     Records 1 to 76 / 76
+#>   BCATLAS1PC
+#>     Records 1 to 17 / 17
+#>   CMMN-DET-HBO
+#>     Records 1 to 26 / 26
+#>   CMMN-DET-VLBO
+#>     Records 1 to 4 / 4
+#>   MBATLAS1BE_DO
+#>     Records 1 to 231 / 231
+#>   MBATLAS1BE_RAW
+#>     Records 1 to 1204 / 1204
+#>   MBATLAS1BE_SUMM
+#>     Records 1 to 720 / 720
+#>   MBATLAS1PC
+#>     Records 1 to 1021 / 1021
+#>   MBBA1BE_RAW
+#>     Records 1 to 480 / 480
+#>   MBBA1BE_SUMM
+#>     Records 1 to 345 / 345
+#>   MBBA2BE_RAW
+#>     Records 1 to 768 / 768
+#>   MBBA2BE_SUMM
+#>     Records 1 to 432 / 432
+#>   MBBA2PC
+#>     Records 1 to 93 / 93
+#>   OBBA1BE_RAW
+#>     Records 1 to 1769 / 1769
+#>   OBBA1BE_SUMM
+#>     Records 1 to 1099 / 1099
+#>   OBBA2BE_RAW
+#>     Records 1 to 2091 / 2091
+#>   OBBA2BE_SUMM
+#>     Records 1 to 1201 / 1201
+#>   OBBA2PC
+#>     Records 1 to 543 / 543
+#>   QCATLAS1BE_RAW
+#>     Records 1 to 862 / 862
+#>   QCATLAS1BE_SUMM
+#>     Records 1 to 579 / 579
+#>   QCATLAS2BE_DO
+#>     Records 1 to 541 / 541
+#>   QCATLAS2BE_RAW
+#>     Records 1 to 1773 / 1773
+#>   QCATLAS2BE_SUMM
+#>     Records 1 to 907 / 907
+#>   QCATLAS2PC
+#>     Records 1 to 446 / 446
 #>   RCBIOTABASE
-#>     Records 1 to 2 / 2
+#>     Records 1 to 16 / 16
 ```
 
 Alternatively, save the downloaded data as a SQLite database
-(`moose.nc`).
+(`bittern`).
 
 ``` r
-moose <- nc_data_dl(species = 133990, sql_db = "moose", username = "sample", 
+bittern <- nc_data_dl(species = 2490, sql_db = "bittern", username = "sample", 
                     info = "readme_example")
-#> Using filters: species (133990); fields_set (BMDE2.00-min)
+#> Using filters: species (2490); fields_set (BMDE2.00-min)
 #> Collecting available records...
-#>    collection nrecords
-#> 1 RCBIOTABASE        2
-#> Total records: 2
+#>      collection nrecords
+#> 1      ABATLAS1      231
+#> 2      ABATLAS2      140
+#> 3    ABBIRDRECS      299
+#> 4           BBS     7200
+#> 5     BBS50-CAN     6234
+#> 6 BBS50-US-EAST      653
+#> ...
+#> Total records: 36,108
 #> 
-#> Database 'moose.nc' does not exist, creating it...
+#> Database 'bittern.nc' does not exist, creating it...
 #> 
 #> Downloading records for each collection:
+#>   ABATLAS1
+#>     Records 1 to 231 / 231
+#>   ABATLAS2
+#>     Records 1 to 140 / 140
+#>   ABBIRDRECS
+#>     Records 1 to 299 / 299
+#>   BBS
+#>     Records 1 to 5000 / 7200
+#>     Records 5001 to 7200 / 7200
+#>   BBS50-CAN
+#>     Records 1 to 5000 / 6234
+#>     Records 5001 to 6234 / 6234
+#>   BBS50-US-EAST
+#>     Records 1 to 653 / 653
+#>   BBS50-US-WEST
+#>     Records 1 to 4000 / 4000
+#>   BCATLAS1BE_DO
+#>     Records 1 to 8 / 8
+#>   BCATLAS1BE_RAW
+#>     Records 1 to 99 / 99
+#>   BCATLAS1BE_SUMM
+#>     Records 1 to 76 / 76
+#>   BCATLAS1PC
+#>     Records 1 to 17 / 17
+#>   CMMN-DET-HBO
+#>     Records 1 to 26 / 26
+#>   CMMN-DET-VLBO
+#>     Records 1 to 4 / 4
+#>   MBATLAS1BE_DO
+#>     Records 1 to 231 / 231
+#>   MBATLAS1BE_RAW
+#>     Records 1 to 1204 / 1204
+#>   MBATLAS1BE_SUMM
+#>     Records 1 to 720 / 720
+#>   MBATLAS1PC
+#>     Records 1 to 1021 / 1021
+#>   MBBA1BE_RAW
+#>     Records 1 to 480 / 480
+#>   MBBA1BE_SUMM
+#>     Records 1 to 345 / 345
+#>   MBBA2BE_RAW
+#>     Records 1 to 768 / 768
+#>   MBBA2BE_SUMM
+#>     Records 1 to 432 / 432
+#>   MBBA2PC
+#>     Records 1 to 93 / 93
+#>   OBBA1BE_RAW
+#>     Records 1 to 1769 / 1769
+#>   OBBA1BE_SUMM
+#>     Records 1 to 1099 / 1099
+#>   OBBA2BE_RAW
+#>     Records 1 to 2091 / 2091
+#>   OBBA2BE_SUMM
+#>     Records 1 to 1201 / 1201
+#>   OBBA2PC
+#>     Records 1 to 543 / 543
+#>   QCATLAS1BE_RAW
+#>     Records 1 to 862 / 862
+#>   QCATLAS1BE_SUMM
+#>     Records 1 to 579 / 579
+#>   QCATLAS2BE_DO
+#>     Records 1 to 541 / 541
+#>   QCATLAS2BE_RAW
+#>     Records 1 to 1773 / 1773
+#>   QCATLAS2BE_SUMM
+#>     Records 1 to 907 / 907
+#>   QCATLAS2PC
+#>     Records 1 to 446 / 446
 #>   RCBIOTABASE
-#>     Records 1 to 2 / 2
+#>     Records 1 to 16 / 16
 ```
 
 ### Authorizations
@@ -169,7 +329,7 @@ of records.
 
 ``` r
 nc_count(username = "my_user_name")
-moose <- nc_data_dl(species = 133990, username = "my_user_name", info = "readme_example")
+bittern <- nc_data_dl(species = 2490, username = "my_user_name", info = "readme_example")
 ```
 
 ### More advanced options

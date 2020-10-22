@@ -184,42 +184,44 @@ checking the "Full access?" box in Step 2 of the form.
 }
 
 \examples{
-# All observations part of the RCBIOTABASE collection
-rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample",
-                    info = "nc_example")
+# All observations part of the SAMPLE1 and SAMPLE2 collections
+sample <- nc_data_dl(collections = c("SAMPLE1", "SAMPLE2"),
+                     username = "sample", info = "nc_example")
 
-\donttest{# All observations part of project_id 1042 accessible by "sample"
-p1042 <- nc_data_dl(project_ids = 1042, username = "sample",
+\donttest{# All observations part of project_id 1042 accessible by "testuser"
+p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
                     info = "nc_example")}
 
-# Black-capped chickadees from RCBIOTABASE collection in 2010
+# Black-capped Chickadees (BCCH) in SAMPLE2 collection in 2013
 search_species("black-capped chickadee") # Find the species_id
-bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280, years = 2010,
+bcch <- nc_data_dl(collection = "SAMPLE2", species = 14280, year = 2013,
                    username = "sample", info = "nc_example")
 
-# All bcch observations since 2015 accessible to user "sample"
+# All BCCH observations since 2015 accessible to user "sample"
 bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
                     info = "nc_example")
 
+# All BCCH observations from mid-July to late October in all years for user "sample"
 bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample",
                     info = "nc_example")
 
+# All BCCH observations from a specific bounding box for user "sample"
 bcch <- nc_data_dl(species = 14280, username = "sample",
-                   region = list(bbox = c(left = -145, bottom = 45,
-                                          right = -100, top = 60)),
+                   region = list(bbox = c(left = -100, bottom = 45,
+                                          right = -80, top = 60)),
                     info = "nc_example")
 
-# All moose observations with public access
-search_species("moose")
-moose <- nc_data_dl(species = 133990, username = "sample", info = "nc_example")
+# All American Bittern observations from user "sample"
+search_species("american bittern")
+bittern <- nc_data_dl(species = 2490, username = "sample", info = "nc_example")
 
 # Different fields/columns
-moose <- nc_data_dl(species = 133990, fields_set = "core",
-                    username = "sample", info = "nc_example")
+bittern <- nc_data_dl(species = 2490, fields_set = "core",
+                      username = "sample", info = "nc_example")
 
-moose <- nc_data_dl(species = 133990, fields_set = "custom",
-                    fields = c("Locality", "AllSpeciesReported"),
-                    username = "sample", info = "nc_example")
+bittern <- nc_data_dl(species = 2490, fields_set = "custom",
+                      fields = c("Locality", "AllSpeciesReported"),
+                      username = "sample", info = "nc_example")
 
 \dontrun{
 # All collections by request id

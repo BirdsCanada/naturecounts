@@ -124,15 +124,15 @@ format_dates_db <- function(db, overwrite) {
 #'
 #' @examples
 #' # Download data (with "core" fields to include 'CommonName')
-#' rc <- nc_data_dl(collection = "RCBIOTABASE", fields_set = "core",
-#'                  username = "sample", info = "nc_example")
+#' sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"), fields_set = "core",
+#'                      username = "sample", info = "nc_example")
 #'
 #' # Remove casual observations (i.e. 'AllSpeciesReported' = "No")
 #' library(dplyr) # For filter function
-#' rc <- filter(rc, AllSpeciesReported == "Yes")
+#' sample <- filter(sample, AllSpeciesReported == "Yes")
 #'
 #' # Zero fill by all species present
-#' rc_all_zeros <- format_zero_fill(rc)
+#' sample_all_zeros <- format_zero_fill(sample)
 #'
 #' # Zero fill only for Canada Goose
 #' rc_goose <- format_zero_fill(rc, species = "230")

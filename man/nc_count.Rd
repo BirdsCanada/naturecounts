@@ -165,9 +165,8 @@ nc_count(species = 7590, region = list(statprov = "ON"), username = "sample")
 
 # Count all records available in the Christmas Bird Count and Breeding Bird
 # Survey collections (regardless of user permissions)
-\donttest{
 nc_count(collections = c("CBC", "BBS"), show = "all", username = "sample")
-}
+
 
 }
 \seealso{
