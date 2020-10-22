@@ -9,7 +9,6 @@ test_that("Get permissions for user", {
   expect_silent(p1 <- nc_permissions(username = "testuser"))
   expect_type(p1, "character")
   expect_gt(length(p1), 1)
-  expect_gt(length(p1), length(p))
 })
 
 
@@ -54,7 +53,7 @@ test_that("Counts return permissions", {
                ignore.order = TRUE)
 
   expect_equal(unique(c_sample[["access"]]), "full")
-  expect_equal(unique(c_sample[["akn_level"]]), c(5,0))
+  expect_equal(unique(c_sample[["akn_level"]]), 5)
 
   expect_equal(sort(unique(c_sample_all[["access"]])),
                c("by request", "full", "no access"))

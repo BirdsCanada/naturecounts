@@ -2,7 +2,7 @@ context("Requests")
 
 test_that("nc_requests() shows 'web' requests", {
 
-  expect_silent(r <- nc_requests(username = "sample")) %>%
+  expect_silent(r <- nc_requests(username = "testuser")) %>%
     expect_is("data.frame")
   expect_equal(nrow(r), 0)
 
@@ -15,7 +15,7 @@ test_that("nc_requests() shows 'web' requests", {
 })
 
 test_that("nc_requests() shows 'api' requests", {
-  expect_silent(r <- nc_requests(username = "sample", type = "api")) %>%
+  expect_silent(r <- nc_requests(username = "testuser", type = "api")) %>%
     expect_is("data.frame")
   expect_gt(nrow(r), 5)
   expect_equal(unique(r$requestOrigin), "api")
@@ -30,7 +30,7 @@ test_that("nc_requests() shows 'api' requests", {
 })
 
 test_that("nc_requests() shows 'all' requests", {
-  expect_silent(r <- nc_requests(username = "sample", type = "all")) %>%
+  expect_silent(r <- nc_requests(username = "testuser", type = "all")) %>%
     expect_is("data.frame")
   expect_gt(nrow(r), 5)
   expect_equal(unique(r$requestOrigin), "api")

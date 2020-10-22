@@ -211,7 +211,7 @@ test_that("db_insert adds new cols as required", {
 
 test_that("Data download to sql", {
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,
-                                 username = "sample", info = "nc_test",
+                                 username = "testuser", info = "nc_test",
                                  sql_db = "test"))
 
   expect_true(file.exists("./test.nc"))
