@@ -249,7 +249,7 @@ test_that("format_zero_fill() extra events columns", {
   # But the rest is the same
   expect_true(all.equal(b1, dplyr::select(b2, names(b1))))
 
-  # Doesn't add non-existin columns
+  # Doesn't add non-existing columns
   expect_error(format_zero_fill(test_rc, extra_event = "test"),
                "Some 'extra_event' are not in the data")
 
