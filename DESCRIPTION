@@ -16,7 +16,7 @@ Depends:
 Imports: 
     askpass (>= 1.1),
     DBI (>= 1.0.0),
-    dbplyr (>= 1.4.4)
+    dbplyr (>= 1.4.4),
     dplyr (>= 0.7.8),
     httr (>= 1.4.0),
     jsonlite (>= 1.6),
