@@ -111,10 +111,13 @@ collections_check <- function(c, token = NULL) {
     dplyr::pull("collection")
 
   if(!is.null(token)) {
-    c1 <- nc_requests_internal(token = token) %>%
-      dplyr::pull("collection") %>%
-      append(c1) %>%
-      unique()
+    c_req <- nc_requests_internal(token = token)
+    if(!is.null(c_req)) {
+      c1 <- c_req %>%
+        dplyr::pull("collection") %>%
+        append(c1) %>%
+        unique()
+    }
   }
   c1 <- c[!c %in% c1]
 
