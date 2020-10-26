@@ -2,3 +2,5 @@
 
 language: R
 cache: packages
+before_install:
+  - sudo apt-get -y install libudunits2-dev
