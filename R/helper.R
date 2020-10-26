@@ -291,8 +291,8 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                 "associated with the '", by, "' column")
       }
     }
-    extra_event <- dplyr::select(df, by,
-                                 tidyselect::all_of(extra_keep)) %>%
+    extra_event <- dplyr::select(df,
+                                 tidyselect::all_of(c(by, extra_keep))) %>%
       dplyr::distinct()
   }
 
