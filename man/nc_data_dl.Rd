@@ -198,7 +198,7 @@ bcch <- nc_data_dl(collection = "SAMPLE2", species = 14280, year = 2013,
                    username = "sample", info = "nc_example")
 
 # All BCCH observations since 2015 accessible to user "sample"
-bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
+bcch <- nc_data_dl(species = 14280, years = c(2013, NA), username = "sample",
                     info = "nc_example")
 
 # All BCCH observations from mid-July to late October in all years for user "sample"
