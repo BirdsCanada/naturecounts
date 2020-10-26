@@ -71,26 +71,29 @@ sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"), fields_set = "core",
 library(dplyr) # For filter function
 sample <- filter(sample, AllSpeciesReported == "Yes")
 
+# Remove data with "X" ObservationCount (only keep numeric obs)
+sample <- filter(sample, ObservationCount != "X")
+
 # Zero fill by all species present
 sample_all_zeros <- format_zero_fill(sample)
 
 # Zero fill only for Canada Goose
-rc_goose <- format_zero_fill(rc, species = "230")
+goose <- format_zero_fill(sample, species = "230")
 
 # Keep species-specific variables
-rc_goose <- format_zero_fill(rc, species = "230", extra_species = "CommonName")
+goose <- format_zero_fill(sample, species = "230", extra_species = "CommonName")
 
 # Keep sampling-event-specific variables
-rc_coords <- format_zero_fill(rc, extra_event = c("latitude", "longitude"))
+coords <- format_zero_fill(sample, extra_event = c("latitude", "longitude"))
 
 # By species, keeping extra species variables and event variables
-rc_goose_coords <- format_zero_fill(rc, species = "230",
-                                    extra_species = "CommonName",
-                                    extra_event = c("latitude", "longitude"))
+goose_coords <- format_zero_fill(sample, species = "230",
+                                 extra_species = "CommonName",
+                                 extra_event = c("latitude", "longitude"))
 
 # Only return event information
-rc_events <- format_zero_fill(rc, fill = NA,
-                              extra_event = c("latitude", "longitude"))
+events <- format_zero_fill(sample, fill = NA,
+                           extra_event = c("latitude", "longitude"))
 
 
 }
