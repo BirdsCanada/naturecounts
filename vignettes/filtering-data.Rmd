@@ -16,6 +16,10 @@ For each example, we will show case how to filter your data either directly down
 
 First let's get a collection of chickadee data to use. We'll collect all public data on Carolina, black-capped and mountain chickadees (see the [vignette on species codes](species-codes.html)) for more information on how to find species codes).
 
+> The following examples use the "testuser" user which is not available to you. 
+> You can quickly [sign up for a free account](https://www.birdscanada.org/birdmon/default/register.jsp)
+> of your own to access and play around with these examples. 
+
 ## Setup
 
 **Packages**
@@ -29,14 +33,14 @@ library(lubridate)
 **Downloading data directly to a Data Frame**
 ```{r}
 chickadee_df <- nc_data_dl(species = c(14270, 14280, 14290), verbose = FALSE,
-                           username = "sample", info = "nc_vignette")
+                           username = "testuser", info = "nc_vignette")
 ```
 
 **Downloading data to a SQLite DataBase (`chickadee.nc`)**
 ```{r, echo = -1}
 if(file.exists("chickadee.nc")) file.remove("chickadee.nc")
 con <- nc_data_dl(species = c(14270, 14280, 14290), sql_db = "chickadee", 
-                  verbose = FALSE, username = "sample", info = "nc_vignette")
+                  verbose = FALSE, username = "testuser", info = "nc_vignette")
 chickadee_db <- tbl(con, "naturecounts")
 ```
 

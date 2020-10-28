@@ -6,6 +6,10 @@ output: rmarkdown::html_vignette
 
 In this article we'll walk through how to create various types of maps of the observations downloaded with `naturecounts` to get a sense of the spatial distribution.
 
+> The following examples use the "testuser" user which is not available to you. 
+> You can quickly [sign up for a free account](https://www.birdscanada.org/birdmon/default/register.jsp)
+> of your own to access and play around with these examples. 
+
 ## Setup
 
 To do so we're going to use the following packages:
@@ -23,7 +27,7 @@ First we'll use download some data:
 
 ```{r}
 barred_owls <- nc_data_dl(species = 7590, region = list(statprov = "AB"), 
-                          username = "sample")
+                          username = "testuser")
 head(barred_owls)
 ```
 
@@ -207,7 +211,7 @@ We can also use some of the `naturecounts` helper functions to create presence/a
 Here we download data from the `RCBIOTABASE` collection, make sure to keep only observations where all species and the location were reported, create a new `presence` column which is either TRUE, FALSE, or NA. Finally we use the `format_zero_fill()` function to fill in sampling events where cardinals (`species_id` 19360) were not detected (presence would then be 0).
 
 ```{r}
-cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "sample") %>%
+cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "testuser") %>%
   filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) %>%
   mutate(presence = as.numeric(ObservationCount) > 0) %>%
   format_zero_fill(species = 19360,

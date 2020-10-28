@@ -95,22 +95,24 @@ The `status` field/column shows which requests have been `approved`, are `pendin
 Data to which you have full access can be directly downloaded via the `nc_data_dl()` function.
 
 ```{r, eval = FALSE}
-moose <- nc_data_dl(species = 133990, username = "sample", info = "nc_example")
+bittern <- nc_data_dl(species = 2490, username = "sample", info = "nc_example")
 ```
 
 Note that `request_id`s are created for `web` requests (above) and are also created for `api` requests: data downloaded via the `nc_data_dl()` function if a `request_id` was not provided.
 
+> The following examples use the "testuser" user which is not available to you. 
+> You can quickly [sign up for a free account](https://www.birdscanada.org/birdmon/default/register.jsp)
+> of your own to access and play around with these examples. 
+
 For example, the previous download created an `api` `request_id`. To see `request_id`s created through this R package, use the argument `type = "api"` in `nc_requests()`.
 ```{r}
-nc_requests(username = "sample", type = "api")[1,]
+nc_requests(username = "testuser", type = "api")[1,]
 ```
 
 This data can be re-downloaded (more quickly) by using this stored `request_id`.
 ```{r, eval = FALSE}
-moose <- nc_data_dl(request_id = 152446, username = "sample")
+old <- nc_data_dl(request_id = 185663, username = "testuser")
 ```
-
-Note that the "sample" user account no longer stores api requests, but you can still recover old requests as examples.
 
 ## How Do I Download Specially Requested Data?
 

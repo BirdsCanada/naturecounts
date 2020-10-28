@@ -12,6 +12,11 @@ After downloading population data, many analyses require that you have records n
 
 To make things simpler, we have included the `format_zero_fill()` function.
 
+> The following examples use the "testuser" user which is not available to you. 
+> You can quickly [sign up for a free account](https://www.birdscanada.org/birdmon/default/register.jsp)
+> of your own to access and play around with these examples. 
+
+
 ## Setup
 
 ### Packages
@@ -29,7 +34,7 @@ We'll use the 'core' version of BMDE fields so that we include `CommonName` for 
 ```{r, results = "asis"}
 rc <- nc_data_dl(collections = "RCBIOTABASE", fields_set = "core",
                  species = c(252456, 252494, 252491),
-                 username = "sample", info = "nc_vignette")
+                 username = "testuser", info = "nc_vignette")
 
 ```
 
