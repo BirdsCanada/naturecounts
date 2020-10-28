@@ -3,7 +3,7 @@ title: "Region Codes"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{"Region Codes"}
+  %\VignetteIndexEntry{Region Codes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -3,7 +3,7 @@ title: "Filtering data after download"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{"Filtering data after download"}
+  %\VignetteIndexEntry{Filtering data after download}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -32,16 +32,16 @@ library(lubridate)
 
 **Downloading data directly to a Data Frame**
 ```{r}
-chickadee_df <- nc_data_dl(species = c(14270, 14280, 14290), verbose = FALSE,
-                           username = "testuser", info = "nc_vignette")
+boreal_chickadee_df <- nc_data_dl(species = 14320, collection = "BBS", verbose = FALSE,
+                                  username = "testuser", info = "nc_vignette")
 ```
 
 **Downloading data to a SQLite DataBase (`chickadee.nc`)**
 ```{r, echo = -1}
-if(file.exists("chickadee.nc")) file.remove("chickadee.nc")
-con <- nc_data_dl(species = c(14270, 14280, 14290), sql_db = "chickadee", 
+unlink("boreal_chickadee.nc")
+con <- nc_data_dl(species = 14320, collection = "BBS", sql_db = "boreal_chickadee", 
                   verbose = FALSE, username = "testuser", info = "nc_vignette")
-chickadee_db <- tbl(con, "naturecounts")
+boreal_chickadee_db <- tbl(con, "naturecounts")
 ```
 
 ```{r, include = FALSE}
@@ -50,21 +50,21 @@ DBI::dbDisconnect(con)
 
 Or, if starting a new session with an existing SQLite database, first create the connection to the database
 ```{r}
-con <- DBI::dbConnect(RSQLite::SQLite(), dbname = "chickadee.nc")
-chickadee_db <- tbl(con, "naturecounts")
+con <- DBI::dbConnect(RSQLite::SQLite(), dbname = "boreal_chickadee.nc")
+boreal_chickadee_db <- tbl(con, "naturecounts")
 ```
 
 When using a database, you can choose to `collect()` your data into a data frame (in which case it will be identical to `chickadee_df`, but if your database is large, it will be faster to leave it as a database as long as possible.
 
 ```{r}
-chickadee_df <- collect(chickadee_db)
+boreal_chickadee_df <- collect(boreal_chickadee_db)
 ```
 
 We will also use a helper function to add columns for `date` and `doy` (day of year) to our data.
 
 For data frames, you directly modify the data frame object.
 ```{r}
-chickadee_df <- format_dates(chickadee_df)
+boreal_chickadee_df <- format_dates(boreal_chickadee_df, overwrite = TRUE)
 ```
 
 For databases, you'll modify the connection, then update your table reference.
@@ -73,14 +73,14 @@ For databases, you'll modify the connection, then update your table reference.
 
 ```{r}
 con <- format_dates(con)
-chickadee_db <- tbl(con, "naturecounts")
+boreal_chickadee_db <- tbl(con, "naturecounts")
 ```
 
 
-The warning reflects dates that were not valid. In this case, they were missing `survey_month` and `survey_day`.
+Not all dates can be created if `survey_year`, `survey_month` or `survey_day` are missing.
 
 ```{r}
-filter(chickadee_df, is.na(date)) %>%
+filter(boreal_chickadee_df, is.na(date)) %>%
   select(survey_year, survey_month, survey_day, date)
 ```
 
@@ -100,20 +100,20 @@ These steps work for categories such as `collection`, `species`, `survey_year`, 
 - `pull()` grabs the column of interest, `unique()` returns only unique values.
 
 ```{r}
-chickadee_db %>%
+boreal_chickadee_db %>%
   select(collection) %>%
   distinct()
 ```
 
 2a) Filter the categories you wish to keep
 ```{r}
-alberta_atlas <- filter(chickadee_db, 
+alberta_atlas <- filter(boreal_chickadee_db, 
                         collection %in% c("ABATLAS1", "ABATLAS2"))
 ```
 
 2b) Filter the categories you wish to exclude with `!`
 ```{r}
-alberta_atlas <- filter(chickadee_db, 
+alberta_atlas <- filter(boreal_chickadee_db, 
                         !collection %in% c("ABBIRDRECS", "RCBIOTABASE"))
 ```
 
@@ -138,7 +138,7 @@ These steps work for categories such as `survey_year`, `survey_month`, `survey_d
 - `pull()` grabs the column of interest, `summary()` returns a numerical summary of the values.
 
 ```{r}
-chickadee_db %>%
+boreal_chickadee_db %>%
   select(survey_year) %>%
   summarize(min = min(survey_year, na.rm = TRUE), 
             max = max(survey_year, na.rm = TRUE))
@@ -146,17 +146,17 @@ chickadee_db %>%
 
 2a) Filter the variable to the range you wish to keep (note that the `,` is an implied `&`)
 ```{r}
-recent <- filter(chickadee_db, survey_year >= 2015)
+recent <- filter(boreal_chickadee_db, survey_year >= 2015)
 ```
 
 2b) Filter the variable to the range you wish to exclude with `!` (note that here we need to use the `&` explicitly)
 ```{r}
-recent <- filter(chickadee_db, !(survey_year > 1960 & survey_year < 2015))
+recent <- filter(boreal_chickadee_db, !(survey_year > 1960 & survey_year < 2015))
 ```
 
 3. Confirm
 ```{r}
-chickadee_db %>%
+recent %>%
   select(survey_year) %>%
   summarize(min = min(survey_year, na.rm = TRUE), 
             max = max(survey_year, na.rm = TRUE))
@@ -170,7 +170,7 @@ Filtering by dates is usually slightly more complex, but fortunately, the `filte
 - `pull()` grabs the column of interest, `summary()` returns a summary of the values.
 
 ```{r}
-chickadee_db %>%
+boreal_chickadee_db %>%
   select(date) %>%
   summarize(min = min(date, na.rm = TRUE), 
             max = max(date, na.rm = TRUE))
@@ -178,12 +178,12 @@ chickadee_db %>%
 
 2a) Filter the variable to the range you wish to keep (note that the `,` is an implied `&`)
 ```{r}
-field_season <- filter(chickadee_db, date >= "2010-05-10", date <= "2010-09-21")
+field_season <- filter(boreal_chickadee_db, date >= "2010-05-10", date <= "2010-09-21")
 ```
 
 2b) Filter the variable to the range you wish to exclude with `!` (note that here we need to use the `&` explicitly)
 ```{r}
-omit_field_season <- filter(chickadee_db, !(date >= "2010-05-10" & date <= "2010-09-21"))
+omit_field_season <- filter(boreal_chickadee_db, !(date >= "2010-05-10" & date <= "2010-09-21"))
 ```
 
 3. Confirm
@@ -195,6 +195,6 @@ field_season %>%
 ```
 
 ```{r, include = FALSE}
-file.remove("chickadee.nc")
+unlink("boreal_chickadee.nc")
 ```
 

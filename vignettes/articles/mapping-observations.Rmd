@@ -27,7 +27,7 @@ First we'll use download some data:
 
 ```{r}
 barred_owls <- nc_data_dl(species = 7590, region = list(statprov = "AB"), 
-                          username = "testuser")
+                          username = "testuser", info = "nc_tutorial")
 head(barred_owls)
 ```
 
@@ -76,7 +76,7 @@ ggmap(map) +
 
 ## Interactive Maps
 If we want to get fancy we can also create interactive maps using the `mapview` packages (see also the [`leaflet` for R package](https://rstudio.github.io/leaflet/)).
-```{r}
+```{r, eval = FALSE}
 mapview(barred_owls_sf, zcol = "survey_year", at = seq(1965, 2005, by = 10),
         map.types = "Esri.WorldImagery")
 ```
@@ -187,7 +187,7 @@ We'll also want to see how many sample years there are per decade.
 ```{r}
 years <- barred_owls_sf %>%
   group_by(years) %>%
-  summarize(n = length(unique(survey_year)))
+  summarize(n = length(unique(survey_year)), .groups = "drop")
 ```
 
 
@@ -208,26 +208,32 @@ ggplot() +
 
 We can also use some of the `naturecounts` helper functions to create presence/absence maps. 
 
-Here we download data from the `RCBIOTABASE` collection, make sure to keep only observations where all species and the location were reported, create a new `presence` column which is either TRUE, FALSE, or NA. Finally we use the `format_zero_fill()` function to fill in sampling events where cardinals (`species_id` 19360) were not detected (presence would then be 0).
+Here we download data from the `RCBIOTABASE` collection, make sure to keep only observations where all species and the location were reported, create a new `presence` column which is either TRUE, FALSE, or NA for each sampling event. Finally we use the `format_zero_fill()` function to fill in sampling events where cardinals (`species_id` 19360) were not detected (presence would then be 0).
 
 ```{r}
-cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "testuser") %>%
+cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "testuser", 
+                        info = "nc_tutorial")
+
+cardinals_zf <- cardinals %>%
   filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) %>%
-  mutate(presence = as.numeric(ObservationCount) > 0) %>%
+  group_by(species_id, AllSpeciesReported, SamplingEventIdentifier, latitude, longitude) %>%
+  summarize(presence = sum(as.numeric(ObservationCount)) > 0, .groups = "drop") %>%
   format_zero_fill(species = 19360,
-                   by = c("SamplingEventIdentifier", "latitude", "longitude"),
+                   by = "SamplingEventIdentifier",
+                   extra_event = c("latitude", "longitude"),
                    fill = "presence")
 
-head(cardinals)
+head(cardinals_zf)
 ```
 
 Now that we have our presence/absence data for cardinals, we can create a map.
 ```{r}
-cardinals_sf <- st_as_sf(cardinals, coords = c("longitude", "latitude"))
+map <- st_as_sf(cardinals_zf, coords = c("longitude", "latitude")) %>%
+  st_bbox() %>%
+  as.numeric() %>%
+  get_stamenmap(bbox = ., zoom = 8)
 
-map <- get_stamenmap(bbox = as.numeric(st_bbox(cardinals_sf)), zoom = 8)
-
-ggmap(map, base_layer = ggplot(data = cardinals)) +
+ggmap(map, base_layer = ggplot(data = cardinals_zf)) +
   geom_count(alpha = 0.75,
              aes(x = longitude, y = latitude, colour = factor(presence))) +
   scale_colour_manual(name = "Presence/Absence", values = c("yellow", "purple"), 

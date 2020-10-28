@@ -3,7 +3,7 @@ title: "Zero-filling data"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{"Zero-filling data"}
+  %\VignetteIndexEntry{Zero-filling data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -125,7 +125,8 @@ To keep other columns associated with the sampling event, specify them, in addit
 
 ```{r}
 rc_filled <- format_zero_fill(rc_all_species, 
-                              by = c("SamplingEventIdentifier", "latitude", "longitude"),
+                              by = "SamplingEventIdentifier",
+                              extra_event = c("latitude", "longitude"),
                               extra_species = c("CommonName", "ScientificName"))
 head(rc_filled)
 ```
@@ -156,6 +157,7 @@ Now if we zero-fill this data set, we get a zero-filled, aggregated dataset.
 rc_sum_filled <- format_zero_fill(rc_sum, by = "utm_square")
 head(rc_sum_filled)
 ```
+
 
 ## Filling specific species
 Up to now in these examples we've been filling all the species present in the data, but often you might be only interested in one or two species. We can specify which species with the `species` argument.
