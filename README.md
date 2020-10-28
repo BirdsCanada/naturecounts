@@ -17,6 +17,9 @@ Access and download data on plant and animal populations from various
 databases through NatureCounts, a service managed by Bird Studies
 Canada.
 
+See tutorials, documentation and articles on the [naturecounts package
+Website](https://birdstudiescanada.github.io/naturecounts)
+
 ## Installation
 
 You can install this developmental version of `naturecounts` from GitHub
