@@ -40,7 +40,7 @@
 #'                    username = "sample", info = "nc_example")
 #'
 #' # All BCCH observations since 2015 accessible to user "sample"
-#' bcch <- nc_data_dl(species = 14280, years = c(2013, NA), username = "sample",
+#' bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
 #'                     info = "nc_example")
 #'
 #' # All BCCH observations from mid-July to late October in all years for user "sample"
@@ -106,6 +106,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
     }
 
     requests <- nc_requests_internal(request_id, token)
+    if(is.null(requests)) stop("No valid requests for this id and this user", call. = FALSE)
 
     if(!is.null(collections)) {
       if(any(!collections %in% requests$collection)) {
@@ -127,6 +128,11 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
                           years = years, doy = doy, region = region,
                           site_type = site_type,
                           fields_set = fields_set, fields = fields)
+
+  # For sample user
+  if(username == "sample" && is.null(collections)) {
+    filter$collections <- c("SAMPLE1", "SAMPLE2")
+  }
 
   # Get available records
   if(verbose) message("Collecting available records...")
@@ -407,6 +413,11 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                           collections = collections, species = species,
                           years = years, doy = doy, region = region,
                           site_type = site_type)
+
+  # For sample user
+  if(!is.null(username) && username == "sample" && is.null(collections)) {
+    filter$collections <- c("SAMPLE1", "SAMPLE2")
+  }
 
   # Get counts
   cnts <- nc_count_internal(filter, timeout, token)[['results']]
