@@ -40,6 +40,18 @@ system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")
 ## Build site (so website uses newest version)
 ## BUILD PACKAGE FIRST
 pkgdown::build_site(lazy = TRUE)
+pkgdown::build_home()
+pkgdown::build_reference()
+pkgdown::build_news()
+
+pkgdown::build_article("species-codes")
+pkgdown::build_article("format-zero-fill")
+pkgdown::build_article("selecting-fields")
+pkgdown::build_article("filtering-data")
+pkgdown::build_article("data-access")
+pkgdown::build_article("region-codes")
+pkgdown::build_article("region-areas")
+
 ## Push to github
 
 ## Actually release it, create signed release on github
