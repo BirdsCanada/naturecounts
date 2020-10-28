@@ -32,4 +32,8 @@ Function           | API Entry Point           | Required fields            | Ex
   - Missing fields **will** the code, but at least they will break the code early!
   - Do **not** do this for data downloads (i.e. `nc_single_dl()` under `nc_data_dl()`) or metadata downloads (i.e. `meta_XXX()`)
   - **Unless**, using a `meta_XXX()` download internally. Then always `select()` the fields required
-  
+
+## Testing
+- Tests are run using the user "testuser"
+  - Locally password can be stored in .Renviron as naturecounts_testuser = PASSWORD
+  - For remote testing, password is supplied as encrypted values
