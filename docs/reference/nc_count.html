@@ -8,21 +8,29 @@
 
 <title>Download information about NatureCounts collections — nc_count • naturecounts</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,13 +40,13 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Download information about NatureCounts collections — nc_count" />
 
+<meta property="og:title" content="Download information about NatureCounts collections — nc_count" />
 <meta property="og:description" content="Download the number of records available for different collections filtered
 by location (if provided). If authorization is provided, the collections are
-filtered to only those available to the user. Otherwise all collections are
-returned." />
-<meta name="twitter:card" content="summary" />
+filtered to only those available to the user (unless using show = &quot;all&quot;).
+Without authorization all collections are returned." />
+
 
 
 
@@ -52,9 +60,10 @@ returned." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -68,7 +77,7 @@ returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.1.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
       </span>
     </div>
 
@@ -90,7 +99,6 @@ returned." />
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/BirdStudiesCanada/naturecounts">
@@ -105,6 +113,7 @@ returned." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -116,19 +125,26 @@ returned." />
     </div>
 
     <div class="ref-description">
-    
     <p>Download the number of records available for different collections filtered
 by location (if provided). If authorization is provided, the collections are
-filtered to only those available to the user. Otherwise all collections are
-returned.</p>
-    
+filtered to only those available to the user (unless using <code>show = "all"</code>).
+Without authorization all collections are returned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>nc_count</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>project_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>years</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>doy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>site_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>show</span> <span class='kw'>=</span> <span class='st'>"available"</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>30</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>nc_count</span><span class='op'>(</span>
+  collections <span class='op'>=</span> <span class='cn'>NULL</span>,
+  project_ids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  species <span class='op'>=</span> <span class='cn'>NULL</span>,
+  years <span class='op'>=</span> <span class='cn'>NULL</span>,
+  doy <span class='op'>=</span> <span class='cn'>NULL</span>,
+  region <span class='op'>=</span> <span class='cn'>NULL</span>,
+  site_type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  show <span class='op'>=</span> <span class='st'>"available"</span>,
+  username <span class='op'>=</span> <span class='cn'>NULL</span>,
+  timeout <span class='op'>=</span> <span class='fl'>120</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -192,204 +208,303 @@ times out.</p></td>
       <td><p>Logical. Show messages?</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Data frame</p>
-    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The <code>akn_level</code> column describes the level of data access for that collection
+(see <a href='https://sandbox.birdscanada.org/birdmon/default/nc_access_levels.jsp'>descriptions online</a>).
+The <code>access</code> column describes the accessibility of a collection for a given
+username (or no access if no username supplied). See the section on Access
+and <code>request_id</code>s for more details.</p>
     <h2 class="hasAnchor" id="naturecounts-account"><a class="anchor" href="#naturecounts-account"></a>NatureCounts account</h2>
 
     
-    <p>All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must <a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a> for a free
-NatureCounts account and
-<a href='https://www.birdscanada.org/birdmon/default/projects.jsp'>register</a> for
-the projects you'd like to access. See the <code>request_id</code> section for more
-information.</p>
-    
+
+<p>All public data is available with a username/password
+(<a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a>
+for a free NatureCounts account). However, to access private/semi-public
+projects/collections you must request access. See the Access and
+<code>request_id</code>s section for more information.</p>
     <h2 class="hasAnchor" id="species-ids-species-"><a class="anchor" href="#species-ids-species-"></a>Species ids (<code>species</code>)</h2>
 
     
-    <p>Numeric species id codes can determined from the functions
-<code><a href='search_species.html'>search_species()</a></code> or <code><a href='search_species_code.html'>search_species_code()</a></code>. See
-also the <a href='https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html'>species codes</a>
+
+<p>Numeric species id codes can determined from the functions
+<code><a href='search_species.html'>search_species()</a></code> or <code><a href='search_species_code.html'>search_species_code()</a></code>. See also the article on
+<a href='https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html'>species codes</a>
 for more information.</p>
-    
     <h2 class="hasAnchor" id="day-of-year-doy-"><a class="anchor" href="#day-of-year-doy-"></a>Day of Year (<code>doy</code>)</h2>
 
     
-    <p>The format for day of year (<code>doy</code>) is fairly flexible and can be a whole
+
+<p>The format for day of year (<code>doy</code>) is fairly flexible and can be a whole
 number between 1 and 366 or anything recognized by
 <code><a href='http://lubridate.tidyverse.org/reference/lubridate-package.html'>lubridate-package</a></code>'s <code><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a>()</code>
 function. However, it must have the order of year, month, day. Note that
 year is ignored when converting to day of year, except that it will result
 in a 1 day offset for leap years.</p>
-    
     <h2 class="hasAnchor" id="regions-region-"><a class="anchor" href="#regions-region-"></a>Regions (<code>region</code>)</h2>
 
     
-    <p>Regions are defined by codes reflecting the country, state/province,
+
+<p>Regions are defined by codes reflecting the country, state/province,
 subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 Regions (BCR) (see <code><a href='search_region.html'>search_region()</a></code> for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifies the min/max longitude and min/max latitude (<code>bbox</code>). See the
 article on <a href='http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html'>regional filters</a>
 for more information.</p>
+    <h2 class="hasAnchor" id="access-and-request-ids"><a class="anchor" href="#access-and-request-ids"></a>Access and <code>request_id</code>s</h2>
+
     
+
+
+<p>Access to a data collection is either available as "full" or "by request".
+Use <code>nc_count(username = "USER", show = "all")</code>, to see the accessibility of
+collections.</p>
+<p>"Full" access means that data can be immediately requested directly through
+the <code>naturecounts</code> R package. "By request" means that a request must be
+<a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>submitted online</a> and
+approved before the data can be downloaded through <code>naturecounts</code>.</p>
+<p>This means that there are two types of data requests: ones made through this
+<code>naturecounts</code> R package (API requests) and those made through the online
+<a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> (Web
+requests). Every request (from either method) generates a <code>request_id</code> which
+identifies the filter set and collections requested. Details of all of
+requests can be reviewed with the <code><a href='nc_requests.html'>nc_requests()</a></code> function.</p>
+<p>To download data with "full" access, users can either specify filters, or if
+they are repeating a download, can use the <code>request_id</code> from <code><a href='nc_requests.html'>nc_requests()</a></code>.</p>
+<p>Otherwise, if the user doesn't have "full" access, they must supply an
+approved <code>request_id</code> to the <code><a href='nc_data_dl.html'>nc_data_dl()</a></code> function (e.g.,
+<code><a href='nc_data_dl.html'>nc_data_dl(request_id = 152000, username = "USER")</a></code>). Use <code><a href='nc_requests.html'>nc_requests()</a></code> to
+see <code>request_id</code>s, filters, and approval status.</p>
+<p>Requests for "full" access to additional collections can be made online
+through the <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> by
+checking the "Full access?" box in Step 2 of the form.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='nc_requests.html'>nc_requests()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-# Count all publicly available records:
-</div><div class='input'><span class='fu'>nc_count</span>()</div><div class='output co'>#&gt; <span class='message'>Without a username, using 'show = "all"'</span></div><div class='output co'>#&gt;                collection nrecords
-#&gt; 1                ABATLAS1   123364
-#&gt; 2                ABATLAS2   201398
-#&gt; 3              ABBIRDRECS   357264
-#&gt; 4                  ATOWLS      367
-#&gt; 5                     BBS  5735895
-#&gt; 6               BBS50-CAN  3219534
-#&gt; 7           BBS50-US-EAST  8067776
-#&gt; 8           BBS50-US-WEST  8701116
-#&gt; 9           BCATLAS1BE_DO    41412
-#&gt; 10         BCATLAS1BE_RAW   344433
-#&gt; 11        BCATLAS1BE_SUMM   165485
-#&gt; 12             BCATLAS1PC   260647
-#&gt; 13             BCATLAS1RC    21884
-#&gt; 14                BCBEACH     7263
-#&gt; 15                  BCCWS   346475
-#&gt; 16                   BCMA    11291
-#&gt; 17                 BCOWLS    27149
-#&gt; 18                  BGRMM      476
-#&gt; 19              BIRDSOFBC   498444
-#&gt; 20                    CBC  7570427
-#&gt; 21         CMMN-BAND-LPBO  1168735
-#&gt; 22           CMMN-DET-ABO    85569
-#&gt; 23          CMMN-DET-ACBO    28386
-#&gt; 24           CMMN-DET-BBO    72759
-#&gt; 25          CMMN-DET-BPBO    88397
-#&gt; 26          CMMN-DET-DMBO    88280
-#&gt; 27           CMMN-DET-HBO   271674
-#&gt; 28           CMMN-DET-IBS    29736
-#&gt; 29          CMMN-DET-IPBO    49741
-#&gt; 30          CMMN-DET-LMBO    57432
-#&gt; 31          CMMN-DET-LPBO  1073798
-#&gt; 32         CMMN-DET-LSLBO   114040
-#&gt; 33          CMMN-DET-MGBO    80063
-#&gt; 34          CMMN-DET-MIBO    10804
-#&gt; 35           CMMN-DET-MNO    69732
-#&gt; 36           CMMN-DET-OOT   106146
-#&gt; 37         CMMN-DET-PEPBO   131973
-#&gt; 38          CMMN-DET-PIBO   116763
-#&gt; 39          CMMN-DET-RPBO   131972
-#&gt; 40          CMMN-DET-TCBO   136565
-#&gt; 41         CMMN-DET-TLBBS    28037
-#&gt; 42          CMMN-DET-TLBO    29722
-#&gt; 43        CMMN-DET-TTPBRS    97635
-#&gt; 44          CMMN-DET-VLBO    52723
-#&gt; 45          CMMN-DET-WPBO    63251
-#&gt; 46         CMMN-LPBO-MOBU     2863
-#&gt; 47            EBIRD-CA-AT  3901226
-#&gt; 48            EBIRD-CA-BC 11218063
-#&gt; 49            EBIRD-CA-NO   753993
-#&gt; 50            EBIRD-CA-ON 20104013
-#&gt; 51            EBIRD-CA-PR  5898226
-#&gt; 52            EBIRD-CA-QC 15818301
-#&gt; 53          EBIRD-CA-SENS    26678
-#&gt; 54             EBUTTERFLY    26192
-#&gt; 55                   GBBC   431613
-#&gt; 56              HAWKCOUNT   112673
-#&gt; 57                   IMMP       43
-#&gt; 58                IMMP_A2       24
-#&gt; 59                IMMP_BW       19
-#&gt; 60                   IMQC      761
-#&gt; 61          MBATLAS1BE_DO    93876
-#&gt; 62         MBATLAS1BE_RAW   326429
-#&gt; 63        MBATLAS1BE_SUMM   154856
-#&gt; 64             MBATLAS1PC   306094
-#&gt; 65             MBATLAS1RC    15622
-#&gt; 66            MBBA1BE_RAW   142920
-#&gt; 67           MBBA1BE_SUMM    93053
-#&gt; 68            MBBA2BE_RAW   263809
-#&gt; 69           MBBA2BE_SUMM   114616
-#&gt; 70                MBBA2PC   127447
-#&gt; 71            MBBA2PC_SAR       13
-#&gt; 72                MBBA2RC    14213
-#&gt; 73                 MBOWLS    23561
-#&gt; 74                   MEXU     3251
-#&gt; 75                   MLMP      802
-#&gt; 76                     MM     4343
-#&gt; 77               MMPBIRDS   425826
-#&gt; 78               MMPFROGS    88438
-#&gt; 79           MONARCHWATCH   145665
-#&gt; 80            Naturalista       30
-#&gt; 81              NESTWATCH   413415
-#&gt; 82            OBBA1BE_RAW   407287
-#&gt; 83           OBBA1BE_SUMM   205816
-#&gt; 84            OBBA2BE_RAW   541743
-#&gt; 85           OBBA2BE_SUMM   256702
-#&gt; 86                OBBA2PC   592425
-#&gt; 87            OBBA2PC_SAR       31
-#&gt; 88                OBBA2RC    27970
-#&gt; 89                   OBFS   324560
-#&gt; 90              OISEAUXQC   666963
-#&gt; 91                 ONOWLS    40449
-#&gt; 92                    PFW  3841194
-#&gt; 93            PFW-US-EAST  8651432
-#&gt; 94            PFW-US-WEST  5631851
-#&gt; 95                   PMMM        5
-#&gt; 96             PRISM-ACSS   117227
-#&gt; 97              PRISM-OSS    47542
-#&gt; 98              PRISM-PSS     3305
-#&gt; 99    QCATLAS_NORTH_BE_DO    19747
-#&gt; 100  QCATLAS_NORTH_BE_RAW    35599
-#&gt; 101 QCATLAS_NORTH_BE_SUMM    23601
-#&gt; 102      QCATLAS_NORTH_PC    21579
-#&gt; 103        QCATLAS1BE_RAW   198816
-#&gt; 104       QCATLAS1BE_SUMM   136333
-#&gt; 105         QCATLAS2BE_DO   283034
-#&gt; 106        QCATLAS2BE_RAW   601540
-#&gt; 107       QCATLAS2BE_SUMM   231775
-#&gt; 108            QCATLAS2PC   341902
-#&gt; 109            QCATLAS2RC    39390
-#&gt; 110                QCOWLS    11195
-#&gt; 111           RCBIOTABASE    12598
-#&gt; 112              SAR-RSHA    27696
-#&gt; 113         SKATLAS1BE_DO    99872
-#&gt; 114       SKATLAS1BE_SUMM    42203
-#&gt; 115            SKATLAS1PC    27916
-#&gt; 116            SWIFTWATCH    10624
-#&gt; 117                  WMMM     8981
-#&gt; 118                  WPWI     3012</div><div class='input'>
-# Count publicly available records for Manitoba, Canada
-</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>statprov</span> <span class='kw'>=</span> <span class='st'>"MB"</span>))</div><div class='output co'>#&gt; <span class='message'>Without a username, using 'show = "all"'</span></div><div class='output co'>#&gt; <span class='message'>Using filters: statprov (MB)</span></div><div class='output co'>#&gt;         collection nrecords
-#&gt; 1       ABBIRDRECS      357
-#&gt; 2              BBS    86997
-#&gt; 3        BBS50-CAN   353755
-#&gt; 4              CBC    20507
-#&gt; 5    CMMN-DET-DMBO    88280
-#&gt; 6      EBIRD-CA-PR  1602592
-#&gt; 7    EBIRD-CA-SENS     2471
-#&gt; 8       EBUTTERFLY      225
-#&gt; 9             GBBC    24393
-#&gt; 10       HAWKCOUNT     1446
-#&gt; 11            IMQC       26
-#&gt; 12   MBATLAS1BE_DO    93876
-#&gt; 13  MBATLAS1BE_RAW   326429
-#&gt; 14 MBATLAS1BE_SUMM   154856
-#&gt; 15      MBATLAS1PC   306094
-#&gt; 16      MBATLAS1RC    15622
-#&gt; 17          MBOWLS    23561
-#&gt; 18              MM       53
-#&gt; 19        MMPBIRDS       60
-#&gt; 20    MONARCHWATCH       24
-#&gt; 21       NESTWATCH     4553
-#&gt; 22       OISEAUXQC        2
-#&gt; 23             PFW   110414</div><div class='input'>
-# Count all records for all collections user "sample" has access to
-</div><span class='co'># NOT RUN {</span>
-<span class='fu'>nc_count</span>(<span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)
-<span class='co'># }</span><div class='input'>
+<span class='co'># Count all publicly available records:</span>
+<span class='co'># \donttest{</span>
+<span class='fu'>nc_count</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Without a username, using 'show = "all"'</span></div><div class='output co'>#&gt;                collection akn_level     access nrecords
+#&gt; 1                ABATLAS1         5       full   123364
+#&gt; 2                ABATLAS2         5       full   201398
+#&gt; 3              ABBIRDRECS         5       full   357264
+#&gt; 4                  ABOWLS         4 by request        0
+#&gt; 5                   ATBBS         4 by request        0
+#&gt; 6                  ATOWLS         4 by request    25192
+#&gt; 7                     BBS         5       full  5735895
+#&gt; 8                   BBS50         5       full        0
+#&gt; 9               BBS50-CAN         5       full  4168740
+#&gt; 10              BBS50-MEX         2  no access        0
+#&gt; 11          BBS50-US-EAST         5       full  9940162
+#&gt; 12          BBS50-US-WEST         5       full 10749161
+#&gt; 13          BCATLAS1BE_DO         5       full    41412
+#&gt; 14         BCATLAS1BE_RAW         5       full   344433
+#&gt; 15        BCATLAS1BE_SUMM         5       full   165485
+#&gt; 16             BCATLAS1PC         5       full   260647
+#&gt; 17         BCATLAS1PC_SAR         3 by request        0
+#&gt; 18             BCATLAS1RC         3 by request    21884
+#&gt; 19                BCBEACH         4 by request    10182
+#&gt; 20                  BCCWS         4 by request   353868
+#&gt; 21                   BCMA         5       full    11291
+#&gt; 22                 BCOWLS         4 by request    28577
+#&gt; 23                  BGRMM         5       full      476
+#&gt; 24              BIRDSOFBC         2  no access   498444
+#&gt; 25                    CBC         2  no access  7570427
+#&gt; 26                   CLLS         4 by request        0
+#&gt; 27         CMMN-BAND-LPBO         3 by request  1168735
+#&gt; 28           CMMN-DET-ABO         3 by request    85569
+#&gt; 29          CMMN-DET-ACBO         4 by request    28386
+#&gt; 30          CMMN-DET-ATBP         2  no access        0
+#&gt; 31          CMMN-DET-ATSI         2  no access        0
+#&gt; 32           CMMN-DET-BBO         3 by request    72759
+#&gt; 33        CMMN-DET-BIBMRS         2  no access        0
+#&gt; 34          CMMN-DET-BPBO         3 by request    92639
+#&gt; 35          CMMN-DET-DMBO         2  no access    88280
+#&gt; 36          CMMN-DET-GMNP         2  no access        0
+#&gt; 37           CMMN-DET-HBO         5       full   274872
+#&gt; 38           CMMN-DET-IBS         3 by request    13607
+#&gt; 39          CMMN-DET-IPBO         3 by request    51964
+#&gt; 40          CMMN-DET-LMBO         3 by request    57432
+#&gt; 41          CMMN-DET-LPBO         3 by request  1101083
+#&gt; 42         CMMN-DET-LSLBO         3 by request   114040
+#&gt; 43          CMMN-DET-MGBO         3 by request    94662
+#&gt; 44          CMMN-DET-MIBO         4 by request    12180
+#&gt; 45           CMMN-DET-MNO         3 by request    69732
+#&gt; 46           CMMN-DET-OOT         3 by request   114793
+#&gt; 47         CMMN-DET-PEPBO         3 by request   144454
+#&gt; 48          CMMN-DET-PIBO         3 by request   124846
+#&gt; 49          CMMN-DET-RBMS         2  no access        0
+#&gt; 50          CMMN-DET-ROCK         3 by request        0
+#&gt; 51          CMMN-DET-RPBO         2  no access   144048
+#&gt; 52          CMMN-DET-RUTH         5       full        0
+#&gt; 53         CMMN-DET-SABBS         2  no access        0
+#&gt; 54          CMMN-DET-SELK         5       full        0
+#&gt; 55          CMMN-DET-TCBO         3 by request   136565
+#&gt; 56         CMMN-DET-TLBBS         4 by request    33522
+#&gt; 57          CMMN-DET-TLBO         3 by request    29722
+#&gt; 58        CMMN-DET-TTPBRS         3 by request   112862
+#&gt; 59          CMMN-DET-VLBO         5       full    56287
+#&gt; 60          CMMN-DET-WPBO         2  no access    63251
+#&gt; 61         CMMN-LPBO-MOBU         3 by request     2970
+#&gt; 62         CMMN-PIBO-MOBU         3 by request        0
+#&gt; 63            EBIRD-CA-AT         4 by request  4811070
+#&gt; 64            EBIRD-CA-BC         4 by request 13496087
+#&gt; 65            EBIRD-CA-NO         4 by request   880775
+#&gt; 66            EBIRD-CA-ON         4 by request 24750269
+#&gt; 67            EBIRD-CA-PR         4 by request  7461849
+#&gt; 68            EBIRD-CA-QC         4 by request 19555444
+#&gt; 69          EBIRD-CA-SENS         3 by request    33272
+#&gt; 70             EBUTTERFLY         5       full    26192
+#&gt; 71                   EPOQ         2  no access        0
+#&gt; 72                   GBBC         4 by request   431613
+#&gt; 73                GBHE_BC         3 by request        0
+#&gt; 74              HawkCount         4 by request   112673
+#&gt; 75                   HELP         3 by request        0
+#&gt; 76                   IMMP         5       full       43
+#&gt; 77                IMMP_A2         5       full       24
+#&gt; 78                IMMP_BW         5       full       19
+#&gt; 79                   IMQC         5       full      761
+#&gt; 80            INATURALIST         3 by request        0
+#&gt; 81              LPWCENSUS         2  no access        0
+#&gt; 82          MBATLAS1BE_DO         5       full    93876
+#&gt; 83         MBATLAS1BE_RAW         5       full   326429
+#&gt; 84        MBATLAS1BE_SUMM         5       full   154856
+#&gt; 85             MBATLAS1PC         5       full   306094
+#&gt; 86         MBATLAS1PC_SAR         3 by request        0
+#&gt; 87             MBATLAS1RC         3 by request    15622
+#&gt; 88            MBBA1BE_RAW         5       full   142920
+#&gt; 89           MBBA1BE_SUMM         5       full    93053
+#&gt; 90            MBBA2BE_RAW         5       full   263809
+#&gt; 91           MBBA2BE_SUMM         5       full   114616
+#&gt; 92                MBBA2PC         5       full   127447
+#&gt; 93            MBBA2PC_SAR         3 by request       13
+#&gt; 94                MBBA2RC         3 by request    14213
+#&gt; 95                 MBOWLS         4 by request    16382
+#&gt; 96                   MEXU         5       full     3251
+#&gt; 97                   MLMP         5       full      802
+#&gt; 98                     MM         5       full     4343
+#&gt; 99                   MMMP         3 by request    88737
+#&gt; 100              MMPBIRDS         4 by request   393302
+#&gt; 101              MMPFROGS         4 by request    91700
+#&gt; 102                  MNRS         4 by request        0
+#&gt; 103          MONARCHWATCH         5       full   145665
+#&gt; 104           NATURALISTA         5       full       30
+#&gt; 105                NBFHWS         3 by request        0
+#&gt; 106             NESTWATCH         3 by request   413415
+#&gt; 107   NESTWATCH_ACAMFIELD         3 by request        0
+#&gt; 108     NESTWATCH_KMARTIN         5       full        0
+#&gt; 109  NESTWATCH_TLEUKERING         2  no access        0
+#&gt; 110         NFATLAS1BE_DO         4 by request      243
+#&gt; 111       NFATLAS1BE_SUMM         4 by request      180
+#&gt; 112            NFATLAS1PC         4 by request        0
+#&gt; 113            NFATLAS1RC         4 by request        0
+#&gt; 114        NRCS_ACAMFIELD         3 by request        0
+#&gt; 115          NRCS_KMARTIN         5       full        0
+#&gt; 116           OBBA1BE_RAW         5       full   407287
+#&gt; 117          OBBA1BE_SUMM         5       full   205816
+#&gt; 118           OBBA2BE_RAW         5       full   541743
+#&gt; 119          OBBA2BE_SUMM         5       full   256702
+#&gt; 120               OBBA2PC         5       full   592425
+#&gt; 121           OBBA2PC_SAR         3 by request       31
+#&gt; 122               OBBA2RC         3 by request    27970
+#&gt; 123                  OBFS         5       full   324560
+#&gt; 124                   OHI         4 by request        0
+#&gt; 125             OISEAUXQC         2  no access   666963
+#&gt; 126                ONOWLS         4 by request    34940
+#&gt; 127                  ONRS         4 by request        0
+#&gt; 128                   PFW         5       full  3841194
+#&gt; 129           PFW-US-EAST         4 by request  8651432
+#&gt; 130           PFW-US-WEST         4 by request  5631851
+#&gt; 131                  PMMM         5       full        5
+#&gt; 132                  PNRS         4 by request        0
+#&gt; 133             PPNP-FBMP         4 by request        0
+#&gt; 134             PPNP-MOBU         3 by request        0
+#&gt; 135            PRISM-ACSS         4 by request   123002
+#&gt; 136             PRISM-OSS         4 by request    48139
+#&gt; 137             PRISM-PSS         3 by request     4287
+#&gt; 138   QCATLAS_NORTH_BE_DO         3 by request    20430
+#&gt; 139  QCATLAS_NORTH_BE_RAW         3 by request    39963
+#&gt; 140 QCATLAS_NORTH_BE_SUMM         3 by request    25816
+#&gt; 141      QCATLAS_NORTH_PC         3 by request    24324
+#&gt; 142        QCATLAS1BE_RAW         5       full   198816
+#&gt; 143       QCATLAS1BE_SUMM         5       full   136333
+#&gt; 144         QCATLAS2BE_DO         5       full   283034
+#&gt; 145        QCATLAS2BE_RAW         5       full   601540
+#&gt; 146       QCATLAS2BE_SUMM         5       full   231775
+#&gt; 147            QCATLAS2PC         5       full   341902
+#&gt; 148        QCATLAS2PC_SAR         2  no access        0
+#&gt; 149            QCATLAS2RC         2  no access    39390
+#&gt; 150                 QCBBS         4 by request        0
+#&gt; 151                QCOWLS         4 by request    12820
+#&gt; 152                  QNRS         4 by request        0
+#&gt; 153           RCBIOTABASE         5       full    12614
+#&gt; 154              SAR-ACFL         1  no access       NA
+#&gt; 155         SAR-BAEA-NEST         1  no access       NA
+#&gt; 156        SAR-BAEA-SATEL         1  no access       NA
+#&gt; 157              SAR-BNOW         1  no access       NA
+#&gt; 158              SAR-GWWA         1  no access       NA
+#&gt; 159              SAR-HOWA         1  no access       NA
+#&gt; 160            SAR-NSPIPL         1  no access       NA
+#&gt; 161              SAR-PROW         1  no access       NA
+#&gt; 162              SAR-RSHA         3 by request    27696
+#&gt; 163              SAR-SEOW         1  no access       NA
+#&gt; 164         SKATLAS1BE_DO         4 by request   270718
+#&gt; 165       SKATLAS1BE_SUMM         4 by request    94929
+#&gt; 166            SKATLAS1PC         4 by request   118190
+#&gt; 167            SKATLAS1RC         4 by request        0
+#&gt; 168                SKOWLS         3 by request     2863
+#&gt; 169            SWIFTWATCH         3 by request    12295
+#&gt; 170                   VBS         5 by request        0
+#&gt; 171                  WMMM         5       full     8981
+#&gt; 172                  WPWI         5       full     3012
+#&gt; 173            WRNIGHTJAR         3 by request     6368</div><div class='input'><span class='co'># }</span>
+
+<span class='co'># Count publicly available records for Manitoba, Canada</span>
+<span class='co'># \donttest{</span>
+<span class='fu'>nc_count</span><span class='op'>(</span>region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>statprov <span class='op'>=</span> <span class='st'>"MB"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Without a username, using 'show = "all"'</span></div><div class='output co'>#&gt; <span class='message'>Using filters: statprov (MB)</span></div><div class='output co'>#&gt;         collection akn_level     access nrecords
+#&gt; 1       ABBIRDRECS         5       full      357
+#&gt; 2              BBS         5       full    86997
+#&gt; 3        BBS50-CAN         5       full   453998
+#&gt; 4              CBC         2  no access    20507
+#&gt; 5    CMMN-DET-DMBO         2  no access    88280
+#&gt; 6      EBIRD-CA-PR         4 by request  2070346
+#&gt; 7    EBIRD-CA-SENS         3 by request     3510
+#&gt; 8       EBUTTERFLY         5       full      224
+#&gt; 9             GBBC         4 by request    24393
+#&gt; 10       HawkCount         4 by request     1446
+#&gt; 11            IMQC         5       full       26
+#&gt; 12   MBATLAS1BE_DO         5       full    93876
+#&gt; 13  MBATLAS1BE_RAW         5       full   326429
+#&gt; 14 MBATLAS1BE_SUMM         5       full   154856
+#&gt; 15      MBATLAS1PC         5       full   306094
+#&gt; 16      MBATLAS1RC         3 by request    15622
+#&gt; 17          MBOWLS         4 by request    15314
+#&gt; 18              MM         5       full       53
+#&gt; 19        MMPBIRDS         4 by request       60
+#&gt; 20    MONARCHWATCH         5       full       24
+#&gt; 21       NESTWATCH         3 by request     4553
+#&gt; 22       OISEAUXQC         2  no access        2
+#&gt; 23             PFW         5       full   110414
+#&gt; 24   SKATLAS1BE_DO         4 by request        1</div><div class='input'><span class='co'># }</span>
+
+<span class='co'># Count all records for all collections user "sample" has access to</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>nc_count</span><span class='op'>(</span>username <span class='op'>=</span> <span class='st'>"sample"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
 <span class='co'># Count records with barred owls in Ontario</span>
-<span class='fu'><a href='search_species.html'>search_species</a></span>(<span class='st'>"barred owl"</span>)</div><div class='output co'>#&gt;    species_id                            scientific_name
+<span class='fu'><a href='search_species.html'>search_species</a></span><span class='op'>(</span><span class='st'>"barred owl"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    species_id                            scientific_name
 #&gt; 1        7590                                Strix varia
 #&gt; 2        7595                 Strix occidentalis x varia
 #&gt; 3       32704                            Strix hylophila
@@ -404,6 +519,7 @@ for more information.</p>
 #&gt; 12      43378             Aegotheles bennettii terborghi
 #&gt; 13      43379              Aegotheles bennettii plumifer
 #&gt; 14      45499                       Aegotheles bennettii
+#&gt; 15      47281                   Strix occidentalis/varia
 #&gt;                           english_name
 #&gt; 1                           Barred Owl
 #&gt; 2        Spotted x Barred Owl (hybrid)
@@ -419,6 +535,7 @@ for more information.</p>
 #&gt; 12   Barred Owlet-nightjar (Diamond's)
 #&gt; 13       Barred Owlet-nightjar (Dwarf)
 #&gt; 14               Barred Owlet-nightjar
+#&gt; 15                  Spotted/Barred Owl
 #&gt;                                       french_name taxon_group
 #&gt; 1                                  Chouette rayée       BIRDS
 #&gt; 2            Hybride Chouette tachetée x C. rayée       BIRDS
@@ -433,35 +550,27 @@ for more information.</p>
 #&gt; 11 Égothèle de Bennett [bennettii ou wiedenfeldi]       BIRDS
 #&gt; 12                Égothèle de Bennett (terborghi)       BIRDS
 #&gt; 13                 Égothèle de Bennett (plumifer)       BIRDS
-#&gt; 14                            Égothèle de Bennett       BIRDS</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>7590</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>statprov</span> <span class='kw'>=</span> <span class='st'>"ON"</span>), <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (7590); statprov (ON)</span></div><div class='output co'>#&gt;   access  collection nrecords
-#&gt; 1    yes RCBIOTABASE       44</div><div class='input'>
-# Count all records available in the Christmas Bird Count and Breeding Bird
-# Survey collections (regardless of user permissions)
-</div><div class='input'><span class='fu'>nc_count</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"CBC"</span>, <span class='st'>"BBS"</span>), <span class='kw'>show</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (CBC, BBS)</span></div><div class='output co'>#&gt;   access collection nrecords
-#&gt; 1     no        BBS  5735895
-#&gt; 2     no        CBC  7570427</div><div class='input'>
+#&gt; 14                            Égothèle de Bennett       BIRDS
+#&gt; 15                  Chouette tachetée ou C. rayée       BIRDS</div><div class='input'><span class='fu'>nc_count</span><span class='op'>(</span>species <span class='op'>=</span> <span class='fl'>7590</span>, region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>statprov <span class='op'>=</span> <span class='st'>"ON"</span><span class='op'>)</span>, username <span class='op'>=</span> <span class='st'>"sample"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: species (7590); statprov (ON)</span></div><div class='output co'>#&gt;   collection akn_level access nrecords
+#&gt; 1    SAMPLE1         0   full       NA
+#&gt; 2    SAMPLE2         0   full        1</div><div class='input'>
+<span class='co'># Count all records available in the Christmas Bird Count and Breeding Bird</span>
+<span class='co'># Survey collections (regardless of user permissions)</span>
+<span class='fu'>nc_count</span><span class='op'>(</span>collections <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CBC"</span>, <span class='st'>"BBS"</span><span class='op'>)</span>, show <span class='op'>=</span> <span class='st'>"all"</span>, username <span class='op'>=</span> <span class='st'>"sample"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (CBC, BBS)</span></div><div class='output co'>#&gt;   collection akn_level     access nrecords
+#&gt; 1        BBS         5 by request  5735895
+#&gt; 2        CBC         2  no access  7570427</div><div class='input'>
+
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#naturecounts-account">NatureCounts account</a></li>
-
-      <li><a href="#species-ids-species-">Species ids (<code>species</code>)</a></li>
-
-      <li><a href="#day-of-year-doy-">Day of Year (<code>doy</code>)</a></li>
-
-      <li><a href="#regions-region-">Regions (<code>region</code>)</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -469,13 +578,16 @@ for more information.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

@@ -6,19 +6,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Selecting columns and fields to download • naturecounts</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Selecting columns and fields to download">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="naturecounts">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.1.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
       </span>
     </div>
 
@@ -69,12 +70,13 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
+
+      </header><script src="selecting-fields_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Selecting columns and fields to download</h1>
+      <h1 data-toc-skip>Selecting columns and fields to download</h1>
             
-            <h4 class="date">2019-07-18</h4>
+            <h4 class="date">2020-10-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/selecting-fields.Rmd"><code>vignettes/selecting-fields.Rmd</code></a></small>
       <div class="hidden name"><code>selecting-fields.Rmd</code></div>
@@ -83,9 +85,13 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(naturecounts)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts">naturecounts</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></pre></div>
 <p>In <code>naturecounts</code>, by default default data is downloaded with a specific set of fields/columns. However, for more advanced applications, users may wish to specify which fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema keeps track of variables used to augment observation data. There are different versions reflecting different collections of variables.</p>
+<blockquote>
+<p>The following examples use the “testuser” user which is not available to you. You can quickly <a href="https://www.birdscanada.org/birdmon/default/register.jsp">sign up for a free account</a> of your own to access and play around with these examples.</p>
+</blockquote>
 <div id="bmde-versions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bmde-versions" class="anchor"></a>BMDE versions</h2>
@@ -93,30 +99,23 @@
 <ol style="list-style-type: decimal">
 <li>You can get a list of the different versions with the <code><a href="../reference/meta.html">meta_bmde_versions()</a></code> function.</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="../reference/meta.html">meta_bmde_versions</a></span>()</a></code></pre></div>
-<pre><code>##                                             descr shorthand
-## 1                                       BMDE 1.38      &lt;NA&gt;
-## 2                                        BMDE 2.0      core
-## 3                        BMDE 2.0 (extended list)  extended
-## 4                              BMDE 2.0 (minimum)   minimum
-## 5                   Banding extension to BMDE 2.0      &lt;NA&gt;
-## 6 Monarch Knowledge Network extension to BMDE 2.0      &lt;NA&gt;
-## 7               Nest record extension to BMDE 2.0      &lt;NA&gt;
-## 8  Nest record extension (visit data) to BMDE 2.0      &lt;NA&gt;
-##               version
-## 1            BMDE1.38
-## 2            BMDE2.00
-## 3        BMDE2.00-ext
-## 4        BMDE2.00-min
-## 5      BMDE-BAND-2.00
-## 6       BMDE-MKN-2.00
-## 7      BMDE-NEST-2.00
-## 8 BMDE-NESTVISIT-2.00</code></pre>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu"><a href="../reference/meta.html">meta_bmde_versions</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<pre><code>##                                             descr shorthand             version
+## 1                                       BMDE 1.38      &lt;NA&gt;            BMDE1.38
+## 2                                        BMDE 2.0      core            BMDE2.00
+## 3                        BMDE 2.0 (extended list)  extended        BMDE2.00-ext
+## 4                              BMDE 2.0 (minimum)   minimum        BMDE2.00-min
+## 5                   Banding extension to BMDE 2.0      &lt;NA&gt;      BMDE-BAND-2.00
+## 6 Monarch Knowledge Network extension to BMDE 2.0      &lt;NA&gt;       BMDE-MKN-2.00
+## 7               Nest record extension to BMDE 2.0      &lt;NA&gt;      BMDE-NEST-2.00
+## 8  Nest record extension (visit data) to BMDE 2.0      &lt;NA&gt; BMDE-NESTVISIT-2.00</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>You can get a list of the specific fields/columns included in each version using the <code><a href="../reference/meta.html">meta_bmde_fields()</a></code> function</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/meta.html">meta_bmde_fields</a></span>(<span class="dt">version =</span> <span class="st">"BMDE-BAND-2.00"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"BMDE-BAND-2.00"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>##   field_order        version             local_name
 ## 1           1 BMDE-BAND-2.00 GlobalUniqueIdentifier
 ## 2           2 BMDE-BAND-2.00       DateLastModified
@@ -127,50 +126,49 @@
 <ol start="3" style="list-style-type: decimal">
 <li>You can see which BMDE versions are used by different collections by looking at the metadata associated with that collection.</li>
 </ol>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/meta.html">meta_collections</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>##    bmdr_code bmde_version project_id n_locations
 ## 1   ABATLAS1     BMDE2.00       1042        2209
 ## 2   ABATLAS2     BMDE2.00       1042        5359
 ## 3 ABBIRDRECS     BMDE2.00       1042       21962
 ## 4     ABOWLS     BMDE2.00       1012          NA
 ## 5      ATBBS     BMDE2.00       1033          NA
-## 6     ATOWLS     BMDE2.00       1011         260
-##                                                   collection_name_fr
-## 1                Atlas des oiseaux nicheurs de l'Alberta (1987-1992)
-## 2                Atlas des oiseaux nicheurs de l'Alberta (2000-2005)
-## 3                                  Observations d'oiseaux en Alberta
-## 4                       Inventaire des hiboux nocturnes de l'Alberta
-## 5 Programme de surveillance des oiseaux échoués du Canada atlantique
-## 6                    Inventaire des hiboux nocturnes de l'Atlantique
-##   collection min_year max_year                         collection_name
-## 1   ABATLAS1     1987     1991 Alberta Breeding Bird Atlas (1987-1992)
-## 2   ABATLAS2     2000     2005 Alberta Breeding Bird Atlas (2000-2005)
-## 3 ABBIRDRECS     1941     2006                    Alberta Bird Records
-## 4     ABOWLS       NA       NA           Alberta Nocturnal Owls Survey
-## 5      ATBBS       NA       NA     Atlantic Canada Beached Bird Survey
-## 6     ATOWLS     2017     2017          Atlantic Nocturnal Owls Survey
-##   akn_level n_records
-## 1         5    123364
-## 2         5    201398
-## 3         5    357264
-## 4         4        NA
-## 5         4        NA
-## 6         4       367</code></pre>
+## 6     ATOWLS     BMDE2.00       1011        1846
+##                                                   collection_name_fr collection
+## 1                Atlas des oiseaux nicheurs de l'Alberta (1987-1992)   ABATLAS1
+## 2                Atlas des oiseaux nicheurs de l'Alberta (2000-2005)   ABATLAS2
+## 3                                  Observations d'oiseaux en Alberta ABBIRDRECS
+## 4                       Inventaire des hiboux nocturnes de l'Alberta     ABOWLS
+## 5 Programme de surveillance des oiseaux échoués du Canada atlantique      ATBBS
+## 6                    Inventaire des hiboux nocturnes de l'Atlantique     ATOWLS
+##   min_year max_year                         collection_name akn_level n_records
+## 1     1987     1991 Alberta Breeding Bird Atlas (1987-1992)         5    123364
+## 2     2000     2005 Alberta Breeding Bird Atlas (2000-2005)         5    201398
+## 3     1941     2006                    Alberta Bird Records         5    357264
+## 4       NA       NA           Alberta Nocturnal Owls Survey         4        NA
+## 5       NA       NA     Atlantic Canada Beached Bird Survey         4        NA
+## 6     2001     2020          Atlantic Nocturnal Owls Survey         4     25192</code></pre>
 </div>
 <div id="specifying-fields-by-version" class="section level2">
 <h2 class="hasAnchor">
 <a href="#specifying-fields-by-version" class="anchor"></a>Specifying fields by version</h2>
 <p>By default, the <code>BMDE2.00-min</code> or <code>minimum</code> BMDE version is used when downloading data, but you can specify other versions with either the version name, or the shorthand.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">cardinals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">19360</span>, <span class="dt">fields_set =</span> <span class="st">"core"</span>, <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"core"</span>, 
+                        username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span></pre></div>
 <pre><code>## Using filters: species (19360); fields_set (BMDE2.00)</code></pre>
 <pre><code>## Collecting available records...</code></pre>
-<pre><code>##   access  collection nrecords
-## 1    yes    ABATLAS1        2
-## 2    yes    ABATLAS2       13
-## 3    yes  ABBIRDRECS        1
-## 4    yes RCBIOTABASE       40
-## Total records: 56</code></pre>
+<pre><code>##      collection nrecords
+## 1      ABATLAS1        2
+## 2      ABATLAS2       13
+## 3    ABBIRDRECS        1
+## 4           BBS    57254
+## 5     BBS50-CAN     6497
+## 6 BBS50-US-EAST   506277
+## ...
+## Total records: 902,803</code></pre>
 <pre><code>## 
 ## Downloading records for each collection:</code></pre>
 <pre><code>##   ABATLAS1</code></pre>
@@ -179,9 +177,234 @@
 <pre><code>##     Records 1 to 13 / 13</code></pre>
 <pre><code>##   ABBIRDRECS</code></pre>
 <pre><code>##     Records 1 to 1 / 1</code></pre>
+<pre><code>##   BBS</code></pre>
+<pre><code>##     Records 1 to 5000 / 57254</code></pre>
+<pre><code>##     Records 5001 to 10000 / 57254</code></pre>
+<pre><code>##     Records 10001 to 15000 / 57254</code></pre>
+<pre><code>##     Records 15001 to 20000 / 57254</code></pre>
+<pre><code>##     Records 20001 to 25000 / 57254</code></pre>
+<pre><code>##     Records 25001 to 30000 / 57254</code></pre>
+<pre><code>##     Records 30001 to 35000 / 57254</code></pre>
+<pre><code>##     Records 35001 to 40000 / 57254</code></pre>
+<pre><code>##     Records 40001 to 45000 / 57254</code></pre>
+<pre><code>##     Records 45001 to 50000 / 57254</code></pre>
+<pre><code>##     Records 50001 to 55000 / 57254</code></pre>
+<pre><code>##     Records 55001 to 57254 / 57254</code></pre>
+<pre><code>##   BBS50-CAN</code></pre>
+<pre><code>##     Records 1 to 5000 / 6497</code></pre>
+<pre><code>##     Records 5001 to 6497 / 6497</code></pre>
+<pre><code>##   BBS50-US-EAST</code></pre>
+<pre><code>##     Records 1 to 5000 / 506277</code></pre>
+<pre><code>##     Records 5001 to 10000 / 506277</code></pre>
+<pre><code>##     Records 10001 to 15000 / 506277</code></pre>
+<pre><code>##     Records 15001 to 20000 / 506277</code></pre>
+<pre><code>##     Records 20001 to 25000 / 506277</code></pre>
+<pre><code>##     Records 25001 to 30000 / 506277</code></pre>
+<pre><code>##     Records 30001 to 35000 / 506277</code></pre>
+<pre><code>##     Records 35001 to 40000 / 506277</code></pre>
+<pre><code>##     Records 40001 to 45000 / 506277</code></pre>
+<pre><code>##     Records 45001 to 50000 / 506277</code></pre>
+<pre><code>##     Records 50001 to 55000 / 506277</code></pre>
+<pre><code>##     Records 55001 to 60000 / 506277</code></pre>
+<pre><code>##     Records 60001 to 65000 / 506277</code></pre>
+<pre><code>##     Records 65001 to 70000 / 506277</code></pre>
+<pre><code>##     Records 70001 to 75000 / 506277</code></pre>
+<pre><code>##     Records 75001 to 80000 / 506277</code></pre>
+<pre><code>##     Records 80001 to 85000 / 506277</code></pre>
+<pre><code>##     Records 85001 to 90000 / 506277</code></pre>
+<pre><code>##     Records 90001 to 95000 / 506277</code></pre>
+<pre><code>##     Records 95001 to 1e+05 / 506277</code></pre>
+<pre><code>##     Records 100001 to 105000 / 506277</code></pre>
+<pre><code>##     Records 105001 to 110000 / 506277</code></pre>
+<pre><code>##     Records 110001 to 115000 / 506277</code></pre>
+<pre><code>##     Records 115001 to 120000 / 506277</code></pre>
+<pre><code>##     Records 120001 to 125000 / 506277</code></pre>
+<pre><code>##     Records 125001 to 130000 / 506277</code></pre>
+<pre><code>##     Records 130001 to 135000 / 506277</code></pre>
+<pre><code>##     Records 135001 to 140000 / 506277</code></pre>
+<pre><code>##     Records 140001 to 145000 / 506277</code></pre>
+<pre><code>##     Records 145001 to 150000 / 506277</code></pre>
+<pre><code>##     Records 150001 to 155000 / 506277</code></pre>
+<pre><code>##     Records 155001 to 160000 / 506277</code></pre>
+<pre><code>##     Records 160001 to 165000 / 506277</code></pre>
+<pre><code>##     Records 165001 to 170000 / 506277</code></pre>
+<pre><code>##     Records 170001 to 175000 / 506277</code></pre>
+<pre><code>##     Records 175001 to 180000 / 506277</code></pre>
+<pre><code>##     Records 180001 to 185000 / 506277</code></pre>
+<pre><code>##     Records 185001 to 190000 / 506277</code></pre>
+<pre><code>##     Records 190001 to 195000 / 506277</code></pre>
+<pre><code>##     Records 195001 to 2e+05 / 506277</code></pre>
+<pre><code>##     Records 200001 to 205000 / 506277</code></pre>
+<pre><code>##     Records 205001 to 210000 / 506277</code></pre>
+<pre><code>##     Records 210001 to 215000 / 506277</code></pre>
+<pre><code>##     Records 215001 to 220000 / 506277</code></pre>
+<pre><code>##     Records 220001 to 225000 / 506277</code></pre>
+<pre><code>##     Records 225001 to 230000 / 506277</code></pre>
+<pre><code>##     Records 230001 to 235000 / 506277</code></pre>
+<pre><code>##     Records 235001 to 240000 / 506277</code></pre>
+<pre><code>##     Records 240001 to 245000 / 506277</code></pre>
+<pre><code>##     Records 245001 to 250000 / 506277</code></pre>
+<pre><code>##     Records 250001 to 255000 / 506277</code></pre>
+<pre><code>##     Records 255001 to 260000 / 506277</code></pre>
+<pre><code>##     Records 260001 to 265000 / 506277</code></pre>
+<pre><code>##     Records 265001 to 270000 / 506277</code></pre>
+<pre><code>##     Records 270001 to 275000 / 506277</code></pre>
+<pre><code>##     Records 275001 to 280000 / 506277</code></pre>
+<pre><code>##     Records 280001 to 285000 / 506277</code></pre>
+<pre><code>##     Records 285001 to 290000 / 506277</code></pre>
+<pre><code>##     Records 290001 to 295000 / 506277</code></pre>
+<pre><code>##     Records 295001 to 3e+05 / 506277</code></pre>
+<pre><code>##     Records 300001 to 305000 / 506277</code></pre>
+<pre><code>##     Records 305001 to 310000 / 506277</code></pre>
+<pre><code>##     Records 310001 to 315000 / 506277</code></pre>
+<pre><code>##     Records 315001 to 320000 / 506277</code></pre>
+<pre><code>##     Records 320001 to 325000 / 506277</code></pre>
+<pre><code>##     Records 325001 to 330000 / 506277</code></pre>
+<pre><code>##     Records 330001 to 335000 / 506277</code></pre>
+<pre><code>##     Records 335001 to 340000 / 506277</code></pre>
+<pre><code>##     Records 340001 to 345000 / 506277</code></pre>
+<pre><code>##     Records 345001 to 350000 / 506277</code></pre>
+<pre><code>##     Records 350001 to 355000 / 506277</code></pre>
+<pre><code>##     Records 355001 to 360000 / 506277</code></pre>
+<pre><code>##     Records 360001 to 365000 / 506277</code></pre>
+<pre><code>##     Records 365001 to 370000 / 506277</code></pre>
+<pre><code>##     Records 370001 to 375000 / 506277</code></pre>
+<pre><code>##     Records 375001 to 380000 / 506277</code></pre>
+<pre><code>##     Records 380001 to 385000 / 506277</code></pre>
+<pre><code>##     Records 385001 to 390000 / 506277</code></pre>
+<pre><code>##     Records 390001 to 395000 / 506277</code></pre>
+<pre><code>##     Records 395001 to 4e+05 / 506277</code></pre>
+<pre><code>##     Records 400001 to 405000 / 506277</code></pre>
+<pre><code>##     Records 405001 to 410000 / 506277</code></pre>
+<pre><code>##     Records 410001 to 415000 / 506277</code></pre>
+<pre><code>##     Records 415001 to 420000 / 506277</code></pre>
+<pre><code>##     Records 420001 to 425000 / 506277</code></pre>
+<pre><code>##     Records 425001 to 430000 / 506277</code></pre>
+<pre><code>##     Records 430001 to 435000 / 506277</code></pre>
+<pre><code>##     Records 435001 to 440000 / 506277</code></pre>
+<pre><code>##     Records 440001 to 445000 / 506277</code></pre>
+<pre><code>##     Records 445001 to 450000 / 506277</code></pre>
+<pre><code>##     Records 450001 to 455000 / 506277</code></pre>
+<pre><code>##     Records 455001 to 460000 / 506277</code></pre>
+<pre><code>##     Records 460001 to 465000 / 506277</code></pre>
+<pre><code>##     Records 465001 to 470000 / 506277</code></pre>
+<pre><code>##     Records 470001 to 475000 / 506277</code></pre>
+<pre><code>##     Records 475001 to 480000 / 506277</code></pre>
+<pre><code>##     Records 480001 to 485000 / 506277</code></pre>
+<pre><code>##     Records 485001 to 490000 / 506277</code></pre>
+<pre><code>##     Records 490001 to 495000 / 506277</code></pre>
+<pre><code>##     Records 495001 to 5e+05 / 506277</code></pre>
+<pre><code>##     Records 500001 to 505000 / 506277</code></pre>
+<pre><code>##     Records 505001 to 506277 / 506277</code></pre>
+<pre><code>##   BBS50-US-WEST</code></pre>
+<pre><code>##     Records 1 to 5000 / 144886</code></pre>
+<pre><code>##     Records 5001 to 10000 / 144886</code></pre>
+<pre><code>##     Records 10001 to 15000 / 144886</code></pre>
+<pre><code>##     Records 15001 to 20000 / 144886</code></pre>
+<pre><code>##     Records 20001 to 25000 / 144886</code></pre>
+<pre><code>##     Records 25001 to 30000 / 144886</code></pre>
+<pre><code>##     Records 30001 to 35000 / 144886</code></pre>
+<pre><code>##     Records 35001 to 40000 / 144886</code></pre>
+<pre><code>##     Records 40001 to 45000 / 144886</code></pre>
+<pre><code>##     Records 45001 to 50000 / 144886</code></pre>
+<pre><code>##     Records 50001 to 55000 / 144886</code></pre>
+<pre><code>##     Records 55001 to 60000 / 144886</code></pre>
+<pre><code>##     Records 60001 to 65000 / 144886</code></pre>
+<pre><code>##     Records 65001 to 70000 / 144886</code></pre>
+<pre><code>##     Records 70001 to 75000 / 144886</code></pre>
+<pre><code>##     Records 75001 to 80000 / 144886</code></pre>
+<pre><code>##     Records 80001 to 85000 / 144886</code></pre>
+<pre><code>##     Records 85001 to 90000 / 144886</code></pre>
+<pre><code>##     Records 90001 to 95000 / 144886</code></pre>
+<pre><code>##     Records 95001 to 1e+05 / 144886</code></pre>
+<pre><code>##     Records 100001 to 105000 / 144886</code></pre>
+<pre><code>##     Records 105001 to 110000 / 144886</code></pre>
+<pre><code>##     Records 110001 to 115000 / 144886</code></pre>
+<pre><code>##     Records 115001 to 120000 / 144886</code></pre>
+<pre><code>##     Records 120001 to 125000 / 144886</code></pre>
+<pre><code>##     Records 125001 to 130000 / 144886</code></pre>
+<pre><code>##     Records 130001 to 135000 / 144886</code></pre>
+<pre><code>##     Records 135001 to 140000 / 144886</code></pre>
+<pre><code>##     Records 140001 to 144886 / 144886</code></pre>
+<pre><code>##   CMMN-DET-HBO</code></pre>
+<pre><code>##     Records 1 to 5000 / 6141</code></pre>
+<pre><code>##     Records 5001 to 6141 / 6141</code></pre>
+<pre><code>##   MBATLAS1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 15 / 15</code></pre>
+<pre><code>##   MBATLAS1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 9 / 9</code></pre>
+<pre><code>##   MBBA1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 25 / 25</code></pre>
+<pre><code>##   MBBA1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 20 / 20</code></pre>
+<pre><code>##   MBBA2BE_RAW</code></pre>
+<pre><code>##     Records 1 to 225 / 225</code></pre>
+<pre><code>##   MBBA2BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 129 / 129</code></pre>
+<pre><code>##   MBBA2PC</code></pre>
+<pre><code>##     Records 1 to 28 / 28</code></pre>
+<pre><code>##   OBBA1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 2132 / 2132</code></pre>
+<pre><code>##   OBBA1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 773 / 773</code></pre>
+<pre><code>##   OBBA2BE_RAW</code></pre>
+<pre><code>##     Records 1 to 3445 / 3445</code></pre>
+<pre><code>##   OBBA2BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 1044 / 1044</code></pre>
+<pre><code>##   OBBA2PC</code></pre>
+<pre><code>##     Records 1 to 4150 / 4150</code></pre>
+<pre><code>##   OBFS</code></pre>
+<pre><code>##     Records 1 to 5000 / 13797</code></pre>
+<pre><code>##     Records 5001 to 10000 / 13797</code></pre>
+<pre><code>##     Records 10001 to 13797 / 13797</code></pre>
+<pre><code>##   PFW</code></pre>
+<pre><code>##     Records 1 to 5000 / 152586</code></pre>
+<pre><code>##     Records 5001 to 10000 / 152586</code></pre>
+<pre><code>##     Records 10001 to 15000 / 152586</code></pre>
+<pre><code>##     Records 15001 to 20000 / 152586</code></pre>
+<pre><code>##     Records 20001 to 25000 / 152586</code></pre>
+<pre><code>##     Records 25001 to 30000 / 152586</code></pre>
+<pre><code>##     Records 30001 to 35000 / 152586</code></pre>
+<pre><code>##     Records 35001 to 40000 / 152586</code></pre>
+<pre><code>##     Records 40001 to 45000 / 152586</code></pre>
+<pre><code>##     Records 45001 to 50000 / 152586</code></pre>
+<pre><code>##     Records 50001 to 55000 / 152586</code></pre>
+<pre><code>##     Records 55001 to 60000 / 152586</code></pre>
+<pre><code>##     Records 60001 to 65000 / 152586</code></pre>
+<pre><code>##     Records 65001 to 70000 / 152586</code></pre>
+<pre><code>##     Records 70001 to 75000 / 152586</code></pre>
+<pre><code>##     Records 75001 to 80000 / 152586</code></pre>
+<pre><code>##     Records 80001 to 85000 / 152586</code></pre>
+<pre><code>##     Records 85001 to 90000 / 152586</code></pre>
+<pre><code>##     Records 90001 to 95000 / 152586</code></pre>
+<pre><code>##     Records 95001 to 1e+05 / 152586</code></pre>
+<pre><code>##     Records 100001 to 105000 / 152586</code></pre>
+<pre><code>##     Records 105001 to 110000 / 152586</code></pre>
+<pre><code>##     Records 110001 to 115000 / 152586</code></pre>
+<pre><code>##     Records 115001 to 120000 / 152586</code></pre>
+<pre><code>##     Records 120001 to 125000 / 152586</code></pre>
+<pre><code>##     Records 125001 to 130000 / 152586</code></pre>
+<pre><code>##     Records 130001 to 135000 / 152586</code></pre>
+<pre><code>##     Records 135001 to 140000 / 152586</code></pre>
+<pre><code>##     Records 140001 to 145000 / 152586</code></pre>
+<pre><code>##     Records 145001 to 150000 / 152586</code></pre>
+<pre><code>##     Records 150001 to 152586 / 152586</code></pre>
+<pre><code>##   QCATLAS1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 156 / 156</code></pre>
+<pre><code>##   QCATLAS1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 93 / 93</code></pre>
+<pre><code>##   QCATLAS2BE_DO</code></pre>
+<pre><code>##     Records 1 to 635 / 635</code></pre>
+<pre><code>##   QCATLAS2BE_RAW</code></pre>
+<pre><code>##     Records 1 to 1633 / 1633</code></pre>
+<pre><code>##   QCATLAS2BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 403 / 403</code></pre>
+<pre><code>##   QCATLAS2PC</code></pre>
+<pre><code>##     Records 1 to 394 / 394</code></pre>
 <pre><code>##   RCBIOTABASE</code></pre>
 <pre><code>##     Records 1 to 40 / 40</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cardinals)</a></code></pre></div>
+<div class="sourceCode" id="cb245"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></pre></div>
 <pre><code>##   [1] "GlobalUniqueIdentifier"                
 ##   [2] "EffortUnits7"                          
 ##   [3] "EffortUnits8"                          
@@ -377,7 +600,8 @@
 <a href="#basic-fields" class="anchor"></a>Basic fields</h2>
 <p>Note that there are extra fields/columns downloaded in every request, which are <strong>in addition</strong> to the BMDE fields. These are additional, basic, indexed fields used in the database.</p>
 <p>You can figure out exactly which fields these are, by removing all the fields from the <code>core</code> BMDE field set.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cardinals)[<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cardinals) <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="../reference/meta.html">meta_bmde_fields</a></span>(<span class="dt">version =</span> <span class="st">"core"</span>)<span class="op">$</span>local_name]</a></code></pre></div>
+<div class="sourceCode" id="cb247"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"core"</span><span class="op">)</span><span class="op">$</span><span class="va">local_name</span><span class="op">]</span></pre></div>
 <pre><code>##  [1] "statprov_code"     "species_id"        "utm_square"       
 ##  [4] "latitude"          "bcr"               "survey_year"      
 ##  [7] "breeding_rank"     "project_id"        "longitude"        
@@ -390,17 +614,21 @@
 <h2 class="hasAnchor">
 <a href="#custom-fields" class="anchor"></a>Custom fields</h2>
 <p>The basic fields will <strong>always</strong> be included in any data request. However, you can choose which fields/columns to include in addition to these basic fields, by specifying <code>fields_set = custom</code>, and listing all additional <code>fields</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">cardinals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">19360</span>, <span class="dt">fields_set =</span> <span class="st">"custom"</span>, </a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">                        <span class="dt">fields =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Sex"</span>, <span class="st">"SamplingEventIdentifier"</span>), </a>
-<a class="sourceLine" id="cb25-3" data-line-number="3">                        <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb249"><pre class="downlit">
+<span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"custom"</span>, 
+                        fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"SamplingEventIdentifier"</span><span class="op">)</span>, 
+                        username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span></pre></div>
 <pre><code>## Using filters: species (19360); fields_set (custom); fields (Sex, SamplingEventIdentifier)</code></pre>
 <pre><code>## Collecting available records...</code></pre>
-<pre><code>##   access  collection nrecords
-## 1    yes    ABATLAS1        2
-## 2    yes    ABATLAS2       13
-## 3    yes  ABBIRDRECS        1
-## 4    yes RCBIOTABASE       40
-## Total records: 56</code></pre>
+<pre><code>##      collection nrecords
+## 1      ABATLAS1        2
+## 2      ABATLAS2       13
+## 3    ABBIRDRECS        1
+## 4           BBS    57254
+## 5     BBS50-CAN     6497
+## 6 BBS50-US-EAST   506277
+## ...
+## Total records: 902,803</code></pre>
 <pre><code>## 
 ## Downloading records for each collection:</code></pre>
 <pre><code>##   ABATLAS1</code></pre>
@@ -409,9 +637,234 @@
 <pre><code>##     Records 1 to 13 / 13</code></pre>
 <pre><code>##   ABBIRDRECS</code></pre>
 <pre><code>##     Records 1 to 1 / 1</code></pre>
+<pre><code>##   BBS</code></pre>
+<pre><code>##     Records 1 to 5000 / 57254</code></pre>
+<pre><code>##     Records 5001 to 10000 / 57254</code></pre>
+<pre><code>##     Records 10001 to 15000 / 57254</code></pre>
+<pre><code>##     Records 15001 to 20000 / 57254</code></pre>
+<pre><code>##     Records 20001 to 25000 / 57254</code></pre>
+<pre><code>##     Records 25001 to 30000 / 57254</code></pre>
+<pre><code>##     Records 30001 to 35000 / 57254</code></pre>
+<pre><code>##     Records 35001 to 40000 / 57254</code></pre>
+<pre><code>##     Records 40001 to 45000 / 57254</code></pre>
+<pre><code>##     Records 45001 to 50000 / 57254</code></pre>
+<pre><code>##     Records 50001 to 55000 / 57254</code></pre>
+<pre><code>##     Records 55001 to 57254 / 57254</code></pre>
+<pre><code>##   BBS50-CAN</code></pre>
+<pre><code>##     Records 1 to 5000 / 6497</code></pre>
+<pre><code>##     Records 5001 to 6497 / 6497</code></pre>
+<pre><code>##   BBS50-US-EAST</code></pre>
+<pre><code>##     Records 1 to 5000 / 506277</code></pre>
+<pre><code>##     Records 5001 to 10000 / 506277</code></pre>
+<pre><code>##     Records 10001 to 15000 / 506277</code></pre>
+<pre><code>##     Records 15001 to 20000 / 506277</code></pre>
+<pre><code>##     Records 20001 to 25000 / 506277</code></pre>
+<pre><code>##     Records 25001 to 30000 / 506277</code></pre>
+<pre><code>##     Records 30001 to 35000 / 506277</code></pre>
+<pre><code>##     Records 35001 to 40000 / 506277</code></pre>
+<pre><code>##     Records 40001 to 45000 / 506277</code></pre>
+<pre><code>##     Records 45001 to 50000 / 506277</code></pre>
+<pre><code>##     Records 50001 to 55000 / 506277</code></pre>
+<pre><code>##     Records 55001 to 60000 / 506277</code></pre>
+<pre><code>##     Records 60001 to 65000 / 506277</code></pre>
+<pre><code>##     Records 65001 to 70000 / 506277</code></pre>
+<pre><code>##     Records 70001 to 75000 / 506277</code></pre>
+<pre><code>##     Records 75001 to 80000 / 506277</code></pre>
+<pre><code>##     Records 80001 to 85000 / 506277</code></pre>
+<pre><code>##     Records 85001 to 90000 / 506277</code></pre>
+<pre><code>##     Records 90001 to 95000 / 506277</code></pre>
+<pre><code>##     Records 95001 to 1e+05 / 506277</code></pre>
+<pre><code>##     Records 100001 to 105000 / 506277</code></pre>
+<pre><code>##     Records 105001 to 110000 / 506277</code></pre>
+<pre><code>##     Records 110001 to 115000 / 506277</code></pre>
+<pre><code>##     Records 115001 to 120000 / 506277</code></pre>
+<pre><code>##     Records 120001 to 125000 / 506277</code></pre>
+<pre><code>##     Records 125001 to 130000 / 506277</code></pre>
+<pre><code>##     Records 130001 to 135000 / 506277</code></pre>
+<pre><code>##     Records 135001 to 140000 / 506277</code></pre>
+<pre><code>##     Records 140001 to 145000 / 506277</code></pre>
+<pre><code>##     Records 145001 to 150000 / 506277</code></pre>
+<pre><code>##     Records 150001 to 155000 / 506277</code></pre>
+<pre><code>##     Records 155001 to 160000 / 506277</code></pre>
+<pre><code>##     Records 160001 to 165000 / 506277</code></pre>
+<pre><code>##     Records 165001 to 170000 / 506277</code></pre>
+<pre><code>##     Records 170001 to 175000 / 506277</code></pre>
+<pre><code>##     Records 175001 to 180000 / 506277</code></pre>
+<pre><code>##     Records 180001 to 185000 / 506277</code></pre>
+<pre><code>##     Records 185001 to 190000 / 506277</code></pre>
+<pre><code>##     Records 190001 to 195000 / 506277</code></pre>
+<pre><code>##     Records 195001 to 2e+05 / 506277</code></pre>
+<pre><code>##     Records 200001 to 205000 / 506277</code></pre>
+<pre><code>##     Records 205001 to 210000 / 506277</code></pre>
+<pre><code>##     Records 210001 to 215000 / 506277</code></pre>
+<pre><code>##     Records 215001 to 220000 / 506277</code></pre>
+<pre><code>##     Records 220001 to 225000 / 506277</code></pre>
+<pre><code>##     Records 225001 to 230000 / 506277</code></pre>
+<pre><code>##     Records 230001 to 235000 / 506277</code></pre>
+<pre><code>##     Records 235001 to 240000 / 506277</code></pre>
+<pre><code>##     Records 240001 to 245000 / 506277</code></pre>
+<pre><code>##     Records 245001 to 250000 / 506277</code></pre>
+<pre><code>##     Records 250001 to 255000 / 506277</code></pre>
+<pre><code>##     Records 255001 to 260000 / 506277</code></pre>
+<pre><code>##     Records 260001 to 265000 / 506277</code></pre>
+<pre><code>##     Records 265001 to 270000 / 506277</code></pre>
+<pre><code>##     Records 270001 to 275000 / 506277</code></pre>
+<pre><code>##     Records 275001 to 280000 / 506277</code></pre>
+<pre><code>##     Records 280001 to 285000 / 506277</code></pre>
+<pre><code>##     Records 285001 to 290000 / 506277</code></pre>
+<pre><code>##     Records 290001 to 295000 / 506277</code></pre>
+<pre><code>##     Records 295001 to 3e+05 / 506277</code></pre>
+<pre><code>##     Records 300001 to 305000 / 506277</code></pre>
+<pre><code>##     Records 305001 to 310000 / 506277</code></pre>
+<pre><code>##     Records 310001 to 315000 / 506277</code></pre>
+<pre><code>##     Records 315001 to 320000 / 506277</code></pre>
+<pre><code>##     Records 320001 to 325000 / 506277</code></pre>
+<pre><code>##     Records 325001 to 330000 / 506277</code></pre>
+<pre><code>##     Records 330001 to 335000 / 506277</code></pre>
+<pre><code>##     Records 335001 to 340000 / 506277</code></pre>
+<pre><code>##     Records 340001 to 345000 / 506277</code></pre>
+<pre><code>##     Records 345001 to 350000 / 506277</code></pre>
+<pre><code>##     Records 350001 to 355000 / 506277</code></pre>
+<pre><code>##     Records 355001 to 360000 / 506277</code></pre>
+<pre><code>##     Records 360001 to 365000 / 506277</code></pre>
+<pre><code>##     Records 365001 to 370000 / 506277</code></pre>
+<pre><code>##     Records 370001 to 375000 / 506277</code></pre>
+<pre><code>##     Records 375001 to 380000 / 506277</code></pre>
+<pre><code>##     Records 380001 to 385000 / 506277</code></pre>
+<pre><code>##     Records 385001 to 390000 / 506277</code></pre>
+<pre><code>##     Records 390001 to 395000 / 506277</code></pre>
+<pre><code>##     Records 395001 to 4e+05 / 506277</code></pre>
+<pre><code>##     Records 400001 to 405000 / 506277</code></pre>
+<pre><code>##     Records 405001 to 410000 / 506277</code></pre>
+<pre><code>##     Records 410001 to 415000 / 506277</code></pre>
+<pre><code>##     Records 415001 to 420000 / 506277</code></pre>
+<pre><code>##     Records 420001 to 425000 / 506277</code></pre>
+<pre><code>##     Records 425001 to 430000 / 506277</code></pre>
+<pre><code>##     Records 430001 to 435000 / 506277</code></pre>
+<pre><code>##     Records 435001 to 440000 / 506277</code></pre>
+<pre><code>##     Records 440001 to 445000 / 506277</code></pre>
+<pre><code>##     Records 445001 to 450000 / 506277</code></pre>
+<pre><code>##     Records 450001 to 455000 / 506277</code></pre>
+<pre><code>##     Records 455001 to 460000 / 506277</code></pre>
+<pre><code>##     Records 460001 to 465000 / 506277</code></pre>
+<pre><code>##     Records 465001 to 470000 / 506277</code></pre>
+<pre><code>##     Records 470001 to 475000 / 506277</code></pre>
+<pre><code>##     Records 475001 to 480000 / 506277</code></pre>
+<pre><code>##     Records 480001 to 485000 / 506277</code></pre>
+<pre><code>##     Records 485001 to 490000 / 506277</code></pre>
+<pre><code>##     Records 490001 to 495000 / 506277</code></pre>
+<pre><code>##     Records 495001 to 5e+05 / 506277</code></pre>
+<pre><code>##     Records 500001 to 505000 / 506277</code></pre>
+<pre><code>##     Records 505001 to 506277 / 506277</code></pre>
+<pre><code>##   BBS50-US-WEST</code></pre>
+<pre><code>##     Records 1 to 5000 / 144886</code></pre>
+<pre><code>##     Records 5001 to 10000 / 144886</code></pre>
+<pre><code>##     Records 10001 to 15000 / 144886</code></pre>
+<pre><code>##     Records 15001 to 20000 / 144886</code></pre>
+<pre><code>##     Records 20001 to 25000 / 144886</code></pre>
+<pre><code>##     Records 25001 to 30000 / 144886</code></pre>
+<pre><code>##     Records 30001 to 35000 / 144886</code></pre>
+<pre><code>##     Records 35001 to 40000 / 144886</code></pre>
+<pre><code>##     Records 40001 to 45000 / 144886</code></pre>
+<pre><code>##     Records 45001 to 50000 / 144886</code></pre>
+<pre><code>##     Records 50001 to 55000 / 144886</code></pre>
+<pre><code>##     Records 55001 to 60000 / 144886</code></pre>
+<pre><code>##     Records 60001 to 65000 / 144886</code></pre>
+<pre><code>##     Records 65001 to 70000 / 144886</code></pre>
+<pre><code>##     Records 70001 to 75000 / 144886</code></pre>
+<pre><code>##     Records 75001 to 80000 / 144886</code></pre>
+<pre><code>##     Records 80001 to 85000 / 144886</code></pre>
+<pre><code>##     Records 85001 to 90000 / 144886</code></pre>
+<pre><code>##     Records 90001 to 95000 / 144886</code></pre>
+<pre><code>##     Records 95001 to 1e+05 / 144886</code></pre>
+<pre><code>##     Records 100001 to 105000 / 144886</code></pre>
+<pre><code>##     Records 105001 to 110000 / 144886</code></pre>
+<pre><code>##     Records 110001 to 115000 / 144886</code></pre>
+<pre><code>##     Records 115001 to 120000 / 144886</code></pre>
+<pre><code>##     Records 120001 to 125000 / 144886</code></pre>
+<pre><code>##     Records 125001 to 130000 / 144886</code></pre>
+<pre><code>##     Records 130001 to 135000 / 144886</code></pre>
+<pre><code>##     Records 135001 to 140000 / 144886</code></pre>
+<pre><code>##     Records 140001 to 144886 / 144886</code></pre>
+<pre><code>##   CMMN-DET-HBO</code></pre>
+<pre><code>##     Records 1 to 5000 / 6141</code></pre>
+<pre><code>##     Records 5001 to 6141 / 6141</code></pre>
+<pre><code>##   MBATLAS1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 15 / 15</code></pre>
+<pre><code>##   MBATLAS1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 9 / 9</code></pre>
+<pre><code>##   MBBA1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 25 / 25</code></pre>
+<pre><code>##   MBBA1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 20 / 20</code></pre>
+<pre><code>##   MBBA2BE_RAW</code></pre>
+<pre><code>##     Records 1 to 225 / 225</code></pre>
+<pre><code>##   MBBA2BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 129 / 129</code></pre>
+<pre><code>##   MBBA2PC</code></pre>
+<pre><code>##     Records 1 to 28 / 28</code></pre>
+<pre><code>##   OBBA1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 2132 / 2132</code></pre>
+<pre><code>##   OBBA1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 773 / 773</code></pre>
+<pre><code>##   OBBA2BE_RAW</code></pre>
+<pre><code>##     Records 1 to 3445 / 3445</code></pre>
+<pre><code>##   OBBA2BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 1044 / 1044</code></pre>
+<pre><code>##   OBBA2PC</code></pre>
+<pre><code>##     Records 1 to 4150 / 4150</code></pre>
+<pre><code>##   OBFS</code></pre>
+<pre><code>##     Records 1 to 5000 / 13797</code></pre>
+<pre><code>##     Records 5001 to 10000 / 13797</code></pre>
+<pre><code>##     Records 10001 to 13797 / 13797</code></pre>
+<pre><code>##   PFW</code></pre>
+<pre><code>##     Records 1 to 5000 / 152586</code></pre>
+<pre><code>##     Records 5001 to 10000 / 152586</code></pre>
+<pre><code>##     Records 10001 to 15000 / 152586</code></pre>
+<pre><code>##     Records 15001 to 20000 / 152586</code></pre>
+<pre><code>##     Records 20001 to 25000 / 152586</code></pre>
+<pre><code>##     Records 25001 to 30000 / 152586</code></pre>
+<pre><code>##     Records 30001 to 35000 / 152586</code></pre>
+<pre><code>##     Records 35001 to 40000 / 152586</code></pre>
+<pre><code>##     Records 40001 to 45000 / 152586</code></pre>
+<pre><code>##     Records 45001 to 50000 / 152586</code></pre>
+<pre><code>##     Records 50001 to 55000 / 152586</code></pre>
+<pre><code>##     Records 55001 to 60000 / 152586</code></pre>
+<pre><code>##     Records 60001 to 65000 / 152586</code></pre>
+<pre><code>##     Records 65001 to 70000 / 152586</code></pre>
+<pre><code>##     Records 70001 to 75000 / 152586</code></pre>
+<pre><code>##     Records 75001 to 80000 / 152586</code></pre>
+<pre><code>##     Records 80001 to 85000 / 152586</code></pre>
+<pre><code>##     Records 85001 to 90000 / 152586</code></pre>
+<pre><code>##     Records 90001 to 95000 / 152586</code></pre>
+<pre><code>##     Records 95001 to 1e+05 / 152586</code></pre>
+<pre><code>##     Records 100001 to 105000 / 152586</code></pre>
+<pre><code>##     Records 105001 to 110000 / 152586</code></pre>
+<pre><code>##     Records 110001 to 115000 / 152586</code></pre>
+<pre><code>##     Records 115001 to 120000 / 152586</code></pre>
+<pre><code>##     Records 120001 to 125000 / 152586</code></pre>
+<pre><code>##     Records 125001 to 130000 / 152586</code></pre>
+<pre><code>##     Records 130001 to 135000 / 152586</code></pre>
+<pre><code>##     Records 135001 to 140000 / 152586</code></pre>
+<pre><code>##     Records 140001 to 145000 / 152586</code></pre>
+<pre><code>##     Records 145001 to 150000 / 152586</code></pre>
+<pre><code>##     Records 150001 to 152586 / 152586</code></pre>
+<pre><code>##   QCATLAS1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 156 / 156</code></pre>
+<pre><code>##   QCATLAS1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 93 / 93</code></pre>
+<pre><code>##   QCATLAS2BE_DO</code></pre>
+<pre><code>##     Records 1 to 635 / 635</code></pre>
+<pre><code>##   QCATLAS2BE_RAW</code></pre>
+<pre><code>##     Records 1 to 1633 / 1633</code></pre>
+<pre><code>##   QCATLAS2BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 403 / 403</code></pre>
+<pre><code>##   QCATLAS2PC</code></pre>
+<pre><code>##     Records 1 to 394 / 394</code></pre>
 <pre><code>##   RCBIOTABASE</code></pre>
 <pre><code>##     Records 1 to 40 / 40</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(cardinals)</a></code></pre></div>
+<div class="sourceCode" id="cb486"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></pre></div>
 <pre><code>##   species_id utm_square SiteCode Sex latitude SamplingEventIdentifier
 ## 1      19360    11UPT60     3103  NA 51.47389                   C0107
 ## 2      19360    11UPT60     3103  NA 51.47389                   C0119
@@ -419,35 +872,36 @@
 ## 4      19360    11UPV91    45868  NA 53.34350                   92650
 ## 5      19360    12UUE43    45940  NA 53.52760                   92829
 ## 6      19360    12UUE33    45988  NA 53.56476                   92900
-##   subnational2_code iba_site survey_week collection protocol_id survey_day
-## 1          CA.AB.06      N/A           3   ABATLAS1          NA         22
-## 2          CA.AB.06      N/A           3   ABATLAS1          NA         18
-## 3          CA.AB.12      N/A           3   ABATLAS2          NA         23
-## 4          CA.AB.11      N/A           1   ABATLAS2          NA          7
-## 5          CA.AB.11      N/A           1   ABATLAS2          NA          4
-## 6          CA.AB.11      N/A           2   ABATLAS2          NA         16
-##   bcr survey_month protocol_type country_code record_id breeding_rank
-## 1   6            5            NA           CA 225669996             0
-## 2   6            5            NA           CA 225669998             0
-## 3   6            2            NA           CA 225121054             0
-## 4   6            5            NA           CA 225167193             0
-## 5  11            4            NA           CA 225185535             0
-## 6  11            5            NA           CA 225185857             0
-##   project_id statprov_code survey_year longitude
-## 1       1048            AB        1987 -114.6239
-## 2       1048            AB        1987 -114.6239
-## 3       1048            AB        2000 -111.2793
-## 4       1048            AB        2005 -114.0790
-## 5       1048            AB        2005 -113.2996
-## 6       1048            AB        2005 -113.4267</code></pre>
+##   subnational2_code iba_site survey_week collection protocol_id survey_day bcr
+## 1          CA.AB.06      N/A           3   ABATLAS1          NA         22   6
+## 2          CA.AB.06      N/A           3   ABATLAS1          NA         18   6
+## 3          CA.AB.12      N/A           3   ABATLAS2          NA         23   6
+## 4          CA.AB.11      N/A           1   ABATLAS2          NA          7   6
+## 5          CA.AB.11      N/A           1   ABATLAS2          NA          4  11
+## 6          CA.AB.11      N/A           2   ABATLAS2          NA         16  11
+##   survey_month protocol_type country_code record_id breeding_rank project_id
+## 1            5            NA           CA 225669996             0       1048
+## 2            5            NA           CA 225669998             0       1048
+## 3            2            NA           CA 225121054             0       1048
+## 4            5            NA           CA 225167193             0       1048
+## 5            4            NA           CA 225185535             0       1048
+## 6            5            NA           CA 225185857             0       1048
+##   statprov_code survey_year longitude
+## 1            AB        1987 -114.6239
+## 2            AB        1987 -114.6239
+## 3            AB        2000 -111.2793
+## 4            AB        2005 -114.0790
+## 5            AB        2005 -113.2996
+## 6            AB        2005 -113.4267</code></pre>
 </div>
 <div id="adding-specific-fields-to-a-bmde-version" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-specific-fields-to-a-bmde-version" class="anchor"></a>Adding specific fields to a BMDE version</h2>
 <p>In a more complex example, if you wished to download data with the <code>minimum</code> set of BMDE fields, but including a couple of extra fields, you could combine the core fields with the extras you want, and pass them on as a custom field set.</p>
 <p>For example, first collect the minimum field/column names.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">my_fields &lt;-<span class="st"> </span><span class="kw"><a href="../reference/meta.html">meta_bmde_fields</a></span>(<span class="dt">version =</span> <span class="st">"minimum"</span>)<span class="op">$</span>local_name</a>
-<a class="sourceLine" id="cb40-2" data-line-number="2">my_fields</a></code></pre></div>
+<div class="sourceCode" id="cb488"><pre class="downlit">
+<span class="va">my_fields</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"minimum"</span><span class="op">)</span><span class="op">$</span><span class="va">local_name</span>
+<span class="va">my_fields</span></pre></div>
 <pre><code>##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          
 ##  [3] "Locality"                "TimeCollected"          
 ##  [5] "CollectorNumber"         "FieldNumber"            
@@ -468,8 +922,9 @@
 ## [35] "ObservationDescriptor6"  "AllIndividualsReported" 
 ## [37] "AllSpeciesReported"</code></pre>
 <p>Then add in the extra fields.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">my_fields &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(my_fields, <span class="st">"Sex"</span>, <span class="st">"LifeStage"</span>)</a>
-<a class="sourceLine" id="cb42-2" data-line-number="2">my_fields</a></code></pre></div>
+<div class="sourceCode" id="cb490"><pre class="downlit">
+<span class="va">my_fields</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">my_fields</span>, <span class="st">"Sex"</span>, <span class="st">"LifeStage"</span><span class="op">)</span>
+<span class="va">my_fields</span></pre></div>
 <pre><code>##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          
 ##  [3] "Locality"                "TimeCollected"          
 ##  [5] "CollectorNumber"         "FieldNumber"            
@@ -491,16 +946,21 @@
 ## [37] "AllSpeciesReported"      "Sex"                    
 ## [39] "LifeStage"</code></pre>
 <p>Now download the data.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">cardinals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span>(<span class="dt">species =</span> <span class="dv">19360</span>, <span class="dt">fields_set =</span> <span class="st">"custom"</span>, </a>
-<a class="sourceLine" id="cb44-2" data-line-number="2">                        <span class="dt">fields =</span> my_fields, <span class="dt">username =</span> <span class="st">"sample"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb492"><pre class="downlit">
+<span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"custom"</span>, 
+                        fields <span class="op">=</span> <span class="va">my_fields</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, 
+                        info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span></pre></div>
 <pre><code>## Using filters: species (19360); fields_set (custom); fields (GlobalUniqueIdentifier, CatalogNumber, Locality, TimeCollected, CollectorNumber, FieldNumber, Remarks, ProjectCode, ProtocolType, ProtocolCode, ProtocolURL, SurveyAreaIdentifier, SamplingEventIdentifier, SamplingEventStructure, RouteIdentifier, TimeObservationsStarted, TimeObservationsEnded, DurationInHours, TimeIntervalStarted, TimeIntervalEnded, TimeIntervalsAdditive, NumberOfObservers, NoObservations, ObservationCount, ObservationDescriptor, ObservationCount2, ObservationDescriptor2, ObservationCount3, ObservationDescriptor3, ObservationCount4, ObservationDescriptor4, ObservationCount5, ObservationDescriptor5, ObservationCount6, ObservationDescriptor6, AllIndividualsReported, AllSpeciesReported, Sex, LifeStage)</code></pre>
 <pre><code>## Collecting available records...</code></pre>
-<pre><code>##   access  collection nrecords
-## 1    yes    ABATLAS1        2
-## 2    yes    ABATLAS2       13
-## 3    yes  ABBIRDRECS        1
-## 4    yes RCBIOTABASE       40
-## Total records: 56</code></pre>
+<pre><code>##      collection nrecords
+## 1      ABATLAS1        2
+## 2      ABATLAS2       13
+## 3    ABBIRDRECS        1
+## 4           BBS    57254
+## 5     BBS50-CAN     6497
+## 6 BBS50-US-EAST   506277
+## ...
+## Total records: 902,803</code></pre>
 <pre><code>## 
 ## Downloading records for each collection:</code></pre>
 <pre><code>##   ABATLAS1</code></pre>
@@ -509,9 +969,234 @@
 <pre><code>##     Records 1 to 13 / 13</code></pre>
 <pre><code>##   ABBIRDRECS</code></pre>
 <pre><code>##     Records 1 to 1 / 1</code></pre>
+<pre><code>##   BBS</code></pre>
+<pre><code>##     Records 1 to 5000 / 57254</code></pre>
+<pre><code>##     Records 5001 to 10000 / 57254</code></pre>
+<pre><code>##     Records 10001 to 15000 / 57254</code></pre>
+<pre><code>##     Records 15001 to 20000 / 57254</code></pre>
+<pre><code>##     Records 20001 to 25000 / 57254</code></pre>
+<pre><code>##     Records 25001 to 30000 / 57254</code></pre>
+<pre><code>##     Records 30001 to 35000 / 57254</code></pre>
+<pre><code>##     Records 35001 to 40000 / 57254</code></pre>
+<pre><code>##     Records 40001 to 45000 / 57254</code></pre>
+<pre><code>##     Records 45001 to 50000 / 57254</code></pre>
+<pre><code>##     Records 50001 to 55000 / 57254</code></pre>
+<pre><code>##     Records 55001 to 57254 / 57254</code></pre>
+<pre><code>##   BBS50-CAN</code></pre>
+<pre><code>##     Records 1 to 5000 / 6497</code></pre>
+<pre><code>##     Records 5001 to 6497 / 6497</code></pre>
+<pre><code>##   BBS50-US-EAST</code></pre>
+<pre><code>##     Records 1 to 5000 / 506277</code></pre>
+<pre><code>##     Records 5001 to 10000 / 506277</code></pre>
+<pre><code>##     Records 10001 to 15000 / 506277</code></pre>
+<pre><code>##     Records 15001 to 20000 / 506277</code></pre>
+<pre><code>##     Records 20001 to 25000 / 506277</code></pre>
+<pre><code>##     Records 25001 to 30000 / 506277</code></pre>
+<pre><code>##     Records 30001 to 35000 / 506277</code></pre>
+<pre><code>##     Records 35001 to 40000 / 506277</code></pre>
+<pre><code>##     Records 40001 to 45000 / 506277</code></pre>
+<pre><code>##     Records 45001 to 50000 / 506277</code></pre>
+<pre><code>##     Records 50001 to 55000 / 506277</code></pre>
+<pre><code>##     Records 55001 to 60000 / 506277</code></pre>
+<pre><code>##     Records 60001 to 65000 / 506277</code></pre>
+<pre><code>##     Records 65001 to 70000 / 506277</code></pre>
+<pre><code>##     Records 70001 to 75000 / 506277</code></pre>
+<pre><code>##     Records 75001 to 80000 / 506277</code></pre>
+<pre><code>##     Records 80001 to 85000 / 506277</code></pre>
+<pre><code>##     Records 85001 to 90000 / 506277</code></pre>
+<pre><code>##     Records 90001 to 95000 / 506277</code></pre>
+<pre><code>##     Records 95001 to 1e+05 / 506277</code></pre>
+<pre><code>##     Records 100001 to 105000 / 506277</code></pre>
+<pre><code>##     Records 105001 to 110000 / 506277</code></pre>
+<pre><code>##     Records 110001 to 115000 / 506277</code></pre>
+<pre><code>##     Records 115001 to 120000 / 506277</code></pre>
+<pre><code>##     Records 120001 to 125000 / 506277</code></pre>
+<pre><code>##     Records 125001 to 130000 / 506277</code></pre>
+<pre><code>##     Records 130001 to 135000 / 506277</code></pre>
+<pre><code>##     Records 135001 to 140000 / 506277</code></pre>
+<pre><code>##     Records 140001 to 145000 / 506277</code></pre>
+<pre><code>##     Records 145001 to 150000 / 506277</code></pre>
+<pre><code>##     Records 150001 to 155000 / 506277</code></pre>
+<pre><code>##     Records 155001 to 160000 / 506277</code></pre>
+<pre><code>##     Records 160001 to 165000 / 506277</code></pre>
+<pre><code>##     Records 165001 to 170000 / 506277</code></pre>
+<pre><code>##     Records 170001 to 175000 / 506277</code></pre>
+<pre><code>##     Records 175001 to 180000 / 506277</code></pre>
+<pre><code>##     Records 180001 to 185000 / 506277</code></pre>
+<pre><code>##     Records 185001 to 190000 / 506277</code></pre>
+<pre><code>##     Records 190001 to 195000 / 506277</code></pre>
+<pre><code>##     Records 195001 to 2e+05 / 506277</code></pre>
+<pre><code>##     Records 200001 to 205000 / 506277</code></pre>
+<pre><code>##     Records 205001 to 210000 / 506277</code></pre>
+<pre><code>##     Records 210001 to 215000 / 506277</code></pre>
+<pre><code>##     Records 215001 to 220000 / 506277</code></pre>
+<pre><code>##     Records 220001 to 225000 / 506277</code></pre>
+<pre><code>##     Records 225001 to 230000 / 506277</code></pre>
+<pre><code>##     Records 230001 to 235000 / 506277</code></pre>
+<pre><code>##     Records 235001 to 240000 / 506277</code></pre>
+<pre><code>##     Records 240001 to 245000 / 506277</code></pre>
+<pre><code>##     Records 245001 to 250000 / 506277</code></pre>
+<pre><code>##     Records 250001 to 255000 / 506277</code></pre>
+<pre><code>##     Records 255001 to 260000 / 506277</code></pre>
+<pre><code>##     Records 260001 to 265000 / 506277</code></pre>
+<pre><code>##     Records 265001 to 270000 / 506277</code></pre>
+<pre><code>##     Records 270001 to 275000 / 506277</code></pre>
+<pre><code>##     Records 275001 to 280000 / 506277</code></pre>
+<pre><code>##     Records 280001 to 285000 / 506277</code></pre>
+<pre><code>##     Records 285001 to 290000 / 506277</code></pre>
+<pre><code>##     Records 290001 to 295000 / 506277</code></pre>
+<pre><code>##     Records 295001 to 3e+05 / 506277</code></pre>
+<pre><code>##     Records 300001 to 305000 / 506277</code></pre>
+<pre><code>##     Records 305001 to 310000 / 506277</code></pre>
+<pre><code>##     Records 310001 to 315000 / 506277</code></pre>
+<pre><code>##     Records 315001 to 320000 / 506277</code></pre>
+<pre><code>##     Records 320001 to 325000 / 506277</code></pre>
+<pre><code>##     Records 325001 to 330000 / 506277</code></pre>
+<pre><code>##     Records 330001 to 335000 / 506277</code></pre>
+<pre><code>##     Records 335001 to 340000 / 506277</code></pre>
+<pre><code>##     Records 340001 to 345000 / 506277</code></pre>
+<pre><code>##     Records 345001 to 350000 / 506277</code></pre>
+<pre><code>##     Records 350001 to 355000 / 506277</code></pre>
+<pre><code>##     Records 355001 to 360000 / 506277</code></pre>
+<pre><code>##     Records 360001 to 365000 / 506277</code></pre>
+<pre><code>##     Records 365001 to 370000 / 506277</code></pre>
+<pre><code>##     Records 370001 to 375000 / 506277</code></pre>
+<pre><code>##     Records 375001 to 380000 / 506277</code></pre>
+<pre><code>##     Records 380001 to 385000 / 506277</code></pre>
+<pre><code>##     Records 385001 to 390000 / 506277</code></pre>
+<pre><code>##     Records 390001 to 395000 / 506277</code></pre>
+<pre><code>##     Records 395001 to 4e+05 / 506277</code></pre>
+<pre><code>##     Records 400001 to 405000 / 506277</code></pre>
+<pre><code>##     Records 405001 to 410000 / 506277</code></pre>
+<pre><code>##     Records 410001 to 415000 / 506277</code></pre>
+<pre><code>##     Records 415001 to 420000 / 506277</code></pre>
+<pre><code>##     Records 420001 to 425000 / 506277</code></pre>
+<pre><code>##     Records 425001 to 430000 / 506277</code></pre>
+<pre><code>##     Records 430001 to 435000 / 506277</code></pre>
+<pre><code>##     Records 435001 to 440000 / 506277</code></pre>
+<pre><code>##     Records 440001 to 445000 / 506277</code></pre>
+<pre><code>##     Records 445001 to 450000 / 506277</code></pre>
+<pre><code>##     Records 450001 to 455000 / 506277</code></pre>
+<pre><code>##     Records 455001 to 460000 / 506277</code></pre>
+<pre><code>##     Records 460001 to 465000 / 506277</code></pre>
+<pre><code>##     Records 465001 to 470000 / 506277</code></pre>
+<pre><code>##     Records 470001 to 475000 / 506277</code></pre>
+<pre><code>##     Records 475001 to 480000 / 506277</code></pre>
+<pre><code>##     Records 480001 to 485000 / 506277</code></pre>
+<pre><code>##     Records 485001 to 490000 / 506277</code></pre>
+<pre><code>##     Records 490001 to 495000 / 506277</code></pre>
+<pre><code>##     Records 495001 to 5e+05 / 506277</code></pre>
+<pre><code>##     Records 500001 to 505000 / 506277</code></pre>
+<pre><code>##     Records 505001 to 506277 / 506277</code></pre>
+<pre><code>##   BBS50-US-WEST</code></pre>
+<pre><code>##     Records 1 to 5000 / 144886</code></pre>
+<pre><code>##     Records 5001 to 10000 / 144886</code></pre>
+<pre><code>##     Records 10001 to 15000 / 144886</code></pre>
+<pre><code>##     Records 15001 to 20000 / 144886</code></pre>
+<pre><code>##     Records 20001 to 25000 / 144886</code></pre>
+<pre><code>##     Records 25001 to 30000 / 144886</code></pre>
+<pre><code>##     Records 30001 to 35000 / 144886</code></pre>
+<pre><code>##     Records 35001 to 40000 / 144886</code></pre>
+<pre><code>##     Records 40001 to 45000 / 144886</code></pre>
+<pre><code>##     Records 45001 to 50000 / 144886</code></pre>
+<pre><code>##     Records 50001 to 55000 / 144886</code></pre>
+<pre><code>##     Records 55001 to 60000 / 144886</code></pre>
+<pre><code>##     Records 60001 to 65000 / 144886</code></pre>
+<pre><code>##     Records 65001 to 70000 / 144886</code></pre>
+<pre><code>##     Records 70001 to 75000 / 144886</code></pre>
+<pre><code>##     Records 75001 to 80000 / 144886</code></pre>
+<pre><code>##     Records 80001 to 85000 / 144886</code></pre>
+<pre><code>##     Records 85001 to 90000 / 144886</code></pre>
+<pre><code>##     Records 90001 to 95000 / 144886</code></pre>
+<pre><code>##     Records 95001 to 1e+05 / 144886</code></pre>
+<pre><code>##     Records 100001 to 105000 / 144886</code></pre>
+<pre><code>##     Records 105001 to 110000 / 144886</code></pre>
+<pre><code>##     Records 110001 to 115000 / 144886</code></pre>
+<pre><code>##     Records 115001 to 120000 / 144886</code></pre>
+<pre><code>##     Records 120001 to 125000 / 144886</code></pre>
+<pre><code>##     Records 125001 to 130000 / 144886</code></pre>
+<pre><code>##     Records 130001 to 135000 / 144886</code></pre>
+<pre><code>##     Records 135001 to 140000 / 144886</code></pre>
+<pre><code>##     Records 140001 to 144886 / 144886</code></pre>
+<pre><code>##   CMMN-DET-HBO</code></pre>
+<pre><code>##     Records 1 to 5000 / 6141</code></pre>
+<pre><code>##     Records 5001 to 6141 / 6141</code></pre>
+<pre><code>##   MBATLAS1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 15 / 15</code></pre>
+<pre><code>##   MBATLAS1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 9 / 9</code></pre>
+<pre><code>##   MBBA1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 25 / 25</code></pre>
+<pre><code>##   MBBA1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 20 / 20</code></pre>
+<pre><code>##   MBBA2BE_RAW</code></pre>
+<pre><code>##     Records 1 to 225 / 225</code></pre>
+<pre><code>##   MBBA2BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 129 / 129</code></pre>
+<pre><code>##   MBBA2PC</code></pre>
+<pre><code>##     Records 1 to 28 / 28</code></pre>
+<pre><code>##   OBBA1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 2132 / 2132</code></pre>
+<pre><code>##   OBBA1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 773 / 773</code></pre>
+<pre><code>##   OBBA2BE_RAW</code></pre>
+<pre><code>##     Records 1 to 3445 / 3445</code></pre>
+<pre><code>##   OBBA2BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 1044 / 1044</code></pre>
+<pre><code>##   OBBA2PC</code></pre>
+<pre><code>##     Records 1 to 4150 / 4150</code></pre>
+<pre><code>##   OBFS</code></pre>
+<pre><code>##     Records 1 to 5000 / 13797</code></pre>
+<pre><code>##     Records 5001 to 10000 / 13797</code></pre>
+<pre><code>##     Records 10001 to 13797 / 13797</code></pre>
+<pre><code>##   PFW</code></pre>
+<pre><code>##     Records 1 to 5000 / 152586</code></pre>
+<pre><code>##     Records 5001 to 10000 / 152586</code></pre>
+<pre><code>##     Records 10001 to 15000 / 152586</code></pre>
+<pre><code>##     Records 15001 to 20000 / 152586</code></pre>
+<pre><code>##     Records 20001 to 25000 / 152586</code></pre>
+<pre><code>##     Records 25001 to 30000 / 152586</code></pre>
+<pre><code>##     Records 30001 to 35000 / 152586</code></pre>
+<pre><code>##     Records 35001 to 40000 / 152586</code></pre>
+<pre><code>##     Records 40001 to 45000 / 152586</code></pre>
+<pre><code>##     Records 45001 to 50000 / 152586</code></pre>
+<pre><code>##     Records 50001 to 55000 / 152586</code></pre>
+<pre><code>##     Records 55001 to 60000 / 152586</code></pre>
+<pre><code>##     Records 60001 to 65000 / 152586</code></pre>
+<pre><code>##     Records 65001 to 70000 / 152586</code></pre>
+<pre><code>##     Records 70001 to 75000 / 152586</code></pre>
+<pre><code>##     Records 75001 to 80000 / 152586</code></pre>
+<pre><code>##     Records 80001 to 85000 / 152586</code></pre>
+<pre><code>##     Records 85001 to 90000 / 152586</code></pre>
+<pre><code>##     Records 90001 to 95000 / 152586</code></pre>
+<pre><code>##     Records 95001 to 1e+05 / 152586</code></pre>
+<pre><code>##     Records 100001 to 105000 / 152586</code></pre>
+<pre><code>##     Records 105001 to 110000 / 152586</code></pre>
+<pre><code>##     Records 110001 to 115000 / 152586</code></pre>
+<pre><code>##     Records 115001 to 120000 / 152586</code></pre>
+<pre><code>##     Records 120001 to 125000 / 152586</code></pre>
+<pre><code>##     Records 125001 to 130000 / 152586</code></pre>
+<pre><code>##     Records 130001 to 135000 / 152586</code></pre>
+<pre><code>##     Records 135001 to 140000 / 152586</code></pre>
+<pre><code>##     Records 140001 to 145000 / 152586</code></pre>
+<pre><code>##     Records 145001 to 150000 / 152586</code></pre>
+<pre><code>##     Records 150001 to 152586 / 152586</code></pre>
+<pre><code>##   QCATLAS1BE_RAW</code></pre>
+<pre><code>##     Records 1 to 156 / 156</code></pre>
+<pre><code>##   QCATLAS1BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 93 / 93</code></pre>
+<pre><code>##   QCATLAS2BE_DO</code></pre>
+<pre><code>##     Records 1 to 635 / 635</code></pre>
+<pre><code>##   QCATLAS2BE_RAW</code></pre>
+<pre><code>##     Records 1 to 1633 / 1633</code></pre>
+<pre><code>##   QCATLAS2BE_SUMM</code></pre>
+<pre><code>##     Records 1 to 403 / 403</code></pre>
+<pre><code>##   QCATLAS2PC</code></pre>
+<pre><code>##     Records 1 to 394 / 394</code></pre>
 <pre><code>##   RCBIOTABASE</code></pre>
 <pre><code>##     Records 1 to 40 / 40</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(cardinals)</a></code></pre></div>
+<div class="sourceCode" id="cb729"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></pre></div>
 <pre><code>##                  GlobalUniqueIdentifier FieldNumber DurationInHours
 ## 1 URN:NatureAlberta:ABATLAS1:C0107-NOCA          NA            &lt;NA&gt;
 ## 2 URN:NatureAlberta:ABATLAS1:C0119-NOCA          NA            &lt;NA&gt;
@@ -520,129 +1205,108 @@
 ## 5 URN:NatureAlberta:ABATLAS2:92829-NOCA          NA               3
 ## 6 URN:NatureAlberta:ABATLAS2:92900-NOCA          NA               3
 ##   ObservationDescriptor5               Remarks ObservationDescriptor6
-## 1                     NA                  &lt;NA&gt;                     NA
-## 2                     NA                  &lt;NA&gt;                     NA
-## 3                     NA              uncommon                     NA
-## 4                     NA                  &lt;NA&gt;                     NA
-## 5                     NA Spotted at the feeder                     NA
-## 6                     NA                  &lt;NA&gt;                     NA
+## 1                   &lt;NA&gt;                  &lt;NA&gt;                   &lt;NA&gt;
+## 2                   &lt;NA&gt;                  &lt;NA&gt;                   &lt;NA&gt;
+## 3                   &lt;NA&gt;              uncommon                   &lt;NA&gt;
+## 4                   &lt;NA&gt;                  &lt;NA&gt;                   &lt;NA&gt;
+## 5                   &lt;NA&gt; Spotted at the feeder                   &lt;NA&gt;
+## 6                   &lt;NA&gt;                  &lt;NA&gt;                   &lt;NA&gt;
 ##   project_id ObservationDescriptor3 ObservationDescriptor4
-## 1       1048                     NA                     NA
-## 2       1048                     NA                     NA
-## 3       1048                     NA                     NA
-## 4       1048                     NA                     NA
-## 5       1048                     NA                     NA
-## 6       1048                     NA                     NA
-##   ObservationDescriptor ProtocolCode ObservationCount
-## 1                    NA         &lt;NA&gt;             &lt;NA&gt;
-## 2                    NA         &lt;NA&gt;             &lt;NA&gt;
-## 3                    NA         &lt;NA&gt;                2
-## 4                    NA         &lt;NA&gt;                1
-## 5                    NA         &lt;NA&gt;                1
-## 6                    NA         &lt;NA&gt;                1
-##   ObservationDescriptor2 TimeIntervalEnded longitude
-## 1                     NA                NA -114.6239
-## 2                     NA                NA -114.6239
-## 3                     NA                NA -111.2793
-## 4                     NA                NA -114.0790
-## 5                     NA                NA -113.2996
-## 6                     NA                NA -113.4267
-##                        Locality SamplingEventIdentifier collection
-## 1                       11UPH60                   C0107   ABATLAS1
-## 2                       11UPH60                   C0119   ABATLAS1
-## 3 All areas within count circle                    5863   ABATLAS2
-## 4                          PK91                   92650   ABATLAS2
-## 5           Sherwood Park, UQ43                   92829   ABATLAS2
-## 6      50st and Ada blvd., UQ33                   92900   ABATLAS2
-##   protocol_id SurveyAreaIdentifier SamplingEventStructure protocol_type
-## 1          NA                 3103                     NA            NA
-## 2          NA                 3103                     NA            NA
-## 3          NA                12049                     NA            NA
-## 4          NA                45868                     NA            NA
-## 5          NA                45940                     NA            NA
-## 6          NA                45988                     NA            NA
-##   country_code TimeCollected statprov_code TimeObservationsEnded
-## 1           CA          &lt;NA&gt;            AB                  &lt;NA&gt;
-## 2           CA          &lt;NA&gt;            AB                  &lt;NA&gt;
-## 3           CA          &lt;NA&gt;            AB                  &lt;NA&gt;
-## 4           CA          &lt;NA&gt;            AB                  &lt;NA&gt;
-## 5           CA          &lt;NA&gt;            AB                  &lt;NA&gt;
-## 6           CA          &lt;NA&gt;            AB                  &lt;NA&gt;
-##   species_id utm_square TimeObservationsStarted Sex latitude iba_site
-## 1      19360    11UPT60                    &lt;NA&gt;  NA 51.47389      N/A
-## 2      19360    11UPT60                    &lt;NA&gt;  NA 51.47389      N/A
-## 3      19360    12UVE88                09:00:00  NA 53.98632      N/A
-## 4      19360    11UPV91                06:00:00  NA 53.34350      N/A
-## 5      19360    12UUE43                06:00:00  NA 53.52760      N/A
-## 6      19360    12UUE33                06:00:00  NA 53.56476      N/A
-##   LifeStage CollectorNumber bcr survey_month CatalogNumber
-## 1        NA            1356   6            5    C0107-NOCA
-## 2        NA            1116   6            5    C0119-NOCA
-## 3        NA            5017   6            2     5863-NOCA
-## 4        NA            4882   6            5    92650-NOCA
-## 5        NA            4882  11            4    92829-NOCA
-## 6        NA           10197  11            5    92900-NOCA
+## 1       1048                   &lt;NA&gt;                   &lt;NA&gt;
+## 2       1048                   &lt;NA&gt;                   &lt;NA&gt;
+## 3       1048                   &lt;NA&gt;                   &lt;NA&gt;
+## 4       1048                   &lt;NA&gt;                   &lt;NA&gt;
+## 5       1048                   &lt;NA&gt;                   &lt;NA&gt;
+## 6       1048                   &lt;NA&gt;                   &lt;NA&gt;
+##   ObservationDescriptor ProtocolCode ObservationCount ObservationDescriptor2
+## 1                  &lt;NA&gt;         &lt;NA&gt;             &lt;NA&gt;                   &lt;NA&gt;
+## 2                  &lt;NA&gt;         &lt;NA&gt;             &lt;NA&gt;                   &lt;NA&gt;
+## 3                  &lt;NA&gt;         &lt;NA&gt;                2                   &lt;NA&gt;
+## 4                  &lt;NA&gt;         &lt;NA&gt;                1                   &lt;NA&gt;
+## 5                  &lt;NA&gt;         &lt;NA&gt;                1                   &lt;NA&gt;
+## 6                  &lt;NA&gt;         &lt;NA&gt;                1                   &lt;NA&gt;
+##   TimeIntervalEnded longitude                      Locality
+## 1                NA -114.6239                       11UPH60
+## 2                NA -114.6239                       11UPH60
+## 3                NA -111.2793 All areas within count circle
+## 4                NA -114.0790                          PK91
+## 5                NA -113.2996           Sherwood Park, UQ43
+## 6                NA -113.4267      50st and Ada blvd., UQ33
+##   SamplingEventIdentifier collection protocol_id SurveyAreaIdentifier
+## 1                   C0107   ABATLAS1          NA                 3103
+## 2                   C0119   ABATLAS1          NA                 3103
+## 3                    5863   ABATLAS2          NA                12049
+## 4                   92650   ABATLAS2          NA                45868
+## 5                   92829   ABATLAS2          NA                45940
+## 6                   92900   ABATLAS2          NA                45988
+##   SamplingEventStructure protocol_type country_code TimeCollected statprov_code
+## 1                   &lt;NA&gt;            NA           CA          &lt;NA&gt;            AB
+## 2                   &lt;NA&gt;            NA           CA          &lt;NA&gt;            AB
+## 3                   &lt;NA&gt;            NA           CA          &lt;NA&gt;            AB
+## 4                   &lt;NA&gt;            NA           CA          &lt;NA&gt;            AB
+## 5                   &lt;NA&gt;            NA           CA          &lt;NA&gt;            AB
+## 6                   &lt;NA&gt;            NA           CA          &lt;NA&gt;            AB
+##   TimeObservationsEnded species_id utm_square TimeObservationsStarted Sex
+## 1                  &lt;NA&gt;      19360    11UPT60                    &lt;NA&gt;  NA
+## 2                  &lt;NA&gt;      19360    11UPT60                    &lt;NA&gt;  NA
+## 3                  &lt;NA&gt;      19360    12UVE88                09:00:00  NA
+## 4                  &lt;NA&gt;      19360    11UPV91                06:00:00  NA
+## 5                  &lt;NA&gt;      19360    12UUE43                06:00:00  NA
+## 6                  &lt;NA&gt;      19360    12UUE33                06:00:00  NA
+##   latitude iba_site LifeStage CollectorNumber bcr survey_month CatalogNumber
+## 1 51.47389      N/A        NA            1356   6            5    C0107-NOCA
+## 2 51.47389      N/A        NA            1116   6            5    C0119-NOCA
+## 3 53.98632      N/A        NA            5017   6            2     5863-NOCA
+## 4 53.34350      N/A        NA            4882   6            5    92650-NOCA
+## 5 53.52760      N/A        NA            4882  11            4    92829-NOCA
+## 6 53.56476      N/A        NA           10197  11            5    92900-NOCA
 ##   AllSpeciesReported survey_year ProjectCode RouteIdentifier
-## 1            Unknown        1987    ABATLAS1              NA
-## 2            Unknown        1987    ABATLAS1              NA
-## 3            Unknown        2000    ABATLAS2              NA
-## 4            Unknown        2005    ABATLAS2              NA
-## 5            Unknown        2005    ABATLAS2              NA
-## 6            Unknown        2005    ABATLAS2              NA
-##   AllIndividualsReported TimeIntervalsAdditive ProtocolURL
-## 1                   &lt;NA&gt;                    NA        &lt;NA&gt;
-## 2                   &lt;NA&gt;                    NA        &lt;NA&gt;
-## 3                   &lt;NA&gt;                    NA        &lt;NA&gt;
-## 4                   &lt;NA&gt;                    NA        &lt;NA&gt;
-## 5                   &lt;NA&gt;                    NA        &lt;NA&gt;
-## 6                   &lt;NA&gt;                    NA        &lt;NA&gt;
-##   NumberOfObservers SiteCode ObservationCount2 subnational2_code
-## 1                 0     3103                NA          CA.AB.06
-## 2                 1     3103                NA          CA.AB.06
-## 3                 0    12049                NA          CA.AB.12
-## 4                 1    45868                NA          CA.AB.11
-## 5                 1    45940                NA          CA.AB.11
-## 6                 1    45988                NA          CA.AB.11
-##   survey_week survey_day record_id breeding_rank ObservationCount6
-## 1           3         22 225669996             0                NA
-## 2           3         18 225669998             0                NA
-## 3           3         23 225121054             0                NA
-## 4           1          7 225167193             0                NA
-## 5           1          4 225185535             0                NA
-## 6           2         16 225185857             0                NA
-##   ObservationCount5            ProtocolType NoObservations
-## 1                NA     Breeding Bird Atlas             NA
-## 2                NA     Breeding Bird Atlas             NA
-## 3                NA AT: Breeding Bird Atlas             NA
-## 4                NA AT: Breeding Bird Atlas             NA
-## 5                NA AT: Breeding Bird Atlas             NA
-## 6                NA AT: Breeding Bird Atlas             NA
-##   ObservationCount4 ObservationCount3 TimeIntervalStarted
-## 1                NA                NA                  NA
-## 2                NA                NA                  NA
-## 3                NA                NA                  NA
-## 4                NA                NA                  NA
-## 5                NA                NA                  NA
-## 6                NA                NA                  NA</code></pre>
+## 1            Unknown        1987    ABATLAS1            &lt;NA&gt;
+## 2            Unknown        1987    ABATLAS1            &lt;NA&gt;
+## 3            Unknown        2000    ABATLAS2            &lt;NA&gt;
+## 4            Unknown        2005    ABATLAS2            &lt;NA&gt;
+## 5            Unknown        2005    ABATLAS2            &lt;NA&gt;
+## 6            Unknown        2005    ABATLAS2            &lt;NA&gt;
+##   AllIndividualsReported TimeIntervalsAdditive ProtocolURL NumberOfObservers
+## 1                   &lt;NA&gt;                    NA        &lt;NA&gt;                 0
+## 2                   &lt;NA&gt;                    NA        &lt;NA&gt;                 1
+## 3                   &lt;NA&gt;                    NA        &lt;NA&gt;                 0
+## 4                   &lt;NA&gt;                    NA        &lt;NA&gt;                 1
+## 5                   &lt;NA&gt;                    NA        &lt;NA&gt;                 1
+## 6                   &lt;NA&gt;                    NA        &lt;NA&gt;                 1
+##   SiteCode ObservationCount2 subnational2_code survey_week survey_day record_id
+## 1     3103              &lt;NA&gt;          CA.AB.06           3         22 225669996
+## 2     3103              &lt;NA&gt;          CA.AB.06           3         18 225669998
+## 3    12049              &lt;NA&gt;          CA.AB.12           3         23 225121054
+## 4    45868              &lt;NA&gt;          CA.AB.11           1          7 225167193
+## 5    45940              &lt;NA&gt;          CA.AB.11           1          4 225185535
+## 6    45988              &lt;NA&gt;          CA.AB.11           2         16 225185857
+##   breeding_rank ObservationCount6 ObservationCount5            ProtocolType
+## 1             0              &lt;NA&gt;              &lt;NA&gt;     Breeding Bird Atlas
+## 2             0              &lt;NA&gt;              &lt;NA&gt;     Breeding Bird Atlas
+## 3             0              &lt;NA&gt;              &lt;NA&gt; AT: Breeding Bird Atlas
+## 4             0              &lt;NA&gt;              &lt;NA&gt; AT: Breeding Bird Atlas
+## 5             0              &lt;NA&gt;              &lt;NA&gt; AT: Breeding Bird Atlas
+## 6             0              &lt;NA&gt;              &lt;NA&gt; AT: Breeding Bird Atlas
+##   NoObservations ObservationCount4 ObservationCount3 TimeIntervalStarted
+## 1             NA              &lt;NA&gt;              &lt;NA&gt;                &lt;NA&gt;
+## 2             NA              &lt;NA&gt;              &lt;NA&gt;                &lt;NA&gt;
+## 3             NA              &lt;NA&gt;              &lt;NA&gt;                &lt;NA&gt;
+## 4             NA              &lt;NA&gt;              &lt;NA&gt;                &lt;NA&gt;
+## 5             NA              &lt;NA&gt;              &lt;NA&gt;                &lt;NA&gt;
+## 6             NA              &lt;NA&gt;              &lt;NA&gt;                &lt;NA&gt;</code></pre>
 <p>Great!</p>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#bmde-versions">BMDE versions</a></li>
-      <li><a href="#specifying-fields-by-version">Specifying fields by version</a></li>
-      <li><a href="#basic-fields">Basic fields</a></li>
-      <li><a href="#custom-fields">Custom fields</a></li>
-      <li><a href="#adding-specific-fields-to-a-bmde-version">Adding specific fields to a BMDE version</a></li>
-      </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
+
 
 
       <footer><div class="copyright">
@@ -650,12 +1314,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

@@ -8,21 +8,29 @@
 
 <title>Check on status of data requests — nc_requests • naturecounts</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,10 +40,10 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Check on status of data requests — nc_requests" />
 
+<meta property="og:title" content="Check on status of data requests — nc_requests" />
 <meta property="og:description" content="List pending or completed data requests for a given user." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -49,9 +57,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -65,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.1.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
       </span>
     </div>
 
@@ -87,7 +96,6 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/BirdStudiesCanada/naturecounts">
@@ -102,6 +110,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -113,13 +122,11 @@
     </div>
 
     <div class="ref-description">
-    
     <p>List pending or completed data requests for a given user.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>nc_requests</span>(<span class='kw'>request_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>username</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>nc_requests</span><span class='op'>(</span>request_id <span class='op'>=</span> <span class='cn'>NULL</span>, type <span class='op'>=</span> <span class='st'>"web"</span>, <span class='va'>username</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -128,247 +135,66 @@
       <td><p>Numeric. Specific request id to check or download.</p></td>
     </tr>
     <tr>
+      <th>type</th>
+      <td><p>Character One of "web", "api", or "all" specifying which types of
+request to return (defaults to "web").</p></td>
+    </tr>
+    <tr>
       <th>username</th>
       <td><p>Character vector. Username for <a href='http://naturecounts.ca'>http://naturecounts.ca</a>. If
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>data frame</p>
-    
-    <h2 class="hasAnchor" id="request-id-s"><a class="anchor" href="#request-id-s"></a><code>request_id</code>'s</h2>
+    <h2 class="hasAnchor" id="access-and-request-ids"><a class="anchor" href="#access-and-request-ids"></a>Access and <code>request_id</code>s</h2>
 
     
-    <p>There are two types of data requests: ones made through the api (i.e. this
-<code>naturecounts</code> R package) and those made through the online <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a>. Each
-request generates a request id which identifies the filter set and
-collections requested.</p>
-<p>Requests made through this package via the <code><a href='nc_data_dl.html'>nc_data_dl()</a></code> function only
-return data the user has access to. If data was successfully downloaded, the
-user can see the request details with the <code>nc_requests()</code> function.</p>
-<p>Requests made through the online <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> may
-include collections to which the user does not have access. <code>nc_requests()</code>
-will list the requests along with the approval status (either 'approved' or
-'pending').</p>
-<p>Any approved request id can be downloaded by supplying the <code>request_id</code> to
-<code><a href='nc_data_dl.html'>nc_data_dl()</a></code> (e.g., <code><a href='nc_data_dl.html'>nc_data_dl(request_id = 152000, username = "USER")</a></code>).</p>
-    
+
+
+<p>Access to a data collection is either available as "full" or "by request".
+Use <code><a href='nc_count.html'>nc_count(username = "USER", show = "all")</a></code>, to see the accessibility of
+collections.</p>
+<p>"Full" access means that data can be immediately requested directly through
+the <code>naturecounts</code> R package. "By request" means that a request must be
+<a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>submitted online</a> and
+approved before the data can be downloaded through <code>naturecounts</code>.</p>
+<p>This means that there are two types of data requests: ones made through this
+<code>naturecounts</code> R package (API requests) and those made through the online
+<a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> (Web
+requests). Every request (from either method) generates a <code>request_id</code> which
+identifies the filter set and collections requested. Details of all of
+requests can be reviewed with the <code>nc_requests()</code> function.</p>
+<p>To download data with "full" access, users can either specify filters, or if
+they are repeating a download, can use the <code>request_id</code> from <code>nc_requests()</code>.</p>
+<p>Otherwise, if the user doesn't have "full" access, they must supply an
+approved <code>request_id</code> to the <code><a href='nc_data_dl.html'>nc_data_dl()</a></code> function (e.g.,
+<code><a href='nc_data_dl.html'>nc_data_dl(request_id = 152000, username = "USER")</a></code>). Use <code>nc_requests()</code> to
+see <code>request_id</code>s, filters, and approval status.</p>
+<p>Requests for "full" access to additional collections can be made online
+through the <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> by
+checking the "Full access?" box in Step 2 of the form.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>nc_requests</span>(<span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt;    request_id requestOrigin requestLabel  collection   status nrecords
-#&gt; 1      152446           api  API Request RCBIOTABASE approved        2
-#&gt; 2      152447           api  API Request RCBIOTABASE approved        2
-#&gt; 3      152508           api  API Request    ABATLAS1 approved     1459
-#&gt; 4      152508           api  API Request    ABATLAS2 approved     4119
-#&gt; 5      152508           api  API Request  ABBIRDRECS approved     3226
-#&gt; 6      152508           api  API Request RCBIOTABASE approved      160
-#&gt; 7      152509           api  API Request RCBIOTABASE approved        7
-#&gt; 8      152510           api  API Request    ABATLAS1 approved     1459
-#&gt; 9      152510           api  API Request    ABATLAS2 approved     4119
-#&gt; 10     152510           api  API Request  ABBIRDRECS approved     3226
-#&gt; 11     152510           api  API Request RCBIOTABASE approved      160
-#&gt; 12     152511           api  API Request    ABATLAS1 approved        2
-#&gt; 13     152511           api  API Request    ABATLAS2 approved       13
-#&gt; 14     152511           api  API Request  ABBIRDRECS approved        1
-#&gt; 15     152511           api  API Request RCBIOTABASE approved       40
-#&gt; 16     152512           api  API Request    ABATLAS1 approved        2
-#&gt; 17     152512           api  API Request    ABATLAS2 approved       13
-#&gt; 18     152512           api  API Request  ABBIRDRECS approved        1
-#&gt; 19     152512           api  API Request RCBIOTABASE approved       40
-#&gt; 20     152513           api  API Request    ABATLAS1 approved        2
-#&gt; 21     152513           api  API Request    ABATLAS2 approved       13
-#&gt; 22     152513           api  API Request  ABBIRDRECS approved        1
-#&gt; 23     152513           api  API Request RCBIOTABASE approved       40
-#&gt; 24     152514           api  API Request RCBIOTABASE approved        2
-#&gt; 25     152515           api  API Request RCBIOTABASE approved        2
-#&gt; 26     152516           api  API Request    ABATLAS1 approved     1949
-#&gt; 27     152516           api  API Request    ABATLAS2 approved     4999
-#&gt; 28     152516           api  API Request  ABBIRDRECS approved     3891
-#&gt; 29     152516           api  API Request RCBIOTABASE approved      170
-#&gt; 30     152517           api  API Request RCBIOTABASE approved        2
-#&gt; 31     152518           api  API Request RCBIOTABASE approved    12598
-#&gt; 32     152519           api  API Request RCBIOTABASE approved        7
-#&gt; 33     152520           api  API Request RCBIOTABASE approved        7
-#&gt; 34     152521           api  API Request RCBIOTABASE approved        7
-#&gt; 35     152522           api  API Request RCBIOTABASE approved        7
-#&gt; 36     152523           api  API Request RCBIOTABASE approved        7
-#&gt; 37     152524           api  API Request RCBIOTABASE approved        7
-#&gt; 38     152525           api  API Request RCBIOTABASE approved      891
-#&gt; 39     152526           api  API Request RCBIOTABASE approved      891
-#&gt; 40     152527           api  API Request RCBIOTABASE approved        3
-#&gt; 41     152528           api  API Request  ABBIRDRECS approved       41
-#&gt; 42     152529           api  API Request  ABBIRDRECS approved      614
-#&gt; 43     152530           api  API Request  ABBIRDRECS approved       41
-#&gt; 44     152531           api  API Request  ABBIRDRECS approved       41
-#&gt; 45     152532           api  API Request    ABATLAS1 approved     1039
-#&gt; 46     152532           api  API Request  EBUTTERFLY approved       11
-#&gt; 47     152532           api  API Request    ABATLAS2 approved     1387
-#&gt; 48     152532           api  API Request  ABBIRDRECS approved      456
-#&gt; 49     152533           api  API Request          MM approved        2
-#&gt; 50     152533           api  API Request  EBUTTERFLY approved       29
-#&gt; 51     152533           api  API Request  ABBIRDRECS approved       10
-#&gt; 52     152534           api  API Request          MM approved        3
-#&gt; 53     152534           api  API Request        IMQC approved        2
-#&gt; 54     152534           api  API Request  EBUTTERFLY approved       38
-#&gt; 55     152535           api  API Request  EBUTTERFLY approved       21
-#&gt; 56     152536           api  API Request  ABBIRDRECS approved      166
-#&gt; 57     152537           api  API Request  ABBIRDRECS approved       20
-#&gt; 58     152538           api  API Request  ABBIRDRECS approved       17
-#&gt; 59     152539           api  API Request  ABBIRDRECS approved        3
-#&gt; 60     152540           api  API Request RCBIOTABASE approved    12598
-#&gt; 61     152541           api  API Request RCBIOTABASE approved        3
-#&gt; 62     152542           api  API Request RCBIOTABASE approved        7
-#&gt; 63     152543           api  API Request RCBIOTABASE approved      160
-#&gt; 64     152544           api  API Request RCBIOTABASE approved        7
-#&gt; 65     152545           api  API Request RCBIOTABASE approved       44
-#&gt; 66     152546           api  API Request RCBIOTABASE approved        7
-#&gt; 67     152547           api  API Request RCBIOTABASE approved      160
-#&gt; 68     152548           api  API Request    ABATLAS1 approved     1459
-#&gt; 69     152548           api  API Request    ABATLAS2 approved     4119
-#&gt; 70     152548           api  API Request  ABBIRDRECS approved     3226
-#&gt; 71     152548           api  API Request RCBIOTABASE approved      160
-#&gt; 72     152549           api  API Request RCBIOTABASE approved        7
-#&gt; 73     152550           api  API Request    ABATLAS1 approved     1459
-#&gt; 74     152550           api  API Request    ABATLAS2 approved     4119
-#&gt; 75     152550           api  API Request  ABBIRDRECS approved     3226
-#&gt; 76     152550           api  API Request RCBIOTABASE approved      160
-#&gt; 77     152551           api  API Request    ABATLAS1 approved        2
-#&gt; 78     152551           api  API Request    ABATLAS2 approved       13
-#&gt; 79     152551           api  API Request  ABBIRDRECS approved        1
-#&gt; 80     152551           api  API Request RCBIOTABASE approved       40
-#&gt; 81     152552           api  API Request    ABATLAS1 approved        2
-#&gt; 82     152552           api  API Request    ABATLAS2 approved       13
-#&gt; 83     152552           api  API Request  ABBIRDRECS approved        1
-#&gt; 84     152552           api  API Request RCBIOTABASE approved       40
-#&gt; 85     152553           api  API Request    ABATLAS1 approved        2
-#&gt; 86     152553           api  API Request    ABATLAS2 approved       13
-#&gt; 87     152553           api  API Request  ABBIRDRECS approved        1
-#&gt; 88     152553           api  API Request RCBIOTABASE approved       40
-#&gt; 89     152554           api  API Request RCBIOTABASE approved        2
-#&gt; 90     152555           api  API Request RCBIOTABASE approved        2
-#&gt; 91     152556           api  API Request    ABATLAS1 approved     1949
-#&gt; 92     152556           api  API Request    ABATLAS2 approved     4999
-#&gt; 93     152556           api  API Request  ABBIRDRECS approved     3891
-#&gt; 94     152556           api  API Request RCBIOTABASE approved      170
-#&gt; 95     152557           api  API Request RCBIOTABASE approved        2
-#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                filters
-#&gt; 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (133990)
-#&gt; 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (133990)
-#&gt; 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 11                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 18                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 22                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 23                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 24                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           project ('RCBIOTABASE'); species (133990)
-#&gt; 25                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           project ('RCBIOTABASE'); species (133990)
-#&gt; 26                                                                                                                                                                                                                                                                                                                                                                                                          project ('RCBIOTABASE'); species (14270,14280,14290,14300,14310,14320,14330,14388,40668,40669,40670,40671,40932,40955,41990,44462,44463,44465,44466,45746)
-#&gt; 27                                                                                                                                                                                                                                                                                                                                                                                                          project ('RCBIOTABASE'); species (14270,14280,14290,14300,14310,14320,14330,14388,40668,40669,40670,40671,40932,40955,41990,44462,44463,44465,44466,45746)
-#&gt; 28                                                                                                                                                                                                                                                                                                                                                                                                          project ('RCBIOTABASE'); species (14270,14280,14290,14300,14310,14320,14330,14388,40668,40669,40670,40671,40932,40955,41990,44462,44463,44465,44466,45746)
-#&gt; 29                                                                                                                                                                                                                                                                                                                                                                                                          project ('RCBIOTABASE'); species (14270,14280,14290,14300,14310,14320,14330,14388,40668,40669,40670,40671,40932,40955,41990,44462,44463,44465,44466,45746)
-#&gt; 30 project ('RCBIOTABASE'); species (139860,139870,139880,139890,139900,139910,139920,139930,139940,139950,139960,139970,139980,139990,140000,140010,140020,140030,140040,140050,140060,140070,140080,140090,140100,140110,140120,140130,140140,140150,140160,140170,140180,140190,140200,140210,140220,140230,140240,140250,140260,140270,140280,140290,140300,140310,140320,140330,140340,140350,140360,140370,140380,140390,140400,140410,140420,140430,140440,140450,140460,140470,140480,140490,140500,140510,140520,140525,140530,140540,140550,140560,140570,1)
-#&gt; 31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             project ('RCBIOTABASE')
-#&gt; 32                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 33                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 34                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 35                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 36                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 37                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 38                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         end_year (2011); project ('RCBIOTABASE'); start_year (2011)
-#&gt; 39                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         end_year (2011); project ('RCBIOTABASE'); start_year (2011)
-#&gt; 40                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         end_year (2000); project ('RCBIOTABASE'); start_year (2000); species (7590)
-#&gt; 41                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          end_year (2000); project ('ABBIRDRECS'); start_year (2000); species (7590)
-#&gt; 42                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    end_year (2004); project ('ABBIRDRECS'); start_year (2003); species (7590,14280)
-#&gt; 43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          end_year (2000); project ('ABBIRDRECS'); start_year (2000); species (7590)
-#&gt; 44                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          end_year (2000); project ('ABBIRDRECS'); start_year (2000); species (7590)
-#&gt; 45                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        project ('EBUTTERFLY'); shapes ('IBA.AB001')
-#&gt; 46                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        project ('EBUTTERFLY'); shapes ('IBA.AB001')
-#&gt; 47                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        project ('EBUTTERFLY'); shapes ('IBA.AB001')
-#&gt; 48                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        project ('EBUTTERFLY'); shapes ('IBA.AB001')
-#&gt; 49                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   project ('MM'); shapes ('BCR.03')
-#&gt; 50                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   project ('MM'); shapes ('BCR.03')
-#&gt; 51                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   project ('MM'); shapes ('BCR.03')
-#&gt; 52                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     statprov ('PE'); project ('MM')
-#&gt; 53                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     statprov ('PE'); project ('MM')
-#&gt; 54                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     statprov ('PE'); project ('MM')
-#&gt; 55                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        statprov ('PE'); project ('EBUTTERFLY'); locality_type (IBA)
-#&gt; 56                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             project ('ABBIRDRECS'); end_doy (140); start_doy (120); species (15770)
-#&gt; 57                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              project ('ABBIRDRECS'); end_doy (20); start_doy (300); species (15770)
-#&gt; 58                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('ABBIRDRECS'); start_doy (300); species (15770)
-#&gt; 59                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               project ('ABBIRDRECS'); end_doy (20); species (15770)
-#&gt; 60                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             project ('RCBIOTABASE')
-#&gt; 61                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (7590)
-#&gt; 62                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 63                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (14280)
-#&gt; 64                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 65                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             project ('RCBIOTABASE'); species (7590)
-#&gt; 66                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 67                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (14280)
-#&gt; 68                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 69                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 70                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 71                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 72                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        end_year (2010); project ('RCBIOTABASE'); start_year (2010); species (14280)
-#&gt; 73                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 74                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 75                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 76                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                project ('RCBIOTABASE'); species (14270,14280,14290)
-#&gt; 77                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 78                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 79                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 80                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 81                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 82                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 83                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 84                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 85                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 86                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 87                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 88                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            project ('RCBIOTABASE'); species (19360)
-#&gt; 89                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           project ('RCBIOTABASE'); species (133990)
-#&gt; 90                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           project ('RCBIOTABASE'); species (133990)
-#&gt; 91                                                                                                                                                                                                                                                                                                                                                                                                          project ('RCBIOTABASE'); species (14270,14280,14290,14300,14310,14320,14330,14388,40668,40669,40670,40671,40932,40955,41990,44462,44463,44465,44466,45746)
-#&gt; 92                                                                                                                                                                                                                                                                                                                                                                                                          project ('RCBIOTABASE'); species (14270,14280,14290,14300,14310,14320,14330,14388,40668,40669,40670,40671,40932,40955,41990,44462,44463,44465,44466,45746)
-#&gt; 93                                                                                                                                                                                                                                                                                                                                                                                                          project ('RCBIOTABASE'); species (14270,14280,14290,14300,14310,14320,14330,14388,40668,40669,40670,40671,40932,40955,41990,44462,44463,44465,44466,45746)
-#&gt; 94                                                                                                                                                                                                                                                                                                                                                                                                          project ('RCBIOTABASE'); species (14270,14280,14290,14300,14310,14320,14330,14388,40668,40669,40670,40671,40932,40955,41990,44462,44463,44465,44466,45746)
-#&gt; 95 project ('RCBIOTABASE'); species (139860,139870,139880,139890,139900,139910,139920,139930,139940,139950,139960,139970,139980,139990,140000,140010,140020,140030,140040,140050,140060,140070,140080,140090,140100,140110,140120,140130,140140,140150,140160,140170,140180,140190,140200,140210,140220,140230,140240,140250,140260,140270,140280,140290,140300,140310,140320,140330,140340,140350,140360,140370,140380,140390,140400,140410,140420,140430,140440,140450,140460,140470,140480,140490,140500,140510,140520,140525,140530,140540,140550,140560,140570,1)</div><div class='input'><span class='fu'>nc_requests</span>(<span class='kw'>request_id</span> <span class='kw'>=</span> <span class='fl'>152446</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt;   request_id requestOrigin requestLabel  collection   status nrecords
-#&gt; 1     152446           api  API Request RCBIOTABASE approved        2
-#&gt;                                     filters
-#&gt; 1 project ('RCBIOTABASE'); species (133990)</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>nc_requests</span><span class='op'>(</span>username <span class='op'>=</span> <span class='st'>"sample"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] request_id    requestOrigin requestLabel  collection    status       
+#&gt; [6] nrecords      filters      
+#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'><span class='fu'>nc_requests</span><span class='op'>(</span>request_id <span class='op'>=</span> <span class='fl'>152446</span>, username <span class='op'>=</span> <span class='st'>"sample"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] request_id    requestOrigin requestLabel  collection    status       
+#&gt; [6] nrecords      filters      
+#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#request-id-s"><code>request_id</code>'s</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -376,13 +202,16 @@ will list the requests along with the approval status (either 'approved' or
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

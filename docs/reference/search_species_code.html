@@ -8,21 +8,29 @@
 
 <title>Search for bird species id codes by alphanumeric codes — search_species_code • naturecounts</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,11 +40,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Search for bird species id codes by alphanumeric codes — search_species_code" />
 
+<meta property="og:title" content="Search for bird species id codes by alphanumeric codes — search_species_code" />
 <meta property="og:description" content="This is an advanced function for returning all Bird-related species id codes
 based on the various alphanumeric codes used by different authorities." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -50,9 +58,10 @@ based on the various alphanumeric codes used by different authorities." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -66,7 +75,7 @@ based on the various alphanumeric codes used by different authorities." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.1.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
       </span>
     </div>
 
@@ -88,7 +97,6 @@ based on the various alphanumeric codes used by different authorities." />
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/BirdStudiesCanada/naturecounts">
@@ -103,6 +111,7 @@ based on the various alphanumeric codes used by different authorities." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -114,15 +123,12 @@ based on the various alphanumeric codes used by different authorities." />
     </div>
 
     <div class="ref-description">
-    
     <p>This is an advanced function for returning all Bird-related species id codes
 based on the various alphanumeric codes used by different authorities.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>search_species_code</span>(<span class='kw'>code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>authority</span> <span class='kw'>=</span> <span class='st'>"BSCDATA"</span>,
-  <span class='kw'>results</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>search_species_code</span><span class='op'>(</span>code <span class='op'>=</span> <span class='cn'>NULL</span>, authority <span class='op'>=</span> <span class='st'>"BSCDATA"</span>, results <span class='op'>=</span> <span class='st'>"all"</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -143,21 +149,20 @@ to "BSCDATA")</p></td>
 exact species indicated by the code.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame of numeric species id codes and names</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>species_code_search()</code> is deprecated in favour of <code>search_species_code()</code></p>
 <p>Species ids returned reflect both species and sub-species levels.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Show all ids</span>
-<span class='fu'>search_species_code</span>()</div><div class='output co'>#&gt;      species_id BSCDATA                                   scientific_name
+<span class='fu'>search_species_code</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      species_id BSCDATA                                   scientific_name
 #&gt; 1            80    BBWD                            Dendrocygna autumnalis
 #&gt; 2           100    FUWD                               Dendrocygna bicolor
 #&gt; 3           110    BEGO                        Anser fabalis/serrirostris
@@ -208,7 +213,7 @@ exact species indicated by the code.</p></td>
 #&gt; 48          580    BATE                              Sibirionetta formosa
 #&gt; 49          590    GWTE                                       Anas crecca
 #&gt; 50          600    AGWT                          Anas crecca carolinensis
-#&gt; 51          610    EUTE                          Anas crecca crecca/nimia
+#&gt; 51          610    EUTE                                Anas crecca crecca
 #&gt; 52          620    UNDA                                          Anas sp.
 #&gt; 53          630    CANV                                Aythya valisineria
 #&gt; 54          640    REDH                                  Aythya americana
@@ -501,7 +506,7 @@ exact species indicated by the code.</p></td>
 #&gt; 341        4830    CUSA                               Calidris ferruginea
 #&gt; 342        4840    STSA                               Calidris himantopus
 #&gt; 343        4845    PEEP                                      Calidris sp.
-#&gt; 344        4850    SPOS                                   Calidris pygmea
+#&gt; 344        4850    SPOS                                  Calidris pygmaea
 #&gt; 345        4860    BROS                              Calidris falcinellus
 #&gt; 346        4870    BBSA                            Calidris subruficollis
 #&gt; 347        4880    RUFF                                   Calidris pugnax
@@ -945,12 +950,12 @@ exact species indicated by the code.</p></td>
 #&gt; 785       16440    LAWA Vermivora chrysoptera x cyanoptera (F2 backcross)
 #&gt; 786       16450    BRWA    Vermivora chrysoptera x cyanoptera (F1 hybrid)
 #&gt; 787       16450    HYBG    Vermivora chrysoptera x cyanoptera (F1 hybrid)
-#&gt; 788       16460    TEWA                             Oreothlypis peregrina
-#&gt; 789       16470    OCWA                                Oreothlypis celata
-#&gt; 790       16480    NAWA                           Oreothlypis ruficapilla
-#&gt; 791       16490    VIWA                             Oreothlypis virginiae
-#&gt; 792       16500    COLW                             Oreothlypis crissalis
-#&gt; 793       16510    LUWA                                Oreothlypis luciae
+#&gt; 788       16460    TEWA                             Leiothlypis peregrina
+#&gt; 789       16470    OCWA                                Leiothlypis celata
+#&gt; 790       16480    NAWA                           Leiothlypis ruficapilla
+#&gt; 791       16490    VIWA                             Leiothlypis virginiae
+#&gt; 792       16500    COLW                             Leiothlypis crissalis
+#&gt; 793       16510    LUWA                                Leiothlypis luciae
 #&gt; 794       16530    CCWA                          Oreothlypis superciliosa
 #&gt; 795       16540    NOPA                               Setophaga americana
 #&gt; 796       16550    TRPA                               Setophaga pitiayumi
@@ -1010,7 +1015,7 @@ exact species indicated by the code.</p></td>
 #&gt; 850       17790    WESP                                    Spindalis zena
 #&gt; 851       18100    WCSE                              Sporophila torqueola
 #&gt; 852       18180    YFGR                                  Tiaris olivaceus
-#&gt; 853       18190    BFGR                                    Tiaris bicolor
+#&gt; 853       18190    BFGR                               Melanospiza bicolor
 #&gt; 854       18470    OLSP                           Arremonops rufivirgatus
 #&gt; 855       18530    GTTO                                  Pipilo chlorurus
 #&gt; 856       18550    SPTO                                  Pipilo maculatus
@@ -1160,8 +1165,8 @@ exact species indicated by the code.</p></td>
 #&gt; 1000      40377    DOWS                   Limnodromus griseus/scolopaceus
 #&gt; 1001      40377    UNDO                   Limnodromus griseus/scolopaceus
 #&gt; 1002      40390    HGHG                        Larus argentatus x marinus
-#&gt; 1003      40393    ICGU                                  Larus glaucoides
-#&gt; 1004       5190    THGU                          Larus glaucoides thayeri
+#&gt; 1003       5190    THGU                          Larus glaucoides thayeri
+#&gt; 1004      40393    ICGU                                  Larus glaucoides
 #&gt; 1005      40499    GRVE                               Colibri thalassinus
 #&gt; 1006      40523    MAHU                                   Eugenes fulgens
 #&gt; 1007      40626    CASJ                            Aphelocoma californica
@@ -1192,46 +1197,46 @@ exact species indicated by the code.</p></td>
 #&gt; 1032      41448    SBDU                                  Anas zonorhyncha
 #&gt; 1033      41455    UNTL                           Anatidae sp. (teal sp.)
 #&gt; 1034      41483    UNME                   Mergellus/Lophodytes/Mergus sp.
-#&gt; 1035      41511    LISH                                Puffinus assimilis
-#&gt; 1036      41515    AUSH                              Puffinus lherminieri
-#&gt; 1037      41528    BRST                                Oceanodroma castro
-#&gt; 1038      41596    MOOT                    Gallinula/Fulica/Porphyrio sp.
-#&gt; 1039      41600    SNPL                                Charadrius nivosus
-#&gt; 1040      41677    FEPO                            Glaucidium brasilianum
-#&gt; 1041      41682    UNOW                                  Strigiformes sp.
-#&gt; 1042      42067    NOWH                                 Oenanthe oenanthe
-#&gt; 1043      42141    WHWA                                    Motacilla alba
-#&gt; 1044      42218    DEJU                                    Junco hyemalis
-#&gt; 1045      19090    SCJU  Junco hyemalis hyemalis/carolinensis/cismontanus
-#&gt; 1046      19100    ORJU                   Junco hyemalis [oreganus Group]
-#&gt; 1047      19110    PSJU                            Junco hyemalis mearnsi
-#&gt; 1048      42261    CORE                                  Acanthis flammea
-#&gt; 1049      42291    PAWR                             Troglodytes pacificus
-#&gt; 1050      42628    GRNI                                Caprimulgus jotaka
-#&gt; 1051      42628    JUNI                                Caprimulgus jotaka
-#&gt; 1052      42698    ARWA                             Phylloscopus borealis
-#&gt; 1053      45341    EUKE                                 Falco tinnunculus
-#&gt; 1054      45376    LHSP                             Oceanodroma leucorhoa
-#&gt; 1055      45379    UNCO                             Phalacrocoracidae sp.
-#&gt; 1056      45419    AMCO                                  Fulica americana
-#&gt; 1057      45520    BAWO                               Calliphlox evelynae
-#&gt; 1058      45581    PEFA                                  Falco peregrinus
-#&gt; 1059      45722    WOSJ                            Aphelocoma woodhouseii
-#&gt; 1060      45747    OATI                              Baeolophus inornatus
-#&gt; 1061      45773    CAGN                            Polioptila californica
-#&gt; 1062      45774    BTGN                               Polioptila melanura
-#&gt; 1063      45845    NAFL                               Ficedula narcissina
-#&gt; 1064      45874    EUBL                                     Turdus merula
-#&gt; 1065      45912    GOLW                          Basileuterus culicivorus
-#&gt; 1066      45946    PALB                                  Emberiza pallasi
-#&gt; 1067      45947    REBU                              Emberiza schoeniclus
-#&gt; 1068      45980    WBTH                    Chlidonias niger x leucopterus
-#&gt; 1069      45981    WARH                                Parulidae (hybrid)
+#&gt; 1035      41515    AUSH                              Puffinus lherminieri
+#&gt; 1036      41528    BRST                                Oceanodroma castro
+#&gt; 1037      41596    MOOT                    Gallinula/Fulica/Porphyrio sp.
+#&gt; 1038      41600    SNPL                                Charadrius nivosus
+#&gt; 1039      41677    FEPO                            Glaucidium brasilianum
+#&gt; 1040      41682    UNOW                                  Strigiformes sp.
+#&gt; 1041      42067    NOWH                                 Oenanthe oenanthe
+#&gt; 1042      42141    WHWA                                    Motacilla alba
+#&gt; 1043      19090    SCJU  Junco hyemalis hyemalis/carolinensis/cismontanus
+#&gt; 1044      19100    ORJU                   Junco hyemalis [oreganus Group]
+#&gt; 1045      19110    PSJU                            Junco hyemalis mearnsi
+#&gt; 1046      42218    DEJU                                    Junco hyemalis
+#&gt; 1047      42261    CORE                                  Acanthis flammea
+#&gt; 1048      42291    PAWR                             Troglodytes pacificus
+#&gt; 1049      42628    GRNI                                Caprimulgus jotaka
+#&gt; 1050      42628    JUNI                                Caprimulgus jotaka
+#&gt; 1051      42698    ARWA                             Phylloscopus borealis
+#&gt; 1052      45341    EUKE                                 Falco tinnunculus
+#&gt; 1053      45376    LHSP                             Oceanodroma leucorhoa
+#&gt; 1054      45379    UNCO                             Phalacrocoracidae sp.
+#&gt; 1055      45419    AMCO                                  Fulica americana
+#&gt; 1056      45520    BAWO                                Nesophlox evelynae
+#&gt; 1057      45581    PEFA                                  Falco peregrinus
+#&gt; 1058      45722    WOSJ                            Aphelocoma woodhouseii
+#&gt; 1059      45747    OATI                              Baeolophus inornatus
+#&gt; 1060      45773    CAGN                            Polioptila californica
+#&gt; 1061      45774    BTGN                               Polioptila melanura
+#&gt; 1062      45845    NAFL                               Ficedula narcissina
+#&gt; 1063      45874    EUBL                                     Turdus merula
+#&gt; 1064      45912    GOLW                          Basileuterus culicivorus
+#&gt; 1065      45946    PALB                                  Emberiza pallasi
+#&gt; 1066      45947    REBU                              Emberiza schoeniclus
+#&gt; 1067      45980    WBTH                    Chlidonias niger x leucopterus
+#&gt; 1068      45981    WARH                                Parulidae (hybrid)
+#&gt; 1069      45994    WWSC                                Melanitta deglandi
 #&gt; 1070      46372    NSHR                                   Lanius borealis
 #&gt; 1071      46623    RFBL                                 Tarsiger cyanurus
 #&gt; 1072      46767    RECR                                 Loxia curvirostra
-#&gt; 1073      46802    WWSC                                Melanitta deglandi
-#&gt; 1074      46804    RUDU                                Oxyura jamaicensis
+#&gt; 1073      46804    RUDU                                Oxyura jamaicensis
+#&gt; 1074      47255    LISH                                Puffinus assimilis
 #&gt; 1075     100010    MOME                             Mormoops megalophylla
 #&gt; 1076     100020    CHME                           Choeronycteris mexicana
 #&gt; 1077     100030    LEPN                             Leptonycteris nivalis
@@ -1284,6 +1289,7 @@ exact species indicated by the code.</p></td>
 #&gt; 1124     100670    NYMA                              Nyctinomops macrotis
 #&gt; 1125     100680    TABR                             Tadarida brasiliensis
 #&gt; 1126     100690    UNBT                                    Chiroptera sp.
+#&gt; 1127     137860    RESQ                           Tamiasciurus hudsonicus
 #&gt;                                                   english_name
 #&gt; 1                                 Black-bellied Whistling-Duck
 #&gt; 2                                       Fulvous Whistling-Duck
@@ -1744,8 +1750,8 @@ exact species indicated by the code.</p></td>
 #&gt; 457                                              Mourning Dove
 #&gt; 458                                           Passenger Pigeon
 #&gt; 459                                                  Inca Dove
-#&gt; 460                                         Common Ground-Dove
-#&gt; 461                                          Ruddy Ground-Dove
+#&gt; 460                                         Common Ground Dove
+#&gt; 461                                          Ruddy Ground Dove
 #&gt; 462                                          White-tipped Dove
 #&gt; 463                                        Key West Quail-Dove
 #&gt; 464                                           Ruddy Quail-Dove
@@ -1814,7 +1820,7 @@ exact species indicated by the code.</p></td>
 #&gt; 527                                   Buff-bellied Hummingbird
 #&gt; 528                                       Cinnamon Hummingbird
 #&gt; 529                                 Violet-crowned Hummingbird
-#&gt; 530                                  Blue-throated Hummingbird
+#&gt; 530                                 Blue-throated Mountain-gem
 #&gt; 531                                    Plain-capped Starthroat
 #&gt; 532                                        Lucifer Hummingbird
 #&gt; 533                                  Ruby-throated Hummingbird
@@ -2287,8 +2293,8 @@ exact species indicated by the code.</p></td>
 #&gt; 1000                        Short-billed/Long-billed Dowitcher
 #&gt; 1001                        Short-billed/Long-billed Dowitcher
 #&gt; 1002                Herring x Great Black-backed Gull (hybrid)
-#&gt; 1003                                              Iceland Gull
-#&gt; 1004                                   Iceland Gull (Thayer's)
+#&gt; 1003                                   Iceland Gull (Thayer's)
+#&gt; 1004                                              Iceland Gull
 #&gt; 1005                                         Mexican Violetear
 #&gt; 1006                                      Rivoli's Hummingbird
 #&gt; 1007                                      California Scrub-Jay
@@ -2319,46 +2325,46 @@ exact species indicated by the code.</p></td>
 #&gt; 1032                                  Eastern Spot-billed Duck
 #&gt; 1033                                                  teal sp.
 #&gt; 1034                                             merganser sp.
-#&gt; 1035                                         Little Shearwater
-#&gt; 1036                                      Audubon's Shearwater
-#&gt; 1037                                  Band-rumped Storm-Petrel
-#&gt; 1038                                moorhen/coot/gallinule sp.
-#&gt; 1039                                              Snowy Plover
-#&gt; 1040                                     Ferruginous Pygmy-Owl
-#&gt; 1041                                                   owl sp.
-#&gt; 1042                                         Northern Wheatear
-#&gt; 1043                                             White Wagtail
-#&gt; 1044                                           Dark-eyed Junco
-#&gt; 1045               Dark-eyed Junco (Slate-colored/cismontanus)
-#&gt; 1046                                  Dark-eyed Junco (Oregon)
-#&gt; 1047                              Dark-eyed Junco (Pink-sided)
-#&gt; 1048                                            Common Redpoll
-#&gt; 1049                                              Pacific Wren
+#&gt; 1035                                      Audubon's Shearwater
+#&gt; 1036                                  Band-rumped Storm-Petrel
+#&gt; 1037                                moorhen/coot/gallinule sp.
+#&gt; 1038                                              Snowy Plover
+#&gt; 1039                                     Ferruginous Pygmy-Owl
+#&gt; 1040                                                   owl sp.
+#&gt; 1041                                         Northern Wheatear
+#&gt; 1042                                             White Wagtail
+#&gt; 1043               Dark-eyed Junco (Slate-colored/cismontanus)
+#&gt; 1044                                  Dark-eyed Junco (Oregon)
+#&gt; 1045                              Dark-eyed Junco (Pink-sided)
+#&gt; 1046                                           Dark-eyed Junco
+#&gt; 1047                                            Common Redpoll
+#&gt; 1048                                              Pacific Wren
+#&gt; 1049                                             Gray Nightjar
 #&gt; 1050                                             Gray Nightjar
-#&gt; 1051                                             Gray Nightjar
-#&gt; 1052                                            Arctic Warbler
-#&gt; 1053                                          Eurasian Kestrel
-#&gt; 1054                                      Leach's Storm-Petrel
-#&gt; 1055                                             cormorant sp.
-#&gt; 1056                                             American Coot
-#&gt; 1057                                           Bahama Woodstar
-#&gt; 1058                                          Peregrine Falcon
-#&gt; 1059                                     Woodhouse's Scrub-Jay
-#&gt; 1060                                              Oak Titmouse
-#&gt; 1061                                    California Gnatcatcher
-#&gt; 1062                                  Black-tailed Gnatcatcher
-#&gt; 1063                                      Narcissus Flycatcher
-#&gt; 1064                                        Eurasian Blackbird
-#&gt; 1065                                    Golden-crowned Warbler
-#&gt; 1066                                          Pallas's Bunting
-#&gt; 1067                                              Reed Bunting
-#&gt; 1068                        Black x White-winged Tern (hybrid)
-#&gt; 1069                                        Hybrid Warbler sp.
+#&gt; 1051                                            Arctic Warbler
+#&gt; 1052                                          Eurasian Kestrel
+#&gt; 1053                                      Leach's Storm-Petrel
+#&gt; 1054                                             cormorant sp.
+#&gt; 1055                                             American Coot
+#&gt; 1056                                           Bahama Woodstar
+#&gt; 1057                                          Peregrine Falcon
+#&gt; 1058                                     Woodhouse's Scrub-Jay
+#&gt; 1059                                              Oak Titmouse
+#&gt; 1060                                    California Gnatcatcher
+#&gt; 1061                                  Black-tailed Gnatcatcher
+#&gt; 1062                                      Narcissus Flycatcher
+#&gt; 1063                                        Eurasian Blackbird
+#&gt; 1064                                    Golden-crowned Warbler
+#&gt; 1065                                          Pallas's Bunting
+#&gt; 1066                                              Reed Bunting
+#&gt; 1067                        Black x White-winged Tern (hybrid)
+#&gt; 1068                                        Hybrid Warbler sp.
+#&gt; 1069                                       White-winged Scoter
 #&gt; 1070                                           Northern Shrike
 #&gt; 1071                                      Red-flanked Bluetail
 #&gt; 1072                                             Red Crossbill
-#&gt; 1073                                       White-winged Scoter
-#&gt; 1074                                                Ruddy Duck
+#&gt; 1073                                                Ruddy Duck
+#&gt; 1074                                         Little Shearwater
 #&gt; 1075                                  Peters's Ghost-faced Bat
 #&gt; 1076                                  Mexican Long-tongued Bat
 #&gt; 1077                                    Mexican Long-nosed Bat
@@ -2411,6 +2417,7 @@ exact species indicated by the code.</p></td>
 #&gt; 1124                                       Big Free-tailed Bat
 #&gt; 1125                                 Brazilian Free-tailed Bat
 #&gt; 1126                                                   Bat sp.
+#&gt; 1127                                              Red Squirrel
 #&gt;                                                          french_name
 #&gt; 1                                          Dendrocygne à ventre noir
 #&gt; 2                                                  Dendrocygne fauve
@@ -2462,7 +2469,7 @@ exact species indicated by the code.</p></td>
 #&gt; 48                                                 Sarcelle élégante
 #&gt; 49                                                  Sarcelle d'hiver
 #&gt; 50                                   Sarcelle d'hiver (carolinensis)
-#&gt; 51                                Sarcelle d'hiver [crecca ou nimia]
+#&gt; 51                                         Sarcelle d'hiver (crecca)
 #&gt; 52                                                          Anas sp.
 #&gt; 53                                              Fuligule à dos blanc
 #&gt; 54                                             Fuligule à tête rouge
@@ -2567,7 +2574,7 @@ exact species indicated by the code.</p></td>
 #&gt; 153                                                 Océanite tempête
 #&gt; 154                                        Océanite à queue fourchue
 #&gt; 155                                                  Océanite cendré
-#&gt; 156                                  Océanite de Castro (sensu lato)
+#&gt; 156                    Oceanodroma sp. (complexe Océanite de Castro)
 #&gt; 157                                                  Océanite téthys
 #&gt; 158                                                    Océanite noir
 #&gt; 159                                                  Océanite minute
@@ -3196,9 +3203,9 @@ exact species indicated by the code.</p></td>
 #&gt; 782                                          Paruline à ailes bleues
 #&gt; 783                                          Paruline à ailes dorées
 #&gt; 784                     Paruline à ailes dorées ou P. à ailes bleues
-#&gt; 785                                   Paruline de Lawrence (hybride)
-#&gt; 786                                   Paruline de Brewster (hybride)
-#&gt; 787                                   Paruline de Brewster (hybride)
+#&gt; 785                                Paruline de Lawrence (hybride F2)
+#&gt; 786                                Paruline de Brewster (hybride F1)
+#&gt; 787                                Paruline de Brewster (hybride F1)
 #&gt; 788                                                 Paruline obscure
 #&gt; 789                                                Paruline verdâtre
 #&gt; 790                                          Paruline à joues grises
@@ -3404,7 +3411,7 @@ exact species indicated by the code.</p></td>
 #&gt; 990                                                  Gobemouche brun
 #&gt; 991                                                  Gobemouche nain
 #&gt; 992                                             Corneille d'Amérique
-#&gt; 993                                 Hybride Canard noir x C. colvert
+#&gt; 993                                 Hybride Canard colvert x C. noir
 #&gt; 994                               Garrot à oeil d'or ou G. d'Islande
 #&gt; 995                                          Albatros à cape blanche
 #&gt; 996                                            Puffin de Macaronésie
@@ -3414,8 +3421,8 @@ exact species indicated by the code.</p></td>
 #&gt; 1000                                  Bécassin roux ou B. à long bec
 #&gt; 1001                                  Bécassin roux ou B. à long bec
 #&gt; 1002                              Hybride Goéland argenté x G. marin
-#&gt; 1003                                                Goéland arctique
-#&gt; 1004                                      Goéland arctique (thayeri)
+#&gt; 1003                                      Goéland arctique (thayeri)
+#&gt; 1004                                                Goéland arctique
 #&gt; 1005                                               Colibri thalassin
 #&gt; 1006                                               Colibri de Rivoli
 #&gt; 1007                                                Geai buissonnier
@@ -3446,46 +3453,46 @@ exact species indicated by the code.</p></td>
 #&gt; 1032                                                 Canard de Chine
 #&gt; 1033                                                    Sarcelle sp.
 #&gt; 1034                                                       Harle sp.
-#&gt; 1035                                                    Petit Puffin
-#&gt; 1036                                                Puffin d'Audubon
-#&gt; 1037                                              Océanite de Castro
-#&gt; 1038                                Gallinule, Foulque ou Talève sp.
-#&gt; 1039                                                 Pluvier neigeux
-#&gt; 1040                                               Chevêchette brune
-#&gt; 1041                                                Strigiformes sp.
-#&gt; 1042                                                 Traquet motteux
-#&gt; 1043                                             Bergeronnette grise
-#&gt; 1044                                                   Junco ardoisé
-#&gt; 1045           Junco ardoisé [hyemalis, carolinensis ou cismontanus]
-#&gt; 1046                                        Junco ardoisé [oreganus]
-#&gt; 1047                                         Junco ardoisé (mearnsi)
-#&gt; 1048                                                  Sizerin flammé
-#&gt; 1049                                             Troglodyte de Baird
+#&gt; 1035                                                Puffin d'Audubon
+#&gt; 1036                                              Océanite de Castro
+#&gt; 1037                                Gallinule, Foulque ou Talève sp.
+#&gt; 1038                                                 Pluvier neigeux
+#&gt; 1039                                               Chevêchette brune
+#&gt; 1040                                                Strigiformes sp.
+#&gt; 1041                                                 Traquet motteux
+#&gt; 1042                                             Bergeronnette grise
+#&gt; 1043           Junco ardoisé [hyemalis, carolinensis ou cismontanus]
+#&gt; 1044                                        Junco ardoisé [oreganus]
+#&gt; 1045                                         Junco ardoisé (mearnsi)
+#&gt; 1046                                                   Junco ardoisé
+#&gt; 1047                                                  Sizerin flammé
+#&gt; 1048                                             Troglodyte de Baird
+#&gt; 1049                                              Engoulevent jotaka
 #&gt; 1050                                              Engoulevent jotaka
-#&gt; 1051                                              Engoulevent jotaka
-#&gt; 1052                                                 Pouillot boréal
-#&gt; 1053                                               Faucon crécerelle
-#&gt; 1054                                              Océanite cul-blanc
-#&gt; 1055                                               Phalacrocorax sp.
-#&gt; 1056                                              Foulque d'Amérique
-#&gt; 1057                                             Colibri des Bahamas
-#&gt; 1058                                                  Faucon pèlerin
-#&gt; 1059                                               Geai de Woodhouse
-#&gt; 1060                                               Mésange unicolore
-#&gt; 1061                                     Gobemoucheron de Californie
-#&gt; 1062                                     Gobemoucheron à queue noire
-#&gt; 1063                                             Gobemouche narcisse
-#&gt; 1064                                                      Merle noir
-#&gt; 1065                                       Paruline à couronne dorée
-#&gt; 1066                                                Bruant de Pallas
-#&gt; 1067                                              Bruant des roseaux
-#&gt; 1068                                  Guifette noire x G. leucoptère
-#&gt; 1069                                         Hybride de paruline sp.
+#&gt; 1051                                                 Pouillot boréal
+#&gt; 1052                                               Faucon crécerelle
+#&gt; 1053                                              Océanite cul-blanc
+#&gt; 1054                                               Phalacrocorax sp.
+#&gt; 1055                                              Foulque d'Amérique
+#&gt; 1056                                             Colibri des Bahamas
+#&gt; 1057                                                  Faucon pèlerin
+#&gt; 1058                                               Geai de Woodhouse
+#&gt; 1059                                               Mésange unicolore
+#&gt; 1060                                     Gobemoucheron de Californie
+#&gt; 1061                                     Gobemoucheron à queue noire
+#&gt; 1062                                             Gobemouche narcisse
+#&gt; 1063                                                      Merle noir
+#&gt; 1064                                       Paruline à couronne dorée
+#&gt; 1065                                                Bruant de Pallas
+#&gt; 1066                                              Bruant des roseaux
+#&gt; 1067                                  Guifette noire x G. leucoptère
+#&gt; 1068                                         Hybride de paruline sp.
+#&gt; 1069                                       Macreuse à ailes blanches
 #&gt; 1070                                             Pie-grièche boréale
 #&gt; 1071                                             Robin à flancs roux
 #&gt; 1072                                           Bec-croisé des sapins
-#&gt; 1073                                       Macreuse à ailes blanches
-#&gt; 1074                                               Érismature rousse
+#&gt; 1073                                               Érismature rousse
+#&gt; 1074                                                    Petit Puffin
 #&gt; 1075                                                            &lt;NA&gt;
 #&gt; 1076                                                            &lt;NA&gt;
 #&gt; 1077                                                            &lt;NA&gt;
@@ -3537,29 +3544,33 @@ exact species indicated by the code.</p></td>
 #&gt; 1123                                                            &lt;NA&gt;
 #&gt; 1124                                                            &lt;NA&gt;
 #&gt; 1125                                                            &lt;NA&gt;
-#&gt; 1126                                                            &lt;NA&gt;</div><div class='input'>
+#&gt; 1126                                                            &lt;NA&gt;
+#&gt; 1127                                                   Écureuil roux</div><div class='input'>
 <span class='co'># Get all species ids for house finches</span>
-<span class='fu'>search_species_code</span>(<span class='st'>"HOFI"</span>)</div><div class='output co'>#&gt;   species_id BSCDATA      scientific_name english_name      french_name
+<span class='fu'>search_species_code</span><span class='op'>(</span><span class='st'>"HOFI"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   species_id BSCDATA      scientific_name english_name      french_name
 #&gt; 1      20350    HOFI Haemorhous mexicanus  House Finch Roselin familier</div><div class='input'>
 <span class='co'># Get all species ids for Dark-eyed Juncos</span>
-<span class='fu'>search_species_code</span>(<span class='st'>"DEJU"</span>)</div><div class='output co'>#&gt;   species_id BSCDATA                                  scientific_name
-#&gt; 1      42218    DEJU                                   Junco hyemalis
-#&gt; 2      19090    SCJU Junco hyemalis hyemalis/carolinensis/cismontanus
-#&gt; 3      19100    ORJU                  Junco hyemalis [oreganus Group]
-#&gt; 4      19110    PSJU                           Junco hyemalis mearnsi
+<span class='fu'>search_species_code</span><span class='op'>(</span><span class='st'>"DEJU"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   species_id BSCDATA                                  scientific_name
+#&gt; 1      19090    SCJU Junco hyemalis hyemalis/carolinensis/cismontanus
+#&gt; 2      19100    ORJU                  Junco hyemalis [oreganus Group]
+#&gt; 3      19110    PSJU                           Junco hyemalis mearnsi
+#&gt; 4      42218    DEJU                                   Junco hyemalis
 #&gt;                                  english_name
-#&gt; 1                             Dark-eyed Junco
-#&gt; 2 Dark-eyed Junco (Slate-colored/cismontanus)
-#&gt; 3                    Dark-eyed Junco (Oregon)
-#&gt; 4                Dark-eyed Junco (Pink-sided)
+#&gt; 1 Dark-eyed Junco (Slate-colored/cismontanus)
+#&gt; 2                    Dark-eyed Junco (Oregon)
+#&gt; 3                Dark-eyed Junco (Pink-sided)
+#&gt; 4                             Dark-eyed Junco
 #&gt;                                             french_name
-#&gt; 1                                         Junco ardoisé
-#&gt; 2 Junco ardoisé [hyemalis, carolinensis ou cismontanus]
-#&gt; 3                              Junco ardoisé [oreganus]
-#&gt; 4                               Junco ardoisé (mearnsi)</div><div class='input'>
+#&gt; 1 Junco ardoisé [hyemalis, carolinensis ou cismontanus]
+#&gt; 2                              Junco ardoisé [oreganus]
+#&gt; 3                               Junco ardoisé (mearnsi)
+#&gt; 4                                         Junco ardoisé</div><div class='input'>
 <span class='co'># Get all species ids related to Yellow-rumped Warbler (Myrtle)</span>
 <span class='co'># NOTE! This includes Audubon's and the main, Yellow-rumped Warbler species</span>
-<span class='fu'>search_species_code</span>(<span class='st'>"MYWA"</span>)</div><div class='output co'>#&gt;   species_id BSCDATA             scientific_name
+<span class='fu'>search_species_code</span><span class='op'>(</span><span class='st'>"MYWA"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   species_id BSCDATA             scientific_name
 #&gt; 1      16610    YRWA          Setophaga coronata
 #&gt; 2      16620    MYWA Setophaga coronata coronata
 #&gt; 3      16630    AUWA Setophaga coronata auduboni
@@ -3568,12 +3579,14 @@ exact species indicated by the code.</p></td>
 #&gt; 2    Yellow-rumped Warbler (Myrtle) Paruline à croupion jaune (coronata)
 #&gt; 3 Yellow-rumped Warbler (Audubon's) Paruline à croupion jaune (auduboni)</div><div class='input'>
 <span class='co'># Get ONLY specific id related to Yellow-rumped Warbler (Myrtle)</span>
-<span class='fu'>search_species_code</span>(<span class='st'>"MYWA"</span>, <span class='kw'>results</span> <span class='kw'>=</span> <span class='st'>"exact"</span>)</div><div class='output co'>#&gt;   species_id BSCDATA             scientific_name                   english_name
+<span class='fu'>search_species_code</span><span class='op'>(</span><span class='st'>"MYWA"</span>, results <span class='op'>=</span> <span class='st'>"exact"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   species_id BSCDATA             scientific_name                   english_name
 #&gt; 1      16620    MYWA Setophaga coronata coronata Yellow-rumped Warbler (Myrtle)
 #&gt;                            french_name
 #&gt; 1 Paruline à croupion jaune (coronata)</div><div class='input'>
 <span class='co'># Use the Christmas Bird Count authority</span>
-<span class='fu'>search_species_code</span>(<span class='fl'>11609</span>, <span class='kw'>authority</span> <span class='kw'>=</span> <span class='st'>"CBC"</span>)</div><div class='output co'>#&gt;   species_id   CBC                        scientific_name
+<span class='fu'>search_species_code</span><span class='op'>(</span><span class='fl'>11609</span>, authority <span class='op'>=</span> <span class='st'>"CBC"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   species_id   CBC                        scientific_name
 #&gt; 1      16610 11609                     Setophaga coronata
 #&gt; 2      16620 11610            Setophaga coronata coronata
 #&gt; 3      16630 11611            Setophaga coronata auduboni
@@ -3591,12 +3604,13 @@ exact species indicated by the code.</p></td>
 #&gt; 1                       Paruline à croupion jaune
 #&gt; 2            Paruline à croupion jaune (coronata)
 #&gt; 3            Paruline à croupion jaune (auduboni)
-#&gt; 4 Paruline à croupion jaune (coronata x auduboni)
+#&gt; 4 Paruline à croupion jaune [coronata x auduboni]
 #&gt; 5          Paruline à croupion jaune (nigrifrons)
 #&gt; 6            Paruline à croupion jaune (goldmani)</div><div class='input'>
 <span class='co'># Look in more than one authority (note that the code only needs to match on</span>
 <span class='co'># of the authorities)</span>
-<span class='fu'>search_species_code</span>(<span class='st'>"MYWA"</span>, <span class='kw'>authority</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"BCMA"</span>, <span class='st'>"CBC"</span>))</div><div class='output co'>#&gt;   species_id BCMA   CBC                        scientific_name
+<span class='fu'>search_species_code</span><span class='op'>(</span><span class='st'>"MYWA"</span>, authority <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"BCMA"</span>, <span class='st'>"CBC"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   species_id BCMA   CBC                        scientific_name
 #&gt; 1      16630 AUWA 11611            Setophaga coronata auduboni
 #&gt; 2      16620 MYWA 11610            Setophaga coronata coronata
 #&gt; 3      16610 YRWA 11609                     Setophaga coronata
@@ -3614,25 +3628,18 @@ exact species indicated by the code.</p></td>
 #&gt; 1            Paruline à croupion jaune (auduboni)
 #&gt; 2            Paruline à croupion jaune (coronata)
 #&gt; 3                       Paruline à croupion jaune
-#&gt; 4 Paruline à croupion jaune (coronata x auduboni)
+#&gt; 4 Paruline à croupion jaune [coronata x auduboni]
 #&gt; 5          Paruline à croupion jaune (nigrifrons)
 #&gt; 6            Paruline à croupion jaune (goldmani)</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -3640,13 +3647,16 @@ exact species indicated by the code.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
