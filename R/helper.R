@@ -43,10 +43,11 @@ format_dates_df <- function(df, overwrite) {
     stop("Missing column 'survey_year', 'survey_month', and/or 'survey_day'",
          call. = FALSE)
   }
+
   dplyr::mutate(df,
                 date = lubridate::ymd(paste(.data$survey_year,
                                             .data$survey_month,
-                                            .data$survey_day)),
+                                            .data$survey_day), quiet = TRUE),
                 doy = lubridate::yday(.data$date))
 }
 
@@ -57,23 +58,31 @@ format_dates_db <- function(db, overwrite) {
   # Add columns if don't already exist
   if(!"date" %in% col_db) {
     DBI::dbExecute(db, "ALTER TABLE naturecounts ADD COLUMN date TEXT;")
-  } else if(!overwrite) {
+  } else if("date" %in% col_db & !overwrite) {
     stop("'date' field already exists, and ",
          "'overwrite' is FALSE", call. = FALSE)
+  } else {
+    DBI::dbExecute(db, "UPDATE naturecounts SET date = NULL;")
   }
 
   if(!"doy" %in% col_db) {
     DBI::dbExecute(db, "ALTER TABLE naturecounts ADD COLUMN doy NUMERIC;")
-  } else if(!overwrite) {
+  } else if(!"doy" %in% col_db & !overwrite) {
     stop("'doy' field already exists, and ",
          "'overwrite' is FALSE", call. = FALSE)
+  } else {
+    DBI::dbExecute(db, "UPDATE naturecounts SET doy = NULL;")
   }
 
   # Format to date
   DBI::dbExecute(db, paste0("UPDATE naturecounts SET ",
                             "date = survey_year || '-' || ",
                             "PRINTF('%02d', survey_month) || '-' ",
-                            "|| PRINTF('%02d', survey_day);"))
+                            "|| PRINTF('%02d', survey_day) ",
+                            "WHERE ",
+                            "survey_year IS NOT NULL AND ",
+                            "survey_month IS NOT NULL AND ",
+                            "survey_day IS NOT NULL"))
 
   # Add Day of Year
   DBI::dbExecute(db, paste0("UPDATE naturecounts SET ",
