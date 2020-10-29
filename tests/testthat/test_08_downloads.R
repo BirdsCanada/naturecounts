@@ -161,9 +161,9 @@ test_that("Filter region works as expected", {
 })
 
 test_that("Filter site_type works as expected", {
-  expect_message(d <- nc_data_dl(region = list(statprov = "PE"),
+  expect_silent(d <- nc_data_dl(region = list(statprov = "PE"),
                                 site_type = "IBA", username = "testuser",
-                                verbose = FALSE, info = "nc_test"), "hello")
+                                verbose = FALSE, info = "nc_test"))
   expect_true(all(d$iba_site != "N/A"))
   expect_true(all(stringr::str_detect(d$iba_site, "^PE")))
 })
