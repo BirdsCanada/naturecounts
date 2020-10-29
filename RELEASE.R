@@ -3,7 +3,7 @@
 ## Update internal data files
 source("data-raw/data_creation.R")
 
-## Update metadata stored in inst/extdata
+## Update metadata stored in inst/extdata (UPDATE URL!)
 # - Utm codes take a VERY long time to update!
 nc_metadata_internal(force = TRUE, utm = FALSE)
 
