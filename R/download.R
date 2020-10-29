@@ -441,7 +441,7 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
   }
 
   # Add counts for available collections
-  if(show == "available") p <- dplyr::right_join(p, cnts, by = "collection")
+  if(show == "available") p <- dplyr::inner_join(p, cnts, by = "collection")
 
   # Clarify access type
   p %>%
