@@ -8,21 +8,29 @@
 
 <title>Download NatureCounts data records — nc_data_dl • naturecounts</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,15 +40,15 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Download NatureCounts data records — nc_data_dl" />
 
+<meta property="og:title" content="Download NatureCounts data records — nc_data_dl" />
 <meta property="og:description" content="Download data records from various collections filtered by various options.
 In order to ease the load on the server, note that only three of
 collections/project_ids, species, years, doy, region, and
 site_type can be used in any one request. See the vignette for filtering
 your data after download for more options:
 vignette(&quot;filtering_data&quot;, package = &quot;naturecounts&quot;)." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -54,9 +62,10 @@ vignette(&quot;filtering_data&quot;, package = &quot;naturecounts&quot;)." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -70,7 +79,7 @@ vignette(&quot;filtering_data&quot;, package = &quot;naturecounts&quot;)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.1.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
       </span>
     </div>
 
@@ -92,7 +101,6 @@ vignette(&quot;filtering_data&quot;, package = &quot;naturecounts&quot;)." />
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/BirdStudiesCanada/naturecounts">
@@ -107,6 +115,7 @@ vignette(&quot;filtering_data&quot;, package = &quot;naturecounts&quot;)." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -118,21 +127,33 @@ vignette(&quot;filtering_data&quot;, package = &quot;naturecounts&quot;)." />
     </div>
 
     <div class="ref-description">
-    
     <p>Download data records from various collections filtered by various options.
 In order to ease the load on the server, note that only <strong>three</strong> of
 <code>collections</code>/<code>project_ids</code>, <code>species</code>, <code>years</code>, <code>doy</code>, <code>region</code>, and
 <code>site_type</code> can be used in any one request. See the vignette for filtering
 your data after download for more options:
 <code>vignette("filtering_data", package = "naturecounts")</code>.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>nc_data_dl</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>project_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>years</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>doy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>region</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>site_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fields_set</span> <span class='kw'>=</span> <span class='st'>"minimum"</span>, <span class='kw'>fields</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>username</span>, <span class='kw'>request_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sql_db</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>60</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>nc_data_dl</span><span class='op'>(</span>
+  collections <span class='op'>=</span> <span class='cn'>NULL</span>,
+  project_ids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  species <span class='op'>=</span> <span class='cn'>NULL</span>,
+  years <span class='op'>=</span> <span class='cn'>NULL</span>,
+  doy <span class='op'>=</span> <span class='cn'>NULL</span>,
+  region <span class='op'>=</span> <span class='cn'>NULL</span>,
+  site_type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fields_set <span class='op'>=</span> <span class='st'>"minimum"</span>,
+  fields <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>username</span>,
+  info <span class='op'>=</span> <span class='cn'>NULL</span>,
+  request_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sql_db <span class='op'>=</span> <span class='cn'>NULL</span>,
+  warn <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  timeout <span class='op'>=</span> <span class='fl'>120</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -190,6 +211,13 @@ provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.</p></td>
     </tr>
     <tr>
+      <th>info</th>
+      <td><p>Character vector. Short description of reason for the download.
+E.g., "COSEWIC report", "Impact Assessment Study", "School project", etc.
+This kind of information helps NatureCounts.ca justify the utility of the
+database. Required unless resuming/re-downloaded with a <code>request_id</code>.</p></td>
+    </tr>
+    <tr>
       <th>request_id</th>
       <td><p>Numeric. Specific request id to check or download.</p></td>
     </tr>
@@ -213,54 +241,53 @@ times out.</p></td>
       <td><p>Logical. Show messages?</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Data frame</p>
-    
+    <p>Data frame or connection to SQLite database</p>
     <h2 class="hasAnchor" id="naturecounts-account"><a class="anchor" href="#naturecounts-account"></a>NatureCounts account</h2>
 
     
-    <p>All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must <a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a> for a free
-NatureCounts account and
-<a href='https://www.birdscanada.org/birdmon/default/projects.jsp'>register</a> for
-the projects you'd like to access. See the <code>request_id</code> section for more
-information.</p>
-    
+
+<p>All public data is available with a username/password
+(<a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a>
+for a free NatureCounts account). However, to access private/semi-public
+projects/collections you must request access. See the Access and
+<code>request_id</code>s section for more information.</p>
     <h2 class="hasAnchor" id="species-ids-species-"><a class="anchor" href="#species-ids-species-"></a>Species ids (<code>species</code>)</h2>
 
     
-    <p>Numeric species id codes can determined from the functions
-<code><a href='search_species.html'>search_species()</a></code> or <code><a href='search_species_code.html'>search_species_code()</a></code>. See
-also the <a href='https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html'>species codes</a>
+
+<p>Numeric species id codes can determined from the functions
+<code><a href='search_species.html'>search_species()</a></code> or <code><a href='search_species_code.html'>search_species_code()</a></code>. See also the article on
+<a href='https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html'>species codes</a>
 for more information.</p>
-    
     <h2 class="hasAnchor" id="day-of-year-doy-"><a class="anchor" href="#day-of-year-doy-"></a>Day of Year (<code>doy</code>)</h2>
 
     
-    <p>The format for day of year (<code>doy</code>) is fairly flexible and can be a whole
+
+<p>The format for day of year (<code>doy</code>) is fairly flexible and can be a whole
 number between 1 and 366 or anything recognized by
 <code><a href='http://lubridate.tidyverse.org/reference/lubridate-package.html'>lubridate-package</a></code>'s <code><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a>()</code>
 function. However, it must have the order of year, month, day. Note that
 year is ignored when converting to day of year, except that it will result
 in a 1 day offset for leap years.</p>
-    
     <h2 class="hasAnchor" id="regions-region-"><a class="anchor" href="#regions-region-"></a>Regions (<code>region</code>)</h2>
 
     
-    <p>Regions are defined by codes reflecting the country, state/province,
+
+<p>Regions are defined by codes reflecting the country, state/province,
 subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 Regions (BCR) (see <code><a href='search_region.html'>search_region()</a></code> for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifies the min/max longitude and min/max latitude (<code>bbox</code>). See the
 article on <a href='http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html'>regional filters</a>
 for more information.</p>
-    
     <h2 class="hasAnchor" id="data-fields-columns-fields-set-and-fields-"><a class="anchor" href="#data-fields-columns-fields-set-and-fields-"></a>Data Fields/Columns (<code>fields_set</code> and <code>fields</code>)</h2>
 
     
-    <p>By default data is downloaded with the <code>minimum</code> set of fields/columns.
+
+<p>By default data is downloaded with the <code>minimum</code> set of fields/columns.
 However, for more advanced applications, users may wish to specify which
 fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
 keeps track of variables used to augment observation data. There are
@@ -279,42 +306,58 @@ for options.</p></li>
 character vector specifying the exact fields/columns to return. See
 <code><a href='meta.html'>meta_bmde_fields()</a></code>) for potential <code>fields</code> values.</p></li>
 </ol>
-    <p>Note that in all cases there are a set of fields/columns that are <em>always</em>
+
+<p>Note that in all cases there are a set of fields/columns that are <em>always</em>
 returned, no matter what <code>fields_set</code> is used.</p>
-    
-    <h2 class="hasAnchor" id="request-id-s"><a class="anchor" href="#request-id-s"></a><code>request_id</code>'s</h2>
+    <h2 class="hasAnchor" id="access-and-request-ids"><a class="anchor" href="#access-and-request-ids"></a>Access and <code>request_id</code>s</h2>
 
     
-    <p>There are two types of data requests: ones made through the api (i.e. this
-<code>naturecounts</code> R package) and those made through the online <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a>. Each
-request generates a request id which identifies the filter set and
-collections requested.</p>
-<p>Requests made through this package via the <code>nc_data_dl()</code> function only
-return data the user has access to. If data was successfully downloaded, the
-user can see the request details with the <code><a href='nc_requests.html'>nc_requests()</a></code> function.</p>
-<p>Requests made through the online <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> may
-include collections to which the user does not have access. <code><a href='nc_requests.html'>nc_requests()</a></code>
-will list the requests along with the approval status (either 'approved' or
-'pending').</p>
-<p>Any approved request id can be downloaded by supplying the <code>request_id</code> to
-<code>nc_data_dl()</code> (e.g., <code>nc_data_dl(request_id = 152000, username = "USER")</code>).</p>
-    
+
+
+<p>Access to a data collection is either available as "full" or "by request".
+Use <code><a href='nc_count.html'>nc_count(username = "USER", show = "all")</a></code>, to see the accessibility of
+collections.</p>
+<p>"Full" access means that data can be immediately requested directly through
+the <code>naturecounts</code> R package. "By request" means that a request must be
+<a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>submitted online</a> and
+approved before the data can be downloaded through <code>naturecounts</code>.</p>
+<p>This means that there are two types of data requests: ones made through this
+<code>naturecounts</code> R package (API requests) and those made through the online
+<a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> (Web
+requests). Every request (from either method) generates a <code>request_id</code> which
+identifies the filter set and collections requested. Details of all of
+requests can be reviewed with the <code><a href='nc_requests.html'>nc_requests()</a></code> function.</p>
+<p>To download data with "full" access, users can either specify filters, or if
+they are repeating a download, can use the <code>request_id</code> from <code><a href='nc_requests.html'>nc_requests()</a></code>.</p>
+<p>Otherwise, if the user doesn't have "full" access, they must supply an
+approved <code>request_id</code> to the <code>nc_data_dl()</code> function (e.g.,
+<code>nc_data_dl(request_id = 152000, username = "USER")</code>). Use <code><a href='nc_requests.html'>nc_requests()</a></code> to
+see <code>request_id</code>s, filters, and approval status.</p>
+<p>Requests for "full" access to additional collections can be made online
+through the <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> by
+checking the "Full access?" box in Step 2 of the form.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># All observations part of the RCBIOTABASE collection</span>
-<span class='no'>rcbio</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='st'>"RCBIOTABASE"</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (RCBIOTABASE); fields_set (BMDE2.00-min)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access  collection nrecords</span>
-#&gt; <span class='message'>1    yes RCBIOTABASE    12598</span>
-#&gt; <span class='message'>Total records: 12,598</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 5000 / 12598</span></div><div class='output co'>#&gt; <span class='message'>    Records 5001 to 10000 / 12598</span></div><div class='output co'>#&gt; <span class='message'>    Records 10001 to 12598 / 12598</span></div><div class='input'>
-</div><div class='input'><span class='co'># All observations part of project_id 1042 accessible by "sample"</span>
-<span class='no'>p1042</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>project_ids</span> <span class='kw'>=</span> <span class='fl'>1042</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (ABATLAS1, ABATLAS2, ABBIRDRECS); fields_set (BMDE2.00-min)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access collection nrecords</span>
-#&gt; <span class='message'>1    yes   ABATLAS1   123364</span>
-#&gt; <span class='message'>2    yes   ABATLAS2   201398</span>
-#&gt; <span class='message'>3    yes ABBIRDRECS   357264</span>
+    <pre class="examples"><div class='input'><span class='co'># All observations part of the SAMPLE1 and SAMPLE2 collections</span>
+<span class='va'>sample</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>collections <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SAMPLE1"</span>, <span class='st'>"SAMPLE2"</span><span class='op'>)</span>,
+                     username <span class='op'>=</span> <span class='st'>"sample"</span>, info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (SAMPLE1, SAMPLE2); fields_set (BMDE2.00-min)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1    SAMPLE1     1000</span>
+#&gt; <span class='message'>2    SAMPLE2     1000</span>
+#&gt; <span class='message'>Total records: 2,000</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 1000 / 1000</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 1000 / 1000</span></div><div class='input'>
+<span class='co'># All observations part of project_id 1042 accessible by "testuser"</span>
+<span class='va'>p1042</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>project_ids <span class='op'>=</span> <span class='fl'>1042</span>, username <span class='op'>=</span> <span class='st'>"testuser"</span>,
+                    info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (ABATLAS1, ABATLAS2, ABBIRDRECS); fields_set (BMDE2.00-min)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1   ABATLAS1   123364</span>
+#&gt; <span class='message'>2   ABATLAS2   201398</span>
+#&gt; <span class='message'>3 ABBIRDRECS   357264</span>
 #&gt; <span class='message'>Total records: 682,026</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 5000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 5001 to 10000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 10001 to 15000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 15001 to 20000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 20001 to 25000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 25001 to 30000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 30001 to 35000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 35001 to 40000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 40001 to 45000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 45001 to 50000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 50001 to 55000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 55001 to 60000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 60001 to 65000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 65001 to 70000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 70001 to 75000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 75001 to 80000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 80001 to 85000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 85001 to 90000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 90001 to 95000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 95001 to 1e+05 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 100001 to 105000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 105001 to 110000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 110001 to 115000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 115001 to 120000 / 123364</span></div><div class='output co'>#&gt; <span class='message'>    Records 120001 to 123364 / 123364</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 5000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 5001 to 10000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 10001 to 15000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 15001 to 20000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 20001 to 25000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 25001 to 30000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 30001 to 35000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 35001 to 40000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 40001 to 45000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 45001 to 50000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 50001 to 55000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 55001 to 60000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 60001 to 65000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 65001 to 70000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 70001 to 75000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 75001 to 80000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 80001 to 85000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 85001 to 90000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 90001 to 95000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 95001 to 1e+05 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 100001 to 105000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 105001 to 110000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 110001 to 115000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 115001 to 120000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 120001 to 125000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 125001 to 130000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 130001 to 135000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 135001 to 140000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 140001 to 145000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 145001 to 150000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 150001 to 155000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 155001 to 160000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 160001 to 165000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 165001 to 170000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 170001 to 175000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 175001 to 180000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 180001 to 185000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 185001 to 190000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 190001 to 195000 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 195001 to 2e+05 / 201398</span></div><div class='output co'>#&gt; <span class='message'>    Records 200001 to 201398 / 201398</span></div><div class='output co'>#&gt; <span class='message'>  ABBIRDRECS</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 5000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 5001 to 10000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 10001 to 15000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 15001 to 20000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 20001 to 25000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 25001 to 30000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 30001 to 35000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 35001 to 40000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 40001 to 45000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 45001 to 50000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 50001 to 55000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 55001 to 60000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 60001 to 65000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 65001 to 70000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 70001 to 75000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 75001 to 80000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 80001 to 85000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 85001 to 90000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 90001 to 95000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 95001 to 1e+05 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 100001 to 105000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 105001 to 110000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 110001 to 115000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 115001 to 120000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 120001 to 125000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 125001 to 130000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 130001 to 135000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 135001 to 140000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 140001 to 145000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 145001 to 150000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 150001 to 155000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 155001 to 160000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 160001 to 165000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 165001 to 170000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 170001 to 175000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 175001 to 180000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 180001 to 185000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 185001 to 190000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 190001 to 195000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 195001 to 2e+05 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 200001 to 205000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 205001 to 210000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 210001 to 215000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 215001 to 220000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 220001 to 225000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 225001 to 230000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 230001 to 235000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 235001 to 240000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 240001 to 245000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 245001 to 250000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 250001 to 255000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 255001 to 260000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 260001 to 265000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 265001 to 270000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 270001 to 275000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 275001 to 280000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 280001 to 285000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 285001 to 290000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 290001 to 295000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 295001 to 3e+05 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 300001 to 305000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 305001 to 310000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 310001 to 315000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 315001 to 320000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 320001 to 325000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 325001 to 330000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 330001 to 335000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 335001 to 340000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 340001 to 345000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 345001 to 350000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 350001 to 355000 / 357264</span></div><div class='output co'>#&gt; <span class='message'>    Records 355001 to 357264 / 357264</span></div><div class='input'>
-<span class='co'># Black-capped chickadees from RCBIOTABASE collection in 2010</span>
-<span class='fu'><a href='search_species.html'>search_species</a></span>(<span class='st'>"black-capped chickadee"</span>) <span class='co'># Find the species_id</span></div><div class='output co'>#&gt;   species_id                           scientific_name
+<span class='co'># Black-capped Chickadees (BCCH) in SAMPLE2 collection in 2013</span>
+<span class='fu'><a href='search_species.html'>search_species</a></span><span class='op'>(</span><span class='st'>"black-capped chickadee"</span><span class='op'>)</span> <span class='co'># Find the species_id</span>
+</div><div class='output co'>#&gt;   species_id                           scientific_name
 #&gt; 1      14280                      Poecile atricapillus
 #&gt; 2      40668       Poecile carolinensis x atricapillus
 #&gt; 3      40669         Poecile carolinensis/atricapillus
@@ -328,83 +371,80 @@ will list the requests along with the approval status (either 'approved' or
 #&gt; 1                          Mésange à tête noire       BIRDS
 #&gt; 2 Hybride Mésange de Caroline x M. à tête noire       BIRDS
 #&gt; 3        Mésange de Caroline ou M. à tête noire       BIRDS
-#&gt; 4    Hybride Mésange à tête noire x M. bicolore       BIRDS</div><div class='input'><span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='st'>"RCBIOTABASE"</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>,
-                   <span class='kw'>years</span> <span class='kw'>=</span> <span class='fl'>2010</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (RCBIOTABASE); species (14280); fields_set (BMDE2.00-min); start_year (2010); end_year (2010)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access  collection nrecords</span>
-#&gt; <span class='message'>1    yes RCBIOTABASE        7</span>
-#&gt; <span class='message'>Total records: 7</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 7 / 7</span></div><div class='input'>
-<span class='co'># All bcch observations since 2015 accessible to user "sample"</span>
-<span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>, <span class='kw'>years</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2015</span>, <span class='fl'>NA</span>), <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (14280); fields_set (BMDE2.00-min); start_year (2015)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access  collection nrecords</span>
-#&gt; <span class='message'>1    yes RCBIOTABASE        2</span>
-#&gt; <span class='message'>Total records: 2</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2 / 2</span></div><div class='input'>
-<span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>, <span class='kw'>doy</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>200</span>, <span class='fl'>300</span>), <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (14280); fields_set (BMDE2.00-min); start_doy (200); end_doy (300)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access  collection nrecords</span>
-#&gt; <span class='message'>1    yes    ABATLAS1       55</span>
-#&gt; <span class='message'>2    yes    ABATLAS2      565</span>
-#&gt; <span class='message'>3    yes  ABBIRDRECS      223</span>
-#&gt; <span class='message'>4    yes RCBIOTABASE       17</span>
-#&gt; <span class='message'>Total records: 860</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 55 / 55</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 565 / 565</span></div><div class='output co'>#&gt; <span class='message'>  ABBIRDRECS</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 223 / 223</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 17 / 17</span></div><div class='input'>
-<span class='no'>bcch</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>14280</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>,
-                   <span class='kw'>region</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>bbox</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='kw'>left</span> <span class='kw'>=</span> -<span class='fl'>145</span>, <span class='kw'>bottom</span> <span class='kw'>=</span> <span class='fl'>45</span>,
-                                          <span class='kw'>right</span> <span class='kw'>=</span> -<span class='fl'>100</span>, <span class='kw'>top</span> <span class='kw'>=</span> <span class='fl'>60</span>)))</div><div class='output co'>#&gt; <span class='message'>Using filters: species (14280); fields_set (BMDE2.00-min); bbox_left (-145); bbox_bottom (45); bbox_right (-100); bbox_top (60)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access collection nrecords</span>
-#&gt; <span class='message'>1    yes   ABATLAS1     1314</span>
-#&gt; <span class='message'>2    yes   ABATLAS2     3773</span>
-#&gt; <span class='message'>3    yes ABBIRDRECS     2931</span>
-#&gt; <span class='message'>Total records: 8,018</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 1314 / 1314</span></div><div class='output co'>#&gt; <span class='message'>  ABATLAS2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 3773 / 3773</span></div><div class='output co'>#&gt; <span class='message'>  ABBIRDRECS</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2931 / 2931</span></div><div class='input'>
-<span class='co'># All moose observations with public access</span>
-<span class='fu'><a href='search_species.html'>search_species</a></span>(<span class='st'>"moose"</span>)</div><div class='output co'>#&gt;   species_id scientific_name english_name french_name taxon_group
-#&gt; 1     133990     Alces alces        Moose        &lt;NA&gt;     MAMMALS</div><div class='input'><span class='no'>moose</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>133990</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (133990); fields_set (BMDE2.00-min)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access  collection nrecords</span>
-#&gt; <span class='message'>1    yes RCBIOTABASE        2</span>
-#&gt; <span class='message'>Total records: 2</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2 / 2</span></div><div class='input'>
+#&gt; 4    Hybride Mésange à tête noire x M. bicolore       BIRDS</div><div class='input'><span class='va'>bcch</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>collection <span class='op'>=</span> <span class='st'>"SAMPLE2"</span>, species <span class='op'>=</span> <span class='fl'>14280</span>, year <span class='op'>=</span> <span class='fl'>2013</span>,
+                   username <span class='op'>=</span> <span class='st'>"sample"</span>, info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (SAMPLE2); species (14280); fields_set (BMDE2.00-min); start_year (2013); end_year (2013)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1    SAMPLE2       14</span>
+#&gt; <span class='message'>Total records: 14</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 14 / 14</span></div><div class='input'>
+<span class='co'># All BCCH observations since 2015 accessible to user "sample"</span>
+<span class='va'>bcch</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>species <span class='op'>=</span> <span class='fl'>14280</span>, years <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2015</span>, <span class='cn'>NA</span><span class='op'>)</span>, username <span class='op'>=</span> <span class='st'>"sample"</span>,
+                    info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: species (14280); fields_set (BMDE2.00-min); start_year (2015)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1    SAMPLE1       20</span>
+#&gt; <span class='message'>2    SAMPLE2       20</span>
+#&gt; <span class='message'>Total records: 40</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 20 / 20</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 20 / 20</span></div><div class='input'>
+<span class='co'># All BCCH observations from mid-July to late October in all years for user "sample"</span>
+<span class='va'>bcch</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>species <span class='op'>=</span> <span class='fl'>14280</span>, doy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fl'>300</span><span class='op'>)</span>, username <span class='op'>=</span> <span class='st'>"sample"</span>,
+                    info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: species (14280); fields_set (BMDE2.00-min); start_doy (200); end_doy (300)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1    SAMPLE1        7</span>
+#&gt; <span class='message'>2    SAMPLE2        7</span>
+#&gt; <span class='message'>Total records: 14</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 7 / 7</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 7 / 7</span></div><div class='input'>
+<span class='co'># All BCCH observations from a specific bounding box for user "sample"</span>
+<span class='va'>bcch</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>species <span class='op'>=</span> <span class='fl'>14280</span>, username <span class='op'>=</span> <span class='st'>"sample"</span>,
+                   region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>bbox <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>left <span class='op'>=</span> <span class='op'>-</span><span class='fl'>100</span>, bottom <span class='op'>=</span> <span class='fl'>45</span>,
+                                          right <span class='op'>=</span> <span class='op'>-</span><span class='fl'>80</span>, top <span class='op'>=</span> <span class='fl'>60</span><span class='op'>)</span><span class='op'>)</span>,
+                    info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: species (14280); fields_set (BMDE2.00-min); bbox_left (-100); bbox_bottom (45); bbox_right (-80); bbox_top (60)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1    SAMPLE1        3</span>
+#&gt; <span class='message'>2    SAMPLE2        2</span>
+#&gt; <span class='message'>Total records: 5</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 3 / 3</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2 / 2</span></div><div class='input'>
+<span class='co'># All American Bittern observations from user "sample"</span>
+<span class='fu'><a href='search_species.html'>search_species</a></span><span class='op'>(</span><span class='st'>"american bittern"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   species_id       scientific_name     english_name      french_name
+#&gt; 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique
+#&gt;   taxon_group
+#&gt; 1       BIRDS</div><div class='input'><span class='va'>bittern</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>species <span class='op'>=</span> <span class='fl'>2490</span>, username <span class='op'>=</span> <span class='st'>"sample"</span>, info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: species (2490); fields_set (BMDE2.00-min)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1    SAMPLE1        1</span>
+#&gt; <span class='message'>Total records: 1</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 1 / 1</span></div><div class='input'>
 <span class='co'># Different fields/columns</span>
-<span class='no'>moose</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>133990</span>, <span class='kw'>fields_set</span> <span class='kw'>=</span> <span class='st'>"core"</span>,
-                    <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (133990); fields_set (BMDE2.00)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access  collection nrecords</span>
-#&gt; <span class='message'>1    yes RCBIOTABASE        2</span>
-#&gt; <span class='message'>Total records: 2</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2 / 2</span></div><div class='input'>
-<span class='no'>moose</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>species</span> <span class='kw'>=</span> <span class='fl'>133990</span>, <span class='kw'>fields_set</span> <span class='kw'>=</span> <span class='st'>"custom"</span>,
-                    <span class='kw'>fields</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Locality"</span>, <span class='st'>"AllSpeciesReported"</span>),
-                    <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: species (133990); fields_set (custom); fields (Locality, AllSpeciesReported)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access  collection nrecords</span>
-#&gt; <span class='message'>1    yes RCBIOTABASE        2</span>
-#&gt; <span class='message'>Total records: 2</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 2 / 2</span></div><div class='input'>
-</div><span class='co'># NOT RUN {</span>
+<span class='va'>bittern</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>species <span class='op'>=</span> <span class='fl'>2490</span>, fields_set <span class='op'>=</span> <span class='st'>"core"</span>,
+                      username <span class='op'>=</span> <span class='st'>"sample"</span>, info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: species (2490); fields_set (BMDE2.00)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1    SAMPLE1        1</span>
+#&gt; <span class='message'>Total records: 1</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 1 / 1</span></div><div class='input'>
+<span class='va'>bittern</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>species <span class='op'>=</span> <span class='fl'>2490</span>, fields_set <span class='op'>=</span> <span class='st'>"custom"</span>,
+                      fields <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Locality"</span>, <span class='st'>"AllSpeciesReported"</span><span class='op'>)</span>,
+                      username <span class='op'>=</span> <span class='st'>"sample"</span>, info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: species (2490); fields_set (custom); fields (Locality, AllSpeciesReported)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1    SAMPLE1        1</span>
+#&gt; <span class='message'>Total records: 1</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 1 / 1</span></div><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># All collections by request id</span>
-<span class='no'>my_data</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>request_id</span> <span class='kw'>=</span> <span class='fl'>000000</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"USER"</span>)
 
 <span class='co'># Specific collection by request id</span>
-<span class='no'>my_data</span> <span class='kw'>&lt;-</span> <span class='fu'>nc_data_dl</span>(<span class='kw'>collections</span> <span class='kw'>=</span> <span class='st'>"ABATLAS1"</span>,
-                      <span class='kw'>request_id</span> <span class='kw'>=</span> <span class='fl'>000000</span>, <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"USER"</span>)
-<span class='co'># }</span><div class='input'>
+<span class='va'>my_data</span> <span class='op'>&lt;-</span> <span class='fu'>nc_data_dl</span><span class='op'>(</span>collections <span class='op'>=</span> <span class='st'>"ABATLAS1"</span>,
+                      request_id <span class='op'>=</span> <span class='fl'>000000</span>, username <span class='op'>=</span> <span class='st'>"USER"</span>,
+                      info <span class='op'>=</span> <span class='st'>"MY REASON"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#naturecounts-account">NatureCounts account</a></li>
-
-      <li><a href="#species-ids-species-">Species ids (<code>species</code>)</a></li>
-
-      <li><a href="#day-of-year-doy-">Day of Year (<code>doy</code>)</a></li>
-
-      <li><a href="#regions-region-">Regions (<code>region</code>)</a></li>
-
-      <li><a href="#data-fields-columns-fields-set-and-fields-">Data Fields/Columns (<code>fields_set</code> and <code>fields</code>)</a></li>
-
-      <li><a href="#request-id-s"><code>request_id</code>'s</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -412,13 +452,16 @@ will list the requests along with the approval status (either 'approved' or
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

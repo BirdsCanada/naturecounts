@@ -4,8 +4,7 @@
 \alias{db_connect}
 \title{Connect to or create a SQLite database}
 \usage{
-db_connect(name = paste0("./naturecounts_", Sys.Date()),
-  verbose = TRUE)
+db_connect(name = paste0("./naturecounts_", Sys.Date()), verbose = TRUE)
 }
 \arguments{
 \item{name}{Character. The file path and name (no extension) of the database
@@ -19,11 +18,5 @@ A RSQLite connection
 Connect to an existing database, or, if the database doesn't exist, create a
 new one and fill with the appropriate table (internally stored empty df
 called nc_dbs).
-}
-\examples{
-
-\donttest{
-  db_connect()
-}
 }
 \keyword{internal}

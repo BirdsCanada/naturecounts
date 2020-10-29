@@ -14,9 +14,16 @@ knitr::opts_chunk$set(
 ```
 # `naturecounts`
 
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.com/BirdStudiesCanada/naturecounts.svg?branch=master)](https://travis-ci.com/BirdStudiesCanada/naturecounts)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/BirdStudiesCanada/naturecounts?branch=master&svg=true)](https://ci.appveyor.com/project/BirdStudiesCanada/naturecounts)
+
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
 
 Access and download data on plant and animal populations from various databases through NatureCounts, a service managed by Bird Studies Canada.
+
+See tutorials, documentation and articles on the [naturecounts package Website](https://birdstudiescanada.github.io/naturecounts)
 
 ## Installation
 
@@ -50,18 +57,27 @@ nc_count(show = "all") %>%
 
 ### Fetching data
 
-Fetch all observations of moose which are available to user **sample** into a local data frame.
+Fetch all observations of bittern which are available to user **sample** into a local data frame.
+
+First find the species id
 ```{r}
-moose <- nc_data_dl(species = 133990, username = "sample")
+search_species("American Bittern")
 ```
 
-Alternatively, save the downloaded data as a SQLite database (`moose.nc`).
+Use this id with `nc_data_dl()`. The `info` parameter is a short description of what the data is being downloaded for.
 ```{r}
-moose <- nc_data_dl(species = 133990, sql_db = "moose", username = "sample")
+bittern <- nc_data_dl(species = 2490, username = "sample", 
+                    info = "readme_example")
+```
+
+Alternatively, save the downloaded data as a SQLite database (`bittern`).
+```{r}
+bittern <- nc_data_dl(species = 2490, sql_db = "bittern", username = "sample", 
+                    info = "readme_example")
 ```
 
 ```{r cleanup, include = FALSE}
-file.remove("moose.nc")
+file.remove("bittern.nc")
 ```
 
 ### Authorizations
@@ -70,7 +86,7 @@ To access private/semi-public projects/collections you must [sign up](https://ww
 
 ```{r, eval = FALSE}
 nc_count(username = "my_user_name")
-moose <- nc_data_dl(species = 133990, username = "my_user_name")
+bittern <- nc_data_dl(species = 2490, username = "my_user_name", info = "readme_example")
 ```
 
 ### More advanced options

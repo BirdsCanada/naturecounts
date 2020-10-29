@@ -4,7 +4,9 @@
 \name{bdow}
 \alias{bdow}
 \title{Example barred owl data}
-\format{A data frame with 160 rows and 170 variables:}
+\format{
+A data frame with 160 rows and 170 variables:
+}
 \usage{
 bdow
 }

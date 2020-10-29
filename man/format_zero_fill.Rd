@@ -4,9 +4,16 @@
 \alias{format_zero_fill}
 \title{Zero-fill data}
 \usage{
-format_zero_fill(df_db, by = "SamplingEventIdentifier",
-  species = "all", fill = "ObservationCount", extra_species = NULL,
-  warn = TRUE, verbose = TRUE)
+format_zero_fill(
+  df_db,
+  by = "SamplingEventIdentifier",
+  species = "all",
+  fill = "ObservationCount",
+  extra_species = NULL,
+  extra_event = NULL,
+  warn = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{df_db}{Either data frame or a connection to database with
@@ -23,7 +30,13 @@ vector of species ID codes to fill in.}
 
 \item{extra_species}{Character vector. Extra columns/fields uniquely
 associated with \code{species_id} to keep in the data (all columns not in \code{by},
-\code{species}, \code{fill}, or \code{extra_species} will be omitted from the result).}
+\code{species}, \code{fill}, \code{extra_species}, or \code{extra_event} will be omitted from
+the result).}
+
+\item{extra_event}{Character vector. Extra columns/fields uniquely associated
+with the Sampling Event (the field defined by \code{by}) to keep in the data
+(all columns not in \code{by}, \code{species}, \code{fill}, \code{extra_species}, or
+\code{extra_event}) will be omitted from the result).}
 
 \item{warn}{Logical. If TRUE, stop zero-filling if >100 species and >1000
 unique sampling events. If FALSE, ignore and proceed.}
@@ -51,24 +64,36 @@ species.
 }
 \examples{
 # Download data (with "core" fields to include 'CommonName')
-rc <- nc_data_dl(collection = "RCBIOTABASE", fields_set = "core",
-                 username = "sample", info = "nc_example")
+sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"), fields_set = "core",
+                     username = "sample", info = "nc_example")
 
 # Remove casual observations (i.e. 'AllSpeciesReported' = "No")
 library(dplyr) # For filter function
-rc <- filter(rc, AllSpeciesReported == "Yes")
+sample <- filter(sample, AllSpeciesReported == "Yes")
+
+# Remove data with "X" ObservationCount (only keep numeric obs)
+sample <- filter(sample, ObservationCount != "X")
 
 # Zero fill by all species present
-rc_all_zeros <- format_zero_fill(rc)
+sample_all_zeros <- format_zero_fill(sample)
 
 # Zero fill only for Canada Goose
-rc_goose <- format_zero_fill(rc, species = "230")
+goose <- format_zero_fill(sample, species = "230")
 
 # Keep species-specific variables
-rc_goose <- format_zero_fill(rc, species = "230", extra_species = "CommonName")
+goose <- format_zero_fill(sample, species = "230", extra_species = "CommonName")
 
-# Keep sampling-event-specific variables (keep 'SamplingEventIdentifier')
-rc_goose <- format_zero_fill(rc, by = c("SamplingEventIdentifier",
-                                        "latitude", "longitude"))
+# Keep sampling-event-specific variables
+coords <- format_zero_fill(sample, extra_event = c("latitude", "longitude"))
+
+# By species, keeping extra species variables and event variables
+goose_coords <- format_zero_fill(sample, species = "230",
+                                 extra_species = "CommonName",
+                                 extra_event = c("latitude", "longitude"))
+
+# Only return event information
+events <- format_zero_fill(sample, fill = NA,
+                           extra_event = c("latitude", "longitude"))
+
 
 }

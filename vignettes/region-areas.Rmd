@@ -3,7 +3,7 @@ title: "Exploring IBAs and BCRs"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{"Exploring IBAs and BCRs"}
+  %\VignetteIndexEntry{Exploring IBAs and BCRs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -15,6 +15,10 @@ library(dplyr)
 
 In `naturecounts`, by default default data is downloaded with a specific set of fields/columns. However, for more advanced applications, users may wish to specify which fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema keeps track of variables used to augment observation data. There are different versions reflecting different collections of variables. 
 
+> The following examples use the "testuser" user which is not available to you. 
+> You can quickly [sign up for a free account](https://www.birdscanada.org/birdmon/default/register.jsp)
+> of your own to access and play around with these examples. 
+
 
 ## BMDE versions
 
@@ -43,7 +47,7 @@ By default, the `BMDE2.00-min` or `minimum` BMDE version is used when downloadin
 
 ```{r}
 cardinals <- nc_data_dl(species = 19360, fields_set = "core", 
-                        username = "sample", info = "nc_vignette")
+                        username = "testuser", info = "nc_vignette")
 names(cardinals)
 ```
 
@@ -65,7 +69,7 @@ The basic fields will **always** be included in any data request. However, you c
 ```{r}
 cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
                         fields = c("Sex", "SamplingEventIdentifier"), 
-                        username = "sample", info = "nc_vignette")
+                        username = "testuser", info = "nc_vignette")
 head(cardinals)
 ```
 
@@ -91,7 +95,7 @@ Now download the data.
 
 ```{r}
 cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
-                        fields = my_fields, username = "sample", 
+                        fields = my_fields, username = "testuser", 
                         info = "nc_vignette")
 head(cardinals)
 ```

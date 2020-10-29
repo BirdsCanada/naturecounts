@@ -21,47 +21,49 @@
 #' @inheritSection args Day of Year (`doy`)
 #' @inheritSection args Regions (`region`)
 #' @inheritSection args Data Fields/Columns (`fields_set` and `fields`)
-#' @inheritSection args `request_id`'s
+#' @inheritSection args Access and `request_id`s
 #'
-#' @return Data frame
+#' @return Data frame or connection to SQLite database
 #'
 #' @examples
-#' # All observations part of the RCBIOTABASE collection
-#' rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample",
-#'                     info = "nc_example")
+#' # All observations part of the SAMPLE1 and SAMPLE2 collections
+#' sample <- nc_data_dl(collections = c("SAMPLE1", "SAMPLE2"),
+#'                      username = "sample", info = "nc_example")
 #'
-#' \donttest{# All observations part of project_id 1042 accessible by "sample"
-#' p1042 <- nc_data_dl(project_ids = 1042, username = "sample",
+#' \donttest{# All observations part of project_id 1042 accessible by "testuser"
+#' p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
 #'                     info = "nc_example")}
 #'
-#' # Black-capped chickadees from RCBIOTABASE collection in 2010
+#' # Black-capped Chickadees (BCCH) in SAMPLE2 collection in 2013
 #' search_species("black-capped chickadee") # Find the species_id
-#' bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280, years = 2010,
+#' bcch <- nc_data_dl(collection = "SAMPLE2", species = 14280, year = 2013,
 #'                    username = "sample", info = "nc_example")
 #'
-#' # All bcch observations since 2015 accessible to user "sample"
+#' # All BCCH observations since 2015 accessible to user "sample"
 #' bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
 #'                     info = "nc_example")
 #'
+#' # All BCCH observations from mid-July to late October in all years for user "sample"
 #' bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample",
 #'                     info = "nc_example")
 #'
+#' # All BCCH observations from a specific bounding box for user "sample"
 #' bcch <- nc_data_dl(species = 14280, username = "sample",
-#'                    region = list(bbox = c(left = -145, bottom = 45,
-#'                                           right = -100, top = 60)),
+#'                    region = list(bbox = c(left = -100, bottom = 45,
+#'                                           right = -80, top = 60)),
 #'                     info = "nc_example")
 #'
-#' # All moose observations with public access
-#' search_species("moose")
-#' moose <- nc_data_dl(species = 133990, username = "sample", info = "nc_example")
+#' # All American Bittern observations from user "sample"
+#' search_species("american bittern")
+#' bittern <- nc_data_dl(species = 2490, username = "sample", info = "nc_example")
 #'
 #' # Different fields/columns
-#' moose <- nc_data_dl(species = 133990, fields_set = "core",
-#'                     username = "sample", info = "nc_example")
+#' bittern <- nc_data_dl(species = 2490, fields_set = "core",
+#'                       username = "sample", info = "nc_example")
 #'
-#' moose <- nc_data_dl(species = 133990, fields_set = "custom",
-#'                     fields = c("Locality", "AllSpeciesReported"),
-#'                     username = "sample", info = "nc_example")
+#' bittern <- nc_data_dl(species = 2490, fields_set = "custom",
+#'                       fields = c("Locality", "AllSpeciesReported"),
+#'                       username = "sample", info = "nc_example")
 #'
 #' \dontrun{
 #' # All collections by request id
@@ -81,7 +83,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
                        doy = NULL, region = NULL, site_type = NULL,
                        fields_set = "minimum", fields = NULL,
                        username, info = NULL, request_id = NULL,
-                       sql_db = NULL, warn = TRUE, timeout = 60,
+                       sql_db = NULL, warn = TRUE, timeout = 120,
                        verbose = TRUE) {
 
   # Username check and Authorization
@@ -89,6 +91,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
 
   # Check/convert project_ids to collections (collections checked in filter)
   collections <- projects_check(project_ids, collections)
+  collections <- collections_check(collections, token)
 
   # If request_id provided, check, and ignore other filter values
   if(!is.null(request_id)) {
@@ -103,13 +106,14 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
     }
 
     requests <- nc_requests_internal(request_id, token)
+    if(is.null(requests)) stop("No valid requests for this id and this user", call. = FALSE)
 
     if(!is.null(collections)) {
       if(any(!collections %in% requests$collection)) {
         stop("Some 'collections' were not included in the original request and ",
              "cannot be downloaded with this 'request_id'", call. = FALSE)
       }
-      requests <- dplyr::filter(requests, collection %in% collections)
+      requests <- dplyr::filter(requests, .data$collection %in% collections)
     } else {
       collections <- requests$collection
     }
@@ -125,15 +129,23 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
                           site_type = site_type,
                           fields_set = fields_set, fields = fields)
 
+  # For sample user
+  if(username == "sample" && is.null(collections)) {
+    filter$collections <- c("SAMPLE1", "SAMPLE2")
+  }
+
   # Get available records
   if(verbose) message("Collecting available records...")
 
   if(!is.null(request_id)) {
-    records <- dplyr::select(requests, collection, nrecords)
+    records <- dplyr::select(requests, "collection", "nrecords")
   } else {
-    records <- nc_count_internal(filter = filter, timeout = timeout, token = token)
+    records <- nc_count_internal(filter = filter, timeout = timeout,
+                                 token = token, info = info)
     request_id <- records$requestId
-    records <- records$results
+    # Filter records to collections available
+    records <- records$results %>%
+      dplyr::filter(.data$collection %in% nc_permissions_internal(token)$collection)
   }
 
   # If there are no records to download, see why not and report that to the user
@@ -142,7 +154,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
     # Is it because they don't have permission?
     if(!is.null(collections)) {
       no_access <- collections[!collections %in%
-                                 nc_permissions(token = token)$collection]
+                                 nc_permissions_internal(token)$collection]
     } else no_access <- c()
 
     if(length(no_access) == 0) {
@@ -185,8 +197,7 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   }
 
   # Query Information
-  query <- list(lastRecord = 0, numRecords = 5000, requestId = request_id,
-                info = info)
+  query <- list(lastRecord = 0, numRecords = 5000, requestId = request_id)
 
   if(verbose) message("\nDownloading records for each collection:")
   for(c in 1:nrow(records)) {
@@ -323,8 +334,15 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' Download the number of records available for different collections filtered
 #' by location (if provided). If authorization is provided, the collections are
-#' filtered to only those available to the user. Otherwise all collections are
-#' returned.
+#' filtered to only those available to the user (unless using `show = "all"`).
+#' Without authorization all collections are returned.
+#'
+#' The `akn_level` column describes the level of data access for that collection
+#' (see [descriptions
+#' online](https://sandbox.birdscanada.org/birdmon/default/nc_access_levels.jsp)).
+#' The `access` column describes the accessibility of a collection for a given
+#' username (or no access if no username supplied). See the section on Access
+#' and `request_id`s for more details.
 #'
 #' @param show Character. Either "all" or "available". "all" returns counts from
 #'   all data sources. "available" only returns counts for data available for
@@ -335,8 +353,11 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #' @inheritSection args Species ids (`species`)
 #' @inheritSection args Day of Year (`doy`)
 #' @inheritSection args Regions (`region`)
+#' @inheritSection args Access and `request_id`s
 #'
 #' @return Data frame
+#'
+#' @seealso [nc_requests()]
 #'
 #' @examples
 #'
@@ -361,15 +382,14 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' # Count all records available in the Christmas Bird Count and Breeding Bird
 #' # Survey collections (regardless of user permissions)
-#' \donttest{
 #' nc_count(collections = c("CBC", "BBS"), show = "all", username = "sample")
-#' }
+#'
 #'
 #' @export
 
 nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                      years = NULL, doy = NULL, region = NULL, site_type = NULL,
-                     show = "available", username = NULL, timeout = 30,
+                     show = "available", username = NULL, timeout = 120,
                      verbose = TRUE) {
 
   if(!show %in% c("available", "all")) {
@@ -386,6 +406,7 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
 
   # Check/convert project_ids to collections
   collections <- projects_check(project_ids, collections)
+  if(!is.null(token) & show == "available") collections <- collections_check(collections, token)
 
   # Assemble and check filter parameters
   filter <- filter_create(verbose = verbose,
@@ -393,30 +414,89 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
                           years = years, doy = doy, region = region,
                           site_type = site_type)
 
-  # Get counts
-  cnts <- nc_count_internal(filter, timeout, token, show)
+  # For sample user
+  if(!is.null(username) && username == "sample" && is.null(collections)) {
+    filter$collections <- c("SAMPLE1", "SAMPLE2")
+  }
 
-  cnts[['results']]
+  # Get counts
+  cnts <- nc_count_internal(filter, timeout, token)[['results']]
+
+  if(length(filter) > 0 && nrow(cnts) == 0) stop("No counts for these filters", call. = FALSE)
+
+  p <- nc_permissions_internal(token, timeout) %>%
+    dplyr::mutate(access = "full")
+
+  # Add access codes and counts for unavailable collections
+  if(show == "all") {
+    p <- meta_collections() %>%
+      dplyr::select("collection", "akn_level") %>%
+      dplyr::full_join(p, ., by = c("collection", "akn_level"))
+
+    if(length(filter) > 0){
+      p <- dplyr::right_join(p, cnts, by = "collection")
+    } else {
+      p <- dplyr::full_join(p, cnts, by = "collection")
+    }
+  }
+
+  # Add counts for available collections
+  if(show == "available") p <- dplyr::inner_join(p, cnts, by = "collection")
+
+  # Clarify access type
+  p %>%
+    dplyr::mutate(access = dplyr::case_when(
+      .data$access == "full" ~ "full",
+      is.na(.data$access) & .data$akn_level >= 3 ~ "by request",
+      is.na(.data$access) & .data$akn_level < 3 ~ "no access"),
+      nrecords = dplyr::if_else(.data$akn_level >= 2 & is.na(.data$nrecords),
+                                0L, .data$nrecords)) %>%
+    dplyr::arrange(.data$collection)
 }
 
-nc_count_internal <- function(filter, timeout, token, show = "available") {
-  cnts <- srv_query(api$collections_count, token = token, filter = filter,
+nc_count_internal <- function(filter, timeout, token, info = NULL) {
+
+  cnts <- srv_query(api$collections_count, token = token,
+                    query = list(info = info), filter = filter,
                     timeout = timeout)
 
   requestId <- cnts$requestId
 
   cnts <- cnts %>%
     parse_results(results = TRUE) %>%
+    dplyr::select("collection", "nrecords") %>%
     dplyr::arrange(.data$collection)
 
-  if(show == "available" && nrow(cnts) > 0) {
-    cnts <- dplyr::filter(cnts, .data$access == "yes")
-  }
   list(results = cnts, requestId = requestId)
 }
 
-
-nc_permissions <- function(token = NULL) {
-  srv_query(api$permissions, token = token, timeout = 30) %>%
-    parse_results(results = TRUE)
+#' Download list of accessible collections
+#'
+#' Returns a list of collections accessible by 'username'.
+#'
+#' @inheritParams args
+#' @inheritSection args NatureCounts account
+#'
+#' @examples
+#'
+#' nc_permissions()
+#' nc_permissions(username = "sample")
+#'
+#' @export
+nc_permissions <- function(username = NULL, timeout = 60) {
+  token <- srv_auth(username)
+  nc_permissions_internal(token, timeout) %>%
+    dplyr::pull(.data$collection)
 }
+
+nc_permissions_internal <- function(token, timeout = 60) {
+  srv_query(api$permissions, token = token, timeout = timeout) %>%
+    parse_results(results = TRUE) %>%
+    dplyr::select("collection", "akn_level")
+}
+
+# Cache function results
+nc_permissions_internal <- memoise::memoise(nc_permissions_internal,
+                                            ~memoise::timeout(24 * 60 * 60))
+
+

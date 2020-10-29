@@ -150,7 +150,7 @@ test_that("Species code exact vs. all", {
     expect_is("data.frame")
   expect_gte(nrow(s1), 1)
   expect_gte(ncol(s1), 1)
-  expect_equal(s1$BSCDATA, c("DEJU", "SCJU", "ORJU", "PSJU"))
+  expect_equal(sort(s1$BSCDATA), sort(c("DEJU", "SCJU", "ORJU", "PSJU")))
 
   expect_silent(s1 <- search_species_code("DEJU", results = "exact")) %>%
     expect_is("data.frame")

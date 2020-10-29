@@ -5,20 +5,21 @@ parse_results <- function(r, results = FALSE) {
 
 parse_request <- function(request) {
   dplyr::tibble(request) %>%
-    dplyr::mutate(request_id = names(request),
-                  request = unname(request),
-                  collection = purrr::map(request, ~list_to_df(.$collection, type = "collection")),
-                  filters = purrr::map_chr(request, ~filter_to_str(.$filters)),
-                  requestOrigin = purrr::map_chr(request, ~null_to_na(.$requestOrigin)),
-                  requestLabel = purrr::map_chr(request, ~null_to_na(.$requestLabel))) %>%
-    tidyr::unnest(collection) %>%
-    dplyr::select(request_id, requestOrigin, requestLabel,
-                  collection,
-                  status = approved,
-                  nrecords,
-                  filters) %>%
-    dplyr::mutate(nrecords = as_numeric(nrecords)) %>%
-    dplyr::arrange(request_id) %>%
+    dplyr::mutate(
+      request_id = names(.data$request),
+      request = unname(.data$request),
+      collection = purrr::map(.data$request, ~list_to_df(.$collection, type = "collection")),
+      filters = purrr::map_chr(.data$request, ~filter_to_str(.$filters)),
+      requestOrigin = purrr::map_chr(.data$request, ~null_to_na(.$requestOrigin)),
+      requestLabel = purrr::map_chr(.data$request, ~null_to_na(.$requestLabel))) %>%
+    tidyr::unnest(cols = .data$collection) %>%
+    dplyr::select("request_id", "requestOrigin", "requestLabel",
+                  "collection",
+                  "status" = "approved",
+                  "nrecords",
+                  "filters") %>%
+    dplyr::mutate(nrecords = as_numeric(.data$nrecords)) %>%
+    dplyr::arrange(.data$request_id) %>%
     as.data.frame()
 }
 
@@ -118,4 +119,8 @@ NULL
 nc_deprecate <- function(new){
   .Deprecated(msg = paste0(as.character(sys.call(sys.parent()))[1L],
                            " is deprecated, use ", new, " instead"))
+}
+
+have_auth <- function(){
+  Sys.getenv("naturecounts_steffilazerte2") != ""
 }

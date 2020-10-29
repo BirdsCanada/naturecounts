@@ -4,10 +4,13 @@
 \alias{nc_requests}
 \title{Check on status of data requests}
 \usage{
-nc_requests(request_id = NULL, username)
+nc_requests(request_id = NULL, type = "web", username)
 }
 \arguments{
 \item{request_id}{Numeric. Specific request id to check or download.}
+
+\item{type}{Character One of "web", "api", or "all" specifying which types of
+request to return (defaults to "web").}
 
 \item{username}{Character vector. Username for \url{http://naturecounts.ca}. If
 provided, the user will be prompted for a password. If left NULL, only
@@ -19,24 +22,36 @@ data frame
 \description{
 List pending or completed data requests for a given user.
 }
-\section{\code{request_id}'s}{
+\section{Access and \code{request_id}s}{
 
-There are two types of data requests: ones made through the api (i.e. this
-\code{naturecounts} R package) and those made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form}. Each
-request generates a request id which identifies the filter set and
-collections requested.
 
-Requests made through this package via the \code{\link[=nc_data_dl]{nc_data_dl()}} function only
-return data the user has access to. If data was successfully downloaded, the
-user can see the request details with the \code{\link[=nc_requests]{nc_requests()}} function.
+Access to a data collection is either available as "full" or "by request".
+Use \code{nc_count(username = "USER", show = "all")}, to see the accessibility of
+collections.
 
-Requests made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} may
-include collections to which the user does not have access. \code{\link[=nc_requests]{nc_requests()}}
-will list the requests along with the approval status (either 'approved' or
-'pending').
+"Full" access means that data can be immediately requested directly through
+the \code{naturecounts} R package. "By request" means that a request must be
+\href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{submitted online} and
+approved before the data can be downloaded through \code{naturecounts}.
 
-Any approved request id can be downloaded by supplying the \code{request_id} to
-\code{\link[=nc_data_dl]{nc_data_dl()}} (e.g., \code{nc_data_dl(request_id = 152000, username = "USER")}).
+This means that there are two types of data requests: ones made through this
+\code{naturecounts} R package (API requests) and those made through the online
+\href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} (Web
+requests). Every request (from either method) generates a \code{request_id} which
+identifies the filter set and collections requested. Details of all of
+requests can be reviewed with the \code{\link[=nc_requests]{nc_requests()}} function.
+
+To download data with "full" access, users can either specify filters, or if
+they are repeating a download, can use the \code{request_id} from \code{\link[=nc_requests]{nc_requests()}}.
+
+Otherwise, if the user doesn't have "full" access, they must supply an
+approved \code{request_id} to the \code{\link[=nc_data_dl]{nc_data_dl()}} function (e.g.,
+\code{nc_data_dl(request_id = 152000, username = "USER")}). Use \code{\link[=nc_requests]{nc_requests()}} to
+see \code{request_id}s, filters, and approval status.
+
+Requests for "full" access to additional collections can be made online
+through the \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} by
+checking the "Full access?" box in Step 2 of the form.
 }
 
 \examples{

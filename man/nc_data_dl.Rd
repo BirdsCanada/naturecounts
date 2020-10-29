@@ -4,17 +4,30 @@
 \alias{nc_data_dl}
 \title{Download NatureCounts data records}
 \usage{
-nc_data_dl(collections = NULL, project_ids = NULL, species = NULL,
-  years = NULL, doy = NULL, region = NULL, site_type = NULL,
-  fields_set = "minimum", fields = NULL, username, info = NULL,
-  request_id = NULL, sql_db = NULL, warn = TRUE, timeout = 60,
-  verbose = TRUE)
+nc_data_dl(
+  collections = NULL,
+  project_ids = NULL,
+  species = NULL,
+  years = NULL,
+  doy = NULL,
+  region = NULL,
+  site_type = NULL,
+  fields_set = "minimum",
+  fields = NULL,
+  username,
+  info = NULL,
+  request_id = NULL,
+  sql_db = NULL,
+  warn = TRUE,
+  timeout = 120,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
 download data. NULL (default) downloads data from all available collections}
 
-\item{project_ids}{Character/Numeric vector. The \code{project id}s from which to
+\item{project_ids}{Character/Numeric vector. The \verb{project id}s from which to
 download data. First the collections associated with a \code{project_id} are
 determined, and then data is downloaded for each collection. If both
 \code{collections} and \code{project_ids} are supplied, they are combined.}
@@ -63,7 +76,7 @@ times out.}
 \item{verbose}{Logical. Show messages?}
 }
 \value{
-Data frame
+Data frame or connection to SQLite database
 }
 \description{
 Download data records from various collections filtered by various options.
@@ -75,19 +88,18 @@ your data after download for more options:
 }
 \section{NatureCounts account}{
 
-All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must \href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up} for a free
-NatureCounts account and
-\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register} for
-the projects you'd like to access. See the \code{request_id} section for more
-information.
+All public data is available with a username/password
+(\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up}
+for a free NatureCounts account). However, to access private/semi-public
+projects/collections you must request access. See the Access and
+\code{request_id}s section for more information.
 }
 
 \section{Species ids (\code{species})}{
 
 Numeric species id codes can determined from the functions
-\code{\link[=search_species]{search_species()}} or \code{\link[=search_species_code]{search_species_code()}}. See
-also the \href{https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html}{species codes}
+\code{\link[=search_species]{search_species()}} or \code{\link[=search_species_code]{search_species_code()}}. See also the article on
+\href{https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html}{species codes}
 for more information.
 }
 
@@ -139,63 +151,77 @@ Note that in all cases there are a set of fields/columns that are \emph{always}
 returned, no matter what \code{fields_set} is used.
 }
 
-\section{\code{request_id}'s}{
+\section{Access and \code{request_id}s}{
 
-There are two types of data requests: ones made through the api (i.e. this
-\code{naturecounts} R package) and those made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form}. Each
-request generates a request id which identifies the filter set and
-collections requested.
 
-Requests made through this package via the \code{\link[=nc_data_dl]{nc_data_dl()}} function only
-return data the user has access to. If data was successfully downloaded, the
-user can see the request details with the \code{\link[=nc_requests]{nc_requests()}} function.
+Access to a data collection is either available as "full" or "by request".
+Use \code{nc_count(username = "USER", show = "all")}, to see the accessibility of
+collections.
 
-Requests made through the online \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} may
-include collections to which the user does not have access. \code{\link[=nc_requests]{nc_requests()}}
-will list the requests along with the approval status (either 'approved' or
-'pending').
+"Full" access means that data can be immediately requested directly through
+the \code{naturecounts} R package. "By request" means that a request must be
+\href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{submitted online} and
+approved before the data can be downloaded through \code{naturecounts}.
 
-Any approved request id can be downloaded by supplying the \code{request_id} to
-\code{\link[=nc_data_dl]{nc_data_dl()}} (e.g., \code{nc_data_dl(request_id = 152000, username = "USER")}).
+This means that there are two types of data requests: ones made through this
+\code{naturecounts} R package (API requests) and those made through the online
+\href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} (Web
+requests). Every request (from either method) generates a \code{request_id} which
+identifies the filter set and collections requested. Details of all of
+requests can be reviewed with the \code{\link[=nc_requests]{nc_requests()}} function.
+
+To download data with "full" access, users can either specify filters, or if
+they are repeating a download, can use the \code{request_id} from \code{\link[=nc_requests]{nc_requests()}}.
+
+Otherwise, if the user doesn't have "full" access, they must supply an
+approved \code{request_id} to the \code{\link[=nc_data_dl]{nc_data_dl()}} function (e.g.,
+\code{nc_data_dl(request_id = 152000, username = "USER")}). Use \code{\link[=nc_requests]{nc_requests()}} to
+see \code{request_id}s, filters, and approval status.
+
+Requests for "full" access to additional collections can be made online
+through the \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} by
+checking the "Full access?" box in Step 2 of the form.
 }
 
 \examples{
-# All observations part of the RCBIOTABASE collection
-rcbio <- nc_data_dl(collections = "RCBIOTABASE", username = "sample",
-                    info = "nc_example")
+# All observations part of the SAMPLE1 and SAMPLE2 collections
+sample <- nc_data_dl(collections = c("SAMPLE1", "SAMPLE2"),
+                     username = "sample", info = "nc_example")
 
-\donttest{# All observations part of project_id 1042 accessible by "sample"
-p1042 <- nc_data_dl(project_ids = 1042, username = "sample",
+\donttest{# All observations part of project_id 1042 accessible by "testuser"
+p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
                     info = "nc_example")}
 
-# Black-capped chickadees from RCBIOTABASE collection in 2010
+# Black-capped Chickadees (BCCH) in SAMPLE2 collection in 2013
 search_species("black-capped chickadee") # Find the species_id
-bcch <- nc_data_dl(collection = "RCBIOTABASE", species = 14280, years = 2010,
+bcch <- nc_data_dl(collection = "SAMPLE2", species = 14280, year = 2013,
                    username = "sample", info = "nc_example")
 
-# All bcch observations since 2015 accessible to user "sample"
+# All BCCH observations since 2015 accessible to user "sample"
 bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
                     info = "nc_example")
 
+# All BCCH observations from mid-July to late October in all years for user "sample"
 bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample",
                     info = "nc_example")
 
+# All BCCH observations from a specific bounding box for user "sample"
 bcch <- nc_data_dl(species = 14280, username = "sample",
-                   region = list(bbox = c(left = -145, bottom = 45,
-                                          right = -100, top = 60)),
+                   region = list(bbox = c(left = -100, bottom = 45,
+                                          right = -80, top = 60)),
                     info = "nc_example")
 
-# All moose observations with public access
-search_species("moose")
-moose <- nc_data_dl(species = 133990, username = "sample", info = "nc_example")
+# All American Bittern observations from user "sample"
+search_species("american bittern")
+bittern <- nc_data_dl(species = 2490, username = "sample", info = "nc_example")
 
 # Different fields/columns
-moose <- nc_data_dl(species = 133990, fields_set = "core",
-                    username = "sample", info = "nc_example")
+bittern <- nc_data_dl(species = 2490, fields_set = "core",
+                      username = "sample", info = "nc_example")
 
-moose <- nc_data_dl(species = 133990, fields_set = "custom",
-                    fields = c("Locality", "AllSpeciesReported"),
-                    username = "sample", info = "nc_example")
+bittern <- nc_data_dl(species = 2490, fields_set = "custom",
+                      fields = c("Locality", "AllSpeciesReported"),
+                      username = "sample", info = "nc_example")
 
 \dontrun{
 # All collections by request id

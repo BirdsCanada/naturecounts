@@ -95,7 +95,7 @@ site_type_check <- function(site_type) {
 projects_check <- function(project_ids, collections = NULL) {
   if(!is.null(project_ids)) {
     c1 <- meta_collections() %>%
-      dplyr::filter(project_id %in% project_ids)
+      dplyr::filter(.data$project_id %in% project_ids)
 
     if(nrow(c1) == 0) {
       stop("'project_ids' must be either NULL or a vector of valid ",
@@ -106,14 +106,38 @@ projects_check <- function(project_ids, collections = NULL) {
   c1
 }
 
-collections_check <- function(c) {
-  c1 <- meta_collections() %>%
-    dplyr::filter(collection %in% c)
+collections_check <- function(c, token = NULL) {
+  c1 <- nc_permissions_internal(token) %>%
+    dplyr::pull("collection")
 
-  if(!is.character(c) || nrow(c1) == 0) {
-    stop("'collections' must be either NULL (for all collections) ",
-         "or a character vector of valid 'collection' names specified ",
-         "in 'meta_collections()'.", call. = FALSE)
+  if(!is.null(token)) {
+    c_req <- nc_requests_internal(token = token)
+    if(!is.null(c_req)) {
+      c1 <- c_req %>%
+        dplyr::pull("collection") %>%
+        append(c1) %>%
+        unique()
+    }
+  }
+  c1 <- c[!c %in% c1]
+
+  if(!is.null(c) && (!is.character(c) || length(c1) > 0)) {
+    msg <- paste0("'collections' must be either NULL (return all collections) ",
+                  "or a \ncharacter vector of valid 'collection' names to which ",
+                  "'username' has access.\nSee 'vignette(\"Data Access\", ",
+                  "package = \"naturecounts\")' for details.")
+    if(any(c1 %in% meta_collections()$collection)) {
+      msg <- paste0(msg, "\nNo access to collection(s): ",
+                    paste0(c1[c1 %in% meta_collections()$collection],
+                           collapse = ", "))
+    }
+    if(any(!c1 %in% meta_collections()$collection)) {
+      msg <- paste0(msg, "\nNo access or no collection: ",
+                    paste0(c1[!c1 %in% meta_collections()$collection],
+                           collapse = ", "))
+    }
+
+    stop(msg, call. = FALSE)
   }
   c
 }
@@ -144,7 +168,7 @@ fields_set_check <- function(fields_set) {
 
 fields_check <- function(fields) {
   f <- meta_bmde_fields(version = NULL) %>%
-    dplyr::pull(local_name) %>%
+    dplyr::pull(.data$local_name) %>%
     unique()
 
   w <- fields[!fields %in% f]

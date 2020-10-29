@@ -6,23 +6,31 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Common arguments for <code>nc_data_dl</code> and <code>nc_count</code> — args • naturecounts</title>
+<title>Common arguments for nc_data_dl and nc_count — args • naturecounts</title>
+
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,10 +40,10 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Common arguments for <code>nc_data_dl</code> and <code>nc_count</code> — args" />
 
+<meta property="og:title" content="Common arguments for nc_data_dl and nc_count — args" />
 <meta property="og:description" content="Common arguments for nc_data_dl and nc_count" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -49,9 +57,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -65,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.1.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
       </span>
     </div>
 
@@ -87,7 +96,6 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/BirdStudiesCanada/naturecounts">
@@ -102,6 +110,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -113,12 +122,10 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Common arguments for <code>nc_data_dl</code> and <code>nc_count</code></p>
-    
     </div>
 
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -167,6 +174,13 @@ provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.</p></td>
     </tr>
     <tr>
+      <th>info</th>
+      <td><p>Character vector. Short description of reason for the download.
+E.g., "COSEWIC report", "Impact Assessment Study", "School project", etc.
+This kind of information helps NatureCounts.ca justify the utility of the
+database. Required unless resuming/re-downloaded with a <code>request_id</code>.</p></td>
+    </tr>
+    <tr>
       <th>request_id</th>
       <td><p>Numeric. Specific request id to check or download.</p></td>
     </tr>
@@ -180,50 +194,50 @@ times out.</p></td>
       <td><p>Logical. Show messages?</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="naturecounts-account"><a class="anchor" href="#naturecounts-account"></a>NatureCounts account</h2>
 
     
-    <p>All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must <a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a> for a free
-NatureCounts account and
-<a href='https://www.birdscanada.org/birdmon/default/projects.jsp'>register</a> for
-the projects you'd like to access. See the <code>request_id</code> section for more
-information.</p>
-    
+
+<p>All public data is available with a username/password
+(<a href='https://www.birdscanada.org/birdmon/default/register.jsp'>sign up</a>
+for a free NatureCounts account). However, to access private/semi-public
+projects/collections you must request access. See the Access and
+<code>request_id</code>s section for more information.</p>
     <h2 class="hasAnchor" id="species-ids-species-"><a class="anchor" href="#species-ids-species-"></a>Species ids (<code>species</code>)</h2>
 
     
-    <p>Numeric species id codes can determined from the functions
-<code><a href='search_species.html'>search_species()</a></code> or <code><a href='search_species_code.html'>search_species_code()</a></code>. See
-also the <a href='https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html'>species codes</a>
+
+<p>Numeric species id codes can determined from the functions
+<code><a href='search_species.html'>search_species()</a></code> or <code><a href='search_species_code.html'>search_species_code()</a></code>. See also the article on
+<a href='https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html'>species codes</a>
 for more information.</p>
-    
     <h2 class="hasAnchor" id="day-of-year-doy-"><a class="anchor" href="#day-of-year-doy-"></a>Day of Year (<code>doy</code>)</h2>
 
     
-    <p>The format for day of year (<code>doy</code>) is fairly flexible and can be a whole
+
+<p>The format for day of year (<code>doy</code>) is fairly flexible and can be a whole
 number between 1 and 366 or anything recognized by
 <code><a href='http://lubridate.tidyverse.org/reference/lubridate-package.html'>lubridate-package</a></code>'s <code><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a>()</code>
 function. However, it must have the order of year, month, day. Note that
 year is ignored when converting to day of year, except that it will result
 in a 1 day offset for leap years.</p>
-    
     <h2 class="hasAnchor" id="regions-region-"><a class="anchor" href="#regions-region-"></a>Regions (<code>region</code>)</h2>
 
     
-    <p>Regions are defined by codes reflecting the country, state/province,
+
+<p>Regions are defined by codes reflecting the country, state/province,
 subnational (level 2), Important Bird Areas (IBA), and Bird Conservation
 Regions (BCR) (see <code><a href='search_region.html'>search_region()</a></code> for codes). They can also be defined
 by providing specific UTM squares to download or a bounding box area which
 specifies the min/max longitude and min/max latitude (<code>bbox</code>). See the
 article on <a href='http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html'>regional filters</a>
 for more information.</p>
-    
     <h2 class="hasAnchor" id="data-fields-columns-fields-set-and-fields-"><a class="anchor" href="#data-fields-columns-fields-set-and-fields-"></a>Data Fields/Columns (<code>fields_set</code> and <code>fields</code>)</h2>
 
     
-    <p>By default data is downloaded with the <code>minimum</code> set of fields/columns.
+
+<p>By default data is downloaded with the <code>minimum</code> set of fields/columns.
 However, for more advanced applications, users may wish to specify which
 fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
 keeps track of variables used to augment observation data. There are
@@ -242,48 +256,45 @@ for options.</p></li>
 character vector specifying the exact fields/columns to return. See
 <code><a href='meta.html'>meta_bmde_fields()</a></code>) for potential <code>fields</code> values.</p></li>
 </ol>
-    <p>Note that in all cases there are a set of fields/columns that are <em>always</em>
+
+<p>Note that in all cases there are a set of fields/columns that are <em>always</em>
 returned, no matter what <code>fields_set</code> is used.</p>
-    
-    <h2 class="hasAnchor" id="request-id-s"><a class="anchor" href="#request-id-s"></a><code>request_id</code>'s</h2>
+    <h2 class="hasAnchor" id="access-and-request-ids"><a class="anchor" href="#access-and-request-ids"></a>Access and <code>request_id</code>s</h2>
 
     
-    <p>There are two types of data requests: ones made through the api (i.e. this
-<code>naturecounts</code> R package) and those made through the online <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a>. Each
-request generates a request id which identifies the filter set and
-collections requested.</p>
-<p>Requests made through this package via the <code><a href='nc_data_dl.html'>nc_data_dl()</a></code> function only
-return data the user has access to. If data was successfully downloaded, the
-user can see the request details with the <code><a href='nc_requests.html'>nc_requests()</a></code> function.</p>
-<p>Requests made through the online <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> may
-include collections to which the user does not have access. <code><a href='nc_requests.html'>nc_requests()</a></code>
-will list the requests along with the approval status (either 'approved' or
-'pending').</p>
-<p>Any approved request id can be downloaded by supplying the <code>request_id</code> to
-<code><a href='nc_data_dl.html'>nc_data_dl()</a></code> (e.g., <code><a href='nc_data_dl.html'>nc_data_dl(request_id = 152000, username = "USER")</a></code>).</p>
-    
+
+
+<p>Access to a data collection is either available as "full" or "by request".
+Use <code><a href='nc_count.html'>nc_count(username = "USER", show = "all")</a></code>, to see the accessibility of
+collections.</p>
+<p>"Full" access means that data can be immediately requested directly through
+the <code>naturecounts</code> R package. "By request" means that a request must be
+<a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>submitted online</a> and
+approved before the data can be downloaded through <code>naturecounts</code>.</p>
+<p>This means that there are two types of data requests: ones made through this
+<code>naturecounts</code> R package (API requests) and those made through the online
+<a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> (Web
+requests). Every request (from either method) generates a <code>request_id</code> which
+identifies the filter set and collections requested. Details of all of
+requests can be reviewed with the <code><a href='nc_requests.html'>nc_requests()</a></code> function.</p>
+<p>To download data with "full" access, users can either specify filters, or if
+they are repeating a download, can use the <code>request_id</code> from <code><a href='nc_requests.html'>nc_requests()</a></code>.</p>
+<p>Otherwise, if the user doesn't have "full" access, they must supply an
+approved <code>request_id</code> to the <code><a href='nc_data_dl.html'>nc_data_dl()</a></code> function (e.g.,
+<code><a href='nc_data_dl.html'>nc_data_dl(request_id = 152000, username = "USER")</a></code>). Use <code><a href='nc_requests.html'>nc_requests()</a></code> to
+see <code>request_id</code>s, filters, and approval status.</p>
+<p>Requests for "full" access to additional collections can be made online
+through the <a href='https://www.birdscanada.org/birdmon/default/searchquery.jsp'>Web Request Form</a> by
+checking the "Full access?" box in Step 2 of the form.</p>
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#naturecounts-account">NatureCounts account</a></li>
-
-      <li><a href="#species-ids-species-">Species ids (<code>species</code>)</a></li>
-
-      <li><a href="#day-of-year-doy-">Day of Year (<code>doy</code>)</a></li>
-
-      <li><a href="#regions-region-">Regions (<code>region</code>)</a></li>
-
-      <li><a href="#data-fields-columns-fields-set-and-fields-">Data Fields/Columns (<code>fields_set</code> and <code>fields</code>)</a></li>
-
-      <li><a href="#request-id-s"><code>request_id</code>'s</a></li>
-          </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -291,13 +302,16 @@ will list the requests along with the approval status (either 'approved' or
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

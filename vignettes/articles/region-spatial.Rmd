@@ -11,6 +11,10 @@ knitr::opts_chunk$set(out.width = "60%", fig.width = 6, fig.asp = 1, fig.align =
 
 In this article we'll go over how to use spatial data to more precisely define regional filters. Often you might be interested only in observations which fall within a very specific geographic area. While the `nc_data_dl()` function cannot take a shapefile as an argument, you can use regional codes to filter your data, or you can use shape files to specify either the `utm_squares` or the `bbox` (bounding box) surrounding your area of interest. After the download, you can then trip the resulting observations to your original shape file.
 
+> The following examples use the "testuser" user which is not available to you. 
+> You can quickly [sign up for a free account](https://www.birdscanada.org/birdmon/default/register.jsp)
+> of your own to access and play around with these examples. 
+
 ## Setup 
 
 We'll be using the [`tidyverse`](http://tidyverse.org) packages `dplyr` and `ggplot2` for data manipulation and plotting, respectively. We'll use the `gridExtra` to combine figures. We'll use the `sf` package for working with spatial data, and the `rnaturalearth` package to get example spatial data.
@@ -67,7 +71,7 @@ For example, if you wanted to collect all public observations in Winnipeg, Manit
 
 ```{r}
 obs <- nc_data_dl(region = list(statprov = "MB"), 
-                  verbose = FALSE, username = "sample")
+                  verbose = FALSE, username = "testuser")
 ```
 
 Now we'll get a polygon representing Winnipeg, MB.
@@ -182,7 +186,7 @@ So now we can see that the `utm_squares` we've selected overlap all our urban ar
 
 ```{r}
 obs <- nc_data_dl(region = list(utm_squares = utm_on$utm_square), 
-                  verbose = FALSE, username = "sample", timeout = 300)
+                  verbose = FALSE, username = "testuser", timeout = 300)
 ```
 
 Finally, we do clip the resulting observations to the exact urban areas:
@@ -262,7 +266,7 @@ b
 We can give this directly to our `nc_data_dl()` function.
 
 ```{r}
-obs <- nc_data_dl(region = list(bbox = b), verbose = FALSE, username = "sample")
+obs <- nc_data_dl(region = list(bbox = b), verbose = FALSE, username = "testuser")
 ```
 
 Finally we clip the observations to the exact area of Jasper.

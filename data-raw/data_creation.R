@@ -4,7 +4,7 @@ ua <- httr::user_agent(agent = "https://github.com/BirdStudiesCanada/naturecount
 # API URLs
 meta_info <- dplyr::tribble(
   ~package_name,         ~api_url,                              ~primary_keys,
-  "api",                 "https://www.birdscanada.org/api", NA,
+  "api",                 "https://birdscanada.org/api",         NA,
 
   "auth",                "/data/authenticate",                  NA,
 
@@ -75,7 +75,7 @@ queries <- dplyr::tribble(
 
 # Testing Data ------------------------------------------------------------
 test_rc <- nc_data_dl(request_id = 152518, fields_set = "core",
-                      username = "sample") %>%
+                      username = "sample", info = "sample_data") %>%
   dplyr::filter(CommonName %in% c("Monarch",
                                   "Black Swallowtail",
                                   "Red Admiral"),
@@ -94,5 +94,3 @@ usethis::use_data(bcch, internal = FALSE, overwrite = TRUE)
 
 bdow <- nc_data_dl(request_id = 152545, username = "sample")
 usethis::use_data(bdow, internal = FALSE, overwrite = TRUE)
-
-

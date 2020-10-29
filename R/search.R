@@ -121,8 +121,8 @@ search_species <- function(name = NULL, show = "names", authority = NULL) {
 
   if(show == "names") {
     ids <- dplyr::select(ids, "species_id",
-                         dplyr::one_of("scientific_name", "english_name",
-                                       "french_name", "taxon_group"))
+                         tidyselect::any_of(c("scientific_name", "english_name",
+                                              "french_name", "taxon_group")))
   }
 
   if(!is.null(authority)) {
@@ -200,9 +200,11 @@ search_species_code <- function(code = NULL, authority = "BSCDATA",
 
   # Return matching rows
   ids <- meta_species_codes() %>%
+    dplyr::select("species_id", "species_code",
+                  "authority", "species_id2", "rank") %>%
     dplyr::filter(.data$authority %in% !!authority) %>%
     tidyr::spread("authority", "species_code") %>%
-    dplyr::select(-rank) %>%
+    dplyr::select(-"rank") %>%
     dplyr::distinct()
 
   if(!is.null(code)) ids <- search_codes(code, df = ids,
@@ -217,15 +219,17 @@ search_species_code <- function(code = NULL, authority = "BSCDATA",
   }
 
   # We're interested in all/exact species_id2s
-  ids <- dplyr::select(ids, species_id = "species_id2", authority) %>%
+  ids <- dplyr::select(ids, species_id = "species_id2",
+                       tidyselect::all_of(authority)) %>%
     dplyr::distinct()
-
 
   # Add in common/scientific names for reference
   dplyr::left_join(ids,
-                   dplyr::select(meta_species_taxonomy(), "species_id",
-                                 "scientific_name", "english_name",
-                                 "french_name"),
+                   dplyr::select(meta_species_taxonomy(),
+                                 "species_id",
+                                 tidyselect::any_of(c("scientific_name",
+                                                      "english_name",
+                                                      "french_name"))),
                    by = "species_id")
 }
 

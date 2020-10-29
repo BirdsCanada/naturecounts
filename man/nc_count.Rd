@@ -4,16 +4,25 @@
 \alias{nc_count}
 \title{Download information about NatureCounts collections}
 \usage{
-nc_count(collections = NULL, project_ids = NULL, species = NULL,
-  years = NULL, doy = NULL, region = NULL, site_type = NULL,
-  show = "available", username = NULL, timeout = 30,
-  verbose = TRUE)
+nc_count(
+  collections = NULL,
+  project_ids = NULL,
+  species = NULL,
+  years = NULL,
+  doy = NULL,
+  region = NULL,
+  site_type = NULL,
+  show = "available",
+  username = NULL,
+  timeout = 120,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{collections}{Character vector. The collection codes from which to
 download data. NULL (default) downloads data from all available collections}
 
-\item{project_ids}{Character/Numeric vector. The \code{project id}s from which to
+\item{project_ids}{Character/Numeric vector. The \verb{project id}s from which to
 download data. First the collections associated with a \code{project_id} are
 determined, and then data is downloaded for each collection. If both
 \code{collections} and \code{project_ids} are supplied, they are combined.}
@@ -53,24 +62,30 @@ Data frame
 \description{
 Download the number of records available for different collections filtered
 by location (if provided). If authorization is provided, the collections are
-filtered to only those available to the user. Otherwise all collections are
-returned.
+filtered to only those available to the user (unless using \code{show = "all"}).
+Without authorization all collections are returned.
+}
+\details{
+The \code{akn_level} column describes the level of data access for that collection
+(see \href{https://sandbox.birdscanada.org/birdmon/default/nc_access_levels.jsp}{descriptions online}).
+The \code{access} column describes the accessibility of a collection for a given
+username (or no access if no username supplied). See the section on Access
+and \code{request_id}s for more details.
 }
 \section{NatureCounts account}{
 
-All public data is available without a username/password. However, to
-access private/semi-public projects/collections you must \href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up} for a free
-NatureCounts account and
-\href{https://www.birdscanada.org/birdmon/default/projects.jsp}{register} for
-the projects you'd like to access. See the \code{request_id} section for more
-information.
+All public data is available with a username/password
+(\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up}
+for a free NatureCounts account). However, to access private/semi-public
+projects/collections you must request access. See the Access and
+\code{request_id}s section for more information.
 }
 
 \section{Species ids (\code{species})}{
 
 Numeric species id codes can determined from the functions
-\code{\link[=search_species]{search_species()}} or \code{\link[=search_species_code]{search_species_code()}}. See
-also the \href{https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html}{species codes}
+\code{\link[=search_species]{search_species()}} or \code{\link[=search_species_code]{search_species_code()}}. See also the article on
+\href{https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html}{species codes}
 for more information.
 }
 
@@ -93,6 +108,38 @@ by providing specific UTM squares to download or a bounding box area which
 specifies the min/max longitude and min/max latitude (\code{bbox}). See the
 article on \href{http://BirdStudiesCanada.github.io/naturecounts/articles/region-codes.html}{regional filters}
 for more information.
+}
+
+\section{Access and \code{request_id}s}{
+
+
+Access to a data collection is either available as "full" or "by request".
+Use \code{nc_count(username = "USER", show = "all")}, to see the accessibility of
+collections.
+
+"Full" access means that data can be immediately requested directly through
+the \code{naturecounts} R package. "By request" means that a request must be
+\href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{submitted online} and
+approved before the data can be downloaded through \code{naturecounts}.
+
+This means that there are two types of data requests: ones made through this
+\code{naturecounts} R package (API requests) and those made through the online
+\href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} (Web
+requests). Every request (from either method) generates a \code{request_id} which
+identifies the filter set and collections requested. Details of all of
+requests can be reviewed with the \code{\link[=nc_requests]{nc_requests()}} function.
+
+To download data with "full" access, users can either specify filters, or if
+they are repeating a download, can use the \code{request_id} from \code{\link[=nc_requests]{nc_requests()}}.
+
+Otherwise, if the user doesn't have "full" access, they must supply an
+approved \code{request_id} to the \code{\link[=nc_data_dl]{nc_data_dl()}} function (e.g.,
+\code{nc_data_dl(request_id = 152000, username = "USER")}). Use \code{\link[=nc_requests]{nc_requests()}} to
+see \code{request_id}s, filters, and approval status.
+
+Requests for "full" access to additional collections can be made online
+through the \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} by
+checking the "Full access?" box in Step 2 of the form.
 }
 
 \examples{
@@ -118,8 +165,10 @@ nc_count(species = 7590, region = list(statprov = "ON"), username = "sample")
 
 # Count all records available in the Christmas Bird Count and Breeding Bird
 # Survey collections (regardless of user permissions)
-\donttest{
 nc_count(collections = c("CBC", "BBS"), show = "all", username = "sample")
-}
 
+
+}
+\seealso{
+\code{\link[=nc_requests]{nc_requests()}}
 }

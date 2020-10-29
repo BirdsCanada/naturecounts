@@ -25,6 +25,11 @@ For all species, you can search by scientific, English or French name with the `
 
 For birds, you can also search by alphanumeric species codes with the `search_species_code()` function. **Note: ** These alphanumeric codes are _not_ the ones used by `naturecounts`, but are ones used by various taxonomic authorities. This function also gives you the option of returning all species codes (including subspecies, etc.) related to a single species, and is considered a more robust method for ensuring that you do not miss observations.
 
+> The following examples use the "testuser" user which is not available to you. 
+> You can quickly [sign up for a free account](https://www.birdscanada.org/birdmon/default/register.jsp)
+> of your own to access and play around with these examples. 
+
+
 ## Searching by name
 
 The simplest way to determine a species id (and the only way, for non-avian taxa) is to use the `search_species()` function which searches for a species id according to scientific, English or French name and returns a data frame of taxonomic information for all related hits:
@@ -39,14 +44,14 @@ These species ids can then be used to download data either directly:
 
 ```{r}
 moose <- nc_data_dl(species = 133990, verbose = FALSE, 
-                    username = "sample", info = "nc_vignette")
+                    username = "testuser", info = "nc_vignette")
 ```
 
 Or by saving and referencing the data frame:
 ```{r}
 moose_id <- search_species("moose")$species_id
 moose <- nc_data_dl(species = moose_id, verbose = FALSE, 
-                    username = "sample", info = "nc_vignette")
+                    username = "testuser", info = "nc_vignette")
 ```
 
 This might be considered overkill for a single species, but is useful when you want to download data for multiple species:
@@ -54,7 +59,7 @@ This might be considered overkill for a single species, but is useful when you w
 ```{r}
 chickadee_ids <- search_species("chickadee")$species_id
 chickadees <- nc_data_dl(species = chickadee_ids, verbose = FALSE, 
-                         username = "sample", info = "nc_vignette")
+                         username = "testuser", info = "nc_vignette")
 ```
 
 ## Searching by alphanumeric code
@@ -145,7 +150,7 @@ So there are a **lot** of muridae species! But probably not that many in the act
 
 ```{r}
 mice <- nc_data_dl(species = mice_ids$species_id, 
-                   verbose = FALSE, username = "sample", info = "nc_vignette")
+                   verbose = FALSE, username = "testuser", info = "nc_vignette")
 mice
 ```
 

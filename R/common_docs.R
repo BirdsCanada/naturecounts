@@ -31,18 +31,16 @@
 #' @param verbose Logical. Show messages?
 #'
 #' @section NatureCounts account:
-#'   All public data is available without a username/password. However, to
-#'   access private/semi-public projects/collections you must [sign
-#'   up](https://www.birdscanada.org/birdmon/default/register.jsp) for a free
-#'   NatureCounts account and
-#'   [register](https://www.birdscanada.org/birdmon/default/projects.jsp) for
-#'   the projects you'd like to access. See the `request_id` section for more
-#'   information.
+#'   All public data is available with a username/password
+#'   ([sign up](https://www.birdscanada.org/birdmon/default/register.jsp)
+#'   for a free NatureCounts account). However, to access private/semi-public
+#'   projects/collections you must request access. See the Access and
+#'   `request_id`s section for more information.
 #'
 #' @section Species ids (`species`):
 #'   Numeric species id codes can determined from the functions
-#'   [search_species()] or [search_species_code()]. See
-#'   also the [species codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+#'   [search_species()] or [search_species_code()]. See also the article on
+#'   [species codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
 #'   for more information.
 #'
 #' @section Day of Year (`doy`):
@@ -86,26 +84,38 @@
 #'   Note that in all cases there are a set of fields/columns that are *always*
 #'   returned, no matter what `fields_set` is used.
 #'
-#' @section `request_id`'s:
-#' There are two types of data requests: ones made through the api (i.e. this
-#' `naturecounts` R package) and those made through the online [Web Request
-#' Form](https://www.birdscanada.org/birdmon/default/searchquery.jsp). Each
-#' request generates a request id which identifies the filter set and
-#' collections requested.
+#' @section Access and `request_id`s:
 #'
-#' Requests made through this package via the [nc_data_dl()] function only
-#' return data the user has access to. If data was successfully downloaded, the
-#' user can see the request details with the [nc_requests()] function.
+#' Access to a data collection is either available as "full" or "by request".
+#' Use `nc_count(username = "USER", show = "all")`, to see the accessibility of
+#' collections.
 #'
-#' Requests made through the online [Web Request
-#' Form](https://www.birdscanada.org/birdmon/default/searchquery.jsp) may
-#' include collections to which the user does not have access. [nc_requests()]
-#' will list the requests along with the approval status (either 'approved' or
-#' 'pending').
+#' "Full" access means that data can be immediately requested directly through
+#' the `naturecounts` R package. "By request" means that a request must be
+#' [submitted
+#' online](https://www.birdscanada.org/birdmon/default/searchquery.jsp) and
+#' approved before the data can be downloaded through `naturecounts`.
 #'
-#' Any approved request id can be downloaded by supplying the `request_id` to
-#' [nc_data_dl()] (e.g., `nc_data_dl(request_id = 152000, username = "USER")`).
+#' This means that there are two types of data requests: ones made through this
+#' `naturecounts` R package (API requests) and those made through the online
+#' [Web Request
+#' Form](https://www.birdscanada.org/birdmon/default/searchquery.jsp) (Web
+#' requests). Every request (from either method) generates a `request_id` which
+#' identifies the filter set and collections requested. Details of all of
+#' requests can be reviewed with the [nc_requests()] function.
 #'
+#' To download data with "full" access, users can either specify filters, or if
+#' they are repeating a download, can use the `request_id` from [nc_requests()].
+#'
+#' Otherwise, if the user doesn't have "full" access, they must supply an
+#' approved `request_id` to the [nc_data_dl()] function (e.g.,
+#' `nc_data_dl(request_id = 152000, username = "USER")`). Use [nc_requests()] to
+#' see `request_id`s, filters, and approval status.
+#'
+#' Requests for "full" access to additional collections can be made online
+#' through the [Web Request
+#' Form](https://www.birdscanada.org/birdmon/default/searchquery.jsp) by
+#' checking the "Full access?" box in Step 2 of the form.
 #'
 #' @keywords internal
 #' @name args

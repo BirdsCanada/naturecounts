@@ -8,21 +8,29 @@
 
 <title>Zero-fill data — format_zero_fill • naturecounts</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,11 +40,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Zero-fill data — format_zero_fill" />
 
+<meta property="og:title" content="Zero-fill data — format_zero_fill" />
 <meta property="og:description" content="Zero-fill the species presence data by adding zero observation counts
 (absences) data to an existing naturecounts dataset." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -50,9 +58,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -66,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.1.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
       </span>
     </div>
 
@@ -88,7 +97,6 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/BirdStudiesCanada/naturecounts">
@@ -103,6 +111,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -114,16 +123,21 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Zero-fill the species presence data by adding zero observation counts
 (absences) data to an existing naturecounts dataset.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>format_zero_fill</span>(<span class='no'>df_db</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"SamplingEventIdentifier"</span>,
-  <span class='kw'>species</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"ObservationCount"</span>, <span class='kw'>extra_species</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>format_zero_fill</span><span class='op'>(</span>
+  <span class='va'>df_db</span>,
+  by <span class='op'>=</span> <span class='st'>"SamplingEventIdentifier"</span>,
+  species <span class='op'>=</span> <span class='st'>"all"</span>,
+  fill <span class='op'>=</span> <span class='st'>"ObservationCount"</span>,
+  extra_species <span class='op'>=</span> <span class='cn'>NULL</span>,
+  extra_event <span class='op'>=</span> <span class='cn'>NULL</span>,
+  warn <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -151,7 +165,15 @@ vector of species ID codes to fill in.</p></td>
       <th>extra_species</th>
       <td><p>Character vector. Extra columns/fields uniquely
 associated with <code>species_id</code> to keep in the data (all columns not in <code>by</code>,
-<code>species</code>, <code>fill</code>, or <code>extra_species</code> will be omitted from the result).</p></td>
+<code>species</code>, <code>fill</code>, <code>extra_species</code>, or <code>extra_event</code> will be omitted from
+the result).</p></td>
+    </tr>
+    <tr>
+      <th>extra_event</th>
+      <td><p>Character vector. Extra columns/fields uniquely associated
+with the Sampling Event (the field defined by <code>by</code>) to keep in the data
+(all columns not in <code>by</code>, <code>species</code>, <code>fill</code>, <code>extra_species</code>, or
+<code>extra_event</code>) will be omitted from the result).</p></td>
     </tr>
     <tr>
       <th>warn</th>
@@ -163,11 +185,10 @@ unique sampling events. If FALSE, ignore and proceed.</p></td>
       <td><p>Logical. Show messages?</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Data frame</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>by</code> refers to the combination of columns which are used to detect
@@ -179,50 +200,59 @@ species in <code>species</code> will be returned (all others will be omitted). N
 that records where <code>species_id</code> is NA (generally for 0 counts for
 presence/absence), will be converted to a list of 0's for the individual
 species.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Download data (with "core" fields to include 'CommonName')</span>
-<span class='no'>rc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='nc_data_dl.html'>nc_data_dl</a></span>(<span class='kw'>collection</span> <span class='kw'>=</span> <span class='st'>"RCBIOTABASE"</span>, <span class='kw'>fields_set</span> <span class='kw'>=</span> <span class='st'>"core"</span>,
-               <span class='kw'>username</span> <span class='kw'>=</span> <span class='st'>"sample"</span>)</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (RCBIOTABASE); fields_set (BMDE2.00)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  access  collection nrecords</span>
-#&gt; <span class='message'>1    yes RCBIOTABASE    12598</span>
-#&gt; <span class='message'>Total records: 12,598</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  RCBIOTABASE</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 5000 / 12598</span></div><div class='output co'>#&gt; <span class='message'>    Records 5001 to 10000 / 12598</span></div><div class='output co'>#&gt; <span class='message'>    Records 10001 to 12598 / 12598</span></div><div class='input'>
+<span class='va'>sample</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nc_data_dl.html'>nc_data_dl</a></span><span class='op'>(</span>collection <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SAMPLE1"</span>, <span class='st'>"SAMPLE2"</span><span class='op'>)</span>, fields_set <span class='op'>=</span> <span class='st'>"core"</span>,
+                     username <span class='op'>=</span> <span class='st'>"sample"</span>, info <span class='op'>=</span> <span class='st'>"nc_example"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (SAMPLE1, SAMPLE2); fields_set (BMDE2.00)</span></div><div class='output co'>#&gt; <span class='message'>Collecting available records...</span></div><div class='output co'>#&gt; <span class='message'>  collection nrecords</span>
+#&gt; <span class='message'>1    SAMPLE1     1000</span>
+#&gt; <span class='message'>2    SAMPLE2     1000</span>
+#&gt; <span class='message'>Total records: 2,000</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Downloading records for each collection:</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE1</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 1000 / 1000</span></div><div class='output co'>#&gt; <span class='message'>  SAMPLE2</span></div><div class='output co'>#&gt; <span class='message'>    Records 1 to 1000 / 1000</span></div><div class='input'>
 <span class='co'># Remove casual observations (i.e. 'AllSpeciesReported' = "No")</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>) <span class='co'># For filter function</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span> <span class='co'># For filter function</span>
+</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>rc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>rc</span>, <span class='no'>AllSpeciesReported</span> <span class='kw'>==</span> <span class='st'>"Yes"</span>)
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='va'>sample</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>sample</span>, <span class='va'>AllSpeciesReported</span> <span class='op'>==</span> <span class='st'>"Yes"</span><span class='op'>)</span>
+
+<span class='co'># Remove data with "X" ObservationCount (only keep numeric obs)</span>
+<span class='va'>sample</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>sample</span>, <span class='va'>ObservationCount</span> <span class='op'>!=</span> <span class='st'>"X"</span><span class='op'>)</span>
 
 <span class='co'># Zero fill by all species present</span>
-<span class='no'>rc_all_zeros</span> <span class='kw'>&lt;-</span> <span class='fu'>format_zero_fill</span>(<span class='no'>rc</span>)</div><div class='output co'>#&gt; <span class='message'> - Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
+<span class='va'>sample_all_zeros</span> <span class='op'>&lt;-</span> <span class='fu'>format_zero_fill</span><span class='op'>(</span><span class='va'>sample</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'> - Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
 <span class='co'># Zero fill only for Canada Goose</span>
-<span class='no'>rc_goose</span> <span class='kw'>&lt;-</span> <span class='fu'>format_zero_fill</span>(<span class='no'>rc</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='st'>"230"</span>)</div><div class='output co'>#&gt; <span class='message'> - Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
+<span class='va'>goose</span> <span class='op'>&lt;-</span> <span class='fu'>format_zero_fill</span><span class='op'>(</span><span class='va'>sample</span>, species <span class='op'>=</span> <span class='st'>"230"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'> - Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
 <span class='co'># Keep species-specific variables</span>
-<span class='no'>rc_goose</span> <span class='kw'>&lt;-</span> <span class='fu'>format_zero_fill</span>(<span class='no'>rc</span>, <span class='kw'>species</span> <span class='kw'>=</span> <span class='st'>"230"</span>, <span class='kw'>extra_species</span> <span class='kw'>=</span> <span class='st'>"CommonName"</span>)</div><div class='output co'>#&gt; <span class='message'> - Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
-<span class='co'># Keep sampling-event-specific variables (keep 'SamplingEventIdentifier')</span>
-<span class='no'>rc_goose</span> <span class='kw'>&lt;-</span> <span class='fu'>format_zero_fill</span>(<span class='no'>rc</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"SamplingEventIdentifier"</span>,
-                                        <span class='st'>"latitude"</span>, <span class='st'>"longitude"</span>))</div><div class='output co'>#&gt; <span class='message'> - There are missing values in 'by'. These are classified as a single event</span></div><div class='output co'>#&gt; <span class='message'> - Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
+<span class='va'>goose</span> <span class='op'>&lt;-</span> <span class='fu'>format_zero_fill</span><span class='op'>(</span><span class='va'>sample</span>, species <span class='op'>=</span> <span class='st'>"230"</span>, extra_species <span class='op'>=</span> <span class='st'>"CommonName"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'> - Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
+<span class='co'># Keep sampling-event-specific variables</span>
+<span class='va'>coords</span> <span class='op'>&lt;-</span> <span class='fu'>format_zero_fill</span><span class='op'>(</span><span class='va'>sample</span>, extra_event <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"latitude"</span>, <span class='st'>"longitude"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'> - Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
+<span class='co'># By species, keeping extra species variables and event variables</span>
+<span class='va'>goose_coords</span> <span class='op'>&lt;-</span> <span class='fu'>format_zero_fill</span><span class='op'>(</span><span class='va'>sample</span>, species <span class='op'>=</span> <span class='st'>"230"</span>,
+                                 extra_species <span class='op'>=</span> <span class='st'>"CommonName"</span>,
+                                 extra_event <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"latitude"</span>, <span class='st'>"longitude"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'> - Converted 'fill' column (ObservationCount) from character to numeric</span></div><div class='input'>
+<span class='co'># Only return event information</span>
+<span class='va'>events</span> <span class='op'>&lt;-</span> <span class='fu'>format_zero_fill</span><span class='op'>(</span><span class='va'>sample</span>, fill <span class='op'>=</span> <span class='cn'>NA</span>,
+                           extra_event <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"latitude"</span>, <span class='st'>"longitude"</span><span class='op'>)</span><span class='op'>)</span>
+
+
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -230,13 +260,16 @@ species.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

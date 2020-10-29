@@ -1,5 +1,6 @@
 context("SQLite Databases")
 
+teardown(unlink("test.nc"))
 
 # db_check_version ------------------------------------------------------------
 test_that("db_check_version() works as expected", {
@@ -190,7 +191,8 @@ test_that("db_insert adds new cols as required", {
     expect_equal(length(n) - 2)
 
   # Add data with more cols than db
-  bcch2 <- dplyr::mutate(bcch, new1 = "test", new2 = 4.56, new3 = 1L)
+  bcch2 <- dplyr::mutate(bcch, new1 = "test", new2 = 4.56, new3 = 1L) %>%
+    dplyr::as_tibble()
   expect_silent(db_insert(con, "naturecounts", bcch2))
 
   expect_silent(nc <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
@@ -202,4 +204,24 @@ test_that("db_insert adds new cols as required", {
   # Clean up
   DBI::dbDisconnect(con)
   expect_true(file.remove(paste0("naturecounts_", Sys.Date(), ".nc")))
+})
+
+
+# nc_data_dl to SQL -------------------------------------------------------
+
+test_that("Data download to sql", {
+  expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,
+                                 username = "testuser", info = "nc_test",
+                                 sql_db = "test"))
+
+  expect_true(file.exists("./test.nc"))
+  expect_is(d, "SQLiteConnection")
+
+  expect_silent(d_db <- dplyr::collect(dplyr::tbl(d, "naturecounts")))
+
+  expect_gt(nrow(d_db), 0)
+  expect_gt(ncol(d_db), 0)
+  expect_equal(min(as.numeric(d_db$survey_year), na.rm = TRUE), 2011)
+  expect_equal(max(as.numeric(d_db$survey_year), na.rm = TRUE), 2011)
+  DBI::dbDisconnect(d)
 })

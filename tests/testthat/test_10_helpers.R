@@ -19,10 +19,10 @@ test_that("format_dates() with SQLite database", {
   for(i in 1:2) {
     if(i == 1) {
       i <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
-                      sql_db = "bcch", username = "sample", info = "nc_test")
+                      sql_db = "bcch", username = "testuser", info = "nc_test")
     } else if(i == 2) {
       i <- nc_data_dl(collections = "RCBIOTABASE", species = 7590,
-                      sql_db = "bdow", username = "sample", info = "nc_test")
+                      sql_db = "bdow", username = "testuser", info = "nc_test")
     }
     expect_silent(f <- format_dates(i)) %>%
       expect_is("SQLiteConnection")
@@ -52,7 +52,7 @@ test_that("format_dates() overwrite", {
 
   # SQL
   s <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
-                  sql_db = "bcch", username = "sample", info = "nc_test")
+                  sql_db = "bcch", username = "testuser", info = "nc_test")
   expect_silent(format_dates(s))
   expect_error(format_dates(s), "'date' field already exists")
   f1 <- dplyr::tbl(s, "naturecounts") %>% dplyr::collect()
@@ -166,9 +166,9 @@ test_that("format_zero_fill() adds zeros in real example", {
   expect_silent(rc1_fill <- format_zero_fill(rc1, species = 19360,
                                              verbose = FALSE)) %>%
     expect_is("data.frame")
+  expect_equal(unique(rc1_fill$species_id), 19360)
   expect_equal(nrow(rc1_fill),
                length(unique(rc1$SamplingEventIdentifier)))
-  expect_equal(unique(rc1_fill$species_id), 19360)
   expect_equal(0, sum(rc1_fill$ObservationCount))
 })
 
@@ -236,11 +236,34 @@ test_that("format_zero_fill() extra species columns", {
 })
 
 
+test_that("format_zero_fill() extra events columns", {
+
+  expect_silent(b1 <- format_zero_fill(test_rc, verbose = FALSE))
+  expect_length(b1, 3)
+
+  # Add two new
+  expect_silent(b2 <- format_zero_fill(test_rc, verbose = FALSE,
+                                       extra_event = c("latitude", "longitude")))
+  expect_length(b2, 5)
+
+  # But the rest is the same
+  expect_true(all.equal(b1, dplyr::select(b2, names(b1))))
+
+  # Doesn't add non-existing columns
+  expect_error(format_zero_fill(test_rc, extra_event = "test"),
+               "Some 'extra_event' are not in the data")
+
+  # Ignores non unique columns
+  expect_message(format_zero_fill(test_rc, extra_event = "record_id"),
+                 "Ignoring 'extra_event' columns")
+})
+
+
 test_that("format_zero_fill() with SQLite database", {
   bcch_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
-                         sql_db = "bcch", username = "sample", info = "nc_test")
+                         sql_db = "bcch", username = "testuser", info = "nc_test")
   bdow_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 7590,
-                         sql_db = "bdow", username = "sample", info = "nc_test")
+                         sql_db = "bdow", username = "testuser", info = "nc_test")
 
   # No zeros to add
   expect_message(b <- format_zero_fill(bcch_sql),

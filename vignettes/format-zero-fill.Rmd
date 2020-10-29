@@ -3,7 +3,7 @@ title: "Zero-filling data"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{"Zero-filling data"}
+  %\VignetteIndexEntry{Zero-filling data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -11,6 +11,11 @@ vignette: >
 After downloading population data, many analyses require that you have records not only of when/where species *were* detected, but also where they *were not* detected. While NatureCounts generally contains records of species presence, we can infer species absence when a species was not detected in a Sampling Event (unique `SamplingEventIdentifier`), provided that all species were reported for that Sampling Event (i.e. that `AllSpeciesReported` is "Yes").
 
 To make things simpler, we have included the `format_zero_fill()` function.
+
+> The following examples use the "testuser" user which is not available to you. 
+> You can quickly [sign up for a free account](https://www.birdscanada.org/birdmon/default/register.jsp)
+> of your own to access and play around with these examples. 
+
 
 ## Setup
 
@@ -29,7 +34,7 @@ We'll use the 'core' version of BMDE fields so that we include `CommonName` for 
 ```{r, results = "asis"}
 rc <- nc_data_dl(collections = "RCBIOTABASE", fields_set = "core",
                  species = c(252456, 252494, 252491),
-                 username = "sample", info = "nc_vignette")
+                 username = "testuser", info = "nc_vignette")
 
 ```
 
@@ -120,7 +125,8 @@ To keep other columns associated with the sampling event, specify them, in addit
 
 ```{r}
 rc_filled <- format_zero_fill(rc_all_species, 
-                              by = c("SamplingEventIdentifier", "latitude", "longitude"),
+                              by = "SamplingEventIdentifier",
+                              extra_event = c("latitude", "longitude"),
                               extra_species = c("CommonName", "ScientificName"))
 head(rc_filled)
 ```
@@ -151,6 +157,7 @@ Now if we zero-fill this data set, we get a zero-filled, aggregated dataset.
 rc_sum_filled <- format_zero_fill(rc_sum, by = "utm_square")
 head(rc_sum_filled)
 ```
+
 
 ## Filling specific species
 Up to now in these examples we've been filling all the species present in the data, but often you might be only interested in one or two species. We can specify which species with the `species` argument.

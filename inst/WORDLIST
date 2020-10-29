@@ -1,4 +1,5 @@
 api
+AppVeyor
 baselayer
 bcr
 BCR
@@ -45,6 +46,7 @@ SamplingEventIdentifier
 statprov
 subnational
 Subnational
+testuser
 unintuitive
 unprojected
 Wickham

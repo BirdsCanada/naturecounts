@@ -3,11 +3,22 @@
 
 # `naturecounts`
 
+<!-- badges: start -->
+
+[![Travis build
+status](https://travis-ci.com/BirdStudiesCanada/naturecounts.svg?branch=master)](https://travis-ci.com/BirdStudiesCanada/naturecounts)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/BirdStudiesCanada/naturecounts?branch=master&svg=true)](https://ci.appveyor.com/project/BirdStudiesCanada/naturecounts)
+
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
 
 Access and download data on plant and animal populations from various
 databases through NatureCounts, a service managed by Bird Studies
 Canada.
+
+See tutorials, documentation and articles on the [naturecounts package
+Website](https://birdstudiescanada.github.io/naturecounts)
 
 ## Installation
 
@@ -33,25 +44,9 @@ collections associated with username **sample**).
 
 ``` r
 nc_count(username = "sample")
-#>      collection nrecords
-#> 1      ABATLAS1   123364
-#> 2      ABATLAS2   201398
-#> 3    ABBIRDRECS   357264
-#> 4         BGRMM      476
-#> 5    EBUTTERFLY    26192
-#> 6          IMMP       43
-#> 7       IMMP_A2       24
-#> 8       IMMP_BW       19
-#> 9          IMQC      761
-#> 10         MEXU     3251
-#> 11         MLMP      802
-#> 12           MM     4343
-#> 13 MONARCHWATCH   145665
-#> 14         PMMM        5
-#> 15  RCBIOTABASE    12598
-#> 16      SAMPLE1     1000
-#> 17      SAMPLE2     1000
-#> 18         WMMM     8981
+#>   collection akn_level access nrecords
+#> 1    SAMPLE1         0   full     1000
+#> 2    SAMPLE2         0   full     1000
 ```
 
 Use the `show = "all"` argument to show counts for all collections
@@ -60,47 +55,64 @@ available (public or otherwise).
 ``` r
 nc_count(show = "all") %>%
   head()
-#>   collection nrecords
-#> 1   ABATLAS1   123364
-#> 2   ABATLAS2   201398
-#> 3 ABBIRDRECS   357264
-#> 4     ATOWLS      367
-#> 5        BBS  5735895
-#> 6  BBS50-CAN  3219534
+#>   collection akn_level     access nrecords
+#> 1   ABATLAS1         5       full   123364
+#> 2   ABATLAS2         5       full   201398
+#> 3 ABBIRDRECS         5       full   357264
+#> 4     ABOWLS         4 by request        0
+#> 5      ATBBS         4 by request        0
+#> 6     ATOWLS         4 by request    25192
 ```
 
 ### Fetching data
 
-Fetch all observations of moose which are available to user **sample**
+Fetch all observations of bittern which are available to user **sample**
 into a local data frame.
 
+First find the species id
+
 ``` r
-moose <- nc_data_dl(species = 133990, username = "sample")
-#> Using filters: species (133990); fields_set (BMDE2.00-min)
+search_species("American Bittern")
+#>   species_id       scientific_name     english_name      french_name
+#> 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique
+#>   taxon_group
+#> 1       BIRDS
+```
+
+Use this id with `nc_data_dl()`. The `info` parameter is a short
+description of what the data is being downloaded for.
+
+``` r
+bittern <- nc_data_dl(species = 2490, username = "sample", 
+                    info = "readme_example")
+#> Using filters: species (2490); fields_set (BMDE2.00-min)
 #> Collecting available records...
-#>    collection nrecords
-#> 1 RCBIOTABASE        2
+#>   collection nrecords
+#> 1    SAMPLE1        1
+#> Total records: 1
 #> 
 #> Downloading records for each collection:
-#>   RCBIOTABASE
-#>     Records 1 to 2 / 2
+#>   SAMPLE1
+#>     Records 1 to 1 / 1
 ```
 
 Alternatively, save the downloaded data as a SQLite database
-(`moose.nc`).
+(`bittern`).
 
 ``` r
-moose <- nc_data_dl(species = 133990, sql_db = "moose", username = "sample")
-#> Using filters: species (133990); fields_set (BMDE2.00-min)
+bittern <- nc_data_dl(species = 2490, sql_db = "bittern", username = "sample", 
+                    info = "readme_example")
+#> Using filters: species (2490); fields_set (BMDE2.00-min)
 #> Collecting available records...
-#>    collection nrecords
-#> 1 RCBIOTABASE        2
+#>   collection nrecords
+#> 1    SAMPLE1        1
+#> Total records: 1
 #> 
-#> Database 'moose.nc' does not exist, creating it...
+#> Database 'bittern.nc' does not exist, creating it...
 #> 
 #> Downloading records for each collection:
-#>   RCBIOTABASE
-#>     Records 1 to 2 / 2
+#>   SAMPLE1
+#>     Records 1 to 1 / 1
 ```
 
 ### Authorizations
@@ -116,7 +128,7 @@ of records.
 
 ``` r
 nc_count(username = "my_user_name")
-moose <- nc_data_dl(species = 133990, username = "my_user_name")
+bittern <- nc_data_dl(species = 2490, username = "my_user_name", info = "readme_example")
 ```
 
 ### More advanced options

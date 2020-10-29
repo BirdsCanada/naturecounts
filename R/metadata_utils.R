@@ -143,13 +143,13 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
     # Get BMDE fields
     message("Updating BMDE Field list...")
     bmde_fields <- meta_bmde_versions() %>%
-      dplyr::pull(version) %>%
+      dplyr::pull(.data$version) %>%
       lapply(X = ., FUN = function(x) {
         srv_query(api$bmde_fields, query = list(version = x)) %>%
           parse_results()
       }) %>%
       do.call('rbind', .) %>%
-      dplyr::select(-field_name)
+      dplyr::select(-"field_name")
     metadata_save(bmde_fields, path)
 
     # Update metadata version

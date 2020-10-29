@@ -17,9 +17,9 @@ test_that("Code checks work on collections", {
     expect_equal(c("ABATLAS1", "ABBIRDRECS", "RCBIOTABASE"))
 
   expect_error(collections_check("my_favourite_collection"),
-               "'collections' must be either NULL \\(for all collections\\)")
+               "'collections' must be either NULL \\(return all collections\\)")
   expect_error(collections_check(1042),
-               "'collections' must be either NULL \\(for all collections\\)")
+               "'collections' must be either NULL \\(return all collections\\)")
 })
 
 # Projects -------------------------------------------------------------
@@ -183,7 +183,8 @@ test_that("filter_checks correct", {
 
   f <- list(collections = 45, species = 14280,
             country = "CA", statprov = "ON", subnational2 = "CA.MB.07")
-  expect_error(filter_check(f), "'collections' must be either")
+  #expect_error(filter_check(f), "'collections' must be either")
+  expect_silent(filter_check(f)) # Check happens earlier
 
 })
 

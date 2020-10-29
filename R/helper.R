@@ -43,11 +43,12 @@ format_dates_df <- function(df, overwrite) {
     stop("Missing column 'survey_year', 'survey_month', and/or 'survey_day'",
          call. = FALSE)
   }
+
   dplyr::mutate(df,
-                date = lubridate::ymd(paste(survey_year,
-                                            survey_month,
-                                            survey_day)),
-                doy = lubridate::yday(date))
+                date = lubridate::ymd(paste(.data$survey_year,
+                                            .data$survey_month,
+                                            .data$survey_day), quiet = TRUE),
+                doy = lubridate::yday(.data$date))
 }
 
 format_dates_db <- function(db, overwrite) {
@@ -57,23 +58,31 @@ format_dates_db <- function(db, overwrite) {
   # Add columns if don't already exist
   if(!"date" %in% col_db) {
     DBI::dbExecute(db, "ALTER TABLE naturecounts ADD COLUMN date TEXT;")
-  } else if(!overwrite) {
+  } else if("date" %in% col_db & !overwrite) {
     stop("'date' field already exists, and ",
          "'overwrite' is FALSE", call. = FALSE)
+  } else {
+    DBI::dbExecute(db, "UPDATE naturecounts SET date = NULL;")
   }
 
   if(!"doy" %in% col_db) {
     DBI::dbExecute(db, "ALTER TABLE naturecounts ADD COLUMN doy NUMERIC;")
-  } else if(!overwrite) {
+  } else if(!"doy" %in% col_db & !overwrite) {
     stop("'doy' field already exists, and ",
          "'overwrite' is FALSE", call. = FALSE)
+  } else {
+    DBI::dbExecute(db, "UPDATE naturecounts SET doy = NULL;")
   }
 
   # Format to date
   DBI::dbExecute(db, paste0("UPDATE naturecounts SET ",
                             "date = survey_year || '-' || ",
                             "PRINTF('%02d', survey_month) || '-' ",
-                            "|| PRINTF('%02d', survey_day);"))
+                            "|| PRINTF('%02d', survey_day) ",
+                            "WHERE ",
+                            "survey_year IS NOT NULL AND ",
+                            "survey_month IS NOT NULL AND ",
+                            "survey_day IS NOT NULL"))
 
   # Add Day of Year
   DBI::dbExecute(db, paste0("UPDATE naturecounts SET ",
@@ -99,7 +108,12 @@ format_dates_db <- function(db, overwrite) {
 #'   "ObservationCount".
 #' @param extra_species Character vector. Extra columns/fields uniquely
 #'   associated with `species_id` to keep in the data (all columns not in `by`,
-#'   `species`, `fill`, or `extra_species` will be omitted from the result).
+#'   `species`, `fill`, `extra_species`, or `extra_event` will be omitted from
+#'   the result).
+#' @param extra_event Character vector. Extra columns/fields uniquely associated
+#'   with the Sampling Event (the field defined by `by`) to keep in the data
+#'   (all columns not in `by`, `species`, `fill`, `extra_species`, or
+#'   `extra_event`) will be omitted from the result).
 #' @param warn Logical. If TRUE, stop zero-filling if >100 species and >1000
 #'   unique sampling events. If FALSE, ignore and proceed.
 #' @inheritParams args
@@ -119,30 +133,43 @@ format_dates_db <- function(db, overwrite) {
 #'
 #' @examples
 #' # Download data (with "core" fields to include 'CommonName')
-#' rc <- nc_data_dl(collection = "RCBIOTABASE", fields_set = "core",
-#'                  username = "sample", info = "nc_example")
+#' sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"), fields_set = "core",
+#'                      username = "sample", info = "nc_example")
 #'
 #' # Remove casual observations (i.e. 'AllSpeciesReported' = "No")
 #' library(dplyr) # For filter function
-#' rc <- filter(rc, AllSpeciesReported == "Yes")
+#' sample <- filter(sample, AllSpeciesReported == "Yes")
+#'
+#' # Remove data with "X" ObservationCount (only keep numeric obs)
+#' sample <- filter(sample, ObservationCount != "X")
 #'
 #' # Zero fill by all species present
-#' rc_all_zeros <- format_zero_fill(rc)
+#' sample_all_zeros <- format_zero_fill(sample)
 #'
 #' # Zero fill only for Canada Goose
-#' rc_goose <- format_zero_fill(rc, species = "230")
+#' goose <- format_zero_fill(sample, species = "230")
 #'
 #' # Keep species-specific variables
-#' rc_goose <- format_zero_fill(rc, species = "230", extra_species = "CommonName")
+#' goose <- format_zero_fill(sample, species = "230", extra_species = "CommonName")
 #'
-#' # Keep sampling-event-specific variables (keep 'SamplingEventIdentifier')
-#' rc_goose <- format_zero_fill(rc, by = c("SamplingEventIdentifier",
-#'                                         "latitude", "longitude"))
+#' # Keep sampling-event-specific variables
+#' coords <- format_zero_fill(sample, extra_event = c("latitude", "longitude"))
+#'
+#' # By species, keeping extra species variables and event variables
+#' goose_coords <- format_zero_fill(sample, species = "230",
+#'                                  extra_species = "CommonName",
+#'                                  extra_event = c("latitude", "longitude"))
+#'
+#' # Only return event information
+#' events <- format_zero_fill(sample, fill = NA,
+#'                            extra_event = c("latitude", "longitude"))
+#'
 #'
 #' @export
 format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                              species = "all", fill = "ObservationCount",
                              extra_species = NULL,
+                             extra_event = NULL,
                              warn = TRUE, verbose = TRUE) {
 
   # SQLite Connections must become dataframes
@@ -170,7 +197,7 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
 
   # fill columns present?
   if(length(fill) > 1) stop("'fill' can only be one column", .call = FALSE)
-  if(!fill %in% names(df)) {
+  if(!fill %in% names(df) && !is.na(fill)) {
     stop("'fill' column ('", fill, "') is missing from the data", call. = FALSE)
   }
   # All species reported?
@@ -210,7 +237,8 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                 "associated with the 'species_id' column")
       }
     }
-    extra_species <- dplyr::select(df, "species_id", extra_keep) %>%
+    extra_species <- dplyr::select(df, "species_id",
+                                   tidyselect::all_of(extra_keep)) %>%
       dplyr::distinct()
   }
 
@@ -243,24 +271,64 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
   }
 
   # Convert fill column to numeric
-  if(!is.numeric(df[[fill]])) {
+  if(!is.numeric(df[[fill]]) && !is.na(fill)) {
     orig <- class(df[[fill]])
     df[[fill]] <- as_numeric(df[[fill]])
     if(!is.numeric(df[[fill]])) {
-      stop("'fill' column cannot be converted to numeric", call. = FALSE)
+      stop("'fill' column cannot be converted to numeric (non-numeric entries)",
+           call. = FALSE)
     }
     if(verbose) message(" - Converted 'fill' column (", fill, ") from ",
                         orig, " to numeric")
   }
-  fill <- as.list(rlang::set_names(0, fill))
 
-  df_filled <- df %>%
-    dplyr::select(by, "species_id", names(fill)) %>%
-    dplyr::group_by(!!!rlang::syms(by)) %>%
-    tidyr::complete(species_id = species, fill = fill)
+
+  # Get extra events columns
+  if(!is.null(extra_event)) {
+
+    if(any(!extra_event %in% names(df))) {
+      stop("Some 'extra_event' are not in the data (",
+           paste0(extra_event[!extra_event %in% names(df)], collapse = ", "),
+           ")", call. = FALSE)
+    }
+    extra_keep <- find_unique(df, by, extra_event)
+    if(!all(extra_event %in% extra_keep)) {
+      if(verbose) {
+        message(" - Ignoring 'extra_event' columns (",
+                paste0(extra_event[!extra_event %in% extra_keep], collapse = ", "),
+                ") not uniquely ",
+                "associated with the '", by, "' column")
+      }
+    }
+    extra_event <- dplyr::select(df,
+                                 tidyselect::all_of(c(by, extra_keep))) %>%
+      dplyr::distinct()
+  }
+
+  df_by <- df %>%
+    dplyr::select(tidyselect::all_of(by)) %>%
+    dplyr::distinct() %>%
+    tidyr::expand(!!!rlang::syms(by), species_id = species)
+
+  if(!is.na(fill)) {
+    df_filled <- df %>%
+      dplyr::select(tidyselect::all_of(by),
+                    "species_id",
+                    tidyselect::all_of(fill)) %>%
+      dplyr::filter(.data$species_id %in% species) %>%
+      dplyr::left_join(df_by, ., by = c(by, "species_id")) %>%
+      dplyr::mutate(!!fill := tidyr::replace_na(!!rlang::sym(fill), 0))
+  } else {
+    df_filled <- dplyr::select(df, tidyselect::all_of(by)) %>%
+      dplyr::distinct()
+  }
 
   if(!is.null(extra_species)) {
     df_filled <- dplyr::left_join(df_filled, extra_species, by = "species_id")
+  }
+
+  if(!is.null(extra_event)) {
+    df_filled <- dplyr::left_join(df_filled, extra_event, by = by)
   }
 
   as.data.frame(df_filled)
