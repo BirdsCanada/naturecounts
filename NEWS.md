@@ -1,3 +1,7 @@
+# naturecounts 0.2.1
+
+* Fixed bug with data extraction for `nc_data_dl()` and `nc_counts()`
+
 # naturecounts 0.2.0
 
 * Clarified access in `nc_counts()`

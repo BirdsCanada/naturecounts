@@ -1,6 +1,6 @@
 parse_results <- function(r, results = FALSE) {
   if(results) r <- r$results
-  structure(r, class = "data.frame", row.names = seq(along = r[[1]]))
+  dplyr::as_tibble(r)
 }
 
 parse_request <- function(request) {

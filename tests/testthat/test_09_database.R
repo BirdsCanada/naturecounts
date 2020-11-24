@@ -62,7 +62,7 @@ test_that("db_create creates tables in the database", {
   for(m in funs) {
     expect_silent(d <- dplyr::tbl(con, !!m)) %>%
       expect_is("tbl_sql")
-    expect_equal(dplyr::collect(d) %>% as.data.frame(),
+    expect_equal(dplyr::collect(d) %>% dplyr::as_tibble(),
                  do.call(paste0("meta_", !!m), args = list()))
   }
 
