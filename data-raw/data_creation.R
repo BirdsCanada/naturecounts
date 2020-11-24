@@ -70,7 +70,7 @@ queries <- dplyr::tribble(
   "species",       "species",       FALSE,
   "country",       "country",       FALSE,
   "statprov",      "statProv",      FALSE,
-  "subnational2",  "subnational2",  FALSE,
+  "subnational2",  "subNat2",       FALSE,
   "site_type",     "siteType",      TRUE)
 
 # Testing Data ------------------------------------------------------------

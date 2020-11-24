@@ -44,9 +44,11 @@ collections associated with username **sample**).
 
 ``` r
 nc_count(username = "sample")
+#> # A tibble: 2 x 4
 #>   collection akn_level access nrecords
-#> 1    SAMPLE1         0   full     1000
-#> 2    SAMPLE2         0   full     1000
+#>   <chr>          <int> <chr>     <int>
+#> 1 SAMPLE1            0 full        998
+#> 2 SAMPLE2            0 full        999
 ```
 
 Use the `show = "all"` argument to show counts for all collections
@@ -55,13 +57,15 @@ available (public or otherwise).
 ``` r
 nc_count(show = "all") %>%
   head()
-#>   collection akn_level     access nrecords
-#> 1   ABATLAS1         5       full   123364
-#> 2   ABATLAS2         5       full   201398
-#> 3 ABBIRDRECS         5       full   357264
-#> 4     ABOWLS         4 by request        0
-#> 5      ATBBS         4 by request        0
-#> 6     ATOWLS         4 by request    25192
+#> # A tibble: 6 x 4
+#>   collection akn_level access     nrecords
+#>   <chr>          <int> <chr>         <int>
+#> 1 ABATLAS1           5 full         123364
+#> 2 ABATLAS2           5 full         201398
+#> 3 ABBIRDRECS         5 full         357264
+#> 4 ABOWLS             4 by request        0
+#> 5 ATBBS              4 by request        0
+#> 6 ATOWLS             4 by request    25173
 ```
 
 ### Fetching data
@@ -73,10 +77,10 @@ First find the species id
 
 ``` r
 search_species("American Bittern")
-#>   species_id       scientific_name     english_name      french_name
-#> 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique
-#>   taxon_group
-#> 1       BIRDS
+#> # A tibble: 1 x 5
+#>   species_id scientific_name       english_name     french_name      taxon_group
+#>        <int> <chr>                 <chr>            <chr>            <chr>      
+#> 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique BIRDS
 ```
 
 Use this id with `nc_data_dl()`. The `info` parameter is a short
