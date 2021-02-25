@@ -8,7 +8,8 @@ parse_request <- function(request) {
     dplyr::mutate(
       request_id = names(.data$request),
       request = unname(.data$request),
-      collection = purrr::map(.data$request, ~list_to_df(.$collection, type = "collection")),
+      collection = purrr::map(.data$request,
+                              ~list_to_df(.$collection, type = "collection")),
       filters = purrr::map_chr(.data$request, ~filter_to_str(.$filters)),
       requestOrigin = purrr::map_chr(.data$request, ~null_to_na(.$requestOrigin)),
       requestLabel = purrr::map_chr(.data$request, ~null_to_na(.$requestLabel))) %>%

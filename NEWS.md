@@ -1,3 +1,7 @@
+# naturecounts 0.2.1.9000
+
+* Arrange returned data fields more sensibly
+
 # naturecounts 0.2.1
 
 * Fixed bug with data extraction for `nc_data_dl()` and `nc_counts()`
