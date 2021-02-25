@@ -197,7 +197,7 @@ test_that("Search for region codes", {
 
   expect_is(r <- search_region("Colorado", type = "statprov"), "data.frame")
   expect_equal(nrow(r), 1)
-  expect_equal(r$country_cod, "US")
+  expect_equal(r$country_code, "US")
   expect_equal(r$statprov_code, "CO")
   expect_equal(r$statprov_name, "Colorado")
 
