@@ -83,8 +83,19 @@ test_rc <- nc_data_dl(request_id = 152518, fields_set = "core",
   dplyr::mutate(presence = as.numeric(ObservationCount > 0)) %>%
   format_dates()
 
+# Field order - Non BMDE fields
+field_order <- c("record_id", "collection", "project_id", "protocol_id",
+                 "protocol_type", "species_id", "statprov_code", "country_code",
+                 "SiteCode", "latitude", "longitude", "bcr", "subnational2_code",
+                 "iba_site", "utm_square", "survey_year", "survey_month",
+                 "survey_week", "survey_day", "is_sensitive", "bmde_status_level",
+                 "sensitive_status_level", "partners_status_level",
+                 "last_edited_dt", "last_edited_user_id", "last_indexed_dt",
+                 "source_table", "breeding_rank", "is_unconfirmed")
+
 # Save all internal datasets
-usethis::use_data(ua, api, keys, queries, test_rc, internal = TRUE, overwrite = TRUE)
+usethis::use_data(ua, api, keys, queries, test_rc, field_order,
+                  internal = TRUE, overwrite = TRUE)
 
 # Get Example Data ------------------------------------------------------------
 

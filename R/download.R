@@ -207,6 +207,12 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
                         timeout, token, df_db, verbose)
   }
 
+  # Arrange field order
+  if(is.null(sql_db)) {
+    o <- c(field_order, meta_bmde_fields(version = filter$bmdeVersion)$local_name)
+    df_db <- dplyr::select(df_db, dplyr::any_of(o), dplyr::everything())
+  }
+
   # Clear the web request id
   srv_query(api$release_request_id, query = query['requestId'],
             timeout = timeout, token = token)

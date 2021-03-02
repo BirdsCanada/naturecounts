@@ -1,7 +1,7 @@
 Package: naturecounts
 Type: Package
 Title: Access and download data on plant and animal populations from NatureCounts
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
     person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "aut"),
     person("Denis", "LePage", email = "dlepage@bsc-eoc.org", role = c("aut", "cre")))
