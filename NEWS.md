@@ -1,4 +1,4 @@
-# naturecounts 0.2.1.9000
+# naturecounts 0.2.2
 
 * Arrange returned data fields more sensibly
 
