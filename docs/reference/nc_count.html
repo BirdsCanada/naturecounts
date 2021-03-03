@@ -77,7 +77,7 @@ Without authorization all collections are returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.2</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@ Without authorization all collections are returned." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -102,7 +102,7 @@ Without authorization all collections are returned." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/BirdStudiesCanada/naturecounts">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -293,209 +293,38 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class='co'># Count all publicly available records:</span>
 <span class='co'># \donttest{</span>
 <span class='fu'>nc_count</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Without a username, using 'show = "all"'</span></div><div class='output co'>#&gt;                collection akn_level     access nrecords
-#&gt; 1                ABATLAS1         5       full   123364
-#&gt; 2                ABATLAS2         5       full   201398
-#&gt; 3              ABBIRDRECS         5       full   357264
-#&gt; 4                  ABOWLS         4 by request        0
-#&gt; 5                   ATBBS         4 by request        0
-#&gt; 6                  ATOWLS         4 by request    25192
-#&gt; 7                     BBS         5       full  5735895
-#&gt; 8                   BBS50         5       full        0
-#&gt; 9               BBS50-CAN         5       full  4168740
-#&gt; 10              BBS50-MEX         2  no access        0
-#&gt; 11          BBS50-US-EAST         5       full  9940162
-#&gt; 12          BBS50-US-WEST         5       full 10749161
-#&gt; 13          BCATLAS1BE_DO         5       full    41412
-#&gt; 14         BCATLAS1BE_RAW         5       full   344433
-#&gt; 15        BCATLAS1BE_SUMM         5       full   165485
-#&gt; 16             BCATLAS1PC         5       full   260647
-#&gt; 17         BCATLAS1PC_SAR         3 by request        0
-#&gt; 18             BCATLAS1RC         3 by request    21884
-#&gt; 19                BCBEACH         4 by request    10182
-#&gt; 20                  BCCWS         4 by request   353868
-#&gt; 21                   BCMA         5       full    11291
-#&gt; 22                 BCOWLS         4 by request    28577
-#&gt; 23                  BGRMM         5       full      476
-#&gt; 24              BIRDSOFBC         2  no access   498444
-#&gt; 25                    CBC         2  no access  7570427
-#&gt; 26                   CLLS         4 by request        0
-#&gt; 27         CMMN-BAND-LPBO         3 by request  1168735
-#&gt; 28           CMMN-DET-ABO         3 by request    85569
-#&gt; 29          CMMN-DET-ACBO         4 by request    28386
-#&gt; 30          CMMN-DET-ATBP         2  no access        0
-#&gt; 31          CMMN-DET-ATSI         2  no access        0
-#&gt; 32           CMMN-DET-BBO         3 by request    72759
-#&gt; 33        CMMN-DET-BIBMRS         2  no access        0
-#&gt; 34          CMMN-DET-BPBO         3 by request    92639
-#&gt; 35          CMMN-DET-DMBO         2  no access    88280
-#&gt; 36          CMMN-DET-GMNP         2  no access        0
-#&gt; 37           CMMN-DET-HBO         5       full   274872
-#&gt; 38           CMMN-DET-IBS         3 by request    13607
-#&gt; 39          CMMN-DET-IPBO         3 by request    51964
-#&gt; 40          CMMN-DET-LMBO         3 by request    57432
-#&gt; 41          CMMN-DET-LPBO         3 by request  1101083
-#&gt; 42         CMMN-DET-LSLBO         3 by request   114040
-#&gt; 43          CMMN-DET-MGBO         3 by request    94662
-#&gt; 44          CMMN-DET-MIBO         4 by request    12180
-#&gt; 45           CMMN-DET-MNO         3 by request    69732
-#&gt; 46           CMMN-DET-OOT         3 by request   114793
-#&gt; 47         CMMN-DET-PEPBO         3 by request   144454
-#&gt; 48          CMMN-DET-PIBO         3 by request   124846
-#&gt; 49          CMMN-DET-RBMS         2  no access        0
-#&gt; 50          CMMN-DET-ROCK         3 by request        0
-#&gt; 51          CMMN-DET-RPBO         2  no access   144048
-#&gt; 52          CMMN-DET-RUTH         5       full        0
-#&gt; 53         CMMN-DET-SABBS         2  no access        0
-#&gt; 54          CMMN-DET-SELK         5       full        0
-#&gt; 55          CMMN-DET-TCBO         3 by request   136565
-#&gt; 56         CMMN-DET-TLBBS         4 by request    33522
-#&gt; 57          CMMN-DET-TLBO         3 by request    29722
-#&gt; 58        CMMN-DET-TTPBRS         3 by request   112862
-#&gt; 59          CMMN-DET-VLBO         5       full    56287
-#&gt; 60          CMMN-DET-WPBO         2  no access    63251
-#&gt; 61         CMMN-LPBO-MOBU         3 by request     2970
-#&gt; 62         CMMN-PIBO-MOBU         3 by request        0
-#&gt; 63            EBIRD-CA-AT         4 by request  4811070
-#&gt; 64            EBIRD-CA-BC         4 by request 13496087
-#&gt; 65            EBIRD-CA-NO         4 by request   880775
-#&gt; 66            EBIRD-CA-ON         4 by request 24750269
-#&gt; 67            EBIRD-CA-PR         4 by request  7461849
-#&gt; 68            EBIRD-CA-QC         4 by request 19555444
-#&gt; 69          EBIRD-CA-SENS         3 by request    33272
-#&gt; 70             EBUTTERFLY         5       full    26192
-#&gt; 71                   EPOQ         2  no access        0
-#&gt; 72                   GBBC         4 by request   431613
-#&gt; 73                GBHE_BC         3 by request        0
-#&gt; 74              HawkCount         4 by request   112673
-#&gt; 75                   HELP         3 by request        0
-#&gt; 76                   IMMP         5       full       43
-#&gt; 77                IMMP_A2         5       full       24
-#&gt; 78                IMMP_BW         5       full       19
-#&gt; 79                   IMQC         5       full      761
-#&gt; 80            INATURALIST         3 by request        0
-#&gt; 81              LPWCENSUS         2  no access        0
-#&gt; 82          MBATLAS1BE_DO         5       full    93876
-#&gt; 83         MBATLAS1BE_RAW         5       full   326429
-#&gt; 84        MBATLAS1BE_SUMM         5       full   154856
-#&gt; 85             MBATLAS1PC         5       full   306094
-#&gt; 86         MBATLAS1PC_SAR         3 by request        0
-#&gt; 87             MBATLAS1RC         3 by request    15622
-#&gt; 88            MBBA1BE_RAW         5       full   142920
-#&gt; 89           MBBA1BE_SUMM         5       full    93053
-#&gt; 90            MBBA2BE_RAW         5       full   263809
-#&gt; 91           MBBA2BE_SUMM         5       full   114616
-#&gt; 92                MBBA2PC         5       full   127447
-#&gt; 93            MBBA2PC_SAR         3 by request       13
-#&gt; 94                MBBA2RC         3 by request    14213
-#&gt; 95                 MBOWLS         4 by request    16382
-#&gt; 96                   MEXU         5       full     3251
-#&gt; 97                   MLMP         5       full      802
-#&gt; 98                     MM         5       full     4343
-#&gt; 99                   MMMP         3 by request    88737
-#&gt; 100              MMPBIRDS         4 by request   393302
-#&gt; 101              MMPFROGS         4 by request    91700
-#&gt; 102                  MNRS         4 by request        0
-#&gt; 103          MONARCHWATCH         5       full   145665
-#&gt; 104           NATURALISTA         5       full       30
-#&gt; 105                NBFHWS         3 by request        0
-#&gt; 106             NESTWATCH         3 by request   413415
-#&gt; 107   NESTWATCH_ACAMFIELD         3 by request        0
-#&gt; 108     NESTWATCH_KMARTIN         5       full        0
-#&gt; 109  NESTWATCH_TLEUKERING         2  no access        0
-#&gt; 110         NFATLAS1BE_DO         4 by request      243
-#&gt; 111       NFATLAS1BE_SUMM         4 by request      180
-#&gt; 112            NFATLAS1PC         4 by request        0
-#&gt; 113            NFATLAS1RC         4 by request        0
-#&gt; 114        NRCS_ACAMFIELD         3 by request        0
-#&gt; 115          NRCS_KMARTIN         5       full        0
-#&gt; 116           OBBA1BE_RAW         5       full   407287
-#&gt; 117          OBBA1BE_SUMM         5       full   205816
-#&gt; 118           OBBA2BE_RAW         5       full   541743
-#&gt; 119          OBBA2BE_SUMM         5       full   256702
-#&gt; 120               OBBA2PC         5       full   592425
-#&gt; 121           OBBA2PC_SAR         3 by request       31
-#&gt; 122               OBBA2RC         3 by request    27970
-#&gt; 123                  OBFS         5       full   324560
-#&gt; 124                   OHI         4 by request        0
-#&gt; 125             OISEAUXQC         2  no access   666963
-#&gt; 126                ONOWLS         4 by request    34940
-#&gt; 127                  ONRS         4 by request        0
-#&gt; 128                   PFW         5       full  3841194
-#&gt; 129           PFW-US-EAST         4 by request  8651432
-#&gt; 130           PFW-US-WEST         4 by request  5631851
-#&gt; 131                  PMMM         5       full        5
-#&gt; 132                  PNRS         4 by request        0
-#&gt; 133             PPNP-FBMP         4 by request        0
-#&gt; 134             PPNP-MOBU         3 by request        0
-#&gt; 135            PRISM-ACSS         4 by request   123002
-#&gt; 136             PRISM-OSS         4 by request    48139
-#&gt; 137             PRISM-PSS         3 by request     4287
-#&gt; 138   QCATLAS_NORTH_BE_DO         3 by request    20430
-#&gt; 139  QCATLAS_NORTH_BE_RAW         3 by request    39963
-#&gt; 140 QCATLAS_NORTH_BE_SUMM         3 by request    25816
-#&gt; 141      QCATLAS_NORTH_PC         3 by request    24324
-#&gt; 142        QCATLAS1BE_RAW         5       full   198816
-#&gt; 143       QCATLAS1BE_SUMM         5       full   136333
-#&gt; 144         QCATLAS2BE_DO         5       full   283034
-#&gt; 145        QCATLAS2BE_RAW         5       full   601540
-#&gt; 146       QCATLAS2BE_SUMM         5       full   231775
-#&gt; 147            QCATLAS2PC         5       full   341902
-#&gt; 148        QCATLAS2PC_SAR         2  no access        0
-#&gt; 149            QCATLAS2RC         2  no access    39390
-#&gt; 150                 QCBBS         4 by request        0
-#&gt; 151                QCOWLS         4 by request    12820
-#&gt; 152                  QNRS         4 by request        0
-#&gt; 153           RCBIOTABASE         5       full    12614
-#&gt; 154              SAR-ACFL         1  no access       NA
-#&gt; 155         SAR-BAEA-NEST         1  no access       NA
-#&gt; 156        SAR-BAEA-SATEL         1  no access       NA
-#&gt; 157              SAR-BNOW         1  no access       NA
-#&gt; 158              SAR-GWWA         1  no access       NA
-#&gt; 159              SAR-HOWA         1  no access       NA
-#&gt; 160            SAR-NSPIPL         1  no access       NA
-#&gt; 161              SAR-PROW         1  no access       NA
-#&gt; 162              SAR-RSHA         3 by request    27696
-#&gt; 163              SAR-SEOW         1  no access       NA
-#&gt; 164         SKATLAS1BE_DO         4 by request   270718
-#&gt; 165       SKATLAS1BE_SUMM         4 by request    94929
-#&gt; 166            SKATLAS1PC         4 by request   118190
-#&gt; 167            SKATLAS1RC         4 by request        0
-#&gt; 168                SKOWLS         3 by request     2863
-#&gt; 169            SWIFTWATCH         3 by request    12295
-#&gt; 170                   VBS         5 by request        0
-#&gt; 171                  WMMM         5       full     8981
-#&gt; 172                  WPWI         5       full     3012
-#&gt; 173            WRNIGHTJAR         3 by request     6368</div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'>Without a username, using 'show = "all"'</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 172 x 4</span><span>
+#&gt;    collection akn_level access     nrecords
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> ABATLAS1           5 full         </span><span style='text-decoration: underline;'>123</span><span>364
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> ABATLAS2           5 full         </span><span style='text-decoration: underline;'>201</span><span>382
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> ABBIRDRECS         5 full         </span><span style='text-decoration: underline;'>357</span><span>264
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> ABOWLS             4 by request        0
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> ATBBS              4 by request        0
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> ATOWLS             4 by request    </span><span style='text-decoration: underline;'>25</span><span>250
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> BBS                5 full        5</span><span style='text-decoration: underline;'>735</span><span>895
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> BBS50              5 full              0
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> BBS50-CAN          5 full        4</span><span style='text-decoration: underline;'>168</span><span>740
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> BBS50-MEX          2 no access         0
+#&gt; </span><span style='color: #949494;'># … with 162 more rows</span><span></div><div class='input'><span class='co'># }</span>
 
 <span class='co'># Count publicly available records for Manitoba, Canada</span>
 <span class='co'># \donttest{</span>
 <span class='fu'>nc_count</span><span class='op'>(</span>region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>statprov <span class='op'>=</span> <span class='st'>"MB"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Without a username, using 'show = "all"'</span></div><div class='output co'>#&gt; <span class='message'>Using filters: statprov (MB)</span></div><div class='output co'>#&gt;         collection akn_level     access nrecords
-#&gt; 1       ABBIRDRECS         5       full      357
-#&gt; 2              BBS         5       full    86997
-#&gt; 3        BBS50-CAN         5       full   453998
-#&gt; 4              CBC         2  no access    20507
-#&gt; 5    CMMN-DET-DMBO         2  no access    88280
-#&gt; 6      EBIRD-CA-PR         4 by request  2070346
-#&gt; 7    EBIRD-CA-SENS         3 by request     3510
-#&gt; 8       EBUTTERFLY         5       full      224
-#&gt; 9             GBBC         4 by request    24393
-#&gt; 10       HawkCount         4 by request     1446
-#&gt; 11            IMQC         5       full       26
-#&gt; 12   MBATLAS1BE_DO         5       full    93876
-#&gt; 13  MBATLAS1BE_RAW         5       full   326429
-#&gt; 14 MBATLAS1BE_SUMM         5       full   154856
-#&gt; 15      MBATLAS1PC         5       full   306094
-#&gt; 16      MBATLAS1RC         3 by request    15622
-#&gt; 17          MBOWLS         4 by request    15314
-#&gt; 18              MM         5       full       53
-#&gt; 19        MMPBIRDS         4 by request       60
-#&gt; 20    MONARCHWATCH         5       full       24
-#&gt; 21       NESTWATCH         3 by request     4553
-#&gt; 22       OISEAUXQC         2  no access        2
-#&gt; 23             PFW         5       full   110414
-#&gt; 24   SKATLAS1BE_DO         4 by request        1</div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'>Without a username, using 'show = "all"'</span></div><div class='output co'>#&gt; <span class='message'>Using filters: statprov (MB)</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 23 x 4</span><span>
+#&gt;    collection    akn_level access     nrecords
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>             </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> ABBIRDRECS            5 full            357
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> BBS                   5 full          </span><span style='text-decoration: underline;'>86</span><span>997
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> BBS50-CAN             5 full         </span><span style='text-decoration: underline;'>453</span><span>998
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> CBC                   2 no access     </span><span style='text-decoration: underline;'>20</span><span>507
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> CMMN-DET-DMBO         2 no access     </span><span style='text-decoration: underline;'>88</span><span>280
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> EBIRD-CA-PR           4 by request  2</span><span style='text-decoration: underline;'>452</span><span>054
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> EBIRD-CA-SENS         3 by request     </span><span style='text-decoration: underline;'>3</span><span>961
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> EBUTTERFLY            5 full            224
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> GBBC                  4 by request    </span><span style='text-decoration: underline;'>24</span><span>393
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> HawkCount             4 by request     </span><span style='text-decoration: underline;'>1</span><span>446
+#&gt; </span><span style='color: #949494;'># … with 13 more rows</span><span></div><div class='input'><span class='co'># }</span>
 
 <span class='co'># Count all records for all collections user "sample" has access to</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
@@ -504,65 +333,38 @@ checking the "Full access?" box in Step 2 of the form.</p>
 
 <span class='co'># Count records with barred owls in Ontario</span>
 <span class='fu'><a href='search_species.html'>search_species</a></span><span class='op'>(</span><span class='st'>"barred owl"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    species_id                            scientific_name
-#&gt; 1        7590                                Strix varia
-#&gt; 2        7595                 Strix occidentalis x varia
-#&gt; 3       32704                            Strix hylophila
-#&gt; 4       32746                      Glaucidium cuculoides
-#&gt; 5       32750                         Glaucidium capense
-#&gt; 6       32805                       Aegotheles bennettii
-#&gt; 7       43347              Glaucidium capense scheffleri
-#&gt; 8       43348       Glaucidium capense capense/ngamiense
-#&gt; 9       43362                  Strix varia [varia Group]
-#&gt; 10      43363                       Strix varia sartorii
-#&gt; 11      43377 Aegotheles bennettii bennettii/wiedenfeldi
-#&gt; 12      43378             Aegotheles bennettii terborghi
-#&gt; 13      43379              Aegotheles bennettii plumifer
-#&gt; 14      45499                       Aegotheles bennettii
-#&gt; 15      47281                   Strix occidentalis/varia
-#&gt;                           english_name
-#&gt; 1                           Barred Owl
-#&gt; 2        Spotted x Barred Owl (hybrid)
-#&gt; 3                     Rusty-barred Owl
-#&gt; 4                   Asian Barred Owlet
-#&gt; 5                 African Barred Owlet
-#&gt; 6                Barred Owlet-Nightjar
-#&gt; 7  African Barred Owlet (Spot-fronted)
-#&gt; 8   African Barred Owlet (Bar-fronted)
-#&gt; 9                Barred Owl (Northern)
-#&gt; 10              Barred Owl (Cinereous)
-#&gt; 11      Barred Owlet-nightjar (Barred)
-#&gt; 12   Barred Owlet-nightjar (Diamond's)
-#&gt; 13       Barred Owlet-nightjar (Dwarf)
-#&gt; 14               Barred Owlet-nightjar
-#&gt; 15                  Spotted/Barred Owl
-#&gt;                                       french_name taxon_group
-#&gt; 1                                  Chouette rayée       BIRDS
-#&gt; 2            Hybride Chouette tachetée x C. rayée       BIRDS
-#&gt; 3                                 Chouette dryade       BIRDS
-#&gt; 4                           Chevêchette cuculoïde       BIRDS
-#&gt; 5                              Chevêchette du Cap       BIRDS
-#&gt; 6                             Égothèle de Bennett       BIRDS
-#&gt; 7                 Chevêchette du Cap (scheffleri)       BIRDS
-#&gt; 8       Chevêchette du Cap [capense ou ngamiense]       BIRDS
-#&gt; 9                          Chouette rayée [varia]       BIRDS
-#&gt; 10                      Chouette rayée (sartorii)       BIRDS
-#&gt; 11 Égothèle de Bennett [bennettii ou wiedenfeldi]       BIRDS
-#&gt; 12                Égothèle de Bennett (terborghi)       BIRDS
-#&gt; 13                 Égothèle de Bennett (plumifer)       BIRDS
-#&gt; 14                            Égothèle de Bennett       BIRDS
-#&gt; 15                  Chouette tachetée ou C. rayée       BIRDS</div><div class='input'><span class='fu'>nc_count</span><span class='op'>(</span>species <span class='op'>=</span> <span class='fl'>7590</span>, region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>statprov <span class='op'>=</span> <span class='st'>"ON"</span><span class='op'>)</span>, username <span class='op'>=</span> <span class='st'>"sample"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using filters: species (7590); statprov (ON)</span></div><div class='output co'>#&gt;   collection akn_level access nrecords
-#&gt; 1    SAMPLE1         0   full       NA
-#&gt; 2    SAMPLE2         0   full        1</div><div class='input'>
+</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 15 x 5</span><span>
+#&gt;    species_id scientific_name      english_name     french_name      taxon_group
+#&gt;         </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>       </span><span style='text-decoration: underline;'>7</span><span>590 Strix varia          Barred Owl       Chouette rayée   BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>       </span><span style='text-decoration: underline;'>7</span><span>595 Strix occidentalis … Spotted x Barre… Hybride Chouett… BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>      </span><span style='text-decoration: underline;'>32</span><span>704 Strix hylophila      Rusty-barred Owl Chouette dryade  BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>      </span><span style='text-decoration: underline;'>32</span><span>746 Glaucidium cuculoid… Asian Barred Ow… Chevêchette cuc… BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>      </span><span style='text-decoration: underline;'>32</span><span>750 Glaucidium capense   African Barred … Chevêchette du … BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>      </span><span style='text-decoration: underline;'>32</span><span>805 Aegotheles bennettii Barred Owlet-Ni… Égothèle de Ben… BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>      </span><span style='text-decoration: underline;'>43</span><span>347 Glaucidium capense … African Barred … Chevêchette du … BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>      </span><span style='text-decoration: underline;'>43</span><span>348 Glaucidium capense … African Barred … Chevêchette du … BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>      </span><span style='text-decoration: underline;'>43</span><span>362 Strix varia [varia … Barred Owl (Nor… Chouette rayée … BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span>      </span><span style='text-decoration: underline;'>43</span><span>363 Strix varia sartorii Barred Owl (Cin… Chouette rayée … BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'>11</span><span>      </span><span style='text-decoration: underline;'>43</span><span>377 Aegotheles bennetti… Barred Owlet-ni… Égothèle de Ben… BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'>12</span><span>      </span><span style='text-decoration: underline;'>43</span><span>378 Aegotheles bennetti… Barred Owlet-ni… Égothèle de Ben… BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'>13</span><span>      </span><span style='text-decoration: underline;'>43</span><span>379 Aegotheles bennetti… Barred Owlet-ni… Égothèle de Ben… BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'>14</span><span>      </span><span style='text-decoration: underline;'>45</span><span>499 Aegotheles bennettii Barred Owlet-ni… Égothèle de Ben… BIRDS      
+#&gt; </span><span style='color: #BCBCBC;'>15</span><span>      </span><span style='text-decoration: underline;'>47</span><span>281 Strix occidentalis/… Spotted/Barred … Chouette tachet… BIRDS      </div><div class='input'><span class='fu'>nc_count</span><span class='op'>(</span>species <span class='op'>=</span> <span class='fl'>7590</span>, region <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>statprov <span class='op'>=</span> <span class='st'>"ON"</span><span class='op'>)</span>, username <span class='op'>=</span> <span class='st'>"sample"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: species (7590); statprov (ON)</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 4</span><span>
+#&gt;   collection akn_level access nrecords
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> SAMPLE2            0 full          1</div><div class='input'>
 <span class='co'># Count all records available in the Christmas Bird Count and Breeding Bird</span>
 <span class='co'># Survey collections (regardless of user permissions)</span>
 <span class='fu'>nc_count</span><span class='op'>(</span>collections <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CBC"</span>, <span class='st'>"BBS"</span><span class='op'>)</span>, show <span class='op'>=</span> <span class='st'>"all"</span>, username <span class='op'>=</span> <span class='st'>"sample"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (CBC, BBS)</span></div><div class='output co'>#&gt;   collection akn_level     access nrecords
-#&gt; 1        BBS         5 by request  5735895
-#&gt; 2        CBC         2  no access  7570427</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Using filters: collections (CBC, BBS)</span></div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 2 x 4</span><span>
+#&gt;   collection akn_level access     nrecords
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> BBS                5 by request  5</span><span style='text-decoration: underline;'>735</span><span>895
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> CBC                2 no access   7</span><span style='text-decoration: underline;'>570</span><span>427</div><div class='input'>
 
-</div></pre>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -1,5 +1,5 @@
 ---
-title: "Species Codes"
+title: "Species codes"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -42,7 +42,7 @@ search_species("mesange a tete noire")
 
 These species ids can then be used to download data either directly:
 
-```{r}
+```{r, eval = FALSE}
 moose <- nc_data_dl(species = 133990, verbose = FALSE, 
                     username = "testuser", info = "nc_vignette")
 ```
@@ -56,9 +56,12 @@ moose <- nc_data_dl(species = moose_id, verbose = FALSE,
 
 This might be considered overkill for a single species, but is useful when you want to download data for multiple species:
 
-```{r}
-chickadee_ids <- search_species("chickadee")$species_id
-chickadees <- nc_data_dl(species = chickadee_ids, verbose = FALSE, 
+```{r, eval = FALSE}
+chickadee_ids <- search_species("chickadee")
+chickadee_ids
+
+# Let's take the first three
+chickadees <- nc_data_dl(species = chickadee_ids$species_id[1:3], verbose = FALSE, 
                          username = "testuser", info = "nc_vignette")
 ```
 
@@ -154,4 +157,4 @@ mice <- nc_data_dl(species = mice_ids$species_id,
 mice
 ```
 
-Only 2 observations!
+Actualy more than I expected (although not many compared to bird species).

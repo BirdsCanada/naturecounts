@@ -146,12 +146,12 @@ boreal_chickadee_db %>%
 
 2a) Filter the variable to the range you wish to keep (note that the `,` is an implied `&`)
 ```{r}
-recent <- filter(boreal_chickadee_db, survey_year >= 2015)
+recent <- filter(boreal_chickadee_db, survey_year >= 2005)
 ```
 
 2b) Filter the variable to the range you wish to exclude with `!` (note that here we need to use the `&` explicitly)
 ```{r}
-recent <- filter(boreal_chickadee_db, !(survey_year > 1960 & survey_year < 2015))
+recent <- filter(boreal_chickadee_db, !(survey_year >= 1960 & survey_year < 2000))
 ```
 
 3. Confirm

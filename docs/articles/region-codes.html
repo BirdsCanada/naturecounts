@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.2</span>
       </span>
     </div>
 
@@ -40,7 +40,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -57,7 +57,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/BirdStudiesCanada/naturecounts">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -71,12 +71,12 @@
 
       
 
-      </header><script src="region-codes_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="region-codes_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Region Codes</h1>
             
-            <h4 class="date">2020-10-28</h4>
+            <h4 class="date">2021-03-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/region-codes.Rmd"><code>vignettes/region-codes.Rmd</code></a></small>
       <div class="hidden name"><code>region-codes.Rmd</code></div>
@@ -85,8 +85,8 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts">naturecounts</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts">naturecounts</a></span><span class="op">)</span></code></pre></div>
 <p>In the main data download functions for <code>naturecounts</code>, <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code> and <code><a href="../reference/nc_count.html">nc_count()</a></code>, you have the option of filtering data by <code>region</code>. In this article we will explore the various ways of specifying regional filters.</p>
 <p>For more details regarding spatial limits to regions, see the articles:</p>
 <ul>
@@ -115,34 +115,24 @@
 <code>bbox</code> - Bounding box coordinates (e.g., <code><a href="https://rdrr.io/r/base/c.html">c(left = -101.097223, bottom = 50.494717, right = -99.511239, top = 51.027557)</a></code> for a box containing Riding Mountain National Park in Manitoba)</li>
 </ul>
 <p>To use the <code>region</code> argument:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="st">"NB"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="st">"NB"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Without a username, using 'show = "all"'</code></pre>
 <pre><code>## Using filters: statprov (NB)</code></pre>
-<pre><code>##       collection akn_level     access nrecords
-## 1         ATOWLS         4 by request    13154
-## 2            BBS         5       full    54578
-## 3      BBS50-CAN         5       full   188884
-## 4            CBC         2  no access    21559
-## 5    EBIRD-CA-AT         4 by request  1097730
-## 6  EBIRD-CA-SENS         3 by request       67
-## 7     EBUTTERFLY         5       full     2393
-## 8           GBBC         4 by request    13010
-## 9           IMQC         5       full       11
-## 10   MBBA1BE_RAW         5       full    73182
-## 11  MBBA1BE_SUMM         5       full    48406
-## 12   MBBA2BE_RAW         5       full   123253
-## 13  MBBA2BE_SUMM         5       full    55195
-## 14       MBBA2PC         5       full    64492
-## 15   MBBA2PC_SAR         3 by request        7
-## 16       MBBA2RC         3 by request     6908
-## 17            MM         5       full       42
-## 18          MMMP         3 by request    74724
-## 19     NESTWATCH         3 by request    28864
-## 20           PFW         5       full   128219
-## 21    PRISM-ACSS         4 by request    43537
-## 22    SWIFTWATCH         3 by request      513
-## 23    WRNIGHTJAR         3 by request       47</code></pre>
+<pre><code>## # A tibble: 23 x 4
+##    collection    akn_level access     nrecords
+##    &lt;chr&gt;             &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
+##  1 ATOWLS                4 by request    13154
+##  2 BBS                   5 full          54578
+##  3 BBS50-CAN             5 full         188884
+##  4 CBC                   2 no access     21559
+##  5 EBIRD-CA-AT           4 by request  1333296
+##  6 EBIRD-CA-SENS         3 by request       78
+##  7 EBUTTERFLY            5 full           2393
+##  8 GBBC                  4 by request    13010
+##  9 IMQC                  5 full             11
+## 10 MBBA1BE_RAW           5 full          73182
+## # … with 13 more rows</code></pre>
 </div>
 <div id="in-detail---codes" class="section level2">
 <h2 class="hasAnchor">
@@ -151,203 +141,87 @@
 <h3 class="hasAnchor">
 <a href="#country" class="anchor"></a>Country</h3>
 <p><strong>Search by name</strong> (English or French)</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"États-Unis"</span>, type <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></pre></div>
-<pre><code>##   country_code                         country_name                        country_name_fr
-## 1           UM United States Minor Outlying Islands Îles mineures éloignées des États-Unis
-## 2           US                        United States                             États-Unis
-## 3           VI                 Virgin Uslands, U.S.            Îles Vierges des États-Unis</code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"États-Unis"</span>, type <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 3
+##   country_code country_name                         country_name_fr                       
+##   &lt;chr&gt;        &lt;chr&gt;                                &lt;chr&gt;                                 
+## 1 UM           United States Minor Outlying Islands Îles mineures éloignées des États-Unis
+## 2 US           United States                        États-Unis                            
+## 3 VI           Virgin Uslands, U.S.                 Îles Vierges des États-Unis</code></pre>
 <p><strong>Browse the code list</strong></p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="fu"><a href="../reference/meta.html">meta_country_codes</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_country_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>country <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"US"</span>, <span class="st">"CA"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>country <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"US"</span>, <span class="st">"CA"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="stateprovince" class="section level3">
 <h3 class="hasAnchor">
 <a href="#stateprovince" class="anchor"></a>State/Province</h3>
 <p><strong>Search by name</strong> (English, French, or Spanish)</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Distrito de Colombia"</span>, type <span class="op">=</span> <span class="st">"statprov"</span><span class="op">)</span></pre></div>
-<pre><code>##   country_code statprov_code     statprov_name_es        statprov_name     statprov_name_fr
-## 1           US            DC Distrito de Colombia District of Columbia District de Columbia</code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Distrito de Colombia"</span>, type <span class="op">=</span> <span class="st">"statprov"</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 5
+##   country_code statprov_code statprov_name_es     statprov_name        statprov_name_fr    
+##   &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;                &lt;chr&gt;                &lt;chr&gt;               
+## 1 US           DC            Distrito de Colombia District of Columbia District de Columbia</code></pre>
 <p><strong>Browse the code list</strong></p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="fu"><a href="../reference/meta.html">meta_statprov_codes</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_statprov_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DC"</span>, <span class="st">"MB"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DC"</span>, <span class="st">"MB"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Without a username, using 'show = "all"'</code></pre>
 <pre><code>## Using filters: statprov (DC, MB)</code></pre>
-<pre><code>##         collection akn_level     access nrecords
-## 1       ABBIRDRECS         5       full      357
-## 2              BBS         5       full    86997
-## 3        BBS50-CAN         5       full   453998
-## 4              CBC         2  no access    29107
-## 5    CMMN-DET-DMBO         2  no access    88280
-## 6      EBIRD-CA-PR         4 by request  2070346
-## 7    EBIRD-CA-SENS         3 by request     3510
-## 8       EBUTTERFLY         5       full      247
-## 9             GBBC         4 by request    24393
-## 10       HawkCount         4 by request     1446
-## 11            IMQC         5       full       26
-## 12   MBATLAS1BE_DO         5       full    93876
-## 13  MBATLAS1BE_RAW         5       full   326429
-## 14 MBATLAS1BE_SUMM         5       full   154856
-## 15      MBATLAS1PC         5       full   306094
-## 16      MBATLAS1RC         3 by request    15622
-## 17          MBOWLS         4 by request    15314
-## 18              MM         5       full       53
-## 19        MMPBIRDS         4 by request       60
-## 20    MONARCHWATCH         5       full       54
-## 21       NESTWATCH         3 by request     4553
-## 22       OISEAUXQC         2  no access        2
-## 23             PFW         5       full   110414
-## 24     PFW-US-EAST         4 by request     9133
-## 25   SKATLAS1BE_DO         4 by request        1</code></pre>
+<pre><code>## # A tibble: 24 x 4
+##    collection    akn_level access     nrecords
+##    &lt;chr&gt;             &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
+##  1 ABBIRDRECS            5 full            357
+##  2 BBS                   5 full          86997
+##  3 BBS50-CAN             5 full         453998
+##  4 CBC                   2 no access     29107
+##  5 CMMN-DET-DMBO         2 no access     88280
+##  6 EBIRD-CA-PR           4 by request  2452054
+##  7 EBIRD-CA-SENS         3 by request     3961
+##  8 EBUTTERFLY            5 full            247
+##  9 GBBC                  4 by request    24393
+## 10 HawkCount             4 by request     1446
+## # … with 14 more rows</code></pre>
 </div>
 <div id="subnational-regions-type-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#subnational-regions-type-2" class="anchor"></a>Subnational regions (type 2)</h3>
 <p><strong>Search by name</strong><br>
 Language depends on location: - Mexico = Spanish - USA = English - Quebec = French - Rest of Canada = English</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Montreal"</span>, type <span class="op">=</span> <span class="st">"subnational2"</span><span class="op">)</span></pre></div>
-<pre><code>##   country_code statprov_code subnational2_code              subnational2_name ebird_code
-## 1           CA            QC          CA.QC.MR Communauté-Urbaine-de-Montréal   CA-QC-MR</code></pre>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Montreal"</span>, type <span class="op">=</span> <span class="st">"subnational2"</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 5
+##   country_code statprov_code subnational2_code subnational2_name              ebird_code
+##   &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;             &lt;chr&gt;                          &lt;chr&gt;     
+## 1 CA           QC            CA.QC.MR          Communauté-Urbaine-de-Montréal CA-QC-MR</code></pre>
 <p><strong>Browse the code list</strong></p>
-<div class="sourceCode" id="cb19"><pre class="downlit">
-<span class="fu"><a href="../reference/meta.html">meta_subnational2_codes</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_subnational2_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
-<div class="sourceCode" id="cb20"><pre class="downlit">
-<span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>subnational2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CA-QC-MR"</span>, <span class="st">"CA-ON-TO"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>subnational2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CA-QC-MR"</span>, <span class="st">"CA-ON-TO"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Without a username, using 'show = "all"'</code></pre>
 <pre><code>## Using filters: subnational2 (CA-QC-MR, CA-ON-TO)</code></pre>
-<pre><code>##                collection akn_level     access nrecords
-## 1                ABATLAS1         5       full   123364
-## 2                ABATLAS2         5       full   201398
-## 3              ABBIRDRECS         5       full   357264
-## 4                  ATOWLS         4 by request    25192
-## 5                     BBS         5       full  5735895
-## 6               BBS50-CAN         5       full  4168740
-## 7           BBS50-US-EAST         5       full  9940162
-## 8           BBS50-US-WEST         5       full 10749161
-## 9           BCATLAS1BE_DO         5       full    41412
-## 10         BCATLAS1BE_RAW         5       full   344433
-## 11        BCATLAS1BE_SUMM         5       full   165485
-## 12             BCATLAS1PC         5       full   260647
-## 13             BCATLAS1RC         3 by request    21884
-## 14                BCBEACH         4 by request    10182
-## 15                  BCCWS         4 by request   353868
-## 16                   BCMA         5       full    11291
-## 17                 BCOWLS         4 by request    28577
-## 18                  BGRMM         5       full      476
-## 19              BIRDSOFBC         2  no access   498444
-## 20                    CBC         2  no access  7570427
-## 21         CMMN-BAND-LPBO         3 by request  1168735
-## 22           CMMN-DET-ABO         3 by request    85569
-## 23          CMMN-DET-ACBO         4 by request    28386
-## 24           CMMN-DET-BBO         3 by request    72759
-## 25          CMMN-DET-BPBO         3 by request    92639
-## 26          CMMN-DET-DMBO         2  no access    88280
-## 27           CMMN-DET-HBO         5       full   274872
-## 28           CMMN-DET-IBS         3 by request    13607
-## 29          CMMN-DET-IPBO         3 by request    51964
-## 30          CMMN-DET-LMBO         3 by request    57432
-## 31          CMMN-DET-LPBO         3 by request  1101083
-## 32         CMMN-DET-LSLBO         3 by request   114040
-## 33          CMMN-DET-MGBO         3 by request    94662
-## 34          CMMN-DET-MIBO         4 by request    12180
-## 35           CMMN-DET-MNO         3 by request    69732
-## 36           CMMN-DET-OOT         3 by request   114793
-## 37         CMMN-DET-PEPBO         3 by request   144454
-## 38          CMMN-DET-PIBO         3 by request   124846
-## 39          CMMN-DET-RPBO         2  no access   144048
-## 40          CMMN-DET-TCBO         3 by request   136565
-## 41         CMMN-DET-TLBBS         4 by request    33522
-## 42          CMMN-DET-TLBO         3 by request    29722
-## 43        CMMN-DET-TTPBRS         3 by request   112862
-## 44          CMMN-DET-VLBO         5       full    56287
-## 45          CMMN-DET-WPBO         2  no access    63251
-## 46         CMMN-LPBO-MOBU         3 by request     2970
-## 47            EBIRD-CA-AT         4 by request  4811070
-## 48            EBIRD-CA-BC         4 by request 13496087
-## 49            EBIRD-CA-NO         4 by request   880775
-## 50            EBIRD-CA-ON         4 by request 24750269
-## 51            EBIRD-CA-PR         4 by request  7461849
-## 52            EBIRD-CA-QC         4 by request 19555444
-## 53          EBIRD-CA-SENS         3 by request    33272
-## 54             EBUTTERFLY         5       full    26192
-## 55                   GBBC         4 by request   431613
-## 56              HawkCount         4 by request   112673
-## 57                   IMMP         5       full       43
-## 58                IMMP_A2         5       full       24
-## 59                IMMP_BW         5       full       19
-## 60                   IMQC         5       full      761
-## 61          MBATLAS1BE_DO         5       full    93876
-## 62         MBATLAS1BE_RAW         5       full   326429
-## 63        MBATLAS1BE_SUMM         5       full   154856
-## 64             MBATLAS1PC         5       full   306094
-## 65             MBATLAS1RC         3 by request    15622
-## 66            MBBA1BE_RAW         5       full   142920
-## 67           MBBA1BE_SUMM         5       full    93053
-## 68            MBBA2BE_RAW         5       full   263809
-## 69           MBBA2BE_SUMM         5       full   114616
-## 70                MBBA2PC         5       full   127447
-## 71            MBBA2PC_SAR         3 by request       13
-## 72                MBBA2RC         3 by request    14213
-## 73                 MBOWLS         4 by request    16382
-## 74                   MEXU         5       full     3251
-## 75                   MLMP         5       full      802
-## 76                     MM         5       full     4343
-## 77                   MMMP         3 by request    88737
-## 78               MMPBIRDS         4 by request   393302
-## 79               MMPFROGS         4 by request    91700
-## 80           MONARCHWATCH         5       full   145665
-## 81            NATURALISTA         5       full       30
-## 82              NESTWATCH         3 by request   413415
-## 83          NFATLAS1BE_DO         4 by request      243
-## 84        NFATLAS1BE_SUMM         4 by request      180
-## 85            OBBA1BE_RAW         5       full   407287
-## 86           OBBA1BE_SUMM         5       full   205816
-## 87            OBBA2BE_RAW         5       full   541743
-## 88           OBBA2BE_SUMM         5       full   256702
-## 89                OBBA2PC         5       full   592425
-## 90            OBBA2PC_SAR         3 by request       31
-## 91                OBBA2RC         3 by request    27970
-## 92                   OBFS         5       full   324560
-## 93              OISEAUXQC         2  no access   666963
-## 94                 ONOWLS         4 by request    34940
-## 95                    PFW         5       full  3841194
-## 96            PFW-US-EAST         4 by request  8651432
-## 97            PFW-US-WEST         4 by request  5631851
-## 98                   PMMM         5       full        5
-## 99             PRISM-ACSS         4 by request   123002
-## 100             PRISM-OSS         4 by request    48139
-## 101             PRISM-PSS         3 by request     4287
-## 102   QCATLAS_NORTH_BE_DO         3 by request    20430
-## 103  QCATLAS_NORTH_BE_RAW         3 by request    39963
-## 104 QCATLAS_NORTH_BE_SUMM         3 by request    25816
-## 105      QCATLAS_NORTH_PC         3 by request    24324
-## 106        QCATLAS1BE_RAW         5       full   198816
-## 107       QCATLAS1BE_SUMM         5       full   136333
-## 108         QCATLAS2BE_DO         5       full   283034
-## 109        QCATLAS2BE_RAW         5       full   601540
-## 110       QCATLAS2BE_SUMM         5       full   231775
-## 111            QCATLAS2PC         5       full   341902
-## 112            QCATLAS2RC         2  no access    39390
-## 113                QCOWLS         4 by request    12820
-## 114           RCBIOTABASE         5       full    12614
-## 115              SAR-RSHA         3 by request    27696
-## 116         SKATLAS1BE_DO         4 by request   270718
-## 117       SKATLAS1BE_SUMM         4 by request    94929
-## 118            SKATLAS1PC         4 by request   118190
-## 119                SKOWLS         3 by request     2863
-## 120            SWIFTWATCH         3 by request    12295
-## 121                  WMMM         5       full     8981
-## 122                  WPWI         5       full     3012
-## 123            WRNIGHTJAR         3 by request     6368</code></pre>
+<pre><code>## # A tibble: 124 x 4
+##    collection     akn_level access     nrecords
+##    &lt;chr&gt;              &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
+##  1 ABATLAS1               5 full         123364
+##  2 ABATLAS2               5 full         201382
+##  3 ABBIRDRECS             5 full         357264
+##  4 ATOWLS                 4 by request    25250
+##  5 BBS                    5 full        5735895
+##  6 BBS50-CAN              5 full        4168740
+##  7 BBS50-US-EAST          5 full        9940162
+##  8 BBS50-US-WEST          5 full       10749161
+##  9 BCATLAS1BE_DO          5 full          41412
+## 10 BCATLAS1BE_RAW         5 full         344433
+## # … with 114 more rows</code></pre>
 </div>
 <div id="important-bird-areas-iba" class="section level3">
 <h3 class="hasAnchor">
@@ -356,157 +230,120 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 <li>These are Canadian designations</li>
 </ul>
 <p><strong>Search by name</strong> (English or French)</p>
-<div class="sourceCode" id="cb24"><pre class="downlit">
-<span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"oak hammock"</span>, type <span class="op">=</span> <span class="st">"iba"</span><span class="op">)</span></pre></div>
-<pre><code>##   iba_site           iba_name_fr latitude statprov area_ha alt_min              iba_name
-## 1    MB010 Oak Hammock Marsh WMA 50.18958       MB   67.56     233 Oak Hammock Marsh WMA
-##   nearest_town bcr ncc_region alt_max longitude status
-## 1     Winnipeg  11         35     233 -97.13287      G</code></pre>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"oak hammock"</span>, type <span class="op">=</span> <span class="st">"iba"</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 13
+##   iba_site iba_name_fr latitude statprov area_ha alt_min iba_name nearest_town bcr   ncc_region
+##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;     
+## 1 MB010    Oak Hammoc…     50.2 MB          67.6     233 Oak Ham… Winnipeg     11    35        
+## # … with 3 more variables: alt_max &lt;dbl&gt;, longitude &lt;dbl&gt;, status &lt;chr&gt;</code></pre>
 <p><strong>Browse the code list</strong></p>
-<div class="sourceCode" id="cb26"><pre class="downlit">
-<span class="fu"><a href="../reference/meta.html">meta_iba_codes</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_iba_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
-<div class="sourceCode" id="cb27"><pre class="downlit">
-<span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>iba <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"MB010"</span>, <span class="st">"AB011"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>iba <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"MB010"</span>, <span class="st">"AB011"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Without a username, using 'show = "all"'</code></pre>
 <pre><code>## Using filters: iba (IBA.MB010, IBA.AB011)</code></pre>
-<pre><code>##         collection akn_level     access nrecords
-## 1         ABATLAS1         5       full      130
-## 2         ABATLAS2         5       full       99
-## 3       ABBIRDRECS         5       full        9
-## 4      EBIRD-CA-PR         4 by request   142981
-## 5    EBIRD-CA-SENS         3 by request       57
-## 6       EBUTTERFLY         5       full        3
-## 7    MBATLAS1BE_DO         5       full      309
-## 8   MBATLAS1BE_RAW         5       full     1004
-## 9  MBATLAS1BE_SUMM         5       full      208
-## 10      MBATLAS1PC         5       full      381
-## 11      MBATLAS1RC         3 by request       23
-## 12       NESTWATCH         3 by request        2</code></pre>
+<pre><code>## # A tibble: 12 x 4
+##    collection      akn_level access     nrecords
+##    &lt;chr&gt;               &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
+##  1 ABATLAS1                5 full            130
+##  2 ABATLAS2                5 full             99
+##  3 ABBIRDRECS              5 full              9
+##  4 EBIRD-CA-PR             4 by request   163791
+##  5 EBIRD-CA-SENS           3 by request       59
+##  6 EBUTTERFLY              5 full              3
+##  7 MBATLAS1BE_DO           5 full            309
+##  8 MBATLAS1BE_RAW          5 full           1004
+##  9 MBATLAS1BE_SUMM         5 full            208
+## 10 MBATLAS1PC              5 full            381
+## 11 MBATLAS1RC              3 by request       23
+## 12 NESTWATCH               3 by request        2</code></pre>
 </div>
 <div id="bird-conservation-regions-bcr" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bird-conservation-regions-bcr" class="anchor"></a>Bird Conservation Regions (BCR)</h3>
 <p><strong>Search by name</strong> (English, French, or Spanish)</p>
-<div class="sourceCode" id="cb31"><pre class="downlit">
-<span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"rainforest"</span>, type <span class="op">=</span> <span class="st">"bcr"</span><span class="op">)</span></pre></div>
-<pre><code>##   bcr                    bcr_name                        bcr_name_es
-## 1   5 Northern Pacific Rainforest Bosque Lluvioso del Pacífico Norte
-##                                        bcr_name_fr
-## 1 Forêts pluviales du nord de la côte du Pacifique</code></pre>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"rainforest"</span>, type <span class="op">=</span> <span class="st">"bcr"</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 4
+##     bcr bcr_name                bcr_name_es                  bcr_name_fr                            
+##   &lt;int&gt; &lt;chr&gt;                   &lt;chr&gt;                        &lt;chr&gt;                                  
+## 1     5 Northern Pacific Rainf… Bosque Lluvioso del Pacífic… Forêts pluviales du nord de la côte du…</code></pre>
 <p><strong>Browse the code list</strong></p>
-<div class="sourceCode" id="cb33"><pre class="downlit">
-<span class="fu"><a href="../reference/meta.html">meta_bcr_codes</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_bcr_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
-<div class="sourceCode" id="cb34"><pre class="downlit">
-<span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>bcr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>bcr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Without a username, using 'show = "all"'</code></pre>
 <pre><code>## Using filters: bcr (BCR.05, BCR.02)</code></pre>
-<pre><code>##         collection akn_level     access nrecords
-## 1        BBS50-CAN         5       full   130766
-## 2    BBS50-US-WEST         5       full   783880
-## 3    BCATLAS1BE_DO         5       full     8171
-## 4   BCATLAS1BE_RAW         5       full    84685
-## 5  BCATLAS1BE_SUMM         5       full    35528
-## 6       BCATLAS1PC         5       full    52256
-## 7       BCATLAS1RC         3 by request     6309
-## 8          BCBEACH         4 by request     6576
-## 9            BCCWS         4 by request   353274
-## 10          BCOWLS         4 by request     6523
-## 11       BIRDSOFBC         2  no access   250134
-## 12             CBC         2  no access   421925
-## 13   CMMN-DET-RPBO         2  no access   144048
-## 14     EBIRD-CA-BC         4 by request  8335281
-## 15     EBIRD-CA-NO         4 by request       18
-## 16   EBIRD-CA-SENS         3 by request     1862
-## 17      EBUTTERFLY         5       full      344
-## 18            GBBC         4 by request    71691
-## 19       HawkCount         4 by request      249
-## 20            IMQC         5       full        1
-## 21              MM         5       full        1
-## 22       NESTWATCH         3 by request    14790
-## 23             PFW         5       full   209613
-## 24     PFW-US-WEST         4 by request   648740
-## 25            WMMM         5       full      267</code></pre>
+<pre><code>## # A tibble: 25 x 4
+##    collection      akn_level access     nrecords
+##    &lt;chr&gt;               &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
+##  1 BBS50-CAN               5 full         130766
+##  2 BBS50-US-WEST           5 full         783880
+##  3 BCATLAS1BE_DO           5 full           8171
+##  4 BCATLAS1BE_RAW          5 full          84685
+##  5 BCATLAS1BE_SUMM         5 full          35528
+##  6 BCATLAS1PC              5 full          52256
+##  7 BCATLAS1RC              3 by request     6309
+##  8 BCBEACH                 4 by request     6576
+##  9 BCCWS                   4 by request   353274
+## 10 BCOWLS                  4 by request     6557
+## # … with 15 more rows</code></pre>
 </div>
 <div id="utm-squares" class="section level3">
 <h3 class="hasAnchor">
 <a href="#utm-squares" class="anchor"></a>UTM Squares</h3>
 <p><strong>Browse the code list</strong></p>
-<div class="sourceCode" id="cb38"><pre class="downlit">
-<span class="fu"><a href="../reference/meta.html">meta_utm_squares</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_utm_squares</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
-<div class="sourceCode" id="cb39"><pre class="downlit">
-<span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>utm_squares <span class="op">=</span> <span class="st">"18TUR35"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>utm_squares <span class="op">=</span> <span class="st">"18TUR35"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Without a username, using 'show = "all"'</code></pre>
 <pre><code>## Using filters: utm_squares (18TUR35)</code></pre>
-<pre><code>##      collection akn_level     access nrecords
-## 1   EBIRD-CA-ON         4 by request    13977
-## 2      MMPFROGS         4 by request       37
-## 3     NESTWATCH         3 by request       65
-## 4   OBBA1BE_RAW         5       full      178
-## 5  OBBA1BE_SUMM         5       full      103
-## 6   OBBA2BE_RAW         5       full      232
-## 7  OBBA2BE_SUMM         5       full       96
-## 8       OBBA2PC         5       full      205
-## 9       OBBA2RC         3 by request       10
-## 10  RCBIOTABASE         5       full     1926
-## 11         WPWI         5       full       10</code></pre>
+<pre><code>## # A tibble: 11 x 4
+##    collection   akn_level access     nrecords
+##    &lt;chr&gt;            &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
+##  1 EBIRD-CA-ON          4 by request    18676
+##  2 MMPFROGS             4 by request       37
+##  3 NESTWATCH            3 by request       65
+##  4 OBBA1BE_RAW          5 full            178
+##  5 OBBA1BE_SUMM         5 full            103
+##  6 OBBA2BE_RAW          5 full            232
+##  7 OBBA2BE_SUMM         5 full             96
+##  8 OBBA2PC              5 full            205
+##  9 OBBA2RC              3 by request       10
+## 10 RCBIOTABASE          5 full           1926
+## 11 WPWI                 5 full             10</code></pre>
 </div>
 <div id="bounding-box" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bounding-box" class="anchor"></a>Bounding Box</h3>
 <p>Bounding box reflects latitude and longitude limits.</p>
 <p><strong>Use the resulting code(s)</strong></p>
-<div class="sourceCode" id="cb43"><pre class="downlit">
-<span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>left <span class="op">=</span> <span class="op">-</span><span class="fl">125</span>, bottom <span class="op">=</span> <span class="fl">45</span>, 
-                                right <span class="op">=</span> <span class="op">-</span><span class="fl">100</span>, top <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>left <span class="op">=</span> <span class="op">-</span><span class="fl">125</span>, bottom <span class="op">=</span> <span class="fl">45</span>, 
+                                right <span class="op">=</span> <span class="op">-</span><span class="fl">100</span>, top <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Without a username, using 'show = "all"'</code></pre>
 <pre><code>## Using filters: bbox_left (-125); bbox_bottom (45); bbox_right (-100); bbox_top (50)</code></pre>
-<pre><code>##         collection akn_level     access nrecords
-## 1         ABATLAS1         5       full     9827
-## 2         ABATLAS2         5       full    25652
-## 3       ABBIRDRECS         5       full    39546
-## 4              BBS         5       full   373698
-## 5        BBS50-CAN         5       full   382768
-## 6    BBS50-US-WEST         5       full  1310345
-## 7    BCATLAS1BE_DO         5       full     8786
-## 8   BCATLAS1BE_RAW         5       full   106886
-## 9  BCATLAS1BE_SUMM         5       full    41747
-## 10      BCATLAS1PC         5       full    56786
-## 11      BCATLAS1RC         3 by request     7154
-## 12         BCBEACH         4 by request     4932
-## 13           BCCWS         4 by request   312253
-## 14            BCMA         5       full    11266
-## 15          BCOWLS         4 by request    10586
-## 16       BIRDSOFBC         2  no access   299880
-## 17             CBC         2  no access   427924
-## 18   CMMN-DET-RPBO         2  no access   144048
-## 19   CMMN-DET-VLBO         5       full    56287
-## 20     EBIRD-CA-BC         4 by request 10360962
-## 21     EBIRD-CA-PR         4 by request   704322
-## 22   EBIRD-CA-SENS         3 by request     2502
-## 23      EBUTTERFLY         5       full      705
-## 24            GBBC         4 by request    80332
-## 25       HawkCount         4 by request      249
-## 26            IMQC         5       full        1
-## 27   MBATLAS1BE_DO         5       full     3793
-## 28  MBATLAS1BE_RAW         5       full    29704
-## 29 MBATLAS1BE_SUMM         5       full    11626
-## 30      MBATLAS1PC         5       full    20130
-## 31      MBATLAS1RC         3 by request      975
-## 32          MBOWLS         4 by request     1378
-## 33            MLMP         5       full        2
-## 34              MM         5       full        3
-## 35       NESTWATCH         3 by request    34683
-## 36             PFW         5       full   438323
-## 37     PFW-US-WEST         4 by request   640683
-## 38   SKATLAS1BE_DO         4 by request    62585
-## 39 SKATLAS1BE_SUMM         4 by request    19761
-## 40      SKATLAS1PC         4 by request    21476
-## 41          SKOWLS         3 by request      124
-## 42            WMMM         5       full      518
-## 43      WRNIGHTJAR         3 by request     2846</code></pre>
+<pre><code>## # A tibble: 43 x 4
+##    collection      akn_level access nrecords
+##    &lt;chr&gt;               &lt;int&gt; &lt;chr&gt;     &lt;int&gt;
+##  1 ABATLAS1                5 full       9827
+##  2 ABATLAS2                5 full      25648
+##  3 ABBIRDRECS              5 full      39546
+##  4 BBS                     5 full     373698
+##  5 BBS50-CAN               5 full     382768
+##  6 BBS50-US-WEST           5 full    1310345
+##  7 BCATLAS1BE_DO           5 full       8786
+##  8 BCATLAS1BE_RAW          5 full     106886
+##  9 BCATLAS1BE_SUMM         5 full      41747
+## 10 BCATLAS1PC              5 full      56786
+## # … with 33 more rows</code></pre>
 </div>
 </div>
   </div>

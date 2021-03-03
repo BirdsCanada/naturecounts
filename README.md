@@ -47,8 +47,8 @@ nc_count(username = "sample")
 #> # A tibble: 2 x 4
 #>   collection akn_level access nrecords
 #>   <chr>          <int> <chr>     <int>
-#> 1 SAMPLE1            0 full        998
-#> 2 SAMPLE2            0 full        999
+#> 1 SAMPLE1            0 full        994
+#> 2 SAMPLE2            0 full        997
 ```
 
 Use the `show = "all"` argument to show counts for all collections
@@ -61,11 +61,11 @@ nc_count(show = "all") %>%
 #>   collection akn_level access     nrecords
 #>   <chr>          <int> <chr>         <int>
 #> 1 ABATLAS1           5 full         123364
-#> 2 ABATLAS2           5 full         201398
+#> 2 ABATLAS2           5 full         201382
 #> 3 ABBIRDRECS         5 full         357264
 #> 4 ABOWLS             4 by request        0
 #> 5 ATBBS              4 by request        0
-#> 6 ATOWLS             4 by request    25173
+#> 6 ATOWLS             4 by request    25250
 ```
 
 ### Fetching data
@@ -150,14 +150,14 @@ See the function examples
 [`nc_data_dl()`](https://birdstudiescanada.github.io/naturecounts/reference/nc_data_dl.html))
 the following articles for more information on these filters:
 
-  - Collections
-  - [Species
+-   Collections
+-   [Species
     Codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
-  - [Regional
+-   [Regional
     Codes](https://birdstudiescanada.github.io/naturecounts/articles/region-codes.html)
-  - [IBAs and BCRs
+-   [IBAs and BCRs
     (regions)](https://birdstudiescanada.github.io/naturecounts/articles/region-areas.html)
-  - [Using spatial data to filter
+-   [Using spatial data to filter
     observations](https://birdstudiescanada.github.io/naturecounts/articles/region-spatial.html)
 
 We also have an [article on post-filtering your

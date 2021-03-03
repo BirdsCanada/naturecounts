@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.2</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -98,7 +98,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/BirdStudiesCanada/naturecounts">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -218,12 +218,12 @@ Some API entry points return data in a container, for example,</p>
 <h4 class="hasAnchor">
 <a href="#coding-principles" class="anchor"></a>Coding Principles</h4>
 <ul>
-<li>In package, after accessing the API, explictly <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> the fields/columns expected. This way extra fields won’t break existing code
+<li>In package, after accessing the API, explictly <code>select()</code> the fields/columns expected. This way extra fields won’t break existing code
 <ul>
 <li>Missing fields <strong>will</strong> the code, but at least they will break the code early!</li>
 <li>Do <strong>not</strong> do this for data downloads (i.e. <code><a href="reference/nc_single_dl.html">nc_single_dl()</a></code> under <code><a href="reference/nc_data_dl.html">nc_data_dl()</a></code>) or metadata downloads (i.e. <code>meta_XXX()</code>)</li>
 <li>
-<strong>Unless</strong>, using a <code>meta_XXX()</code> download internally. Then always <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> the fields required</li>
+<strong>Unless</strong>, using a <code>meta_XXX()</code> download internally. Then always <code>select()</code> the fields required</li>
 </ul>
 </li>
 </ul>

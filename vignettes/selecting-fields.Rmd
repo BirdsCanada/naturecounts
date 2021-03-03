@@ -47,6 +47,7 @@ By default, the `BMDE2.00-min` or `minimum` BMDE version is used when downloadin
 
 ```{r}
 cardinals <- nc_data_dl(species = 19360, fields_set = "core", 
+                        collection = "ABATLAS2", verbose = FALSE,
                         username = "testuser", info = "nc_vignette")
 names(cardinals)
 ```
@@ -69,6 +70,7 @@ The basic fields will **always** be included in any data request. However, you c
 ```{r}
 cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
                         fields = c("Sex", "SamplingEventIdentifier"), 
+                        collection = "ABATLAS2", verbose = FALSE,
                         username = "testuser", info = "nc_vignette")
 head(cardinals)
 ```
@@ -95,8 +97,9 @@ Now download the data.
 
 ```{r}
 cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
-                        fields = my_fields, username = "testuser", 
-                        info = "nc_vignette")
+                        fields = my_fields, 
+                        collection = "ABATLAS2", verbose = FALSE,
+                        username = "testuser", info = "nc_vignette")
 head(cardinals)
 ```
 
