@@ -1,3 +1,8 @@
+# naturecounts dev
+
+* Add `nc_query_table()` for arbitrary and custom table queries
+
+
 # naturecounts 0.2.2
 
 * Arrange returned data fields more sensibly

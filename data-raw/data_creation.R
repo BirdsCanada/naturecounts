@@ -36,7 +36,9 @@ meta_info <- dplyr::tribble(
   "collections_count",   "data/list_collections",               "collection",
   "permissions",         "data/list_permissions",               "collection",
   "list_requests",       "data/list_requests",                  NA,
-  "release_request_id",  "data/release_request_id",             NA
+  "release_request_id",  "data/release_request_id",             NA,
+
+  "query",               "query",                               NA
   )
 
 api <- as.list(meta_info$api_url)
