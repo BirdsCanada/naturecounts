@@ -20,15 +20,16 @@ library(sf)
 library(rnaturalearth)
 library(ggmap)
 library(dplyr)
+library(tidyr)
 library(mapview)
 ```
 
 First we'll use download some data:
 
 ```{r}
-barred_owls <- nc_data_dl(species = 7590, region = list(statprov = "AB"), 
-                          username = "testuser", info = "nc_tutorial")
-head(barred_owls)
+house_finches <- nc_data_dl(species = 20350, region = list(statprov = "AB"), 
+                            username = "testuser", info = "nc_tutorial")
+head(house_finches)
 ```
 
 ## Simple Maps
@@ -36,48 +37,49 @@ The quickest way to look at the spatial distribution is probably to use Stamen m
 
 First let's get an idea of how many distinct points there are (often multiple observations are recorded for the same location).
 ```{r}
-nrow(barred_owls)
+nrow(house_finches)
 
-select(barred_owls, longitude, latitude) %>%
+select(house_finches, longitude, latitude) %>%
   distinct() %>%
   nrow()
 ```
 
-So we have `r nrow(unique(barred_owls[, c("longitude", "latitude")]))` sites for `r nrow(barred_owls)` observations.
+So we have `r nrow(unique(house_finches[, c("longitude", "latitude")]))` sites for `r nrow(house_finches)` observations.
 
-Next let's convert our data to spatial data so we can extract the spatial extent. Note that we're using CRS EPSG code of 4326 because that's reflects unprojected, GPS data in lat/lon.
+Next let's convert our data to spatial data so we can extract the spatial extent. Note that we're using CRS EPSG code of 4326 because that's reflects unprojected, GPS data in lat/lon. First we omit `NA`s.
 ```{r}
-barred_owls_sf <- st_as_sf(barred_owls, 
-                           coords = c("longitude", "latitude"), crs = 4326)
+house_finches <- drop_na(house_finches, "longitude", "latitude")
+house_finches_sf <- st_as_sf(house_finches, 
+                             coords = c("longitude", "latitude"), crs = 4326)
 ```
 
 We can extract the spatial extent (**b**ounding **box**) with the `st_bbox()` function.
 
 ```{r}
-st_bbox(barred_owls_sf)
+st_bbox(house_finches_sf)
 ```
 
 Now we're ready to make a map of the distribution of observations. First we get the baselayer map.
 ```{r}
-map <- get_stamenmap(bbox = as.numeric(st_bbox(barred_owls_sf)), zoom = 5)
+map <- get_stamenmap(bbox = as.numeric(st_bbox(house_finches_sf)), zoom = 5)
 ```
 
 Now we can add our observations. Note that for `ggmap`, we'll use non-sf data frame.
 ```{r}
 ggmap(map) + 
-  geom_point(data = barred_owls, aes(x = longitude, y = latitude))
+  geom_point(data = house_finches, aes(x = longitude, y = latitude))
 ```
 
 Let's count our observations for each site.
 ```{r}
 ggmap(map) + 
-  geom_count(data = barred_owls, aes(x = longitude, y = latitude))
+  geom_count(data = house_finches, aes(x = longitude, y = latitude))
 ```
 
 ## Interactive Maps
 If we want to get fancy we can also create interactive maps using the `mapview` packages (see also the [`leaflet` for R package](https://rstudio.github.io/leaflet/)).
 ```{r, eval = FALSE}
-mapview(barred_owls_sf, zcol = "survey_year", at = seq(1965, 2005, by = 10),
+mapview(house_finches_sf, zcol = "survey_year", at = seq(1965, 2005, by = 10),
         map.types = "Esri.WorldImagery")
 ```
 
@@ -102,7 +104,7 @@ Let's add our observations (note that the data are transformed to match the proj
 ggplot() +
   theme_bw() +
   geom_sf(data = canada) +
-  geom_sf(data = barred_owls_sf, size = 0.5)
+  geom_sf(data = house_finches_sf, size = 0.5)
 ```
 
 We can also focus on Alberta
@@ -113,7 +115,7 @@ ab <- filter(canada, name == "Alberta")
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
-  geom_sf(data = barred_owls_sf, size = 0.5)
+  geom_sf(data = house_finches_sf, size = 0.5)
 ```
 
 Perhaps we should see how many of these observations were made in parks. 
@@ -147,7 +149,7 @@ ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
   geom_sf(data = parks, colour = "darkgreen", fill = "forestgreen") +
-  geom_sf(data = barred_owls_sf, size = 0.5)
+  geom_sf(data = house_finches_sf, size = 0.5)
 ```
 
 Well it's actually a bit difficult to tell, there are lots of small parks! 
@@ -157,7 +159,7 @@ To solve this problem, we can merge our observations with the parks and plot tho
 First we'll transform our observation data to match the CRS of `parks`, then we'll join the park information to our observations, based on whether the observations overlap a park polygon (by default this is a left join), and finally we'll create a new column `outside_park` that is a category for out or in the park, based on whether the observation was joined to a park name (`OC_NAME`).
 
 ```{r}
-barred_owls_sf <- barred_owls_sf %>%
+house_finches_sf <- house_finches_sf %>%
   st_transform(st_crs(parks)) %>%
   st_join(parks) %>%
   mutate(outside_park = if_else(is.na(OC_NAME), "Outside Park", "Inside Park"))
@@ -169,7 +171,7 @@ ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
   geom_sf(data = parks, colour = "darkgreen", fill = "forestgreen") +
-  geom_sf(data = barred_owls_sf, size = 1) +
+  geom_sf(data = house_finches_sf, size = 1) +
   facet_wrap(~outside_park)
 ```
 
@@ -177,28 +179,28 @@ We might also be interested in observations over time.
 
 First we'll bin our yearly observations
 ```{r}
-barred_owls_sf <- mutate(barred_owls_sf, 
-                         years = cut(survey_year, 
-                                     breaks = seq(1960, 2010, 10), 
-                                     labels = seq(1960, 2000, 10), right = FALSE))
+house_finches_sf <- mutate(house_finches_sf, 
+                           years = cut(survey_year, 
+                                       breaks = seq(1960, 2010, 10), 
+                                       labels = seq(1960, 2000, 10), right = FALSE))
 ```
 
 We'll also want to see how many sample years there are per decade.
 ```{r}
-years <- barred_owls_sf %>%
+years <- house_finches_sf %>%
   group_by(years) %>%
   summarize(n = length(unique(survey_year)), .groups = "drop")
 ```
 
 
-Now we can see how Barred Owl observations change over the years
+Now we can see how House Finch observations change over the years
 
 ```{r}
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
   geom_sf(data = parks, colour = "darkgreen", fill = "forestgreen") +
-  geom_sf(data = barred_owls_sf, size = 1.5) +
+  geom_sf(data = house_finches_sf, size = 1.5) +
   geom_sf_text(data = years, x = 4427134, y = 2965275, hjust = 0, vjust = 1, 
                aes(label = paste0("n = ", n))) +
   facet_wrap(~years)

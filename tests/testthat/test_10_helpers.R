@@ -4,7 +4,7 @@ context("Helper/Formating functions")
 # format_dates() ----------------------------------------------------------
 test_that("format_dates() with data frame", {
   for(i in 1:2) {
-    if(i == 1) i <- bcch else i <- bdow
+    if(i == 1) i <- bcch else i <- hofi
     expect_silent(f <- format_dates(i)) %>%
       expect_is("data.frame")
     expect_true(all(c("doy", "date") %in% names(f)))
@@ -16,13 +16,14 @@ test_that("format_dates() with data frame", {
 })
 
 test_that("format_dates() with SQLite database", {
+  unlink(c("bcch.nc", "hofi.nc"))
   for(i in 1:2) {
     if(i == 1) {
       i <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
                       sql_db = "bcch", username = "testuser", info = "nc_test")
     } else if(i == 2) {
-      i <- nc_data_dl(collections = "RCBIOTABASE", species = 7590,
-                      sql_db = "bdow", username = "testuser", info = "nc_test")
+      i <- nc_data_dl(collections = "RCBIOTABASE", species = 20350,
+                      sql_db = "hofi", username = "testuser", info = "nc_test")
     }
     expect_silent(f <- format_dates(i)) %>%
       expect_is("SQLiteConnection")
@@ -39,7 +40,7 @@ test_that("format_dates() with SQLite database", {
   }
 
   # Clean up
-  file.remove(c("bcch.nc", "bdow.nc"))
+  unlink(c("bcch.nc", "hofi.nc"))
 })
 
 test_that("format_dates() overwrite", {
@@ -262,8 +263,8 @@ test_that("format_zero_fill() extra events columns", {
 test_that("format_zero_fill() with SQLite database", {
   bcch_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
                          sql_db = "bcch", username = "testuser", info = "nc_test")
-  bdow_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 7590,
-                         sql_db = "bdow", username = "testuser", info = "nc_test")
+  hofi_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 20350,
+                         sql_db = "hofi", username = "testuser", info = "nc_test")
 
   # No zeros to add
   expect_message(b <- format_zero_fill(bcch_sql),
@@ -278,7 +279,7 @@ test_that("format_zero_fill() with SQLite database", {
 
   # All zeros to add
   db_insert(bcch_sql, table = "naturecounts",
-            df = dplyr::tbl(bdow_sql, "naturecounts") %>%
+            df = dplyr::tbl(hofi_sql, "naturecounts") %>%
               dplyr::collect())
 
   expect_message(b <- format_zero_fill(bcch_sql),
@@ -286,14 +287,14 @@ test_that("format_zero_fill() with SQLite database", {
     expect_is("data.frame")
 
   # All zero's to add
-  expect_silent(b <- format_dates(rbind(bcch, bdow))) %>%
+  expect_silent(b <- format_dates(rbind(bcch, hofi))) %>%
     expect_is("data.frame")
-  expect_equal(nrow(b), nrow(bcch) + nrow(bdow))
+  expect_equal(nrow(b), nrow(bcch) + nrow(hofi))
 
   # Clean up
   DBI::dbDisconnect(bcch_sql)
-  DBI::dbDisconnect(bdow_sql)
-  file.remove(c("bcch.nc", "bdow.nc"))
+  DBI::dbDisconnect(hofi_sql)
+  file.remove(c("bcch.nc", "hofi.nc"))
 })
 
 test_that("format_zero_fill() checks for size", {

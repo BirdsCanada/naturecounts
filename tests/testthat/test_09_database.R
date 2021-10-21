@@ -133,11 +133,11 @@ test_that("db_insert add and appends rows", {
     expect_is("tbl")
 
   # Appending new data to table with data
-  expect_silent(db_insert(con, "naturecounts", bdow))
+  expect_silent(db_insert(con, "naturecounts", hofi))
   expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts"))) %>%
     expect_is("tbl")
 
-  expect_equal(nrow(nc2), nrow(bcch) + nrow(bdow))
+  expect_equal(nrow(nc2), nrow(bcch) + nrow(hofi))
 
   # Clean up (leave file for next tests)
   DBI::dbDisconnect(con)
@@ -157,7 +157,7 @@ test_that("db_insert overwrites rows as required", {
   expect_equal(nrow(nc1), nrow(bcch))
 
   # Trying to add new data with same record_id replaces existing data
-  bcch2 <- bdow
+  bcch2 <- hofi
   bcch2$record_id <- bcch$record_id[1:nrow(bcch2)]
 
   expect_silent(db_insert(con, "naturecounts", bcch2))

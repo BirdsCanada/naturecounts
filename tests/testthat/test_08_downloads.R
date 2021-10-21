@@ -14,6 +14,8 @@ test_that("Get permissions for user", {
 
 test_that("Get counts for collections", {
 
+  expect_message(nc_count())
+
   # Entire collection
   expect_message(c1 <- nc_count(c("CBC", "BBS")), "Without a username")
   expect_message(c1 <- nc_count(c("CBC", "BBS")), "Using filters")
@@ -40,12 +42,13 @@ test_that("Get counts for collections", {
 })
 
 test_that("Counts return permissions", {
+  # 14280 = black-capped chickadee
 
-  expect_silent(c_sample <- nc_count(species = 7590,
+  expect_silent(c_sample <- nc_count(species = 14280,
                                      verbose = FALSE, username = "testuser"))
-  expect_silent(c_sample_all <- nc_count(species = 7590, show = "all",
+  expect_silent(c_sample_all <- nc_count(species = 14280, show = "all",
                                          verbose = FALSE, username = "testuser"))
-  expect_silent(c_all <- nc_count(species = 7590, show = "all",
+  expect_silent(c_all <- nc_count(species = 14280, show = "all",
                                   verbose = FALSE))
   expect_gt(sum(c_all$nrecords, na.rm = TRUE), sum(c_sample$nrecords, na.rm = TRUE))
 
@@ -94,34 +97,34 @@ test_that("Data filters work as expected", {
 
   # single project_id
   expect_silent(d <- nc_data_dl(project_ids = 1030,
-                                 species = 7590, years = 2000,
-                                 username = "testuser", verbose = FALSE,
-                                 info = "nc_test"))
+                                species = 14280, years = 2000,
+                                username = "testuser", verbose = FALSE,
+                                info = "nc_test"))
   expect_equal(unique(d$collection), "RCBIOTABASE")
   expect_equal(unique(d$project_id), 1030)
 
   # single collection/species/year/
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
-                                species = 7590, years = 2000,
+                                species = 14280, years = 2000,
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
-  expect_equal(unique(d1$species_id), 7590)
+  expect_equal(unique(d1$species_id), 14280)
   expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
   expect_equal(max(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
 
   # mult species/year
   expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
-                                species = c(7590, 14280),
+                                species = c(20350, 14280),
                                 years = c(2003, 2004),
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
-  expect_equal(sort(unique(d2$species_id)), c(7590, 14280))
+  expect_equal(sort(unique(d2$species_id)), c(14280, 20350))
   expect_equal(min(as.numeric(d2$survey_year), na.rm = TRUE), 2003)
   expect_equal(max(as.numeric(d2$survey_year), na.rm = TRUE), 2004)
 
   # fields set
   expect_silent(d3 <- nc_data_dl(collections = "ABBIRDRECS",
-                                 species = 7590, years = 2000,
+                                 species = 14280, years = 2000,
                                  fields_set = "core",
                                  username = "testuser", verbose = FALSE,
                                  info = "nc_test"))
@@ -130,7 +133,7 @@ test_that("Data filters work as expected", {
 
   # custom fields
   expect_silent(d4 <- nc_data_dl(collections = "ABBIRDRECS",
-                                 species = 7590, years = 2000,
+                                 species = 14280, years = 2000,
                                  fields_set = "custom", fields = "Locality",
                                  username = "testuser", verbose = FALSE,
                                  info = "nc_test"))
@@ -231,16 +234,17 @@ test_that("Data download returns informative errors/messages", {
 
   # No data for some
   expect_message(nc_data_dl(collections = c("ABBIRDRECS", "RCBIOTABASE"),
-                            years = 2010, species = 7590,
+                            years = 2010, species = 14280,
                             username = "testuser", verbose = TRUE,
                             info = "nc_test"),
                  "Not all collections have data that match these filters")
 
   expect_error(nc_data_dl(collections = "ABBIRDRECS",
-                            years = 2010, species = 7590,
+                            years = 1950, species = 14280,
                             username = "testuser", verbose = TRUE,
                             info = "nc_test"),
-                 "These collections have no data that match these filters")
+                 "These collections have no data that match these filters") %>%
+    suppressMessages()
 
   # No permission
   expect_error(nc_data_dl(collections = "ATOWLS",
@@ -255,14 +259,14 @@ test_that("Data download returns informative errors/messages", {
                "These collections have no data that match these filters")
 
   # Custom field_set without fields
-  expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 7590,
+  expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 20350,
                           years = 2000, fields_set = "custom",
                           username = "testuser", verbose = FALSE,
                           info = "nc_test"),
                "Must specify 'fields' if using a custom 'field_set'")
 
   # No info
-  expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 7590,
+  expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 20350,
                           years = 2000, fields_set = "custom",
                           username = "testuser", verbose = FALSE),
                "'info' is required text if not using a 'request_id'")

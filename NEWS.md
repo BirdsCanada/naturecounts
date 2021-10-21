@@ -1,3 +1,8 @@
+# naturecounts 0.2.3
+
+* switch back to regular server (not sandbox)
+* use house finches as example data frame rather than barred owls
+
 # naturecounts 0.2.2
 
 * Arrange returned data fields more sensibly

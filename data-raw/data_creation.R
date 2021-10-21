@@ -4,7 +4,7 @@ ua <- httr::user_agent(agent = "https://github.com/BirdStudiesCanada/naturecount
 # API URLs
 meta_info <- dplyr::tribble(
   ~package_name,         ~api_url,                              ~primary_keys,
-  "api",                 "https://sandbox.birdscanada.org/api", NA,
+  "api",                 "https://birdscanada.org/api", NA,
 
   "auth",                "/data/authenticate",                  NA,
 
@@ -103,5 +103,5 @@ usethis::use_data(ua, api, keys, queries, test_rc, field_order,
 bcch <- nc_data_dl(request_id = 152543, username = "sample")
 usethis::use_data(bcch, internal = FALSE, overwrite = TRUE)
 
-bdow <- nc_data_dl(request_id = 152545, username = "sample")
-usethis::use_data(bdow, internal = FALSE, overwrite = TRUE)
+hofi <- nc_data_dl(species = 20350, username = "sample", info = "pkg_data")
+usethis::use_data(hofi, internal = FALSE, overwrite = TRUE)

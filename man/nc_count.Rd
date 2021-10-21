@@ -159,9 +159,9 @@ nc_count(region = list(statprov = "MB"))
 nc_count(username = "sample")
 }
 
-# Count records with barred owls in Ontario
-search_species("barred owl")
-nc_count(species = 7590, region = list(statprov = "ON"), username = "sample")
+# Count records with house finches in Ontario
+search_species("house finch")
+nc_count(species = 20350, region = list(statprov = "ON"), username = "sample")
 
 # Count all records available in the Christmas Bird Count and Breeding Bird
 # Survey collections (regardless of user permissions)
