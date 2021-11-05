@@ -18,8 +18,7 @@ spelling::update_wordlist()
 # Update README.Rmd
 # Compile README.md
 # REBUILD!
-rmarkdown::render("README.Rmd")
-unlink("README.html")
+devtools::build_readme()
 
 ## Finalize package version
 
