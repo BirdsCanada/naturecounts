@@ -25,10 +25,14 @@
 #' head(d)
 #'
 #' # Filter our query
-#' d <- nc_query_table(table = "bmde_filter_bad_dates", SiteCode = "DMBO",
-#'                     username = "sample")
-#' head(d)
+#' d <- nc_query_table(table = "bmde_filter_bad_dates",
+#'                     SiteCode = "DMBO", username = "sample")
+#' d
 #'
+#' # Filter our query
+#' d <- nc_query_table(table = "bmde_filter_bad_dates",
+#'                     species_id = c(7680, 9750), username = "sample")
+#' d
 #'
 #' @export
 
@@ -36,10 +40,15 @@ nc_query_table <- function(table = NULL, ..., username = NULL, timeout = 120,
                            verbose = FALSE) {
 
   # Grab filters
-  if(length(list(...)) > 0) filter <- list(...) else filter <- NULL
+  if(length(list(...)) > 0) {
+    filter <- list(...) %>%
+      purrr::map(~{if(length(.) == 1) jsonlite::unbox(.) else .})
+  } else {
+    filter <- NULL
+  }
+
 
   # Username check and Authorization
-  if(is.null(username)) stop("usename required", call. = FALSE)
   token <- srv_auth(username)
 
   # No table

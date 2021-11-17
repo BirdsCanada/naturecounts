@@ -47,9 +47,13 @@ d <- nc_query_table(table = "bmde_filter_bad_dates", username = "sample")
 head(d)
 
 # Filter our query
-d <- nc_query_table(table = "bmde_filter_bad_dates", SiteCode = "DMBO",
-                    username = "sample")
-head(d)
+d <- nc_query_table(table = "bmde_filter_bad_dates",
+                    SiteCode = "DMBO", username = "sample")
+d
 
+# Filter our query
+d <- nc_query_table(table = "bmde_filter_bad_dates",
+                    species_id = c(7680, 9750), username = "sample")
+d
 
 }

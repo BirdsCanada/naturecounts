@@ -65,7 +65,7 @@ capture_df <- function(x) {
 
 
 
-
+# Pipe operator -------------------------------
 #' Pipe operator
 #'
 #' See \code{magrittr::\link[magrittr]{\%>\%}} for details.
@@ -74,11 +74,11 @@ capture_df <- function(x) {
 #' @rdname pipe
 #' @keywords internal
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom magrittr %>% %T>%
 #' @usage lhs \%>\% rhs
 NULL
 
-
+# Tidy eval helpers -------------------------
 #' Tidy eval helpers
 #'
 #' @description
@@ -116,6 +116,7 @@ NULL
 #' @keywords internal
 #' @export   .data
 NULL
+
 
 nc_deprecate <- function(new){
   .Deprecated(msg = paste0(as.character(sys.call(sys.parent()))[1L],
