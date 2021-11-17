@@ -32,8 +32,25 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
+      - name: install macOS system dependencies
+        if: runner.os == 'macOS'
+        continue-on-error: true
+        run: |
+          brew install pkg-config gdal udunits
+
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: rcmdcheck
+
+      - name: Install vignette dependencies
+        run: |
+          install.packages("rnaturalearthhires", repos = "http://packages.ropensci.org", type = "source")
+          install.packages("curl")
+        shell: Rscript {0}
+
+      - uses: r-lib/actions/setup-pandoc@v1
+        with:
+          pandoc-version: '2.7.3' # The pandoc version to download (if necessary) and use.
+      - run: echo "# Test" | pandoc -t html
 
       - uses: r-lib/actions/check-r-package@v1
