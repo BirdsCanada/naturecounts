@@ -40,7 +40,7 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-       - name: Install vignette dependencies
+      - name: Install vignette dependencies
         run: |
           install.packages("rnaturalearthhires", repos = "https://ropensci.r-universe.dev")
         shell: Rscript {0}
