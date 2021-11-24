@@ -42,11 +42,6 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
-          extra-packages: rcmdcheck
-
-      - name: Install vignette dependencies
-        run: |
-          install.packages("rnaturalearthhires", repos = "https://ropensci.r-universe.dev")
-        shell: Rscript {0}
+          extra-packages: rcmdcheck, rnaturalearthhires
 
       - uses: r-lib/actions/check-r-package@v1
