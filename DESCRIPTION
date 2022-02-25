@@ -4,7 +4,7 @@ Title: Access and download data on plant and animal populations from NatureCount
 Version: 0.2.3
 Authors@R: c(
     person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "aut"),
-    person("Denis", "LePage", email = "dlepage@bsc-eoc.org", role = c("aut", "cre")))
+    person("Denis", "Lepage", email = "dlepage@birdscanada.org", role = c("aut", "cre")))
 Description: Access and download data on plant and animal populations from 
     various databases through NatureCounts, a service managed by Bird Studies 
     Canada. 
@@ -47,5 +47,5 @@ Suggests:
 Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-URL: https://github.com/BirdStudiesCanada/naturecounts, https://naturecounts.ca
+URL: https://github.com/birdscanada/naturecounts, https://naturecounts.ca
 VignetteBuilder: knitr
