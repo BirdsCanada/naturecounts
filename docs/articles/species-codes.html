@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.2</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.3</span>
       </span>
     </div>
 
@@ -40,7 +42,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -56,8 +58,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/BirdStudiesCanada/naturecounts">
-    <span class="fas fa-github fa-lg"></span>
+  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -71,14 +73,14 @@
 
       
 
-      </header><script src="species-codes_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Species codes</h1>
             
-            <h4 class="date">2021-03-03</h4>
+            <h4 data-toc-skip class="date">2022-02-25</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/species-codes.Rmd"><code>vignettes/species-codes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/HEAD/vignettes/species-codes.Rmd" class="external-link"><code>vignettes/species-codes.Rmd</code></a></small>
       <div class="hidden name"><code>species-codes.Rmd</code></div>
 
     </div>
@@ -86,44 +88,44 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts">naturecounts</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></code></pre></div>
 <p>In order to download data pertaining to specific species, you’ll have to get the species id codes. These are numeric codes that reflect species identity, and in complex cases, take account of subspecies or changes to species identity.</p>
 <p>For all species, you can search by scientific, English or French name with the <code><a href="../reference/search_species.html">search_species()</a></code> function.</p>
 <p>For birds, you can also search by alphanumeric species codes with the <code><a href="../reference/search_species_code.html">search_species_code()</a></code> function. <strong>Note: </strong> These alphanumeric codes are <em>not</em> the ones used by <code>naturecounts</code>, but are ones used by various taxonomic authorities. This function also gives you the option of returning all species codes (including subspecies, etc.) related to a single species, and is considered a more robust method for ensuring that you do not miss observations.</p>
 <blockquote>
-<p>The following examples use the “testuser” user which is not available to you. You can quickly <a href="https://www.birdscanada.org/birdmon/default/register.jsp">sign up for a free account</a> of your own to access and play around with these examples.</p>
+<p>The following examples use the “testuser” user which is not available to you. You can quickly <a href="https://www.birdscanada.org/birdmon/default/register.jsp" class="external-link">sign up for a free account</a> of your own to access and play around with these examples.</p>
 </blockquote>
-<div id="searching-by-name" class="section level2">
-<h2 class="hasAnchor">
-<a href="#searching-by-name" class="anchor"></a>Searching by name</h2>
+<div class="section level2">
+<h2 id="searching-by-name">Searching by name<a class="anchor" aria-label="anchor" href="#searching-by-name"></a>
+</h2>
 <p>The simplest way to determine a species id (and the only way, for non-avian taxa) is to use the <code><a href="../reference/search_species.html">search_species()</a></code> function which searches for a species id according to scientific, English or French name and returns a data frame of taxonomic information for all related hits:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"moose"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 x 5</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="co">#&gt;   species_id scientific_name english_name french_name taxon_group</span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;           &lt;chr&gt;        &lt;chr&gt;       &lt;chr&gt;      </span>
-<span class="co">#&gt; 1     133990 Alces alces     Moose        &lt;NA&gt;        MAMMALS</span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">133</span>990 Alces alces     Moose        <span style="color: #BB0000;">NA</span>          MAMMALS</span>
 <span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"swallowtail"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 8 x 5</span>
-<span class="co">#&gt;   species_id scientific_name   english_name        french_name       taxon_group</span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;               &lt;chr&gt;             &lt;chr&gt;      </span>
-<span class="co">#&gt; 1     252492 Battus philenor   Pipevine Swallowta… Papillon de l'ar… BUTTERFL   </span>
-<span class="co">#&gt; 2     252493 Eurytides marcel… Zebra Swallowtail   Papillon zébré    BUTTERFL   </span>
-<span class="co">#&gt; 3     252494 Papilio polyxenes Black Swallowtail   Papillon du céle… BUTTERFL   </span>
-<span class="co">#&gt; 4     252495 Papilio machaon   Old World Swallowt… Machaon           BUTTERFL   </span>
-<span class="co">#&gt; 5     252496 Papilio cresphon… Giant Swallowtail   Grand porte-queue BUTTERFL   </span>
-<span class="co">#&gt; 6     252497 Papilio glaucus   Eastern Tiger Swal… Papillon tigré d… BUTTERFL   </span>
-<span class="co">#&gt; 7     252498 Papilio canadens… Canadian Tiger Swa… Papillon tigré d… BUTTERFL   </span>
-<span class="co">#&gt; 8     252499 Papilio troilus   Spicebush Swallowt… Papillon carolin… BUTTERFL</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 5</span></span>
+<span class="co">#&gt;   species_id scientific_name     english_name            french_name taxon_group</span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">252</span>492 Battus philenor     Pipevine Swallowtail    Papillon d… BUTTERFL   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     <span style="text-decoration: underline;">252</span>493 Eurytides marcellus Zebra Swallowtail       Papillon z… BUTTERFL   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     <span style="text-decoration: underline;">252</span>494 Papilio polyxenes   Black Swallowtail       Papillon d… BUTTERFL   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     <span style="text-decoration: underline;">252</span>495 Papilio machaon     Old World Swallowtail   Machaon     BUTTERFL   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     <span style="text-decoration: underline;">252</span>496 Papilio cresphontes Giant Swallowtail       Grand port… BUTTERFL   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     <span style="text-decoration: underline;">252</span>497 Papilio glaucus     Eastern Tiger Swallowt… Papillon t… BUTTERFL   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">7</span>     <span style="text-decoration: underline;">252</span>498 Papilio canadensis  Canadian Tiger Swallow… Papillon t… BUTTERFL   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">8</span>     <span style="text-decoration: underline;">252</span>499 Papilio troilus     Spicebush Swallowtail   Papillon c… BUTTERFL</span>
 <span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"mesange a tete noire"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 5 x 5</span>
-<span class="co">#&gt;   species_id scientific_name     english_name       french_name      taxon_group</span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;               &lt;chr&gt;              &lt;chr&gt;            &lt;chr&gt;      </span>
-<span class="co">#&gt; 1      14280 Poecile atricapill… Black-capped Chic… Mésange à tête … BIRDS      </span>
-<span class="co">#&gt; 2      40932 Poecile atricapill… Black-capped x Mo… Hybride Mésange… BIRDS      </span>
-<span class="co">#&gt; 3      44462 Poecile atricapill… Black-capped x Bo… Hybride Mésange… BIRDS      </span>
-<span class="co">#&gt; 4      44466 Poecile atricapill… Black-capped Chic… Hybride Mésange… BIRDS      </span>
-<span class="co">#&gt; 5      45746 Poecile atricapill… Black-capped/Moun… Mésange à tête … BIRDS</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 5</span></span>
+<span class="co">#&gt;   species_id scientific_name                english_name french_name taxon_group</span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280 Poecile atricapillus           Black-cappe… Mésange à … BIRDS      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>      <span style="text-decoration: underline;">40</span>932 Poecile atricapillus x gambeli Black-cappe… Hybride Mé… BIRDS      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>      <span style="text-decoration: underline;">44</span>462 Poecile atricapillus x hudson… Black-cappe… Hybride Mé… BIRDS      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>      <span style="text-decoration: underline;">44</span>466 Poecile atricapillus x Baeolo… Black-cappe… Hybride Mé… BIRDS      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>      <span style="text-decoration: underline;">45</span>746 Poecile atricapillus/gambeli   Black-cappe… Mésange à … BIRDS</span></code></pre></div>
 <p>These species ids can then be used to download data either directly:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">moose</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">133990</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>, 
@@ -142,153 +144,154 @@
 <span class="va">chickadees</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="va">chickadee_ids</span><span class="op">$</span><span class="va">species_id</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>, 
                          username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="searching-by-alphanumeric-code" class="section level2">
-<h2 class="hasAnchor">
-<a href="#searching-by-alphanumeric-code" class="anchor"></a>Searching by alphanumeric code</h2>
+<div class="section level2">
+<h2 id="searching-by-alphanumeric-code">Searching by alphanumeric code<a class="anchor" aria-label="anchor" href="#searching-by-alphanumeric-code"></a>
+</h2>
 <p>Taxonomy for bird species has long included various alphanumeric codes from different taxonomic authorities. The codes often include separate codes for recognized subdivisions of the species (subspecies, subpopulations, hybrids, etc.). The <code><a href="../reference/search_species_code.html">search_species_code()</a></code> allows you to search for avian species ids according to these authorities.</p>
-<div id="authorities" class="section level3">
-<h3 class="hasAnchor">
-<a href="#authorities" class="anchor"></a>Authorities</h3>
+<div class="section level3">
+<h3 id="authorities">Authorities<a class="anchor" aria-label="anchor" href="#authorities"></a>
+</h3>
 <p>The default taxonomic authority used is <code>BSCDATA</code>, which uses 4-letter alpha codes:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"BCCH"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 x 5</span>
-<span class="co">#&gt;   species_id BSCDATA scientific_name     english_name         french_name       </span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;               &lt;chr&gt;                &lt;chr&gt;             </span>
-<span class="co">#&gt; 1      14280 BCCH    Poecile atricapill… Black-capped Chicka… Mésange à tête no…</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="co">#&gt;   species_id BSCDATA scientific_name      english_name           french_name    </span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280 BCCH    Poecile atricapillus Black-capped Chickadee Mésange à tête…</span></code></pre></div>
 <p>The search function is case insensitive:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"bcch"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 x 5</span>
-<span class="co">#&gt;   species_id BSCDATA scientific_name     english_name         french_name       </span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;               &lt;chr&gt;                &lt;chr&gt;             </span>
-<span class="co">#&gt; 1      14280 BCCH    Poecile atricapill… Black-capped Chicka… Mésange à tête no…</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="co">#&gt;   species_id BSCDATA scientific_name      english_name           french_name    </span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280 BCCH    Poecile atricapillus Black-capped Chickadee Mésange à tête…</span></code></pre></div>
 <p>However, you can search by codes for different authorities, by specifying the appropriate <code>authority</code> argument:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="fl">8868</span>, authority <span class="op">=</span> <span class="st">"CBC"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 x 5</span>
-<span class="co">#&gt;   species_id CBC   scientific_name      english_name          french_name       </span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt; &lt;chr&gt;                &lt;chr&gt;                 &lt;chr&gt;             </span>
-<span class="co">#&gt; 1      14280 8868  Poecile atricapillus Black-capped Chickad… Mésange à tête no…</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="co">#&gt;   species_id CBC   scientific_name      english_name           french_name      </span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280 8868  Poecile atricapillus Black-capped Chickadee Mésange à tête n…</span></code></pre></div>
 </div>
-<div id="all-related-subspecies" class="section level3">
-<h3 class="hasAnchor">
-<a href="#all-related-subspecies" class="anchor"></a>All related subspecies</h3>
+<div class="section level3">
+<h3 id="all-related-subspecies">All related subspecies<a class="anchor" aria-label="anchor" href="#all-related-subspecies"></a>
+</h3>
 <p>By default, the <code>search_species_codes()</code> returns all species ids related to the search term.</p>
 <p>For example, searching for myrtle warblers (<code>MYWA</code>), one of two subspecies of the yellow-rumped warbler (<code>YRWA</code>) returns both subspecies and the parent species.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"MYWA"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 3 x 5</span>
-<span class="co">#&gt;   species_id BSCDATA scientific_name     english_name        french_name        </span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;               &lt;chr&gt;               &lt;chr&gt;              </span>
-<span class="co">#&gt; 1      16610 YRWA    Setophaga coronata  Yellow-rumped Warb… Paruline à croupio…</span>
-<span class="co">#&gt; 2      16620 MYWA    Setophaga coronata… Yellow-rumped Warb… Paruline à croupio…</span>
-<span class="co">#&gt; 3      16630 AUWA    Setophaga coronata… Yellow-rumped Warb… Paruline à croupio…</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="co">#&gt;   species_id BSCDATA scientific_name             english_name        french_name</span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">16</span>610 YRWA    Setophaga coronata          Yellow-rumped Warb… Paruline à…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>      <span style="text-decoration: underline;">16</span>620 MYWA    Setophaga coronata coronata Yellow-rumped Warb… Paruline à…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>      <span style="text-decoration: underline;">16</span>630 AUWA    Setophaga coronata auduboni Yellow-rumped Warb… Paruline à…</span></code></pre></div>
 <p><strong>Note:</strong> Different taxonomic authorities recognize different subgroups.</p>
 <p>For example, <code>BSCDATA</code> recognizes 4 groups for dark-eyed juncos:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"DEJU"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 4 x 5</span>
-<span class="co">#&gt;   species_id BSCDATA scientific_name       english_name       french_name       </span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;chr&gt;              &lt;chr&gt;             </span>
-<span class="co">#&gt; 1      19090 SCJU    Junco hyemalis hyema… Dark-eyed Junco (… Junco ardoisé [hy…</span>
-<span class="co">#&gt; 2      19100 ORJU    Junco hyemalis [oreg… Dark-eyed Junco (… Junco ardoisé [or…</span>
-<span class="co">#&gt; 3      19110 PSJU    Junco hyemalis mearn… Dark-eyed Junco (… Junco ardoisé (me…</span>
-<span class="co">#&gt; 4      42218 DEJU    Junco hyemalis        Dark-eyed Junco    Junco ardoisé</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 5</span></span>
+<span class="co">#&gt;   species_id BSCDATA scientific_name                    english_name french_name</span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">19</span>090 SCJU    Junco hyemalis hyemalis/carolinen… Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>      <span style="text-decoration: underline;">19</span>110 PSJU    Junco hyemalis mearnsi             Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>      <span style="text-decoration: underline;">42</span>218 DEJU    Junco hyemalis                     Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>      <span style="text-decoration: underline;">47</span>928 ORJU    Junco hyemalis [oreganus Group]    Dark-eyed J… Junco ardo…</span></code></pre></div>
 <p>Whereas <code>CBC</code> also recognizes sub group hybrids (and the Guadalupe junco):</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"12385"</span>, authority <span class="op">=</span> <span class="st">"CBC"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 11 x 5</span>
-<span class="co">#&gt;    species_id CBC   scientific_name        english_name       french_name       </span>
-<span class="co">#&gt;         &lt;int&gt; &lt;chr&gt; &lt;chr&gt;                  &lt;chr&gt;              &lt;chr&gt;             </span>
-<span class="co">#&gt;  1      42218 12385 Junco hyemalis         Dark-eyed Junco    Junco ardoisé     </span>
-<span class="co">#&gt;  2      19090 12386 Junco hyemalis hyemal… Dark-eyed Junco (… Junco ardoisé [hy…</span>
-<span class="co">#&gt;  3      41434 12388 Junco hyemalis cismon… Dark-eyed Junco (… Junco ardoisé (ci…</span>
-<span class="co">#&gt;  4      19100 12389 Junco hyemalis [orega… Dark-eyed Junco (… Junco ardoisé [or…</span>
-<span class="co">#&gt;  5      19110 12390 Junco hyemalis mearnsi Dark-eyed Junco (… Junco ardoisé (me…</span>
-<span class="co">#&gt;  6      42219 12391 Junco hyemalis oregan… Dark-eyed Junco (… Junco ardoisé [or…</span>
-<span class="co">#&gt;  7      19112 12392 Junco hyemalis aikeni  Dark-eyed Junco (… Junco ardoisé (fo…</span>
-<span class="co">#&gt;  8      19111 12394 Junco hyemalis canice… Dark-eyed Junco (… Junco ardoisé (ca…</span>
-<span class="co">#&gt;  9      42220 12395 Junco hyemalis mearns… Dark-eyed Junco (… Junco ardoisé [me…</span>
-<span class="co">#&gt; 10      40859 12396 Junco hyemalis dorsal… Dark-eyed Junco (… Junco ardoisé (do…</span>
-<span class="co">#&gt; 11      39768 12398 Junco insularis        Guadalupe Junco    Junco de Guadalupe</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 11 × 5</span></span>
+<span class="co">#&gt;    species_id CBC   scientific_name                     english_name french_name</span>
+<span class="co">#&gt;         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>      <span style="text-decoration: underline;">42</span>218 12385 Junco hyemalis                      Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>      <span style="text-decoration: underline;">19</span>090 12386 Junco hyemalis hyemalis/carolinens… Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>      <span style="text-decoration: underline;">41</span>434 12388 Junco hyemalis cismontanus          Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>      <span style="text-decoration: underline;">19</span>100 12389 Junco hyemalis [oreganus Group]     Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>      <span style="text-decoration: underline;">19</span>110 12390 Junco hyemalis mearnsi              Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>      <span style="text-decoration: underline;">42</span>219 12391 Junco hyemalis oreganus x mearnsi   Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>      <span style="text-decoration: underline;">19</span>112 12392 Junco hyemalis aikeni               Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>      <span style="text-decoration: underline;">19</span>111 12394 Junco hyemalis caniceps             Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>      <span style="text-decoration: underline;">42</span>220 12395 Junco hyemalis mearnsi x caniceps   Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      <span style="text-decoration: underline;">40</span>859 12396 Junco hyemalis dorsalis             Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">11</span>      <span style="text-decoration: underline;">39</span>768 12398 Junco insularis                     Guadalupe J… Junco de G…</span></code></pre></div>
 <p>You can search by more than one authority at the same time. Note that your search term only needs to match one authority (not both), and that the information returned reflects both authorities combined.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"DEJU"</span>, authority <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BSCDATA"</span>, <span class="st">"CBC"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 11 x 6</span>
-<span class="co">#&gt;    species_id BSCDATA CBC   scientific_name     english_name     french_name    </span>
-<span class="co">#&gt;         &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;               &lt;chr&gt;            &lt;chr&gt;          </span>
-<span class="co">#&gt;  1      42218 DEJU    12385 Junco hyemalis      Dark-eyed Junco  Junco ardoisé  </span>
-<span class="co">#&gt;  2      19100 ORJU    12389 Junco hyemalis [or… Dark-eyed Junco… Junco ardoisé …</span>
-<span class="co">#&gt;  3      19110 PSJU    12390 Junco hyemalis mea… Dark-eyed Junco… Junco ardoisé …</span>
-<span class="co">#&gt;  4      19090 SCJU    12386 Junco hyemalis hye… Dark-eyed Junco… Junco ardoisé …</span>
-<span class="co">#&gt;  5      41434 &lt;NA&gt;    12388 Junco hyemalis cis… Dark-eyed Junco… Junco ardoisé …</span>
-<span class="co">#&gt;  6      42219 &lt;NA&gt;    12391 Junco hyemalis ore… Dark-eyed Junco… Junco ardoisé …</span>
-<span class="co">#&gt;  7      19112 &lt;NA&gt;    12392 Junco hyemalis aik… Dark-eyed Junco… Junco ardoisé …</span>
-<span class="co">#&gt;  8      19111 &lt;NA&gt;    12394 Junco hyemalis can… Dark-eyed Junco… Junco ardoisé …</span>
-<span class="co">#&gt;  9      42220 &lt;NA&gt;    12395 Junco hyemalis mea… Dark-eyed Junco… Junco ardoisé …</span>
-<span class="co">#&gt; 10      40859 &lt;NA&gt;    12396 Junco hyemalis dor… Dark-eyed Junco… Junco ardoisé …</span>
-<span class="co">#&gt; 11      39768 &lt;NA&gt;    12398 Junco insularis     Guadalupe Junco  Junco de Guada…</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"DEJU"</span>, authority <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BSCDATA"</span>, <span class="st">"CBC"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 6</span></span>
+<span class="co">#&gt;    species_id BSCDATA CBC   scientific_name             english_name french_name</span>
+<span class="co">#&gt;         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>      <span style="text-decoration: underline;">42</span>218 DEJU    12385 Junco hyemalis              Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>      <span style="text-decoration: underline;">47</span>928 ORJU    <span style="color: #BB0000;">NA</span>    Junco hyemalis [oreganus G… Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>      <span style="text-decoration: underline;">19</span>110 PSJU    12390 Junco hyemalis mearnsi      Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>      <span style="text-decoration: underline;">19</span>090 SCJU    12386 Junco hyemalis hyemalis/ca… Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>      <span style="text-decoration: underline;">41</span>434 <span style="color: #BB0000;">NA</span>      12388 Junco hyemalis cismontanus  Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>      <span style="text-decoration: underline;">19</span>100 <span style="color: #BB0000;">NA</span>      12389 Junco hyemalis [oreganus G… Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>      <span style="text-decoration: underline;">42</span>219 <span style="color: #BB0000;">NA</span>      12391 Junco hyemalis oreganus x … Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>      <span style="text-decoration: underline;">19</span>112 <span style="color: #BB0000;">NA</span>      12392 Junco hyemalis aikeni       Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>      <span style="text-decoration: underline;">19</span>111 <span style="color: #BB0000;">NA</span>      12394 Junco hyemalis caniceps     Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      <span style="text-decoration: underline;">42</span>220 <span style="color: #BB0000;">NA</span>      12395 Junco hyemalis mearnsi x c… Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">11</span>      <span style="text-decoration: underline;">40</span>859 <span style="color: #BB0000;">NA</span>      12396 Junco hyemalis dorsalis     Dark-eyed J… Junco ardo…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">12</span>      <span style="text-decoration: underline;">39</span>768 <span style="color: #BB0000;">NA</span>      12398 Junco insularis             Guadalupe J… Junco de G…</span></code></pre></div>
 </div>
 </div>
-<div id="exact-species" class="section level2">
-<h2 class="hasAnchor">
-<a href="#exact-species" class="anchor"></a>Exact species</h2>
+<div class="section level2">
+<h2 id="exact-species">Exact species<a class="anchor" aria-label="anchor" href="#exact-species"></a>
+</h2>
 <p>If you do not want all subgroups, you can use the <code>results = "exact"</code> argument to return only an exact match.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"DEJU"</span>, results <span class="op">=</span> <span class="st">"exact"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 x 5</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="co">#&gt;   species_id BSCDATA scientific_name english_name    french_name  </span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;           &lt;chr&gt;        </span>
-<span class="co">#&gt; 1      42218 DEJU    Junco hyemalis  Dark-eyed Junco Junco ardoisé</span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">42</span>218 DEJU    Junco hyemalis  Dark-eyed Junco Junco ardoisé</span>
 <span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"ORJU"</span>, results <span class="op">=</span> <span class="st">"exact"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 x 5</span>
-<span class="co">#&gt;   species_id BSCDATA scientific_name         english_name      french_name      </span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;                   &lt;chr&gt;             &lt;chr&gt;            </span>
-<span class="co">#&gt; 1      19100 ORJU    Junco hyemalis [oregan… Dark-eyed Junco … Junco ardoisé [o…</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="co">#&gt;   species_id BSCDATA scientific_name                 english_name    french_name</span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">47</span>928 ORJU    Junco hyemalis [oreganus Group] Dark-eyed Junc… Junco ardo…</span></code></pre></div>
 </div>
-<div id="advanced-searches" class="section level2">
-<h2 class="hasAnchor">
-<a href="#advanced-searches" class="anchor"></a>Advanced searches</h2>
-<p>If you have a very specific type of search you’d like to do, you may be better off using the <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> function from the <code>dplyr</code> package.</p>
+<div class="section level2">
+<h2 id="advanced-searches">Advanced searches<a class="anchor" aria-label="anchor" href="#advanced-searches"></a>
+</h2>
+<p>If you have a very specific type of search you’d like to do, you may be better off using the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function from the <code>dplyr</code> package.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></code></pre></div>
 <p>For example, let’s assume you’re interested in collecting species codes for in the Muridae family.</p>
 <p>We can get the entire species list by omitting a search term, and also return all taxonomic information available with the <code>show = "all"</code> argument.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span>show <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 x 17</span>
-<span class="co">#&gt;   species_id concept_id scientific_name species_status added_dt english_name</span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;       </span>
-<span class="co">#&gt; 1          0 74B5AA012… N/A                         NA &lt;NA&gt;     No observat…</span>
-<span class="co">#&gt; 2         10 42D72AE11… Tinamus major                1 &lt;NA&gt;     Great Tinam…</span>
-<span class="co">#&gt; 3         20 66C31E09F… Nothocercus bo…              1 &lt;NA&gt;     Highland Ti…</span>
-<span class="co">#&gt; 4         30 39DD9DD76… Crypturellus s…              1 &lt;NA&gt;     Little Tina…</span>
-<span class="co">#&gt; 5         40 AAB5CEED3… Crypturellus c…              1 &lt;NA&gt;     Thicket Tin…</span>
-<span class="co">#&gt; 6         50 5183B60E1… Crypturellus b…              1 &lt;NA&gt;     Slaty-breas…</span>
-<span class="co">#&gt; # … with 11 more variables: french_name &lt;chr&gt;, phylum &lt;chr&gt;,</span>
-<span class="co">#&gt; #   family_french_name &lt;chr&gt;, group_id &lt;int&gt;, order_taxon &lt;chr&gt;,</span>
-<span class="co">#&gt; #   taxon_group &lt;chr&gt;, sort_order &lt;int&gt;, class &lt;chr&gt;, family_name &lt;chr&gt;,</span>
-<span class="co">#&gt; #   concept_source &lt;chr&gt;, family_english_name &lt;chr&gt;</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 17</span></span>
+<span class="co">#&gt;   species_id concept_id     scientific_name species_status added_dt english_name</span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>          0 74B5AA0128689… N/A                         <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>       No observat…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>         10 42D72AE118D2D… Tinamus major                1 <span style="color: #BB0000;">NA</span>       Great Tinam…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>         20 66C31E09F8C28… Nothocercus bo…              1 <span style="color: #BB0000;">NA</span>       Highland Ti…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>         30 39DD9DD76680A… Crypturellus s…              1 <span style="color: #BB0000;">NA</span>       Little Tina…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>         40 AAB5CEED3FC9E… Crypturellus c…              1 <span style="color: #BB0000;">NA</span>       Thicket Tin…</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>         50 5183B60E14DE9… Crypturellus b…              1 <span style="color: #BB0000;">NA</span>       Slaty-breas…</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 11 more variables: french_name &lt;chr&gt;, phylum &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   family_french_name &lt;chr&gt;, group_id &lt;int&gt;, order_taxon &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   taxon_group &lt;chr&gt;, sort_order &lt;int&gt;, class &lt;chr&gt;, family_name &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   concept_source &lt;chr&gt;, family_english_name &lt;chr&gt;</span></span></code></pre></div>
 <p>Now we can search for the family</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mice_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">all</span>, <span class="va">family_name</span> <span class="op">==</span> <span class="st">"Muridae"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mice_ids</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 x 17</span>
-<span class="co">#&gt;   species_id concept_id scientific_name species_status added_dt english_name</span>
-<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;       </span>
-<span class="co">#&gt; 1     139860 CA7511C47… Alticola albic…              1 &lt;NA&gt;     &lt;NA&gt;        </span>
-<span class="co">#&gt; 2     139870 20968C4C2… Alticola argen…              1 &lt;NA&gt;     &lt;NA&gt;        </span>
-<span class="co">#&gt; 3     139880 45B93B339… Alticola barak…              1 &lt;NA&gt;     &lt;NA&gt;        </span>
-<span class="co">#&gt; 4     139890 85588495C… Alticola lemmi…              1 &lt;NA&gt;     &lt;NA&gt;        </span>
-<span class="co">#&gt; 5     139900 4BEBDB13A… Alticola macro…              1 &lt;NA&gt;     &lt;NA&gt;        </span>
-<span class="co">#&gt; 6     139910 FBE489236… Alticola monto…              1 &lt;NA&gt;     &lt;NA&gt;        </span>
-<span class="co">#&gt; # … with 11 more variables: french_name &lt;chr&gt;, phylum &lt;chr&gt;,</span>
-<span class="co">#&gt; #   family_french_name &lt;chr&gt;, group_id &lt;int&gt;, order_taxon &lt;chr&gt;,</span>
-<span class="co">#&gt; #   taxon_group &lt;chr&gt;, sort_order &lt;int&gt;, class &lt;chr&gt;, family_name &lt;chr&gt;,</span>
-<span class="co">#&gt; #   concept_source &lt;chr&gt;, family_english_name &lt;chr&gt;</span>
-<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">mice_ids</span><span class="op">$</span><span class="va">species_id</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">mice_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">all</span>, <span class="va">family_name</span> <span class="op">==</span> <span class="st">"Muridae"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mice_ids</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 17</span></span>
+<span class="co">#&gt;   species_id concept_id     scientific_name species_status added_dt english_name</span>
+<span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">139</span>860 CA7511C47A77B… Alticola albic…              1 <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>          </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     <span style="text-decoration: underline;">139</span>870 20968C4C26EBF… Alticola argen…              1 <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>          </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     <span style="text-decoration: underline;">139</span>880 45B93B3397553… Alticola barak…              1 <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>          </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     <span style="text-decoration: underline;">139</span>890 85588495C41CC… Alticola lemmi…              1 <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>          </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     <span style="text-decoration: underline;">139</span>900 4BEBDB13A8E2F… Alticola macro…              1 <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>          </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     <span style="text-decoration: underline;">139</span>910 FBE48923651EF… Alticola monto…              1 <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>          </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 11 more variables: french_name &lt;chr&gt;, phylum &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   family_french_name &lt;chr&gt;, group_id &lt;int&gt;, order_taxon &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   taxon_group &lt;chr&gt;, sort_order &lt;int&gt;, class &lt;chr&gt;, family_name &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   concept_source &lt;chr&gt;, family_english_name &lt;chr&gt;</span></span>
+<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">mice_ids</span><span class="op">$</span><span class="va">species_id</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1331</span></code></pre></div>
 <p>So there are a <strong>lot</strong> of muridae species! But probably not that many in the actual database. We can download all available observations of these species, by passing the <code>species_id</code>s to the <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code> function.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -3574,11 +3577,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Steffi LaZerte, Denis LePage.</p>
+  <p></p>
+<p>Developed by Steffi LaZerte, Denis LePage.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -3586,6 +3591,8 @@
 
   
 
+
+  
 
   </body>
 </html>

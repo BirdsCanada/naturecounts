@@ -1,5 +1,5 @@
 # Save user agent as internal object
-ua <- httr::user_agent(agent = "https://github.com/BirdStudiesCanada/naturecounts")
+ua <- httr::user_agent(agent = "https://github.com/birdscanada/naturecounts")
 
 # API URLs
 meta_info <- dplyr::tribble(

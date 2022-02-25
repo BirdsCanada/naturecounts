@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.2</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.3</span>
       </span>
     </div>
 
@@ -40,7 +42,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -56,8 +58,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/BirdStudiesCanada/naturecounts">
-    <span class="fas fa-github fa-lg"></span>
+  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -71,14 +73,14 @@
 
       
 
-      </header><script src="selecting-fields_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Selecting columns and fields to download</h1>
             
-            <h4 class="date">2021-03-03</h4>
+            <h4 data-toc-skip class="date">2022-02-25</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/selecting-fields.Rmd"><code>vignettes/selecting-fields.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/HEAD/vignettes/selecting-fields.Rmd" class="external-link"><code>vignettes/selecting-fields.Rmd</code></a></small>
       <div class="hidden name"><code>selecting-fields.Rmd</code></div>
 
     </div>
@@ -86,474 +88,474 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts">naturecounts</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></code></pre></div>
 <p>In <code>naturecounts</code>, by default default data is downloaded with a specific set of fields/columns. However, for more advanced applications, users may wish to specify which fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema keeps track of variables used to augment observation data. There are different versions reflecting different collections of variables.</p>
 <blockquote>
-<p>The following examples use the “testuser” user which is not available to you. You can quickly <a href="https://www.birdscanada.org/birdmon/default/register.jsp">sign up for a free account</a> of your own to access and play around with these examples.</p>
+<p>The following examples use the “testuser” user which is not available to you. You can quickly <a href="https://www.birdscanada.org/birdmon/default/register.jsp" class="external-link">sign up for a free account</a> of your own to access and play around with these examples.</p>
 </blockquote>
-<div id="bmde-versions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#bmde-versions" class="anchor"></a>BMDE versions</h2>
+<div class="section level2">
+<h2 id="bmde-versions">BMDE versions<a class="anchor" aria-label="anchor" href="#bmde-versions"></a>
+</h2>
 <p>There are several ways to get more information about these different field/columns sets.</p>
 <ol style="list-style-type: decimal">
 <li>You can get a list of the different versions with the <code><a href="../reference/meta.html">meta_bmde_versions()</a></code> function.</li>
 </ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_bmde_versions</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 8 x 3
-##   descr                                           shorthand version            
-##   &lt;chr&gt;                                           &lt;chr&gt;     &lt;chr&gt;              
-## 1 BMDE 1.38                                       &lt;NA&gt;      BMDE1.38           
-## 2 BMDE 2.0                                        core      BMDE2.00           
-## 3 BMDE 2.0 (extended list)                        extended  BMDE2.00-ext       
-## 4 BMDE 2.0 (minimum)                              minimum   BMDE2.00-min       
-## 5 Banding extension to BMDE 2.0                   &lt;NA&gt;      BMDE-BAND-2.00     
-## 6 Monarch Knowledge Network extension to BMDE 2.0 &lt;NA&gt;      BMDE-MKN-2.00      
-## 7 Nest record extension to BMDE 2.0               &lt;NA&gt;      BMDE-NEST-2.00     
-## 8 Nest record extension (visit data) to BMDE 2.0  &lt;NA&gt;      BMDE-NESTVISIT-2.00</code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 8 × 3</span></span>
+<span class="co">##   descr                                           shorthand version            </span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> BMDE 1.38                                       <span style="color: #BB0000;">NA</span>        BMDE1.38           </span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> BMDE 2.0                                        core      BMDE2.00           </span>
+<span class="co">## <span style="color: #BCBCBC;">3</span> BMDE 2.0 (extended list)                        extended  BMDE2.00-ext       </span>
+<span class="co">## <span style="color: #BCBCBC;">4</span> BMDE 2.0 (minimum)                              minimum   BMDE2.00-min       </span>
+<span class="co">## <span style="color: #BCBCBC;">5</span> Banding extension to BMDE 2.0                   <span style="color: #BB0000;">NA</span>        BMDE-BAND-2.00     </span>
+<span class="co">## <span style="color: #BCBCBC;">6</span> Monarch Knowledge Network extension to BMDE 2.0 <span style="color: #BB0000;">NA</span>        BMDE-MKN-2.00      </span>
+<span class="co">## <span style="color: #BCBCBC;">7</span> Nest record extension to BMDE 2.0               <span style="color: #BB0000;">NA</span>        BMDE-NEST-2.00     </span>
+<span class="co">## <span style="color: #BCBCBC;">8</span> Nest record extension (visit data) to BMDE 2.0  <span style="color: #BB0000;">NA</span>        BMDE-NESTVISIT-2.00</span></code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>You can get a list of the specific fields/columns included in each version using the <code><a href="../reference/meta.html">meta_bmde_fields()</a></code> function</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"BMDE-BAND-2.00"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 6 x 3
-##   field_order version        local_name            
-##         &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;                 
-## 1           1 BMDE-BAND-2.00 GlobalUniqueIdentifier
-## 2           2 BMDE-BAND-2.00 DateLastModified      
-## 3           3 BMDE-BAND-2.00 BasisOfRecord         
-## 4           4 BMDE-BAND-2.00 InstitutionCode       
-## 5           5 BMDE-BAND-2.00 CollectionCode        
-## 6           6 BMDE-BAND-2.00 CatalogNumber</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"BMDE-BAND-2.00"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 6 × 3</span></span>
+<span class="co">##   field_order version        local_name            </span>
+<span class="co">##         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span>           1 BMDE-BAND-2.00 GlobalUniqueIdentifier</span>
+<span class="co">## <span style="color: #BCBCBC;">2</span>           2 BMDE-BAND-2.00 DateLastModified      </span>
+<span class="co">## <span style="color: #BCBCBC;">3</span>           3 BMDE-BAND-2.00 BasisOfRecord         </span>
+<span class="co">## <span style="color: #BCBCBC;">4</span>           4 BMDE-BAND-2.00 InstitutionCode       </span>
+<span class="co">## <span style="color: #BCBCBC;">5</span>           5 BMDE-BAND-2.00 CollectionCode        </span>
+<span class="co">## <span style="color: #BCBCBC;">6</span>           6 BMDE-BAND-2.00 CatalogNumber</span></code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>You can see which BMDE versions are used by different collections by looking at the metadata associated with that collection.</li>
 </ol>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 6 x 11
-##   bmdr_code bmde_version project_id n_locations collection_name… collection
-##   &lt;chr&gt;     &lt;chr&gt;             &lt;int&gt;       &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;     
-## 1 ABATLAS1  BMDE2.00           1042        2209 Atlas des oisea… ABATLAS1  
-## 2 ABATLAS2  BMDE2.00           1042        5359 Atlas des oisea… ABATLAS2  
-## 3 ABBIRDRE… BMDE2.00           1042       21962 Observations d'… ABBIRDRECS
-## 4 ABOWLS    BMDE2.00           1012          NA Inventaire des … ABOWLS    
-## 5 ATBBS     BMDE2.00           1033          NA Programme de su… ATBBS     
-## 6 ATOWLS    BMDE2.00           1011        1846 Inventaire des … ATOWLS    
-## # … with 5 more variables: min_year &lt;int&gt;, max_year &lt;int&gt;,
-## #   collection_name &lt;chr&gt;, akn_level &lt;int&gt;, n_records &lt;int&gt;</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 6 × 11</span></span>
+<span class="co">##   bmdr_code  bmde_version project_id n_locations collection_name_fr   collection</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> ABATLAS1   BMDE2.00           <span style="text-decoration: underline;">1</span>042        <span style="text-decoration: underline;">2</span>209 Atlas des oiseaux n… ABATLAS1  </span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> ABATLAS2   BMDE2.00           <span style="text-decoration: underline;">1</span>042        <span style="text-decoration: underline;">5</span>359 Atlas des oiseaux n… ABATLAS2  </span>
+<span class="co">## <span style="color: #BCBCBC;">3</span> ABBIRDRECS BMDE2.00           <span style="text-decoration: underline;">1</span>042       <span style="text-decoration: underline;">21</span>962 Observations d'oise… ABBIRDRECS</span>
+<span class="co">## <span style="color: #BCBCBC;">4</span> ATOWLS     BMDE2.00           <span style="text-decoration: underline;">1</span>011        <span style="text-decoration: underline;">1</span>848 Inventaire des hibo… ATOWLS    </span>
+<span class="co">## <span style="color: #BCBCBC;">5</span> BBS        BMDE2.00           <span style="text-decoration: underline;">1</span>019        <span style="text-decoration: underline;">5</span>009 Relevés des oiseaux… BBS       </span>
+<span class="co">## <span style="color: #BCBCBC;">6</span> BBS50      BMDE2.00           <span style="text-decoration: underline;">1</span>019       <span style="text-decoration: underline;">20</span>290 Relevés des oiseaux… BBS50     </span>
+<span class="co">## <span style="color: #949494;"># … with 5 more variables: min_year &lt;int&gt;, max_year &lt;int&gt;,</span></span>
+<span class="co">## <span style="color: #949494;">#   collection_name &lt;chr&gt;, akn_level &lt;int&gt;, n_records &lt;int&gt;</span></span></code></pre>
 </div>
-<div id="specifying-fields-by-version" class="section level2">
-<h2 class="hasAnchor">
-<a href="#specifying-fields-by-version" class="anchor"></a>Specifying fields by version</h2>
+<div class="section level2">
+<h2 id="specifying-fields-by-version">Specifying fields by version<a class="anchor" aria-label="anchor" href="#specifying-fields-by-version"></a>
+</h2>
 <p>By default, the <code>BMDE2.00-min</code> or <code>minimum</code> BMDE version is used when downloading data, but you can specify other versions with either the version name, or the shorthand.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"core"</span>, 
                         collection <span class="op">=</span> <span class="st">"ABATLAS2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,
                         username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></code></pre></div>
-<pre><code>##   [1] "record_id"                             
-##   [2] "collection"                            
-##   [3] "project_id"                            
-##   [4] "protocol_id"                           
-##   [5] "protocol_type"                         
-##   [6] "species_id"                            
-##   [7] "statprov_code"                         
-##   [8] "country_code"                          
-##   [9] "SiteCode"                              
-##  [10] "latitude"                              
-##  [11] "longitude"                             
-##  [12] "bcr"                                   
-##  [13] "subnational2_code"                     
-##  [14] "iba_site"                              
-##  [15] "utm_square"                            
-##  [16] "survey_year"                           
-##  [17] "survey_month"                          
-##  [18] "survey_week"                           
-##  [19] "survey_day"                            
-##  [20] "breeding_rank"                         
-##  [21] "GlobalUniqueIdentifier"                
-##  [22] "DateLastModified"                      
-##  [23] "BasisOfRecord"                         
-##  [24] "InstitutionCode"                       
-##  [25] "CollectionCode"                        
-##  [26] "CatalogNumber"                         
-##  [27] "ScientificName"                        
-##  [28] "HigherTaxon"                           
-##  [29] "Kingdom"                               
-##  [30] "Phylum"                                
-##  [31] "Class"                                 
-##  [32] "OrderTaxon"                            
-##  [33] "Family"                                
-##  [34] "Genus"                                 
-##  [35] "SpecificEpithet"                       
-##  [36] "InfraspecificRank"                     
-##  [37] "InfraspecificEpithet"                  
-##  [38] "ScientificNameAuthor"                  
-##  [39] "IdentificationQualifier"               
-##  [40] "HigherGeography"                       
-##  [41] "Continent"                             
-##  [42] "WaterBody"                             
-##  [43] "IslandGroup"                           
-##  [44] "Island"                                
-##  [45] "Country"                               
-##  [46] "StateProvince"                         
-##  [47] "County"                                
-##  [48] "Locality"                              
-##  [49] "MinimumElevationInMeters"              
-##  [50] "MaximumElevationInMeters"              
-##  [51] "MinimumDepthInMeters"                  
-##  [52] "MaximumDepthInMeters"                  
-##  [53] "DecimalLatitude"                       
-##  [54] "DecimalLongitude"                      
-##  [55] "GeodeticDatum"                         
-##  [56] "CoordinateUncertaintyInMeters"         
-##  [57] "YearCollected"                         
-##  [58] "MonthCollected"                        
-##  [59] "DayCollected"                          
-##  [60] "TimeCollected"                         
-##  [61] "JulianDay"                             
-##  [62] "Collector"                             
-##  [63] "Sex"                                   
-##  [64] "LifeStage"                             
-##  [65] "ImageURL"                              
-##  [66] "RelatedInformation"                    
-##  [67] "CollectorNumber"                       
-##  [68] "FieldNumber"                           
-##  [69] "FieldNotes"                            
-##  [70] "OriginalCoordinatesSystem"             
-##  [71] "LatLongComments"                       
-##  [72] "GeoreferenceMethod"                    
-##  [73] "GeoreferenceReferences"                
-##  [74] "GeoreferenceVerificationStatus"        
-##  [75] "Remarks"                               
-##  [76] "FootprintWKT"                          
-##  [77] "FootprintSRS"                          
-##  [78] "ProjectCode"                           
-##  [79] "ProtocolType"                          
-##  [80] "ProtocolCode"                          
-##  [81] "ProtocolSpeciesTargeted"               
-##  [82] "ProtocolReference"                     
-##  [83] "ProtocolURL"                           
-##  [84] "SurveyAreaIdentifier"                  
-##  [85] "SurveyAreaSize"                        
-##  [86] "SurveyAreaPercentageCovered"           
-##  [87] "SurveyAreaShape"                       
-##  [88] "SurveyAreaLongAxisLength"              
-##  [89] "SurveyAreaShortAxisLength"             
-##  [90] "SurveyAreaLongAxisOrientation"         
-##  [91] "CoordinatesScope"                      
-##  [92] "SamplingEventIdentifier"               
-##  [93] "SamplingEventStructure"                
-##  [94] "RouteIdentifier"                       
-##  [95] "TimeObservationsStarted"               
-##  [96] "TimeObservationsEnded"                 
-##  [97] "DurationInHours"                       
-##  [98] "TimeIntervalStarted"                   
-##  [99] "TimeIntervalEnded"                     
-## [100] "TimeIntervalsAdditive"                 
-## [101] "NumberOfObservers"                     
-## [102] "EffortMeasurement1"                    
-## [103] "EffortUnits1"                          
-## [104] "EffortMeasurement2"                    
-## [105] "EffortUnits2"                          
-## [106] "EffortMeasurement3"                    
-## [107] "EffortUnits3"                          
-## [108] "EffortMeasurement4"                    
-## [109] "EffortUnits4"                          
-## [110] "EffortMeasurement5"                    
-## [111] "EffortUnits5"                          
-## [112] "EffortMeasurement6"                    
-## [113] "EffortUnits6"                          
-## [114] "EffortMeasurement7"                    
-## [115] "EffortUnits7"                          
-## [116] "EffortMeasurement8"                    
-## [117] "EffortUnits8"                          
-## [118] "EffortMeasurement9"                    
-## [119] "EffortUnits9"                          
-## [120] "EffortMeasurement10"                   
-## [121] "EffortUnits10"                         
-## [122] "EffortMeasurement11"                   
-## [123] "EffortUnits11"                         
-## [124] "EffortMeasurement12"                   
-## [125] "EffortUnits12"                         
-## [126] "EffortMeasurement13"                   
-## [127] "EffortUnits13"                         
-## [128] "EffortMeasurement14"                   
-## [129] "EffortUnits14"                         
-## [130] "EffortMeasurement15"                   
-## [131] "EffortUnits15"                         
-## [132] "EffortMeasurement16"                   
-## [133] "EffortUnits16"                         
-## [134] "EffortMeasurement17"                   
-## [135] "EffortUnits17"                         
-## [136] "EffortMeasurement18"                   
-## [137] "EffortUnits18"                         
-## [138] "NoObservations"                        
-## [139] "DistanceFromObserver"                  
-## [140] "DistanceFromObserverMin"               
-## [141] "DistanceFromObserverMax"               
-## [142] "DistanceFromStart"                     
-## [143] "BearingInDegrees"                      
-## [144] "SpecimenDecimalLatitude"               
-## [145] "SpecimenDecimalLongitude"              
-## [146] "SpecimenGeodeticDatum"                 
-## [147] "SpecimenUTMZone"                       
-## [148] "SpecimenUTMNorthing"                   
-## [149] "SpecimenUTMEasting"                    
-## [150] "ObservationCount"                      
-## [151] "ObservationDescriptor"                 
-## [152] "ObservationCount2"                     
-## [153] "ObservationDescriptor2"                
-## [154] "ObservationCount3"                     
-## [155] "ObservationDescriptor3"                
-## [156] "ObservationCount4"                     
-## [157] "ObservationDescriptor4"                
-## [158] "ObservationCount5"                     
-## [159] "ObservationDescriptor5"                
-## [160] "ObservationCount6"                     
-## [161] "ObservationDescriptor6"                
-## [162] "ObsCountAtLeast"                       
-## [163] "ObsCountAtMost"                        
-## [164] "ObservationDate"                       
-## [165] "DateUncertaintyInDays"                 
-## [166] "AllIndividualsReported"                
-## [167] "AllSpeciesReported"                    
-## [168] "UTMZone"                               
-## [169] "UTMNorthing"                           
-## [170] "UTMEasting"                            
-## [171] "CoordinatesUncertaintyInDecimalDegrees"
-## [172] "CommonName"                            
-## [173] "RecordPermissions"                     
-## [174] "MultiScientificName1"                  
-## [175] "MultiScientificName2"                  
-## [176] "MultiScientificName3"                  
-## [177] "MultiScientificName4"                  
-## [178] "MultiScientificName5"                  
-## [179] "MultiScientificName6"                  
-## [180] "TaxonomicAuthorityAuthors"             
-## [181] "TaxonomicAuthorityVersion"             
-## [182] "TaxonomicAuthorityYear"                
-## [183] "SpeciesCode"                           
-## [184] "TaxonConceptID"                        
-## [185] "BreedingBirdAtlasCode"                 
-## [186] "HabitatDescription"                    
-## [187] "Remarks2"                              
-## [188] "LastModifiedAction"                    
-## [189] "RecordReviewStatus"</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##   [1] "record_id"                             </span>
+<span class="co">##   [2] "collection"                            </span>
+<span class="co">##   [3] "project_id"                            </span>
+<span class="co">##   [4] "protocol_id"                           </span>
+<span class="co">##   [5] "protocol_type"                         </span>
+<span class="co">##   [6] "species_id"                            </span>
+<span class="co">##   [7] "statprov_code"                         </span>
+<span class="co">##   [8] "country_code"                          </span>
+<span class="co">##   [9] "SiteCode"                              </span>
+<span class="co">##  [10] "latitude"                              </span>
+<span class="co">##  [11] "longitude"                             </span>
+<span class="co">##  [12] "bcr"                                   </span>
+<span class="co">##  [13] "subnational2_code"                     </span>
+<span class="co">##  [14] "iba_site"                              </span>
+<span class="co">##  [15] "utm_square"                            </span>
+<span class="co">##  [16] "survey_year"                           </span>
+<span class="co">##  [17] "survey_month"                          </span>
+<span class="co">##  [18] "survey_week"                           </span>
+<span class="co">##  [19] "survey_day"                            </span>
+<span class="co">##  [20] "breeding_rank"                         </span>
+<span class="co">##  [21] "GlobalUniqueIdentifier"                </span>
+<span class="co">##  [22] "DateLastModified"                      </span>
+<span class="co">##  [23] "BasisOfRecord"                         </span>
+<span class="co">##  [24] "InstitutionCode"                       </span>
+<span class="co">##  [25] "CollectionCode"                        </span>
+<span class="co">##  [26] "CatalogNumber"                         </span>
+<span class="co">##  [27] "ScientificName"                        </span>
+<span class="co">##  [28] "HigherTaxon"                           </span>
+<span class="co">##  [29] "Kingdom"                               </span>
+<span class="co">##  [30] "Phylum"                                </span>
+<span class="co">##  [31] "Class"                                 </span>
+<span class="co">##  [32] "OrderTaxon"                            </span>
+<span class="co">##  [33] "Family"                                </span>
+<span class="co">##  [34] "Genus"                                 </span>
+<span class="co">##  [35] "SpecificEpithet"                       </span>
+<span class="co">##  [36] "InfraspecificRank"                     </span>
+<span class="co">##  [37] "InfraspecificEpithet"                  </span>
+<span class="co">##  [38] "ScientificNameAuthor"                  </span>
+<span class="co">##  [39] "IdentificationQualifier"               </span>
+<span class="co">##  [40] "HigherGeography"                       </span>
+<span class="co">##  [41] "Continent"                             </span>
+<span class="co">##  [42] "WaterBody"                             </span>
+<span class="co">##  [43] "IslandGroup"                           </span>
+<span class="co">##  [44] "Island"                                </span>
+<span class="co">##  [45] "Country"                               </span>
+<span class="co">##  [46] "StateProvince"                         </span>
+<span class="co">##  [47] "County"                                </span>
+<span class="co">##  [48] "Locality"                              </span>
+<span class="co">##  [49] "MinimumElevationInMeters"              </span>
+<span class="co">##  [50] "MaximumElevationInMeters"              </span>
+<span class="co">##  [51] "MinimumDepthInMeters"                  </span>
+<span class="co">##  [52] "MaximumDepthInMeters"                  </span>
+<span class="co">##  [53] "DecimalLatitude"                       </span>
+<span class="co">##  [54] "DecimalLongitude"                      </span>
+<span class="co">##  [55] "GeodeticDatum"                         </span>
+<span class="co">##  [56] "CoordinateUncertaintyInMeters"         </span>
+<span class="co">##  [57] "YearCollected"                         </span>
+<span class="co">##  [58] "MonthCollected"                        </span>
+<span class="co">##  [59] "DayCollected"                          </span>
+<span class="co">##  [60] "TimeCollected"                         </span>
+<span class="co">##  [61] "JulianDay"                             </span>
+<span class="co">##  [62] "Collector"                             </span>
+<span class="co">##  [63] "Sex"                                   </span>
+<span class="co">##  [64] "LifeStage"                             </span>
+<span class="co">##  [65] "ImageURL"                              </span>
+<span class="co">##  [66] "RelatedInformation"                    </span>
+<span class="co">##  [67] "CollectorNumber"                       </span>
+<span class="co">##  [68] "FieldNumber"                           </span>
+<span class="co">##  [69] "FieldNotes"                            </span>
+<span class="co">##  [70] "OriginalCoordinatesSystem"             </span>
+<span class="co">##  [71] "LatLongComments"                       </span>
+<span class="co">##  [72] "GeoreferenceMethod"                    </span>
+<span class="co">##  [73] "GeoreferenceReferences"                </span>
+<span class="co">##  [74] "GeoreferenceVerificationStatus"        </span>
+<span class="co">##  [75] "Remarks"                               </span>
+<span class="co">##  [76] "FootprintWKT"                          </span>
+<span class="co">##  [77] "FootprintSRS"                          </span>
+<span class="co">##  [78] "ProjectCode"                           </span>
+<span class="co">##  [79] "ProtocolType"                          </span>
+<span class="co">##  [80] "ProtocolCode"                          </span>
+<span class="co">##  [81] "ProtocolSpeciesTargeted"               </span>
+<span class="co">##  [82] "ProtocolReference"                     </span>
+<span class="co">##  [83] "ProtocolURL"                           </span>
+<span class="co">##  [84] "SurveyAreaIdentifier"                  </span>
+<span class="co">##  [85] "SurveyAreaSize"                        </span>
+<span class="co">##  [86] "SurveyAreaPercentageCovered"           </span>
+<span class="co">##  [87] "SurveyAreaShape"                       </span>
+<span class="co">##  [88] "SurveyAreaLongAxisLength"              </span>
+<span class="co">##  [89] "SurveyAreaShortAxisLength"             </span>
+<span class="co">##  [90] "SurveyAreaLongAxisOrientation"         </span>
+<span class="co">##  [91] "CoordinatesScope"                      </span>
+<span class="co">##  [92] "SamplingEventIdentifier"               </span>
+<span class="co">##  [93] "SamplingEventStructure"                </span>
+<span class="co">##  [94] "RouteIdentifier"                       </span>
+<span class="co">##  [95] "TimeObservationsStarted"               </span>
+<span class="co">##  [96] "TimeObservationsEnded"                 </span>
+<span class="co">##  [97] "DurationInHours"                       </span>
+<span class="co">##  [98] "TimeIntervalStarted"                   </span>
+<span class="co">##  [99] "TimeIntervalEnded"                     </span>
+<span class="co">## [100] "TimeIntervalsAdditive"                 </span>
+<span class="co">## [101] "NumberOfObservers"                     </span>
+<span class="co">## [102] "EffortMeasurement1"                    </span>
+<span class="co">## [103] "EffortUnits1"                          </span>
+<span class="co">## [104] "EffortMeasurement2"                    </span>
+<span class="co">## [105] "EffortUnits2"                          </span>
+<span class="co">## [106] "EffortMeasurement3"                    </span>
+<span class="co">## [107] "EffortUnits3"                          </span>
+<span class="co">## [108] "EffortMeasurement4"                    </span>
+<span class="co">## [109] "EffortUnits4"                          </span>
+<span class="co">## [110] "EffortMeasurement5"                    </span>
+<span class="co">## [111] "EffortUnits5"                          </span>
+<span class="co">## [112] "EffortMeasurement6"                    </span>
+<span class="co">## [113] "EffortUnits6"                          </span>
+<span class="co">## [114] "EffortMeasurement7"                    </span>
+<span class="co">## [115] "EffortUnits7"                          </span>
+<span class="co">## [116] "EffortMeasurement8"                    </span>
+<span class="co">## [117] "EffortUnits8"                          </span>
+<span class="co">## [118] "EffortMeasurement9"                    </span>
+<span class="co">## [119] "EffortUnits9"                          </span>
+<span class="co">## [120] "EffortMeasurement10"                   </span>
+<span class="co">## [121] "EffortUnits10"                         </span>
+<span class="co">## [122] "EffortMeasurement11"                   </span>
+<span class="co">## [123] "EffortUnits11"                         </span>
+<span class="co">## [124] "EffortMeasurement12"                   </span>
+<span class="co">## [125] "EffortUnits12"                         </span>
+<span class="co">## [126] "EffortMeasurement13"                   </span>
+<span class="co">## [127] "EffortUnits13"                         </span>
+<span class="co">## [128] "EffortMeasurement14"                   </span>
+<span class="co">## [129] "EffortUnits14"                         </span>
+<span class="co">## [130] "EffortMeasurement15"                   </span>
+<span class="co">## [131] "EffortUnits15"                         </span>
+<span class="co">## [132] "EffortMeasurement16"                   </span>
+<span class="co">## [133] "EffortUnits16"                         </span>
+<span class="co">## [134] "EffortMeasurement17"                   </span>
+<span class="co">## [135] "EffortUnits17"                         </span>
+<span class="co">## [136] "EffortMeasurement18"                   </span>
+<span class="co">## [137] "EffortUnits18"                         </span>
+<span class="co">## [138] "NoObservations"                        </span>
+<span class="co">## [139] "DistanceFromObserver"                  </span>
+<span class="co">## [140] "DistanceFromObserverMin"               </span>
+<span class="co">## [141] "DistanceFromObserverMax"               </span>
+<span class="co">## [142] "DistanceFromStart"                     </span>
+<span class="co">## [143] "BearingInDegrees"                      </span>
+<span class="co">## [144] "SpecimenDecimalLatitude"               </span>
+<span class="co">## [145] "SpecimenDecimalLongitude"              </span>
+<span class="co">## [146] "SpecimenGeodeticDatum"                 </span>
+<span class="co">## [147] "SpecimenUTMZone"                       </span>
+<span class="co">## [148] "SpecimenUTMNorthing"                   </span>
+<span class="co">## [149] "SpecimenUTMEasting"                    </span>
+<span class="co">## [150] "ObservationCount"                      </span>
+<span class="co">## [151] "ObservationDescriptor"                 </span>
+<span class="co">## [152] "ObservationCount2"                     </span>
+<span class="co">## [153] "ObservationDescriptor2"                </span>
+<span class="co">## [154] "ObservationCount3"                     </span>
+<span class="co">## [155] "ObservationDescriptor3"                </span>
+<span class="co">## [156] "ObservationCount4"                     </span>
+<span class="co">## [157] "ObservationDescriptor4"                </span>
+<span class="co">## [158] "ObservationCount5"                     </span>
+<span class="co">## [159] "ObservationDescriptor5"                </span>
+<span class="co">## [160] "ObservationCount6"                     </span>
+<span class="co">## [161] "ObservationDescriptor6"                </span>
+<span class="co">## [162] "ObsCountAtLeast"                       </span>
+<span class="co">## [163] "ObsCountAtMost"                        </span>
+<span class="co">## [164] "ObservationDate"                       </span>
+<span class="co">## [165] "DateUncertaintyInDays"                 </span>
+<span class="co">## [166] "AllIndividualsReported"                </span>
+<span class="co">## [167] "AllSpeciesReported"                    </span>
+<span class="co">## [168] "UTMZone"                               </span>
+<span class="co">## [169] "UTMNorthing"                           </span>
+<span class="co">## [170] "UTMEasting"                            </span>
+<span class="co">## [171] "CoordinatesUncertaintyInDecimalDegrees"</span>
+<span class="co">## [172] "CommonName"                            </span>
+<span class="co">## [173] "RecordPermissions"                     </span>
+<span class="co">## [174] "MultiScientificName1"                  </span>
+<span class="co">## [175] "MultiScientificName2"                  </span>
+<span class="co">## [176] "MultiScientificName3"                  </span>
+<span class="co">## [177] "MultiScientificName4"                  </span>
+<span class="co">## [178] "MultiScientificName5"                  </span>
+<span class="co">## [179] "MultiScientificName6"                  </span>
+<span class="co">## [180] "TaxonomicAuthorityAuthors"             </span>
+<span class="co">## [181] "TaxonomicAuthorityVersion"             </span>
+<span class="co">## [182] "TaxonomicAuthorityYear"                </span>
+<span class="co">## [183] "SpeciesCode"                           </span>
+<span class="co">## [184] "TaxonConceptID"                        </span>
+<span class="co">## [185] "BreedingBirdAtlasCode"                 </span>
+<span class="co">## [186] "HabitatDescription"                    </span>
+<span class="co">## [187] "Remarks2"                              </span>
+<span class="co">## [188] "LastModifiedAction"                    </span>
+<span class="co">## [189] "RecordReviewStatus"</span></code></pre>
 </div>
-<div id="basic-fields" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-fields" class="anchor"></a>Basic fields</h2>
+<div class="section level2">
+<h2 id="basic-fields">Basic fields<a class="anchor" aria-label="anchor" href="#basic-fields"></a>
+</h2>
 <p>Note that there are extra fields/columns downloaded in every request, which are <strong>in addition</strong> to the BMDE fields. These are additional, basic, indexed fields used in the database.</p>
 <p>You can figure out exactly which fields these are, by removing all the fields from the <code>core</code> BMDE field set.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"core"</span><span class="op">)</span><span class="op">$</span><span class="va">local_name</span><span class="op">]</span></code></pre></div>
-<pre><code>##  [1] "record_id"         "collection"        "project_id"       
-##  [4] "protocol_id"       "protocol_type"     "species_id"       
-##  [7] "statprov_code"     "country_code"      "SiteCode"         
-## [10] "latitude"          "longitude"         "bcr"              
-## [13] "subnational2_code" "iba_site"          "utm_square"       
-## [16] "survey_year"       "survey_month"      "survey_week"      
-## [19] "survey_day"        "breeding_rank"</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"core"</span><span class="op">)</span><span class="op">$</span><span class="va">local_name</span><span class="op">]</span></code></pre></div>
+<pre><code><span class="co">##  [1] "record_id"         "collection"        "project_id"       </span>
+<span class="co">##  [4] "protocol_id"       "protocol_type"     "species_id"       </span>
+<span class="co">##  [7] "statprov_code"     "country_code"      "SiteCode"         </span>
+<span class="co">## [10] "latitude"          "longitude"         "bcr"              </span>
+<span class="co">## [13] "subnational2_code" "iba_site"          "utm_square"       </span>
+<span class="co">## [16] "survey_year"       "survey_month"      "survey_week"      </span>
+<span class="co">## [19] "survey_day"        "breeding_rank"</span></code></pre>
 </div>
-<div id="custom-fields" class="section level2">
-<h2 class="hasAnchor">
-<a href="#custom-fields" class="anchor"></a>Custom fields</h2>
+<div class="section level2">
+<h2 id="custom-fields">Custom fields<a class="anchor" aria-label="anchor" href="#custom-fields"></a>
+</h2>
 <p>The basic fields will <strong>always</strong> be included in any data request. However, you can choose which fields/columns to include in addition to these basic fields, by specifying <code>fields_set = custom</code>, and listing all additional <code>fields</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"custom"</span>, 
-                        fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"SamplingEventIdentifier"</span><span class="op">)</span>, 
+                        fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"SamplingEventIdentifier"</span><span class="op">)</span>, 
                         collection <span class="op">=</span> <span class="st">"ABATLAS2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,
                         username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></code></pre></div>
-<pre><code>##   record_id collection project_id protocol_id protocol_type species_id
-## 1 225121054   ABATLAS2       1048          NA            NA      19360
-## 2 225167193   ABATLAS2       1048          NA            NA      19360
-## 3 225185535   ABATLAS2       1048          NA            NA      19360
-## 4 225185857   ABATLAS2       1048          NA            NA      19360
-## 5 225387824   ABATLAS2       1048          NA            NA      19360
-## 6 225389502   ABATLAS2       1048          NA            NA      19360
-##   statprov_code country_code SiteCode latitude longitude bcr subnational2_code
-## 1            AB           CA    12049 53.98632 -111.2793   6          CA.AB.12
-## 2            AB           CA    45868 53.34350 -114.0790   6          CA.AB.11
-## 3            AB           CA    45940 53.52760 -113.2996  11          CA.AB.11
-## 4            AB           CA    45988 53.56476 -113.4267  11          CA.AB.11
-## 5            AB           CA    15330 53.95000 -115.1361   6          CA.AB.13
-## 6            AB           CA    45851 53.53472 -113.6407  11          CA.AB.11
-##   iba_site utm_square survey_year survey_month survey_week survey_day
-## 1      N/A    12UVE88        2000            2           3         23
-## 2      N/A    11UPV91        2005            5           1          7
-## 3      N/A    12UUE43        2005            4           1          4
-## 4      N/A    12UUE33        2005            5           2         16
-## 5      N/A    11UPV27        2004           12           1          7
-## 6      N/A    12UUE23        2005            4           4         26
-##   breeding_rank Sex SamplingEventIdentifier
-## 1             0  NA                    5863
-## 2             0  NA                   92650
-## 3             0  NA                   92829
-## 4             0  NA                   92900
-## 5             0  NA                   11937
-## 6             0  NA                   92626</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##   record_id collection project_id protocol_id protocol_type species_id</span>
+<span class="co">## 1 225121054   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 2 225167193   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 3 225185535   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 4 225185857   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 5 225387824   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 6 225389502   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">##   statprov_code country_code SiteCode latitude longitude bcr subnational2_code</span>
+<span class="co">## 1            AB           CA    12049 53.98632 -111.2793   6          CA.AB.12</span>
+<span class="co">## 2            AB           CA    45868 53.34350 -114.0790   6          CA.AB.11</span>
+<span class="co">## 3            AB           CA    45940 53.52760 -113.2996  11          CA.AB.11</span>
+<span class="co">## 4            AB           CA    45988 53.56476 -113.4267  11          CA.AB.11</span>
+<span class="co">## 5            AB           CA    15330 53.95000 -115.1361   6          CA.AB.13</span>
+<span class="co">## 6            AB           CA    45851 53.53472 -113.6407  11          CA.AB.11</span>
+<span class="co">##   iba_site utm_square survey_year survey_month survey_week survey_day</span>
+<span class="co">## 1      N/A    12UVE88        2000            2           3         23</span>
+<span class="co">## 2      N/A    11UPV91        2005            5           1          7</span>
+<span class="co">## 3      N/A    12UUE43        2005            4           1          4</span>
+<span class="co">## 4      N/A    12UUE33        2005            5           2         16</span>
+<span class="co">## 5      N/A    11UPV27        2004           12           1          7</span>
+<span class="co">## 6      N/A    12UUE23        2005            4           4         26</span>
+<span class="co">##   breeding_rank Sex SamplingEventIdentifier</span>
+<span class="co">## 1             0  NA                    5863</span>
+<span class="co">## 2             0  NA                   92650</span>
+<span class="co">## 3             0  NA                   92829</span>
+<span class="co">## 4             0  NA                   92900</span>
+<span class="co">## 5             0  NA                   11937</span>
+<span class="co">## 6             0  NA                   92626</span></code></pre>
 </div>
-<div id="adding-specific-fields-to-a-bmde-version" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-specific-fields-to-a-bmde-version" class="anchor"></a>Adding specific fields to a BMDE version</h2>
+<div class="section level2">
+<h2 id="adding-specific-fields-to-a-bmde-version">Adding specific fields to a BMDE version<a class="anchor" aria-label="anchor" href="#adding-specific-fields-to-a-bmde-version"></a>
+</h2>
 <p>In a more complex example, if you wished to download data with the <code>minimum</code> set of BMDE fields, but including a couple of extra fields, you could combine the core fields with the extras you want, and pass them on as a custom field set.</p>
 <p>For example, first collect the minimum field/column names.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_fields</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"minimum"</span><span class="op">)</span><span class="op">$</span><span class="va">local_name</span>
 <span class="va">my_fields</span></code></pre></div>
-<pre><code>##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          
-##  [3] "Locality"                "TimeCollected"          
-##  [5] "CollectorNumber"         "FieldNumber"            
-##  [7] "Remarks"                 "ProjectCode"            
-##  [9] "ProtocolType"            "ProtocolCode"           
-## [11] "ProtocolURL"             "SurveyAreaIdentifier"   
-## [13] "SamplingEventIdentifier" "SamplingEventStructure" 
-## [15] "RouteIdentifier"         "TimeObservationsStarted"
-## [17] "TimeObservationsEnded"   "DurationInHours"        
-## [19] "TimeIntervalStarted"     "TimeIntervalEnded"      
-## [21] "TimeIntervalsAdditive"   "NumberOfObservers"      
-## [23] "NoObservations"          "ObservationCount"       
-## [25] "ObservationDescriptor"   "ObservationCount2"      
-## [27] "ObservationDescriptor2"  "ObservationCount3"      
-## [29] "ObservationDescriptor3"  "ObservationCount4"      
-## [31] "ObservationDescriptor4"  "ObservationCount5"      
-## [33] "ObservationDescriptor5"  "ObservationCount6"      
-## [35] "ObservationDescriptor6"  "AllIndividualsReported" 
-## [37] "AllSpeciesReported"</code></pre>
+<pre><code><span class="co">##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          </span>
+<span class="co">##  [3] "Locality"                "TimeCollected"          </span>
+<span class="co">##  [5] "CollectorNumber"         "FieldNumber"            </span>
+<span class="co">##  [7] "Remarks"                 "ProjectCode"            </span>
+<span class="co">##  [9] "ProtocolType"            "ProtocolCode"           </span>
+<span class="co">## [11] "ProtocolURL"             "SurveyAreaIdentifier"   </span>
+<span class="co">## [13] "SamplingEventIdentifier" "SamplingEventStructure" </span>
+<span class="co">## [15] "RouteIdentifier"         "TimeObservationsStarted"</span>
+<span class="co">## [17] "TimeObservationsEnded"   "DurationInHours"        </span>
+<span class="co">## [19] "TimeIntervalStarted"     "TimeIntervalEnded"      </span>
+<span class="co">## [21] "TimeIntervalsAdditive"   "NumberOfObservers"      </span>
+<span class="co">## [23] "NoObservations"          "ObservationCount"       </span>
+<span class="co">## [25] "ObservationDescriptor"   "ObservationCount2"      </span>
+<span class="co">## [27] "ObservationDescriptor2"  "ObservationCount3"      </span>
+<span class="co">## [29] "ObservationDescriptor3"  "ObservationCount4"      </span>
+<span class="co">## [31] "ObservationDescriptor4"  "ObservationCount5"      </span>
+<span class="co">## [33] "ObservationDescriptor5"  "ObservationCount6"      </span>
+<span class="co">## [35] "ObservationDescriptor6"  "AllIndividualsReported" </span>
+<span class="co">## [37] "AllSpeciesReported"</span></code></pre>
 <p>Then add in the extra fields.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_fields</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">my_fields</span>, <span class="st">"Sex"</span>, <span class="st">"LifeStage"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">my_fields</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">my_fields</span>, <span class="st">"Sex"</span>, <span class="st">"LifeStage"</span><span class="op">)</span>
 <span class="va">my_fields</span></code></pre></div>
-<pre><code>##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          
-##  [3] "Locality"                "TimeCollected"          
-##  [5] "CollectorNumber"         "FieldNumber"            
-##  [7] "Remarks"                 "ProjectCode"            
-##  [9] "ProtocolType"            "ProtocolCode"           
-## [11] "ProtocolURL"             "SurveyAreaIdentifier"   
-## [13] "SamplingEventIdentifier" "SamplingEventStructure" 
-## [15] "RouteIdentifier"         "TimeObservationsStarted"
-## [17] "TimeObservationsEnded"   "DurationInHours"        
-## [19] "TimeIntervalStarted"     "TimeIntervalEnded"      
-## [21] "TimeIntervalsAdditive"   "NumberOfObservers"      
-## [23] "NoObservations"          "ObservationCount"       
-## [25] "ObservationDescriptor"   "ObservationCount2"      
-## [27] "ObservationDescriptor2"  "ObservationCount3"      
-## [29] "ObservationDescriptor3"  "ObservationCount4"      
-## [31] "ObservationDescriptor4"  "ObservationCount5"      
-## [33] "ObservationDescriptor5"  "ObservationCount6"      
-## [35] "ObservationDescriptor6"  "AllIndividualsReported" 
-## [37] "AllSpeciesReported"      "Sex"                    
-## [39] "LifeStage"</code></pre>
+<pre><code><span class="co">##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          </span>
+<span class="co">##  [3] "Locality"                "TimeCollected"          </span>
+<span class="co">##  [5] "CollectorNumber"         "FieldNumber"            </span>
+<span class="co">##  [7] "Remarks"                 "ProjectCode"            </span>
+<span class="co">##  [9] "ProtocolType"            "ProtocolCode"           </span>
+<span class="co">## [11] "ProtocolURL"             "SurveyAreaIdentifier"   </span>
+<span class="co">## [13] "SamplingEventIdentifier" "SamplingEventStructure" </span>
+<span class="co">## [15] "RouteIdentifier"         "TimeObservationsStarted"</span>
+<span class="co">## [17] "TimeObservationsEnded"   "DurationInHours"        </span>
+<span class="co">## [19] "TimeIntervalStarted"     "TimeIntervalEnded"      </span>
+<span class="co">## [21] "TimeIntervalsAdditive"   "NumberOfObservers"      </span>
+<span class="co">## [23] "NoObservations"          "ObservationCount"       </span>
+<span class="co">## [25] "ObservationDescriptor"   "ObservationCount2"      </span>
+<span class="co">## [27] "ObservationDescriptor2"  "ObservationCount3"      </span>
+<span class="co">## [29] "ObservationDescriptor3"  "ObservationCount4"      </span>
+<span class="co">## [31] "ObservationDescriptor4"  "ObservationCount5"      </span>
+<span class="co">## [33] "ObservationDescriptor5"  "ObservationCount6"      </span>
+<span class="co">## [35] "ObservationDescriptor6"  "AllIndividualsReported" </span>
+<span class="co">## [37] "AllSpeciesReported"      "Sex"                    </span>
+<span class="co">## [39] "LifeStage"</span></code></pre>
 <p>Now download the data.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"custom"</span>, 
                         fields <span class="op">=</span> <span class="va">my_fields</span>, 
                         collection <span class="op">=</span> <span class="st">"ABATLAS2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,
                         username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></code></pre></div>
-<pre><code>##   record_id collection project_id protocol_id protocol_type species_id
-## 1 225121054   ABATLAS2       1048          NA            NA      19360
-## 2 225167193   ABATLAS2       1048          NA            NA      19360
-## 3 225185535   ABATLAS2       1048          NA            NA      19360
-## 4 225185857   ABATLAS2       1048          NA            NA      19360
-## 5 225387824   ABATLAS2       1048          NA            NA      19360
-## 6 225389502   ABATLAS2       1048          NA            NA      19360
-##   statprov_code country_code SiteCode latitude longitude bcr subnational2_code
-## 1            AB           CA    12049 53.98632 -111.2793   6          CA.AB.12
-## 2            AB           CA    45868 53.34350 -114.0790   6          CA.AB.11
-## 3            AB           CA    45940 53.52760 -113.2996  11          CA.AB.11
-## 4            AB           CA    45988 53.56476 -113.4267  11          CA.AB.11
-## 5            AB           CA    15330 53.95000 -115.1361   6          CA.AB.13
-## 6            AB           CA    45851 53.53472 -113.6407  11          CA.AB.11
-##   iba_site utm_square survey_year survey_month survey_week survey_day
-## 1      N/A    12UVE88        2000            2           3         23
-## 2      N/A    11UPV91        2005            5           1          7
-## 3      N/A    12UUE43        2005            4           1          4
-## 4      N/A    12UUE33        2005            5           2         16
-## 5      N/A    11UPV27        2004           12           1          7
-## 6      N/A    12UUE23        2005            4           4         26
-##   breeding_rank                GlobalUniqueIdentifier FieldNumber
-## 1             0  URN:NatureAlberta:ABATLAS2:5863-NOCA          NA
-## 2             0 URN:NatureAlberta:ABATLAS2:92650-NOCA          NA
-## 3             0 URN:NatureAlberta:ABATLAS2:92829-NOCA          NA
-## 4             0 URN:NatureAlberta:ABATLAS2:92900-NOCA          NA
-## 5             0 URN:NatureAlberta:ABATLAS2:11937-NOCA          NA
-## 6             0 URN:NatureAlberta:ABATLAS2:92626-NOCA          NA
-##   DurationInHours ObservationDescriptor5               Remarks
-## 1               8                     NA              uncommon
-## 2               3                     NA                  &lt;NA&gt;
-## 3               3                     NA Spotted at the feeder
-## 4               3                     NA                  &lt;NA&gt;
-## 5               3                     NA                  &lt;NA&gt;
-## 6               3                     NA                  &lt;NA&gt;
-##   ObservationDescriptor6 ObservationDescriptor3 ObservationDescriptor4
-## 1                     NA                     NA                     NA
-## 2                     NA                     NA                     NA
-## 3                     NA                     NA                     NA
-## 4                     NA                     NA                     NA
-## 5                     NA                     NA                     NA
-## 6                     NA                     NA                     NA
-##   ObservationDescriptor ProtocolCode ObservationCount ObservationDescriptor2
-## 1                    NA           NA                2                     NA
-## 2                    NA           NA                1                     NA
-## 3                    NA           NA                1                     NA
-## 4                    NA           NA                1                     NA
-## 5                    NA           NA                1                     NA
-## 6                    NA           NA                1                     NA
-##   TimeIntervalEnded                      Locality SamplingEventIdentifier
-## 1                NA All areas within count circle                    5863
-## 2                NA                          PK91                   92650
-## 3                NA           Sherwood Park, UQ43                   92829
-## 4                NA      50st and Ada blvd., UQ33                   92900
-## 5                NA                   Mayerthorpe                   11937
-## 6                NA                          UQ23                   92626
-##   SurveyAreaIdentifier SamplingEventStructure TimeCollected
-## 1                12049                     NA            NA
-## 2                45868                     NA            NA
-## 3                45940                     NA            NA
-## 4                45988                     NA            NA
-## 5                15330                     NA            NA
-## 6                45851                     NA            NA
-##   TimeObservationsEnded TimeObservationsStarted Sex LifeStage CollectorNumber
-## 1                    NA                09:00:00  NA        NA            5017
-## 2                    NA                06:00:00  NA        NA            4882
-## 3                    NA                06:00:00  NA        NA            4882
-## 4                    NA                06:00:00  NA        NA           10197
-## 5                    NA                06:00:00  NA        NA            6810
-## 6                    NA                06:00:00  NA        NA            4882
-##   CatalogNumber AllSpeciesReported ProjectCode RouteIdentifier
-## 1     5863-NOCA            Unknown    ABATLAS2              NA
-## 2    92650-NOCA            Unknown    ABATLAS2              NA
-## 3    92829-NOCA            Unknown    ABATLAS2              NA
-## 4    92900-NOCA            Unknown    ABATLAS2              NA
-## 5    11937-NOCA            Unknown    ABATLAS2              NA
-## 6    92626-NOCA            Unknown    ABATLAS2              NA
-##   AllIndividualsReported TimeIntervalsAdditive ProtocolURL NumberOfObservers
-## 1                     NA                    NA          NA                 0
-## 2                     NA                    NA          NA                 1
-## 3                     NA                    NA          NA                 1
-## 4                     NA                    NA          NA                 1
-## 5                     NA                    NA          NA                 0
-## 6                     NA                    NA          NA                 1
-##   ObservationCount2 ObservationCount6 ObservationCount5            ProtocolType
-## 1                NA                NA                NA AT: Breeding Bird Atlas
-## 2                NA                NA                NA AT: Breeding Bird Atlas
-## 3                NA                NA                NA AT: Breeding Bird Atlas
-## 4                NA                NA                NA AT: Breeding Bird Atlas
-## 5                NA                NA                NA AT: Breeding Bird Atlas
-## 6                NA                NA                NA AT: Breeding Bird Atlas
-##   NoObservations ObservationCount4 ObservationCount3 TimeIntervalStarted
-## 1             NA                NA                NA                  NA
-## 2             NA                NA                NA                  NA
-## 3             NA                NA                NA                  NA
-## 4             NA                NA                NA                  NA
-## 5             NA                NA                NA                  NA
-## 6             NA                NA                NA                  NA</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##   record_id collection project_id protocol_id protocol_type species_id</span>
+<span class="co">## 1 225121054   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 2 225167193   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 3 225185535   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 4 225185857   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 5 225387824   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">## 6 225389502   ABATLAS2       1048          NA            NA      19360</span>
+<span class="co">##   statprov_code country_code SiteCode latitude longitude bcr subnational2_code</span>
+<span class="co">## 1            AB           CA    12049 53.98632 -111.2793   6          CA.AB.12</span>
+<span class="co">## 2            AB           CA    45868 53.34350 -114.0790   6          CA.AB.11</span>
+<span class="co">## 3            AB           CA    45940 53.52760 -113.2996  11          CA.AB.11</span>
+<span class="co">## 4            AB           CA    45988 53.56476 -113.4267  11          CA.AB.11</span>
+<span class="co">## 5            AB           CA    15330 53.95000 -115.1361   6          CA.AB.13</span>
+<span class="co">## 6            AB           CA    45851 53.53472 -113.6407  11          CA.AB.11</span>
+<span class="co">##   iba_site utm_square survey_year survey_month survey_week survey_day</span>
+<span class="co">## 1      N/A    12UVE88        2000            2           3         23</span>
+<span class="co">## 2      N/A    11UPV91        2005            5           1          7</span>
+<span class="co">## 3      N/A    12UUE43        2005            4           1          4</span>
+<span class="co">## 4      N/A    12UUE33        2005            5           2         16</span>
+<span class="co">## 5      N/A    11UPV27        2004           12           1          7</span>
+<span class="co">## 6      N/A    12UUE23        2005            4           4         26</span>
+<span class="co">##   breeding_rank                GlobalUniqueIdentifier FieldNumber</span>
+<span class="co">## 1             0  URN:NatureAlberta:ABATLAS2:5863-NOCA          NA</span>
+<span class="co">## 2             0 URN:NatureAlberta:ABATLAS2:92650-NOCA          NA</span>
+<span class="co">## 3             0 URN:NatureAlberta:ABATLAS2:92829-NOCA          NA</span>
+<span class="co">## 4             0 URN:NatureAlberta:ABATLAS2:92900-NOCA          NA</span>
+<span class="co">## 5             0 URN:NatureAlberta:ABATLAS2:11937-NOCA          NA</span>
+<span class="co">## 6             0 URN:NatureAlberta:ABATLAS2:92626-NOCA          NA</span>
+<span class="co">##   DurationInHours ObservationDescriptor5               Remarks</span>
+<span class="co">## 1               8                     NA              uncommon</span>
+<span class="co">## 2               3                     NA                  &lt;NA&gt;</span>
+<span class="co">## 3               3                     NA Spotted at the feeder</span>
+<span class="co">## 4               3                     NA                  &lt;NA&gt;</span>
+<span class="co">## 5               3                     NA                  &lt;NA&gt;</span>
+<span class="co">## 6               3                     NA                  &lt;NA&gt;</span>
+<span class="co">##   ObservationDescriptor6 ObservationDescriptor3 ObservationDescriptor4</span>
+<span class="co">## 1                     NA                     NA                     NA</span>
+<span class="co">## 2                     NA                     NA                     NA</span>
+<span class="co">## 3                     NA                     NA                     NA</span>
+<span class="co">## 4                     NA                     NA                     NA</span>
+<span class="co">## 5                     NA                     NA                     NA</span>
+<span class="co">## 6                     NA                     NA                     NA</span>
+<span class="co">##   ObservationDescriptor ProtocolCode ObservationCount ObservationDescriptor2</span>
+<span class="co">## 1                    NA           NA                2                     NA</span>
+<span class="co">## 2                    NA           NA                1                     NA</span>
+<span class="co">## 3                    NA           NA                1                     NA</span>
+<span class="co">## 4                    NA           NA                1                     NA</span>
+<span class="co">## 5                    NA           NA                1                     NA</span>
+<span class="co">## 6                    NA           NA                1                     NA</span>
+<span class="co">##   TimeIntervalEnded                      Locality SamplingEventIdentifier</span>
+<span class="co">## 1                NA All areas within count circle                    5863</span>
+<span class="co">## 2                NA                          PK91                   92650</span>
+<span class="co">## 3                NA           Sherwood Park, UQ43                   92829</span>
+<span class="co">## 4                NA      50st and Ada blvd., UQ33                   92900</span>
+<span class="co">## 5                NA                   Mayerthorpe                   11937</span>
+<span class="co">## 6                NA                          UQ23                   92626</span>
+<span class="co">##   SurveyAreaIdentifier SamplingEventStructure TimeCollected</span>
+<span class="co">## 1                12049                     NA            NA</span>
+<span class="co">## 2                45868                     NA            NA</span>
+<span class="co">## 3                45940                     NA            NA</span>
+<span class="co">## 4                45988                     NA            NA</span>
+<span class="co">## 5                15330                     NA            NA</span>
+<span class="co">## 6                45851                     NA            NA</span>
+<span class="co">##   TimeObservationsEnded TimeObservationsStarted Sex LifeStage CollectorNumber</span>
+<span class="co">## 1                    NA                09:00:00  NA        NA            5017</span>
+<span class="co">## 2                    NA                06:00:00  NA        NA            4882</span>
+<span class="co">## 3                    NA                06:00:00  NA        NA            4882</span>
+<span class="co">## 4                    NA                06:00:00  NA        NA           10197</span>
+<span class="co">## 5                    NA                06:00:00  NA        NA            6810</span>
+<span class="co">## 6                    NA                06:00:00  NA        NA            4882</span>
+<span class="co">##   CatalogNumber AllSpeciesReported ProjectCode RouteIdentifier</span>
+<span class="co">## 1     5863-NOCA            Unknown    ABATLAS2              NA</span>
+<span class="co">## 2    92650-NOCA            Unknown    ABATLAS2              NA</span>
+<span class="co">## 3    92829-NOCA            Unknown    ABATLAS2              NA</span>
+<span class="co">## 4    92900-NOCA            Unknown    ABATLAS2              NA</span>
+<span class="co">## 5    11937-NOCA            Unknown    ABATLAS2              NA</span>
+<span class="co">## 6    92626-NOCA            Unknown    ABATLAS2              NA</span>
+<span class="co">##   AllIndividualsReported TimeIntervalsAdditive ProtocolURL NumberOfObservers</span>
+<span class="co">## 1                     NA                    NA          NA                 0</span>
+<span class="co">## 2                     NA                    NA          NA                 1</span>
+<span class="co">## 3                     NA                    NA          NA                 1</span>
+<span class="co">## 4                     NA                    NA          NA                 1</span>
+<span class="co">## 5                     NA                    NA          NA                 0</span>
+<span class="co">## 6                     NA                    NA          NA                 1</span>
+<span class="co">##   ObservationCount2 ObservationCount6 ObservationCount5            ProtocolType</span>
+<span class="co">## 1                NA                NA                NA AT: Breeding Bird Atlas</span>
+<span class="co">## 2                NA                NA                NA AT: Breeding Bird Atlas</span>
+<span class="co">## 3                NA                NA                NA AT: Breeding Bird Atlas</span>
+<span class="co">## 4                NA                NA                NA AT: Breeding Bird Atlas</span>
+<span class="co">## 5                NA                NA                NA AT: Breeding Bird Atlas</span>
+<span class="co">## 6                NA                NA                NA AT: Breeding Bird Atlas</span>
+<span class="co">##   NoObservations ObservationCount4 ObservationCount3 TimeIntervalStarted</span>
+<span class="co">## 1             NA                NA                NA                  NA</span>
+<span class="co">## 2             NA                NA                NA                  NA</span>
+<span class="co">## 3             NA                NA                NA                  NA</span>
+<span class="co">## 4             NA                NA                NA                  NA</span>
+<span class="co">## 5             NA                NA                NA                  NA</span>
+<span class="co">## 6             NA                NA                NA                  NA</span></code></pre>
 <p>Great!</p>
 </div>
   </div>
@@ -569,11 +571,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Steffi LaZerte, Denis LePage.</p>
+  <p></p>
+<p>Developed by Steffi LaZerte, Denis LePage.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -581,6 +585,8 @@
 
   
 
+
+  
 
   </body>
 </html>

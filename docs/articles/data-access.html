@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.2</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.3</span>
       </span>
     </div>
 
@@ -40,7 +42,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -56,8 +58,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/BirdStudiesCanada/naturecounts">
-    <span class="fas fa-github fa-lg"></span>
+  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -71,14 +73,14 @@
 
       
 
-      </header><script src="data-access_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Data Access</h1>
             
-            <h4 class="date">2021-03-03</h4>
+            <h4 data-toc-skip class="date">2022-02-25</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/data-access.Rmd"><code>vignettes/data-access.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/HEAD/vignettes/data-access.Rmd" class="external-link"><code>vignettes/data-access.Rmd</code></a></small>
       <div class="hidden name"><code>data-access.Rmd</code></div>
 
     </div>
@@ -86,57 +88,55 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts">naturecounts</a></span><span class="op">)</span></code></pre></div>
-<div id="understanding-data-access" class="section level2">
-<h2 class="hasAnchor">
-<a href="#understanding-data-access" class="anchor"></a>Understanding Data Access</h2>
-<p>All downloads in <code>naturecounts</code> require a free NatureCounts account (<a href="https://www.birdscanada.org/birdmon/default/register.jsp">sign up here</a>).</p>
-<p>Not all data hosted by NatureCounts is immediately available to users. Different data sets have different access levels (also called <code>akn_levels</code>). A full description of these different levels is available from the <a href="https://www.birdscanada.org/birdmon/default/nc_access_levels.jsp">NatureCounts site</a>.</p>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="understanding-data-access">Understanding Data Access<a class="anchor" aria-label="anchor" href="#understanding-data-access"></a>
+</h2>
+<p>All downloads in <code>naturecounts</code> require a free NatureCounts account (<a href="https://www.birdscanada.org/birdmon/default/register.jsp" class="external-link">sign up here</a>).</p>
+<p>Not all data hosted by NatureCounts is immediately available to users. Different data sets have different access levels (also called <code>akn_levels</code>). A full description of these different levels is available from the <a href="https://www.birdscanada.org/birdmon/default/nc_access_levels.jsp" class="external-link">NatureCounts site</a>.</p>
 <p>Briefly, there are five levels and the R package <code>naturecounts</code> can potentially access three of these levels (for most users).</p>
 <p>Data at <strong>access level 5</strong> are considered public data and are available to all users. Data at <strong>access levels 4 and 3</strong> are private/semi-public projects/collections. To access this data you must request access (see Requesting Access, below).</p>
 <p>Data at <strong>access level 2</strong> are visible in counts returned by <code><a href="../reference/nc_count.html">nc_count()</a></code> and in metadata returned by <code><a href="../reference/meta.html">meta_collections()</a></code> , etc., but are not downloadable through <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code> in the <code>naturecounts</code> R package without special permissions.</p>
 <p>Data at <strong>access level 1</strong> are not visible through the <code>naturecounts</code> R package without special permissions.</p>
 </div>
-<div id="requesting-access" class="section level2">
-<h2 class="hasAnchor">
-<a href="#requesting-access" class="anchor"></a>Requesting Access</h2>
-<p>You can request access to <strong>full</strong> or <strong>partial</strong> datasets at levels 3 and 4 through the NatureCounts <a href="https://www.birdscanada.org/birdmon/default/searchquery.jsp">data request page</a>. To request <strong>partial</strong> access, choose the filters and walk through the steps. To request <strong>full</strong> access, choose the collection and check the “Full access?” box in Step 2.</p>
+<div class="section level2">
+<h2 id="requesting-access">Requesting Access<a class="anchor" aria-label="anchor" href="#requesting-access"></a>
+</h2>
+<p>You can request access to <strong>full</strong> or <strong>partial</strong> datasets at levels 3 and 4 through the NatureCounts <a href="https://www.birdscanada.org/birdmon/default/searchquery.jsp" class="external-link">data request page</a>. To request <strong>partial</strong> access, choose the filters and walk through the steps. To request <strong>full</strong> access, choose the collection and check the “Full access?” box in Step 2.</p>
 <p>Once a request has been submitted it has to be approved by the appropriate data custodian.</p>
 </div>
-<div id="what-do-i-have-access-to" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-do-i-have-access-to" class="anchor"></a>What Do I Have Access To?</h2>
+<div class="section level2">
+<h2 id="what-do-i-have-access-to">What Do I Have Access To?<a class="anchor" aria-label="anchor" href="#what-do-i-have-access-to"></a>
+</h2>
 <p>To see what you have access to you can use three functions: <code><a href="../reference/nc_permissions.html">nc_permissions()</a></code>, <code><a href="../reference/nc_count.html">nc_count()</a></code> and <code><a href="../reference/nc_requests.html">nc_requests()</a></code>.</p>
-<div id="full-access---nc_permissions-or-nc_count" class="section level3">
-<h3 class="hasAnchor">
-<a href="#full-access---nc_permissions-or-nc_count" class="anchor"></a>Full Access - <code>nc_permissions()</code> or <code>nc_count()</code>
+<div class="section level3">
+<h3 id="full-access---nc_permissions-or-nc_count">Full Access - <code>nc_permissions()</code> or <code>nc_count()</code><a class="anchor" aria-label="anchor" href="#full-access---nc_permissions-or-nc_count"></a>
 </h3>
 <p>You can see which data you have <strong>full</strong> access to (i.e. you have access to all data within a specific collection) with either the <code><a href="../reference/nc_permissions.html">nc_permissions()</a></code> or <code><a href="../reference/nc_count.html">nc_count()</a></code> functions.</p>
 <p>To get a list of collections to which you have access, use the <code><a href="../reference/nc_permissions.html">nc_permissions()</a></code> function.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/nc_permissions.html">nc_permissions</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"sample"</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "SAMPLE1" "SAMPLE2"</code></pre>
+<pre><code><span class="co">## [1] "SAMPLE1" "SAMPLE2"</span></code></pre>
 <p>To additionally get the amount of data in each of these collections, user the <code><a href="../reference/nc_count.html">nc_count()</a></code> function.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"sample"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 2 x 4
-##   collection akn_level access nrecords
-##   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;     &lt;int&gt;
-## 1 SAMPLE1            0 full        994
-## 2 SAMPLE2            0 full        997</code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 2 × 4</span></span>
+<span class="co">##   collection akn_level access nrecords</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> SAMPLE1            0 full        994</span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> SAMPLE2            0 full        997</span></code></pre>
 <p>To see which data you do not (currently) have access to, use the <code>show = "all"</code> argument.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"sample"</span>, show <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 2 x 4
-##   collection akn_level access nrecords
-##   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;     &lt;int&gt;
-## 1 SAMPLE1            0 full        994
-## 2 SAMPLE2            0 full        997</code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 2 × 4</span></span>
+<span class="co">##   collection akn_level access nrecords</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> SAMPLE1            0 full        994</span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> SAMPLE2            0 full        997</span></code></pre>
 <p>Data where <code>access</code> is “by request” is available through the online request portal. Data where <code>access</code> is “no access” may be available as counts, but is not generally accessible as a download of raw data.</p>
 </div>
-<div id="partial-access---nc_requests" class="section level3">
-<h3 class="hasAnchor">
-<a href="#partial-access---nc_requests" class="anchor"></a>Partial Access - <code>nc_requests()</code>
+<div class="section level3">
+<h3 id="partial-access---nc_requests">Partial Access - <code>nc_requests()</code><a class="anchor" aria-label="anchor" href="#partial-access---nc_requests"></a>
 </h3>
 <p>You can see which data you have <strong>partial</strong> access to (i.e. you have requested access to part of a collection or part of a series of collections through the online portal) with the <code><a href="../reference/nc_requests.html">nc_requests()</a></code> function.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -163,34 +163,34 @@
 <p>The <code>status</code> field/column shows which requests have been <code>approved</code>, are <code>pending</code> or have been <code>declined</code>.</p>
 </div>
 </div>
-<div id="how-do-i-download-accessible-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-do-i-download-accessible-data" class="anchor"></a>How Do I Download Accessible Data?</h2>
-<div id="full-access" class="section level3">
-<h3 class="hasAnchor">
-<a href="#full-access" class="anchor"></a>Full Access</h3>
+<div class="section level2">
+<h2 id="how-do-i-download-accessible-data">How Do I Download Accessible Data?<a class="anchor" aria-label="anchor" href="#how-do-i-download-accessible-data"></a>
+</h2>
+<div class="section level3">
+<h3 id="full-access">Full Access<a class="anchor" aria-label="anchor" href="#full-access"></a>
+</h3>
 <p>Data to which you have full access can be directly downloaded via the <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code> function.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, username <span class="op">=</span> <span class="st">"sample"</span>, info <span class="op">=</span> <span class="st">"nc_example"</span><span class="op">)</span></code></pre></div>
 <p>Note that <code>request_id</code>s are created for <code>web</code> requests (above) and are also created for <code>api</code> requests: data downloaded via the <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code> function if a <code>request_id</code> was not provided.</p>
 <blockquote>
-<p>The following examples use the “testuser” user which is not available to you. You can quickly <a href="https://www.birdscanada.org/birdmon/default/register.jsp">sign up for a free account</a> of your own to access and play around with these examples.</p>
+<p>The following examples use the “testuser” user which is not available to you. You can quickly <a href="https://www.birdscanada.org/birdmon/default/register.jsp" class="external-link">sign up for a free account</a> of your own to access and play around with these examples.</p>
 </blockquote>
 <p>For example, the previous download created an <code>api</code> <code>request_id</code>. To see <code>request_id</code>s created through this R package, use the argument <code>type = "api"</code> in <code><a href="../reference/nc_requests.html">nc_requests()</a></code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/nc_requests.html">nc_requests</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"testuser"</span>, type <span class="op">=</span> <span class="st">"api"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span></code></pre></div>
-<pre><code>##   request_id requestOrigin requestLabel  collection   status nrecords
-## 1     185663           api  API Request RCBIOTABASE approved        0
-##                                                       filters
-## 1 end_year (2011); project ('RCBIOTABASE'); start_year (2011)</code></pre>
+<pre><code><span class="co">##   request_id requestOrigin requestLabel  collection   status nrecords</span>
+<span class="co">## 1     185663           api  API Request RCBIOTABASE approved        0</span>
+<span class="co">##                                                       filters</span>
+<span class="co">## 1 end_year (2011); project ('RCBIOTABASE'); start_year (2011)</span></code></pre>
 <p>This data can be re-downloaded (more quickly) by using this stored <code>request_id</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">old</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>request_id <span class="op">=</span> <span class="fl">185663</span>, username <span class="op">=</span> <span class="st">"testuser"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="how-do-i-download-specially-requested-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-do-i-download-specially-requested-data" class="anchor"></a>How Do I Download Specially Requested Data?</h2>
+<div class="section level2">
+<h2 id="how-do-i-download-specially-requested-data">How Do I Download Specially Requested Data?<a class="anchor" aria-label="anchor" href="#how-do-i-download-specially-requested-data"></a>
+</h2>
 <p>Approved requests can either be downloaded by hand from the website, or the <code>request_id</code> can be used to download data with the <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code> function.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/nc_requests.html">nc_requests</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"USER"</span><span class="op">)</span></code></pre></div>
@@ -218,11 +218,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Steffi LaZerte, Denis LePage.</p>
+  <p></p>
+<p>Developed by Steffi LaZerte, Denis LePage.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -230,6 +232,8 @@
 
   
 
+
+  
 
   </body>
 </html>

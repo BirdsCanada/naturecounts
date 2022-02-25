@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.2</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.3</span>
       </span>
     </div>
 
@@ -40,7 +42,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -56,8 +58,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/BirdStudiesCanada/naturecounts">
-    <span class="fas fa-github fa-lg"></span>
+  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -71,14 +73,14 @@
 
       
 
-      </header><script src="filtering-data_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Filtering data after download</h1>
             
-            <h4 class="date">2021-03-03</h4>
+            <h4 data-toc-skip class="date">2022-02-25</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/filtering-data.Rmd"><code>vignettes/filtering-data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/HEAD/vignettes/filtering-data.Rmd" class="external-link"><code>vignettes/filtering-data.Rmd</code></a></small>
       <div class="hidden name"><code>filtering-data.Rmd</code></div>
 
     </div>
@@ -86,20 +88,20 @@
     
     
 <p>The <code>naturecounts</code> package restricts users to three types of data filters in order not to overload the NatureCounts server. However, it is fairly straightforward to apply data filters after the download.</p>
-<p>In this vignette we will go over several different types of filtering using the <code>tidyverse</code> collection of packages. In particular, we will make extensive use of the <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> function from the <code>dplyr</code> package. For more information about this function, see the chapter on <a href="https://r4ds.had.co.nz/transform.html#filter-rows-with-filter">Data Transformations</a> in R for Data Science by Hadley Wickham and Garrett Grolemund.</p>
+<p>In this vignette we will go over several different types of filtering using the <code>tidyverse</code> collection of packages. In particular, we will make extensive use of the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function from the <code>dplyr</code> package. For more information about this function, see the chapter on <a href="https://r4ds.had.co.nz/transform.html#filter-rows-with-filter" class="external-link">Data Transformations</a> in R for Data Science by Hadley Wickham and Garrett Grolemund.</p>
 <p>For each example, we will show case how to filter your data either directly downloaded as a data frame, or obtained from a SQLite database.</p>
 <p>First let’s get a collection of chickadee data to use. We’ll collect all public data on Carolina, black-capped and mountain chickadees (see the <a href="species-codes.html">vignette on species codes</a>) for more information on how to find species codes).</p>
 <blockquote>
-<p>The following examples use the “testuser” user which is not available to you. You can quickly <a href="https://www.birdscanada.org/birdmon/default/register.jsp">sign up for a free account</a> of your own to access and play around with these examples.</p>
+<p>The following examples use the “testuser” user which is not available to you. You can quickly <a href="https://www.birdscanada.org/birdmon/default/register.jsp" class="external-link">sign up for a free account</a> of your own to access and play around with these examples.</p>
 </blockquote>
-<div id="setup" class="section level2">
-<h2 class="hasAnchor">
-<a href="#setup" class="anchor"></a>Setup</h2>
+<div class="section level2">
+<h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
+</h2>
 <p><strong>Packages</strong></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts">naturecounts</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></code></pre></div>
 <p><strong>Downloading data directly to a Data Frame</strong></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">boreal_chickadee_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">14320</span>, collection <span class="op">=</span> <span class="st">"BBS"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,
@@ -108,39 +110,39 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">14320</span>, collection <span class="op">=</span> <span class="st">"BBS"</span>, sql_db <span class="op">=</span> <span class="st">"boreal_chickadee"</span>, 
                   verbose <span class="op">=</span> <span class="cn">FALSE</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span>
-<span class="va">boreal_chickadee_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"naturecounts"</span><span class="op">)</span></code></pre></div>
+<span class="va">boreal_chickadee_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"naturecounts"</span><span class="op">)</span></code></pre></div>
 <p>Or, if starting a new session with an existing SQLite database, first create the connection to the database</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"boreal_chickadee.nc"</span><span class="op">)</span>
-<span class="va">boreal_chickadee_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"naturecounts"</span><span class="op">)</span></code></pre></div>
-<p>When using a database, you can choose to <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> your data into a data frame (in which case it will be identical to <code>chickadee_df</code>, but if your database is large, it will be faster to leave it as a database as long as possible.</p>
+<code class="sourceCode R"><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"boreal_chickadee.nc"</span><span class="op">)</span>
+<span class="va">boreal_chickadee_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"naturecounts"</span><span class="op">)</span></code></pre></div>
+<p>When using a database, you can choose to <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> your data into a data frame (in which case it will be identical to <code>chickadee_df</code>, but if your database is large, it will be faster to leave it as a database as long as possible.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">boreal_chickadee_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">boreal_chickadee_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span><span class="op">)</span></code></pre></div>
 <p>We will also use a helper function to add columns for <code>date</code> and <code>doy</code> (day of year) to our data.</p>
 <p>For data frames, you directly modify the data frame object.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">boreal_chickadee_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_dates.html">format_dates</a></span><span class="op">(</span><span class="va">boreal_chickadee_df</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>For databases, you’ll modify the connection, then update your table reference.</p>
-<p><strong>Note:</strong> This results in on-disk additions to the SQLite database. If you do not wish to make add fields to your SQLite database, you will have to <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> the data into a data frame first.</p>
+<p><strong>Note:</strong> This results in on-disk additions to the SQLite database. If you do not wish to make add fields to your SQLite database, you will have to <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> the data into a data frame first.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_dates.html">format_dates</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span>
-<span class="va">boreal_chickadee_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"naturecounts"</span><span class="op">)</span></code></pre></div>
+<span class="va">boreal_chickadee_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"naturecounts"</span><span class="op">)</span></code></pre></div>
 <p>Not all dates can be created if <code>survey_year</code>, <code>survey_month</code> or <code>survey_day</code> are missing.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_df</span>, <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">survey_year</span>, <span class="va">survey_month</span>, <span class="va">survey_day</span>, <span class="va">date</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 4 x 4
-##   survey_year survey_month survey_day date      
-##         &lt;int&gt;        &lt;int&gt;      &lt;int&gt; &lt;date&gt;    
-## 1        2001           NA         NA NA        
-## 2        2007           NA         NA NA        
-## 3        2007           NA         NA NA        
-## 4        1987           NA         NA NA</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_df</span>, <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">survey_year</span>, <span class="va">survey_month</span>, <span class="va">survey_day</span>, <span class="va">date</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 4 × 4</span></span>
+<span class="co">##   survey_year survey_month survey_day date  </span>
+<span class="co">##         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;">1</span>        <span style="text-decoration: underline;">2</span>001           <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">## <span style="color: #BCBCBC;">2</span>        <span style="text-decoration: underline;">2</span>007           <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">## <span style="color: #BCBCBC;">3</span>        <span style="text-decoration: underline;">2</span>007           <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">## <span style="color: #BCBCBC;">4</span>        <span style="text-decoration: underline;">1</span>987           <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span></span></code></pre>
 <p>Unless stated otherwise, in the following examples, we demonstrate code that works for both data frames and databases.</p>
 </div>
-<div id="categorical-filters" class="section level2">
-<h2 class="hasAnchor">
-<a href="#categorical-filters" class="anchor"></a>Categorical filters</h2>
+<div class="section level2">
+<h2 id="categorical-filters">Categorical filters<a class="anchor" aria-label="anchor" href="#categorical-filters"></a>
+</h2>
 <p>The simplest way to filter your data is to pick out categories to include or exclude. In each case there are three steps.</p>
 <ol style="list-style-type: decimal">
 <li>What are the categories available?</li>
@@ -153,43 +155,43 @@
 </ol>
 <ul>
 <li>
-<code><a href="https://dplyr.tidyverse.org/reference/pull.html">pull()</a></code> grabs the column of interest, <code><a href="https://rdrr.io/r/base/unique.html">unique()</a></code> returns only unique values.</li>
+<code><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull()</a></code> grabs the column of interest, <code><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique()</a></code> returns only unique values.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">boreal_chickadee_db</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">collection</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## # Source:   lazy query [?? x 1]
-## # Database: sqlite 3.34.1
-## #   [/home/steffi/Projects/Business/BSC/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]
-##   collection
-##   &lt;chr&gt;     
-## 1 BBS</code></pre>
+<code class="sourceCode R"><span class="va">boreal_chickadee_db</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">collection</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 1]</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.37.0 [/home/steffi/Projects/Business/Bird</span></span>
+<span class="co"><span style="color: #949494;">## #   Studies/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span>
+<span class="co">##   collection</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> BBS</span></code></pre>
 <p>2a) Filter the categories you wish to keep</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">alberta_atlas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, 
-                        <span class="va">collection</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ABATLAS1"</span>, <span class="st">"ABATLAS2"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>2b) Filter the categories you wish to exclude with <code><a href="https://rdrr.io/r/base/Logic.html">!</a></code></p>
+<code class="sourceCode R"><span class="va">alberta_atlas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, 
+                        <span class="va">collection</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ABATLAS1"</span>, <span class="st">"ABATLAS2"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>2b) Filter the categories you wish to exclude with <code>!</code></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">alberta_atlas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, 
-                        <span class="op">!</span><span class="va">collection</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ABBIRDRECS"</span>, <span class="st">"RCBIOTABASE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">alberta_atlas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, 
+                        <span class="op">!</span><span class="va">collection</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ABBIRDRECS"</span>, <span class="st">"RCBIOTABASE"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>Confirm</li>
 </ol>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">alberta_atlas</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">collection</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## # Source:   lazy query [?? x 1]
-## # Database: sqlite 3.34.1
-## #   [/home/steffi/Projects/Business/BSC/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]
-##   collection
-##   &lt;chr&gt;     
-## 1 BBS</code></pre>
+<code class="sourceCode R"><span class="va">alberta_atlas</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">collection</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 1]</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.37.0 [/home/steffi/Projects/Business/Bird</span></span>
+<span class="co"><span style="color: #949494;">## #   Studies/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span>
+<span class="co">##   collection</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> BBS</span></code></pre>
 </div>
-<div id="numerical-filters" class="section level2">
-<h2 class="hasAnchor">
-<a href="#numerical-filters" class="anchor"></a>Numerical filters</h2>
+<div class="section level2">
+<h2 id="numerical-filters">Numerical filters<a class="anchor" aria-label="anchor" href="#numerical-filters"></a>
+</h2>
 <p>Another way to filter your data is to specify numerical ranges include or exclude. In each case there are the same three steps as above.</p>
 <ol style="list-style-type: decimal">
 <li>What is the numerical range available?</li>
@@ -202,82 +204,82 @@
 </ol>
 <ul>
 <li>
-<code><a href="https://dplyr.tidyverse.org/reference/pull.html">pull()</a></code> grabs the column of interest, <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> returns a numerical summary of the values.</li>
+<code><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull()</a></code> grabs the column of interest, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> returns a numerical summary of the values.</li>
 </ul>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">boreal_chickadee_db</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
-            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## # Source:   lazy query [?? x 2]
-## # Database: sqlite 3.34.1
-## #   [/home/steffi/Projects/Business/BSC/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]
-##     min   max
-##   &lt;int&gt; &lt;int&gt;
-## 1  1966  2010</code></pre>
-<p>2a) Filter the variable to the range you wish to keep (note that the <code>,</code> is an implied <code><a href="https://rdrr.io/r/base/Logic.html">&amp;</a></code>)</p>
+<code class="sourceCode R"><span class="va">boreal_chickadee_db</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
+            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 2]</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.37.0 [/home/steffi/Projects/Business/Bird</span></span>
+<span class="co"><span style="color: #949494;">## #   Studies/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span>
+<span class="co">##     min   max</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">1</span>966  <span style="text-decoration: underline;">2</span>010</span></code></pre>
+<p>2a) Filter the variable to the range you wish to keep (note that the <code>,</code> is an implied <code>&amp;</code>)</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, <span class="va">survey_year</span> <span class="op">&gt;=</span> <span class="fl">2005</span><span class="op">)</span></code></pre></div>
-<p>2b) Filter the variable to the range you wish to exclude with <code><a href="https://rdrr.io/r/base/Logic.html">!</a></code> (note that here we need to use the <code><a href="https://rdrr.io/r/base/Logic.html">&amp;</a></code> explicitly)</p>
+<code class="sourceCode R"><span class="va">recent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, <span class="va">survey_year</span> <span class="op">&gt;=</span> <span class="fl">2005</span><span class="op">)</span></code></pre></div>
+<p>2b) Filter the variable to the range you wish to exclude with <code>!</code> (note that here we need to use the <code>&amp;</code> explicitly)</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, <span class="op">!</span><span class="op">(</span><span class="va">survey_year</span> <span class="op">&gt;=</span> <span class="fl">1960</span> <span class="op">&amp;</span> <span class="va">survey_year</span> <span class="op">&lt;</span> <span class="fl">2000</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">recent</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, <span class="op">!</span><span class="op">(</span><span class="va">survey_year</span> <span class="op">&gt;=</span> <span class="fl">1960</span> <span class="op">&amp;</span> <span class="va">survey_year</span> <span class="op">&lt;</span> <span class="fl">2000</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>Confirm</li>
 </ol>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recent</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
-            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## # Source:   lazy query [?? x 2]
-## # Database: sqlite 3.34.1
-## #   [/home/steffi/Projects/Business/BSC/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]
-##     min   max
-##   &lt;int&gt; &lt;int&gt;
-## 1  2000  2010</code></pre>
+<code class="sourceCode R"><span class="va">recent</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
+            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 2]</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.37.0 [/home/steffi/Projects/Business/Bird</span></span>
+<span class="co"><span style="color: #949494;">## #   Studies/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span>
+<span class="co">##     min   max</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">2</span>000  <span style="text-decoration: underline;">2</span>010</span></code></pre>
 </div>
-<div id="date-filters" class="section level2">
-<h2 class="hasAnchor">
-<a href="#date-filters" class="anchor"></a>Date filters</h2>
-<p>Filtering by dates is usually slightly more complex, but fortunately, the <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> function automatically detects dates which means it’s pretty much the same as a numerical filter.</p>
+<div class="section level2">
+<h2 id="date-filters">Date filters<a class="anchor" aria-label="anchor" href="#date-filters"></a>
+</h2>
+<p>Filtering by dates is usually slightly more complex, but fortunately, the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function automatically detects dates which means it’s pretty much the same as a numerical filter.</p>
 <ol style="list-style-type: decimal">
 <li>What categories are available?</li>
 </ol>
 <ul>
 <li>
-<code><a href="https://dplyr.tidyverse.org/reference/pull.html">pull()</a></code> grabs the column of interest, <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> returns a summary of the values.</li>
+<code><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull()</a></code> grabs the column of interest, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> returns a summary of the values.</li>
 </ul>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">boreal_chickadee_db</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
-            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## # Source:   lazy query [?? x 2]
-## # Database: sqlite 3.34.1
-## #   [/home/steffi/Projects/Business/BSC/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]
-##   min        max       
-##   &lt;chr&gt;      &lt;chr&gt;     
-## 1 1966-06-02 2010-07-07</code></pre>
-<p>2a) Filter the variable to the range you wish to keep (note that the <code>,</code> is an implied <code><a href="https://rdrr.io/r/base/Logic.html">&amp;</a></code>)</p>
+<code class="sourceCode R"><span class="va">boreal_chickadee_db</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
+            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 2]</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.37.0 [/home/steffi/Projects/Business/Bird</span></span>
+<span class="co"><span style="color: #949494;">## #   Studies/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span>
+<span class="co">##   min        max       </span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> 1966-06-02 2010-07-07</span></code></pre>
+<p>2a) Filter the variable to the range you wish to keep (note that the <code>,</code> is an implied <code>&amp;</code>)</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">field_season</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, <span class="va">date</span> <span class="op">&gt;=</span> <span class="st">"2010-05-10"</span>, <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2010-09-21"</span><span class="op">)</span></code></pre></div>
-<p>2b) Filter the variable to the range you wish to exclude with <code><a href="https://rdrr.io/r/base/Logic.html">!</a></code> (note that here we need to use the <code><a href="https://rdrr.io/r/base/Logic.html">&amp;</a></code> explicitly)</p>
+<code class="sourceCode R"><span class="va">field_season</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, <span class="va">date</span> <span class="op">&gt;=</span> <span class="st">"2010-05-10"</span>, <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2010-09-21"</span><span class="op">)</span></code></pre></div>
+<p>2b) Filter the variable to the range you wish to exclude with <code>!</code> (note that here we need to use the <code>&amp;</code> explicitly)</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">omit_field_season</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, <span class="op">!</span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="st">"2010-05-10"</span> <span class="op">&amp;</span> <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2010-09-21"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">omit_field_season</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, <span class="op">!</span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="st">"2010-05-10"</span> <span class="op">&amp;</span> <span class="va">date</span> <span class="op">&lt;=</span> <span class="st">"2010-09-21"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>Confirm</li>
 </ol>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">field_season</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
-            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## # Source:   lazy query [?? x 2]
-## # Database: sqlite 3.34.1
-## #   [/home/steffi/Projects/Business/BSC/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]
-##   min        max       
-##   &lt;chr&gt;      &lt;chr&gt;     
-## 1 2010-05-30 2010-07-07</code></pre>
+<code class="sourceCode R"><span class="va">field_season</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, 
+            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #949494;"># Source:   lazy query [?? x 2]</span></span>
+<span class="co">## <span style="color: #949494;"># Database: sqlite 3.37.0 [/home/steffi/Projects/Business/Bird</span></span>
+<span class="co"><span style="color: #949494;">## #   Studies/NatureCounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span>
+<span class="co">##   min        max       </span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> 2010-05-30 2010-07-07</span></code></pre>
 </div>
   </div>
 
@@ -292,11 +294,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Steffi LaZerte, Denis LePage.</p>
+  <p></p>
+<p>Developed by Steffi LaZerte, Denis LePage.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -304,6 +308,8 @@
 
   
 
+
+  
 
   </body>
 </html>
