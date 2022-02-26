@@ -46,4 +46,5 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
         with:
-          args: '--ignore-vignettes'
+          args: c('--no-manual', '--ignore-vignettes', '--no-build-vignettes')
+          build-args: c('--no-manual', '--ignore-vignettes', '--no-build-vignettes')
