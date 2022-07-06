@@ -1,6 +1,3 @@
-context("Metadata")
-
-
 # Metadata update ---------------------------------------------------------
 test_that("Metadata updates", {
   # Get original file dates

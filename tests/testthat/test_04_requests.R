@@ -1,5 +1,3 @@
-context("Requests")
-
 test_that("nc_requests() shows 'web' requests", {
 
   expect_silent(r <- nc_requests(username = "testuser")) %>%

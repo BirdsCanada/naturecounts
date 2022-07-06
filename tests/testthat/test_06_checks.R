@@ -1,5 +1,3 @@
-context("Checks")
-
 test_that("Code conversion works as expected", {
   expect_equal(codes_convert("Ontario", "statprov"), "ON")
   expect_equal(codes_convert("Canada", "country"), "CA")

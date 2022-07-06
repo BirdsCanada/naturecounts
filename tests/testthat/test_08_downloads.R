@@ -1,6 +1,4 @@
 # Counts - General ----------------------------------------------------
-context("Download counts")
-
 test_that("Get permissions for user", {
   expect_silent(p <- nc_permissions())
   expect_type(p, "character")
@@ -67,8 +65,6 @@ test_that("Counts error when no data returned", {
 
 
 # Data - General -----------------------------------------------------
-
-context("Download data")
 
 test_that("Data download returns data", {
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,

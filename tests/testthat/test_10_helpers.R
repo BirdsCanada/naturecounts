@@ -1,6 +1,3 @@
-context("Helper/Formating functions")
-
-
 # format_dates() ----------------------------------------------------------
 test_that("format_dates() with data frame", {
   for(i in 1:2) {
