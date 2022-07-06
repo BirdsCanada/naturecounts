@@ -47,7 +47,6 @@ nc_query_table <- function(table = NULL, ..., username = NULL, timeout = 120,
     filter <- NULL
   }
 
-
   # Username check and Authorization
   token <- srv_auth(username)
 
@@ -55,10 +54,12 @@ nc_query_table <- function(table = NULL, ..., username = NULL, timeout = 120,
   if(is.null(table)) table <- "api_tables"
 
   # Make query
-  request <- srv_query(file.path(api$query, table),
+  request <- srv_query(api$query,
+                       query = list("table" = table),
                        filter = filter,
                        token = token,
-                       timeout = timeout) %>%
+                       timeout = timeout,
+                       verbose = verbose) %>%
     as.data.frame()
 
   if(table == "api_tables") {
