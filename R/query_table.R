@@ -64,8 +64,8 @@ nc_query_table <- function(table = NULL, ..., username = NULL, timeout = 120,
 
   if(table == "api_tables") {
     request <- request %>%
-      dplyr::filter(table_name != "api_tables") %>%
-      dplyr::select(table_name, filters, required)
+      dplyr::filter(.data$table_name != "api_tables") %>%
+      dplyr::select("table_name", "filters", "required")
   }
 
   request
