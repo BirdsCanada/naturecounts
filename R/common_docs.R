@@ -32,7 +32,7 @@
 #'
 #' @section NatureCounts account:
 #'   All public data is available with a username/password
-#'   ([sign up](https://www.birdscanada.org/birdmon/default/register.jsp)
+#'   ([sign up](https://www.naturecounts.ca/nc/default/register.jsp)
 #'   for a free NatureCounts account). However, to access private/semi-public
 #'   projects/collections you must request access. See the Access and
 #'   `request_id`s section for more information.
@@ -93,13 +93,13 @@
 #' "Full" access means that data can be immediately requested directly through
 #' the `naturecounts` R package. "By request" means that a request must be
 #' [submitted
-#' online](https://www.birdscanada.org/birdmon/default/searchquery.jsp) and
+#' online](https://naturecounts.ca/nc/default/searchquery.jsp) and
 #' approved before the data can be downloaded through `naturecounts`.
 #'
 #' This means that there are two types of data requests: ones made through this
 #' `naturecounts` R package (API requests) and those made through the online
 #' [Web Request
-#' Form](https://www.birdscanada.org/birdmon/default/searchquery.jsp) (Web
+#' Form](https://naturecounts.ca/nc/default/searchquery.jsp) (Web
 #' requests). Every request (from either method) generates a `request_id` which
 #' identifies the filter set and collections requested. Details of all of
 #' requests can be reviewed with the [nc_requests()] function.
@@ -114,7 +114,7 @@
 #'
 #' Requests for "full" access to additional collections can be made online
 #' through the [Web Request
-#' Form](https://www.birdscanada.org/birdmon/default/searchquery.jsp) by
+#' Form](https://naturecounts.ca/nc/default/searchquery.jsp) by
 #' checking the "Full access?" box in Step 2 of the form.
 #'
 #' @keywords internal

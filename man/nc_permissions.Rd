@@ -20,7 +20,7 @@ Returns a list of collections accessible by 'username'.
 \section{NatureCounts account}{
 
 All public data is available with a username/password
-(\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up}
+(\href{https://www.naturecounts.ca/nc/default/register.jsp}{sign up}
 for a free NatureCounts account). However, to access private/semi-public
 projects/collections you must request access. See the Access and
 \code{request_id}s section for more information.
