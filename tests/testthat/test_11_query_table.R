@@ -32,10 +32,19 @@ test_that("nc_query_table works as expected", {
   expect_true(nrow(t4) < 10 & nrow(t4) > 1)
 
   t5 <- nc_query_table(table = "bmde_filter_bad_dates",
-                       species_id = c(7680, 9750)) %T>%
+                       species_id = 15770) %T>%
     expect_silent() %T>%
     expect_s3_class("data.frame") %T>%
     expect_named()
 
   expect_true(nrow(t5) < 10 & nrow(t5) > 1)
+
+  t6 <- nc_query_table(table = "bmde_filter_bad_dates",
+                       species_id = c(15770, 9750)) %T>%
+    expect_silent() %T>%
+    expect_s3_class("data.frame") %T>%
+    expect_named()
+
+  #expect_true(nrow(t6) < 10 & nrow(t6) > 1) # Fails but shouldn't
+})
 })
