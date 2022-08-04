@@ -60,7 +60,7 @@ reference:
     desc: "Included example data sets"
     contents:
       - bcch
-      - bdow
+      - amro
 
 articles:
   - title: Reference

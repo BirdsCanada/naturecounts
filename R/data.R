@@ -10,4 +10,4 @@
 #' An example of barred owl data downloaded from NatureCounts
 #'
 #' @format A data frame with 160 rows and 170 variables:
-"bdow"
+"amro"

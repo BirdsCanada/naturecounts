@@ -39,11 +39,11 @@ test_that("Get counts for collections", {
 
 test_that("Counts return permissions", {
 
-  expect_silent(c_sample <- nc_count(species = 7590,
+  expect_silent(c_sample <- nc_count(species = 15770,
                                      verbose = FALSE, username = "testuser"))
-  expect_silent(c_sample_all <- nc_count(species = 7590, show = "all",
+  expect_silent(c_sample_all <- nc_count(species = 15770, show = "all",
                                          verbose = FALSE, username = "testuser"))
-  expect_silent(c_all <- nc_count(species = 7590, show = "all",
+  expect_silent(c_all <- nc_count(species = 15770, show = "all",
                                   verbose = FALSE))
   expect_gt(sum(c_all$nrecords, na.rm = TRUE), sum(c_sample$nrecords, na.rm = TRUE))
 
@@ -90,28 +90,28 @@ test_that("Data filters work as expected", {
 
   # single project_id
   expect_silent(d <- nc_data_dl(project_ids = 1030,
-                                 species = 7590, years = 2000,
-                                 username = "testuser", verbose = FALSE,
-                                 info = "nc_test"))
+                                species = 15770, years = 2000,
+                                username = "testuser", verbose = FALSE,
+                                info = "nc_test"))
   expect_equal(unique(d$collection), "RCBIOTABASE")
   expect_equal(unique(d$project_id), 1030)
 
   # single collection/species/year/
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
-                                species = 7590, years = 2000,
+                                species = 15770, years = 2000,
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
-  expect_equal(unique(d1$species_id), 7590)
+  expect_equal(unique(d1$species_id), 15770)
   expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
   expect_equal(max(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
 
   # mult species/year
   expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
-                                species = c(7590, 14280),
+                                species = c(15770, 14280),
                                 years = c(2003, 2004),
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
-  expect_equal(sort(unique(d2$species_id)), c(7590, 14280))
+  expect_equal(sort(unique(d2$species_id)), c(14280, 15770))
   expect_equal(min(as.numeric(d2$survey_year), na.rm = TRUE), 2003)
   expect_equal(max(as.numeric(d2$survey_year), na.rm = TRUE), 2004)
 
@@ -227,13 +227,13 @@ test_that("Data download returns informative errors/messages", {
 
   # No data for some
   expect_message(nc_data_dl(collections = c("ABBIRDRECS", "RCBIOTABASE"),
-                            years = 2010, species = 7590,
+                            years = 2010, species = 15770,
                             username = "testuser", verbose = TRUE,
                             info = "nc_test"),
                  "Not all collections have data that match these filters")
 
   expect_error(nc_data_dl(collections = "ABBIRDRECS",
-                            years = 2010, species = 7590,
+                            years = 2010, species = 15770,
                             username = "testuser", verbose = TRUE,
                             info = "nc_test"),
                  "These collections have no data that match these filters")

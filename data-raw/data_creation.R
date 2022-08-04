@@ -105,5 +105,5 @@ usethis::use_data(ua, api, keys, queries, test_rc, field_order,
 bcch <- nc_data_dl(request_id = 152543, username = "sample")
 usethis::use_data(bcch, internal = FALSE, overwrite = TRUE)
 
-bdow <- nc_data_dl(request_id = 152545, username = "sample")
-usethis::use_data(bdow, internal = FALSE, overwrite = TRUE)
+amro <- nc_data_dl(species = 15770, username = "sample", info = "data prep")
+usethis::use_data(amro, internal = FALSE, overwrite = TRUE)

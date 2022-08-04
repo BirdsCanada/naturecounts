@@ -57,7 +57,7 @@ test_that("Code checks work on species", {
   species <- "BCCH"
   expect_error(codes_check(species), "'species' code must be a numeric code")
 
-  species <- c("BCCH", "BDOW")
+  species <- c("BCCH", "AMRO")
   expect_error(codes_check(species), "'species' code must be a numeric code")
 
   species <- "Dodo"
