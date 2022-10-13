@@ -1,13 +1,19 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
-on: [push, pull_request]
+on:
+  push:
+    branches: [main, master, sandbox]
+  pull_request:
+    branches: [main, master, sandbox]
 
 name: R-CMD-check
 
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
+
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
     strategy:
       fail-fast: false
       matrix:
@@ -43,8 +49,8 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
+          needs: check
 
       - uses: r-lib/actions/check-r-package@v2
         with:
-          args: c('--no-manual', '--ignore-vignettes', '--no-build-vignettes')
-          build_args: c('--no-manual', '--ignore-vignettes', '--no-build-vignettes')
+          upload-snapshots: true
