@@ -9,5 +9,6 @@
 #' https://birdscanada.github.io/naturecounts for getting started!
 #' 
 #' @importFrom memoise memoise
+#' @importFrom dbplyr sql
 "_PACKAGE"
 
