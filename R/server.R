@@ -73,6 +73,8 @@ srv_query <- function(path, query = NULL, filter = NULL,
   parsed
 }
 
+srv_query <- memoise::memoise(srv_query, ~memoise::timeout(4 * 60 * 60))
+
 srv_error <- function(parsed, url, filter) {
 
   if(any(stringr::str_detect(names(parsed), "errorMsgs"))) {

@@ -26,3 +26,17 @@ test_that("capture_df() capture dataframe", {
     expect_length(1) %>%
     expect_match("[a-zA-Z ]+$")
 })
+
+test_that("nc_remove_cache()", {
+  expect_true(memoise::is.memoised(srv_query))
+  
+  p <- srv_query(path = api$permissions, token = srv_auth("sample"))
+  
+  expect_true(memoise::has_cache(srv_query)(path = api$permissions, 
+                                            token = srv_auth("sample")))
+
+  expect_true(nc_remove_cache())
+  expect_false(memoise::has_cache(srv_query)(path = api$permissions, 
+                                             token = srv_auth("sample")))
+  
+})

@@ -126,3 +126,22 @@ nc_deprecate <- function(new){
 have_auth <- function(){
   Sys.getenv("naturecounts_steffilazerte2") != ""
 }
+
+
+
+#' Remove in-memory cache
+#' 
+#' All server queries are cached for four hours to reduce server load. You can 
+#' reset the cache at any time by either restarting your R session or running
+#' `nc_remove_cache()`.
+#'
+#' @return `TRUE` if it worked
+#' @export
+#'
+#' @examples
+#' 
+#' nc_remove_cache()
+#' 
+nc_remove_cache <- function() {
+  memoise::forget(srv_query)
+}

@@ -502,7 +502,7 @@ nc_permissions_internal <- function(token, timeout = 60) {
 }
 
 # Cache function results
-nc_permissions_internal <- memoise::memoise(nc_permissions_internal,
-                                            ~memoise::timeout(24 * 60 * 60))
+# nc_permissions_internal <- memoise::memoise(nc_permissions_internal,
+#                                             ~memoise::timeout(24 * 60 * 60))
 
 
