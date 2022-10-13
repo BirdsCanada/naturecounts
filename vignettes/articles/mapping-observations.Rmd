@@ -123,7 +123,7 @@ Perhaps we should see how many of these observations were made in parks.
 
 First we'll download and extract the Park shapefiles available from the [Alberta Parks](https://www.albertaparks.ca/albertaparksca/library/downloadable-data-sets/) website.
 
-```{r, echo = FALSE, eval = !file.exists("vignettes/articles/article_files/Parks_Protected_Areas_Alberta.shp")}
+```{r, echo = FALSE, eval = !file.exists(here::here("vignettes/articles/article_files/Parks_Protected_Areas_Alberta.shp"))}
 # Run if don't have shapefile
 download.file(url = "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip",
               destfile = here::here("vignettes/articles/article_files/alberta_parks.zip"))
