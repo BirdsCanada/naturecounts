@@ -117,7 +117,7 @@ test_that("Data filters work as expected", {
 
   # fields set
   expect_silent(d3 <- nc_data_dl(collections = "ABBIRDRECS",
-                                 species = 7590, years = 2000,
+                                 species = 15770, years = 2000,
                                  fields_set = "core",
                                  username = "testuser", verbose = FALSE,
                                  info = "nc_test"))
@@ -126,7 +126,7 @@ test_that("Data filters work as expected", {
 
   # custom fields
   expect_silent(d4 <- nc_data_dl(collections = "ABBIRDRECS",
-                                 species = 7590, years = 2000,
+                                 species = 15770, years = 2000,
                                  fields_set = "custom", fields = "Locality",
                                  username = "testuser", verbose = FALSE,
                                  info = "nc_test"))
