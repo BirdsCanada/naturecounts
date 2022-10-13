@@ -16,6 +16,9 @@ navbar:
   - icon: fa-github fa-lg
     href: https://github.com/BirdStudiesCanada/naturecounts
 reference:
+- title: Learning about this package
+  contents:
+  - naturecounts-package
 - title: Accessing Data
   desc: |
     Main functions of `naturecounts` for accessing data or counts or updating local metadata from the NatureCounts server
@@ -25,6 +28,8 @@ reference:
   - nc_data_dl
   - nc_metadata
   - nc_requests
+  - nc_query_table
+  - nc_remove_cache
 - title: Metadata
   desc: Functions for returning metadata
   contents: starts_with("meta_")
