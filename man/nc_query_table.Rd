@@ -53,7 +53,20 @@ d
 
 # Filter our query
 d <- nc_query_table(table = "bmde_filter_bad_dates",
-                    species_id = c(7680, 9750), username = "sample")
-d
+                    species_id = 15770, username = "sample")
+                    
+# Want more than one species? Either filter after, or combine two queries
+
+# Filter after
+library(dplyr)
+d <- nc_query_table(table = "bmde_filter_bad_dates", username = "sample")
+d <- filter(d, species_id \%in\% c(15770, 9750))
+
+# Combine two queries
+d1 <- nc_query_table(table = "bmde_filter_bad_dates",
+                     species_id = 15770, username = "sample")
+d2 <- nc_query_table(table = "bmde_filter_bad_dates",
+                     species_id = 9750, username = "sample")
+d <- rbind(d1, d2)
 
 }
