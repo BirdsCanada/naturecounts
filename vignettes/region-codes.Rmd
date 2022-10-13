@@ -21,7 +21,7 @@ In the main data download functions for `naturecounts`, `nc_data_dl()` and `nc_c
 
 For more details regarding spatial limits to regions, see the articles:
 
-- [Mapping observations](https://birdstudiescanada.github.io/naturecounts/articles/articles/mapping-observations.html)
+- [Mapping observations](https://birdscanada.github.io/naturecounts/articles/articles/mapping-observations.html)
 - [IBAs and BCRs](region-areas.html)
 - [Using spatial data to filter observations](region-spatial.html)
 

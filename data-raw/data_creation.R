@@ -1,5 +1,5 @@
 # Save user agent as internal object
-ua <- httr::user_agent(agent = "https://github.com/BirdsCanada/naturecounts")
+ua <- httr::user_agent(agent = "https://github.com/birdscanada/naturecounts")
 
 # API URLs
 meta_info <- dplyr::tribble(
@@ -105,5 +105,5 @@ usethis::use_data(ua, api, keys, queries, test_rc, field_order,
 bcch <- nc_data_dl(request_id = 152543, username = "sample")
 usethis::use_data(bcch, internal = FALSE, overwrite = TRUE)
 
-amro <- nc_data_dl(species = 15770, username = "sample", info = "data prep")
-usethis::use_data(amro, internal = FALSE, overwrite = TRUE)
+hofi <- nc_data_dl(species = 20350, username = "sample", info = "pkg_data")
+usethis::use_data(hofi, internal = FALSE, overwrite = TRUE)

@@ -2,12 +2,12 @@
 #'
 #' An example of black-capped chickadee data downloaded from NatureCounts
 #'
-#' @format A data frame with 160 rows and 170 variables:
+#' @format A data frame with 160 rows and 57 variables:
 "bcch"
 
-#' Example barred owl data
+#' Example house finch data
 #'
-#' An example of barred owl data downloaded from NatureCounts
+#' An example of house finch data downloaded from NatureCounts
 #'
-#' @format A data frame with 160 rows and 170 variables:
-"amro"
+#' @format A data frame with 19 rows and 57 variables:
+"hofi"

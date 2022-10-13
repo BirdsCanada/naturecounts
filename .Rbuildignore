@@ -7,5 +7,4 @@
 ^RELEASE.R$
 ^pkgdown$
 ^CODE_DESIGN.md$
-^\.travis\.yml$
-^appveyor\.yml$
+^\.github$

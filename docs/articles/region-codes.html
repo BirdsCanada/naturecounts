@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.2</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.3</span>
       </span>
     </div>
 
@@ -40,7 +42,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -56,8 +58,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/BirdStudiesCanada/naturecounts">
-    <span class="fas fa-github fa-lg"></span>
+  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -71,14 +73,14 @@
 
       
 
-      </header><script src="region-codes_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Region Codes</h1>
             
-            <h4 class="date">2021-03-03</h4>
+            <h4 data-toc-skip class="date">2022-02-25</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/master/vignettes/region-codes.Rmd"><code>vignettes/region-codes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/HEAD/vignettes/region-codes.Rmd" class="external-link"><code>vignettes/region-codes.Rmd</code></a></small>
       <div class="hidden name"><code>region-codes.Rmd</code></div>
 
     </div>
@@ -86,17 +88,17 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts">naturecounts</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></code></pre></div>
 <p>In the main data download functions for <code>naturecounts</code>, <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code> and <code><a href="../reference/nc_count.html">nc_count()</a></code>, you have the option of filtering data by <code>region</code>. In this article we will explore the various ways of specifying regional filters.</p>
 <p>For more details regarding spatial limits to regions, see the articles:</p>
 <ul>
-<li><a href="https://birdstudiescanada.github.io/naturecounts/articles/articles/mapping-observations.html">Mapping observations</a></li>
+<li><a href="https://birdscanada.github.io/naturecounts/articles/articles/mapping-observations.html" class="external-link">Mapping observations</a></li>
 <li><a href="region-areas.html">IBAs and BCRs</a></li>
 <li><a href="region-spatial.html">Using spatial data to filter observations</a></li>
 </ul>
-<div id="in-short" class="section level2">
-<h2 class="hasAnchor">
-<a href="#in-short" class="anchor"></a>In short</h2>
+<div class="section level2">
+<h2 id="in-short">In short<a class="anchor" aria-label="anchor" href="#in-short"></a>
+</h2>
 <p><code>region</code> must be a named list with <strong>one</strong> of the following:</p>
 <ul>
 <li>
@@ -108,242 +110,245 @@
 <li>
 <code>iba</code> - Important Bird Areas (IBA) code (e.g., <code>AB001</code> for Beaverhill Lake in Alberta)</li>
 <li>
-<code>bcr</code> - <a href="https://www.birdscanada.org/research/gislab/index.jsp?targetpg=bcr&amp;targetpg=bcr">Bird Conservation Regions</a> (e.g., <code>2</code> for Western Alaska)</li>
+<code>bcr</code> - <a href="https://www.birdscanada.org/research/gislab/index.jsp?targetpg=bcr&amp;targetpg=bcr" class="external-link">Bird Conservation Regions</a> (e.g., <code>2</code> for Western Alaska)</li>
 <li>
 <code>utm_squares</code> - UTM square code (e.g., <code>10UFE96</code> for a grid in Alberta)</li>
 <li>
-<code>bbox</code> - Bounding box coordinates (e.g., <code><a href="https://rdrr.io/r/base/c.html">c(left = -101.097223, bottom = 50.494717, right = -99.511239, top = 51.027557)</a></code> for a box containing Riding Mountain National Park in Manitoba)</li>
+<code>bbox</code> - Bounding box coordinates (e.g., <code>c(left = -101.097223, bottom = 50.494717, right = -99.511239, top = 51.027557)</code> for a box containing Riding Mountain National Park in Manitoba)</li>
 </ul>
 <p>To use the <code>region</code> argument:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="st">"NB"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Without a username, using 'show = "all"'</code></pre>
-<pre><code>## Using filters: statprov (NB)</code></pre>
-<pre><code>## # A tibble: 23 x 4
-##    collection    akn_level access     nrecords
-##    &lt;chr&gt;             &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
-##  1 ATOWLS                4 by request    13154
-##  2 BBS                   5 full          54578
-##  3 BBS50-CAN             5 full         188884
-##  4 CBC                   2 no access     21559
-##  5 EBIRD-CA-AT           4 by request  1333296
-##  6 EBIRD-CA-SENS         3 by request       78
-##  7 EBUTTERFLY            5 full           2393
-##  8 GBBC                  4 by request    13010
-##  9 IMQC                  5 full             11
-## 10 MBBA1BE_RAW           5 full          73182
-## # … with 13 more rows</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="st">"NB"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Without a username, using 'show = "all"'</span></code></pre>
+<pre><code><span class="co">## Using filters: statprov (NB)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 22 × 4</span></span>
+<span class="co">##    collection    akn_level access     nrecords</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> ATOWLS                4 by request    <span style="text-decoration: underline;">13</span>172</span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> BBS                   5 full          <span style="text-decoration: underline;">54</span>578</span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> BBS50-CAN             5 full         <span style="text-decoration: underline;">188</span>884</span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> CBC                   2 no access     <span style="text-decoration: underline;">21</span>559</span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> EBIRD-CA-AT           4 by request  1<span style="text-decoration: underline;">546</span>012</span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> EBIRD-CA-SENS         3 by request       80</span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> EBUTTERFLY            5 full           <span style="text-decoration: underline;">2</span>393</span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> GBBC                  4 by request    <span style="text-decoration: underline;">13</span>010</span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> IMQC                  5 full             11</span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> MBBA1BE_RAW           5 full          <span style="text-decoration: underline;">73</span>182</span>
+<span class="co">## <span style="color: #949494;"># … with 12 more rows</span></span></code></pre>
 </div>
-<div id="in-detail---codes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#in-detail---codes" class="anchor"></a>In Detail - Codes</h2>
-<div id="country" class="section level3">
-<h3 class="hasAnchor">
-<a href="#country" class="anchor"></a>Country</h3>
+<div class="section level2">
+<h2 id="in-detail---codes">In Detail - Codes<a class="anchor" aria-label="anchor" href="#in-detail---codes"></a>
+</h2>
+<div class="section level3">
+<h3 id="country">Country<a class="anchor" aria-label="anchor" href="#country"></a>
+</h3>
 <p><strong>Search by name</strong> (English or French)</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"États-Unis"</span>, type <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 3 x 3
-##   country_code country_name                         country_name_fr                       
-##   &lt;chr&gt;        &lt;chr&gt;                                &lt;chr&gt;                                 
-## 1 UM           United States Minor Outlying Islands Îles mineures éloignées des États-Unis
-## 2 US           United States                        États-Unis                            
-## 3 VI           Virgin Uslands, U.S.                 Îles Vierges des États-Unis</code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 3 × 3</span></span>
+<span class="co">##   country_code country_name                         country_name_fr                       </span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                 </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> UM           United States Minor Outlying Islands Îles mineures éloignées des États-Unis</span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> US           United States                        États-Unis                            </span>
+<span class="co">## <span style="color: #BCBCBC;">3</span> VI           Virgin Uslands, U.S.                 Îles Vierges des États-Unis</span></code></pre>
 <p><strong>Browse the code list</strong></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_country_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>country <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"US"</span>, <span class="st">"CA"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>country <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"US"</span>, <span class="st">"CA"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="stateprovince" class="section level3">
-<h3 class="hasAnchor">
-<a href="#stateprovince" class="anchor"></a>State/Province</h3>
+<div class="section level3">
+<h3 id="stateprovince">State/Province<a class="anchor" aria-label="anchor" href="#stateprovince"></a>
+</h3>
 <p><strong>Search by name</strong> (English, French, or Spanish)</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Distrito de Colombia"</span>, type <span class="op">=</span> <span class="st">"statprov"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 5
-##   country_code statprov_code statprov_name_es     statprov_name        statprov_name_fr    
-##   &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;                &lt;chr&gt;                &lt;chr&gt;               
-## 1 US           DC            Distrito de Colombia District of Columbia District de Columbia</code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="co">##   country_code statprov_code statprov_name_es     statprov_name        statprov_name_fr    </span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> US           DC            Distrito de Colombia District of Columbia District de Columbia</span></code></pre>
 <p><strong>Browse the code list</strong></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_statprov_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DC"</span>, <span class="st">"MB"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Without a username, using 'show = "all"'</code></pre>
-<pre><code>## Using filters: statprov (DC, MB)</code></pre>
-<pre><code>## # A tibble: 24 x 4
-##    collection    akn_level access     nrecords
-##    &lt;chr&gt;             &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
-##  1 ABBIRDRECS            5 full            357
-##  2 BBS                   5 full          86997
-##  3 BBS50-CAN             5 full         453998
-##  4 CBC                   2 no access     29107
-##  5 CMMN-DET-DMBO         2 no access     88280
-##  6 EBIRD-CA-PR           4 by request  2452054
-##  7 EBIRD-CA-SENS         3 by request     3961
-##  8 EBUTTERFLY            5 full            247
-##  9 GBBC                  4 by request    24393
-## 10 HawkCount             4 by request     1446
-## # … with 14 more rows</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DC"</span>, <span class="st">"MB"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Without a username, using 'show = "all"'</span></code></pre>
+<pre><code><span class="co">## Using filters: statprov (DC, MB)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 24 × 4</span></span>
+<span class="co">##    collection    akn_level access     nrecords</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> ABBIRDRECS            5 full            357</span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> BBS                   5 full          <span style="text-decoration: underline;">86</span>997</span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> BBS50-CAN             5 full         <span style="text-decoration: underline;">453</span>998</span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> CBC                   2 no access     <span style="text-decoration: underline;">29</span>107</span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> CMMN-DET-DMBO         2 no access     <span style="text-decoration: underline;">88</span>280</span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> EBIRD-CA-PR           4 by request  2<span style="text-decoration: underline;">823</span>248</span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> EBIRD-CA-SENS         3 by request     <span style="text-decoration: underline;">4</span>277</span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> EBUTTERFLY            5 full            247</span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> GBBC                  4 by request    <span style="text-decoration: underline;">24</span>393</span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> HawkCount             4 by request     <span style="text-decoration: underline;">1</span>446</span>
+<span class="co">## <span style="color: #949494;"># … with 14 more rows</span></span></code></pre>
 </div>
-<div id="subnational-regions-type-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#subnational-regions-type-2" class="anchor"></a>Subnational regions (type 2)</h3>
+<div class="section level3">
+<h3 id="subnational-regions-type-2">Subnational regions (type 2)<a class="anchor" aria-label="anchor" href="#subnational-regions-type-2"></a>
+</h3>
 <p><strong>Search by name</strong><br>
 Language depends on location: - Mexico = Spanish - USA = English - Quebec = French - Rest of Canada = English</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Montreal"</span>, type <span class="op">=</span> <span class="st">"subnational2"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 5
-##   country_code statprov_code subnational2_code subnational2_name              ebird_code
-##   &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;             &lt;chr&gt;                          &lt;chr&gt;     
-## 1 CA           QC            CA.QC.MR          Communauté-Urbaine-de-Montréal CA-QC-MR</code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="co">##   country_code statprov_code subnational2_code subnational2_name              ebird_code</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> CA           QC            CA.QC.MR          Communauté-Urbaine-de-Montréal CA-QC-MR</span></code></pre>
 <p><strong>Browse the code list</strong></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_subnational2_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>subnational2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CA-QC-MR"</span>, <span class="st">"CA-ON-TO"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Without a username, using 'show = "all"'</code></pre>
-<pre><code>## Using filters: subnational2 (CA-QC-MR, CA-ON-TO)</code></pre>
-<pre><code>## # A tibble: 124 x 4
-##    collection     akn_level access     nrecords
-##    &lt;chr&gt;              &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
-##  1 ABATLAS1               5 full         123364
-##  2 ABATLAS2               5 full         201382
-##  3 ABBIRDRECS             5 full         357264
-##  4 ATOWLS                 4 by request    25250
-##  5 BBS                    5 full        5735895
-##  6 BBS50-CAN              5 full        4168740
-##  7 BBS50-US-EAST          5 full        9940162
-##  8 BBS50-US-WEST          5 full       10749161
-##  9 BCATLAS1BE_DO          5 full          41412
-## 10 BCATLAS1BE_RAW         5 full         344433
-## # … with 114 more rows</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>subnational2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CA-QC-MR"</span>, <span class="st">"CA-ON-TO"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Without a username, using 'show = "all"'</span></code></pre>
+<pre><code><span class="co">## Using filters: subnational2 (CA-QC-MR, CA-ON-TO)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 133 × 4</span></span>
+<span class="co">##    collection     akn_level access     nrecords</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> ABATLAS1               5 full         <span style="text-decoration: underline;">123</span>364</span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> ABATLAS2               5 full         <span style="text-decoration: underline;">201</span>382</span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> ABBIRDRECS             5 full         <span style="text-decoration: underline;">357</span>264</span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> ATOWLS                 4 by request    <span style="text-decoration: underline;">25</span>268</span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> BBS                    5 full        5<span style="text-decoration: underline;">735</span>895</span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> BBS50-CAN              5 full        4<span style="text-decoration: underline;">168</span>740</span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> BBS50-US-EAST          5 full        9<span style="text-decoration: underline;">940</span>162</span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> BBS50-US-WEST          5 full       10<span style="text-decoration: underline;">749</span>161</span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> BCATLAS1BE_DO          5 full          <span style="text-decoration: underline;">41</span>412</span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> BCATLAS1BE_RAW         5 full         <span style="text-decoration: underline;">344</span>433</span>
+<span class="co">## <span style="color: #949494;"># … with 123 more rows</span></span></code></pre>
 </div>
-<div id="important-bird-areas-iba" class="section level3">
-<h3 class="hasAnchor">
-<a href="#important-bird-areas-iba" class="anchor"></a>Important Bird Areas (IBA)</h3>
+<div class="section level3">
+<h3 id="important-bird-areas-iba">Important Bird Areas (IBA)<a class="anchor" aria-label="anchor" href="#important-bird-areas-iba"></a>
+</h3>
 <ul>
 <li>These are Canadian designations</li>
 </ul>
 <p><strong>Search by name</strong> (English or French)</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"oak hammock"</span>, type <span class="op">=</span> <span class="st">"iba"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 13
-##   iba_site iba_name_fr latitude statprov area_ha alt_min iba_name nearest_town bcr   ncc_region
-##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;     
-## 1 MB010    Oak Hammoc…     50.2 MB          67.6     233 Oak Ham… Winnipeg     11    35        
-## # … with 3 more variables: alt_max &lt;dbl&gt;, longitude &lt;dbl&gt;, status &lt;chr&gt;</code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 1 × 13</span></span>
+<span class="co">##   iba_site iba_name_fr      latitude statprov area_ha alt_min iba_name nearest_town bcr   ncc_region</span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> MB010    Oak Hammock Mar…     50.2 MB          67.6     233 Oak Ham… Winnipeg     11    35        </span>
+<span class="co">## <span style="color: #949494;"># … with 3 more variables: alt_max &lt;dbl&gt;, longitude &lt;dbl&gt;, status &lt;chr&gt;</span></span></code></pre>
 <p><strong>Browse the code list</strong></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_iba_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>iba <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"MB010"</span>, <span class="st">"AB011"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Without a username, using 'show = "all"'</code></pre>
-<pre><code>## Using filters: iba (IBA.MB010, IBA.AB011)</code></pre>
-<pre><code>## # A tibble: 12 x 4
-##    collection      akn_level access     nrecords
-##    &lt;chr&gt;               &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
-##  1 ABATLAS1                5 full            130
-##  2 ABATLAS2                5 full             99
-##  3 ABBIRDRECS              5 full              9
-##  4 EBIRD-CA-PR             4 by request   163791
-##  5 EBIRD-CA-SENS           3 by request       59
-##  6 EBUTTERFLY              5 full              3
-##  7 MBATLAS1BE_DO           5 full            309
-##  8 MBATLAS1BE_RAW          5 full           1004
-##  9 MBATLAS1BE_SUMM         5 full            208
-## 10 MBATLAS1PC              5 full            381
-## 11 MBATLAS1RC              3 by request       23
-## 12 NESTWATCH               3 by request        2</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iba <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MB010"</span>, <span class="st">"AB011"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Without a username, using 'show = "all"'</span></code></pre>
+<pre><code><span class="co">## Using filters: iba (IBA.MB010, IBA.AB011)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 12 × 4</span></span>
+<span class="co">##    collection      akn_level access     nrecords</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> ABATLAS1                5 full            130</span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> ABATLAS2                5 full             99</span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> ABBIRDRECS              5 full              9</span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> EBIRD-CA-PR             4 by request   <span style="text-decoration: underline;">185</span>178</span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> EBIRD-CA-SENS           3 by request       75</span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> EBUTTERFLY              5 full              3</span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> MBATLAS1BE_DO           5 full            309</span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> MBATLAS1BE_RAW          5 full           <span style="text-decoration: underline;">1</span>004</span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> MBATLAS1BE_SUMM         5 full            208</span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> MBATLAS1PC              5 full            381</span>
+<span class="co">## <span style="color: #BCBCBC;">11</span> MBATLAS1RC              3 by request       23</span>
+<span class="co">## <span style="color: #BCBCBC;">12</span> NESTWATCH               3 by request        2</span></code></pre>
 </div>
-<div id="bird-conservation-regions-bcr" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bird-conservation-regions-bcr" class="anchor"></a>Bird Conservation Regions (BCR)</h3>
+<div class="section level3">
+<h3 id="bird-conservation-regions-bcr">Bird Conservation Regions (BCR)<a class="anchor" aria-label="anchor" href="#bird-conservation-regions-bcr"></a>
+</h3>
 <p><strong>Search by name</strong> (English, French, or Spanish)</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"rainforest"</span>, type <span class="op">=</span> <span class="st">"bcr"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 4
-##     bcr bcr_name                bcr_name_es                  bcr_name_fr                            
-##   &lt;int&gt; &lt;chr&gt;                   &lt;chr&gt;                        &lt;chr&gt;                                  
-## 1     5 Northern Pacific Rainf… Bosque Lluvioso del Pacífic… Forêts pluviales du nord de la côte du…</code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span>
+<span class="co">##     bcr bcr_name                    bcr_name_es                        bcr_name_fr                  </span>
+<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        </span>
+<span class="co">## <span style="color: #BCBCBC;">1</span>     5 Northern Pacific Rainforest Bosque Lluvioso del Pacífico Norte Forêts pluviales du nord de …</span></code></pre>
 <p><strong>Browse the code list</strong></p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_bcr_codes</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>bcr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Without a username, using 'show = "all"'</code></pre>
-<pre><code>## Using filters: bcr (BCR.05, BCR.02)</code></pre>
-<pre><code>## # A tibble: 25 x 4
-##    collection      akn_level access     nrecords
-##    &lt;chr&gt;               &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
-##  1 BBS50-CAN               5 full         130766
-##  2 BBS50-US-WEST           5 full         783880
-##  3 BCATLAS1BE_DO           5 full           8171
-##  4 BCATLAS1BE_RAW          5 full          84685
-##  5 BCATLAS1BE_SUMM         5 full          35528
-##  6 BCATLAS1PC              5 full          52256
-##  7 BCATLAS1RC              3 by request     6309
-##  8 BCBEACH                 4 by request     6576
-##  9 BCCWS                   4 by request   353274
-## 10 BCOWLS                  4 by request     6557
-## # … with 15 more rows</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bcr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Without a username, using 'show = "all"'</span></code></pre>
+<pre><code><span class="co">## Using filters: bcr (BCR.05, BCR.02)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 29 × 4</span></span>
+<span class="co">##    collection      akn_level access     nrecords</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> BBS50-CAN               5 full         <span style="text-decoration: underline;">130</span>766</span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> BBS50-US-WEST           5 full         <span style="text-decoration: underline;">783</span>880</span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> BCATLAS1BE_DO           5 full           <span style="text-decoration: underline;">8</span>171</span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> BCATLAS1BE_RAW          5 full          <span style="text-decoration: underline;">84</span>685</span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> BCATLAS1BE_SUMM         5 full          <span style="text-decoration: underline;">35</span>528</span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> BCATLAS1PC              5 full          <span style="text-decoration: underline;">52</span>256</span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> BCATLAS1RC              3 by request     <span style="text-decoration: underline;">6</span>309</span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> BCBEACH                 4 by request     <span style="text-decoration: underline;">8</span>629</span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> BCCWS                   4 by request   <span style="text-decoration: underline;">426</span>844</span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> BCMMP_BIRDS             3 by request     <span style="text-decoration: underline;">1</span>815</span>
+<span class="co">## <span style="color: #949494;"># … with 19 more rows</span></span></code></pre>
 </div>
-<div id="utm-squares" class="section level3">
-<h3 class="hasAnchor">
-<a href="#utm-squares" class="anchor"></a>UTM Squares</h3>
+<div class="section level3">
+<h3 id="utm-squares">UTM Squares<a class="anchor" aria-label="anchor" href="#utm-squares"></a>
+</h3>
 <p><strong>Browse the code list</strong></p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/meta.html">meta_utm_squares</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><strong>Use the resulting code(s)</strong></p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>utm_squares <span class="op">=</span> <span class="st">"18TUR35"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Without a username, using 'show = "all"'</code></pre>
-<pre><code>## Using filters: utm_squares (18TUR35)</code></pre>
-<pre><code>## # A tibble: 11 x 4
-##    collection   akn_level access     nrecords
-##    &lt;chr&gt;            &lt;int&gt; &lt;chr&gt;         &lt;int&gt;
-##  1 EBIRD-CA-ON          4 by request    18676
-##  2 MMPFROGS             4 by request       37
-##  3 NESTWATCH            3 by request       65
-##  4 OBBA1BE_RAW          5 full            178
-##  5 OBBA1BE_SUMM         5 full            103
-##  6 OBBA2BE_RAW          5 full            232
-##  7 OBBA2BE_SUMM         5 full             96
-##  8 OBBA2PC              5 full            205
-##  9 OBBA2RC              3 by request       10
-## 10 RCBIOTABASE          5 full           1926
-## 11 WPWI                 5 full             10</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>utm_squares <span class="op">=</span> <span class="st">"18TUR35"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## Without a username, using 'show = "all"'</span></code></pre>
+<pre><code><span class="co">## Using filters: utm_squares (18TUR35)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 14 × 4</span></span>
+<span class="co">##    collection      akn_level access     nrecords</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> EBIRD-CA-ON             4 by request    <span style="text-decoration: underline;">22</span>650</span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> MMPFROGS                4 by request       37</span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> NESTWATCH               3 by request       65</span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> OBBA1BE_RAW             5 full            178</span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> OBBA1BE_SUMM            5 full            103</span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> OBBA2BE_RAW             5 full            232</span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> OBBA2BE_SUMM            5 full             96</span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> OBBA2PC                 5 full            205</span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> OBBA2RC                 3 by request       10</span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> ONATLAS3BE_DO           3 by request      520</span>
+<span class="co">## <span style="color: #BCBCBC;">11</span> ONATLAS3BE_SUMM         3 by request       73</span>
+<span class="co">## <span style="color: #BCBCBC;">12</span> ONATLAS3PC              3 by request        4</span>
+<span class="co">## <span style="color: #BCBCBC;">13</span> RCBIOTABASE             5 full           <span style="text-decoration: underline;">1</span>947</span>
+<span class="co">## <span style="color: #BCBCBC;">14</span> WPWI                    5 full             10</span></code></pre>
 </div>
-<div id="bounding-box" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bounding-box" class="anchor"></a>Bounding Box</h3>
+<div class="section level3">
+<h3 id="bounding-box">Bounding Box<a class="anchor" aria-label="anchor" href="#bounding-box"></a>
+</h3>
 <p>Bounding box reflects latitude and longitude limits.</p>
 <p><strong>Use the resulting code(s)</strong></p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>left <span class="op">=</span> <span class="op">-</span><span class="fl">125</span>, bottom <span class="op">=</span> <span class="fl">45</span>, 
+<code class="sourceCode R"><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>left <span class="op">=</span> <span class="op">-</span><span class="fl">125</span>, bottom <span class="op">=</span> <span class="fl">45</span>, 
                                 right <span class="op">=</span> <span class="op">-</span><span class="fl">100</span>, top <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## Without a username, using 'show = "all"'</code></pre>
-<pre><code>## Using filters: bbox_left (-125); bbox_bottom (45); bbox_right (-100); bbox_top (50)</code></pre>
-<pre><code>## # A tibble: 43 x 4
-##    collection      akn_level access nrecords
-##    &lt;chr&gt;               &lt;int&gt; &lt;chr&gt;     &lt;int&gt;
-##  1 ABATLAS1                5 full       9827
-##  2 ABATLAS2                5 full      25648
-##  3 ABBIRDRECS              5 full      39546
-##  4 BBS                     5 full     373698
-##  5 BBS50-CAN               5 full     382768
-##  6 BBS50-US-WEST           5 full    1310345
-##  7 BCATLAS1BE_DO           5 full       8786
-##  8 BCATLAS1BE_RAW          5 full     106886
-##  9 BCATLAS1BE_SUMM         5 full      41747
-## 10 BCATLAS1PC              5 full      56786
-## # … with 33 more rows</code></pre>
+<pre><code><span class="co">## Without a username, using 'show = "all"'</span></code></pre>
+<pre><code><span class="co">## Using filters: bbox_left (-125); bbox_bottom (45); bbox_right (-100); bbox_top (50)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 47 × 4</span></span>
+<span class="co">##    collection      akn_level access nrecords</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> ABATLAS1                5 full       <span style="text-decoration: underline;">9</span>827</span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> ABATLAS2                5 full      <span style="text-decoration: underline;">25</span>648</span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> ABBIRDRECS              5 full      <span style="text-decoration: underline;">39</span>546</span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> BBS                     5 full     <span style="text-decoration: underline;">373</span>698</span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> BBS50-CAN               5 full     <span style="text-decoration: underline;">382</span>768</span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> BBS50-US-WEST           5 full    1<span style="text-decoration: underline;">310</span>345</span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> BCATLAS1BE_DO           5 full       <span style="text-decoration: underline;">8</span>786</span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> BCATLAS1BE_RAW          5 full     <span style="text-decoration: underline;">106</span>886</span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> BCATLAS1BE_SUMM         5 full      <span style="text-decoration: underline;">41</span>747</span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> BCATLAS1PC              5 full      <span style="text-decoration: underline;">56</span>786</span>
+<span class="co">## <span style="color: #949494;"># … with 37 more rows</span></span></code></pre>
 </div>
 </div>
   </div>
@@ -359,11 +364,13 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 
 
       <footer><div class="copyright">
-  <p>Developed by Steffi LaZerte, Denis LePage.</p>
+  <p></p>
+<p>Developed by Steffi LaZerte, Denis LePage.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -371,6 +378,8 @@ Language depends on location: - Mexico = Spanish - USA = English - Quebec = Fren
 
   
 
+
+  
 
   </body>
 </html>

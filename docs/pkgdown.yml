@@ -1,10 +1,10 @@
-pandoc: 2.11.2
-pkgdown: 1.6.1
+pandoc: 2.11.4
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
-  articles/climate-data: climate-data.html
-  articles/mapping-observations: mapping-observations.html
-  articles/region-spatial: region-spatial.html
+  climate-data: climate-data.html
+  mapping-observations: mapping-observations.html
+  region-spatial: region-spatial.html
   data-access: data-access.html
   filtering-data: filtering-data.html
   format-zero-fill: format-zero-fill.html
@@ -12,5 +12,5 @@ articles:
   region-codes: region-codes.html
   selecting-fields: selecting-fields.html
   species-codes: species-codes.html
-last_built: 2021-03-03T20:53Z
+last_built: 2022-02-25T23:24Z
 

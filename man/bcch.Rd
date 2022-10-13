@@ -5,7 +5,7 @@
 \alias{bcch}
 \title{Example black-capped chickadee data}
 \format{
-A data frame with 160 rows and 170 variables:
+A data frame with 160 rows and 57 variables:
 }
 \usage{
 bcch

@@ -78,7 +78,7 @@ ggplot() +
                                
 ```
 
-For a more detailed view of IBAs, we can also grab the shape files from Bird Studies Canada.
+For a more detailed view of IBAs, we can also grab the shape files from Birds Canada.
 
 ```{r}
 iba <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=atlas:iba&outputFormat=application%2Fjson") %>%
@@ -100,7 +100,7 @@ mapview(iba)
 
 ### Bird Conservation Regions
 
-Bird Conservation Regions are also available from Bird Studies Canada.
+Bird Conservation Regions are also available from Birds Canada.
 
 ```{r}
 bcr <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=atlas:bcr&outputFormat=application%2Fjson") %>%

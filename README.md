@@ -5,29 +5,25 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.com/BirdStudiesCanada/naturecounts.svg?branch=master)](https://travis-ci.com/BirdStudiesCanada/naturecounts)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/BirdStudiesCanada/naturecounts?branch=master&svg=true)](https://ci.appveyor.com/project/BirdStudiesCanada/naturecounts)
-
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R-CMD-check](https://github.com/birdscanada/naturecounts/workflows/R-CMD-check/badge.svg)](https://github.com/birdscanada/naturecounts/actions)
+![r-universe](https://birdscanada.r-universe.dev/badges/naturecounts)
 <!-- badges: end -->
 
 Access and download data on plant and animal populations from various
-databases through NatureCounts, a service managed by Bird Studies
-Canada.
+databases through NatureCounts, a service managed by Birds Canada.
 
 See tutorials, documentation and articles on the [naturecounts package
-Website](https://birdstudiescanada.github.io/naturecounts)
+Website](https://birdscanada.github.io/naturecounts)
 
 ## Installation
 
-You can install this developmental version of `naturecounts` from GitHub
-with the remotes package:
+You can install the main version of `naturecounts` from our R-Universe
 
 ``` r
-install.packages("remotes")
-remotes::install_github("BirdStudiesCanada/naturecounts")
+install.packages("naturecounts", 
+                 repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
+                           CRAN = 'https://cloud.r-project.org'))
 ```
 
 ## Usage
@@ -44,7 +40,7 @@ collections associated with username **sample**).
 
 ``` r
 nc_count(username = "sample")
-#> # A tibble: 2 x 4
+#> # A tibble: 2 × 4
 #>   collection akn_level access nrecords
 #>   <chr>          <int> <chr>     <int>
 #> 1 SAMPLE1            0 full        994
@@ -57,15 +53,15 @@ available (public or otherwise).
 ``` r
 nc_count(show = "all") %>%
   head()
-#> # A tibble: 6 x 4
+#> # A tibble: 6 × 4
 #>   collection akn_level access     nrecords
 #>   <chr>          <int> <chr>         <int>
 #> 1 ABATLAS1           5 full         123364
 #> 2 ABATLAS2           5 full         201382
 #> 3 ABBIRDRECS         5 full         357264
-#> 4 ABOWLS             4 by request        0
-#> 5 ATBBS              4 by request        0
-#> 6 ATOWLS             4 by request    25250
+#> 4 ATOWLS             4 by request    25268
+#> 5 BBS                5 full        5735895
+#> 6 BBS50              5 full              0
 ```
 
 ### Fetching data
@@ -77,7 +73,7 @@ First find the species id
 
 ``` r
 search_species("American Bittern")
-#> # A tibble: 1 x 5
+#> # A tibble: 1 × 5
 #>   species_id scientific_name       english_name     french_name      taxon_group
 #>        <int> <chr>                 <chr>            <chr>            <chr>      
 #> 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique BIRDS
@@ -146,26 +142,26 @@ include `collections`, `species`, `years`, `doy` (day-of-year),
 your download.
 
 See the function examples
-([`nc_count()`](https://birdstudiescanada.github.io/naturecounts/reference/nc_count.html),
-[`nc_data_dl()`](https://birdstudiescanada.github.io/naturecounts/reference/nc_data_dl.html))
+([`nc_count()`](https://birdscanada.github.io/naturecounts/reference/nc_count.html),
+[`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.html))
 the following articles for more information on these filters:
 
 -   Collections
 -   [Species
-    Codes](https://birdstudiescanada.github.io/naturecounts/articles/species-codes.html)
+    Codes](https://birdscanada.github.io/naturecounts/articles/species-codes.html)
 -   [Regional
-    Codes](https://birdstudiescanada.github.io/naturecounts/articles/region-codes.html)
+    Codes](https://birdscanada.github.io/naturecounts/articles/region-codes.html)
 -   [IBAs and BCRs
-    (regions)](https://birdstudiescanada.github.io/naturecounts/articles/region-areas.html)
+    (regions)](https://birdscanada.github.io/naturecounts/articles/region-areas.html)
 -   [Using spatial data to filter
-    observations](https://birdstudiescanada.github.io/naturecounts/articles/region-spatial.html)
+    observations](https://birdscanada.github.io/naturecounts/articles/region-spatial.html)
 
 We also have an [article on post-filtering your
-data](https://birdstudiescanada.github.io/naturecounts/articles/filtering-data.html)
+data](https://birdscanada.github.io/naturecounts/articles/filtering-data.html)
 
 ### Metadata
 
 NatureCounts includes a great deal of metadata which can be accessed
 through the functions with the `meta_` prefix. See the [Meta
-Documentation](https://birdstudiescanada.github.io/naturecounts/reference/meta.html)
+Documentation](https://birdscanada.github.io/naturecounts/reference/meta.html)
 for specifics.

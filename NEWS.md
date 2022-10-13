@@ -3,6 +3,11 @@
 * Add `nc_query_table()` for arbitrary and custom table queries
 
 
+# naturecounts 0.2.3
+
+* switch back to regular server (not sandbox)
+* use house finches as example data frame rather than barred owls
+
 # naturecounts 0.2.2
 
 * Arrange returned data fields more sensibly

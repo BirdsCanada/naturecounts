@@ -44,12 +44,12 @@ test_that("Code checks work on project_ids", {
 # Species -----------------------------------------------------------------
 test_that("Code checks work on species", {
 
-  species <- 7590
+  species <- 20350
   expect_silent(codes_check(species)) %>%
     expect_is("numeric") %>%
     expect_equal(species)
 
-  species <- "7590"
+  species <- "20350"
   expect_silent(codes_check(species)) %>%
     expect_is("numeric") %>%
     expect_equal(as.numeric(species))
@@ -57,7 +57,7 @@ test_that("Code checks work on species", {
   species <- "BCCH"
   expect_error(codes_check(species), "'species' code must be a numeric code")
 
-  species <- c("BCCH", "AMRO")
+  species <- c("BCCH", "HOFI")
   expect_error(codes_check(species), "'species' code must be a numeric code")
 
   species <- "Dodo"
