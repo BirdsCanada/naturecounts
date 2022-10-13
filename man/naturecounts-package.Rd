@@ -18,13 +18,13 @@ https://birdscanada.github.io/naturecounts for getting started!
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/BirdStudiesCanada/naturecounts}
+  \item \url{https://github.com/BirdsCanada/naturecounts}
   \item \url{https://naturecounts.ca}
 }
 
 }
 \author{
-\strong{Maintainer}: Denis LePage \email{dlepage@bsc-eoc.org}
+\strong{Maintainer}: Denis Lepage \email{dlepage@birdscanada.org}
 
 Authors:
 \itemize{
