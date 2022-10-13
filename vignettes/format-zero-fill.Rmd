@@ -13,9 +13,9 @@ After downloading population data, many analyses require that you have records n
 To make things simpler, we have included the `format_zero_fill()` function.
 
 > The following examples use the "testuser" user which is not available to you. 
-> You can quickly [sign up for a free account](https://www.birdscanada.org/birdmon/default/register.jsp)
-> of your own to access and play around with these examples. 
-
+> You can quickly [sign up for a free account](https://naturecounts.ca/nc/default/register.jsp)
+> of your own to access and play around with these examples. Simply replace
+> `testuser` with your own username.
 
 ## Setup
 
