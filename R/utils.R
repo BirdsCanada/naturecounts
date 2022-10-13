@@ -13,7 +13,7 @@ parse_request <- function(request) {
       filters = purrr::map_chr(.data$request, ~filter_to_str(.$filters)),
       requestOrigin = purrr::map_chr(.data$request, ~null_to_na(.$requestOrigin)),
       requestLabel = purrr::map_chr(.data$request, ~null_to_na(.$requestLabel))) %>%
-    tidyr::unnest(cols = .data$collection) %>%
+    tidyr::unnest(cols = "collection") %>%
     dplyr::select("request_id", "requestOrigin", "requestLabel",
                   "collection",
                   "status" = "approved",
