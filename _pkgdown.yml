@@ -1,6 +1,6 @@
+url: https://birdscanada.github.io/naturecounts/
 development:
-  mode: unreleased
-
+  mode: auto
 navbar:
   type: default
   left:
@@ -10,79 +10,56 @@ navbar:
     href: reference/index.html
   - text: Articles
     href: articles/index.html
-#    menu:
-#    - text: Reference Articles
-#    - text: Species Codes
-#      href: articles/species-codes.html
-#    - text: Region Codes
-#      href: articles/region-codes.html
-#    - text: ------
-#    - text: Tutorials
-#    - text: Filtering data after download
-#      href: articles/articles/filtering-data.html
-#    - text: Exploring IBAs and BCRs
-#      href: articles/region-areas.html
-#    - text: Using spatial data to filter observations
-#      href: articles/region-spatial.html
-#    - text: Mapping Observations
-#      href: articles/articles/mapping-observations.html
   - text: News
     href: news/index.html
   right:
   - icon: fa-github fa-lg
     href: https://github.com/BirdStudiesCanada/naturecounts
-
 reference:
-  - title: "Accessing Data"
-    desc: >
-      Main functions of `naturecounts` for accessing data or counts or
-      updating local metadata from the NatureCounts server
-    contents:
-      - nc_permissions
-      - nc_count
-      - nc_data_dl
-      - nc_metadata
-      - nc_requests
-  - title: "Metadata"
-    desc: "Functions for returning metadata"
-    contents:
-      - starts_with("meta_")
-  - title: "Searching through Metadata"
-    desc: "Functions for searching through metadata"
-    contents:
-      - starts_with("search_")
-  - title: "Helper functions"
-    desc: "Functions for formating, cleaning or transforming downloaded data"
-    contents:
-      - format_dates
-      - format_zero_fill
-  - title: "Data"
-    desc: "Included example data sets"
-    contents:
-      - bcch
-      - hofi
-
+- title: Accessing Data
+  desc: |
+    Main functions of `naturecounts` for accessing data or counts or updating local metadata from the NatureCounts server
+  contents:
+  - nc_permissions
+  - nc_count
+  - nc_data_dl
+  - nc_metadata
+  - nc_requests
+- title: Metadata
+  desc: Functions for returning metadata
+  contents: starts_with("meta_")
+- title: Searching through Metadata
+  desc: Functions for searching through metadata
+  contents: starts_with("search_")
+- title: Helper functions
+  desc: Functions for formating, cleaning or transforming downloaded data
+  contents:
+  - format_dates
+  - format_zero_fill
+- title: Data
+  desc: Included example data sets
+  contents:
+  - bcch
+  - hofi
 articles:
-  - title: Reference
-    desc: Reference articles for metadata codes and descriptions.
-    contents:
-      - '`region-codes`'
-      - '`species-codes`'
-  - title: Tutorials
-    desc: How-to articles describing common tasks
-    contents:
-      - '`data-access`'
-      - '`region-areas`'
-      - '`articles/region-spatial`'
-      - '`filtering-data`'
-      - '`articles/mapping-observations`'
-      - '`selecting-fields`'
-#      - '`articles/climate-data`'
-  - title: Formating
-    desc: How to format downloaded data
-    contents:
-      - '`format-zero-fill`'
-
+- title: Reference
+  desc: Reference articles for metadata codes and descriptions.
+  contents:
+  - '`region-codes`'
+  - '`species-codes`'
+- title: Tutorials
+  desc: How-to articles describing common tasks
+  contents:
+  - '`data-access`'
+  - '`region-areas`'
+  - '`articles/region-spatial`'
+  - '`filtering-data`'
+  - '`articles/mapping-observations`'
+  - '`selecting-fields`'
+- title: Formating
+  desc: How to format downloaded data
+  contents: '`format-zero-fill`'
 template:
   params:
     bootswatch: sandstone
+

@@ -35,9 +35,15 @@ system("cd ..; R CMD build naturecounts")
 system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")
 
 ## Push to github
-## Check travis / appveyor
+## Check GH Actions
 
-## Build site (so website uses newest version)
+
+## Actually release it! Create signed release on GitHub
+
+
+
+# Testing ----------------------
+# Can build site locally if needed
 ## **BUILD PACKAGE FIRST**
 pkgdown::build_site(lazy = TRUE)
 pkgdown::build_home()
@@ -54,8 +60,4 @@ pkgdown::build_article("region-codes")
 pkgdown::build_article("region-areas")
 pkgdown::build_article("articles/region-spatial")
 
-## Push to github
 
-## Actually release it, create signed release on github
-system("git tag -s v0.1.0 -m 'v0.1.0'")
-system("git push --tags")

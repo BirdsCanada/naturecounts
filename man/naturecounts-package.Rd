@@ -20,6 +20,7 @@ Useful links:
 \itemize{
   \item \url{https://github.com/BirdsCanada/naturecounts}
   \item \url{https://naturecounts.ca}
+  \item \url{https://birdscanada.github.io/naturecounts/}
 }
 
 }
