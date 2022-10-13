@@ -1,10 +1,10 @@
 # Save user agent as internal object
-ua <- httr::user_agent(agent = "https://github.com/BirdStudiesCanada/naturecounts")
+ua <- httr::user_agent(agent = "https://github.com/BirdsCanada/naturecounts")
 
 # API URLs
 meta_info <- dplyr::tribble(
   ~package_name,         ~api_url,                              ~primary_keys,
-  "api",                 "https://sandbox.birdscanada.org/api", NA,
+  "api",                 "https://birdscanada.org/api", NA,
 
   "auth",                "/data/authenticate",                  NA,
 
@@ -12,7 +12,7 @@ meta_info <- dplyr::tribble(
 
   "country_codes",       "metadata/country",                    "country_code",
   "statprov_codes",      "metadata/statprov",                   "statprov_code",
-  "subnational2_codes",  "metadata/subnat2",                "subnational2_code",
+  "subnational2_codes",  "metadata/subnat2",                    "subnational2_code",
 
   "bcr_codes",           "metadata/bcr",                        "bcr",
   "iba_codes",           "metadata/iba_sites",                  "iba_site",

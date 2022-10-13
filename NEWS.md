@@ -1,4 +1,4 @@
-# naturecounts dev
+# naturecounts 0.3.0
 
 * Add `nc_query_table()` for arbitrary and custom table queries
 
