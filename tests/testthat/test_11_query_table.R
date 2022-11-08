@@ -17,16 +17,12 @@ test_that("nc_query_table works as expected", {
     expect_silent() %T>%
     expect_s3_class("data.frame") %T>%
     expect_named(c("table_name", "filters", "required"))
-  
-  t4 <- nc_query_table(username = "steffilazerte") %T>%
-    expect_silent() %T>%
-    expect_s3_class("data.frame") %T>%
-    expect_named(c("table_name", "filters", "required"))
 
   expect_equal(t1, t2)
-  expect_equal(t2, t3)
-  expect_equal(t1[1,1:2], t4[1,1:2])
-  expect_gt(nrow(t4), 1)
+  
+  # testuser has a private table
+  expect_equal(t2[1,1:2], t3[1,1:2]) 
+  expect_gt(nrow(t3), 1)
 
   expect_true("bmde_filter_bad_dates" %in% t1$table_name)
 
