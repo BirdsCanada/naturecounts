@@ -37,6 +37,7 @@ jobs:
             local::.
             any::rnaturalearthhires
             any::rnaturalearthdata
+            any::patchwork
           needs: website
 
       - name: Build site
