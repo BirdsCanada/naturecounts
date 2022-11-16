@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, master, sandbox]
   pull_request:
-    branches: [main, master]
+    branches: [main, master, sandbox]
 
 name: R-CMD-check
 
@@ -53,4 +53,3 @@ jobs:
           args: c('--no-manual', '--ignore-vignettes', '--no-build-vignettes')
           build_args: c('--no-manual', '--no-build-vignettes')
           upload-snapshots: true
-          

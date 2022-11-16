@@ -14,7 +14,7 @@ navbar:
     href: news/index.html
   right:
   - icon: fa-github fa-lg
-    href: https://github.com/BirdStudiesCanada/naturecounts
+    href: https://github.com/BirdsCanada/naturecounts
 reference:
 - title: Learning about this package
   contents:
