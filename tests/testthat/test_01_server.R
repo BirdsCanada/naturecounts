@@ -1,5 +1,3 @@
-context("Server Calls")
-
 test_that("srv_query() returns data", {
 
   expect_silent(d <- srv_query(api$bmde_versions))

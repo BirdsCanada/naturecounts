@@ -50,7 +50,7 @@ Common arguments for \code{nc_data_dl} and \code{nc_count}
 \section{NatureCounts account}{
 
 All public data is available with a username/password
-(\href{https://www.birdscanada.org/birdmon/default/register.jsp}{sign up}
+(\href{https://www.naturecounts.ca/nc/default/register.jsp}{sign up}
 for a free NatureCounts account). However, to access private/semi-public
 projects/collections you must request access. See the Access and
 \code{request_id}s section for more information.
@@ -121,12 +121,12 @@ collections.
 
 "Full" access means that data can be immediately requested directly through
 the \code{naturecounts} R package. "By request" means that a request must be
-\href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{submitted online} and
+\href{https://naturecounts.ca/nc/default/searchquery.jsp}{submitted online} and
 approved before the data can be downloaded through \code{naturecounts}.
 
 This means that there are two types of data requests: ones made through this
 \code{naturecounts} R package (API requests) and those made through the online
-\href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} (Web
+\href{https://naturecounts.ca/nc/default/searchquery.jsp}{Web Request Form} (Web
 requests). Every request (from either method) generates a \code{request_id} which
 identifies the filter set and collections requested. Details of all of
 requests can be reviewed with the \code{\link[=nc_requests]{nc_requests()}} function.
@@ -140,7 +140,7 @@ approved \code{request_id} to the \code{\link[=nc_data_dl]{nc_data_dl()}} functi
 see \code{request_id}s, filters, and approval status.
 
 Requests for "full" access to additional collections can be made online
-through the \href{https://www.birdscanada.org/birdmon/default/searchquery.jsp}{Web Request Form} by
+through the \href{https://naturecounts.ca/nc/default/searchquery.jsp}{Web Request Form} by
 checking the "Full access?" box in Step 2 of the form.
 }
 

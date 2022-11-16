@@ -13,7 +13,7 @@ parse_request <- function(request) {
       filters = purrr::map_chr(.data$request, ~filter_to_str(.$filters)),
       requestOrigin = purrr::map_chr(.data$request, ~null_to_na(.$requestOrigin)),
       requestLabel = purrr::map_chr(.data$request, ~null_to_na(.$requestLabel))) %>%
-    tidyr::unnest(cols = .data$collection) %>%
+    tidyr::unnest(cols = "collection") %>%
     dplyr::select("request_id", "requestOrigin", "requestLabel",
                   "collection",
                   "status" = "approved",
@@ -65,7 +65,7 @@ capture_df <- function(x) {
 
 
 
-
+# Pipe operator -------------------------------
 #' Pipe operator
 #'
 #' See \code{magrittr::\link[magrittr]{\%>\%}} for details.
@@ -74,11 +74,11 @@ capture_df <- function(x) {
 #' @rdname pipe
 #' @keywords internal
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom magrittr %>% %T>%
 #' @usage lhs \%>\% rhs
 NULL
 
-
+# Tidy eval helpers -------------------------
 #' Tidy eval helpers
 #'
 #' @description
@@ -117,6 +117,7 @@ NULL
 #' @export   .data
 NULL
 
+
 nc_deprecate <- function(new){
   .Deprecated(msg = paste0(as.character(sys.call(sys.parent()))[1L],
                            " is deprecated, use ", new, " instead"))
@@ -124,4 +125,23 @@ nc_deprecate <- function(new){
 
 have_auth <- function(){
   Sys.getenv("naturecounts_steffilazerte2") != ""
+}
+
+
+
+#' Remove in-memory cache
+#' 
+#' All server queries are cached for four hours to reduce server load. You can 
+#' reset the cache at any time by either restarting your R session or running
+#' `nc_remove_cache()`.
+#'
+#' @return `TRUE` if it worked
+#' @export
+#'
+#' @examples
+#' 
+#' nc_remove_cache()
+#' 
+nc_remove_cache <- function() {
+  memoise::forget(srv_query)
 }

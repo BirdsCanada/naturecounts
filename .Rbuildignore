@@ -8,3 +8,4 @@
 ^pkgdown$
 ^CODE_DESIGN.md$
 ^\.github$
+^vignettes/articles$

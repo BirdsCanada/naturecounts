@@ -1,5 +1,3 @@
-context("APIs")
-
 test_that("metadata apis are accessible", {
 
   expect_silent(srv_query(api$bmde_versions)) # Doesn't need lang

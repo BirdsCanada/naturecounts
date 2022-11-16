@@ -1,10 +1,8 @@
-context("Helper/Formating functions")
-
-
 # format_dates() ----------------------------------------------------------
 test_that("format_dates() with data frame", {
   for(i in 1:2) {
     if(i == 1) i <- bcch else i <- hofi
+
     expect_silent(f <- format_dates(i)) %>%
       expect_is("data.frame")
     expect_true(all(c("doy", "date") %in% names(f)))
@@ -263,6 +261,7 @@ test_that("format_zero_fill() extra events columns", {
 test_that("format_zero_fill() with SQLite database", {
   bcch_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 14280,
                          sql_db = "bcch", username = "testuser", info = "nc_test")
+
   hofi_sql <- nc_data_dl(collections = "RCBIOTABASE", species = 20350,
                          sql_db = "hofi", username = "testuser", info = "nc_test")
 

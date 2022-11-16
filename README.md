@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![R-CMD-check](https://github.com/birdscanada/naturecounts/workflows/R-CMD-check/badge.svg)](https://github.com/birdscanada/naturecounts/actions)
+[![R-CMD-check](https://github.com/BirdsCanada/naturecounts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/BirdsCanada/naturecounts/actions/workflows/R-CMD-check.yaml)
 ![r-universe](https://birdscanada.r-universe.dev/badges/naturecounts)
 <!-- badges: end -->
 
@@ -43,8 +43,8 @@ nc_count(username = "sample")
 #> # A tibble: 2 × 4
 #>   collection akn_level access nrecords
 #>   <chr>          <int> <chr>     <int>
-#> 1 SAMPLE1            0 full        994
-#> 2 SAMPLE2            0 full        997
+#> 1 SAMPLE1            0 full        991
+#> 2 SAMPLE2            0 full        995
 ```
 
 Use the `show = "all"` argument to show counts for all collections
@@ -146,15 +146,15 @@ See the function examples
 [`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.html))
 the following articles for more information on these filters:
 
--   Collections
--   [Species
-    Codes](https://birdscanada.github.io/naturecounts/articles/species-codes.html)
--   [Regional
-    Codes](https://birdscanada.github.io/naturecounts/articles/region-codes.html)
--   [IBAs and BCRs
-    (regions)](https://birdscanada.github.io/naturecounts/articles/region-areas.html)
--   [Using spatial data to filter
-    observations](https://birdscanada.github.io/naturecounts/articles/region-spatial.html)
+- Collections
+- [Species
+  Codes](https://birdscanada.github.io/naturecounts/articles/species-codes.html)
+- [Regional
+  Codes](https://birdscanada.github.io/naturecounts/articles/region-codes.html)
+- [IBAs and BCRs
+  (regions)](https://birdscanada.github.io/naturecounts/articles/region-areas.html)
+- [Using spatial data to filter
+  observations](https://birdscanada.github.io/naturecounts/articles/region-spatial.html)
 
 We also have an [article on post-filtering your
 data](https://birdscanada.github.io/naturecounts/articles/filtering-data.html)

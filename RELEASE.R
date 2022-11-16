@@ -1,5 +1,12 @@
 # Steps/Commands to run before a package release -----------------------------
 
+# Get started --------------------------------------------------
+
+## Change API in data-raw/data_createion.R to non-sandbox
+
+## Run tests and check
+devtools::test()
+
 ## Update internal data files
 source("data-raw/data_creation.R")
 
@@ -7,21 +14,21 @@ source("data-raw/data_creation.R")
 # - Utm codes take a VERY long time to update!
 nc_metadata_internal(force = TRUE, utm = FALSE)
 
-## Documentation
-# Update NEWS
+# Documentation -------------------------------------------------
+## Update NEWS
 
-# Check spelling
+## Check spelling
 dict <- hunspell::dictionary('en_CA')
 devtools::spell_check()
 spelling::update_wordlist()
 
-# Update README.Rmd
-# Compile README.md
-# REBUILD!
+## Update README.Rmd
 devtools::build_readme()
 
-## Finalize package version
+# Finalize package version --------------------------------------
+## Edit DESCRIPTION and NEWS.md as needed
 
+# Final checks --------------------------------------------------
 ## Checks
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
 
@@ -34,10 +41,21 @@ devtools::check_win_oldrelease()
 system("cd ..; R CMD build naturecounts")
 system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")
 
-## Push to github
-## Check travis / appveyor
+## Check GH Actions on GitHub
 
-## Build site (so website uses newest version)
+
+# Release! ------------------------------------------------------
+## Actually release it! Create signed release on GitHub
+
+# Get ready for next cycle --------------------------------------
+
+# - Create sandbox branch
+# - Change API in data-raw/data_creation.R to sandbox
+# - Add dev components to version in DESCRIPTION and NEWS.md
+
+
+# Testing ----------------------
+# Can build site locally if needed
 ## **BUILD PACKAGE FIRST**
 pkgdown::build_site(lazy = TRUE)
 pkgdown::build_home()
@@ -54,8 +72,4 @@ pkgdown::build_article("region-codes")
 pkgdown::build_article("region-areas")
 pkgdown::build_article("articles/region-spatial")
 
-## Push to github
 
-## Actually release it, create signed release on github
-system("git tag -s v0.1.0 -m 'v0.1.0'")
-system("git push --tags")

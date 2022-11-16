@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
+          - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
@@ -30,13 +30,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: install macOS system dependencies
-        if: runner.os == 'macOS'
-        continue-on-error: true
-        run: |
-          brew install pkg-config gdal udunits
+      - uses: actions/checkout@v3
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -45,12 +39,17 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+          extra-repositories: "https://ropensci.r-universe.dev"
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
-          needs: check
+          extra-packages: | 
+            any::rcmdcheck
+            any::rnaturalearthhires
+            any::rnaturalearthdata
 
       - uses: r-lib/actions/check-r-package@v2
         with:
+          args: c('--no-manual', '--ignore-vignettes', '--no-build-vignettes')
+          build_args: c('--no-manual', '--no-build-vignettes')
           upload-snapshots: true

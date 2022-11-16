@@ -1,3 +1,9 @@
+# naturecounts 0.3.0
+
+* Add `nc_query_table()` for arbitrary and custom table queries
+* Implement in-memory query caching (lasts 4 hours or until session restarts)
+* Added `nc_remove_cache()` to remove the in-memory cache as needed
+
 # naturecounts 0.2.3
 
 * switch back to regular server (not sandbox)

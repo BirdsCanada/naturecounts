@@ -1,5 +1,3 @@
-context("SQLite Databases")
-
 teardown(unlink("test.nc"))
 
 # db_check_version ------------------------------------------------------------

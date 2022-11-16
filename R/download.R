@@ -345,7 +345,7 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' The `akn_level` column describes the level of data access for that collection
 #' (see [descriptions
-#' online](https://sandbox.birdscanada.org/birdmon/default/nc_access_levels.jsp)).
+#' online](https://naturecounts.ca/nc/default/nc_access_levels.jsp)).
 #' The `access` column describes the accessibility of a collection for a given
 #' username (or no access if no username supplied). See the section on Access
 #' and `request_id`s for more details.
@@ -502,7 +502,7 @@ nc_permissions_internal <- function(token, timeout = 60) {
 }
 
 # Cache function results
-nc_permissions_internal <- memoise::memoise(nc_permissions_internal,
-                                            ~memoise::timeout(24 * 60 * 60))
+# nc_permissions_internal <- memoise::memoise(nc_permissions_internal,
+#                                             ~memoise::timeout(24 * 60 * 60))
 
 

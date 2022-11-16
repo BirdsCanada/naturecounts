@@ -29,7 +29,7 @@ Function           | API Entry Point           | Required fields            | Ex
 
 #### Coding Principles
 - In package, after accessing the API, explictly `select()` the fields/columns expected. This way extra fields won't break existing code 
-  - Missing fields **will** the code, but at least they will break the code early!
+  - Missing fields **will** break the code, but at least they will break the code early!
   - Do **not** do this for data downloads (i.e. `nc_single_dl()` under `nc_data_dl()`) or metadata downloads (i.e. `meta_XXX()`)
   - **Unless**, using a `meta_XXX()` download internally. Then always `select()` the fields required
 

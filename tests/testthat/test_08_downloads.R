@@ -1,6 +1,4 @@
 # Counts - General ----------------------------------------------------
-context("Download counts")
-
 test_that("Get permissions for user", {
   expect_silent(p <- nc_permissions())
   expect_type(p, "character")
@@ -8,7 +6,6 @@ test_that("Get permissions for user", {
 
   expect_silent(p1 <- nc_permissions(username = "testuser"))
   expect_type(p1, "character")
-  expect_gt(length(p1), 1)
 })
 
 
@@ -71,8 +68,6 @@ test_that("Counts error when no data returned", {
 
 # Data - General -----------------------------------------------------
 
-context("Download data")
-
 test_that("Data download returns data", {
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,
                                  username = "testuser", info = "nc_test"))
@@ -109,16 +104,18 @@ test_that("Data filters work as expected", {
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
   expect_equal(unique(d1$species_id), 14280)
+
   expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
   expect_equal(max(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
 
   # mult species/year
   expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
-                                species = c(20350, 14280),
+                                species = c(15770, 14280),
                                 years = c(2003, 2004),
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
-  expect_equal(sort(unique(d2$species_id)), c(14280, 20350))
+  expect_equal(sort(unique(d2$species_id)), c(14280, 15770))
+
   expect_equal(min(as.numeric(d2$survey_year), na.rm = TRUE), 2003)
   expect_equal(max(as.numeric(d2$survey_year), na.rm = TRUE), 2004)
 

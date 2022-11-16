@@ -158,4 +158,4 @@ mice <- nc_data_dl(species = mice_ids$species_id,
 mice
 ```
 
-Actualy more than I expected (although not many compared to bird species).
+Actually more than I expected (although not many compared to bird species).

@@ -147,7 +147,8 @@ The message about summarizing multiple observations means that we have multiple 
 ```{r}
 rc_sum <- rc_all_species %>%
   group_by(utm_square, species_id, AllSpeciesReported) %>%
-  summarize(ObservationCount = sum(as.numeric(ObservationCount), na.rm = TRUE))
+  summarize(ObservationCount = sum(as.numeric(ObservationCount), na.rm = TRUE),
+            .groups = "drop")
 head(rc_sum)
 ```
 

@@ -69,46 +69,46 @@ the \code{\link[=nc_metadata]{nc_metadata()}} function. Others are downloaded as
 }
 \section{Functions}{
 \itemize{
-\item \code{meta_country_codes}: Country codes
+\item \code{meta_country_codes()}: Country codes
 
-\item \code{meta_statprov_codes}: State/Province codes
+\item \code{meta_statprov_codes()}: State/Province codes
 
-\item \code{meta_subnational2_codes}: Subnational2 codes
+\item \code{meta_subnational2_codes()}: Subnational2 codes
 
-\item \code{meta_iba_codes}: Important Bird Area (IBA) codes
+\item \code{meta_iba_codes()}: Important Bird Area (IBA) codes
 
-\item \code{meta_bcr_codes}: Bird Conservation Region (BCR) codes
+\item \code{meta_bcr_codes()}: Bird Conservation Region (BCR) codes
 
-\item \code{meta_utm_squares}: UTM Square codes
+\item \code{meta_utm_squares()}: UTM Square codes
 
-\item \code{meta_species_authority}: Species taxonomic authorities
+\item \code{meta_species_authority()}: Species taxonomic authorities
 
-\item \code{meta_species_codes}: Alpha-numeric codes for avian species
+\item \code{meta_species_codes()}: Alpha-numeric codes for avian species
 
-\item \code{meta_species_taxonomy}: Codes and taxonomic information for all species
+\item \code{meta_species_taxonomy()}: Codes and taxonomic information for all species
 
-\item \code{meta_collections}: Collections names and descriptions
+\item \code{meta_collections()}: Collections names and descriptions
 
-\item \code{meta_breeding_codes}: Breeding codes and descriptions
+\item \code{meta_breeding_codes()}: Breeding codes and descriptions
 
-\item \code{meta_project_protocols}: Project protocols
+\item \code{meta_project_protocols()}: Project protocols
 
-\item \code{meta_projects}: Projects ids, names, websites, and descriptions
+\item \code{meta_projects()}: Projects ids, names, websites, and descriptions
 
-\item \code{meta_protocol_types}: Protocol types and descriptions
+\item \code{meta_protocol_types()}: Protocol types and descriptions
 
-\item \code{meta_bmde_versions}: Names and descriptions of the available versions of BMDE
+\item \code{meta_bmde_versions()}: Names and descriptions of the available versions of BMDE
 (Bird Monitoring Data Exchange). These refer to sets of fields/columns
 which can be downloaded for a given group of data. See \code{\link[=nc_data_dl]{nc_data_dl()}} for
 more details.
 
-\item \code{meta_bmde_fields}: Fields/columns associated with a particular BMDE (Bird
+\item \code{meta_bmde_fields()}: Fields/columns associated with a particular BMDE (Bird
 Monitoring Data Exchange) version. See \code{\link[=meta_bmde_versions]{meta_bmde_versions()}} for the
 different versions available, \code{\link[=meta_collections]{meta_collections()}} for which version is
 used by which project, and \code{\link[=nc_data_dl]{nc_data_dl()}} for more details on downloading
 data with a given set of fields/columns.
-}}
 
+}}
 \examples{
 # Return fields/columns in the 'minimum' version
 meta_bmde_fields()

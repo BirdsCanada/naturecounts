@@ -1,7 +1,3 @@
-context("Code searches")
-
-
-
 # Codes search function ---------------------------------------------------
 
 test_that("Accents ignored in region search", {

@@ -12,7 +12,7 @@ meta_info <- dplyr::tribble(
 
   "country_codes",       "metadata/country",                    "country_code",
   "statprov_codes",      "metadata/statprov",                   "statprov_code",
-  "subnational2_codes",  "metadata/subnat2",                "subnational2_code",
+  "subnational2_codes",  "metadata/subnat2",                    "subnational2_code",
 
   "bcr_codes",           "metadata/bcr",                        "bcr",
   "iba_codes",           "metadata/iba_sites",                  "iba_site",
@@ -36,7 +36,9 @@ meta_info <- dplyr::tribble(
   "collections_count",   "data/list_collections",               "collection",
   "permissions",         "data/list_permissions",               "collection",
   "list_requests",       "data/list_requests",                  NA,
-  "release_request_id",  "data/release_request_id",             NA
+  "release_request_id",  "data/release_request_id",             NA,
+
+  "query",               "query",                               NA
   )
 
 api <- as.list(meta_info$api_url)

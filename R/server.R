@@ -35,7 +35,7 @@ srv_query <- function(path, query = NULL, filter = NULL,
   resp <- try(httr::POST(url, body = query, encode = "form",
                          ua, httr::timeout(timeout)),
             silent = TRUE)
-  if(class(resp) == "try-error") {
+  if(inherits(resp, "try-error")) {
     if(stringr::str_detect(resp, "aborted by an application callback")){
       stop(resp, call. = FALSE)
     } else if (stringr::str_detect(resp, "Timeout was reached")) {
@@ -72,6 +72,8 @@ srv_query <- function(path, query = NULL, filter = NULL,
 
   parsed
 }
+
+srv_query <- memoise::memoise(srv_query, ~memoise::timeout(4 * 60 * 60))
 
 srv_error <- function(parsed, url, filter) {
 
