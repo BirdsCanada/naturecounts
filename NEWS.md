@@ -1,3 +1,6 @@
+# naturecounts 0.3.0.9000
+* Add tools for COSEWIC assessments
+
 # naturecounts 0.3.0
 
 * Add `nc_query_table()` for arbitrary and custom table queries
