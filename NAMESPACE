@@ -2,6 +2,7 @@
 
 export("%>%")
 export(.data)
+export(cosewic_ranges)
 export(format_dates)
 export(format_zero_fill)
 export(meta_bcr_codes)

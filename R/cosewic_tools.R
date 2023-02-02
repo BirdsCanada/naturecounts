@@ -25,9 +25,10 @@
 #' 
 #' 
 #' r <- cosewic_ranges(bcch)
-#' 
-#' 
-#' 
+#' r <- cosewic_ranges(bcch, spatial = FALSE)
+#' r <- cosewic_ranges(bcch, spatial = FALSE, plots = FALSE)
+#'
+#' @export 
 
 cosewic_ranges <- function(df_db, 
                            species_id = "species_id",
@@ -94,11 +95,14 @@ cosewic_ranges <- function(df_db,
   } 
   
   if(plots | spatial) ranges <- list("ranges" = ranges)
-  if(plots) ranges <- append(ranges, "plots" = g)
-  if(spatial) ranges <- append(ranges, 
-                               "spatial" = list("aoo_sf" = aoo[["aoo_sf"]],
-                                                "eoo_sf" = eoo[["eoo_sf"]]))
-  
+  if(plots) ranges <- append(ranges, list("plots" = g))
+  if(spatial) {
+    ranges <- append(
+      ranges, 
+      list("spatial" = list("aoo_sf" = aoo[["aoo_sf"]],
+                            "eoo_sf" = eoo[["eoo_sf"]])))
+  }
+    
   ranges
 }
 

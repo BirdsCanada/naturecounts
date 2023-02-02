@@ -46,7 +46,7 @@ Details on how AOO and EOO are calculated and used
 
 
 r <- cosewic_ranges(bcch)
-
-
+r <- cosewic_ranges(bcch, spatial = FALSE)
+r <- cosewic_ranges(bcch, spatial = FALSE, plots = FALSE)
 
 }
