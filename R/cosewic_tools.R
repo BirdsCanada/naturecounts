@@ -11,18 +11,22 @@
 #' - IUCN - [Guidelines for Using the IUCN Red List Categories and Criteria Version 15.1](https://nc.iucnredlist.org/redlist/content/attachment_files/RedListGuidelines.pdf)
 #' - IUCN - [IUCN Red List categories and criteria, version 3.1, second edition](https://portals.iucn.org/library/sites/library/files/documents/RL-2001-001-2nd.pdf)
 #'
-#' @param df_db 
-#' @param species_id 
-#' @param record_id 
-#' @param coords 
-#' @param aoo_grid_size_km 
-#' @param plots 
+#' @param df_db Either data frame or a connection to database with
+#'   `naturecounts` table.
+#' @param record_id Character. Name of the column containing record
+#'   identification.
+#' @param coord_lon Character. Name of the column containing longitude.
+#' @param coord_lat Character. Name of the column containing latitude. 
+#' @param aoo_grid_size_km Numeric. Size of grid (km) to use when calculating
+#'   AOO. Default is COSEWIC requirement (2). Use caution if changing.
+#' @param plots Logical. Whether to return plots
+#' @param spatial Logical. Whether to return sf spatial objects showing
+#'   calculations.
 #'
-#' @return
-#' @name cosewic_tools
+#' @return Data frame or list containing data frame, and (optionally) plots, 
+#' and spatial data frames.
 #'
 #' @examples
-#' 
 #' 
 #' r <- cosewic_ranges(bcch)
 #' r <- cosewic_ranges(bcch, spatial = FALSE)
@@ -31,12 +35,12 @@
 #' @export 
 
 cosewic_ranges <- function(df_db, 
-                           species_id = "species_id",
                            record_id = "record_id", 
-                           coords = c("latitude", "longitude"),
+                           coord_lon = "longitude",
+                           coord_lat = "latitude",
                            aoo_grid_size_km = 2,
-                           spatial = TRUE,
-                           plots = TRUE) {
+                           plots = TRUE,
+                           spatial = TRUE) {
   
   # Check units
   if(!requireNamespace("sf", quietly = TRUE)) {
@@ -47,20 +51,38 @@ cosewic_ranges <- function(df_db,
          "Please update with `install.packages(\"sf\")` first", call. = FALSE)
   }
   
+  # Check df_db 
+  # SQLite Connections must become dataframes
+  if(inherits(df_db, "SQLiteConnection")) {
+    
+    if(verbose) message(" - Cannot work directly on SQLite database connections, ",
+                        "collecting data into a data frame...")
+    
+    if(!"naturecounts" %in% DBI::dbListTables(df_db)) {
+      stop("If 'df_db' is a SQLite database, it must have a 'naturecounts' ",
+           "table", call. = FALSE)
+    }
+    
+    df_db <- dplyr::tbl(df_db, "naturecounts") %>%
+      dplyr::collect()
+  }
+  
+  # CHECK COORDS
+  
   # Note on CRS
   # GeoCAT uses Google's projection EPSG:3857, Web Mercator because of backend
   # Probably should use Canadian projection. Currently using 3347 (Stats 
   # Canada).
   
   df_sf <- df_db %>%
-    dplyr::select(dplyr::all_of(c(.env$species_id, .env$record_id, .env$coords))) %>%
-    sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+    dplyr::select(dplyr::all_of(c(.env$record_id, .env$coord_lon, .env$coord_lat))) %>%
+    sf::st_as_sf(coords = c(coord_lon, coord_lat), crs = 4326)
   
   # Convert to map units
   cell_size <- units::as_units(aoo_grid_size_km, "km")
   df_sf_proj <- sf::st_transform(df_sf, 3347)
   
-  aoo <- cosewic_aoo(df_sf_proj, cell_size)
+  aoo <- cosewic_aoo(df_sf_proj, cell_size, record_id)
   eoo <- cosewic_eoo(df_sf_proj)
   
   ranges <- dplyr::mutate(aoo[["aoo"]], eoo = .env$eoo[["eoo"]])
@@ -89,7 +111,10 @@ cosewic_ranges <- function(df_db,
                                     na.value = NA) +
       ggplot2::scale_colour_manual(name = NULL, values = "black") +
       ggplot2::labs(
-        caption = "Filled cells represent AOO; Black outline represents EOO")
+        caption = paste0("Filled cells represent AOO; ",
+                         "Black outline represents EOO\n",
+                         "Grid is ", aoo_grid_size_km, "x", aoo_grid_size_km, 
+                         "km"))
   } else {
     g <- NULL
   } 
@@ -107,7 +132,7 @@ cosewic_ranges <- function(df_db,
 }
 
 
-cosewic_aoo <- function(df_sf_proj, cell_size) {
+cosewic_aoo <- function(df_sf_proj, cell_size, record_id) {
   grid <- df_sf_proj %>%
     sf::st_make_grid(cellsize = cell_size) %>%
     sf::st_as_sf() %>%
@@ -117,7 +142,7 @@ cosewic_aoo <- function(df_sf_proj, cell_size) {
     sf::st_join(df_sf_proj) %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(grid_id) %>%
-    dplyr::mutate(n_records = sum(!is.na(record_id))) %>%
+    dplyr::mutate(n_records = sum(!is.na(.data[[record_id]]))) %>%
     dplyr::ungroup()
     
   aoo <- aoo_sf %>%
