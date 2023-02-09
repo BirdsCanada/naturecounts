@@ -1,15 +1,20 @@
-#' Calculate COSEWIC AOO and EOO
+#' Calculate COSEWIC IAO and EOO
 #' 
-#' Area of occupancy (AOO, also called Index of Area of Occupancy, IAO) and
-#' Extent of Occurrence (EOO) are metrics used by IUCN and COSEWIC to support
-#' status assessments for potentially endangered species.
+#' The COSEWIC Index of Area of Occupancy (IAO; also called Area of Occupancy,
+#' AOO by the IUCN) and Extent of Occurrence (EOO; IUCN as well) are metrics
+#' used to support status assessments for potentially endangered species.
 #'
-#' Details on how AOO and EOO are calculated and used
+#' Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is actually 
+#' a different measure, the *biological* area of occupancy. See the 
+#' [Distribution](https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html#Distribution)
+#' section in 'Instructions for preparing COSEWIC status reports' 
+#' for more details. 
+#'
+#' Details on how IAO and EOO are calculated and used
 #' 
 #' - COSEWIC - [Guidelines for use of the Index of Area of Occupancy in COSEWIC Assessments](https://www.cosewic.ca/index.php/en-ca/reports/preparing-status-reports/guidelines-index-area-occupancy.html)
+#' - COSEWIC - [Instructions for preparing COSEWIC status reports](https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html)
 #' - COSEWIC - [Table 2 COSEWIC quantitative criteria and guidelines for the status assessment of Wildlife Species](https://www.cosewic.ca/index.php/en-ca/assessment-process/wildlife-species-assessment-process-categories-guidelines/quantitative-criteria.html)
-#' - IUCN - [Guidelines for Using the IUCN Red List Categories and Criteria Version 15.1](https://nc.iucnredlist.org/redlist/content/attachment_files/RedListGuidelines.pdf)
-#' - IUCN - [IUCN Red List categories and criteria, version 3.1, second edition](https://portals.iucn.org/library/sites/library/files/documents/RL-2001-001-2nd.pdf)
 #'
 #' @param df_db Either data frame or a connection to database with
 #'   `naturecounts` table.
@@ -17,8 +22,8 @@
 #'   identification.
 #' @param coord_lon Character. Name of the column containing longitude.
 #' @param coord_lat Character. Name of the column containing latitude. 
-#' @param aoo_grid_size_km Numeric. Size of grid (km) to use when calculating
-#'   AOO. Default is COSEWIC requirement (2). Use caution if changing.
+#' @param iao_grid_size_km Numeric. Size of grid (km) to use when calculating
+#'   IAO. Default is COSEWIC requirement (2). Use caution if changing.
 #' @param plots Logical. Whether to return plots
 #' @param spatial Logical. Whether to return sf spatial objects showing
 #'   calculations.
@@ -38,7 +43,7 @@ cosewic_ranges <- function(df_db,
                            record_id = "record_id", 
                            coord_lon = "longitude",
                            coord_lat = "latitude",
-                           aoo_grid_size_km = 2,
+                           iao_grid_size_km = 2,
                            plots = TRUE,
                            spatial = TRUE) {
   
@@ -79,26 +84,26 @@ cosewic_ranges <- function(df_db,
     sf::st_as_sf(coords = c(coord_lon, coord_lat), crs = 4326)
   
   # Convert to map units
-  cell_size <- units::as_units(aoo_grid_size_km, "km")
+  cell_size <- units::as_units(iao_grid_size_km, "km")
   df_sf_proj <- sf::st_transform(df_sf, 3347)
   
-  aoo <- cosewic_aoo(df_sf_proj, cell_size, record_id)
+  iao <- cosewic_iao(df_sf_proj, cell_size, record_id)
   eoo <- cosewic_eoo(df_sf_proj)
   
-  ranges <- dplyr::mutate(aoo[["aoo"]], eoo = .env$eoo[["eoo"]])
+  ranges <- dplyr::mutate(iao[["iao"]], eoo = .env$eoo[["eoo"]])
  
-  if(ranges$eoo < ranges$aoo) {
+  if(ranges$eoo < ranges$iao) {
    message(
-   "EOO is less than AOO. This can occur if there are very few, clustered ",
-   "records. Making EOO equal to AOO (see Guidelines for Using the IUCN Red ",
-   "List Categories and Criteria version 15.1)")
+   "EOO is less than IAO. This can occur if there are very few, clustered ",
+   "records. Making EOO equal to IAO ",
+   "(see 'Instructions for preparing COSEWIC status reports')")
     
-    ranges$eoo <- ranges$aoo
+    ranges$eoo <- ranges$iao
   }
   
   
   if(plots) {
-    a <- dplyr::mutate(aoo[["aoo_sf"]], 
+    a <- dplyr::mutate(iao[["iao_sf"]], 
                        n_records = dplyr::na_if(.data$n_records, 0))
     g <- ggplot2::ggplot() +
       ggplot2::theme_bw() +
@@ -111,9 +116,9 @@ cosewic_ranges <- function(df_db,
                                     na.value = NA) +
       ggplot2::scale_colour_manual(name = NULL, values = "black") +
       ggplot2::labs(
-        caption = paste0("Filled cells represent AOO; ",
+        caption = paste0("Filled cells represent IAO; ",
                          "Black outline represents EOO\n",
-                         "Grid is ", aoo_grid_size_km, "x", aoo_grid_size_km, 
+                         "Grid is ", iao_grid_size_km, "x", iao_grid_size_km, 
                          "km"))
   } else {
     g <- NULL
@@ -124,7 +129,7 @@ cosewic_ranges <- function(df_db,
   if(spatial) {
     ranges <- append(
       ranges, 
-      list("spatial" = list("aoo_sf" = aoo[["aoo_sf"]],
+      list("spatial" = list("iao_sf" = iao[["iao_sf"]],
                             "eoo_sf" = eoo[["eoo_sf"]])))
   }
     
@@ -132,31 +137,31 @@ cosewic_ranges <- function(df_db,
 }
 
 
-cosewic_aoo <- function(df_sf_proj, cell_size, record_id) {
+cosewic_iao <- function(df_sf_proj, cell_size, record_id) {
   grid <- df_sf_proj %>%
     sf::st_make_grid(cellsize = cell_size) %>%
     sf::st_as_sf() %>%
     dplyr::mutate(grid_id = 1:dplyr::n())
   
-  aoo_sf <- grid %>%
+  iao_sf <- grid %>%
     sf::st_join(df_sf_proj) %>%
     sf::st_drop_geometry() %>%
     dplyr::group_by(grid_id) %>%
     dplyr::mutate(n_records = sum(!is.na(.data[[record_id]]))) %>%
     dplyr::ungroup()
     
-  aoo <- aoo_sf %>%
+  iao <- iao_sf %>%
     dplyr::summarize(min_record = min(n_records[n_records > 0]),
                      max_record = max(n_records[n_records > 0]),
                      median_record = median(n_records[n_records > 0]),
                      grid_size_km = .env$cell_size,
                      n_occupied = sum(n_records != 0), 
-                     aoo = n_occupied * .env$cell_size^2)
+                     iao = n_occupied * .env$cell_size^2)
   
-  aoo_sf <- dplyr::right_join(grid, aoo_sf, by = "grid_id")
+  iao_sf <- dplyr::right_join(grid, iao_sf, by = "grid_id")
   
-  list("aoo" = aoo,
-       "aoo_sf" = aoo_sf)
+  list("iao" = iao,
+       "iao_sf" = iao_sf)
 }
 
 

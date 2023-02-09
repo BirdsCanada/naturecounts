@@ -2,14 +2,14 @@
 % Please edit documentation in R/cosewic_tools.R
 \name{cosewic_ranges}
 \alias{cosewic_ranges}
-\title{Calculate COSEWIC AOO and EOO}
+\title{Calculate COSEWIC IAO and EOO}
 \usage{
 cosewic_ranges(
   df_db,
   record_id = "record_id",
   coord_lon = "longitude",
   coord_lat = "latitude",
-  aoo_grid_size_km = 2,
+  iao_grid_size_km = 2,
   plots = TRUE,
   spatial = TRUE
 )
@@ -25,8 +25,8 @@ identification.}
 
 \item{coord_lat}{Character. Name of the column containing latitude.}
 
-\item{aoo_grid_size_km}{Numeric. Size of grid (km) to use when calculating
-AOO. Default is COSEWIC requirement (2). Use caution if changing.}
+\item{iao_grid_size_km}{Numeric. Size of grid (km) to use when calculating
+IAO. Default is COSEWIC requirement (2). Use caution if changing.}
 
 \item{plots}{Logical. Whether to return plots}
 
@@ -38,17 +38,22 @@ Data frame or list containing data frame, and (optionally) plots,
 and spatial data frames.
 }
 \description{
-Area of occupancy (AOO, also called Index of Area of Occupancy, IAO) and
-Extent of Occurrence (EOO) are metrics used by IUCN and COSEWIC to support
-status assessments for potentially endangered species.
+The COSEWIC Index of Area of Occupancy (IAO; also called Area of Occupancy,
+AOO by the IUCN) and Extent of Occurrence (EOO; IUCN as well) are metrics
+used to support status assessments for potentially endangered species.
 }
 \details{
-Details on how AOO and EOO are calculated and used
+Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is actually
+a different measure, the \emph{biological} area of occupancy. See the
+\href{https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html#Distribution}{Distribution}
+section in 'Instructions for preparing COSEWIC status reports'
+for more details.
+
+Details on how IAO and EOO are calculated and used
 \itemize{
 \item COSEWIC - \href{https://www.cosewic.ca/index.php/en-ca/reports/preparing-status-reports/guidelines-index-area-occupancy.html}{Guidelines for use of the Index of Area of Occupancy in COSEWIC Assessments}
+\item COSEWIC - \href{https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html}{Instructions for preparing COSEWIC status reports}
 \item COSEWIC - \href{https://www.cosewic.ca/index.php/en-ca/assessment-process/wildlife-species-assessment-process-categories-guidelines/quantitative-criteria.html}{Table 2 COSEWIC quantitative criteria and guidelines for the status assessment of Wildlife Species}
-\item IUCN - \href{https://nc.iucnredlist.org/redlist/content/attachment_files/RedListGuidelines.pdf}{Guidelines for Using the IUCN Red List Categories and Criteria Version 15.1}
-\item IUCN - \href{https://portals.iucn.org/library/sites/library/files/documents/RL-2001-001-2nd.pdf}{IUCN Red List categories and criteria, version 3.1, second edition}
 }
 }
 \examples{
