@@ -35,24 +35,26 @@ srv_query <- function(path, query = NULL, filter = NULL,
   resp <- try(httr::POST(url, body = query, encode = "form",
                          ua, httr::timeout(timeout)),
             silent = TRUE)
+  
   if(inherits(resp, "try-error")) {
+    
     if(stringr::str_detect(resp, "aborted by an application callback")){
       stop(resp, call. = FALSE)
     } else if (stringr::str_detect(resp, "Timeout was reached")) {
+      
       message("The server did not respond within ", timeout, "s. Trying again...")
       resp <- try(httr::POST(url, body = query, encode = "form",
                              ua, httr::timeout(timeout)),
                   silent = TRUE)
-      if(stringr::str_detect(resp, "Timeout was reached")) {
-       stop("The server has not respond within the 'timeout' specified.\n",
-            "Either try again later or increase the 'timeout' period.",
-            call. = FALSE)
+      if(inherits(resp, "try-error")) {
+        if(stringr::str_detect(resp, "Timeout was reached")) {
+          stop("The server has not respond within the 'timeout' specified.\n",
+               "Either try again later or increase the 'timeout' period.",
+               call. = FALSE)
+        } else {
+          stop("Unknown error", call. = FALSE)
+        }
       }
-    } else {
-      #message("Ooops, error on first try, retrying...\nError: ",
-      #        as.character(resp))
-      resp <- httr::POST(url, body = query, encode = "form",
-                         ua, httr::timeout(timeout))
     }
   }
 
