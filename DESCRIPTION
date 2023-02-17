@@ -17,7 +17,7 @@ Imports:
     askpass (>= 1.1),
     DBI (>= 1.0.0),
     dbplyr (>= 1.4.4),
-    dplyr (>= 0.7.8),
+    dplyr (>= 1.1.0),
     ggplot2 (>= 3.4.0),
     httr (>= 1.4.0),
     jsonlite (>= 1.6),

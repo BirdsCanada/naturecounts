@@ -113,7 +113,7 @@ NULL
 #' section](https://adv-r.hadley.nz/meta.html) of [Advanced
 #' R](https://adv-r.hadley.nz).
 #'
-#' @importFrom rlang .data :=
+#' @importFrom rlang .data := .env
 #' @md
 #' @name     tidyeval
 #' @keywords internal

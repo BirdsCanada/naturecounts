@@ -293,7 +293,8 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                     "species_id",
                     tidyselect::all_of(fill)) %>%
       dplyr::filter(.data$species_id %in% species) %>%
-      dplyr::left_join(df_by, ., by = c(by, "species_id")) %>%
+      dplyr::left_join(df_by, ., by = c(by, "species_id"), 
+                       multiple = "all") %>%
       dplyr::mutate(!!fill := tidyr::replace_na(!!rlang::sym(fill), 0))
   } else {
     df_filled <- dplyr::select(df, tidyselect::all_of(by)) %>%

@@ -67,12 +67,12 @@ test_that("Search for species codes by name", {
   expect_silent(search_species(show = "all")) %>%
     expect_equal(meta_species_taxonomy())
 
-  expect_silent(s1 <- search_species(authority = "BSCDATA")) %>%
-    expect_s3_class("data.frame")
+  expect_silent(s1 <- search_species(authority = "BSCDATA"))
+  expect_s3_class(s1, "data.frame")
   expect_true("BSCDATA" %in% names(s1))
 
-  expect_silent(s2 <- search_species(show = "all", authority = "BSCDATA")) %>%
-    expect_s3_class("data.frame")
+  expect_silent(s2 <- search_species(show = "all", authority = "BSCDATA"))
+  expect_s3_class(s2, "data.frame")
   expect_true("BSCDATA" %in% names(s2))
 
   expect_gt(length(s2), length(s1))
@@ -82,8 +82,8 @@ test_that("Search for species codes by name", {
   expect_gte(nrow(s1), 1)
   expect_gte(ncol(s1), 1)
 
-  expect_silent(s2 <- search_species("chickadee", authority = "BSCDATA")) %>%
-    expect_s3_class("data.frame")
+  expect_silent(s2 <- search_species("chickadee", authority = "BSCDATA"))
+  expect_s3_class(s2, "data.frame")
   expect_gte(nrow(s2), 1)
   expect_gte(ncol(s2), 1)
   expect_true("BSCDATA" %in% names(s2))
@@ -109,12 +109,12 @@ test_that("Species code returns all with no code", {
   expect_silent(search_species(show = "all")) %>%
     expect_equal(meta_species_taxonomy())
 
-  expect_silent(s1 <- search_species(authority = "BSCDATA")) %>%
-    expect_s3_class("data.frame")
+  expect_silent(s1 <- search_species(authority = "BSCDATA"))
+  expect_s3_class(s1, "data.frame")
   expect_true("BSCDATA" %in% names(s1))
 
-  expect_silent(s2 <- search_species(show = "all", authority = "BSCDATA")) %>%
-    expect_s3_class("data.frame")
+  expect_silent(s2 <- search_species(show = "all", authority = "BSCDATA"))
+  expect_s3_class(s2, "data.frame")
   expect_true("BSCDATA" %in% names(s2))
 
   expect_gt(length(s2), length(s1))
@@ -214,3 +214,4 @@ test_that("Search for region codes", {
   expect_equal(r$bcr, 6)
   expect_equal(r$bcr_name, "Boreal Taiga Plains")
 })
+
