@@ -4,21 +4,24 @@ parse_results <- function(r, results = FALSE) {
 }
 
 parse_request <- function(request) {
-  dplyr::tibble(request) %>%
-    dplyr::mutate(
-      request_id = names(.data$request),
-      request = unname(.data$request),
-      collection = purrr::map(.data$request,
-                              ~list_to_df(.$collection, type = "collection")),
-      filters = purrr::map_chr(.data$request, ~filter_to_str(.$filters)),
-      requestOrigin = purrr::map_chr(.data$request, ~null_to_na(.$requestOrigin)),
-      requestLabel = purrr::map_chr(.data$request, ~null_to_na(.$requestLabel))) %>%
-    tidyr::unnest(cols = "collection") %>%
-    dplyr::select("request_id", "requestOrigin", "requestLabel",
-                  "collection",
-                  "status" = "approved",
-                  "nrecords",
-                  "filters") %>%
+  
+  s <- tibblify::tspec_df(
+    .names_to = "request_id",
+    "request_origin" = tibblify::tib_chr("requestOrigin"),
+    "request_label" = tibblify::tib_chr("requestLabel"),
+    tibblify::tib_df(
+      "collection",
+      .names_to = "collection",
+      "status" = tibblify::tib_chr("approved"),
+      tibblify::tib_chr("nrecords"),
+    ),
+    tibblify::tib_variant("filters")
+  )
+  
+  tibblify::tibblify(request, spec = s) %>%
+    dplyr::mutate(filter = purrr::map_chr(.data$filters, filter_to_str)) %>%
+    dplyr::select(-"filters") %>%
+    tidyr::unnest("collection") %>%
     dplyr::mutate(nrecords = as_numeric(.data$nrecords)) %>%
     dplyr::arrange(.data$request_id) %>%
     as.data.frame()

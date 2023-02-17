@@ -40,3 +40,14 @@ test_that("nc_remove_cache()", {
                                              token = srv_auth("sample")))
   
 })
+
+test_that("parse_request()", {
+
+  req <- srv_query(api$list_requests, token = srv_auth("testuser"))$requests
+  
+  expect_silent(r <- parse_request(req))
+  expect_s3_class(r, "data.frame")
+  expect_gt(nrow(r), 1000) 
+  expect_named(r, c("request_id", "request_origin", "request_label", 
+                    "collection", "status", "nrecords", "filter"))
+})
