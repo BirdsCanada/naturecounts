@@ -51,3 +51,4 @@ URL: https://github.com/BirdsCanada/naturecounts,
     https://naturecounts.ca,
     https://birdscanada.github.io/naturecounts/
 VignetteBuilder: knitr
+Config/testthat/edition: 3

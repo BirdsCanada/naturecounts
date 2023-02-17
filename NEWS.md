@@ -1,5 +1,9 @@
 # naturecounts 0.3.0.9000
 * Add tools for COSEWIC assessments
+* Fix bug in search_species() which returned all authorities
+* Updated dependency to dplyr 1.1.0
+* Updated tests to testthat 3rd edition
+* Re-wrote internal requests formatting to improve speed
 
 # naturecounts 0.3.0
 
