@@ -33,7 +33,7 @@ test_that("db_create creates tables in the database", {
 
   # Check naturecounts table
   expect_silent(nc <- dplyr::tbl(con, "naturecounts")) %>%
-    expect_is("tbl_sql") %>%
+    expect_s3_class("tbl_sql") %>%
     expect_named()
 
   expect_silent(nc <- dplyr::collect(nc))
@@ -42,7 +42,7 @@ test_that("db_create creates tables in the database", {
 
   # Check version table
   expect_silent(v <- dplyr::tbl(con, "versions")) %>%
-    expect_is("tbl_sql") %>%
+    expect_s3_class("tbl_sql") %>%
     expect_named()
 
   expect_silent(v <- dplyr::collect(v))
@@ -59,7 +59,7 @@ test_that("db_create creates tables in the database", {
 
   for(m in funs) {
     expect_silent(d <- dplyr::tbl(con, !!m)) %>%
-      expect_is("tbl_sql")
+      expect_s3_class("tbl_sql")
     expect_equal(dplyr::collect(d) %>% dplyr::as_tibble(),
                  do.call(paste0("meta_", !!m), args = list()))
   }
@@ -76,7 +76,7 @@ test_that("db_connect creates SQLite database file", {
   # Check connection and encoding
   expect_message(con <- db_connect(),
                  "Database '.\\/naturecounts_[0-9-]{10}.nc' does not exist") %>%
-    expect_is("SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Check that file present
@@ -87,7 +87,7 @@ test_that("db_connect creates SQLite database file", {
 
   expect_message(con <- db_connect(),
                  "Database './naturecounts_[0-9-]{10}.nc' already exists") %>%
-    expect_is("SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Clean up
@@ -100,7 +100,7 @@ test_that("db_connect creates named SQLite database file", {
 
   # Check connection and encoding
   expect_silent(con <- db_connect("mydatabase", verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Check that file present
@@ -110,7 +110,7 @@ test_that("db_connect creates named SQLite database file", {
   DBI::dbDisconnect(con)
 
   expect_silent(con <- db_connect("mydatabase", verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Clean up
@@ -123,17 +123,17 @@ test_that("db_connect creates named SQLite database file", {
 test_that("db_insert add and appends rows", {
 
   expect_silent(con <- db_connect(verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
 
   # Adding data to an empty table
   expect_silent(db_insert(con, "naturecounts", bcch))
   expect_silent(nc1 <- dplyr::collect(dplyr::tbl(con, "naturecounts"))) %>%
-    expect_is("tbl")
+    expect_s3_class("tbl")
 
   # Appending new data to table with data
   expect_silent(db_insert(con, "naturecounts", hofi))
   expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts"))) %>%
-    expect_is("tbl")
+    expect_s3_class("tbl")
 
   expect_equal(nrow(nc2), nrow(bcch) + nrow(hofi))
 
@@ -145,7 +145,7 @@ test_that("db_insert add and appends rows", {
 test_that("db_insert overwrites rows as required", {
 
   expect_silent(con <- db_connect(verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
 
   # Trying to append duplicate data doesn't add anything
   expect_silent(db_insert(con, "naturecounts", bcch))
@@ -174,7 +174,7 @@ test_that("db_insert overwrites rows as required", {
 test_that("db_insert adds new cols as required", {
 
   expect_silent(con <- db_connect(verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
 
   n <- DBI::dbListFields(con, "naturecounts")
 
@@ -213,7 +213,7 @@ test_that("Data download to sql", {
                                  sql_db = "test"))
 
   expect_true(file.exists("./test.nc"))
-  expect_is(d, "SQLiteConnection")
+  expect_s4_class(d, "SQLiteConnection")
 
   expect_silent(d_db <- dplyr::collect(dplyr::tbl(d, "naturecounts")))
 
