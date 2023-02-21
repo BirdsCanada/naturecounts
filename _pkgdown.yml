@@ -41,6 +41,10 @@ reference:
   contents:
   - format_dates
   - format_zero_fill
+- title: COSEWIC functions
+  desc: Functions for helping with COSEWIC assessments
+  contents:
+  - cosewic_ranges
 - title: Data
   desc: Included example data sets
   contents:
