@@ -146,7 +146,7 @@ cosewic_ranges <- function(df_db,
                        n_records = dplyr::na_if(.data$n_records, 0))
     g <- ggplot2::ggplot() +
       ggplot2::theme_bw() +
-      ggplot2::geom_sf(data = a, ggplot2::aes(fill = n_records), 
+      ggplot2::geom_sf(data = a, ggplot2::aes(fill = .data$n_records), 
                        colour = "grey") +
       ggplot2::geom_sf(data = eoo[["eoo_sf"]], linewidth = 1.5, fill = NA,
                        ggplot2::aes(colour = "EOO")) +
@@ -206,12 +206,12 @@ cosewic_iao <- function(df_sf, cell_size, record_id) {
     
   iao <- iao_sf %>%
     dplyr::filter(.data$n_records > 0) %>%
-    dplyr::summarize(min_record = min(n_records),
-                     max_record = max(n_records),
-                     median_record = median(n_records),
+    dplyr::summarize(min_record = min(.data$n_records),
+                     max_record = max(.data$n_records),
+                     median_record = stats::median(.data$n_records),
                      grid_size_km = .env$cell_size,
                      n_occupied = dplyr::n(), 
-                     iao = n_occupied * .env$cell_size^2)
+                     iao = .data$n_occupied * .env$cell_size^2)
   
   iao_sf <- dplyr::right_join(grid, iao_sf, by = c("grid_lg_id", "grid_id"))
   
@@ -228,7 +228,7 @@ cosewic_eoo <- function(df_sf, p) {
   
   eoo_sf <- df_sf %>%
     dplyr::mutate(dist = sf::st_distance(.data$geometry, .env$center)[, 1]) %>%
-    dplyr::filter(dist <= quantile(.data$dist, .env$p)) %>%
+    dplyr::filter(.data$dist <= stats::quantile(.data$dist, .env$p)) %>%
     sf::st_cast(to = "POINT") %>%  
     sf::st_union() %>%
     sf::st_convex_hull() %>%
@@ -236,7 +236,7 @@ cosewic_eoo <- function(df_sf, p) {
     dplyr::mutate(eoo = sf::st_area(.),
                   eoo = units::set_units(.data$eoo, "km^2"))
   
-  list("eoo" = dplyr::pull(eoo_sf, eoo),
+  list("eoo" = dplyr::pull(eoo_sf, .data$eoo),
        "eoo_sf" = eoo_sf)
 }
 

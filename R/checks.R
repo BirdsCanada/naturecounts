@@ -254,7 +254,7 @@ have_sf_check <- function() {
   if(!requireNamespace("sf", quietly = TRUE)) {
     stop("This function requires the 'sf' package.", 
          "Please install with `install.packages(\"sf\")` first", call. = FALSE)
-  } else if(packageVersion("sf") < "1.0-9") {
+  } else if(utils::packageVersion("sf") < "1.0-9") {
     stop("This function requires 'sf' version 1.0-9 or higher.",
          "Please update with `install.packages(\"sf\")` first", call. = FALSE)
   }
