@@ -97,7 +97,7 @@ cosewic_ranges <- function(df_db,
                            spatial = TRUE) {
   
   # Checks
-  have_sf_check()
+  have_pkg_check("sf")
   df <- df_db_check(df_db)
   
   # Check species
@@ -175,36 +175,27 @@ cosewic_ranges <- function(df_db,
   ranges
 }
 
-
+# Faster grids https://github.com/r-spatial/sf/issues/1579
 cosewic_iao <- function(df_sf, cell_size, record_id) {
-  
-  cell_big <- cell_size * 10
-  
-  grid_lg <- df_sf %>% 
-    sf::st_buffer(cell_size/4) %>%
-    sf::st_make_grid(cellsize = cell_big) %>%
-    sf::st_as_sf() %>%
-    dplyr::mutate(grid_lg_id = 1:dplyr::n())
-  
-  grid <- sf::st_filter(grid_lg, df_sf) %>%
-    split(.$grid_lg_id) %>%
-    purrr::map(~sf::st_make_grid(.x, cellsize = cell_size) %>% 
-                 sf::st_as_sf()) %>%
-    dplyr::bind_rows(.id = "grid_lg_id") %>%
-    dplyr::mutate(grid_id = 1:dplyr::n()) 
 
-  iao_sf <- grid %>%
+  grid_lg <- grid_filter(grid_canada(), df_sf, cell_size = cell_size * 5) %>%
+    dplyr::bind_rows()
+  
+  grid <- grid_filter(grid_lg, df_sf, cell_size = cell_size) %>%
+    dplyr::bind_rows() %>%
+    dplyr::mutate(grid_id = 1:dplyr::n())
+  
+  iao_full <- grid %>%
     sf::st_join(df_sf) %>%
     sf::st_drop_geometry() %>%
-    dplyr::group_by(.data$grid_lg_id, .data$grid_id) %>%
-    dplyr::summarize(n_records = sum(!is.na(.data[[record_id]])), .groups = "drop") %>%
-    dplyr::ungroup()
+    dplyr::group_by(.data$grid_id) %>%
+    dplyr::summarize(n_records = sum(!is.na(.data[[record_id]])), .groups = "drop")
   
-  if(sum(iao_sf$n_records) != nrow(df_sf)) {
+  if(sum(iao_full$n_records) != nrow(df_sf)) {
     stop("Records incorrectly assigned to grids", call.= FALSE)
   }
-    
-  iao <- iao_sf %>%
+
+  iao <- iao_full %>%
     dplyr::filter(.data$n_records > 0) %>%
     dplyr::summarize(min_record = min(.data$n_records),
                      max_record = max(.data$n_records),
@@ -213,18 +204,17 @@ cosewic_iao <- function(df_sf, cell_size, record_id) {
                      n_occupied = dplyr::n(), 
                      iao = .data$n_occupied * .env$cell_size^2)
   
-  iao_sf <- dplyr::right_join(grid, iao_sf, by = c("grid_lg_id", "grid_id"))
+  iao_sf <- dplyr::right_join(grid, iao_full, by = "grid_id")
   
   list("iao" = iao,
        "iao_sf" = iao_sf)
 }
 
 cosewic_eoo <- function(df_sf, p) {
-
   center <- df_sf %>%
-    dplyr::summarize() %>%
-    sf::st_centroid() %>%
-    sf::st_as_sfc()
+    sf::st_union() %>%
+    sf::st_convex_hull() %>%
+    sf::st_centroid()
   
   eoo_sf <- df_sf %>%
     dplyr::mutate(dist = sf::st_distance(.data$geometry, .env$center)[, 1]) %>%
@@ -251,4 +241,89 @@ prep_spatial <- function(df,
 }
 
 
+#' Create grid across Canada
+#'
+#' @param cell_size Numeric. Size of grid (km) to use when creating grid.
+#'   If using this grid as input to `cosewic_ranges()`, should use default
+#'   COSEWIC grid size of 2.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' 
+#' gc <- grid_canada(200) 
+#' 
+#' # Plot to illustrate
+#' library(ggplot2)
+#' ggplot() +
+#'   geom_sf(data = map_canada()) +
+#'   geom_sf(data = gc, fill = NA)
+ 
+grid_canada <- function(cell_size = 200){
+  have_pkg_check("sf")
+  map_canada() %>%
+    sf::st_buffer(units::set_units(200, "km")) %>%
+    make_grid(cell_size) %>%
+    sf::st_as_sf() %>%
+    dplyr::mutate(grid_ca_id = 1:dplyr::n())
+}
 
+
+
+#' Filter df by a grid and create a smaller grid
+#'
+#' @param grid 
+#' @param df_sf 
+#' @param id_orig 
+#' @param id_new 
+#' @param cell_size 
+#'
+#' @examples
+#' bcch_sf <- sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326)
+#' bcch_sf <- sf::st_transform(bcch_sf, crs = 3347)
+#' grid_filter(grid_canada(), bcch_sf, cell_size = 5)
+#' 
+#' @noRd
+grid_filter <- function(grid, df_sf, cell_size) {
+  sf::st_filter(grid, df_sf) %>% 
+    dplyr::mutate(id = 1:dplyr::n()) %>%
+    split(.$id) %>%
+    purrr::map(~ make_grid(.x, cell_size))
+}
+
+make_grid <- function(df_sf, cell_size) {
+  cell_size <- units::set_units(cell_size, "km")
+  cell_size <- units::set_units(cell_size, "m")
+  cell_size <- as.numeric(cell_size)
+  
+  df_sf %>%
+    sf::st_bbox() %>%
+    wk::as_rct() %>%
+    wk::grd(dx = cell_size, dy = cell_size) %>%
+    sf::st_as_sf()
+}
+
+#' Map of Canada
+#' 
+#' Wrapper around `rnaturalearth::ne_countries()` to creates a simple features
+#' basic map of Canada with CRS 3347 (Statistics Canada Lambert).
+#'
+#' @return Sf data frame
+#' @export
+#'
+#' @examples
+#' 
+#' map_canada()
+#' 
+#' plot(map_canada())
+#' 
+#' library(ggplot2)
+#' ggplot(data = map_canada()) + geom_sf()
+#' 
+map_canada <- function() {
+  have_pkg_check("rnaturalearth")
+  have_pkg_check("sf")
+  rnaturalearth::ne_countries(country = "Canada", returnclass = "sf") %>% 
+    sf::st_transform(crs = 3347)
+}

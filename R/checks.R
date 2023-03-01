@@ -250,15 +250,16 @@ codes_convert <- function(desc, type) {
   dplyr::pull(c, paste0(type, "_code"))
 }
 
-have_sf_check <- function() {
-  if(!requireNamespace("sf", quietly = TRUE)) {
-    stop("This function requires the 'sf' package.", 
-         "Please install with `install.packages(\"sf\")` first", call. = FALSE)
-  } else if(utils::packageVersion("sf") < "1.0-9") {
+have_pkg_check <- function(pkg) {
+  if(!requireNamespace(pkg, quietly = TRUE)) {
+    stop("This function requires the '", pkg, "' package.", 
+         "Please install with `install.packages(\"", pkg, "\")` first", call. = FALSE)
+  } else if(pkg == "sf" && utils::packageVersion("sf") < "1.0-9") {
     stop("This function requires 'sf' version 1.0-9 or higher.",
          "Please update with `install.packages(\"sf\")` first", call. = FALSE)
   }
 }
+
 
 df_db_check <- function(df_db, collect = TRUE, verbose = TRUE) {
   
