@@ -29,13 +29,13 @@ test_that("cosewic_iao()", {
   
   expect_s3_class(a[["iao"]], "data.frame")
   expect_equal(a[["iao"]], 
-               dplyr::tibble(min_record = 1, max_record = 35, median_record = 1, 
+               dplyr::tibble(min_record = 1, max_record = 36, median_record = 1, 
                              grid_size_km = units::set_units(2, "km"), 
                              n_occupied = 31, iao = units::set_units(124, "km2")))
   
   expect_s3_class(a[["iao_sf"]], "sf")
   expect_equal(sum(a[["iao_sf"]]$n_records), nrow(bcch))
-  expect_equal(nrow(a[["iao_sf"]]), 525)
+  expect_equal(nrow(a[["iao_sf"]]), 450)
   expect_equal(unique(as.character(sf::st_geometry_type(a[["iao_sf"]]))),
                "POLYGON")
   expect_snapshot_value(a[["iao_sf"]], style = "json2")
@@ -48,7 +48,7 @@ test_that("cosewic_ranges()", {
   expect_named(r, c("ranges", "plot", "spatial"))
   expect_equal(
     r[["ranges"]], 
-    dplyr::tibble(min_record = 1, max_record = 35, median_record = 1, 
+    dplyr::tibble(min_record = 1, max_record = 36, median_record = 1, 
                   grid_size_km = units::set_units(2, "km"), 
                   n_occupied = 31, iao = units::set_units(124, "km2"),
                   eoo_p95 = units::set_units(1243.421, "km2")), 
@@ -62,5 +62,47 @@ test_that("cosewic_ranges()", {
   
   expect_message(r <- cosewic_ranges(bcch[1,]), "EOO is less than IAO")
   expect_equal(r$ranges$iao, r$ranges$eoo_p95)
+})
+
+test_that("cosewic_ranges() filter_unique", {
   
+  # 95% EOO
+  expect_silent(r1 <- cosewic_ranges(bcch)[["ranges"]])
+  expect_warning(r2 <- cosewic_ranges(bcch, filter_unique = TRUE)[["ranges"]],
+                 "This may bias non-100% EOO calculations")
+  
+  expect_gt(r1$max_record, r2$max_record)
+  expect_equal(r1[,c("grid_size_km", "n_occupied", "iao")],
+               r2[,c("grid_size_km", "n_occupied", "iao")])
+  expect_false(r1$eoo_p95 == r2$eoo_p95)
+  
+  expect_silent(r1 <- cosewic_ranges(bcch)[["ranges"]])
+  expect_warning(r2 <- cosewic_ranges(bcch, filter_unique = TRUE)[["ranges"]],
+                 "This may bias non-100% EOO calculations")
+  
+  # Full EOO
+  expect_silent(r1 <- cosewic_ranges(bcch, eoo_p = 1)[["ranges"]])
+  expect_warning(r2 <- cosewic_ranges(bcch, filter_unique = TRUE, eoo_p = 1)[["ranges"]],
+                 "Filtering")
+  expect_gt(r1$max_record, r2$max_record)
+  expect_equal(r1[,c("grid_size_km", "n_occupied", "iao")],
+               r2[,c("grid_size_km", "n_occupied", "iao")])
+  expect_true(r1$eoo_p100 == r2$eoo_p100)
+  
+})
+
+
+test_that("cosewic_plot()", {
+  
+  expect_silent(r1 <- cosewic_ranges(bcch))
+  expect_silent(g1 <- cosewic_plot(r1))
+  expect_s3_class(g, "ggplot")
+  
+  expect_silent(g2 <- cosewic_plot(r1, grid = grid_canada()))  
+  expect_silent(g3 <- cosewic_plot(r1, points = bcch))
+  expect_silent(g4 <- cosewic_plot(r1, grid = grid_canada(), 
+                                   map = map_canada()))
+  expect_silent(g5 <- cosewic_plot(r1, grid = grid_canada(), 
+                                   map = map_canada(), 
+                                   title = "Black-capped Chickadees"))  
 })

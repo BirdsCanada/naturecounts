@@ -11,7 +11,7 @@ cosewic_ranges(
   coord_lat = "latitude",
   iao_grid_size_km = 2,
   eoo_p = 0.95,
-  plot = TRUE,
+  filter_unique = FALSE,
   spatial = TRUE
 )
 }
@@ -34,14 +34,17 @@ Defaults to 0.95 for a 95\% convex hull to ensure outlier points do not
 artificially inflate the EOO. Note that for a final COSEWIC report, this
 may not be appropriate. Set to 1 to include all points.}
 
-\item{plot}{Logical. Whether to return plot}
+\item{filter_unique}{Logical. Whether to filter observations to unique
+locations. Use this only if there are too many data points to work with.
+This changes the nature of what an observation is, and also may bias
+EOO calculations if using less than 100\% of points (see \code{eoo_p}).}
 
 \item{spatial}{Logical. Whether to return sf spatial objects showing
 calculations.}
 }
 \value{
-Data frame or list containing data frame, and (optionally) plot,
-and spatial data frames.
+Data frame or list containing data frame, and (optionally)
+spatial data frames.
 }
 \description{
 The COSEWIC Index of Area of Occupancy (IAO; also called Area of Occupancy,
@@ -84,7 +87,6 @@ bcch # look at the data
 
 r <- cosewic_ranges(bcch)
 r <- cosewic_ranges(bcch, spatial = FALSE)
-r <- cosewic_ranges(bcch, spatial = FALSE, plot = FALSE)
 
 # Use multiple species
 library(purrr)
@@ -99,17 +101,14 @@ mult <- nest(mult,  .by = species_id)
 mult
 
 # Calculate ranges for nested data
-r <- mutate(mult, results = map(data, cosewic_ranges, plot = FALSE, spatial = FALSE))
+r <- mutate(mult, results = map(data, cosewic_ranges, spatial = FALSE))
 r <- unnest(r, results)
 r
 
-# To also return plot and spatial
+# To also return spatial
 r <- mutate(mult, results = map(data, cosewic_ranges))
 r <- unnest_wider(r, results) \%>\%
   unnest(ranges)
 r
-
-# Take a look at one specifically
-r$plot[[1]]
 
 }

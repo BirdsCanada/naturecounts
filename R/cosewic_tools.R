@@ -42,12 +42,15 @@
 #'   Defaults to 0.95 for a 95% convex hull to ensure outlier points do not
 #'   artificially inflate the EOO. Note that for a final COSEWIC report, this
 #'   may not be appropriate. Set to 1 to include all points.
-#' @param plot Logical. Whether to return plot
+#' @param filter_unique Logical. Whether to filter observations to unique 
+#'   locations. Use this only if there are too many data points to work with. 
+#'   This changes the nature of what an observation is, and also may bias 
+#'   EOO calculations if using less than 100% of points (see `eoo_p`).
 #' @param spatial Logical. Whether to return sf spatial objects showing
 #'   calculations.
 #'
-#' @return Data frame or list containing data frame, and (optionally) plot, 
-#' and spatial data frames.
+#' @return Data frame or list containing data frame, and (optionally)
+#' spatial data frames.
 #'
 #' @examples
 #' 
@@ -57,7 +60,6 @@
 #'
 #' r <- cosewic_ranges(bcch)
 #' r <- cosewic_ranges(bcch, spatial = FALSE)
-#' r <- cosewic_ranges(bcch, spatial = FALSE, plot = FALSE)
 #'
 #' # Use multiple species
 #' library(purrr)
@@ -72,18 +74,15 @@
 #' mult
 #' 
 #' # Calculate ranges for nested data
-#' r <- mutate(mult, results = map(data, cosewic_ranges, plot = FALSE, spatial = FALSE))
+#' r <- mutate(mult, results = map(data, cosewic_ranges, spatial = FALSE))
 #' r <- unnest(r, results)
 #' r
 #' 
-#' # To also return plot and spatial
+#' # To also return spatial
 #' r <- mutate(mult, results = map(data, cosewic_ranges))
 #' r <- unnest_wider(r, results) %>%
 #'   unnest(ranges)
 #' r
-#' 
-#' # Take a look at one specifically
-#' r$plot[[1]]
 #'
 #' @export 
 
@@ -93,7 +92,7 @@ cosewic_ranges <- function(df_db,
                            coord_lat = "latitude",
                            iao_grid_size_km = 2,
                            eoo_p = 0.95,
-                           plot = TRUE,
+                           filter_unique = FALSE,
                            spatial = TRUE) {
   
   # Checks
@@ -113,12 +112,29 @@ cosewic_ranges <- function(df_db,
     stop("`coord_lat` and `coord_lon` must be numeric", call. = FALSE)
   }
   
+  
+  # Filter to unique locations?
+  if(filter_unique) {
+    warning("Filtering to unique lat/lon locations (records now equal locations).\n",
+            dplyr::if_else(eoo_p != 1, "This may bias non-100% EOO calculations\n", ""),
+            "Only do this if the number of observations is too high to process", 
+            call. = FALSE)
+    
+    df <- df %>%
+      dplyr::select(
+        dplyr::all_of(c(.env$coord_lon, .env$coord_lat))) %>%
+      dplyr::distinct() %>%
+      dplyr::mutate(!!record_id := 1:dplyr::n())
+  }
+    
   # Note on CRS
   # GeoCAT uses Google's projection EPSG:3857, Web Mercator because of backend
   # Probably should use Canadian projection. Currently using 3347 (Stats 
   # Canada).
   
   df_sf <- prep_spatial(df)
+  
+  
   
   # Set units
   cell_size <- units::as_units(iao_grid_size_km, "km")
@@ -141,44 +157,29 @@ cosewic_ranges <- function(df_db,
   
   ranges <- dplyr::rename(ranges, !!paste0("eoo_p", eoo_p*100) := "eoo")
   
-  if(plot) {
-    a <- dplyr::mutate(iao[["iao_sf"]], 
-                       n_records = dplyr::na_if(.data$n_records, 0))
-    g <- ggplot2::ggplot() +
-      ggplot2::theme_bw() +
-      ggplot2::geom_sf(data = a, ggplot2::aes(fill = .data$n_records), 
-                       colour = "grey") +
-      ggplot2::geom_sf(data = eoo[["eoo_sf"]], linewidth = 1.5, fill = NA,
-                       ggplot2::aes(colour = "EOO")) +
-      ggplot2::geom_sf(data = df_sf) +
-      ggplot2::scale_fill_viridis_c(name = "No. records\nper cell",
-                                    na.value = NA) +
-      ggplot2::scale_colour_manual(name = NULL, values = "black") +
-      ggplot2::labs(
-        caption = paste0("Filled cells represent IAO; ",
-                         "Black outline represents EOO\n",
-                         "Grid is ", iao_grid_size_km, "x", iao_grid_size_km, 
-                         "km"))
-  } else {
-    g <- NULL
-  } 
-  
-  if(plot | spatial) ranges <- list("ranges" = ranges)
-  if(plot) ranges <- append(ranges, list("plot" = list(g)))
-  if(spatial) {
-    ranges <- append(
-      ranges, 
-      list("spatial" = list("iao_sf" = iao[["iao_sf"]],
-                            "eoo_sf" = eoo[["eoo_sf"]])))
-  }
-    
+  if(spatial) ranges <- list("ranges" = ranges,
+                             "spatial" = list("iao_sf" = iao[["iao_sf"]],
+                                              "eoo_sf" = eoo[["eoo_sf"]]))
   ranges
 }
 
 # Faster grids https://github.com/r-spatial/sf/issues/1579
 cosewic_iao <- function(df_sf, cell_size, record_id) {
 
-  grid_lg <- grid_filter(grid_canada(), df_sf, cell_size = cell_size * 5) %>%
+  grid_ca <- grid_canada(buffer = 500)
+  
+  # Check if all points in grid
+  missing <- !sf::st_within(df_sf, sf::st_union(grid_ca), sparse = FALSE)
+  if(any(missing)) {
+    ids <- df_sf$record_id[which(missing)]
+    message(
+      "  Some observations not within the limits of Canada and a 500km buffer",
+      "\n  Omitting record_ids(s): ", 
+      paste0(ids, collapse = ", "))
+    df_sf <- dplyr::filter(df_sf, !.data$record_id %in% ids)
+  }
+  
+  grid_lg <- grid_filter(grid_ca, df_sf, cell_size = cell_size * 5) %>%
     dplyr::bind_rows()
   
   grid <- grid_filter(grid_lg, df_sf, cell_size = cell_size) %>%
@@ -246,27 +247,37 @@ prep_spatial <- function(df,
 #' @param cell_size Numeric. Size of grid (km) to use when creating grid.
 #'   If using this grid as input to `cosewic_ranges()`, should use default
 #'   COSEWIC grid size of 2.
+#' @param buffer Numeric. Extra buffer (km) to add around the outline of Canada
+#'   before caluclating grid.
 #'
-#' @return
+#' @return sf data frame with polygon grid
 #' @export
 #'
 #' @examples
 #' 
 #' gc <- grid_canada(200) 
+#' gc_buff <- grid_canada(200, buffer = 0)
 #' 
 #' # Plot to illustrate
 #' library(ggplot2)
 #' ggplot() +
 #'   geom_sf(data = map_canada()) +
-#'   geom_sf(data = gc, fill = NA)
+#'   geom_sf(data = gc, fill = NA) +
+#'   labs(caption = "200km buffer")
+#'   
+#' ggplot() +
+#'   geom_sf(data = map_canada()) +
+#'   geom_sf(data = gc_buff, fill = NA) +
+#'   labs(caption = "No buffer")
  
-grid_canada <- function(cell_size = 200){
+grid_canada <- function(cell_size = 200, buffer = 500){
   have_pkg_check("sf")
   map_canada() %>%
-    sf::st_buffer(units::set_units(200, "km")) %>%
+    sf::st_buffer(units::set_units(buffer, "km")) %>%
     make_grid(cell_size) %>%
     sf::st_as_sf() %>%
-    dplyr::mutate(grid_ca_id = 1:dplyr::n())
+    dplyr::mutate(grid_ca_id = 1:dplyr::n(),
+                  grid_size = .env$cell_size)
 }
 
 
@@ -326,4 +337,80 @@ map_canada <- function() {
   have_pkg_check("sf")
   rnaturalearth::ne_countries(country = "Canada", returnclass = "sf") %>% 
     sf::st_transform(crs = 3347)
+}
+
+
+
+#' Plot COSEWIC IAO and EOO
+#' 
+#' Creates a plot of COSEWIC ranges for illustration and checking.
+#'
+#' @param ranges List. Output of `cosewic_ranges()`. 
+#' @param points Data frame. Optional naturecounts data used to compute ranges.
+#'   Raw data points will be added to the plot if provided.
+#' @param grid sf data frame. Optional grid over which to summarize IAO values
+#'   (useful for species with many points over a broad distribution).
+#' @param map sf data frame. Optional base map over which to plot the values.
+#' @param title Character. Optional title to add to the map.
+#'
+#' @return ggplot2 map
+#' @export
+#'
+#' @examples
+#' 
+#' r <- cosewic_ranges(bcch)
+#' cosewic_plot(r)
+#' 
+#' cosewic_plot(r, points = bcch)
+#' 
+#' cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
+#'              title = "Black-capped chickadees")
+#' 
+cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL, 
+                         title = "") {
+  
+  have_pkg_check("sf")
+
+  iao <- ranges[["spatial"]][["iao_sf"]] %>%
+    dplyr::filter(.data$n_records > 0)
+  
+  size_a <- ranges[["ranges"]]$grid_size_km
+
+  if(!is.null(grid)) {
+    iao <- iao %>%
+    sf::st_join(grid, ., left = FALSE) %>% # Inner join
+    dplyr::group_by(.data$grid_ca_id) %>%
+    dplyr::summarize(n_records = sum(.data$n_records))
+    size_p <- grid$grid_size[1]
+  } else {
+    size_p <- size_a
+  }
+  
+  eoo <- ranges[["spatial"]][["eoo_sf"]]
+  
+  eoo_lab <- stringr::str_subset(names(ranges[["ranges"]]), "eoo") %>%
+    stringr::str_replace("_", " ") %>%
+    stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
+    toupper()
+  
+  g <- ggplot2::ggplot() +
+    ggplot2::theme_minimal() +
+    ggplot2::geom_sf(data = iao, ggplot2::aes(fill = n_records), colour = NA) +
+    ggplot2::geom_sf(data = eoo, ggplot2::aes(colour = !!eoo_lab), alpha = 0.1) +
+    ggplot2::scale_fill_viridis_c() +
+    ggplot2::scale_colour_manual(name = "", values = "grey20") +
+    ggplot2::labs(
+      fill = "IAO\nNo. records", 
+      title = title,
+      caption = 
+        paste0("Showing ", size_p, "x", size_p, 
+               "km grids\nAnalysis used ",
+               size_a, "x", size_a, " km"))
+  
+  if(!is.null(map)) g <- g + ggplot2::geom_sf(data = map, fill = NA)
+  if(!is.null(points)) {
+    points <- prep_spatial(points, extra = NULL) 
+    g <- g + ggplot2::geom_sf(data = points)
+  }
+  g
 }
