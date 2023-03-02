@@ -396,7 +396,7 @@ cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL,
   g <- ggplot2::ggplot() +
     ggplot2::theme_minimal() +
     ggplot2::geom_sf(data = iao, ggplot2::aes(fill = n_records), colour = NA) +
-    ggplot2::geom_sf(data = eoo, ggplot2::aes(colour = !!eoo_lab), alpha = 0.1) +
+    ggplot2::geom_sf(data = eoo, ggplot2::aes(colour = !!eoo_lab)) +
     ggplot2::scale_fill_viridis_c() +
     ggplot2::scale_colour_manual(name = "", values = "grey20") +
     ggplot2::labs(
