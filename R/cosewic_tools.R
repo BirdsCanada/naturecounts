@@ -275,7 +275,7 @@ prep_spatial <- function(df,
 #'   If using this grid as input to `cosewic_ranges()`, should use default
 #'   COSEWIC grid size of 2.
 #' @param buffer Numeric. Extra buffer (km) to add around the outline of Canada
-#'   before caluclating grid.
+#'   before calculating grid.
 #'
 #' @return sf data frame with polygon grid
 #' @export
@@ -450,7 +450,7 @@ cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL,
     toupper()
   
   g <- list()
-  if(all(title == "")) title <- setNames(nm = unique(iao[[species_id]]))
+  if(all(title == "")) title <- stats::setNames(nm = unique(iao[[species_id]]))
   
   for(i in unique(iao[[species_id]])) {
     if(length(title) > 1) t <- title[[as.character(i)]] else t <- title
@@ -461,7 +461,7 @@ cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL,
     g1 <- ggplot2::ggplot() +
       ggplot2::theme_minimal() +
       ggplot2::geom_sf(data = e, ggplot2::aes(colour = !!eoo_lab)) +
-      ggplot2::geom_sf(data = a, ggplot2::aes(fill = n_records), colour = NA) +
+      ggplot2::geom_sf(data = a, ggplot2::aes(fill = .data$n_records), colour = NA) +
       ggplot2::scale_fill_viridis_c() +
       ggplot2::scale_colour_manual(name = "", values = "grey20") +
       ggplot2::labs(

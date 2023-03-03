@@ -12,7 +12,7 @@ If using this grid as input to \code{cosewic_ranges()}, should use default
 COSEWIC grid size of 2.}
 
 \item{buffer}{Numeric. Extra buffer (km) to add around the outline of Canada
-before caluclating grid.}
+before calculating grid.}
 }
 \value{
 sf data frame with polygon grid
