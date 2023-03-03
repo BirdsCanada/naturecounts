@@ -9,6 +9,7 @@ cosewic_ranges(
   record_id = "record_id",
   coord_lon = "longitude",
   coord_lat = "latitude",
+  species_id = "species_id",
   iao_grid_size_km = 2,
   eoo_p = 0.95,
   filter_unique = FALSE,
@@ -25,6 +26,9 @@ identification.}
 \item{coord_lon}{Character. Name of the column containing longitude.}
 
 \item{coord_lat}{Character. Name of the column containing latitude.}
+
+\item{species_id}{Character. Name of the column containing species
+identification.}
 
 \item{iao_grid_size_km}{Numeric. Size of grid (km) to use when calculating
 IAO. Default is COSEWIC requirement (2). Use caution if changing.}
@@ -43,8 +47,27 @@ EOO calculations if using less than 100\% of points (see \code{eoo_p}).}
 calculations.}
 }
 \value{
-Data frame or list containing data frame, and (optionally)
-spatial data frames.
+Summarized data frame (ranges) or list containing \code{ranges}, a
+summarized data frame, and \code{spatial}, a list of two spatial data frames.
+
+\code{ranges} contains columns
+\itemize{
+\item \code{n_records_total} - Total number of records used to create ranges
+\item \code{min_record} - Minimum number of records within IAO cells
+\item \code{max_record} - Maximum number of records within IAO cells
+\item \code{median_record} - Median number of records within IAO cells
+\item \code{grid_size_km} - IAO cell size (area is this squared)
+\item \code{n_occupied} - Number of IAO cells with at least one record
+\item \code{iao} - IAO value (\code{grid_size_km}^2 * \code{n_occupied})
+\item \code{eoo_pXX} - EOO area calculated with a convex hull at percentile \code{eoo_p}
+(e.g., 95\%)
+}
+
+\code{spatial} contains spatial data frames
+\itemize{
+\item \code{iao_sf} - Polygons of the IAO grids with the \code{n_records} per cell
+\item \code{eoo_sf} - Polygon of the Convex Hull at percentile \code{eoo_p}
+}
 }
 \description{
 The COSEWIC Index of Area of Occupancy (IAO; also called Area of Occupancy,
@@ -88,27 +111,10 @@ bcch # look at the data
 r <- cosewic_ranges(bcch)
 r <- cosewic_ranges(bcch, spatial = FALSE)
 
-# Use multiple species
-library(purrr)
-library(dplyr)
-library(tidyr)
-
-# Get multiple species
+# Calculate for multiple species
 mult <- rbind(bcch, hofi)
+r <- cosewic_ranges(mult)
+r <- cosewic_ranges(mult, spatial = FALSE)
 
-# Nest
-mult <- nest(mult,  .by = species_id)
-mult
-
-# Calculate ranges for nested data
-r <- mutate(mult, results = map(data, cosewic_ranges, spatial = FALSE))
-r <- unnest(r, results)
-r
-
-# To also return spatial
-r <- mutate(mult, results = map(data, cosewic_ranges))
-r <- unnest_wider(r, results) \%>\%
-  unnest(ranges)
-r
 
 }

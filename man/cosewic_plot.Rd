@@ -4,10 +4,17 @@
 \alias{cosewic_plot}
 \title{Plot COSEWIC IAO and EOO}
 \usage{
-cosewic_plot(ranges, points = NULL, grid = NULL, map = NULL, title = "")
+cosewic_plot(
+  ranges,
+  points = NULL,
+  grid = NULL,
+  map = NULL,
+  species_id = "species_id",
+  title = ""
+)
 }
 \arguments{
-\item{ranges}{List. Output of \code{cosewic_ranges()}.}
+\item{ranges}{List. Output of \code{cosewic_ranges()} with \code{spatial = TRUE}.}
 
 \item{points}{Data frame. Optional naturecounts data used to compute ranges.
 Raw data points will be added to the plot if provided.}
@@ -17,7 +24,11 @@ Raw data points will be added to the plot if provided.}
 
 \item{map}{sf data frame. Optional base map over which to plot the values.}
 
-\item{title}{Character. Optional title to add to the map.}
+\item{species_id}{Character. Name of the column containing species
+identification.}
+
+\item{title}{Character. Optional title to add to the map. Can be a named by
+species vector to supply different titles for different species.}
 }
 \value{
 ggplot2 map
@@ -29,10 +40,18 @@ Creates a plot of COSEWIC ranges for illustration and checking.
 
 r <- cosewic_ranges(bcch)
 cosewic_plot(r)
-
 cosewic_plot(r, points = bcch)
-
 cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
              title = "Black-capped chickadees")
+             
+m <- rbind(bcch, hofi)
+r <- cosewic_ranges(m)
+cosewic_plot(r)
+cosewic_plot(r, points = m)
+p <- cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
+                 title = c("14280" = "Black-capped chickadees", 
+                           "20350" = "House Finches"))
+p[[1]]
+p[[2]]
 
 }

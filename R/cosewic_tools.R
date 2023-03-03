@@ -36,6 +36,8 @@
 #'   identification.
 #' @param coord_lon Character. Name of the column containing longitude.
 #' @param coord_lat Character. Name of the column containing latitude. 
+#' @param species_id Character. Name of the column containing species
+#'   identification.
 #' @param iao_grid_size_km Numeric. Size of grid (km) to use when calculating
 #'   IAO. Default is COSEWIC requirement (2). Use caution if changing.
 #' @param eoo_p Numeric. The percentile to calculate the convex hull over.
@@ -49,8 +51,24 @@
 #' @param spatial Logical. Whether to return sf spatial objects showing
 #'   calculations.
 #'
-#' @return Data frame or list containing data frame, and (optionally)
-#' spatial data frames.
+#' @return Summarized data frame (ranges) or list containing `ranges`, a
+#'   summarized data frame, and `spatial`, a list of two spatial data frames.
+#' 
+#' `ranges` contains columns
+#'   - `n_records_total` - Total number of records used to create ranges
+#'   - `min_record` - Minimum number of records within IAO cells
+#'   - `max_record` - Maximum number of records within IAO cells
+#'   - `median_record` - Median number of records within IAO cells
+#'   - `grid_size_km` - IAO cell size (area is this squared)
+#'   - `n_occupied` - Number of IAO cells with at least one record
+#'   - `iao` - IAO value (`grid_size_km`^2 * `n_occupied`)
+#'   - `eoo_pXX` - EOO area calculated with a convex hull at percentile `eoo_p` 
+#'     (e.g., 95%)
+#' 
+#' `spatial` contains spatial data frames
+#' - `iao_sf` - Polygons of the IAO grids with the `n_records` per cell
+#' - `eoo_sf` - Polygon of the Convex Hull at percentile `eoo_p`
+#' 
 #'
 #' @examples
 #' 
@@ -61,28 +79,11 @@
 #' r <- cosewic_ranges(bcch)
 #' r <- cosewic_ranges(bcch, spatial = FALSE)
 #'
-#' # Use multiple species
-#' library(purrr)
-#' library(dplyr)
-#' library(tidyr)
-#' 
-#' # Get multiple species
+#' # Calculate for multiple species
 #' mult <- rbind(bcch, hofi)
+#' r <- cosewic_ranges(mult)
+#' r <- cosewic_ranges(mult, spatial = FALSE)
 #' 
-#' # Nest
-#' mult <- nest(mult,  .by = species_id)
-#' mult
-#' 
-#' # Calculate ranges for nested data
-#' r <- mutate(mult, results = map(data, cosewic_ranges, spatial = FALSE))
-#' r <- unnest(r, results)
-#' r
-#' 
-#' # To also return spatial
-#' r <- mutate(mult, results = map(data, cosewic_ranges))
-#' r <- unnest_wider(r, results) %>%
-#'   unnest(ranges)
-#' r
 #'
 #' @export 
 
@@ -90,6 +91,7 @@ cosewic_ranges <- function(df_db,
                            record_id = "record_id", 
                            coord_lon = "longitude",
                            coord_lat = "latitude",
+                           species_id = "species_id",
                            iao_grid_size_km = 2,
                            eoo_p = 0.95,
                            filter_unique = FALSE,
@@ -99,19 +101,20 @@ cosewic_ranges <- function(df_db,
   have_pkg_check("sf")
   df <- df_db_check(df_db)
   
-  # Check species
-  if("species_id" %in% names(df) && dplyr::n_distinct(df$species_id) > 1) {
-    stop("Multiple species detected. See examples in ?cosewic_ranges for how ",
-         "to run multiple species.", call. = FALSE)
-  }
-  
-  # CHECK COORDS
+  # Coords
   if(!all(c(coord_lat, coord_lon) %in% names(df))) {
     stop("`coord_lat` and `coord_lon` must be columns in `df_db`", call. = FALSE)
   } else if (!all(is.numeric(df[[coord_lat]]), is.numeric(df[[coord_lat]]))) {
     stop("`coord_lat` and `coord_lon` must be numeric", call. = FALSE)
   }
   
+  # Columns
+  if(!species_id %in% names(df)) {
+    stop("`species_id` must be a column in `df_db`", call. = FALSE)
+  }
+  if(!record_id %in% names(df)) {
+    stop("`record_id` must be a column in `df_db`", call. = FALSE)
+  }
   
   # Filter to unique locations?
   if(filter_unique) {
@@ -122,7 +125,7 @@ cosewic_ranges <- function(df_db,
     
     df <- df %>%
       dplyr::select(
-        dplyr::all_of(c(.env$coord_lon, .env$coord_lat))) %>%
+        dplyr::all_of(c(.env$species_id, .env$coord_lon, .env$coord_lat))) %>%
       dplyr::distinct() %>%
       dplyr::mutate(!!record_id := 1:dplyr::n())
   }
@@ -132,39 +135,60 @@ cosewic_ranges <- function(df_db,
   # Probably should use Canadian projection. Currently using 3347 (Stats 
   # Canada).
   
-  df_sf <- prep_spatial(df)
-  
-  
-  
   # Set units
   cell_size <- units::as_units(iao_grid_size_km, "km")
+  
+  df_sf <- prep_spatial(df, 
+                        coords = c(coord_lon, coord_lat),
+                        extra = c(record_id, species_id))
+
+  n <- dplyr::count(df, .data[[species_id]], name = "n_records_total")
 
   # Calculate
-  eoo <- cosewic_eoo(df_sf, p = eoo_p)
-  iao <- cosewic_iao(df_sf, cell_size, record_id)
   
-  # Assemble
-  ranges <- dplyr::mutate(iao[["iao"]], eoo = .env$eoo[["eoo"]])
- 
-  if(ranges$eoo < ranges$iao) {
-   message(
-   "EOO is less than IAO. This can occur if there are very few, clustered ",
-   "records.\nMaking EOO equal to IAO ",
-   "(see 'Instructions for preparing COSEWIC status reports'",
-   "\nin ?cosewic_ranges)")
-    ranges$eoo <- ranges$iao
+  df_sf <- split(df_sf, df_sf$species_id)
+
+  eoo <- purrr::map(df_sf, ~cosewic_eoo(.x, p = eoo_p, spatial)) %>%
+    dplyr::bind_rows(.id = "species_id") %>% 
+    dplyr::mutate(!!species_id := as.integer(.data[[species_id]])) %>%
+    dplyr::left_join(n, by = "species_id") %>%
+    dplyr::relocate(.data[[species_id]], .data$n_records_total)
+  iao <- purrr::map(df_sf, ~cosewic_iao(.x, cell_size, record_id, spatial)) %>%
+    dplyr::bind_rows(.id = "species_id") %>%
+    dplyr::mutate(!!species_id := as.integer(.data[[species_id]])) %>%
+    dplyr::left_join(n, by = "species_id") %>%
+    dplyr::relocate(.data[[species_id]], .data$n_records_total)
+
+  
+  # Check eoo size
+  i <- iao %>%
+    sf::st_drop_geometry() %>%
+    dplyr::select(dplyr::all_of(c(species_id, "iao"))) %>%
+    dplyr::distinct()
+  if(any(eoo$eoo < unique(i$iao))) {
+    s <- unique(eoo$species_id[eoo$eoo < i$iao])
+    message(
+      "EOO is less than IAO for species ", paste0(s, collapse = ", "), ".\n",
+      "This can occur if there are very few, clustered records.\n",
+      "Making EOO equal to IAO.\n(see 'Instructions for preparing COSEWIC ",
+      "status reports' in ?cosewic_ranges)")
+    eoo$eoo[eoo$eoo < i$iao] <- i$iao
   }
   
-  ranges <- dplyr::rename(ranges, !!paste0("eoo_p", eoo_p*100) := "eoo")
+  # Assemble
+  eoo <- dplyr::rename(eoo, !!paste0("eoo_p", eoo_p * 100) := "eoo")
   
-  if(spatial) ranges <- list("ranges" = ranges,
-                             "spatial" = list("iao_sf" = iao[["iao_sf"]],
-                                              "eoo_sf" = eoo[["eoo_sf"]]))
+  if(spatial) {
+    ranges <- list(iao = iao, eoo = eoo)
+  } else {
+    ranges <- dplyr::full_join(iao, eoo, by = c(species_id, "n_records_total"))
+  }
+
   ranges
 }
 
 # Faster grids https://github.com/r-spatial/sf/issues/1579
-cosewic_iao <- function(df_sf, cell_size, record_id) {
+cosewic_iao <- function(df_sf, cell_size, record_id, spatial) {
 
   grid_ca <- grid_canada(buffer = 500)
   
@@ -204,20 +228,22 @@ cosewic_iao <- function(df_sf, cell_size, record_id) {
                      grid_size_km = .env$cell_size,
                      n_occupied = dplyr::n(), 
                      iao = .data$n_occupied * .env$cell_size^2)
+
+  if(spatial) {
+    iao <- dplyr::right_join(grid, iao_full, by = "grid_id") %>%
+      dplyr::bind_cols(iao)
+  }
   
-  iao_sf <- dplyr::right_join(grid, iao_full, by = "grid_id")
-  
-  list("iao" = iao,
-       "iao_sf" = iao_sf)
+  iao  
 }
 
-cosewic_eoo <- function(df_sf, p) {
+cosewic_eoo <- function(df_sf, p, spatial) {
   center <- df_sf %>%
     sf::st_union() %>%
     sf::st_convex_hull() %>%
     sf::st_centroid()
   
-  eoo_sf <- df_sf %>%
+  eoo <- df_sf %>%
     dplyr::mutate(dist = sf::st_distance(.data$geometry, .env$center)[, 1]) %>%
     dplyr::filter(.data$dist <= stats::quantile(.data$dist, .env$p)) %>%
     sf::st_cast(to = "POINT") %>%  
@@ -227,8 +253,9 @@ cosewic_eoo <- function(df_sf, p) {
     dplyr::mutate(eoo = sf::st_area(.),
                   eoo = units::set_units(.data$eoo, "km^2"))
   
-  list("eoo" = dplyr::pull(eoo_sf, .data$eoo),
-       "eoo_sf" = eoo_sf)
+  if(!spatial) eoo <- sf::st_drop_geometry(eoo)
+  
+  eoo
 }
 
 
@@ -345,13 +372,16 @@ map_canada <- function() {
 #' 
 #' Creates a plot of COSEWIC ranges for illustration and checking.
 #'
-#' @param ranges List. Output of `cosewic_ranges()`. 
+#' @param ranges List. Output of `cosewic_ranges()` with `spatial = TRUE`.
 #' @param points Data frame. Optional naturecounts data used to compute ranges.
 #'   Raw data points will be added to the plot if provided.
 #' @param grid sf data frame. Optional grid over which to summarize IAO values
 #'   (useful for species with many points over a broad distribution).
 #' @param map sf data frame. Optional base map over which to plot the values.
-#' @param title Character. Optional title to add to the map.
+#' @param species_id Character. Name of the column containing species
+#'   identification.
+#' @param title Character. Optional title to add to the map. Can be a named by
+#'  species vector to supply different titles for different species.
 #'
 #' @return ggplot2 map
 #' @export
@@ -360,57 +390,97 @@ map_canada <- function() {
 #' 
 #' r <- cosewic_ranges(bcch)
 #' cosewic_plot(r)
-#' 
 #' cosewic_plot(r, points = bcch)
-#' 
 #' cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
 #'              title = "Black-capped chickadees")
+#'              
+#' m <- rbind(bcch, hofi)
+#' r <- cosewic_ranges(m)
+#' cosewic_plot(r)
+#' cosewic_plot(r, points = m)
+#' p <- cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
+#'                  title = c("14280" = "Black-capped chickadees", 
+#'                            "20350" = "House Finches"))
+#' p[[1]]
+#' p[[2]]
 #' 
 cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL, 
-                         title = "") {
+                         species_id = "species_id",  title = "") {
   
   have_pkg_check("sf")
+  
+  if(!inherits(ranges[["iao"]], "sf")) {
+    stop("`ranges` must be spatial (i.e. use `spatial = TRUE` in ",
+       "`cosewic_ranges()`)", call. = FALSE)
+  }
+  
+  if(!species_id %in% names(ranges[["iao"]]) | 
+     !species_id %in% names(ranges[["eoo"]]) ) {
+    stop("`species_id` must be columns in `iao` and `eoo` inside `ranges`", 
+         call. = FALSE)
+  }
+  
+  if(length(title) > 1 && 
+     !all(names(title) %in% unique(ranges$eoo[[species_id]]))) {
+    stop("`title` must be named by species if providing more than one", 
+         call. = FALSE)
+  }
+  
 
-  iao <- ranges[["spatial"]][["iao_sf"]] %>%
+  iao <- ranges[["iao"]] %>%
     dplyr::filter(.data$n_records > 0)
   
-  size_a <- ranges[["ranges"]]$grid_size_km
+  size_a <- unique(iao$grid_size_km)
 
   if(!is.null(grid)) {
     iao <- iao %>%
-    sf::st_join(grid, ., left = FALSE) %>% # Inner join
-    dplyr::group_by(.data$grid_ca_id) %>%
-    dplyr::summarize(n_records = sum(.data$n_records))
+      sf::st_join(grid, ., left = FALSE) %>% # Inner join
+      dplyr::group_by(.data[[species_id]], .data$grid_ca_id) %>%
+      dplyr::summarize(n_records = sum(.data$n_records)) 
     size_p <- grid$grid_size[1]
   } else {
     size_p <- size_a
   }
   
-  eoo <- ranges[["spatial"]][["eoo_sf"]]
+  eoo <- ranges[["eoo"]]
   
-  eoo_lab <- stringr::str_subset(names(ranges[["ranges"]]), "eoo") %>%
+  eoo_lab <- stringr::str_subset(names(eoo), "eoo") %>%
     stringr::str_replace("_", " ") %>%
     stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
     toupper()
   
-  g <- ggplot2::ggplot() +
-    ggplot2::theme_minimal() +
-    ggplot2::geom_sf(data = eoo, ggplot2::aes(colour = !!eoo_lab)) +
-    ggplot2::geom_sf(data = iao, ggplot2::aes(fill = n_records), colour = NA) +
-    ggplot2::scale_fill_viridis_c() +
-    ggplot2::scale_colour_manual(name = "", values = "grey20") +
-    ggplot2::labs(
-      fill = "IAO\nNo. records", 
-      title = title,
-      caption = 
-        paste0("Showing ", size_p, "x", size_p, 
-               "km grids\nAnalysis used ",
-               size_a, "x", size_a, " km"))
+  g <- list()
+  if(all(title == "")) title <- setNames(nm = unique(iao[[species_id]]))
   
-  if(!is.null(map)) g <- g + ggplot2::geom_sf(data = map, fill = NA)
-  if(!is.null(points)) {
-    points <- prep_spatial(points, extra = NULL) 
-    g <- g + ggplot2::geom_sf(data = points)
+  for(i in unique(iao[[species_id]])) {
+    if(length(title) > 1) t <- title[[as.character(i)]] else t <- title
+
+    e <- dplyr::filter(eoo, .data[[species_id]] == .env$i)
+    a <- dplyr::filter(iao, .data[[species_id]] == .env$i)
+      
+    g1 <- ggplot2::ggplot() +
+      ggplot2::theme_minimal() +
+      ggplot2::geom_sf(data = e, ggplot2::aes(colour = !!eoo_lab)) +
+      ggplot2::geom_sf(data = a, ggplot2::aes(fill = n_records), colour = NA) +
+      ggplot2::scale_fill_viridis_c() +
+      ggplot2::scale_colour_manual(name = "", values = "grey20") +
+      ggplot2::labs(
+        fill = "IAO\nNo. records", 
+        title = t,
+        caption = 
+          paste0("Showing ", size_p, "x", size_p, 
+                 "km grids\nAnalysis used ",
+                 size_a, "x", size_a, " km"))
+    
+    if(!is.null(map)) g1 <- g1 + ggplot2::geom_sf(data = map, fill = NA)
+    if(!is.null(points)) {
+      p <- dplyr::filter(points, .data[[species_id]] == .env$i)
+      p <- prep_spatial(p, extra = NULL) 
+      g1 <- g1 + ggplot2::geom_sf(data = p)
+    }
+    g[[as.character(i)]] <- g1
   }
+  
+  if(length(g) == 1) g <- g[[1]]
   g
 }
