@@ -52,6 +52,12 @@
     <loc>https://birdscanada.github.io/naturecounts/reference/bcch.html</loc>
   </url>
   <url>
+    <loc>https://birdscanada.github.io/naturecounts/reference/cosewic_plot.html</loc>
+  </url>
+  <url>
+    <loc>https://birdscanada.github.io/naturecounts/reference/cosewic_ranges.html</loc>
+  </url>
+  <url>
     <loc>https://birdscanada.github.io/naturecounts/reference/db_connect.html</loc>
   </url>
   <url>
@@ -67,10 +73,16 @@
     <loc>https://birdscanada.github.io/naturecounts/reference/format_zero_fill.html</loc>
   </url>
   <url>
+    <loc>https://birdscanada.github.io/naturecounts/reference/grid_canada.html</loc>
+  </url>
+  <url>
     <loc>https://birdscanada.github.io/naturecounts/reference/hofi.html</loc>
   </url>
   <url>
     <loc>https://birdscanada.github.io/naturecounts/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://birdscanada.github.io/naturecounts/reference/map_canada.html</loc>
   </url>
   <url>
     <loc>https://birdscanada.github.io/naturecounts/reference/meta.html</loc>

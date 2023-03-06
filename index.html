@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">naturecounts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.3</span>
       </span>
     </div>
 
@@ -60,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/BirdsCanada/naturecounts" class="external-link">
+  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -84,45 +84,45 @@
 <!-- badges: start -->
 
 <p>Access and download data on plant and animal populations from various databases through NatureCounts, a service managed by Birds Canada.</p>
-<p>See tutorials, documentation and articles on the <a href="https://birdscanada.github.io/naturecounts">naturecounts package Website</a></p>
+<p>See tutorials, documentation and articles on the <a href="https://birdscanada.github.io/naturecounts" class="external-link">naturecounts package Website</a></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the main version of <code>naturecounts</code> from our R-Universe</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"naturecounts"</span>, </span>
-<span>                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>birdscanada <span class="op">=</span> <span class="st">'https://birdscanada.r-universe.dev'</span>,</span>
-<span>                           CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"naturecounts"</span>, 
+                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>birdscanada <span class="op">=</span> <span class="st">'https://birdscanada.r-universe.dev'</span>,
+                           CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></code></pre></div>
 <div class="section level3">
 <h3 id="fetching-counts">Fetching counts<a class="anchor" aria-label="anchor" href="#fetching-counts"></a>
 </h3>
 <p>Use the <code><a href="reference/nc_count.html">nc_count()</a></code> function to return collections and the number of observations in each for which you have access (here returns all collections associated with username <strong>sample</strong>).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/nc_count.html">nc_count</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"sample"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
-<span><span class="co">#&gt;   collection akn_level access nrecords</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;     &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1 SAMPLE1            0 full        991</span></span>
-<span><span class="co">#&gt; 2 SAMPLE2            0 full        995</span></span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/nc_count.html">nc_count</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"sample"</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 2 × 4</span>
+<span class="co">#&gt;   collection akn_level access nrecords</span>
+<span class="co">#&gt;   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;     &lt;int&gt;</span>
+<span class="co">#&gt; 1 SAMPLE1            0 full        994</span>
+<span class="co">#&gt; 2 SAMPLE2            0 full        997</span></code></pre></div>
 <p>Use the <code>show = "all"</code> argument to show counts for all collections available (public or otherwise).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/nc_count.html">nc_count</a></span><span class="op">(</span>show <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 4</span></span>
-<span><span class="co">#&gt;   collection akn_level access     nrecords</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;         &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1 ABATLAS1           5 full         123364</span></span>
-<span><span class="co">#&gt; 2 ABATLAS2           5 full         201382</span></span>
-<span><span class="co">#&gt; 3 ABBIRDRECS         5 full         357264</span></span>
-<span><span class="co">#&gt; 4 ATOWLS             4 by request    25268</span></span>
-<span><span class="co">#&gt; 5 BBS                5 full        5735895</span></span>
-<span><span class="co">#&gt; 6 BBS50              5 full              0</span></span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/nc_count.html">nc_count</a></span><span class="op">(</span>show <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 6 × 4</span>
+<span class="co">#&gt;   collection akn_level access     nrecords</span>
+<span class="co">#&gt;   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;         &lt;int&gt;</span>
+<span class="co">#&gt; 1 ABATLAS1           5 full         123364</span>
+<span class="co">#&gt; 2 ABATLAS2           5 full         201382</span>
+<span class="co">#&gt; 3 ABBIRDRECS         5 full         357264</span>
+<span class="co">#&gt; 4 ATOWLS             4 by request    25268</span>
+<span class="co">#&gt; 5 BBS                5 full        5735895</span>
+<span class="co">#&gt; 6 BBS50              5 full              0</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="fetching-data">Fetching data<a class="anchor" aria-label="anchor" href="#fetching-data"></a>
@@ -130,66 +130,66 @@
 <p>Fetch all observations of bittern which are available to user <strong>sample</strong> into a local data frame.</p>
 <p>First find the species id</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"American Bittern"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 5</span></span>
-<span><span class="co">#&gt;   species_id scientific_name       english_name     french_name      taxon_group</span></span>
-<span><span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;                 &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;      </span></span>
-<span><span class="co">#&gt; 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique BIRDS</span></span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"American Bittern"</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 1 × 5</span>
+<span class="co">#&gt;   species_id scientific_name       english_name     french_name      taxon_group</span>
+<span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;                 &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;      </span>
+<span class="co">#&gt; 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique BIRDS</span></code></pre></div>
 <p>Use this id with <code><a href="reference/nc_data_dl.html">nc_data_dl()</a></code>. The <code>info</code> parameter is a short description of what the data is being downloaded for.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, username <span class="op">=</span> <span class="st">"sample"</span>, </span>
-<span>                    info <span class="op">=</span> <span class="st">"readme_example"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using filters: species (2490); fields_set (BMDE2.00-min)</span></span>
-<span><span class="co">#&gt; Collecting available records...</span></span>
-<span><span class="co">#&gt;   collection nrecords</span></span>
-<span><span class="co">#&gt; 1    SAMPLE1        1</span></span>
-<span><span class="co">#&gt; Total records: 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Downloading records for each collection:</span></span>
-<span><span class="co">#&gt;   SAMPLE1</span></span>
-<span><span class="co">#&gt;     Records 1 to 1 / 1</span></span></code></pre></div>
+<code class="sourceCode R"><span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, username <span class="op">=</span> <span class="st">"sample"</span>, 
+                    info <span class="op">=</span> <span class="st">"readme_example"</span><span class="op">)</span>
+<span class="co">#&gt; Using filters: species (2490); fields_set (BMDE2.00-min)</span>
+<span class="co">#&gt; Collecting available records...</span>
+<span class="co">#&gt;   collection nrecords</span>
+<span class="co">#&gt; 1    SAMPLE1        1</span>
+<span class="co">#&gt; Total records: 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Downloading records for each collection:</span>
+<span class="co">#&gt;   SAMPLE1</span>
+<span class="co">#&gt;     Records 1 to 1 / 1</span></code></pre></div>
 <p>Alternatively, save the downloaded data as a SQLite database (<code>bittern</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, sql_db <span class="op">=</span> <span class="st">"bittern"</span>, username <span class="op">=</span> <span class="st">"sample"</span>, </span>
-<span>                    info <span class="op">=</span> <span class="st">"readme_example"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using filters: species (2490); fields_set (BMDE2.00-min)</span></span>
-<span><span class="co">#&gt; Collecting available records...</span></span>
-<span><span class="co">#&gt;   collection nrecords</span></span>
-<span><span class="co">#&gt; 1    SAMPLE1        1</span></span>
-<span><span class="co">#&gt; Total records: 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Database 'bittern.nc' does not exist, creating it...</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Downloading records for each collection:</span></span>
-<span><span class="co">#&gt;   SAMPLE1</span></span>
-<span><span class="co">#&gt;     Records 1 to 1 / 1</span></span></code></pre></div>
+<code class="sourceCode R"><span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, sql_db <span class="op">=</span> <span class="st">"bittern"</span>, username <span class="op">=</span> <span class="st">"sample"</span>, 
+                    info <span class="op">=</span> <span class="st">"readme_example"</span><span class="op">)</span>
+<span class="co">#&gt; Using filters: species (2490); fields_set (BMDE2.00-min)</span>
+<span class="co">#&gt; Collecting available records...</span>
+<span class="co">#&gt;   collection nrecords</span>
+<span class="co">#&gt; 1    SAMPLE1        1</span>
+<span class="co">#&gt; Total records: 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Database 'bittern.nc' does not exist, creating it...</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Downloading records for each collection:</span>
+<span class="co">#&gt;   SAMPLE1</span>
+<span class="co">#&gt;     Records 1 to 1 / 1</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="authorizations">Authorizations<a class="anchor" aria-label="anchor" href="#authorizations"></a>
 </h3>
 <p>To access private/semi-public projects/collections you must <a href="https://www.birdscanada.org/birdmon/default/profile.jsp" class="external-link">sign up</a> for a free NatureCounts account and <a href="https://www.birdscanada.org/birdmon/default/projects.jsp" class="external-link">register</a> for the projects you’d like to access. Once registered, you can use the <code>username</code> argument (you will be prompted for a password) for both <code><a href="reference/nc_count.html">nc_count()</a></code> and <code><a href="reference/nc_data_dl.html">nc_data_dl()</a></code>, which will then return a different set of records.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/nc_count.html">nc_count</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"my_user_name"</span><span class="op">)</span></span>
-<span><span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, username <span class="op">=</span> <span class="st">"my_user_name"</span>, info <span class="op">=</span> <span class="st">"readme_example"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/nc_count.html">nc_count</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"my_user_name"</span><span class="op">)</span>
+<span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, username <span class="op">=</span> <span class="st">"my_user_name"</span>, info <span class="op">=</span> <span class="st">"readme_example"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="more-advanced-options">More advanced options<a class="anchor" aria-label="anchor" href="#more-advanced-options"></a>
 </h3>
 <p><code><a href="reference/nc_count.html">nc_count()</a></code> and <code><a href="reference/nc_data_dl.html">nc_data_dl()</a></code> have a variety of arguments that allow you to filter the counts/data prior to downloading. These options include <code>collections</code>, <code>species</code>, <code>years</code>, <code>doy</code> (day-of-year), <code>region</code>, and <code>site_type</code> (users can specify up to 3 of these). For <code><a href="reference/nc_data_dl.html">nc_data_dl()</a></code> you have the additional arguments <code>fields_set</code> and <code>fields</code> with which you can customize which fields/columns to include in your download.</p>
-<p>See the function examples (<a href="https://birdscanada.github.io/naturecounts/reference/nc_count.html"><code>nc_count()</code></a>, <a href="https://birdscanada.github.io/naturecounts/reference/nc_data_dl.html"><code>nc_data_dl()</code></a>) the following articles for more information on these filters:</p>
+<p>See the function examples (<a href="https://birdscanada.github.io/naturecounts/reference/nc_count.html" class="external-link"><code>nc_count()</code></a>, <a href="https://birdscanada.github.io/naturecounts/reference/nc_data_dl.html" class="external-link"><code>nc_data_dl()</code></a>) the following articles for more information on these filters:</p>
 <ul>
 <li>Collections</li>
-<li><a href="https://birdscanada.github.io/naturecounts/articles/species-codes.html">Species Codes</a></li>
-<li><a href="https://birdscanada.github.io/naturecounts/articles/region-codes.html">Regional Codes</a></li>
-<li><a href="https://birdscanada.github.io/naturecounts/articles/region-areas.html">IBAs and BCRs (regions)</a></li>
-<li><a href="https://birdscanada.github.io/naturecounts/articles/region-spatial.html">Using spatial data to filter observations</a></li>
+<li><a href="https://birdscanada.github.io/naturecounts/articles/species-codes.html" class="external-link">Species Codes</a></li>
+<li><a href="https://birdscanada.github.io/naturecounts/articles/region-codes.html" class="external-link">Regional Codes</a></li>
+<li><a href="https://birdscanada.github.io/naturecounts/articles/region-areas.html" class="external-link">IBAs and BCRs (regions)</a></li>
+<li><a href="https://birdscanada.github.io/naturecounts/articles/region-spatial.html" class="external-link">Using spatial data to filter observations</a></li>
 </ul>
-<p>We also have an <a href="https://birdscanada.github.io/naturecounts/articles/filtering-data.html">article on post-filtering your data</a></p>
+<p>We also have an <a href="https://birdscanada.github.io/naturecounts/articles/filtering-data.html" class="external-link">article on post-filtering your data</a></p>
 </div>
 <div class="section level3">
 <h3 id="metadata">Metadata<a class="anchor" aria-label="anchor" href="#metadata"></a>
 </h3>
-<p>NatureCounts includes a great deal of metadata which can be accessed through the functions with the <code>meta_</code> prefix. See the <a href="https://birdscanada.github.io/naturecounts/reference/meta.html">Meta Documentation</a> for specifics.</p>
+<p>NatureCounts includes a great deal of metadata which can be accessed through the functions with the <code>meta_</code> prefix. See the <a href="https://birdscanada.github.io/naturecounts/reference/meta.html" class="external-link">Meta Documentation</a> for specifics.</p>
 </div>
 </div>
 </div>
@@ -199,7 +199,7 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/BirdsCanada/naturecounts/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/birdscanada/naturecounts/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
 
@@ -226,7 +226,13 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="lifecycle"></a></li>
+<li><a href="https://github.com/birdscanada/naturecounts/actions" class="external-link"><img src="https://github.com/birdscanada/naturecounts/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
 
   </div>
 </div>
@@ -239,7 +245,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

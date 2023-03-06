@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">naturecounts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.3</span>
       </span>
     </div>
 
@@ -38,7 +38,7 @@
   <a href="news/index.html">News</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/BirdsCanada/naturecounts" class="external-link">
+  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -62,7 +62,7 @@
 <div class="section level4">
 <h4 id="desired-behaviour">Desired behaviour<a class="anchor" aria-label="anchor" href="#desired-behaviour"></a></h4>
 <p>Required and extra fields returned by the API are expected and treated, respectively, as follows:</p>
-<table class="table"><colgroup><col width="21%"><col width="31%"><col width="31%"><col width="14%"></colgroup><thead><tr class="header"><th>Function</th>
+<table class="table"><thead><tr class="header"><th>Function</th>
 <th>API Entry Point</th>
 <th>Required fields</th>
 <th>Extra fields</th>
@@ -125,7 +125,7 @@ Some API entry points return data in a container, for example,</p>
 <div class="section level4">
 <h4 id="coding-principles">Coding Principles<a class="anchor" aria-label="anchor" href="#coding-principles"></a></h4>
 <ul><li>In package, after accessing the API, explictly <code>select()</code> the fields/columns expected. This way extra fields won’t break existing code
-<ul><li>Missing fields <strong>will</strong> break the code, but at least they will break the code early!</li>
+<ul><li>Missing fields <strong>will</strong> the code, but at least they will break the code early!</li>
 <li>Do <strong>not</strong> do this for data downloads (i.e. <code><a href="reference/nc_single_dl.html">nc_single_dl()</a></code> under <code><a href="reference/nc_data_dl.html">nc_data_dl()</a></code>) or metadata downloads (i.e. <code>meta_XXX()</code>)</li>
 <li>
 <strong>Unless</strong>, using a <code>meta_XXX()</code> download internally. Then always <code>select()</code> the fields required</li>
@@ -156,7 +156,7 @@ Some API entry points return data in a container, for example,</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

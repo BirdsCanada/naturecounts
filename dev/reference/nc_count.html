@@ -20,7 +20,7 @@ Without authorization all collections are returned.'><meta name="robots" content
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -41,7 +41,7 @@ Without authorization all collections are returned.'><meta name="robots" content
   <a href="../news/index.html">News</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
+  <a href="https://github.com/BirdsCanada/naturecounts" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -240,20 +240,20 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">nc_count</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Without a username, using 'show = "all"'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 141 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 143 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    collection    akn_level access     nrecords</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ABATLAS1              5 full         <span style="text-decoration: underline;">123</span>364</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> ABATLAS2              5 full         <span style="text-decoration: underline;">201</span>382</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ABBIRDRECS            5 full         <span style="text-decoration: underline;">357</span>264</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> ATOWLS                4 by request    <span style="text-decoration: underline;">25</span>268</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> BBS                   5 full        5<span style="text-decoration: underline;">735</span>895</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> BBS50                 5 full              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> BBS50-CAN             5 full        4<span style="text-decoration: underline;">168</span>740</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> BBS50-US-EAST         5 full        9<span style="text-decoration: underline;">940</span>162</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> BBS50-US-WEST         5 full       10<span style="text-decoration: underline;">749</span>161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> BCATLAS1BE_DO         5 full          <span style="text-decoration: underline;">41</span>412</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 131 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> ATBANS                3 by request      102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> ATOWLS                4 by request    <span style="text-decoration: underline;">25</span>268</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> BBS                   5 full        5<span style="text-decoration: underline;">735</span>895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> BBS50                 5 full              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> BBS50-CAN             5 full        4<span style="text-decoration: underline;">168</span>740</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> BBS50-US-EAST         5 full        9<span style="text-decoration: underline;">940</span>162</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> BBS50-US-WEST         5 full       10<span style="text-decoration: underline;">749</span>161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 133 more rows</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Count publicly available records for Manitoba, Canada</span></span></span>
@@ -268,7 +268,7 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> BBS                   5 full          <span style="text-decoration: underline;">86</span>997</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> BBS50-CAN             5 full         <span style="text-decoration: underline;">453</span>998</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> CBC                   2 no access     <span style="text-decoration: underline;">20</span>507</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> CMMN-DET-DMBO         2 no access     <span style="text-decoration: underline;">94</span>632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> CMMN-DET-DMBO         2 no access     <span style="text-decoration: underline;">96</span>678</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> EBIRD-CA-PR           4 by request  2<span style="text-decoration: underline;">910</span>791</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> EBIRD-CA-SENS         3 by request     <span style="text-decoration: underline;">4</span>561</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> EBUTTERFLY            5 full            224</span>
@@ -324,7 +324,7 @@ checking the "Full access?" box in Step 2 of the form.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

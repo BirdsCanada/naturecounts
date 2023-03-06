@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.3</span>
       </span>
     </div>
 
@@ -38,7 +38,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/BirdsCanada/naturecounts" class="external-link">
+  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -53,7 +53,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Common arguments for <code>nc_data_dl</code> and <code>nc_count</code></h1>
-    <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/HEAD/R/common_docs.R" class="external-link"><code>R/common_docs.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/BirdStudiesCanada/naturecounts/blob/HEAD/R/common_docs.R" class="external-link"><code>R/common_docs.R</code></a></small>
     <div class="hidden name"><code>args.Rd</code></div>
     </div>
 
@@ -67,73 +67,50 @@
     <dl><dt>collections</dt>
 <dd><p>Character vector. The collection codes from which to
 download data. NULL (default) downloads data from all available collections</p></dd>
-
-
 <dt>project_ids</dt>
 <dd><p>Character/Numeric vector. The <code>project id</code>s from which to
 download data. First the collections associated with a <code>project_id</code> are
 determined, and then data is downloaded for each collection. If both
 <code>collections</code> and <code>project_ids</code> are supplied, they are combined.</p></dd>
-
-
 <dt>species</dt>
 <dd><p>Numeric vector. Numeric species ids (see details)</p></dd>
-
-
 <dt>years</dt>
 <dd><p>Numeric vector. The start/end years of data to download. Can use
 NA for either start or end, or a single value to return data from a single
 year.</p></dd>
-
-
 <dt>doy</dt>
 <dd><p>Character/Numeric vector. The start/end day-of-year to download
 (1-366 or dates that can be converted to day of year). Can use NA for
 either start or end</p></dd>
-
-
 <dt>region</dt>
 <dd><p>List. Named list with <em>one</em> of the following options:
 <code>country</code>, <code>statprov</code>, <code>subnational2</code>, <code>iba</code>, <code>bcr</code>, <code>utm_squares</code>, <code>bbox</code>.
 See details</p></dd>
-
-
 <dt>site_type</dt>
 <dd><p>Character vector. The type of site to return (e.g., <code>IBA</code>).</p></dd>
-
-
 <dt>username</dt>
 <dd><p>Character vector. Username for <a href="http://naturecounts.ca" class="external-link">http://naturecounts.ca</a>. If
 provided, the user will be prompted for a password. If left NULL, only
 public collections will be returned.</p></dd>
-
-
 <dt>info</dt>
 <dd><p>Character vector. Short description of reason for the download.
 E.g., "COSEWIC report", "Impact Assessment Study", "School project", etc.
 This kind of information helps NatureCounts.ca justify the utility of the
 database. Required unless resuming/re-downloaded with a <code>request_id</code>.</p></dd>
-
-
 <dt>request_id</dt>
 <dd><p>Numeric. Specific request id to check or download.</p></dd>
-
-
 <dt>timeout</dt>
 <dd><p>Numeric. Number of seconds before connecting to the server
 times out.</p></dd>
-
-
 <dt>verbose</dt>
 <dd><p>Logical. Show messages?</p></dd>
-
 </dl></div>
     <div id="naturecounts-account">
     <h2>NatureCounts account</h2>
     
 
 <p>All public data is available with a username/password
-(<a href="https://www.naturecounts.ca/nc/default/register.jsp" class="external-link">sign up</a>
+(<a href="https://www.birdscanada.org/birdmon/default/register.jsp" class="external-link">sign up</a>
 for a free NatureCounts account). However, to access private/semi-public
 projects/collections you must request access. See the Access and
 <code>request_id</code>s section for more information.</p>
@@ -144,7 +121,7 @@ projects/collections you must request access. See the Access and
 
 <p>Numeric species id codes can determined from the functions
 <code><a href="search_species.html">search_species()</a></code> or <code><a href="search_species_code.html">search_species_code()</a></code>. See also the article on
-<a href="https://birdscanada.github.io/naturecounts/articles/species-codes.html">species codes</a>
+<a href="https://birdscanada.github.io/naturecounts/articles/species-codes.html" class="external-link">species codes</a>
 for more information.</p>
     </div>
     <div id="day-of-year-doy-">
@@ -204,11 +181,11 @@ Use <code>nc_count(username = "USER", show = "all")</code>, to see the accessibi
 collections.</p>
 <p>"Full" access means that data can be immediately requested directly through
 the <code>naturecounts</code> R package. "By request" means that a request must be
-<a href="https://naturecounts.ca/nc/default/searchquery.jsp" class="external-link">submitted online</a> and
+<a href="https://www.birdscanada.org/birdmon/default/searchquery.jsp" class="external-link">submitted online</a> and
 approved before the data can be downloaded through <code>naturecounts</code>.</p>
 <p>This means that there are two types of data requests: ones made through this
 <code>naturecounts</code> R package (API requests) and those made through the online
-<a href="https://naturecounts.ca/nc/default/searchquery.jsp" class="external-link">Web Request Form</a> (Web
+<a href="https://www.birdscanada.org/birdmon/default/searchquery.jsp" class="external-link">Web Request Form</a> (Web
 requests). Every request (from either method) generates a <code>request_id</code> which
 identifies the filter set and collections requested. Details of all of
 requests can be reviewed with the <code><a href="nc_requests.html">nc_requests()</a></code> function.</p>
@@ -219,7 +196,7 @@ approved <code>request_id</code> to the <code><a href="nc_data_dl.html">nc_data_
 <code>nc_data_dl(request_id = 152000, username = "USER")</code>). Use <code><a href="nc_requests.html">nc_requests()</a></code> to
 see <code>request_id</code>s, filters, and approval status.</p>
 <p>Requests for "full" access to additional collections can be made online
-through the <a href="https://naturecounts.ca/nc/default/searchquery.jsp" class="external-link">Web Request Form</a> by
+through the <a href="https://www.birdscanada.org/birdmon/default/searchquery.jsp" class="external-link">Web Request Form</a> by
 checking the "Full access?" box in Step 2 of the form.</p>
     </div>
 
@@ -235,7 +212,7 @@ checking the "Full access?" box in Step 2 of the form.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

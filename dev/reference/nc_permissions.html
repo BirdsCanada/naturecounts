@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -38,7 +38,7 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
+  <a href="https://github.com/BirdsCanada/naturecounts" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -88,6 +88,34 @@ for a free NatureCounts account). However, to access private/semi-public
 projects/collections you must request access. See the Access and
 <code>request_id</code>s section for more information.</p>
     </div>
+    <div id="access-and-request-ids">
+    <h2>Access and <code>request_id</code>s</h2>
+    
+
+
+<p>Access to a data collection is either available as "full" or "by request".
+Use <code>nc_count(username = "USER", show = "all")</code>, to see the accessibility of
+collections.</p>
+<p>"Full" access means that data can be immediately requested directly through
+the <code>naturecounts</code> R package. "By request" means that a request must be
+<a href="https://naturecounts.ca/nc/default/searchquery.jsp" class="external-link">submitted online</a> and
+approved before the data can be downloaded through <code>naturecounts</code>.</p>
+<p>This means that there are two types of data requests: ones made through this
+<code>naturecounts</code> R package (API requests) and those made through the online
+<a href="https://naturecounts.ca/nc/default/searchquery.jsp" class="external-link">Web Request Form</a> (Web
+requests). Every request (from either method) generates a <code>request_id</code> which
+identifies the filter set and collections requested. Details of all of
+requests can be reviewed with the <code><a href="nc_requests.html">nc_requests()</a></code> function.</p>
+<p>To download data with "full" access, users can either specify filters, or if
+they are repeating a download, can use the <code>request_id</code> from <code><a href="nc_requests.html">nc_requests()</a></code>.</p>
+<p>Otherwise, if the user doesn't have "full" access, they must supply an
+approved <code>request_id</code> to the <code><a href="nc_data_dl.html">nc_data_dl()</a></code> function (e.g.,
+<code>nc_data_dl(request_id = 152000, username = "USER")</code>). Use <code><a href="nc_requests.html">nc_requests()</a></code> to
+see <code>request_id</code>s, filters, and approval status.</p>
+<p>Requests for "full" access to additional collections can be made online
+through the <a href="https://naturecounts.ca/nc/default/searchquery.jsp" class="external-link">Web Request Form</a> by
+checking the "Full access?" box in Step 2 of the form.</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
@@ -129,7 +157,7 @@ projects/collections you must request access. See the Access and
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

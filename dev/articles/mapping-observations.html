@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -59,7 +59,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/BirdStudiesCanada/naturecounts" class="external-link">
+  <a href="https://github.com/BirdsCanada/naturecounts" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -79,7 +79,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Mapping Observations</h1>
             
-            <h4 data-toc-skip class="date">2022-11-09</h4>
+            <h4 data-toc-skip class="date">2023-03-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/HEAD/vignettes/articles/mapping-observations.Rmd" class="external-link"><code>vignettes/articles/mapping-observations.Rmd</code></a></small>
       <div class="hidden name"><code>mapping-observations.Rmd</code></div>
@@ -105,7 +105,7 @@ username.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ropenscilabs/rnaturalearth" class="external-link">rnaturalearth</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rnaturalearth/" class="external-link">rnaturalearth</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dkahle/ggmap" class="external-link">ggmap</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
@@ -305,7 +305,7 @@ data files to layer our data over maps of the area.</p>
 <p>For this we’ll get some outlines of Canada and it’s Provinces and
 Territories from <code>rnaturalearth</code>.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">canada</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rnaturalearth/man/ne_states.html" class="external-link">ne_states</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"canada"</span>, returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">canada</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_states.html" class="external-link">ne_states</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"canada"</span>, returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="fl">3347</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -429,26 +429,37 @@ where cardinals (<code>species_id</code> 19360) were not detected
 <pre><code><span><span class="co">## Using filters: collections (RCBIOTABASE); fields_set (BMDE2.00-min)</span></span></code></pre>
 <pre><code><span><span class="co">## Collecting available records...</span></span></code></pre>
 <pre><code><span><span class="co">##    collection nrecords</span></span>
-<span><span class="co">## 1 RCBIOTABASE    12811</span></span>
-<span><span class="co">## Total records: 12,811</span></span></code></pre>
+<span><span class="co">## 1 RCBIOTABASE    12838</span></span>
+<span><span class="co">## Total records: 12,838</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Downloading records for each collection:</span></span></code></pre>
 <pre><code><span><span class="co">##   RCBIOTABASE</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 1 to 5000 / 12811</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 5001 to 10000 / 12811</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 10001 to 12811 / 12811</span></span></code></pre>
+<pre><code><span><span class="co">##     Records 1 to 5000 / 12838</span></span></code></pre>
+<pre><code><span><span class="co">##     Records 5001 to 10000 / 12838</span></span></code></pre>
+<pre><code><span><span class="co">##     Records 10001 to 12838 / 12838</span></span></code></pre>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cardinals_zf</span> <span class="op">&lt;-</span> <span class="va">cardinals</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">AllSpeciesReported</span> <span class="op">==</span> <span class="st">"Yes"</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">latitude</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">longitude</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">species_id</span>, <span class="va">AllSpeciesReported</span>, <span class="va">SamplingEventIdentifier</span>, <span class="va">latitude</span>, <span class="va">longitude</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">species_id</span>, <span class="va">AllSpeciesReported</span>, <span class="va">SamplingEventIdentifier</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>presence <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>,</span>
-<span>                   by <span class="op">=</span> <span class="st">"SamplingEventIdentifier"</span>,</span>
-<span>                   extra_event <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"latitude"</span>, <span class="st">"longitude"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, by <span class="op">=</span> <span class="st">"SamplingEventIdentifier"</span>,</span>
 <span>                   fill <span class="op">=</span> <span class="st">"presence"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  - Converted 'fill' column (presence) from logical to numeric</span></span></code></pre>
+<p>A bit convoluted, but here we’ll grab coordinates for each Sampling
+Event. This is only necessary if there are errors (worth reporting!)
+where there are more than one lat/lon combo for each sampling event.</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals_zf</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">coords</span> <span class="op">&lt;-</span> <span class="va">cardinals</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"SamplingEventIdentifier"</span>, <span class="st">"latitude"</span>, <span class="st">"longitude"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SamplingEventIdentifier</span>, <span class="va">latitude</span>, <span class="va">longitude</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># Count number of unique coordinates</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SamplingEventIdentifier</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">n</span>, with_ties <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># Grab the most common coordinates for each event</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="st">"n"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cardinals_zf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">cardinals_zf</span>, <span class="va">coords</span>, by <span class="op">=</span> <span class="st">"SamplingEventIdentifier"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals_zf</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   SamplingEventIdentifier species_id presence latitude longitude</span></span>
 <span><span class="co">## 1     RCBIOTABASE-10000-1      19360        0 45.58604 -77.48721</span></span>
 <span><span class="co">## 2     RCBIOTABASE-10001-1      19360        0 45.51110 -77.50533</span></span>
@@ -474,7 +485,7 @@ create a map.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Presence/Absence of Cardinals in the RCBIOTABASE collection"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in missing(base_layer) || base_layer == "auto": 'length(x) = 9 &gt; 1' in</span></span>
 <span><span class="co">## coercion to 'logical(1)'</span></span></code></pre>
-<p><img src="mapping-observations_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p><img src="mapping-observations_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="clean-up-the-mapping-files-if-you-no-longer-need-them">Clean up the mapping files if you no longer need them<a class="anchor" aria-label="anchor" href="#clean-up-the-mapping-files-if-you-no-longer-need-them"></a>
@@ -510,7 +521,7 @@ observations</a></li>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
