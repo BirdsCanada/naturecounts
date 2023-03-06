@@ -1,4 +1,3 @@
-teardown(unlink("test.nc"))
 
 # db_check_version ------------------------------------------------------------
 test_that("db_check_version() works as expected", {
@@ -33,7 +32,7 @@ test_that("db_create creates tables in the database", {
 
   # Check naturecounts table
   expect_silent(nc <- dplyr::tbl(con, "naturecounts")) %>%
-    expect_is("tbl_sql") %>%
+    expect_s3_class("tbl_sql") %>%
     expect_named()
 
   expect_silent(nc <- dplyr::collect(nc))
@@ -42,7 +41,7 @@ test_that("db_create creates tables in the database", {
 
   # Check version table
   expect_silent(v <- dplyr::tbl(con, "versions")) %>%
-    expect_is("tbl_sql") %>%
+    expect_s3_class("tbl_sql") %>%
     expect_named()
 
   expect_silent(v <- dplyr::collect(v))
@@ -59,7 +58,7 @@ test_that("db_create creates tables in the database", {
 
   for(m in funs) {
     expect_silent(d <- dplyr::tbl(con, !!m)) %>%
-      expect_is("tbl_sql")
+      expect_s3_class("tbl_sql")
     expect_equal(dplyr::collect(d) %>% dplyr::as_tibble(),
                  do.call(paste0("meta_", !!m), args = list()))
   }
@@ -72,11 +71,12 @@ test_that("db_create creates tables in the database", {
 # db_connect --------------------------------------------------------------
 
 test_that("db_connect creates SQLite database file", {
+  unlink(list.files(pattern = "naturecounts_(.)+\\.nc"))
 
   # Check connection and encoding
   expect_message(con <- db_connect(),
-                 "Database '.\\/naturecounts_[0-9-]{10}.nc' does not exist") %>%
-    expect_is("SQLiteConnection")
+                 "Database '.\\/naturecounts_[0-9-]{10}.nc' does not exist")
+  expect_s4_class(con, "SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Check that file present
@@ -86,21 +86,21 @@ test_that("db_connect creates SQLite database file", {
   DBI::dbDisconnect(con)
 
   expect_message(con <- db_connect(),
-                 "Database './naturecounts_[0-9-]{10}.nc' already exists") %>%
-    expect_is("SQLiteConnection")
+                 "Database './naturecounts_[0-9-]{10}.nc' already exists")
+  expect_s4_class(con, "SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Clean up
   DBI::dbDisconnect(con)
-  expect_true(file.remove(paste0("naturecounts_", Sys.Date(), ".nc")))
+  unlink(list.files(pattern = "naturecounts_(.)+\\.nc"))
 })
 
 
 test_that("db_connect creates named SQLite database file", {
-
+  unlink("mydatabase.nc")
   # Check connection and encoding
-  expect_silent(con <- db_connect("mydatabase", verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+  expect_silent(con <- db_connect("mydatabase", verbose = FALSE))
+  expect_s4_class(con, "SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Check that file present
@@ -109,43 +109,43 @@ test_that("db_connect creates named SQLite database file", {
   # Check that can re-connect to existing database
   DBI::dbDisconnect(con)
 
-  expect_silent(con <- db_connect("mydatabase", verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+  expect_silent(con <- db_connect("mydatabase", verbose = FALSE))
+  expect_s4_class(con, "SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
   # Clean up
   DBI::dbDisconnect(con)
-  expect_true(file.remove(paste0("mydatabase.nc")))
+  unlink("mydatabase.nc")
 })
 
 
 # db_insert ---------------------------------------------------------------
 test_that("db_insert add and appends rows", {
-
-  expect_silent(con <- db_connect(verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+  unlink(list.files(pattern = "naturecounts_(.)+\\.nc"))
+  expect_silent(con <- db_connect(verbose = FALSE))
+  expect_s4_class(con, "SQLiteConnection")
 
   # Adding data to an empty table
   expect_silent(db_insert(con, "naturecounts", bcch))
-  expect_silent(nc1 <- dplyr::collect(dplyr::tbl(con, "naturecounts"))) %>%
-    expect_is("tbl")
+  expect_silent(nc1 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
+  expect_s3_class(nc1, "tbl")
 
   # Appending new data to table with data
   expect_silent(db_insert(con, "naturecounts", hofi))
-  expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts"))) %>%
-    expect_is("tbl")
+  expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
+  expect_s3_class(nc2, "tbl")
 
   expect_equal(nrow(nc2), nrow(bcch) + nrow(hofi))
 
   # Clean up (leave file for next tests)
   DBI::dbDisconnect(con)
-  expect_true(file.remove(paste0("naturecounts_", Sys.Date(), ".nc")))
+  unlink(list.files(pattern = "naturecounts_(.)+\\.nc"))
 })
 
 test_that("db_insert overwrites rows as required", {
-
+  unlink(list.files(pattern = "naturecounts_(.)+\\.nc"))
   expect_silent(con <- db_connect(verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
 
   # Trying to append duplicate data doesn't add anything
   expect_silent(db_insert(con, "naturecounts", bcch))
@@ -162,19 +162,20 @@ test_that("db_insert overwrites rows as required", {
   expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
 
   expect_equal(nrow(nc1), nrow(nc2)) # Same rows
-  expect_false(isTRUE(dplyr::all_equal(nc1, nc2))) # But data has changed
+  
+  expect_false(isTRUE(all.equal(nc1, nc2))) # But data has changed
 
   expect_equal(sort(nc1$record_id), sort(nc2$record_id)) # Not record_ids
 
   # Clean up
   DBI::dbDisconnect(con)
-  expect_true(file.remove(paste0("naturecounts_", Sys.Date(), ".nc")))
+  unlink(list.files(pattern = "naturecounts_(.)+\\.nc"))
 })
 
 test_that("db_insert adds new cols as required", {
-
+  unlink(list.files(pattern = "naturecounts_(.)+\\.nc"))
   expect_silent(con <- db_connect(verbose = FALSE)) %>%
-    expect_is("SQLiteConnection")
+    expect_s4_class("SQLiteConnection")
 
   n <- DBI::dbListFields(con, "naturecounts")
 
@@ -201,19 +202,20 @@ test_that("db_insert adds new cols as required", {
 
   # Clean up
   DBI::dbDisconnect(con)
-  expect_true(file.remove(paste0("naturecounts_", Sys.Date(), ".nc")))
+  unlink(list.files(pattern = "naturecounts_(.)+\\.nc"))
 })
 
 
 # nc_data_dl to SQL -------------------------------------------------------
 
 test_that("Data download to sql", {
+  unlink("test.nc")
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,
                                  username = "testuser", info = "nc_test",
                                  sql_db = "test"))
 
   expect_true(file.exists("./test.nc"))
-  expect_is(d, "SQLiteConnection")
+  expect_s4_class(d, "SQLiteConnection")
 
   expect_silent(d_db <- dplyr::collect(dplyr::tbl(d, "naturecounts")))
 
@@ -222,4 +224,5 @@ test_that("Data download to sql", {
   expect_equal(min(as.numeric(d_db$survey_year), na.rm = TRUE), 2011)
   expect_equal(max(as.numeric(d_db$survey_year), na.rm = TRUE), 2011)
   DBI::dbDisconnect(d)
+  unlink("test.nc")
 })

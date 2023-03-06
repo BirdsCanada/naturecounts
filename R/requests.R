@@ -26,7 +26,7 @@ nc_requests <- function(request_id = NULL, type = "web", username) {
 
   # Get list
   r <- nc_requests_internal(request_id, token)
-  if(type != "all") r <- dplyr::filter(r, .data$requestOrigin == type)
+  if(type != "all") r <- dplyr::filter(r, .data$request_origin == type)
   r
 }
 

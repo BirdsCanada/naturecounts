@@ -11,19 +11,20 @@ test_that("Get permissions for user", {
 
 test_that("Get counts for collections", {
 
-  expect_message(nc_count())
+  expect_message(nc_count()) %>%
+    suppressMessages()
 
   # Entire collection
-  expect_message(c1 <- nc_count(c("CBC", "BBS")), "Without a username")
-  expect_message(c1 <- nc_count(c("CBC", "BBS")), "Using filters")
-  expect_is(c1, "data.frame")
+  expect_message(c1 <- nc_count(c("CBC", "BBS")), "Without a username") %>%
+    expect_message("Using filters")
+  expect_s3_class(c1, "data.frame")
   expect_gt(nrow(c1), 0)
   expect_true(all(c1$collection %in% c("CBC", "BBS")))
   expect_true(all(c1$access %in% c("full", "no access")))
 
   expect_silent(c2 <- nc_count(c("CBC", "BBS"), region = list(statprov = "MB"),
                                show = "all", verbose = FALSE))
-  expect_is(c2, "data.frame")
+  expect_s3_class(c2, "data.frame")
   expect_gt(nrow(c2), 0)
   expect_true(all(c2$collection %in% c("CBC", "BBS")))
   expect_true(all(c2$nrecords < c1$nrecords))
@@ -31,10 +32,10 @@ test_that("Get counts for collections", {
   # Expect show = "all" with no username
   expect_silent(c1 <- nc_count(region = list(statprov = "MB"), show = "all",
                                verbose = FALSE)) %>%
-    expect_is("data.frame")
+    expect_s3_class("data.frame")
   expect_message(c2 <- nc_count(region = list(statprov = "MB"), show = "available",
-                               verbose = FALSE)) %>%
-    expect_is("data.frame")
+                               verbose = FALSE), "Without a username")
+  expect_s3_class(c2, "data.frame")
   expect_equal(c1, c2)
 })
 
@@ -62,7 +63,9 @@ test_that("Counts return permissions", {
 })
 
 test_that("Counts error when no data returned", {
-  expect_error(nc_count(collections = "steffi"), "No counts for these filters")
+  expect_error(nc_count(collections = "steffi"), 
+               "No counts for these filters") %>%
+    suppressMessages()
 })
 
 
@@ -70,8 +73,9 @@ test_that("Counts error when no data returned", {
 
 test_that("Data download returns data", {
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,
-                                 username = "testuser", info = "nc_test"))
-  expect_is(d, "data.frame")
+                                 username = "testuser", info = "nc_test")) %>%
+    suppressMessages()
+  expect_s3_class(d, "data.frame")
   expect_gt(nrow(d), 0)
   expect_gt(ncol(d), 0)
   expect_equal(min(as.numeric(d$survey_year), na.rm = TRUE), 2011)
@@ -234,7 +238,8 @@ test_that("Data download returns informative errors/messages", {
                             years = 2010, species = 14280,
                             username = "testuser", verbose = TRUE,
                             info = "nc_test"),
-                 "Not all collections have data that match these filters")
+                 "Not all collections have data that match these filters") %>%
+    suppressMessages()
 
   expect_error(nc_data_dl(collections = "ABBIRDRECS",
                             years = 1950, species = 14280,

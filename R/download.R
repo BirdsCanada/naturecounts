@@ -482,6 +482,7 @@ nc_count_internal <- function(filter, timeout, token, info = NULL) {
 #'
 #' @inheritParams args
 #' @inheritSection args NatureCounts account
+#' @inheritSection args Access and `request_id`s
 #'
 #' @examples
 #'

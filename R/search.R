@@ -128,10 +128,10 @@ search_species <- function(name = NULL, show = "names", authority = NULL) {
   if(!is.null(authority)) {
     authority_check(authority)
     auth <- meta_species_codes() %>%
-      dplyr::filter(.data$authority == authority) %>%
+      dplyr::filter(.data$authority == .env$authority) %>%
       dplyr::select("species_id2", !!authority := "species_code")
-
-    ids <- dplyr::left_join(ids, auth, by = c("species_id" = "species_id2"))
+    ids <- dplyr::left_join(ids, auth, by = c("species_id" = "species_id2"),
+                            multiple = "all")
   }
 
   ids

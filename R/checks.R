@@ -249,3 +249,42 @@ codes_convert <- function(desc, type) {
   }
   dplyr::pull(c, paste0(type, "_code"))
 }
+
+have_pkg_check <- function(pkg) {
+  if(!requireNamespace(pkg, quietly = TRUE)) {
+    stop("This function requires the '", pkg, "' package.", 
+         "Please install with `install.packages(\"", pkg, "\")` first", call. = FALSE)
+  } else if(pkg == "sf" && utils::packageVersion("sf") < "1.0-9") {
+    stop("This function requires 'sf' version 1.0-9 or higher.",
+         "Please update with `install.packages(\"sf\")` first", call. = FALSE)
+  }
+}
+
+
+df_db_check <- function(df_db, collect = TRUE, verbose = TRUE) {
+  
+  if(!inherits(df_db, c("data.frame", "SQLiteConnection", "tbl_sql"))) {
+    stop("'df_db' must be either a data frame, a connection to an SQLite ",
+         "database, or a connection to an SQLite table", call. = FALSE)
+  }
+  
+  # Collect as required
+  if(collect && inherits(df_db, c("SQLiteConnection", "tbl_sql"))) {
+    
+    if(verbose) message(" - Cannot work directly on SQLite database connections, ",
+                        "collecting data into a data frame...")
+    
+    if(inherits(df_db, "SQLiteConnection")) {
+      
+      if(!"naturecounts" %in% DBI::dbListTables(df_db)) {
+        stop("If 'df_db' is a SQLite database, it must have a 'naturecounts' ",
+             "table", call. = FALSE)
+      }
+      df_db <- dplyr::tbl(df_db, "naturecounts")
+    }
+    
+    df_db <- dplyr::collect(df_db)
+  }
+  
+  df_db
+}

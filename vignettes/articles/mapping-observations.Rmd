@@ -214,12 +214,27 @@ cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "testuser",
 
 cardinals_zf <- cardinals %>%
   filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) %>%
-  group_by(species_id, AllSpeciesReported, SamplingEventIdentifier, latitude, longitude) %>%
+  group_by(species_id, AllSpeciesReported, SamplingEventIdentifier) %>%
   summarize(presence = sum(as.numeric(ObservationCount)) > 0, .groups = "drop") %>%
-  format_zero_fill(species = 19360,
-                   by = "SamplingEventIdentifier",
-                   extra_event = c("latitude", "longitude"),
+  format_zero_fill(species = 19360, by = "SamplingEventIdentifier",
                    fill = "presence")
+```
+
+
+A bit convoluted, but here we'll grab coordinates for each Sampling Event.
+This is only necessary if there are errors (worth reporting!) where there are
+more than one lat/lon combo for each sampling event.
+
+```{r}
+coords <- cardinals %>%
+  select("SamplingEventIdentifier", "latitude", "longitude") %>%
+  group_by(SamplingEventIdentifier, latitude, longitude) %>%
+  mutate(n = n()) %>%  # Count number of unique coordinates
+  group_by(SamplingEventIdentifier) %>%
+  slice_max(n, with_ties = FALSE) %>% # Grab the most common coordinates for each event
+  select(-"n")
+
+cardinals_zf <- left_join(cardinals_zf, coords, by = "SamplingEventIdentifier")
 
 head(cardinals_zf)
 ```

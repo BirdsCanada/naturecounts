@@ -7,11 +7,11 @@ test_that("Code conversion works as expected", {
 test_that("Code checks work on collections", {
 
   expect_silent(collections_check("ABATLAS1")) %>%
-    expect_is("character") %>%
+    expect_type("character") %>%
     expect_equal("ABATLAS1")
 
   expect_silent(collections_check(c("ABATLAS1", "ABBIRDRECS", "RCBIOTABASE"))) %>%
-    expect_is("character") %>%
+    expect_type("character") %>%
     expect_equal(c("ABATLAS1", "ABBIRDRECS", "RCBIOTABASE"))
 
   expect_error(collections_check("my_favourite_collection"),
@@ -24,15 +24,15 @@ test_that("Code checks work on collections", {
 test_that("Code checks work on project_ids", {
 
   expect_silent(projects_check(1042)) %>%
-    expect_is("character") %>%
+    expect_type("character") %>%
     expect_equal(c("ABATLAS1", "ABATLAS2", "ABBIRDRECS"))
 
   expect_silent(projects_check(1042, "RCBIOTABASE")) %>%
-    expect_is("character") %>%
+    expect_type("character") %>%
     expect_equal(c("ABATLAS1", "ABATLAS2", "ABBIRDRECS", "RCBIOTABASE"))
 
   expect_silent(projects_check("1042")) %>%
-    expect_is("character") %>%
+    expect_type("character") %>%
     expect_equal(c("ABATLAS1", "ABATLAS2", "ABBIRDRECS"))
 
   expect_error(projects_check("my_favourite_collection"),
@@ -46,12 +46,12 @@ test_that("Code checks work on species", {
 
   species <- 20350
   expect_silent(codes_check(species)) %>%
-    expect_is("numeric") %>%
+    expect_type("double") %>%
     expect_equal(species)
 
   species <- "20350"
   expect_silent(codes_check(species)) %>%
-    expect_is("numeric") %>%
+    expect_type("double") %>%
     expect_equal(as.numeric(species))
 
   species <- "BCCH"
@@ -71,22 +71,22 @@ test_that("Code checks work on country", {
 
   country <- "CA"
   expect_silent(codes_check(country)) %>%
-    expect_is("character") %>%
+    expect_type("character") %>%
     expect_equal(country)
 
   country <- "Ca"
   expect_silent(codes_check(country)) %>%
-    expect_is("character") %>%
+    expect_type("character") %>%
     expect_equal(toupper(country))
 
   country <- "Canad"
   expect_silent(codes_check(country)) %>%
-    expect_is("character") %>%
+    expect_type("character") %>%
     expect_equal("CA")
 
   country <- c("Canada", "Colom")
   expect_silent(codes_check(country)) %>%
-    expect_is("character") %>%
+    expect_type("character") %>%
     expect_equal(c("CA", "CO"))
 
   country <- "Can"
@@ -117,10 +117,10 @@ test_that("fields_check correct", {
 # Year --------------------------------------------------------------------
 test_that("year_check correct", {
   expect_silent(year_check(2000)) %>%
-    expect_is("numeric")
+    expect_type("double")
 
   expect_silent(year_check("2000")) %>%
-    expect_is("numeric")
+    expect_type("double")
 
   er <- paste0("Years must be numbers between 1900 and ", lubridate::year(Sys.Date()))
   expect_error(year_check("hello"), er)
@@ -197,15 +197,15 @@ test_that("filter_redundancy correct", {
                           subnational2 = "CA.MB.07"))
   f2 <- f
   f2$region[c('country', 'statprov')] <- list(NULL)
-  expect_message(filter_redundancy(f), "keeping only 'subnational2'") %>%
-    expect_equal(f2)
+  expect_message(f <- filter_redundancy(f), "keeping only 'subnational2'")
+  expect_equal(f, f2)
 
   # fields and fields_set != "custom" redundancy
   f <- list(collections = "RCBIOTABASE", species = 14280,
             fields_set = "BMDE2.00-min", fields = "CollectionYear")
   f2 <- f
   f2['fields'] <- list(NULL)
-  expect_message(filter_redundancy(f), "Ignoring 'fields' argument") %>%
-    expect_equal(f2)
+  expect_message(f <- filter_redundancy(f), "Ignoring 'fields' argument")
+  expect_equal(f, f2)
 
 })

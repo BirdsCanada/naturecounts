@@ -1,12 +1,12 @@
 test_that("srv_query() returns data", {
 
   expect_silent(d <- srv_query(api$bmde_versions))
-  expect_is(d, "list")
+  expect_type(d, "list")
   expect_gt(length(d), 0)
 
   expect_silent(d <- srv_query(api$bmde_versions,
                                query = list(lang = "EN")))
-  expect_is(d, "list")
+  expect_type(d, "list")
   expect_gt(length(d), 0)
 
   expect_error(srv_query("metadat/hello"), "Service not found")
