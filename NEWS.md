@@ -4,6 +4,8 @@
 * Updated dependency to dplyr 1.1.0
 * Updated tests to testthat 3rd edition
 * Re-wrote internal requests formatting to improve speed
+* `nc_dl_data()` returns a warning (not an error) if there are no data for the 
+  given set of filters (to facilitate looping downloads)
 
 # naturecounts 0.3.0
 

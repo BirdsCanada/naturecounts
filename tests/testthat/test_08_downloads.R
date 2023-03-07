@@ -241,7 +241,7 @@ test_that("Data download returns informative errors/messages", {
                  "Not all collections have data that match these filters") %>%
     suppressMessages()
 
-  expect_error(nc_data_dl(collections = "ABBIRDRECS",
+  expect_warning(nc_data_dl(collections = "ABBIRDRECS",
                             years = 1950, species = 14280,
                             username = "testuser", verbose = TRUE,
                             info = "nc_test"),
@@ -255,10 +255,10 @@ test_that("Data download returns informative errors/messages", {
                "No access to collection\\(s\\): ATOWLS")
 
   # No data
-  expect_error(nc_data_dl(collections = "ABBIRDRECS", years = 2018,
-                          username = "testuser", verbose = FALSE,
-                          info = "nc_test"),
-               "These collections have no data that match these filters")
+  expect_warning(nc_data_dl(collections = "ABBIRDRECS", years = 2018,
+                            username = "testuser", verbose = FALSE,
+                            info = "nc_test"),
+                 "These collections have no data that match these filters")
 
   # Custom field_set without fields
   expect_error(nc_data_dl(collections = "ABBIRDRECS", species = 20350,
