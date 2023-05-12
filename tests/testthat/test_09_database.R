@@ -10,7 +10,7 @@ test_that("db_check_version() works as expected", {
 
   # Old version
   DBI::dbWriteTable(con, "versions", data.frame(Rpackage = "0.0.5"))
-  expect_error(db_check_version(con),
+  expect_warning(db_check_version(con),
                "Your NatureCounts database is out of date")
 
   # Current version

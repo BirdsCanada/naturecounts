@@ -6,6 +6,7 @@
 * Re-wrote internal requests formatting to improve speed
 * `nc_dl_data()` returns a warning (not an error) if there are no data for the 
   given set of filters (to facilitate looping downloads)
+* Warn (not error) when database has been created with an older version of the package
 
 # naturecounts 0.3.0
 

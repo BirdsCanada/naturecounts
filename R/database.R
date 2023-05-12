@@ -97,11 +97,12 @@ db_check_version <- function(con) {
       dplyr::collect()
 
     if(numeric_version(v$Rpackage) < utils::packageVersion("naturecounts")) {
-      stop("Your NatureCounts database is out of date. ",
-           "You will need to re-download your data.\n",
-           "(created with package v", v$Rpackage, ", current is v",
-           utils::packageVersion("naturecounts"), ")",
-           call. = FALSE)
+      warning("Your NatureCounts database is out of date. ",
+              "It is highly recommended that you re-download your data.\n",
+              "(database created with package v", v$Rpackage, 
+              ", but current package version is v",
+              utils::packageVersion("naturecounts"), ")",
+              call. = FALSE)
     }
   } else {
     stop("There is no version information for this database. ",
