@@ -125,7 +125,7 @@ cosewic_ranges <- function(df_db,
     
     df <- df %>%
       dplyr::select(
-        dplyr::all_of(c(.env$species_id, .env$coord_lon, .env$coord_lat))) %>%
+        dplyr::all_of(c(species_id, coord_lon, coord_lat))) %>%
       dplyr::distinct() %>%
       dplyr::mutate(!!record_id := 1:dplyr::n())
   }
@@ -152,12 +152,12 @@ cosewic_ranges <- function(df_db,
     dplyr::bind_rows(.id = "species_id") %>% 
     dplyr::mutate(!!species_id := as.integer(.data[[species_id]])) %>%
     dplyr::left_join(n, by = "species_id") %>%
-    dplyr::relocate(.data[[species_id]], .data$n_records_total)
+    dplyr::relocate(dplyr::all_of(species_id), "n_records_total")
   iao <- purrr::map(df_sf, ~cosewic_iao(.x, cell_size, record_id, spatial)) %>%
     dplyr::bind_rows(.id = "species_id") %>%
     dplyr::mutate(!!species_id := as.integer(.data[[species_id]])) %>%
     dplyr::left_join(n, by = "species_id") %>%
-    dplyr::relocate(.data[[species_id]], .data$n_records_total)
+    dplyr::relocate(dplyr::all_of(species_id), "n_records_total")
 
   
   # Check eoo size
@@ -263,7 +263,7 @@ prep_spatial <- function(df,
                          coords = c("longitude", "latitude"), 
                          extra = "record_id") {
   df %>%
-    dplyr::select(dplyr::all_of(c(.env$extra, .env$coords))) %>%
+    dplyr::select(dplyr::all_of(c(extra, coords))) %>%
     sf::st_as_sf(coords = coords, crs = 4326) %>%
     sf::st_transform(3347)
 }
