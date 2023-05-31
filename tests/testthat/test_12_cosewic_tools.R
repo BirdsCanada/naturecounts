@@ -25,10 +25,10 @@ test_that("cosewic_eoo()", {
 
 test_that("cosewic_iao()", {
   df <- prep_spatial(bcch)
-  expect_silent(a <- cosewic_iao(df, 
+  expect_message(a <- cosewic_iao(df, 
                                  cell_size = units::set_units(2, "km"), 
                                  record_id = "record_id", 
-                                 spatial = FALSE))
+                                 spatial = FALSE), "test")
   expect_s3_class(a, "data.frame")
   expect_equal(a, 
                dplyr::tibble(min_record = 1, max_record = 36, median_record = 1, 
