@@ -23,6 +23,7 @@ To do so we're going to use the following packages:
 library(naturecounts)
 library(sf)
 library(rnaturalearth)
+library(ggplot2)
 library(ggspatial)
 library(dplyr)
 library(tidyr)
