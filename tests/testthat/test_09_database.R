@@ -212,7 +212,8 @@ test_that("Data download to sql", {
   unlink("test.nc")
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,
                                  username = "testuser", info = "nc_test",
-                                 sql_db = "test"))
+                                 sql_db = "test")) %>%
+    suppressMessages()
 
   expect_true(file.exists("./test.nc"))
   expect_s4_class(d, "SQLiteConnection")
