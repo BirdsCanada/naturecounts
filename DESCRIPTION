@@ -35,7 +35,7 @@ Imports:
     units (>= 0.8.1),
     wk (>= 0.7.1)
 Suggests: 
-    ggmap,
+    ggspatial,
     here,
     knitr,
     mapview,
