@@ -39,7 +39,6 @@ Suggests:
     here,
     knitr,
     mapview,
-    rgeos,
     rnaturalearth,
     roxygen2,
     rmarkdown,

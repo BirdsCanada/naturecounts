@@ -254,7 +254,7 @@ ggplot() +
                       labels = c("1" = "Present", "0" = "Absent")) +
   scale_size_continuous(name = "Number of Sampling Events", range = c(1, 20)) +
   labs(caption = "Copyright OpenStreetMap contributors",
-       title = paste0("Presence/Absence of Cardinals in the RCBIOTABASE collection"))
+       title = "Presence/Absence of Cardinals in the RCBIOTABASE collection")
 ```
 
 ## Clean up the mapping files if you no longer need them

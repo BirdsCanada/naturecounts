@@ -251,7 +251,8 @@ codes_convert <- function(desc, type) {
 }
 
 have_pkg_check <- function(pkg) {
-  if(!requireNamespace(pkg, quietly = TRUE)) {
+  # TODO: remove suppression when rnaturalearth resolved
+  if(!suppressPackageStartupMessages(requireNamespace(pkg, quietly = TRUE))) {
     stop("This function requires the '", pkg, "' package.", 
          "Please install with `install.packages(\"", pkg, "\")` first", call. = FALSE)
   } else if(pkg == "sf" && utils::packageVersion("sf") < "1.0-9") {

@@ -362,8 +362,12 @@ make_grid <- function(df_sf, cell_size) {
 map_canada <- function() {
   have_pkg_check("rnaturalearth")
   have_pkg_check("sf")
-  rnaturalearth::ne_countries(country = "Canada", returnclass = "sf") %>% 
-    sf::st_transform(crs = 3347)
+  
+  # TODO: revert to no suppression once sf migration complete
+  suppressPackageStartupMessages({
+    rnaturalearth::ne_countries(country = "Canada", returnclass = "sf") %>% 
+      sf::st_transform(crs = 3347)
+  })
 }
 
 
