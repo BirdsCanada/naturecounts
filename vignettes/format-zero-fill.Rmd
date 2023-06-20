@@ -24,6 +24,7 @@ To make things simpler, we have included the `format_zero_fill()` function.
 ```{r, message = FALSE}
 library(naturecounts)
 library(dplyr)
+library(ggplot2)
 ```
 
 ### Download data
