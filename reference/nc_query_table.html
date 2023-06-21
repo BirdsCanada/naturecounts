@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">naturecounts</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -115,25 +115,27 @@ times out.</p></dd>
 <span class="r-in"><span><span class="fu">nc_query_table</span><span class="op">(</span>username <span class="op">=</span> <span class="st">"sample"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              table_name                        filters required</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 bmde_filter_bad_dates project_id,SiteCode,species_id       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        vwResultsRnest                           &lt;NA&gt;       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  vwSpeciesLifeHistory                           &lt;NA&gt;       NA</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Query the bmdefilter_bad_dates table</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">nc_query_table</span><span class="op">(</span>table <span class="op">=</span> <span class="st">"bmde_filter_bad_dates"</span>, username <span class="op">=</span> <span class="st">"sample"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   survey_month species_id period                                   comments</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1            0       7680      0                 began NSWO surveys in 2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2            1          0      0 Changed sites in spring in 2006 - new site</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3            2          0      0 Changed sites in spring in 2006 - new site</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4            3          0      0 Changed sites in spring in 2006 - new site</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5            4          0      0 Changed sites in spring in 2006 - new site</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6            5          0      0 Changed sites in spring in 2006 - new site</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   project_id SiteCode survey_year start_year end_year survey_day</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1005      BBO           0          0     1999          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       1005     DMBO           0          0     2005          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       1005     DMBO           0          0     2005          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       1005     DMBO           0          0     2005          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       1005     DMBO           0          0     2005          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       1005     DMBO           0          0     2005          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   survey_month species_id period                   comments project_id SiteCode</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            0          0 spring              beaver damage       1005     ACBO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            0          0 spring              beaver damage       1005     ACBO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            0          0 spring                   missing        1005      BBO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4            0          0 spring                   missing        1005      BBO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            0          0      0           covid disruption       1005      BBO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6            0       7680      0 began NSWO surveys in 2000       1005      BBO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   survey_year start_year end_year survey_day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        2019          0        0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2022          0        0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        2002          0        0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        2019          0        0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        2020          0        0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           0          0     1999          0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Filter our query</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">nc_query_table</span><span class="op">(</span>table <span class="op">=</span> <span class="st">"bmde_filter_bad_dates"</span>,</span></span>
@@ -146,6 +148,7 @@ times out.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4            4          0      0 Changed sites in spring in 2006 - new site</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5            5          0      0 Changed sites in spring in 2006 - new site</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6            6          0      0 Changed sites in spring in 2006 - new site</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7            0          0      0              Oak Hammock Marsh covid dates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   project_id SiteCode survey_year start_year end_year survey_day</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       1005     DMBO           0          0     2005          0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2       1005     DMBO           0          0     2005          0</span>
@@ -153,6 +156,7 @@ times out.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4       1005     DMBO           0          0     2005          0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5       1005     DMBO           0          0     2005          0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6       1005     DMBO           0          0     2005          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       1005     DMBO        2020          0        0          0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Filter our query</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">nc_query_table</span><span class="op">(</span>table <span class="op">=</span> <span class="st">"bmde_filter_bad_dates"</span>,</span></span>
@@ -186,7 +190,7 @@ times out.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
