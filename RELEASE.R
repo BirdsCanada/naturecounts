@@ -47,6 +47,8 @@ system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")
 
 # Release! ------------------------------------------------------
 
+# - Merge dev into master/main
+# - PULL updates to master/main
 # - Actually release it! Create signed release on GitHub
 usethis::use_github_release()
 
