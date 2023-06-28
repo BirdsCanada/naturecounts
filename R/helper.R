@@ -16,17 +16,10 @@
 #'
 #' @export
 format_dates <- function(df_db, overwrite = FALSE) {
-  r <- df_db
+  r <- df_db_check(df_db, collect = FALSE)
 
-  if(!any(c("SQLiteConnection", "data.frame") %in% class(df_db))) {
-    stop("'df_db' must either be a data frame or ",
-         "a connection to a SQLite database",
-         call. = FALSE)
-  }
-
-
-  if("data.frame" %in% class(df_db)) r <- format_dates_df(df_db, overwrite)
-  if("SQLiteConnection" %in% class(df_db)) format_dates_db(df_db, overwrite)
+  if(inherits(df_db, "data.frame")) r <- format_dates_df(df_db, overwrite)
+  if(inherits(df_db, "SQLiteConnection")) format_dates_db(df_db, overwrite)
 
   r
 }
@@ -172,23 +165,7 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                              extra_event = NULL,
                              warn = TRUE, verbose = TRUE) {
 
-  # SQLite Connections must become dataframes
-  if(any(class(df_db) == "SQLiteConnection")) {
-
-    if(verbose) message(" - Cannot work directly on SQLite database connections, ",
-                        "collecting data into a data frame...")
-
-    if(!"naturecounts" %in% DBI::dbListTables(df_db)) {
-      stop("If 'df_db' is a SQLite database, it must have a 'naturecounts' ",
-           "table", call. = FALSE)
-    }
-
-    df <- dplyr::tbl(df_db, "naturecounts") %>%
-      dplyr::collect()
-
-  } else {
-    df <- df_db
-  }
+  df <- df_db_check(df_db)
 
   # Species ids present?
   if(!"species_id" %in% names(df)) {
@@ -316,7 +293,8 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                     "species_id",
                     tidyselect::all_of(fill)) %>%
       dplyr::filter(.data$species_id %in% species) %>%
-      dplyr::left_join(df_by, ., by = c(by, "species_id")) %>%
+      dplyr::left_join(df_by, ., by = c(by, "species_id"), 
+                       multiple = "all") %>%
       dplyr::mutate(!!fill := tidyr::replace_na(!!rlang::sym(fill), 0))
   } else {
     df_filled <- dplyr::select(df, tidyselect::all_of(by)) %>%

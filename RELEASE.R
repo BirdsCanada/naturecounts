@@ -2,54 +2,57 @@
 
 # Get started --------------------------------------------------
 
-## Change API in data-raw/data_createion.R to non-sandbox
-
-## Run tests and check
+# - Change API in data-raw/data_creation.R to non-sandbox
+# - Run tests and check
 devtools::test()
 
-## Update internal data files
+# - Update internal data files
 source("data-raw/data_creation.R")
 
-## Update metadata stored in inst/extdata (UPDATE URL!)
+# - Update metadata stored in inst/extdata (Check URLS in data-raw/data_creation.R)
 # - Utm codes take a VERY long time to update!
 nc_metadata_internal(force = TRUE, utm = FALSE)
 
 # Documentation -------------------------------------------------
-## Update NEWS
 
-## Check spelling
+# - Update NEWS
+# - Check spelling
 dict <- hunspell::dictionary('en_CA')
 devtools::spell_check()
 spelling::update_wordlist()
 
-## Update README.Rmd
+# - Update README.Rmd
 devtools::build_readme()
 
 # Finalize package version --------------------------------------
-## Edit DESCRIPTION and NEWS.md as needed
+
+# - Edit DESCRIPTION and NEWS.md as needed
 
 # Final checks --------------------------------------------------
-## Checks
+
+# - Checks
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
 
-## Windows checks (particularly if submitting to CRAN)
+# - Windows checks (particularly if submitting to CRAN)
 devtools::check_win_release() # Win builder
 devtools::check_win_devel()
 devtools::check_win_oldrelease()
 
-## Run in console
+# - Run in console
 system("cd ..; R CMD build naturecounts")
 system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")
 
-## Check GH Actions on GitHub
+# - Check GH Actions on GitHub
 
 
 # Release! ------------------------------------------------------
-## Actually release it! Create signed release on GitHub
+
+# - Actually release it! Create signed release on GitHub
+usethis::use_github_release()
 
 # Get ready for next cycle --------------------------------------
 
-# - Create sandbox branch
+# - Create sandbox/dev branch
 # - Change API in data-raw/data_creation.R to sandbox
 # - Add dev components to version in DESCRIPTION and NEWS.md
 

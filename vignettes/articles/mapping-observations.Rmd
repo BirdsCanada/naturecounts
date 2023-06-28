@@ -23,7 +23,8 @@ To do so we're going to use the following packages:
 library(naturecounts)
 library(sf)
 library(rnaturalearth)
-library(ggmap)
+library(ggplot2)
+library(ggspatial)
 library(dplyr)
 library(tidyr)
 library(mapview)
@@ -38,7 +39,8 @@ head(house_finches)
 ```
 
 ## Simple Maps
-The quickest way to look at the spatial distribution is probably to use Stamen maps through the `ggmap` package.
+Here we're going to take a quick look at the spatial distribution using `ggplot2` 
+and `ggspatial` to get some basemaps.
 
 First let's get an idea of how many distinct points there are (often multiple observations are recorded for the same location).
 ```{r}
@@ -51,34 +53,34 @@ select(house_finches, longitude, latitude) %>%
 
 So we have `r nrow(unique(house_finches[, c("longitude", "latitude")]))` sites for `r nrow(house_finches)` observations.
 
-Next let's convert our data to spatial data so we can extract the spatial extent. Note that we're using CRS EPSG code of 4326 because that's reflects unprojected, GPS data in lat/lon. First we omit `NA`s.
+Next let's convert our data to spatial data so we can plot it spatially (i.e. make a map!).
+Note that we're using CRS EPSG code of 4326 because that's reflects unprojected, GPS data in lat/lon. 
+First we omit `NA`s because `sf` data frames cannot have missing locations.
 ```{r}
 house_finches <- drop_na(house_finches, "longitude", "latitude")
 house_finches_sf <- st_as_sf(house_finches, 
                              coords = c("longitude", "latitude"), crs = 4326)
 ```
 
-We can extract the spatial extent (**b**ounding **box**) with the `st_bbox()` function.
+Now we're ready to make a map of the distribution of observations. 
 
+We'll use a baselayer from OpenStreetMap and then add our observations.
 ```{r}
-st_bbox(house_finches_sf)
-```
-
-Now we're ready to make a map of the distribution of observations. First we get the baselayer map.
-```{r}
-map <- get_stamenmap(bbox = as.numeric(st_bbox(house_finches_sf)), zoom = 5)
-```
-
-Now we can add our observations. Note that for `ggmap`, we'll use non-sf data frame.
-```{r}
-ggmap(map) + 
-  geom_point(data = house_finches, aes(x = longitude, y = latitude))
+ggplot() +
+  annotation_map_tile(type = "osm", zoomin = 0) +
+  geom_sf(data = house_finches_sf) +
+  labs(caption = "Copyright OpenStreetMap contributors")
 ```
 
 Let's count our observations for each site.
 ```{r}
-ggmap(map) + 
-  geom_count(data = house_finches, aes(x = longitude, y = latitude))
+cnt <- house_finches_sf %>%
+  count(geometry)
+
+ggplot() +
+  annotation_map_tile(type = "osm", zoomin = 0) +
+  geom_sf(data = cnt, aes(size = n)) +
+  labs(caption = "Copyright OpenStreetMap contributors")
 ```
 
 ## Interactive Maps
@@ -214,30 +216,45 @@ cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "testuser",
 
 cardinals_zf <- cardinals %>%
   filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) %>%
-  group_by(species_id, AllSpeciesReported, SamplingEventIdentifier, latitude, longitude) %>%
+  group_by(species_id, AllSpeciesReported, SamplingEventIdentifier) %>%
   summarize(presence = sum(as.numeric(ObservationCount)) > 0, .groups = "drop") %>%
-  format_zero_fill(species = 19360,
-                   by = "SamplingEventIdentifier",
-                   extra_event = c("latitude", "longitude"),
+  format_zero_fill(species = 19360, by = "SamplingEventIdentifier",
                    fill = "presence")
+```
+
+
+A bit convoluted, but here we'll grab coordinates for each Sampling Event.
+This is only necessary if there are errors (worth reporting!) where there are
+more than one lat/lon combo for each sampling event.
+
+```{r}
+coords <- cardinals %>%
+  select("SamplingEventIdentifier", "latitude", "longitude") %>%
+  group_by(SamplingEventIdentifier, latitude, longitude) %>%
+  mutate(n = n()) %>%  # Count number of unique coordinates
+  group_by(SamplingEventIdentifier) %>%
+  slice_max(n, with_ties = FALSE) %>% # Grab the most common coordinates for each event
+  select(-"n")
+
+cardinals_zf <- left_join(cardinals_zf, coords, by = "SamplingEventIdentifier")
 
 head(cardinals_zf)
 ```
 
 Now that we have our presence/absence data for cardinals, we can create a map.
 ```{r}
-map <- st_as_sf(cardinals_zf, coords = c("longitude", "latitude")) %>%
-  st_bbox() %>%
-  as.numeric() %>%
-  get_stamenmap(bbox = ., zoom = 8)
+cnt <- st_as_sf(cardinals_zf, coords = c("longitude", "latitude"), crs = 4326) %>%
+  group_by(presence) %>%
+  count(geometry)
 
-ggmap(map, base_layer = ggplot(data = cardinals_zf)) +
-  geom_count(alpha = 0.75,
-             aes(x = longitude, y = latitude, colour = factor(presence))) +
-  scale_colour_manual(name = "Presence/Absence", values = c("yellow", "purple"), 
+ggplot() +
+  annotation_map_tile(type = "osm", zoomin = 0) +
+  geom_sf(data = cnt, aes(size = n, colour = factor(presence)), alpha = 0.5) +
+  scale_colour_manual(name = "Presence/Absence", values = c("#31688E", "#440154"), 
                       labels = c("1" = "Present", "0" = "Absent")) +
   scale_size_continuous(name = "Number of Sampling Events", range = c(1, 20)) +
-  labs(title = paste0("Presence/Absence of Cardinals in the RCBIOTABASE collection"))
+  labs(caption = "Copyright OpenStreetMap contributors",
+       title = "Presence/Absence of Cardinals in the RCBIOTABASE collection")
 ```
 
 ## Clean up the mapping files if you no longer need them

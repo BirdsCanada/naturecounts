@@ -57,11 +57,11 @@ nc_count(show = "all") %>%
 #>   collection akn_level access     nrecords
 #>   <chr>          <int> <chr>         <int>
 #> 1 ABATLAS1           5 full         123364
-#> 2 ABATLAS2           5 full         201382
+#> 2 ABATLAS2           5 full         201357
 #> 3 ABBIRDRECS         5 full         357264
-#> 4 ATOWLS             4 by request    25268
-#> 5 BBS                5 full        5735895
-#> 6 BBS50              5 full              0
+#> 4 ATBANS             3 by request      102
+#> 5 ATOWLS             4 by request    25268
+#> 6 BBS                5 full        5735895
 ```
 
 ### Fetching data

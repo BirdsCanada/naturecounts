@@ -2,15 +2,16 @@
 test_that("Metadata updates", {
   # Get original file dates
   loc <- list.files(system.file("extdata", package = "naturecounts"),
-                    full.names = TRUE) %>%
+                    pattern = ".rds", full.names = TRUE) %>%
     subset(!stringr::str_detect(., "utm")) %>%
     file.info()
 
   # Update metadata files
-  expect_message(nc_metadata(force = TRUE), "Updating")
+  expect_message(nc_metadata(force = TRUE), "Updating") %>%
+    suppressMessages()
 
   loc2 <- list.files(system.file("extdata", package = "naturecounts"),
-                     full.names = TRUE) %>%
+                     pattern = ".rds", full.names = TRUE) %>%
     subset(!stringr::str_detect(., "utm")) %>%
     file.info()
 
@@ -22,7 +23,7 @@ test_that("Metadata updates", {
   expect_message(nc_metadata(force = FALSE), "already up-to-date with server")
 
   loc3 <- list.files(system.file("extdata", package = "naturecounts"),
-                     full.names = TRUE) %>%
+                     pattern = ".rds", full.names = TRUE) %>%
     subset(!stringr::str_detect(., "utm")) %>%
     file.info()
 
@@ -42,6 +43,6 @@ test_that("Metadata functions accessible", {
 
   for(m in funs) {
     expect_silent(get(m)()) %>%
-      expect_is("data.frame")
+      expect_s3_class("data.frame")
   }
 })

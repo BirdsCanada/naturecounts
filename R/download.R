@@ -158,8 +158,9 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
     } else no_access <- c()
 
     if(length(no_access) == 0) {
-      stop("These collections have no data that match these filters",
-           call. = FALSE)
+      warning("These collections have no data that match these filters",
+              call. = FALSE)
+      return(invisible())
     } else {
       stop("You do not have permission to access these collections (",
            paste0(no_access, collapse = ", "), ")", call. = FALSE)
@@ -482,6 +483,7 @@ nc_count_internal <- function(filter, timeout, token, info = NULL) {
 #'
 #' @inheritParams args
 #' @inheritSection args NatureCounts account
+#' @inheritSection args Access and `request_id`s
 #'
 #' @examples
 #'

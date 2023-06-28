@@ -1,3 +1,4 @@
+AOO
 BCR
 BCRs
 BMDE
@@ -8,11 +9,14 @@ CMD
 COSEWIC
 CRS
 DataBase
+EOO
 EPSG
 Grolemund
 Hadley
+IAO
 IBA
 IBAs
+IUCN
 JSON
 Metaprogramming
 Muridae
@@ -28,11 +32,14 @@ api
 baselayer
 bcr
 birdscanada
+centroid
 crs
 dbs
 df
+dplyr
 eval
 favour
+ggplot
 github
 harddrive
 https
@@ -50,6 +57,7 @@ requestId
 rumped
 statprov
 subnational
+testthat
 testuser
 unintuitive
 unprojected

@@ -1,5 +1,13 @@
 # naturecounts design principles
 
+## Locations
+- API urls
+  - are stored in `meta_info`, a tibble created in `data-raw/data_creation.R`
+  - This is where you can change from main to sandbox versions
+  - https://birdscanada.org/api vs. https://sandbox.birdscanada.org/api
+  - To apply this you must **re-run** `data-raw/data_creation.R` and then
+    **re-load** the functions/package
+
 ## Fields returned by the API
 
 #### Desired behaviour
