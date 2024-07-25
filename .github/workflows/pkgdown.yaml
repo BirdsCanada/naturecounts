@@ -38,7 +38,6 @@ jobs:
             any::rnaturalearthhires
             any::rnaturalearthdata
             any::patchwork
-            any::rgdal
           needs: website
 
       - name: Build site
