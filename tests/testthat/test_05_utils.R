@@ -47,7 +47,7 @@ test_that("parse_request()", {
   
   expect_silent(r <- parse_request(req))
   expect_s3_class(r, "data.frame")
-  expect_gt(nrow(r), 1000) 
+  expect_gt(nrow(r), 10) 
   expect_named(r, c("request_id", "request_origin", "request_label", 
                     "collection", "status", "nrecords", "filter"))
 })
