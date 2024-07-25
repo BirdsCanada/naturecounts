@@ -33,11 +33,6 @@ devtools::build_readme()
 # - Checks
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
 
-# - Windows checks (particularly if submitting to CRAN)
-devtools::check_win_release() # Win builder
-devtools::check_win_devel()
-devtools::check_win_oldrelease()
-
 # - Run in console
 system("cd ..; R CMD build naturecounts")
 system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")

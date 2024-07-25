@@ -23,6 +23,7 @@ Muridae
 NAD
 NatureCounts
 ObservationCount
+OpenStreetMap
 Petawawa
 RSQLite
 SamplingEventIdentifier
@@ -30,9 +31,9 @@ Subnational
 Wickham
 api
 baselayer
+basemaps
 bcr
 birdscanada
-centroid
 crs
 dbs
 df
@@ -50,7 +51,6 @@ locs
 lon
 muridae
 nc
-ounding
 quosure
 quosures
 requestId

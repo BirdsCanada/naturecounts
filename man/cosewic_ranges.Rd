@@ -6,10 +6,10 @@
 \usage{
 cosewic_ranges(
   df_db,
-  record_id = "record_id",
+  record = "record_id",
   coord_lon = "longitude",
   coord_lat = "latitude",
-  species_id = "species_id",
+  species = "species_id",
   iao_grid_size_km = 2,
   eoo_p = 0.95,
   filter_unique = FALSE,
@@ -20,14 +20,14 @@ cosewic_ranges(
 \item{df_db}{Either data frame or a connection to database with
 \code{naturecounts} table.}
 
-\item{record_id}{Character. Name of the column containing record
+\item{record}{Character. Name of the column containing record
 identification.}
 
 \item{coord_lon}{Character. Name of the column containing longitude.}
 
 \item{coord_lat}{Character. Name of the column containing latitude.}
 
-\item{species_id}{Character. Name of the column containing species
+\item{species}{Character. Name of the column containing species
 identification.}
 
 \item{iao_grid_size_km}{Numeric. Size of grid (km) to use when calculating
@@ -44,7 +44,9 @@ This changes the nature of what an observation is, and also may bias
 EOO calculations if using less than 100\% of points (see \code{eoo_p}).}
 
 \item{spatial}{Logical. Whether to return sf spatial objects showing
-calculations.}
+calculations. If \code{FALSE} (the default) returns a data frame with the IAO
+and EOO values. If \code{TRUE} returns a list of objects with both the
+values and the spatial grid/polygons.}
 }
 \value{
 Summarized data frame (ranges) or list containing \code{ranges}, a

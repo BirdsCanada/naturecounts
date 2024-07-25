@@ -59,8 +59,8 @@ nc_count(show = "all") %>%
 #> 1 ABATLAS1           5 full         123364
 #> 2 ABATLAS2           5 full         201357
 #> 3 ABBIRDRECS         5 full         357264
-#> 4 ATBANS             3 by request      102
-#> 5 ATOWLS             4 by request    25268
+#> 4 ATBANS             3 by request      267
+#> 5 ATOWLS             4 by request    33964
 #> 6 BBS                5 full        5735895
 ```
 
