@@ -6,8 +6,52 @@ test_that("prep_spatial()", {
   expect_equal(format(sf::st_crs(s)), "NAD83 / Statistics Canada Lambert") 
 })
 
+test_that("prep_spatial() diff cols", {
+  b <- dplyr::rename(bcch, sp = species_id, rec = record_id)
+  expect_silent(s <- prep_spatial(b, extra = "rec"))
+  expect_s3_class(s, "sf")
+  expect_named(s, c("rec", "geometry")) 
+  expect_equal(nrow(s), nrow(b))
+  expect_equal(format(sf::st_crs(s)), "NAD83 / Statistics Canada Lambert") 
+})
+
 test_that("cosewic_eoo()", {
   df <- prep_spatial(bcch)
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE))
+  expect_s3_class(e, "data.frame")
+  expect_named(e, "eoo")
+  expect_equal(e[["eoo"]], units::set_units(1243.421, "km2"), tolerance = 0.001)
+  
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE))
+  expect_s3_class(e, "sf")
+  expect_equal(nrow(e), 1)
+  expect_equal(as.character(sf::st_geometry_type(e)), "POLYGON")
+  
+  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE))
+  expect_equal(e[["eoo"]], units::set_units(4861.251, "km2"), tolerance = 0.001)
+})
+
+test_that("cosewic_eoo() diff cols", {
+  df <- dplyr::rename(bcch, sp = species_id, rec = record_id) |>
+    prep_spatial(extra = "rec")
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE))
+  expect_s3_class(e, "data.frame")
+  expect_named(e, "eoo")
+  expect_equal(e[["eoo"]], units::set_units(1243.421, "km2"), tolerance = 0.001)
+  
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE))
+  expect_s3_class(e, "sf")
+  expect_equal(nrow(e), 1)
+  expect_equal(as.character(sf::st_geometry_type(e)), "POLYGON")
+  
+  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE))
+  expect_equal(e[["eoo"]], units::set_units(4861.251, "km2"), tolerance = 0.001)
+})
+
+test_that("cosewic_eoo() no cols", {
+  df <- dplyr::select(bcch, -"species_id") |>
+    dplyr::mutate(record_id = dplyr::row_number()) |>
+    prep_spatial()
   expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE))
   expect_s3_class(e, "data.frame")
   expect_named(e, "eoo")
@@ -27,7 +71,7 @@ test_that("cosewic_iao()", {
   df <- prep_spatial(bcch)
   expect_silent(a <- cosewic_iao(df, 
                                  cell_size = units::set_units(2, "km"), 
-                                 record_id = "record_id", 
+                                 record = "record_id", 
                                  spatial = FALSE))
   expect_s3_class(a, "data.frame")
   expect_equal(a, 
@@ -37,7 +81,56 @@ test_that("cosewic_iao()", {
   
   expect_silent(a <- cosewic_iao(df, 
                                  cell_size = units::set_units(2, "km"), 
-                                 record_id = "record_id", 
+                                 record = "record_id", 
+                                 spatial = TRUE))
+  expect_s3_class(a, "sf")
+  expect_equal(sum(a$n_records), nrow(bcch))
+  expect_equal(nrow(a), 450)
+  expect_equal(unique(as.character(sf::st_geometry_type(a))), "POLYGON")
+  expect_snapshot_value(a, style = "json2")
+})
+
+test_that("cosewic_iao() diff cols", {
+  df <- dplyr::rename(bcch, sp = species_id, rec = record_id) |>
+    prep_spatial(extra = "rec")
+  expect_silent(a <- cosewic_iao(df, 
+                                 cell_size = units::set_units(2, "km"), 
+                                 record = "rec",
+                                 spatial = FALSE))
+  expect_s3_class(a, "data.frame")
+  expect_equal(a, 
+               dplyr::tibble(min_record = 1, max_record = 36, median_record = 1, 
+                             grid_size_km = units::set_units(2, "km"), 
+                             n_occupied = 31, iao = units::set_units(124, "km2")))
+  
+  expect_silent(a <- cosewic_iao(df, 
+                                 cell_size = units::set_units(2, "km"), 
+                                 record = "rec", 
+                                 spatial = TRUE))
+  expect_s3_class(a, "sf")
+  expect_equal(sum(a$n_records), nrow(bcch))
+  expect_equal(nrow(a), 450)
+  expect_equal(unique(as.character(sf::st_geometry_type(a))), "POLYGON")
+  expect_snapshot_value(a, style = "json2")
+})
+
+test_that("cosewic_iao() no cols", {
+  df <- dplyr::select(bcch, -"species_id") |>
+    dplyr::mutate(record_id = dplyr::row_number()) |>
+    prep_spatial()
+  expect_silent(a <- cosewic_iao(df, 
+                                 cell_size = units::set_units(2, "km"), 
+                                 record = "record_id",
+                                 spatial = FALSE))
+  expect_s3_class(a, "data.frame")
+  expect_equal(a, 
+               dplyr::tibble(min_record = 1, max_record = 36, median_record = 1, 
+                             grid_size_km = units::set_units(2, "km"), 
+                             n_occupied = 31, iao = units::set_units(124, "km2")))
+  
+  expect_silent(a <- cosewic_iao(df, 
+                                 cell_size = units::set_units(2, "km"), 
+                                 record = "record_id", 
                                  spatial = TRUE))
   expect_s3_class(a, "sf")
   expect_equal(sum(a$n_records), nrow(bcch))
@@ -70,6 +163,64 @@ test_that("cosewic_ranges()", {
                "`coord_lat` and `coord_lon` must be numeric")
   
   expect_message(r <- cosewic_ranges(bcch[1,], spatial = FALSE), 
+                 "EOO is less than IAO")
+  expect_equal(r$iao, r$eoo_p95)
+})
+
+test_that("cosewic_ranges() diff cols", {
+  b <- dplyr::rename(bcch, sp = species_id, rec = record_id)
+  expect_silent(r <- cosewic_ranges(b, record = "rec", species = "sp"))
+  expect_type(r, "list")
+  expect_named(r, c("iao", "eoo"))
+  
+  expect_silent(r <- cosewic_ranges(b, record = "rec", species = "sp", spatial = FALSE))
+  expect_s3_class(r, "data.frame")
+  expect_equal(
+    r, 
+    dplyr::tibble(sp = 14280L,
+                  n_records_total = nrow(bcch),
+                  min_record = 1, max_record = 36, median_record = 1, 
+                  grid_size_km = units::set_units(2, "km"), 
+                  n_occupied = 31, iao = units::set_units(124, "km2"),
+                  eoo_p95 = units::set_units(1243.421, "km2")), 
+    tolerance = 0.001)
+  
+  expect_error(cosewic_ranges(dplyr::select(b, -"latitude"), record = "rec", species = "sp"),
+               "`coord_lat` and `coord_lon` must be columns in `df_db`")
+  expect_error(cosewic_ranges(dplyr::mutate(b, latitude = collection), record = "rec", species = "sp"),
+               "`coord_lat` and `coord_lon` must be numeric")
+  
+  expect_message(r <- cosewic_ranges(b[1,], spatial = FALSE, record = "rec", species = "sp"), 
+                 "EOO is less than IAO")
+  expect_equal(r$iao, r$eoo_p95)
+})
+
+test_that("cosewic_ranges() no cols", {
+  b <- dplyr::select(bcch, -"species_id", -"record_id")
+  
+  expect_warning(r <- cosewic_ranges(b), "Column \"species_id\"") |>
+    expect_warning("Column \"record_id\"")
+  expect_silent(r <- cosewic_ranges(b, record = NULL, species = NULL))
+  expect_type(r, "list")
+  expect_named(r, c("iao", "eoo"))
+  
+  expect_silent(r <- cosewic_ranges(b, record = NULL, species = NULL, spatial = FALSE))
+  expect_s3_class(r, "data.frame")
+  expect_equal(
+    r, 
+    dplyr::tibble(n_records_total = nrow(bcch),
+                  min_record = 1, max_record = 36, median_record = 1, 
+                  grid_size_km = units::set_units(2, "km"), 
+                  n_occupied = 31, iao = units::set_units(124, "km2"),
+                  eoo_p95 = units::set_units(1243.421, "km2")), 
+    tolerance = 0.001)
+  
+  expect_error(cosewic_ranges(dplyr::select(b, -"latitude"), record = NULL, species = NULL),
+               "`coord_lat` and `coord_lon` must be columns in `df_db`")
+  expect_error(cosewic_ranges(dplyr::mutate(b, latitude = collection), record = NULL, species = NULL),
+               "`coord_lat` and `coord_lon` must be numeric")
+  
+  expect_message(r <- cosewic_ranges(b[1,], spatial = FALSE, record = NULL, species = NULL), 
                  "EOO is less than IAO")
   expect_equal(r$iao, r$eoo_p95)
 })
@@ -125,3 +276,4 @@ test_that("cosewic_plot()", {
   expect_s3_class(g6[[1]], "ggplot")
   expect_s3_class(g6[[2]], "ggplot")
 })
+

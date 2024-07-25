@@ -1,7 +1,7 @@
 Package: naturecounts
 Type: Package
 Title: Access and download data on plant and animal populations from NatureCounts
-Version: 0.4.0
+Version: 0.4.1
 Authors@R: c(
     person("Steffi", "LaZerte", email = "steffi@steffi.ca", role = "aut"),
     person("Denis", "Lepage", email = "dlepage@birdscanada.org", role = c("aut", "cre")))
@@ -47,7 +47,7 @@ Suggests:
     testthat
 Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 URL: https://github.com/BirdsCanada/naturecounts,
     https://naturecounts.ca,
     https://birdscanada.github.io/naturecounts/
