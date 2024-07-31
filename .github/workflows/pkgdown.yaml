@@ -38,6 +38,7 @@ jobs:
             any::rnaturalearthhires
             any::rnaturalearthdata
             any::patchwork
+            any::prettymapr
           needs: website
 
       - name: Build site
