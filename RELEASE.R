@@ -73,4 +73,5 @@ pkgdown::build_article("region-codes")
 pkgdown::build_article("region-areas")
 pkgdown::build_article("articles/region-spatial")
 
-
+unlink("vignettes/articles/BCR_Terrestrial/", recursive = TRUE)
+unlink("vignettes/articles/bcr_terrestrial_shape.zip")
