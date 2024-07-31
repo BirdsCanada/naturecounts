@@ -137,7 +137,8 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
         purrr::map(function(x) if(nrow(x) == 0) NULL else x) %>%
         purrr::list_rbind() %>%
         dplyr::rename("geometry" = "square_wkt") %>%
-        sf::st_as_sf(wkt = "geometry", crs = 3347)
+        sf::st_as_sf(wkt = "geometry", crs = 4326) %>%
+        sf::st_transform(crs = 3347)
       metadata_save(utm_squares, path, compress = "xz")
     }
 
