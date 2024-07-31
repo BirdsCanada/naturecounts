@@ -276,6 +276,7 @@ test_that("cosewic_plot()", {
   expect_s3_class(g6[[1]], "ggplot")
   expect_s3_class(g6[[2]], "ggplot")
   
+  skip_on_os(c("windows", "mac"))
   vdiffr::expect_doppelganger("p_basic", g1)
   vdiffr::expect_doppelganger("p_points", g3)
   vdiffr::expect_doppelganger("p_map", g5)
@@ -304,6 +305,7 @@ test_that("cosewic_plot() no cols", {
   expect_silent(g6 <- cosewic_plot(r2, species = NULL))
   expect_s3_class(g6, "ggplot")
   
+  skip_on_os(c("windows", "mac"))
   vdiffr::expect_doppelganger("p_no_cols_basic", g1)
   vdiffr::expect_doppelganger("p_no_cols_points", g3)
   vdiffr::expect_doppelganger("p_no_cols_map", g5)
