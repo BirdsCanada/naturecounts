@@ -1,156 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/404.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/CODE_DESIGN.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/data-access.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/filtering-data.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/format-zero-fill.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/mapping-observations.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/region-areas.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/region-codes.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/region-spatial.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/selecting-fields.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/articles/species-codes.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/args.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/as_numeric.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/bcch.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/cosewic_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/cosewic_ranges.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/db_connect.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/db_insert.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/filter_create.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/format_dates.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/format_zero_fill.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/grid_canada.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/hofi.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/map_canada.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/meta.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/metadata_v_remote.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/naturecounts-package.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_coll_dl.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_count.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_data_dl.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_data_save.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_metadata.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_permissions.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_query_table.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_remove_cache.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_requests.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/nc_single_dl.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/search_codes.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/search_region.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/search_species.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/search_species_code.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/srv_auth.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/srv_query.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/tidyeval.html</loc>
-  </url>
-  <url>
-    <loc>https://birdscanada.github.io/naturecounts/reference/to_json.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://birdscanada.github.io/naturecounts/404.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/CODE_DESIGN.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/data-access.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/filtering-data.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/format-zero-fill.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/index.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/mapping-observations.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/region-areas.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/region-codes.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/region-spatial.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/selecting-fields.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/species-codes.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/authors.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/index.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/news/index.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/args.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/as_numeric.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/bcch.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/cosewic_plot.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/cosewic_ranges.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/db_connect.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/db_insert.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/filter_create.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/format_dates.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/format_zero_fill.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/grid_canada.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/hofi.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/index.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/map_canada.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/meta.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/metadata_v_remote.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/naturecounts-package.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_coll_dl.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_count.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_data_dl.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_data_save.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_metadata.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_permissions.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_query_table.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_remove_cache.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_requests.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_single_dl.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/pipe.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/search_codes.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/search_region.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/search_species.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/search_species_code.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/srv_auth.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/tidyeval.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/to_json.html</loc></url>
 </urlset>
+
