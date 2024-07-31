@@ -30,10 +30,10 @@ library(mapview)
 First we'll get some spatial objects for our explorations from the `rnaturalearth` package. A map of North America and of Canada, both transformed from CRS EPSG code 4326 (unprojected lat/lon) to 3347 (NAD83 Statistics Canada).
 
 ```{r}
-na <- ne_countries(continent = "north america", returnclass = "sf") %>%
+na <- ne_countries(continent = "north america", returnclass = "sf") |>
   st_transform(3347)
 
-canada <- ne_states(country = "canada", returnclass = "sf") %>%
+canada <- ne_states(country = "canada", returnclass = "sf") |>
   st_transform(3347)
 ```
 
@@ -43,8 +43,8 @@ To get a visual idea of where different Important Bird Areas are, let's plot the
 First we need to grab the IBA data frame and convert it to a spatial object. Because the data contains lat/lon, we assign it to CRS 4326 for GPS lat/lon data, and then convert it to match the crs of our maps.
 
 ```{r}
-iba <- meta_iba_codes() %>%
-  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
+iba <- meta_iba_codes() |>
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
   st_transform(3347)
 
 ggplot() +
@@ -81,7 +81,7 @@ ggplot() +
 For a more detailed view of IBAs, we can also grab the shape files from Birds Canada.
 
 ```{r}
-iba <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=atlas:iba&outputFormat=application%2Fjson") %>%
+iba <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=atlas:iba&outputFormat=application%2Fjson") |>
   st_transform(3347)
 
 iba <- filter(iba, Status == "confirmed") # Omit historical areas
@@ -103,7 +103,7 @@ mapview(iba)
 Bird Conservation Regions are also available from Birds Canada.
 
 ```{r}
-bcr <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=atlas:bcr&outputFormat=application%2Fjson") %>%
+bcr <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=atlas:bcr&outputFormat=application%2Fjson") |>
   st_transform(3347)
 
 ggplot() +

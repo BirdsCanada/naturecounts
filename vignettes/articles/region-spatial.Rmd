@@ -34,18 +34,18 @@ If you have your own spatial data files that you would like to read into R, we r
 First we'll get some spatial objects for our explorations from the `rnaturalearth` package. A map of Canada and a map of Ontario, both transformed from CRS 4326 (unprojected lat/lon) to 3347 (NAD83 Statistics Canada).
 
 ```{r}
-na <- ne_countries(continent = "north america", returnclass = "sf") %>%
+na <- ne_countries(continent = "north america", returnclass = "sf") |>
   st_transform(3347)
 
-canada <- ne_states(country = "canada", returnclass = "sf") %>%
+canada <- ne_states(country = "canada", returnclass = "sf") |>
   st_transform(3347)
 
-ontario <- ne_states(country = "Canada", returnclass = "sf") %>%
-  filter(name == "Ontario") %>%
+ontario <- ne_states(country = "Canada", returnclass = "sf") |>
+  filter(name == "Ontario") |>
   st_transform(3347)
 
-manitoba <- ne_states(country = "Canada", returnclass = "sf") %>%
-  filter(name == "Manitoba") %>%
+manitoba <- ne_states(country = "Canada", returnclass = "sf") |>
+  filter(name == "Manitoba") |>
   st_transform(3347)
 ```
 
@@ -76,10 +76,10 @@ obs <- nc_data_dl(region = list(subnational2 = "CA.MB.11"),
 
 Now we'll get a polygon representing Winnipeg, MB.
 ```{r}
-winnipeg <- st_read("https://data.winnipeg.ca/api/geospatial/jx93-sett?method=export&format=GeoJSON") %>%
+winnipeg <- st_read("https://data.winnipeg.ca/api/geospatial/jx93-sett?method=export&format=GeoJSON") |>
   st_transform(3347)
 
-obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) %>%
+obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) |>
   st_transform(3347)
 
 ggplot() +
@@ -132,8 +132,8 @@ urban <- ne_load(scale = 10, type = "urban_areas", returnclass = "sf",
 First we'll transform it to the 3347 CRS and clip the urban areas to match the borders of Ontario (`st_insection(spatial1, spatial2)`). Here we only care about the geometry of Ontario, not any other data (`st_geometry(ontario)`).
 
 ```{r}
-urban_ontario <- urban %>%
-  st_transform(3347) %>%
+urban_ontario <- urban |>
+  st_transform(3347) |>
   st_intersection(st_geometry(ontario))
 
 ggplot() +
@@ -147,10 +147,10 @@ Now to filter your observations to urban areas, the first step would be to get a
 Once again, we only care about the actual geometries of `urban_ontario`, not about any of it's features, so we use `distinct()` to return distinct polygons without any other columns. Finally we use `unique()` at the end to remove any duplicates (i.e. `utm_squares` that overlap more than 1 urban polygon. Note that you must use `unique()` and not `distinct()` (which works on regular data frames, but here removes all data attributes). 
 
 ```{r}
-utm_on <- meta_utm_squares() %>%
-  filter(statprov_code == "ON") %>%
-  st_transform(3347) %>%  # Transform to match urban CRS
-  st_join(., distinct(urban_ontario), left = FALSE) %>%
+utm_on <- meta_utm_squares() |>
+  filter(statprov_code == "ON") |>
+  st_transform(3347) |>  # Transform to match urban CRS
+  st_join(distinct(urban_ontario), left = FALSE) |>
   unique()
 
 ggplot() +
@@ -165,9 +165,9 @@ It's a bit tricky to see exactly what's going on, so let's zoom in a bit.
 However, it's also a bit tricky to zoom when we're using a non-lat/lon CRS because the units are unintuitive. So let's specify the limits we want, then transform them in the CRS we're using and use that to set our limits.
 ```{r}
 zoom <- data.frame(lon = c(-81, -78, -81, -78),
-                   lat = c(43, 43, 45, 45)) %>%
-  st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
-  st_transform(3347) %>%
+                   lat = c(43, 43, 45, 45)) |>
+  st_as_sf(coords = c("lon", "lat"), crs = 4326) |>
+  st_transform(3347) |>
   st_bbox()
 zoom
 ```
@@ -205,8 +205,8 @@ obs <- nc_data_dl(region = list(utm_squares = utm_on$utm_square[1:10]),
 Finally, we do clip the resulting observations to the exact urban areas:
 
 ```{r}
-obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) %>%
-  st_transform(crs = 3347) %>%
+obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) |>
+  st_transform(crs = 3347) |>
   st_join(distinct(urban_ontario), left = FALSE)
 
 ggplot() +
@@ -249,11 +249,11 @@ parks <- st_read(here::here("vignettes/region-spatial_files/Parks_Protected_Area
 Now we'll get a background map of Alberta and a spatial file of just Jasper.
 
 ```{r}
-alberta <- ne_states(country = "Canada", returnclass = "sf") %>%
-  filter(name == "Alberta") %>%
+alberta <- ne_states(country = "Canada", returnclass = "sf") |>
+  filter(name == "Alberta") |>
   st_transform(3347)
 
-jasper <- filter(parks, NAME == "Jasper") %>%
+jasper <- filter(parks, NAME == "Jasper") |>
   st_transform(3347)
 ```
 
@@ -270,8 +270,8 @@ ggplot() +
 Using a bounding box is a good way to download observations only from the Jasper area. But remember that the bounding box coordinates used by `nc_data_dl()` are in lat/lon, so we'll have to back transform.
 
 ```{r}
-b <- jasper %>%
-  st_transform(4326) %>%
+b <- jasper |>
+  st_transform(4326) |>
   st_bbox()
 b
 ```
@@ -286,8 +286,8 @@ obs <- nc_data_dl(region = list(bbox = b), verbose = FALSE, username = "testuser
 Finally we clip the observations to the exact area of Jasper.
 
 ```{r}
-obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) %>%
-  st_transform(3347) %>%
+obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) |>
+  st_transform(3347) |>
   st_join(distinct(jasper), left = FALSE)
 
 ggplot() +

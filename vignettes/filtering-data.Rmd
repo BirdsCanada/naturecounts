@@ -81,7 +81,7 @@ boreal_chickadee_db <- tbl(con, "naturecounts")
 Not all dates can be created if `survey_year`, `survey_month` or `survey_day` are missing.
 
 ```{r}
-filter(boreal_chickadee_df, is.na(date)) %>%
+filter(boreal_chickadee_df, is.na(date)) |>
   select(survey_year, survey_month, survey_day, date)
 ```
 
@@ -101,8 +101,8 @@ These steps work for categories such as `collection`, `species`, `survey_year`, 
 - `pull()` grabs the column of interest, `unique()` returns only unique values.
 
 ```{r}
-boreal_chickadee_db %>%
-  select(collection) %>%
+boreal_chickadee_db |>
+  select(collection) |>
   distinct()
 ```
 
@@ -120,8 +120,8 @@ alberta_atlas <- filter(boreal_chickadee_db,
 
 3. Confirm
 ```{r}
-alberta_atlas %>%
-  select(collection) %>%
+alberta_atlas |>
+  select(collection) |>
   distinct()
 ```
 
@@ -139,8 +139,8 @@ These steps work for categories such as `survey_year`, `survey_month`, `survey_d
 - `pull()` grabs the column of interest, `summary()` returns a numerical summary of the values.
 
 ```{r}
-boreal_chickadee_db %>%
-  select(survey_year) %>%
+boreal_chickadee_db |>
+  select(survey_year) |>
   summarize(min = min(survey_year, na.rm = TRUE), 
             max = max(survey_year, na.rm = TRUE))
 ```
@@ -157,8 +157,8 @@ recent <- filter(boreal_chickadee_db, !(survey_year >= 1960 & survey_year < 2000
 
 3. Confirm
 ```{r}
-recent %>%
-  select(survey_year) %>%
+recent |>
+  select(survey_year) |>
   summarize(min = min(survey_year, na.rm = TRUE), 
             max = max(survey_year, na.rm = TRUE))
 ```
@@ -171,8 +171,8 @@ Filtering by dates is usually slightly more complex, but fortunately, the `filte
 - `pull()` grabs the column of interest, `summary()` returns a summary of the values.
 
 ```{r}
-boreal_chickadee_db %>%
-  select(date) %>%
+boreal_chickadee_db |>
+  select(date) |>
   summarize(min = min(date, na.rm = TRUE), 
             max = max(date, na.rm = TRUE))
 ```
@@ -189,8 +189,8 @@ omit_field_season <- filter(boreal_chickadee_db, !(date >= "2010-05-10" & date <
 
 3. Confirm
 ```{r}
-field_season %>%
-  select(date) %>%
+field_season |>
+  select(date) |>
   summarize(min = min(date, na.rm = TRUE), 
             max = max(date, na.rm = TRUE))
 ```

@@ -32,13 +32,13 @@ meta_bmde_versions()
 
 2. You can get a list of the specific fields/columns included in each version using the `meta_bmde_fields()` function
 ```{r}
-meta_bmde_fields(version = "BMDE-BAND-2.00") %>%
+meta_bmde_fields(version = "BMDE-BAND-2.00") |>
   head()
 ```
 
 3. You can see which BMDE versions are used by different collections by looking at the metadata associated with that collection.
 ```{r}
-meta_collections() %>% 
+meta_collections() |> 
   head()
 ```
 

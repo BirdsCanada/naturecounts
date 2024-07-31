@@ -147,8 +147,8 @@ head(rc_loc_filled)
 The message about summarizing multiple observations means that we have multiple observations per `utm_square`. This example isn't large enough to be slowed down much, but in larger examples, it can be much faster to simplify the dataset first.
 
 ```{r}
-rc_sum <- rc_all_species %>%
-  group_by(utm_square, species_id, AllSpeciesReported) %>%
+rc_sum <- rc_all_species |>
+  group_by(utm_square, species_id, AllSpeciesReported) |>
   summarize(ObservationCount = sum(as.numeric(ObservationCount), na.rm = TRUE),
             .groups = "drop")
 head(rc_sum)
@@ -175,8 +175,8 @@ By default `format_zero_fill()` adds 0's to the `ObservationCount` column, but y
 
 For example, if you wanted to deal only with Presence/Absence you could create a new `presence` column and zero-fill this column.
 ```{r}
-rc_presence <- rc_all_species %>%
-  select(species_id, AllSpeciesReported, ObservationCount, SamplingEventIdentifier) %>%
+rc_presence <- rc_all_species |>
+  select(species_id, AllSpeciesReported, ObservationCount, SamplingEventIdentifier) |>
   mutate(presence = if_else(as.numeric(ObservationCount) > 0, TRUE, FALSE))
 head(rc_presence)
 

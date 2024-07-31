@@ -46,8 +46,8 @@ First let's get an idea of how many distinct points there are (often multiple ob
 ```{r}
 nrow(house_finches)
 
-select(house_finches, longitude, latitude) %>%
-  distinct() %>%
+select(house_finches, longitude, latitude) |>
+  distinct() |>
   nrow()
 ```
 
@@ -74,7 +74,7 @@ ggplot() +
 
 Let's count our observations for each site.
 ```{r}
-cnt <- house_finches_sf %>%
+cnt <- house_finches_sf |>
   count(geometry)
 
 ggplot() +
@@ -97,7 +97,7 @@ For more complex, or detailed maps, we can use a variety of spatial data files t
 For this we'll get some outlines of Canada and it's Provinces and Territories from `rnaturalearth`.
 
 ```{r}
-canada <- ne_states(country = "canada", returnclass = "sf") %>%
+canada <- ne_states(country = "canada", returnclass = "sf") |>
   st_transform(3347)
 
 ggplot() +
@@ -186,8 +186,8 @@ house_finches_sf <- mutate(house_finches_sf,
 
 We'll also want to see how many sample years there are per decade.
 ```{r}
-years <- house_finches_sf %>%
-  group_by(years) %>%
+years <- house_finches_sf |>
+  group_by(years) |>
   summarize(n = length(unique(survey_year)), .groups = "drop")
 ```
 
@@ -216,10 +216,10 @@ Here we download data from the `RCBIOTABASE` collection, make sure to keep only 
 cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "testuser", 
                         info = "nc_tutorial")
 
-cardinals_zf <- cardinals %>%
-  filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) %>%
-  group_by(species_id, AllSpeciesReported, SamplingEventIdentifier) %>%
-  summarize(presence = sum(as.numeric(ObservationCount)) > 0, .groups = "drop") %>%
+cardinals_zf <- cardinals |>
+  filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) |>
+  group_by(species_id, AllSpeciesReported, SamplingEventIdentifier) |>
+  summarize(presence = sum(as.numeric(ObservationCount)) > 0, .groups = "drop") |>
   format_zero_fill(species = 19360, by = "SamplingEventIdentifier",
                    fill = "presence")
 ```
@@ -230,12 +230,12 @@ This is only necessary if there are errors (worth reporting!) where there are
 more than one lat/lon combo for each sampling event.
 
 ```{r}
-coords <- cardinals %>%
-  select("SamplingEventIdentifier", "latitude", "longitude") %>%
-  group_by(SamplingEventIdentifier, latitude, longitude) %>%
-  mutate(n = n()) %>%  # Count number of unique coordinates
-  group_by(SamplingEventIdentifier) %>%
-  slice_max(n, with_ties = FALSE) %>% # Grab the most common coordinates for each event
+coords <- cardinals |>
+  select("SamplingEventIdentifier", "latitude", "longitude") |>
+  group_by(SamplingEventIdentifier, latitude, longitude) |>
+  mutate(n = n()) |>  # Count number of unique coordinates
+  group_by(SamplingEventIdentifier) |>
+  slice_max(n, with_ties = FALSE) |> # Grab the most common coordinates for each event
   select(-"n")
 
 cardinals_zf <- left_join(cardinals_zf, coords, by = "SamplingEventIdentifier")
@@ -245,8 +245,8 @@ head(cardinals_zf)
 
 Now that we have our presence/absence data for cardinals, we can create a map.
 ```{r}
-cnt <- st_as_sf(cardinals_zf, coords = c("longitude", "latitude"), crs = 4326) %>%
-  group_by(presence) %>%
+cnt <- st_as_sf(cardinals_zf, coords = c("longitude", "latitude"), crs = 4326) |>
+  group_by(presence) |>
   count(geometry)
 
 ggplot() +
