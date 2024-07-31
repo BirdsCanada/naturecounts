@@ -63,12 +63,14 @@ Sometimes, but not all the time.
 Finally, let's take a peak at the observations recorded for these three species
 
 ```{r}
+#| fig-alt: "Boxplots showing counts for three butterflies, Monarchs showing the most"
 ggplot(data = rc, aes(x = CommonName, y = as.numeric(ObservationCount))) +
   geom_boxplot() +
   labs(title = "Number of individuals observed")
 ```
 
 ```{r}
+#| fig-alt: "Barplots showing counts for number of sampling events, Monarchs again showed the most"
 ggplot(data = rc, aes(x = CommonName)) +
   geom_bar() +
   labs(title = "Number of sampling events the species was observed")
@@ -102,6 +104,7 @@ head(rc_filled)
 
 
 ```{r}
+#| fig-alt: "Barplot showing number of sampling events across three species. Pink bars show the counts for events with 0 observations, blue show the counts for those with >0 observations."
 ggplot(data = rc_filled, aes(x = factor(species_id), fill = ObservationCount > 0)) +
   geom_bar(position = "dodge") +
   labs(title = "Number of sampling events the species was observed")
