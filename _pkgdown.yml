@@ -1,20 +1,22 @@
 url: https://birdscanada.github.io/naturecounts/
+
 development:
   mode: auto
+  
+template:
+  bootstrap: 5
+  bootswatch: sandstone
+
 navbar:
-  type: default
-  left:
-  - icon: fa-home
-    href: index.html
-  - text: Reference
-    href: reference/index.html
-  - text: Articles
-    href: articles/index.html
-  - text: News
-    href: news/index.html
-  right:
-  - icon: fa-github fa-lg
-    href: https://github.com/BirdsCanada/naturecounts
+  bg: dark
+  structure:
+    left: [home, reference, articles, news]
+    right: [search, github]
+  components:
+    home:
+      icon: fa-home
+      href: index.html
+
 reference:
 - title: Learning about this package
   contents:
@@ -53,6 +55,7 @@ reference:
   contents:
   - bcch
   - hofi
+  
 articles:
 - title: Reference
   desc: Reference articles for metadata codes and descriptions.
@@ -71,7 +74,5 @@ articles:
 - title: Formating
   desc: How to format downloaded data
   contents: '`format-zero-fill`'
-template:
-  params:
-    bootswatch: sandstone
+
 
