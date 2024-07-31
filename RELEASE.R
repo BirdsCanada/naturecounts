@@ -10,8 +10,9 @@ devtools::test()
 source("data-raw/data_creation.R")
 
 # - Update metadata stored in inst/extdata (Check URLS in data-raw/data_creation.R)
-# - Utm codes take a VERY long time to update!
+# - Utm codes take time to update
 nc_metadata_internal(force = TRUE, utm = FALSE)
+#nc_metadata_internal(force = TRUE, utm = TRUE)
 
 # Documentation -------------------------------------------------
 

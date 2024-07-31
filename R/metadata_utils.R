@@ -128,15 +128,16 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
 
       # Get UTM square codes
       message("Updating UTM squares codes...")
-      utm_squares <- statprov_codes()$statprov_code %>%
-        lapply(., function(x) {
+      utm_squares <- meta_statprov_codes()$statprov_code %>%
+        purrr::map(function(x) {
           message("  Getting ", x)
           srv_query(api$utm_squares, query = list('statprov' = x))
         }) %>%
-        lapply(parse_results, results = FALSE) %>%
-        dplyr::bind_rows() %>%
+        purrr::map(parse_results) %>%
+        purrr::map(function(x) if(nrow(x) == 0) NULL else x) %>%
+        purrr::list_rbind() %>%
         dplyr::rename("geometry" = "square_wkt") %>%
-        sf::st_as_sf(., wkt = "geometry", crs = 3347)
+        sf::st_as_sf(wkt = "geometry", crs = 3347)
       metadata_save(utm_squares, path, compress = "xz")
     }
 
