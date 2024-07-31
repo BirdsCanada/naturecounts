@@ -275,5 +275,38 @@ test_that("cosewic_plot()", {
   expect_named(g6, as.character(unique(r2$iao$species_id)))
   expect_s3_class(g6[[1]], "ggplot")
   expect_s3_class(g6[[2]], "ggplot")
+  
+  vdiffr::expect_doppelganger("p_basic", g1)
+  vdiffr::expect_doppelganger("p_points", g3)
+  vdiffr::expect_doppelganger("p_map", g5)
+})
+
+test_that("cosewic_plot() no cols", {
+  b <- dplyr::select(bcch, -"species_id", -"record_id")
+  
+  expect_silent(r1 <- cosewic_ranges(b, species = NULL, record = NULL))
+  expect_warning(g0 <- cosewic_plot(r1), "Column \"species_id\" not found")
+  expect_silent(g1 <- cosewic_plot(r1, species = NULL))
+  expect_s3_class(g1, "ggplot")
+  expect_equal(g0, g1)
+  
+  
+  expect_silent(g2 <- cosewic_plot(r1, grid = grid_canada(), species = NULL))  
+  expect_silent(g3 <- cosewic_plot(r1, points = bcch, species = NULL))
+  expect_silent(g4 <- cosewic_plot(r1, grid = grid_canada(), 
+                                   map = map_canada(), species = NULL))
+  expect_silent(g5 <- cosewic_plot(r1, grid = grid_canada(), 
+                                   map = map_canada(), species = NULL,
+                                   title = "Black-capped Chickadees"))  
+  
+  # Multiple species as one
+  expect_silent(r2 <- cosewic_ranges(rbind(bcch, hofi), species = NULL, record = NULL))
+  expect_silent(g6 <- cosewic_plot(r2, species = NULL))
+  expect_s3_class(g6, "ggplot")
+  
+  vdiffr::expect_doppelganger("p_no_cols_basic", g1)
+  vdiffr::expect_doppelganger("p_no_cols_points", g3)
+  vdiffr::expect_doppelganger("p_no_cols_map", g5)
+  vdiffr::expect_doppelganger("p_no_cols_mult", g6)
 })
 

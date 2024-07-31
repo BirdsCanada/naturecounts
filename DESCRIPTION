@@ -44,7 +44,8 @@ Suggests:
     rmarkdown,
     sf (>= 1.0-9),
     spelling,
-    testthat
+    testthat,
+    vdiffr
 Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1

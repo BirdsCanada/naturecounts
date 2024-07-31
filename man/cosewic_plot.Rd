@@ -37,7 +37,6 @@ ggplot2 map
 Creates a plot of COSEWIC ranges for illustration and checking.
 }
 \examples{
-
 r <- cosewic_ranges(bcch)
 cosewic_plot(r)
 cosewic_plot(r, points = bcch)

@@ -423,7 +423,6 @@ map_canada <- function() {
 #' @export
 #'
 #' @examples
-#' 
 #' r <- cosewic_ranges(bcch)
 #' cosewic_plot(r)
 #' cosewic_plot(r, points = bcch)
@@ -450,73 +449,92 @@ cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL,
        "`cosewic_ranges()`)", call. = FALSE)
   }
   
-  if(!species %in% names(ranges[["iao"]]) | 
-     !species %in% names(ranges[["eoo"]]) ) {
-    stop("`species` must be columns in `iao` and `eoo` inside `ranges`", 
-         call. = FALSE)
+  # Extract ranges
+  iao <- ranges[["iao"]] %>%
+    dplyr::filter(.data$n_records > 0)
+  
+  eoo <- ranges[["eoo"]]
+  
+  # Check Species Columns
+  if(!is.null(species) && !species %in% names(iao)) {
+    warning(
+      "Column \"", species, "\" not found in spatial data in `ranges`. ",
+      "Treating data as single species.\n",
+      "Use `species = NULL` to remove this warning or ",
+      "`species = \"COLUMN_NAME\"` to specify the species id column.",
+      call. = FALSE)
+    iao[[species]] <- "PLACEHOLDER"
+    eoo[[species]] <- "PLACEHOLDER"
+  } else if(is.null(species)) {
+    species <- "species_id"
+    iao[[species]] <- "PLACEHOLDER"
+    eoo[[species]] <- "PLACEHOLDER"
   }
   
+  # Check/set titles
   if(length(title) > 1 && 
-     !all(names(title) %in% unique(ranges$eoo[[species]]))) {
+     !all(names(title) %in% unique(iao[[species]]))) {
     stop("`title` must be named by species if providing more than one", 
          call. = FALSE)
   }
   
-
-  iao <- ranges[["iao"]] %>%
-    dplyr::filter(.data$n_records > 0)
+  g <- list()
+  if(all(title == "") & iao[[species]][1] != "PLACEHOLDER") {
+    title <- stats::setNames(nm = unique(iao[[species]]))
+  }
   
-  size_a <- unique(iao$grid_size_km)
+  # Split by species (if applicable)
+  e <- split(eoo, eoo[[species]])
+  i <- split(iao, iao[[species]])
+  if(!is.null(points)) points <- split(points, points[[species]]) else points <- list(points)
+  
+  g <- purrr::pmap(
+    list(e, i, points, title), 
+    \(e, i, points, title) cosewic_plot_indiv(e, i, points, grid, map, title))
+  
+  if(length(g) == 1) g <- g[[1]]
+  g
+}
 
+
+cosewic_plot_indiv <- function(e, a, points, grid, map, title) {
+  
+  size_a <- unique(a$grid_size_km)
+  
+  eoo_lab <- stringr::str_subset(names(e), "eoo") %>%
+    stringr::str_replace("_", " ") %>%
+    stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
+    toupper()
+  
   if(!is.null(grid)) {
-    iao <- iao %>%
+    a <- a %>%
       sf::st_join(grid, ., left = FALSE) %>% # Inner join
-      dplyr::group_by(.data[[species]], .data$grid_ca_id) %>%
+      dplyr::group_by(.data$grid_ca_id) %>%
       dplyr::summarize(n_records = sum(.data$n_records)) 
     size_p <- grid$grid_size[1]
   } else {
     size_p <- size_a
   }
-  
-  eoo <- ranges[["eoo"]]
-  
-  eoo_lab <- stringr::str_subset(names(eoo), "eoo") %>%
-    stringr::str_replace("_", " ") %>%
-    stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
-    toupper()
-  
-  g <- list()
-  if(all(title == "")) title <- stats::setNames(nm = unique(iao[[species]]))
-  
-  for(i in unique(iao[[species]])) {
-    if(length(title) > 1) t <- title[[as.character(i)]] else t <- title
 
-    e <- dplyr::filter(eoo, .data[[species]] == .env$i)
-    a <- dplyr::filter(iao, .data[[species]] == .env$i)
-      
-    g1 <- ggplot2::ggplot() +
-      ggplot2::theme_minimal() +
-      ggplot2::geom_sf(data = e, ggplot2::aes(colour = !!eoo_lab)) +
-      ggplot2::geom_sf(data = a, ggplot2::aes(fill = .data$n_records), colour = NA) +
-      ggplot2::scale_fill_viridis_c() +
-      ggplot2::scale_colour_manual(name = "", values = "grey20") +
-      ggplot2::labs(
-        fill = "IAO\nNo. records", 
-        title = t,
-        caption = 
-          paste0("Showing ", size_p, "x", size_p, 
-                 "km grids\nAnalysis used ",
-                 size_a, "x", size_a, " km"))
-    
-    if(!is.null(map)) g1 <- g1 + ggplot2::geom_sf(data = map, fill = NA)
-    if(!is.null(points)) {
-      p <- dplyr::filter(points, .data[[species]] == .env$i)
-      p <- prep_spatial(p, extra = NULL) 
-      g1 <- g1 + ggplot2::geom_sf(data = p)
-    }
-    g[[as.character(i)]] <- g1
+  g <- ggplot2::ggplot() +
+    ggplot2::theme_minimal() +
+    ggplot2::geom_sf(data = e, ggplot2::aes(colour = !!eoo_lab)) +
+    ggplot2::geom_sf(data = a, ggplot2::aes(fill = .data$n_records), colour = NA) +
+    ggplot2::scale_fill_viridis_c() +
+    ggplot2::scale_colour_manual(name = "", values = "grey20") +
+    ggplot2::labs(
+      fill = "IAO\nNo. records", 
+      title = title,
+      caption = 
+        paste0("Showing ", size_p, "x", size_p, 
+               "km grids\nAnalysis used ",
+               size_a, "x", size_a, " km"))
+  
+  if(!is.null(map)) g <- g + ggplot2::geom_sf(data = map, fill = NA)
+  if(!is.null(points)) {
+    points <- prep_spatial(points, extra = NULL) 
+    g <- g + ggplot2::geom_sf(data = points)
   }
   
-  if(length(g) == 1) g <- g[[1]]
   g
 }
