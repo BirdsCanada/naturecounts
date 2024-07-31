@@ -144,14 +144,11 @@ ggplot() +
 
 Now to filter your observations to urban areas, the first step would be to get all the UTM squares which overlap these areas. We can do this collecting the UTM squares with `meta_utm_squares()` and then filtering these to include only those that overlap these urban areas.
 
-Once again, we only care about the actual geometries of `urban_ontario`, not about any of it's features, so we use `distinct()` to return distinct polygons without any other columns. Finally we use `unique()` at the end to remove any duplicates (i.e. `utm_squares` that overlap more than 1 urban polygon. Note that you must use `unique()` and not `distinct()` (which works on regular data frames, but here removes all data attributes). 
-
 ```{r}
 utm_on <- meta_utm_squares() |>
   filter(statprov_code == "ON") |>
   st_transform(3347) |>  # Transform to match urban CRS
-  st_join(distinct(urban_ontario), left = FALSE) |>
-  unique()
+  st_filter(urban_ontario)
 
 ggplot() +
   theme_bw() + 
@@ -222,39 +219,25 @@ However, sending large lists of UTM squares can be slow, so consider using a bou
 
 ## By Bounding Box
 
-In this example, we'll gather all observations for Jasper National Park in Alberta, Canada.
+In this example, we'll gather all observations around Jasper in Alberta.
 
-First we'll download and extract the shapefiles available from the [Alberta Parks](https://www.albertaparks.ca/albertaparksca/library/downloadable-data-sets/) website.
+First we'll define the area we want to grab. Jasper is at about 52.8755, -118.0833, 
+and we want to get a bout a lat and lon around that. 
 
-```{r, echo = FALSE, eval = !file.exists(here::here("vignettes/region-spatial_files/Parks_Protected_Areas_Alberta.shp"))}
-# Run if don't have shapefile
-download.file(url = "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip",
-              destfile = here::here("vignettes/region-spatial_files/alberta_parks.zip"))
-unzip(here::here("vignettes/region-spatial_files/alberta_parks.zip"), 
-      exdir = here::here("vignettes/region-spatial_files/"))
+```{r}
+jasper <- st_bbox(c(xmin = -118.0833 - 0.5, 
+                    xmax = -118.0833 + 0.5, 
+                    ymin = 52.8755 - 0.5,
+                    ymax = 52.8755 + 0.5), 
+                  crs = 4326)
 ```
 
-```{r, eval = FALSE}
-url <- "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip"
-download.file(url = url)
-unzip("parks_and_protected_areas_alberta.zip")
 
-parks <- st_read("Parks_Protected_Areas_Alberta.shp")
-```
-
-```{r echo = FALSE}
-parks <- st_read(here::here("vignettes/region-spatial_files/Parks_Protected_Areas_Alberta.shp"))
-```
-
-Now we'll get a background map of Alberta and a spatial file of just Jasper.
+Now we'll get a background map of Alberta.
 
 ```{r}
 alberta <- ne_states(country = "Canada", returnclass = "sf") |>
-  filter(name == "Alberta") |>
-  st_transform(3347)
-
-jasper <- filter(parks, NAME == "Jasper") |>
-  st_transform(3347)
+  filter(name == "Alberta")
 ```
 
 Let's see what that all looks like.
@@ -263,35 +246,21 @@ Let's see what that all looks like.
 ggplot() +
   theme_bw() +
   geom_sf(data = alberta) +
-  geom_sf(data = parks, aes(fill = NAME == "Jasper"), show.legend = FALSE) +
-  scale_fill_manual(values = c("lightyellow", "orange"))
+  geom_sf(data = st_as_sfc(jasper), fill = "orange")
 ```
 
-Using a bounding box is a good way to download observations only from the Jasper area. But remember that the bounding box coordinates used by `nc_data_dl()` are in lat/lon, so we'll have to back transform.
+Now we can give our coordinates directly to our `nc_data_dl()` function.
 
 ```{r}
-b <- jasper |>
-  st_transform(4326) |>
-  st_bbox()
-b
-```
-
-We can give this directly to our `nc_data_dl()` function.
-
-```{r}
-obs <- nc_data_dl(region = list(bbox = b), verbose = FALSE, username = "testuser", 
+obs <- nc_data_dl(region = list(bbox = jasper), verbose = FALSE, username = "testuser", 
                   info = "nc_vignette")
 ```
 
-Finally we clip the observations to the exact area of Jasper.
-
+Let's take a look...
 ```{r}
-obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) |>
-  st_transform(3347) |>
-  st_join(distinct(jasper), left = FALSE)
-
 ggplot() +
   theme_bw() +
-  geom_sf(data = jasper) +
-  geom_sf(data = obs_sf, size = 1, aes(colour = collection))
+  geom_sf(data = st_as_sfc(jasper), fill = "orange") +
+  geom_sf(data = st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326))
 ```
+
