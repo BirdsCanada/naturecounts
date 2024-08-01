@@ -63,12 +63,14 @@ Sometimes, but not all the time.
 Finally, let's take a peak at the observations recorded for these three species
 
 ```{r}
+#| fig-alt: "Boxplots showing counts for three butterflies, Monarchs showing the most"
 ggplot(data = rc, aes(x = CommonName, y = as.numeric(ObservationCount))) +
   geom_boxplot() +
   labs(title = "Number of individuals observed")
 ```
 
 ```{r}
+#| fig-alt: "Barplots showing counts for number of sampling events, Monarchs again showed the most"
 ggplot(data = rc, aes(x = CommonName)) +
   geom_bar() +
   labs(title = "Number of sampling events the species was observed")
@@ -102,6 +104,7 @@ head(rc_filled)
 
 
 ```{r}
+#| fig-alt: "Barplot showing number of sampling events across three species. Pink bars show the counts for events with 0 observations, blue show the counts for those with >0 observations."
 ggplot(data = rc_filled, aes(x = factor(species_id), fill = ObservationCount > 0)) +
   geom_bar(position = "dodge") +
   labs(title = "Number of sampling events the species was observed")
@@ -144,8 +147,8 @@ head(rc_loc_filled)
 The message about summarizing multiple observations means that we have multiple observations per `utm_square`. This example isn't large enough to be slowed down much, but in larger examples, it can be much faster to simplify the dataset first.
 
 ```{r}
-rc_sum <- rc_all_species %>%
-  group_by(utm_square, species_id, AllSpeciesReported) %>%
+rc_sum <- rc_all_species |>
+  group_by(utm_square, species_id, AllSpeciesReported) |>
   summarize(ObservationCount = sum(as.numeric(ObservationCount), na.rm = TRUE),
             .groups = "drop")
 head(rc_sum)
@@ -172,8 +175,8 @@ By default `format_zero_fill()` adds 0's to the `ObservationCount` column, but y
 
 For example, if you wanted to deal only with Presence/Absence you could create a new `presence` column and zero-fill this column.
 ```{r}
-rc_presence <- rc_all_species %>%
-  select(species_id, AllSpeciesReported, ObservationCount, SamplingEventIdentifier) %>%
+rc_presence <- rc_all_species |>
+  select(species_id, AllSpeciesReported, ObservationCount, SamplingEventIdentifier) |>
   mutate(presence = if_else(as.numeric(ObservationCount) > 0, TRUE, FALSE))
 head(rc_presence)
 

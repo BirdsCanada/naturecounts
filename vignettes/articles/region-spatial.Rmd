@@ -34,18 +34,18 @@ If you have your own spatial data files that you would like to read into R, we r
 First we'll get some spatial objects for our explorations from the `rnaturalearth` package. A map of Canada and a map of Ontario, both transformed from CRS 4326 (unprojected lat/lon) to 3347 (NAD83 Statistics Canada).
 
 ```{r}
-na <- ne_countries(continent = "north america", returnclass = "sf") %>%
+na <- ne_countries(continent = "north america", returnclass = "sf") |>
   st_transform(3347)
 
-canada <- ne_states(country = "canada", returnclass = "sf") %>%
+canada <- ne_states(country = "canada", returnclass = "sf") |>
   st_transform(3347)
 
-ontario <- ne_states(country = "Canada", returnclass = "sf") %>%
-  filter(name == "Ontario") %>%
+ontario <- ne_states(country = "Canada", returnclass = "sf") |>
+  filter(name == "Ontario") |>
   st_transform(3347)
 
-manitoba <- ne_states(country = "Canada", returnclass = "sf") %>%
-  filter(name == "Manitoba") %>%
+manitoba <- ne_states(country = "Canada", returnclass = "sf") |>
+  filter(name == "Manitoba") |>
   st_transform(3347)
 ```
 
@@ -74,12 +74,12 @@ obs <- nc_data_dl(region = list(subnational2 = "CA.MB.11"),
                   verbose = FALSE, username = "testuser", info = "nc_vignette")
 ```
 
-Now we'll get a polygon representing Winnipeg, MB.
+Now we'll get a [polygon representing Winnipeg, MB](https://data.winnipeg.ca/City-Planning/city_limit/2nyq-f444).
 ```{r}
-winnipeg <- st_read("https://data.winnipeg.ca/api/geospatial/jx93-sett?method=export&format=GeoJSON") %>%
+winnipeg <- st_read("https://data.winnipeg.ca/resource/2nyq-f444.geojson") |>
   st_transform(3347)
 
-obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) %>%
+obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) |>
   st_transform(3347)
 
 ggplot() +
@@ -132,8 +132,8 @@ urban <- ne_load(scale = 10, type = "urban_areas", returnclass = "sf",
 First we'll transform it to the 3347 CRS and clip the urban areas to match the borders of Ontario (`st_insection(spatial1, spatial2)`). Here we only care about the geometry of Ontario, not any other data (`st_geometry(ontario)`).
 
 ```{r}
-urban_ontario <- urban %>%
-  st_transform(3347) %>%
+urban_ontario <- urban |>
+  st_transform(3347) |>
   st_intersection(st_geometry(ontario))
 
 ggplot() +
@@ -144,14 +144,11 @@ ggplot() +
 
 Now to filter your observations to urban areas, the first step would be to get all the UTM squares which overlap these areas. We can do this collecting the UTM squares with `meta_utm_squares()` and then filtering these to include only those that overlap these urban areas.
 
-Once again, we only care about the actual geometries of `urban_ontario`, not about any of it's features, so we use `distinct()` to return distinct polygons without any other columns. Finally we use `unique()` at the end to remove any duplicates (i.e. `utm_squares` that overlap more than 1 urban polygon. Note that you must use `unique()` and not `distinct()` (which works on regular data frames, but here removes all data attributes). 
-
 ```{r}
-utm_on <- meta_utm_squares() %>%
-  filter(statprov_code == "ON") %>%
-  st_transform(3347) %>%  # Transform to match urban CRS
-  st_join(., distinct(urban_ontario), left = FALSE) %>%
-  unique()
+utm_on <- meta_utm_squares() |>
+  filter(statprov_code == "ON") |>
+  st_transform(3347) |>  # Transform to match urban CRS
+  st_filter(urban_ontario)
 
 ggplot() +
   theme_bw() + 
@@ -165,9 +162,9 @@ It's a bit tricky to see exactly what's going on, so let's zoom in a bit.
 However, it's also a bit tricky to zoom when we're using a non-lat/lon CRS because the units are unintuitive. So let's specify the limits we want, then transform them in the CRS we're using and use that to set our limits.
 ```{r}
 zoom <- data.frame(lon = c(-81, -78, -81, -78),
-                   lat = c(43, 43, 45, 45)) %>%
-  st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
-  st_transform(3347) %>%
+                   lat = c(43, 43, 45, 45)) |>
+  st_as_sf(coords = c("lon", "lat"), crs = 4326) |>
+  st_transform(3347) |>
   st_bbox()
 zoom
 ```
@@ -205,8 +202,8 @@ obs <- nc_data_dl(region = list(utm_squares = utm_on$utm_square[1:10]),
 Finally, we do clip the resulting observations to the exact urban areas:
 
 ```{r}
-obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) %>%
-  st_transform(crs = 3347) %>%
+obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) |>
+  st_transform(crs = 3347) |>
   st_join(distinct(urban_ontario), left = FALSE)
 
 ggplot() +
@@ -222,39 +219,25 @@ However, sending large lists of UTM squares can be slow, so consider using a bou
 
 ## By Bounding Box
 
-In this example, we'll gather all observations for Jasper National Park in Alberta, Canada.
+In this example, we'll gather all observations around Jasper in Alberta.
 
-First we'll download and extract the shapefiles available from the [Alberta Parks](https://www.albertaparks.ca/albertaparksca/library/downloadable-data-sets/) website.
-
-```{r, echo = FALSE, eval = !file.exists(here::here("vignettes/region-spatial_files/Parks_Protected_Areas_Alberta.shp"))}
-# Run if don't have shapefile
-download.file(url = "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip",
-              destfile = here::here("vignettes/region-spatial_files/alberta_parks.zip"))
-unzip(here::here("vignettes/region-spatial_files/alberta_parks.zip"), 
-      exdir = here::here("vignettes/region-spatial_files/"))
-```
-
-```{r, eval = FALSE}
-url <- "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip"
-download.file(url = url)
-unzip("parks_and_protected_areas_alberta.zip")
-
-parks <- st_read("Parks_Protected_Areas_Alberta.shp")
-```
-
-```{r echo = FALSE}
-parks <- st_read(here::here("vignettes/region-spatial_files/Parks_Protected_Areas_Alberta.shp"))
-```
-
-Now we'll get a background map of Alberta and a spatial file of just Jasper.
+First we'll define the area we want to grab. Jasper is at about 52.8755, -118.0833, 
+and we want to get a bout a lat and lon around that. 
 
 ```{r}
-alberta <- ne_states(country = "Canada", returnclass = "sf") %>%
-  filter(name == "Alberta") %>%
-  st_transform(3347)
+jasper <- st_bbox(c(xmin = -118.0833 - 0.5, 
+                    xmax = -118.0833 + 0.5, 
+                    ymin = 52.8755 - 0.5,
+                    ymax = 52.8755 + 0.5), 
+                  crs = 4326)
+```
 
-jasper <- filter(parks, NAME == "Jasper") %>%
-  st_transform(3347)
+
+Now we'll get a background map of Alberta.
+
+```{r}
+alberta <- ne_states(country = "Canada", returnclass = "sf") |>
+  filter(name == "Alberta")
 ```
 
 Let's see what that all looks like.
@@ -263,35 +246,21 @@ Let's see what that all looks like.
 ggplot() +
   theme_bw() +
   geom_sf(data = alberta) +
-  geom_sf(data = parks, aes(fill = NAME == "Jasper"), show.legend = FALSE) +
-  scale_fill_manual(values = c("lightyellow", "orange"))
+  geom_sf(data = st_as_sfc(jasper), fill = "orange")
 ```
 
-Using a bounding box is a good way to download observations only from the Jasper area. But remember that the bounding box coordinates used by `nc_data_dl()` are in lat/lon, so we'll have to back transform.
+Now we can give our coordinates directly to our `nc_data_dl()` function.
 
 ```{r}
-b <- jasper %>%
-  st_transform(4326) %>%
-  st_bbox()
-b
-```
-
-We can give this directly to our `nc_data_dl()` function.
-
-```{r}
-obs <- nc_data_dl(region = list(bbox = b), verbose = FALSE, username = "testuser", 
+obs <- nc_data_dl(region = list(bbox = jasper), verbose = FALSE, username = "testuser", 
                   info = "nc_vignette")
 ```
 
-Finally we clip the observations to the exact area of Jasper.
-
+Let's take a look...
 ```{r}
-obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) %>%
-  st_transform(3347) %>%
-  st_join(distinct(jasper), left = FALSE)
-
 ggplot() +
   theme_bw() +
-  geom_sf(data = jasper) +
-  geom_sf(data = obs_sf, size = 1, aes(colour = collection))
+  geom_sf(data = st_as_sfc(jasper), fill = "orange") +
+  geom_sf(data = st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326))
 ```
+

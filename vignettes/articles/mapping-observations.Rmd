@@ -46,8 +46,8 @@ First let's get an idea of how many distinct points there are (often multiple ob
 ```{r}
 nrow(house_finches)
 
-select(house_finches, longitude, latitude) %>%
-  distinct() %>%
+select(house_finches, longitude, latitude) |>
+  distinct() |>
   nrow()
 ```
 
@@ -74,7 +74,7 @@ ggplot() +
 
 Let's count our observations for each site.
 ```{r}
-cnt <- house_finches_sf %>%
+cnt <- house_finches_sf |>
   count(geometry)
 
 ggplot() +
@@ -97,7 +97,7 @@ For more complex, or detailed maps, we can use a variety of spatial data files t
 For this we'll get some outlines of Canada and it's Provinces and Territories from `rnaturalearth`.
 
 ```{r}
-canada <- ne_states(country = "canada", returnclass = "sf") %>%
+canada <- ne_states(country = "canada", returnclass = "sf") |>
   st_transform(3347)
 
 ggplot() +
@@ -125,19 +125,19 @@ ggplot() +
   geom_sf(data = house_finches_sf, size = 0.5)
 ```
 
-Perhaps we should see how many of these observations were made in parks. 
+Perhaps we should see how these observations are distributed among Alberta's 
+Bird Conservation Regions (BCRs). 
 
-First we'll download and extract the Park shapefiles available from the [Alberta Parks](https://www.albertaparks.ca/albertaparksca/library/downloadable-data-sets/) website.
+First we'll grab the BCR shape file from [Birds Canada](https://www.birdscanada.org/bird-science/nabci-bird-conservation-regions)[^1].
+
+[^1]: Bird Studies Canada and NABCI.  2014.  Bird Conservation Regions.  Published by Bird Studies Canada on behalf of the North American Bird Conservation Initiative.   https://birdscanada.org/bird-science/nabci-bird-conservation-regions  Accessed: `r Sys.Date()`
 
 ```{r}
-dir.create("alberta_parks") # Create a folder for the data
-download.file(
-  url = "https://www.albertaparks.ca/media/2941843/parks_and_protected_areas_alberta.zip", 
-  destfile = "alberta_parks/parks_protected_areas_alberta.zip")
-
-unzip("alberta_parks/parks_protected_areas_alberta.zip", exdir = "alberta_parks")
-
-parks <- st_read("alberta_parks/Parks_Protected_Areas_Alberta.shp")
+download.file("https://birdscanada.org/download/gislab/bcr_terrestrial_shape.zip", "bcr_terrestrial_shape.zip")
+unzip("bcr_terrestrial_shape.zip")
+bcr <- st_read("BCR_Terrestrial/BCR_Terrestrial_master.shp") |>
+  filter(PROVINCE_S == "ALBERTA") |>
+  st_transform(3347)
 ```
 
 Add this layer to our plot.
@@ -146,31 +146,32 @@ Add this layer to our plot.
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
-  geom_sf(data = parks, colour = "darkgreen", fill = "forestgreen") +
-  geom_sf(data = house_finches_sf, size = 0.5)
+  geom_sf(data = bcr, aes(fill = factor(BCR)), alpha = 0.5, colour = NA) +
+  geom_sf(data = house_finches_sf, size = 0.5) +
+  scale_fill_viridis_d(name = "BCR")
 ```
 
-Well it's actually a bit difficult to tell, there are lots of small parks! 
+Some of the border cases are a bit hard to separate visually.
+To solve this problem, we can merge our observations with the BCRs and plot the
+observations by BCR as well.
 
-To solve this problem, we can merge our observations with the parks and plot those inside parks separately from those outside parks.
-
-First we'll transform our observation data to match the CRS of `parks`, then we'll join the park information to our observations, based on whether the observations overlap a park polygon (by default this is a left join), and finally we'll create a new column `outside_park` that is a category for out or in the park, based on whether the observation was joined to a park name (`OC_NAME`).
+First we'll transform our observation data to match the CRS of `bcr`, then we'll join the BCR information to our observations, based on whether the observations overlap a BCR polygon (by default this is a left join).
+Now we have a BCR designation for each observation.
 
 ```{r}
-house_finches_sf <- house_finches_sf %>%
-  st_transform(st_crs(parks)) %>%
-  st_join(parks) %>%
-  mutate(outside_park = if_else(is.na(OC_NAME), "Outside Park", "Inside Park"))
+house_finches_sf <- house_finches_sf |>
+  st_transform(st_crs(bcr)) |>
+  st_join(bcr)
 ```
 
-And now we can see that there are quite a few, if not more, observations outside of parks than in.
+Those border cases are now resolved.
 ```{r}
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
-  geom_sf(data = parks, colour = "darkgreen", fill = "forestgreen") +
-  geom_sf(data = house_finches_sf, size = 1) +
-  facet_wrap(~outside_park)
+  geom_sf(data = bcr, aes(fill = factor(BCR)), alpha = 0.25, colour = NA) +
+  geom_sf(data = house_finches_sf, aes(fill = factor(BCR)), shape = 21) +
+  scale_fill_viridis_d(name = "BCR")
 ```
 
 We might also be interested in observations over time.
@@ -185,8 +186,8 @@ house_finches_sf <- mutate(house_finches_sf,
 
 We'll also want to see how many sample years there are per decade.
 ```{r}
-years <- house_finches_sf %>%
-  group_by(years) %>%
+years <- house_finches_sf |>
+  group_by(years) |>
   summarize(n = length(unique(survey_year)), .groups = "drop")
 ```
 
@@ -197,8 +198,9 @@ Now we can see how House Finch observations change over the years
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
-  geom_sf(data = parks, colour = "darkgreen", fill = "forestgreen") +
-  geom_sf(data = house_finches_sf, size = 1.5) +
+  geom_sf(data = bcr, aes(fill = factor(BCR)), alpha = 0.5, colour = NA) +
+  geom_sf(data = house_finches_sf, size = 0.5) +
+  scale_fill_viridis_d(name = "BCR") +
   geom_sf_text(data = years, x = 4427134, y = 2965275, hjust = 0, vjust = 1, 
                aes(label = paste0("n = ", n))) +
   facet_wrap(~years)
@@ -214,10 +216,10 @@ Here we download data from the `RCBIOTABASE` collection, make sure to keep only 
 cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "testuser", 
                         info = "nc_tutorial")
 
-cardinals_zf <- cardinals %>%
-  filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) %>%
-  group_by(species_id, AllSpeciesReported, SamplingEventIdentifier) %>%
-  summarize(presence = sum(as.numeric(ObservationCount)) > 0, .groups = "drop") %>%
+cardinals_zf <- cardinals |>
+  filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) |>
+  group_by(species_id, AllSpeciesReported, SamplingEventIdentifier) |>
+  summarize(presence = sum(as.numeric(ObservationCount)) > 0, .groups = "drop") |>
   format_zero_fill(species = 19360, by = "SamplingEventIdentifier",
                    fill = "presence")
 ```
@@ -228,12 +230,12 @@ This is only necessary if there are errors (worth reporting!) where there are
 more than one lat/lon combo for each sampling event.
 
 ```{r}
-coords <- cardinals %>%
-  select("SamplingEventIdentifier", "latitude", "longitude") %>%
-  group_by(SamplingEventIdentifier, latitude, longitude) %>%
-  mutate(n = n()) %>%  # Count number of unique coordinates
-  group_by(SamplingEventIdentifier) %>%
-  slice_max(n, with_ties = FALSE) %>% # Grab the most common coordinates for each event
+coords <- cardinals |>
+  select("SamplingEventIdentifier", "latitude", "longitude") |>
+  group_by(SamplingEventIdentifier, latitude, longitude) |>
+  mutate(n = n()) |>  # Count number of unique coordinates
+  group_by(SamplingEventIdentifier) |>
+  slice_max(n, with_ties = FALSE) |> # Grab the most common coordinates for each event
   select(-"n")
 
 cardinals_zf <- left_join(cardinals_zf, coords, by = "SamplingEventIdentifier")
@@ -243,8 +245,8 @@ head(cardinals_zf)
 
 Now that we have our presence/absence data for cardinals, we can create a map.
 ```{r}
-cnt <- st_as_sf(cardinals_zf, coords = c("longitude", "latitude"), crs = 4326) %>%
-  group_by(presence) %>%
+cnt <- st_as_sf(cardinals_zf, coords = c("longitude", "latitude"), crs = 4326) |>
+  group_by(presence) |>
   count(geometry)
 
 ggplot() +

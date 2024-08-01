@@ -1,3 +1,8 @@
+# naturecounts 0.4.1
+* Fix use of species_id and record_id in `cosewic_ranges()`.
+  * Truly allow different columns
+  * Also allow no `species_id` or `record_id` columns
+
 # naturecounts 0.4.0
 * Add tools for COSEWIC assessments
 * Fix bug in search_species() which returned all authorities

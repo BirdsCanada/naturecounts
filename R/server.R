@@ -7,7 +7,7 @@
 #'
 #' @return A data frame
 #'
-#' @keywords internal
+#' @noRd
 
 srv_query <- function(path, query = NULL, filter = NULL,
                       token = NULL, api_url = NULL, timeout = 120,

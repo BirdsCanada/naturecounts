@@ -9,7 +9,7 @@ cosewic_plot(
   points = NULL,
   grid = NULL,
   map = NULL,
-  species_id = "species_id",
+  species = "species_id",
   title = ""
 )
 }
@@ -24,7 +24,7 @@ Raw data points will be added to the plot if provided.}
 
 \item{map}{sf data frame. Optional base map over which to plot the values.}
 
-\item{species_id}{Character. Name of the column containing species
+\item{species}{Character. Name of the column containing species
 identification.}
 
 \item{title}{Character. Optional title to add to the map. Can be a named by
@@ -37,7 +37,6 @@ ggplot2 map
 Creates a plot of COSEWIC ranges for illustration and checking.
 }
 \examples{
-
 r <- cosewic_ranges(bcch)
 cosewic_plot(r)
 cosewic_plot(r, points = bcch)

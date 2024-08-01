@@ -10,8 +10,9 @@ devtools::test()
 source("data-raw/data_creation.R")
 
 # - Update metadata stored in inst/extdata (Check URLS in data-raw/data_creation.R)
-# - Utm codes take a VERY long time to update!
+# - Utm codes take time to update
 nc_metadata_internal(force = TRUE, utm = FALSE)
+#nc_metadata_internal(force = TRUE, utm = TRUE)
 
 # Documentation -------------------------------------------------
 
@@ -32,11 +33,6 @@ devtools::build_readme()
 
 # - Checks
 devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
-
-# - Windows checks (particularly if submitting to CRAN)
-devtools::check_win_release() # Win builder
-devtools::check_win_devel()
-devtools::check_win_oldrelease()
 
 # - Run in console
 system("cd ..; R CMD build naturecounts")
@@ -77,4 +73,5 @@ pkgdown::build_article("region-codes")
 pkgdown::build_article("region-areas")
 pkgdown::build_article("articles/region-spatial")
 
-
+unlink("vignettes/articles/BCR_Terrestrial/", recursive = TRUE)
+unlink("vignettes/articles/bcr_terrestrial_shape.zip")
