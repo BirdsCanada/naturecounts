@@ -56,14 +56,18 @@ usethis::use_github_release()
 
 
 # Testing ----------------------
-# Can build site locally if needed
-## **BUILD PACKAGE FIRST**
-pkgdown::build_site(lazy = TRUE)
+
+# Test the pkgdown site locally as needed
+#
+# **BUILD PACKAGE FIRST**  (Ctrl-Shift-B)
+
+pkgdown::build_site(lazy = TRUE) # lazy=TRUE means only rebuild articles/vignettes which have changed
 pkgdown::build_home()
 pkgdown::build_reference()
 pkgdown::build_news()
 pkgdown::build_articles(lazy = TRUE)
 
+# Build a specific article
 pkgdown::build_article("species-codes")
 pkgdown::build_article("format-zero-fill")
 pkgdown::build_article("selecting-fields")
@@ -73,5 +77,6 @@ pkgdown::build_article("region-codes")
 pkgdown::build_article("region-areas")
 pkgdown::build_article("articles/region-spatial")
 
+# Don't push resources
 unlink("vignettes/articles/BCR_Terrestrial/", recursive = TRUE)
 unlink("vignettes/articles/bcr_terrestrial_shape.zip")
