@@ -4,15 +4,15 @@ on:
   push:
     branches: 
       - main
-      - master
       - dev
       - sandbox
+      - '!docs-update'
   pull_request:
     branches: 
       - main
-      - master
       - dev
       - sandbox
+      - '!docs-update'
   schedule:
     - cron: '0 0 1 * *'  # Run once a month on the 1st at midnight
 
