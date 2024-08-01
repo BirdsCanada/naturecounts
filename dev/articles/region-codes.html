@@ -306,29 +306,20 @@ Quebec = French - Rest of Canada = English</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>utm_squares <span class="op">=</span> <span class="st">"18TUR35"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Without a username, using 'show = "all"'</span></span></code></pre>
 <pre><code><span><span class="co">## Using filters: utm_squares (18TUR35)</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 20 × 4</span></span></span>
-<span><span class="co">##    collection     akn_level access     nrecords</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> EBIRD-CA-ON            4 by request    <span style="text-decoration: underline;">34</span>861</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> GBIF_136560FA          5 full              6</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> GBIF_50C9509D          5 full            140</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> GBIF_848586A4          5 full              6</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> GBIF_E3B959D6          5 full              1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> GBIF_E5C5CAD9          5 full              2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> GBIF_F6E21753          5 full             35</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> MMPFROGS               4 by request       93</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> NESTWATCH              3 by request       65</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> OBBA1BE_RAW            5 full            178</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">11</span> OBBA1BE_SUMM           5 full            103</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">12</span> OBBA2BE_RAW            5 full            232</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">13</span> OBBA2BE_SUMM           5 full             96</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">14</span> OBBA2PC                5 full            205</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">15</span> OBBA2RC                3 by request       10</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">16</span> ONATLAS3BE_DO          3 by request     <span style="text-decoration: underline;">1</span>169</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">17</span> ONATLAS3BE_SAR         3 by request       97</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">18</span> ONATLAS3PC             3 by request      403</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">19</span> RCBIOTABASE            5 full           <span style="text-decoration: underline;">1</span>948</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">20</span> WPWI                   5 full             10</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 21 × 4</span></span></span>
+<span><span class="co">##    collection    akn_level access     nrecords</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> EBIRD-CA-ON           4 by request    <span style="text-decoration: underline;">34</span>861</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> GBIF_136560FA         5 full              6</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> GBIF_50C9509D         5 full            140</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> GBIF_848586A4         5 full              6</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> GBIF_E3B959D6         5 full              1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> GBIF_E5C5CAD9         5 full              2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> GBIF_F6E21753         5 full             35</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> MMPFROGS              4 by request       93</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> NESTWATCH             3 by request       65</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> OBBA1BE_RAW           5 full            178</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 11 more rows</span></span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="bounding-box">Bounding Box<a class="anchor" aria-label="anchor" href="#bounding-box"></a>
