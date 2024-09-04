@@ -57,16 +57,7 @@ reference:
   - hofi
   
 articles:
-- title: The NatureCounts R User Guides
-  desc: A series of R walkthroughs to help process and analyze NatureCounts data.
-  contents:
-
-- title: Reference
-  desc: Reference articles for metadata codes and descriptions.
-  contents:
-  - '`region-codes`'
-  - '`species-codes`'
-- title: Tutorials
+- title: more Tutorials
   desc: How-to articles describing common tasks
   contents:
   - '`data-access`'
@@ -75,6 +66,11 @@ articles:
   - '`filtering-data`'
   - '`articles/mapping-observations`'
   - '`selecting-fields`'
+- title: Reference
+  desc: Reference articles for metadata codes and descriptions.
+  contents:
+  - '`region-codes`'
+  - '`species-codes`'
 - title: Formating
   desc: How to format downloaded data
   contents: '`format-zero-fill`'
