@@ -57,6 +57,9 @@ reference:
   - hofi
   
 articles:
+- title: The NatureCounts R User Guides
+  desc: A series of R walkthroughs to help process and analyze NatureCounts data.
+
 - title: Reference
   desc: Reference articles for metadata codes and descriptions.
   contents:
