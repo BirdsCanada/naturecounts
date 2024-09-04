@@ -1,5 +1,5 @@
 ---
-title: "01-Introcution"
+title: "01-Introdution"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
