@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction {#Intro1}
+# Introducing NatureCounts {#Intro1}
 [NatureCounts](https://naturecounts.ca/nc/default/main.jsp) is a website hosted and managed by [Birds Canada](https://www.birdscanada.org), Canada's leading scientific non-government organization dedicated to increasing the understanding, appreciation and conservation of wild birds and their habitats . Birds Canada specializes in citizen science long-term monitoring programs using a partnership-based model. Citizen science has been found to be the most cost-effective way to monitor bird populations across large geographic areas. In Canada, over 16,000 volunteers are currently involved in Birds Canada's programs.
 
 Launched in January 2008, NatureCounts is the first Canadian node of the [Avian Knowledge Network](http://www.avianknowledge.net). It serves as an online data dissemination portal to facilitate the collection, management and sharing of biological data. NatureCounts hosts hundreds of datasets, representing well over 140 million occurrences of birds. These include virtually all of Birds Canada's monitoring initiatives, such as Breeding Bird Atlases, eBird Canada, the Marsh Monitoring Program, Nocturnal Owl Surveys, as well as many other major initiatives to which Birds Canada contributes in some capacity (e.g., Canadian Migration Monitoring Program, HawkCount and the Raptor Population Index, Monarch Knowledge Network, Breeding Bird Survey, Christmas Bird Count, Project FeederWatch).
