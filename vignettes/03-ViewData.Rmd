@@ -9,6 +9,7 @@ vignette: >
 ---
 
 # Understanding and Viewing Data {#Data3}
+
 This chapter begins with a brief introduction to the structure of the NatureCounts database, followed by a description of access levels and how to create a user account. We then provide instructions on how to view data from various collections and apply filters.
 
 ```{r}
