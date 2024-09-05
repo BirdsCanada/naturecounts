@@ -63,15 +63,18 @@ articles:
   - '`articles/01-Introduction`'
   - '`articles/02-LoadPackage`'
   - '`articles/03-ViewData`'
+  - '`articles/04-DownloadData`'
+  - '`articles/05-ManipData`'
 - title: more Tutorials
   desc: How-to articles describing common tasks
   contents:
   - '`data-access`'
-  - '`region-areas`'
-  - '`articles/region-spatial`'
-  - '`filtering-data`'
-  - '`articles/mapping-observations`'
   - '`selecting-fields`'
+  - '`filtering-data`'
+  - '`articles/region-spatial`'
+  - '`region-areas`'
+  - '`articles/mapping-observations`'
+  
 - title: Reference
   desc: Reference articles for metadata codes and descriptions.
   contents:
