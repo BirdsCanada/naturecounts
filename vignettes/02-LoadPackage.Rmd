@@ -3,7 +3,7 @@ title: "Chapter 2 - Loading R Packages"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Data Access}
+  %\VignetteIndexEntry{Chapter 2 - Loading R Packages}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
