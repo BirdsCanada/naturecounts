@@ -1,10 +1,10 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/CODE_DESIGN.html</loc></url>
-<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/01-Introduction.html</loc></url>
-<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/02-LoadPackage.html</loc></url>
-<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/03-ViewData.html</loc></url>
-<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/04-DownloadData.html</loc></url>
-<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/05-ManipData.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/1.1-Introduction.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/1.2-LoadPackage.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/1.3-ViewData.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/1.4-DownloadData.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/1.5-ManipData.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/data-access.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/filtering-data.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/format-zero-fill.html</loc></url>
