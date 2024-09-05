@@ -183,7 +183,7 @@ Next, let's say we want to narrow down our search to the subnational level (Mont
 
 Browse the code list:
 
-```{r}
+```{r eval = FALSE}
 View(meta_subnational2_codes())
 ```
 
@@ -252,7 +252,7 @@ search_species_code("12385", authority = "CBC") # Returns the species ids and CB
 
 You can search by more than one authority at the same time. Note that your search term only needs to match one authority (not both), and that the information returned reflects both authorities combined.
 
-```{r}
+```{r eval = FALSE}
 View(search_species_code("DEJU", authority = c("BSCDATA", "CBC")))
 ```
 
