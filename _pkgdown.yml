@@ -60,11 +60,11 @@ articles:
 - title: The NatureCounts Intro Tutorial
   desc: An R walkthrough on how to import, explore, and visualize NatureCounts data. 
   contents:
-  - '`articles/01-Introduction`'
-  - '`articles/02-LoadPackage`'
-  - '`articles/03-ViewData`'
-  - '`articles/04-DownloadData`'
-  - '`articles/05-ManipData`'
+  - '`articles/1.1-Introduction`'
+  - '`articles/1.2-LoadPackage`'
+  - '`articles/1.3-ViewData`'
+  - '`articles/1.4-DownloadData`'
+  - '`articles/1.5-ManipData`'
 - title: more Tutorials
   desc: How-to articles describing common tasks
   contents:
