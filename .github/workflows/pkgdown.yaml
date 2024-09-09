@@ -41,6 +41,7 @@ jobs:
             any::rnaturalearthdata
             any::patchwork
             any::prettymapr
+            any::tidyverse
           needs: website
 
       - name: Build site
