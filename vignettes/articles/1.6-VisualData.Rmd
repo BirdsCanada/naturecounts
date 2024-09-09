@@ -10,7 +10,7 @@ vignette: >
 
 # Data Visualization {#Visual6}
 
-```{r, message = FALSE}
+```{r, message = FALSE, warning = FALSE}
 library(dplyr) 
 library(ggplot2)
 library(naturecounts)
