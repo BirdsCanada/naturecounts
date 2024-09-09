@@ -3,7 +3,7 @@ title: "Chapter 3 - Understanding and Viewing Data"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Data Access}
+  %\VignetteIndexEntry{Chapter 3 - Understanding and Viewing Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
