@@ -42,6 +42,12 @@ jobs:
             any::patchwork
             any::prettymapr
             any::tidyverse
+            any::terra
+            any::leaflet
+            any::leaflet.extras
+            any::leaflet.providers
+            any::ggspatial
+            any::mapview
           needs: website
 
       - name: Build site
