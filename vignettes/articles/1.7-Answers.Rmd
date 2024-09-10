@@ -1,0 +1,111 @@
+---
+title: "Chapter 7 - Answers"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chapter 7 - Answers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Exercise Answers {#Ans7}
+
+```{r, message = FALSE, warning = FALSE}
+library(dplyr) 
+library(ggplot2)
+library(naturecounts)
+```
+
+## Chapter 3 {#Ans7.1}
+
+Exercise 1: If you are interesting in doing a research project on Snowy Owls in Quebec, which three collections are you most likely to consider using (i.e., which have the most data)?
+
+```{r Ans3.1, eval=FALSE}
+search_species("Snowy Owl")
+search_region("Quebec", type = "statprov")
+SNOW<-nc_count(species=7450, region = list(statprov="QC"))
+View(SNOW)
+```
+
+Answer: EBird-CA-QC, OISEAUXQC, CBC
+
+Exercise 2: How many records of Gadwal are in the British Columbia Coastal Waterbird Survey collection? What if you are only interested in records from 2010-2019, how many records are available?
+
+```{r Ans3.2, eval=FALSE}
+search_species("Gadwal")
+collection<-collections<-meta_collections()
+View(collection)
+
+GADW<-nc_count(species=390, collections = "BCCWS")
+View(GADW)
+
+GADW2<-nc_count(species=390, collections = "BCCWS", years =c(2010,2019))
+View(GADW2)
+```
+
+Answer: 702, 389
+
+## Chapter 4 {#Ans7.2}
+
+Exercise 1: You are from the Northwest Territories and interested in learning more about birds in your region. First, you identify the NatureCounts dataset most suitable for this exercise using the nc_count() function (i.e., which has the most data). Next, you decide to focus your download to only include Blackpoll Warbler data collected over the past 5 years (2015-2020). How many observation records did you download?
+
+```{r Ans4.1, eval=FALSE}
+search_region("Northwest Territories", type = "statprov")
+NT<-nc_count(region = list(statprov="NT"), username="testuser")
+View(NT)
+
+search_species("Blackpoll warbler")
+BLPW<-nc_data_dl(collections="BBS50-CAN", species = 16820, years =c(2015, 2020), username="testuser", info="tutorial example")
+```
+
+Answer: BBS50-CAN, 1756
+
+Exercise 2: You are birding in the Beaverhill Lake Important Bird Area (iba) in May. You think you hear a Bobolink! You are curious if this species has been detected here in the month of May. You choose to download the records you have authorization to freely access from NatureCounts. How many observation records did you download? What year are these records from?
+
+```{r Ans4.2, eval=FALSE}
+search_region("Beaverhill Lake", type = "iba") 
+search_species("Bobolink")
+#May = doy 122-152
+
+BOBO<-nc_data_dl(region = list(iba="AB001"), species= 19520, doy=c(122,152),  username="testuser", info="tutorial example")
+View(BOBO)
+```
+
+Answer: 3, 1988 & 1987
+
+## Chapter 5 {#Ans7.3}
+
+Exercise 1: You are doing a research project using the fall migration monitoring data collected at Vaseux Lake Bird Observatory, British Columbia. You request the open access data from 2017-2020. After you request this subset of the collection, you need to determine the number of unique days Gray catbirds were records in each year?
+
+```{r Ans5.1, eval=FALSE}
+collections<-meta_collections()
+search_species("Gray Catbird") 
+
+VLBO <- nc_data_dl(collections = "CMMN-DET-VLBO", species=15900, years = c(2017, 2020), username = "testuser", info = "tutorial example")
+
+VLBO<-format_dates(VLBO) #This step is not strictly required.
+
+GRCA<-VLBO %>% group_by(survey_year) %>% summarize(day_distinct = n_distinct(doy)) #Could have alternatively counted the number of district `SamplingEventIdentifier` 
+View(GRCA)
+
+```
+
+Answer: 2017 = 54 2018 = 53
+
+Exercise 2: Building off the same dataset used in Exercise 1, you now want to zero-fill the dataframe to ensure it is complete for your study on Gray catbirds. How many records (rows) are in the zero-fill Gray catbird dataframe?
+
+```{r Ans5.2, eval=FALSE}
+
+#You will pull all the data for this exercise, not just the records for Gray catbird. This ensures the zero-fill works correctly
+
+VLBO <- nc_data_dl(collections = "CMMN-DET-VLBO", years = c(2017, 2020), username = "testuser", info = "tutorial example")
+
+VLBO<-format_zero_fill(VLBO)
+
+GRCA<-VLBO %>% filter(species_id==15900)
+
+#The number of records is the number of rows in the resulting dataframe. 
+
+```
+
+Answer: 152
