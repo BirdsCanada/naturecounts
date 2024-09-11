@@ -3,6 +3,7 @@ title: "Chapter 1 - Manipulating Spatial Data in R"
 author: Dimitrios Markou
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+cache: TRUE
 vignette: >
   %\VignetteIndexEntry{Chapter 1 - Manipulating Spatial Data in R}
   %\VignetteEngine{knitr::rmarkdown}
@@ -83,7 +84,7 @@ search_species("cedar waxwing")
 Perform the data download:
 
 ```{r, eval = TRUE, message = FALSE}
-cedar_waxwing <- nc_data_dl(collections = "MBBA2PC", species = 16330, username = "testuser", info = "spatial_data_tutorial")
+cedar_waxwing <- nc_data_dl(collections = "MBBA2PC", species = 16330, username = "testuser", info = "spatial_data_tutorial", timeout = 300)
 ```
 
 Create date and doy columns:
@@ -108,7 +109,7 @@ cedar_waxwing_june_sf <- sf::st_as_sf(cedar_waxwing_june,
 
 Finally, use `ggplot2` to visualize the spatio-temporal distribution of Cedar Waxwing observations across the Maritime provinces by color-coding the data points by **survey_year** and creating a multi-panel plot based on this discrete variable:
 
-```{r, eval = TRUE, message = FALSE}
+```{r, eval = TRUE, message = FALSE, warning = FALSE}
 ggplot(data = cedar_waxwing_june_sf) +
   # Select a basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
@@ -148,8 +149,8 @@ The `sf` package provides [simple feature](https://r-spatial.github.io/sf/) acce
 
 Navigate to the [KBA Canada Map Viewer](https://kbacanada.org/explore/map-viewer/), search for all the KBA's in Ontario, and download the data to your working directory. It helps if you assign these files a meaningful name! We can read in our KBA polygons using the `sf` package:
 
-```{r, echo = FALSE, message = FALSE}
-ontario_kba <- sf::st_read("C:/Users/dimit/Birds Canada/naturecounts/data-raw/spatial_data/KBA/ProvOntario_KBA/ontario_kba.shp")
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
+ontario_kba <- sf::st_read("C:/Users/dimit/Birds Canada/NatureCounts_SpatialData_Tutorial/Data/KBA/ProvOntario_KBA/ontario_kba.shp")
 ```
 ```{r, eval = FALSE}
 ontario_kba <- sf::st_read("path_to_your_shp")
@@ -163,8 +164,8 @@ ontario_kba <- ontario_kba %>% st_make_valid() %>% distinct()
 
 Our spatial data is also accompanied by a CSV file that contains additional useful attributes (landcover, species, etc) concerning our KBAs. Let's read in the accompanying CSV file for our KBA layer:
 
-```{r, echo = FALSE}
-kba_attributes <- read.csv("C:/Users/dimit/Birds Canada/naturecounts/data-raw/spatial_data/KBA/ProvOntario_KBA/ontario_kba.csv")
+```{r, echo = FALSE, cache = TRUE}
+kba_attributes <- read.csv("C:/Users/dimit/Birds Canada/NatureCounts_SpatialData_Tutorial/Data/KBA/ProvOntario_KBA/ontario_kba.csv")
 ```
 
 ```{r, eval = FALSE}
@@ -325,8 +326,8 @@ where the argument delete_layer = TRUE is used to overwrite a file.
 
 First, lets create a path to our downloaded Priority Place file:
 
-```{r, echo = FALSE}
-gdb_path <- "C:/Users/dimit/Birds Canada/naturecounts/data-raw/spatial_data/Priority Places/PriorityPlaces.gdb"
+```{r, echo = FALSE, cache = TRUE}
+gdb_path <- "C:/Users/dimit/Birds Canada/NatureCounts_SpatialData_Tutorial/Data/Priority Places/PriorityPlaces.gdb"
 ```
 
 ```{r, eval = FALSE}
