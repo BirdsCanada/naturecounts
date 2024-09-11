@@ -149,7 +149,7 @@ The `sf` package provides [simple feature](https://r-spatial.github.io/sf/) acce
 Navigate to the [KBA Canada Map Viewer](https://kbacanada.org/explore/map-viewer/), search for all the KBA's in Ontario, and download the data to your working directory. It helps if you assign these files a meaningful name! We can read in our KBA polygons using the `sf` package:
 
 ```{r, echo = FALSE, message = FALSE}
-ontario_kba <- sf::st_read("C:/Users/dimit/Birds Canada/naturecounts/spatial_data/KBA/ProvOntario_KBA/ontario_kba.shp")
+ontario_kba <- sf::st_read("C:/Users/dimit/Birds Canada/naturecounts/data-raw/spatial_data/KBA/ProvOntario_KBA/ontario_kba.shp")
 ```
 ```{r, eval = FALSE}
 ontario_kba <- sf::st_read("path_to_your_shp")
@@ -164,7 +164,7 @@ ontario_kba <- ontario_kba %>% st_make_valid() %>% distinct()
 Our spatial data is also accompanied by a CSV file that contains additional useful attributes (landcover, species, etc) concerning our KBAs. Let's read in the accompanying CSV file for our KBA layer:
 
 ```{r, echo = FALSE}
-kba_attributes <- read.csv("C:/Users/dimit/Birds Canada/naturecounts/spatial_data/KBA/ProvOntario_KBA/ontario_kba.csv")
+kba_attributes <- read.csv("C:/Users/dimit/Birds Canada/naturecounts/data-raw/spatial_data/KBA/ProvOntario_KBA/ontario_kba.csv")
 ```
 
 ```{r, eval = FALSE}
@@ -326,7 +326,7 @@ where the argument delete_layer = TRUE is used to overwrite a file.
 First, lets create a path to our downloaded Priority Place file:
 
 ```{r, echo = FALSE}
-gdb_path <- "C:/Users/dimit/Birds Canada/naturecounts/spatial_data/Priority Places/PriorityPlaces.gdb"
+gdb_path <- "C:/Users/dimit/Birds Canada/naturecounts/data-raw/spatial_data/Priority Places/PriorityPlaces.gdb"
 ```
 
 ```{r, eval = FALSE}
