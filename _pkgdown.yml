@@ -70,7 +70,7 @@ articles:
 - title: The NatureCounts Spatial Data Tutorial
   desc: An R walkthrough on how to analyze and map NatureCounts and spatial data. 
   contents:
-  - '`articles/2.1-ManipSpatialData`'
+  - '`articles/2.1-ManipSpatialData.html`'
 - title: more Tutorials
   desc: How-to articles describing common tasks
   contents:
