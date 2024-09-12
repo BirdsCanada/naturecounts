@@ -1,4 +1,6 @@
-pkgdown
+knitr
+readr
+stringr
 naturecounts
 sf
 terra
@@ -6,10 +8,8 @@ tidyverse
 ggplot2
 tibble
 tidyr
-readr
 purrr
 dplyr
-stringr
 forcats
 lubridate
 ggspatial
