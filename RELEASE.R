@@ -25,6 +25,11 @@ spelling::update_wordlist()
 # - Update README.Rmd
 devtools::build_readme()
 
+# - Precompile Vignettes - MUST BUILD/INSTALL PACKAGE FIRST!
+devtools::install(quick = TRUE, build = TRUE, upgrade = "never") # Build/install
+unlink("vignettes/articles/figures/", recursive = TRUE) # Clean up old figs
+source("vignettes/_PRECOMPILE.R")
+
 # Finalize package version --------------------------------------
 
 # - Edit DESCRIPTION and NEWS.md as needed
