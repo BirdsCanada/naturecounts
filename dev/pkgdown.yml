@@ -9,6 +9,7 @@ articles:
   articles/1.5-ManipData: 1.5-ManipData.html
   articles/1.6-VisualData: 1.6-VisualData.html
   articles/1.7-Answers: 1.7-Answers.html
+  articles/2.1-ManipSpatialData: 2.1-ManipSpatialData.html
   data-access: data-access.html
   filtering-data: filtering-data.html
   format-zero-fill: format-zero-fill.html
@@ -18,7 +19,7 @@ articles:
   articles/region-spatial: region-spatial.html
   selecting-fields: selecting-fields.html
   species-codes: species-codes.html
-last_built: 2024-09-10T20:37Z
+last_built: 2024-09-12T17:21Z
 urls:
   reference: https://birdscanada.github.io/naturecounts/reference
   article: https://birdscanada.github.io/naturecounts/articles
