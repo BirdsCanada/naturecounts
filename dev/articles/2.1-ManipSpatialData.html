@@ -211,7 +211,7 @@ creating a multi-panel plot based on this discrete variable:</p>
 <span>       x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
 <span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="articles/articles/figures/spatdatatutorial_cedarwaxwingmap-1.png" alt="plot of chunk cedarwaxwingmap"><div class="figcaption">plot of chunk cedarwaxwingmap</div>
+<img src="figures/spatdatatutorial_cedarwaxwingmap-1.png" alt="cedarwaxwingmap"><div class="figcaption"><strong>cedarwaxwingmap</strong></div>
 </div>
 <p>The map above provides a simple visualization of NatureCounts data
 over a broad spatial and temporal scale. However, mapping data in
@@ -296,7 +296,9 @@ interactive map, using the <code>leaflet</code> package:</p>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addTiles</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addPolygons</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">ontario_kba</span>,color <span class="op">=</span> <span class="st">"black"</span>, weight <span class="op">=</span> <span class="fl">2</span>, smoothFactor <span class="op">=</span> <span class="fl">1</span>,opacity <span class="op">=</span> <span class="fl">1.0</span>, fillOpacity <span class="op">=</span> <span class="fl">0.5</span>, fillColor <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://trafficonese.github.io/leaflet.extras/reference/fullscreen.html" class="external-link">addFullscreenControl</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/addLegend.html" class="external-link">addLegend</a></span><span class="op">(</span>colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span><span class="op">)</span>,labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Ontario KBAs"</span><span class="op">)</span>,position <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in loadNamespace(name): there is no package called 'webshot'</span></span></code></pre></div>
+<span><span class="co">#&gt; PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.</span></span>
+<span><span class="co">#&gt; PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.</span></span>
+<span><span class="co">#&gt; Error in path.expand(path): invalid 'path' argument</span></span></code></pre></div>
 <p>Similarly, the package <code>mapview</code> (based on leaflet) can
 also be used to make interactive plots. We can represent specific
 attributes like so (try it yourself!):</p>
@@ -413,7 +415,8 @@ this time using the <code>addCircleMarkers</code> argument:</p>
 <span>                   stroke <span class="op">=</span> <span class="cn">FALSE</span>, fillOpacity <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://trafficonese.github.io/leaflet.extras/reference/fullscreen.html" class="external-link">addFullscreenControl</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/addLegend.html" class="external-link">addLegend</a></span><span class="op">(</span>colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"violet"</span>, <span class="st">"orange"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Ontario KBA"</span>, <span class="st">"Wood Duck Observations"</span><span class="op">)</span>, position <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in loadNamespace(name): there is no package called 'webshot'</span></span></code></pre></div>
+<span><span class="co">#&gt; PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.</span></span>
+<span><span class="co">#&gt; Error in path.expand(path): invalid 'path' argument</span></span></code></pre></div>
 <p>After geoprocessing our data in R, we can write out any sf objects to
 Shapefiles on a disk, if necessary:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -440,6 +443,11 @@ function and specify our desired data layer like so:</p>
 <span><span class="co">#&gt; Reading layer `PriorityPlacesBoundary' from data source </span></span>
 <span><span class="co">#&gt;   `C:\Users\dimit\Birds Canada\NatureCounts_SpatialData_Tutorial\Data\Priority Places\PriorityPlaces.gdb' </span></span>
 <span><span class="co">#&gt;   using driver `OpenFileGDB'</span></span>
+<span><span class="co">#&gt; Warning in CPL_read_ogr(dsn, layer, query,</span></span>
+<span><span class="co">#&gt; as.character(options), quiet, : GDAL Message 1:</span></span>
+<span><span class="co">#&gt; organizePolygons() received a polygon with more than 100</span></span>
+<span><span class="co">#&gt; parts.  The processing may be really slow.  You can skip the</span></span>
+<span><span class="co">#&gt; processing by setting METHOD=SKIP.</span></span>
 <span><span class="co">#&gt; Simple feature collection with 11 features and 11 fields</span></span>
 <span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
@@ -474,7 +482,8 @@ visualizing them with <code>leaflet</code>:</p>
 <span>                   stroke <span class="op">=</span> <span class="cn">FALSE</span>, fillOpacity <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://trafficonese.github.io/leaflet.extras/reference/fullscreen.html" class="external-link">addFullscreenControl</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/addLegend.html" class="external-link">addLegend</a></span><span class="op">(</span>colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Long Point Walsingham Forest"</span>, <span class="st">"Wood Duck Observations"</span><span class="op">)</span>, position <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in loadNamespace(name): there is no package called 'webshot'</span></span></code></pre></div>
+<span><span class="co">#&gt; PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.</span></span>
+<span><span class="co">#&gt; Error in path.expand(path): invalid 'path' argument</span></span></code></pre></div>
 <p><strong>Congratulations</strong>! You’ve completed <strong>Chapter 1
 - Manipulating Spatial Data (Part 1)</strong>. Here, you’ve successfully
 filtered and visualized NatureCounts data using spatio-temporal, KBA,
