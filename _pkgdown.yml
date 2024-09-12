@@ -67,6 +67,10 @@ articles:
   - '`articles/1.5-ManipData`'
   - '`articles/1.6-VisualData`'
   - '`articles/1.7-Answers`'
+- title: The NatureCounts Spatial Data Tutorial
+  desc: A guide to help users work with NatureCounts and spatial data in R.
+  contents:
+  - '`articles/2.1-ManipSpatialData`'
 - title: more Tutorials
   desc: How-to articles describing common tasks
   contents:
