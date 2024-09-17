@@ -48,7 +48,7 @@ jobs:
             any::leaflet.providers
             any::ggspatial
             any::mapview
-            any::mapshot
+            any::webshot
           needs: website
 
       - name: Build site
