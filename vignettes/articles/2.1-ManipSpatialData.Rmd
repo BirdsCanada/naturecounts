@@ -248,7 +248,7 @@ In this example, were interested in all the KBA polygons of Ontario. However, if
 
 # 1.5 Reading in NatureCounts data
 
-Let's search NatureCounts for the Ontario Breeding Bird Atlas (ONATLAS3PC) dataset to assess Wood Duck distribution across Ontario KBA's. The steps here are similar to those you used in the Cedar Waxwing example.
+Let's search NatureCounts for the Ontario Breeding Bird Atlas (OBBA2PC, 2001-2005) dataset to assess Wood Duck distribution across Ontario KBA's. The steps here are similar to those you used in the Cedar Waxwing example.
 
 ```{r, eval = FALSE}
 collections <- meta_collections()
@@ -262,7 +262,7 @@ search_species("wood duck")
 Then let's filter and download data specifically for the Wood Ducks in Ontario.
 
 ```{r, eval = TRUE}
-atlas_on <- nc_data_dl(collections = "ONATLAS3PC", species = 360, username = "testuser", info = "spatial_data_tutorial")
+atlas_on <- nc_data_dl(collections = "OBBA2PC", species = 360, username = "testuser", info = "spatial_data_tutorial")
 ```
 
 We can then convert our NatureCounts data into a spatial object. To do so, we deploy the `st_as_sf` function and specify the coordinate reference system (CRS).
@@ -319,6 +319,7 @@ To identify Wood Ducks observed in Ontario KBA's, we can apply the `st_intersect
 ```{r, eval = TRUE}
 wood_ducks_kba <- sf::st_intersection(ontario_kba, atlas_on_sf)
 ```
+
 You will get a `warning` message, which you can safely ignore.
 
 ```{r, eval = TRUE}
