@@ -3,6 +3,9 @@ library(knitr)
 library(readr)
 library(stringr)
 
+# setting fig path
+opts_chunk$set(fig.path = "naturecounts/man/figures/")
+
 # Make sure to put figures in local dir in knitr chunk options
 v <- list.files("vignettes", ".orig$", full.names = TRUE, recursive = TRUE)
 
