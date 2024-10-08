@@ -3,17 +3,15 @@ library(knitr)
 library(readr)
 library(stringr)
 
-# setting fig path
-opts_chunk$set(fig.path = "naturecounts/man/figures/")
-
 # Make sure to put figures in local dir in knitr chunk options
 v <- list.files("vignettes", ".orig$", full.names = TRUE, recursive = TRUE)
 
-for(i in v[1:2]) {
+for(i in v) {
   new <- stringr::str_remove(i, ".orig$")
   knit(i, new)
   
   read_lines(new) %>%
+    #str_extract("vignettes(/articles)*/")
     str_replace_all("vignettes(/articles)*/", "") %>%
     write_lines(new)
 }

@@ -81,6 +81,7 @@ pkgdown::build_article("data-access")
 pkgdown::build_article("region-codes")
 pkgdown::build_article("region-areas")
 pkgdown::build_article("articles/region-spatial")
+pkgdown::build_article("articles/2.1-ManipSpatialData")
 
 # Don't push resources
 unlink("vignettes/articles/BCR_Terrestrial/", recursive = TRUE)
