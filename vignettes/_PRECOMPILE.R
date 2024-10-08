@@ -11,7 +11,6 @@ for(i in v) {
   knit(i, new)
   
   read_lines(new) %>%
-    #str_extract("vignettes(/articles)*/")
     str_replace_all("vignettes(/articles)*/", "") %>%
     write_lines(new)
 }

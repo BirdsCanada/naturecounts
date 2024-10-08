@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   # For pre-compiling and pkgdown (relative to pkg home)
-  fig.path = "vignettes/figures/spatdatatutorial_",
+  fig.path = "vignettes/articles/figures/spatdatatutorial_",
   dpi = 150
 )
 ```
@@ -124,7 +124,7 @@ cedar_waxwing_june_sf <- sf::st_as_sf(cedar_waxwing_june,
 
 Finally, use `ggplot2` to visualize the spatio-temporal distribution of Cedar Waxwing observations across the Maritime provinces by color-coding the data points by **survey_year** and creating a multi-panel plot based on this discrete variable:
 
-```{r cedarwaxwing_map, eval = TRUE}
+```{r cedarwaxwing_map, eval = TRUE, fig.alt = "test", fig.cap = ""}
 ggplot(data = cedar_waxwing_june_sf) +
   # Select a basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
@@ -162,7 +162,7 @@ getwd()
 It helps if you assign these files a meaningful name! We can read in our KBA polygons using the `sf` package once it is in your working directory.
 
 ```{r, eval = TRUE, echo = FALSE, message = FALSE}
-ontario_kba <- sf::st_read("misc/Data/kba/provontario_kba/ontario_kba.shp")
+ontario_kba <- sf::st_read(here::here("misc/Data/kba/provontario_kba/ontario_kba.shp"))
 ```
 
 ```{r, eval = FALSE}
@@ -205,7 +205,7 @@ ontario_kba <- full_join(ontario_kba, kba_attributes, by = "SiteCode")
 
 # 1.4 Visualizing spatial data in R
 
-```{r ontario_kbas}
+```{r ontario_kbas, fig.alt = "test1", fig.cap = ""}
 ggplot() +
   # Select the basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
@@ -330,7 +330,7 @@ wood_ducks_kba <- st_transform(wood_ducks_kba, crs = 4326)
 
 Use ggplot2 to visualize the polygon data and point data for the Long Point Peninsula and Marshes (SiteCode ON001):
 
-```{r longpoint_kba}
+```{r longpoint_kba, fig.alt = "Test3", fig.cap = ""}
 # Filter the ontario_kba and wood_ducks_kba data by SiteCode 
 ontario_kba_LP <- ontario_kba[ontario_kba$SiteCode == "ON001", ]
 wood_ducks_kba_LP <- wood_ducks_kba[wood_ducks_kba$SiteCode == "ON001", ]
@@ -381,7 +381,7 @@ After geoprocessing our data in R, we can write out any sf objects to Shapefiles
 First, lets create a path to our downloaded Priority Place file.
 
 ```{r, eval = TRUE, echo = FALSE, message = FALSE}
-gdb_path <- "C:/Users/dimit/Birds Canada/Data/priority_places/priorityplaces.gdb"
+gdb_path <- here::here("misc/Data/priority_places/priorityplaces.gdb")
 ```
 
 ```{r, eval = FALSE}
@@ -432,7 +432,7 @@ wood_ducks_longpoint <- st_transform(wood_ducks_longpoint, crs = 4326)
 
 with `ggplot2`:
 
-```{r longpoint_prioriplace, eval = TRUE}
+```{r longpoint_prioriplace, eval = TRUE, fig.alt = "test4", fig.cap = ""}
 ggplot() +
   # Select a basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
