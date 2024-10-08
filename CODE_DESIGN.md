@@ -1,5 +1,9 @@
 # naturecounts design principles
 
+## Non-cloud data
+- Put data required to precompile vignettes in the `misc` folder
+- This isn't uploaded to GitHub
+
 ## Locations
 - API urls
   - are stored in `meta_info`, a tibble created in `data-raw/data_creation.R`

@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   # For pre-compiling and pkgdown (relative to pkg home)
-  fig.path = "naturecounts/man/figures/spatdatatutorial_",
+  fig.path = "vignettes/figures/spatdatatutorial_",
   dpi = 150
 )
 ```
@@ -162,7 +162,7 @@ getwd()
 It helps if you assign these files a meaningful name! We can read in our KBA polygons using the `sf` package once it is in your working directory.
 
 ```{r, eval = TRUE, echo = FALSE, message = FALSE}
-ontario_kba <- sf::st_read("C:/Users/dimit/Birds Canada/Data/kba/provontario_kba/ontario_kba.shp")
+ontario_kba <- sf::st_read("misc/Data/kba/provontario_kba/ontario_kba.shp")
 ```
 
 ```{r, eval = FALSE}
