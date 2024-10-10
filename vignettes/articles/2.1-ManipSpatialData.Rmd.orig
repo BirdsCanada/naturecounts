@@ -124,7 +124,7 @@ cedar_waxwing_june_sf <- sf::st_as_sf(cedar_waxwing_june,
 
 Finally, use `ggplot2` to visualize the spatio-temporal distribution of Cedar Waxwing observations across the Maritime provinces by color-coding the data points by **survey_year** and creating a multi-panel plot based on this discrete variable:
 
-```{r cedarwaxwing_map, eval = TRUE, fig.alt = "test", fig.cap = ""}
+```{r cedarwaxwing_map, eval = TRUE}
 ggplot(data = cedar_waxwing_june_sf) +
   # Select a basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
