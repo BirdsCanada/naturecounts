@@ -205,7 +205,7 @@ ontario_kba <- full_join(ontario_kba, kba_attributes, by = "SiteCode")
 
 # 1.4 Visualizing spatial data in R
 
-```{r ontario_kbas, fig.alt = "test1", fig.cap = ""}
+```{r ontario_kbas}
 ggplot() +
   # Select the basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
@@ -330,7 +330,7 @@ wood_ducks_kba <- st_transform(wood_ducks_kba, crs = 4326)
 
 Use ggplot2 to visualize the polygon data and point data for the Long Point Peninsula and Marshes (SiteCode ON001):
 
-```{r longpoint_kba, fig.alt = "Test3", fig.cap = ""}
+```{r longpoint_kba}
 # Filter the ontario_kba and wood_ducks_kba data by SiteCode 
 ontario_kba_LP <- ontario_kba[ontario_kba$SiteCode == "ON001", ]
 wood_ducks_kba_LP <- wood_ducks_kba[wood_ducks_kba$SiteCode == "ON001", ]
@@ -432,7 +432,7 @@ wood_ducks_longpoint <- st_transform(wood_ducks_longpoint, crs = 4326)
 
 with `ggplot2`:
 
-```{r longpoint_prioriplace, eval = TRUE, fig.alt = "test4", fig.cap = ""}
+```{r longpoint_prioriplace, eval = TRUE}
 ggplot() +
   # Select a basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +

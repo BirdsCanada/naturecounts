@@ -254,7 +254,7 @@ ggplot() +
 #> Zoom: 4
 ```
 
-<img src="figures/spatdatatutorial_ontario_kbas-1.png" alt="test1"  />
+![plot of chunk ontario_kbas](figures/spatdatatutorial_ontario_kbas-1.png)
 
 We can visualize the **ontario_kba** data with an interactive map, using the `leaflet` package.
 
@@ -491,7 +491,7 @@ ggplot() +
 #> Zoom: 9
 ```
 
-<img src="figures/spatdatatutorial_longpoint_kba-1.png" alt="Test3"  />
+![plot of chunk longpoint_kba](figures/spatdatatutorial_longpoint_kba-1.png)
 
 Or use leaflet, this time using the `addCircleMarkers` argument.
 
@@ -617,7 +617,7 @@ ggplot() +
 #> Zoom: 9
 ```
 
-<img src="figures/spatdatatutorial_longpoint_prioriplace-1.png" alt="test4"  />
+![plot of chunk longpoint_prioriplace](figures/spatdatatutorial_longpoint_prioriplace-1.png)
 
 With `leaflet`:
 
