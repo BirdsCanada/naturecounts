@@ -25,6 +25,11 @@ spelling::update_wordlist()
 # - Update README.Rmd
 devtools::build_readme()
 
+# - Precompile Vignettes - MUST BUILD/INSTALL PACKAGE FIRST!
+devtools::install(quick = TRUE, build = TRUE, upgrade = "never") # Build/install
+unlink("vignettes/articles/figures/", recursive = TRUE) # Clean up old figs
+source("vignettes/_PRECOMPILE.R")
+
 # Finalize package version --------------------------------------
 
 # - Edit DESCRIPTION and NEWS.md as needed
@@ -56,14 +61,18 @@ usethis::use_github_release()
 
 
 # Testing ----------------------
-# Can build site locally if needed
-## **BUILD PACKAGE FIRST**
-pkgdown::build_site(lazy = TRUE)
+
+# Test the pkgdown site locally as needed
+#
+# **BUILD PACKAGE FIRST**  (Ctrl-Shift-B)
+
+pkgdown::build_site(lazy = TRUE) # lazy=TRUE means only rebuild articles/vignettes which have changed
 pkgdown::build_home()
 pkgdown::build_reference()
 pkgdown::build_news()
 pkgdown::build_articles(lazy = TRUE)
 
+# Build a specific article
 pkgdown::build_article("species-codes")
 pkgdown::build_article("format-zero-fill")
 pkgdown::build_article("selecting-fields")
@@ -72,6 +81,8 @@ pkgdown::build_article("data-access")
 pkgdown::build_article("region-codes")
 pkgdown::build_article("region-areas")
 pkgdown::build_article("articles/region-spatial")
+pkgdown::build_article("articles/2.1-ManipSpatialData")
 
+# Don't push resources
 unlink("vignettes/articles/BCR_Terrestrial/", recursive = TRUE)
 unlink("vignettes/articles/bcr_terrestrial_shape.zip")

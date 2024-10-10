@@ -1,0 +1,88 @@
+---
+title: "Chapter 6 - Data Visualization"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chapter 6 - Data Visualization}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Data Visualization {#Visual6}
+
+```{r, message = FALSE, warning = FALSE}
+library(dplyr) 
+library(ggplot2)
+library(naturecounts)
+library(tidyverse)
+```
+
+You have successfully downloaded and summarized your NatureCounts dataset. In this chapter we will demonstrate how to do some basic visualizations with plots.
+
+> The code in this Chapter will not work unless you replace `"testuser"` with your actual user name. You will be prompted to enter your password.
+
+## Plotting {#PM6.1}
+
+Plotting your data is a powerful way to detect patterns and make results stand out. Recall in [Chapter 2](#Package2.2) you installed the [tidyverse](https://www.tidyverse.org/) package, which included `ggplot2` for data visualizations. You are encouraged to learn more about this function by reviewing [Cookbook for R](http://www.cookbook-r.com/Graphs/). We also recommend you download a copy of the RStudio [Data Visualization](https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) cheat sheet as a reference document.
+
+At the end of [Chapter 5](#Manip5) you were exploring fall migration monitoring data collected at [Vaseux Lake Bird Observatory](https://naturecounts.ca/nc/default/datasets.jsp?code=CMMN-DET-VLBO), British Columbia. Let's continue using this dataset for our plotting example and download the data for 2015-present.
+
+First, lets apply our previously acquired skills to download the filtered dataset and zero-fill for GRCA, while also keep some extra variables.
+
+```{r VLBO, eval = TRUE}
+VLBO <- nc_data_dl(collections = "CMMN-DET-VLBO", years = c(2015, NA), 
+                   username = "testuser", info = "tutorial example")
+
+GRCA <- format_zero_fill(VLBO, species = 15900, 
+                         by = "SamplingEventIdentifier", 
+                         extra_event= c("survey_year", "survey_month", "survey_day"))
+
+```
+
+First, we are interested if there are any noticeable patterns in migration timing. For this, we will use the [add date and day-of-year helper function](https://birdstudiescanada.github.io/naturecounts/reference/format_dates.html), introduced at the end of [Chapter 5](#Manip5.3), to add two new columns to the dataframe.
+
+```{r doy, eval = TRUE}
+
+GRCA_dates <- format_dates(GRCA)
+
+```
+
+Now we can plot raw counts (y-axis) for each day-of-year (x-axis).
+
+```{r plot1VLBO, eval = TRUE}
+
+ggplot(data = GRCA_dates) + 
+  geom_point(aes(x = doy, y = ObservationCount))
+
+```
+
+What you will notice is that migration for this species is highest early in the year and diminishes with time.
+
+Next, we are interested in visually examining the mean number of migrant GRCA each year, to see if there are any noticeable changes over time. First, we need to summarise the data. Here, we create a function that calculates standard error (se) and deploy the `mutate()` function which helps create new variables from existing ones:
+
+```{r VLBOsum, eval = TRUE, warning = FALSE}
+
+#use this shortcut function to calculate the standard error
+se <- function(x) sd(x) / sqrt(length(x))
+
+GRCA_year <- GRCA %>% 
+  group_by(survey_year) %>% 
+  summarise(MeanObs = mean(ObservationCount), 
+            SEObs = se(ObservationCount)) %>%   
+  mutate(yrmin = MeanObs + SEObs, yrmax = MeanObs - SEObs)
+
+```
+
+Now we can create the plot:
+
+```{r plot2VLBO, eval = TRUE}
+ggplot(data = GRCA_year) +  
+  geom_pointrange(aes(x = survey_year, y = MeanObs, ymin = yrmin, ymax = yrmax))
+
+```
+
+You will notice there was an increase in the mean number of GRCA observed in the last three years, compared to 2015. You might now be wondering why.
+
+## Mapping {#PM6.2}
+
+Resources you can use to help analyze and map your data include the [NatureCounts Spatial Data Tutorial](https://birdscanada.github.io/naturecounts/articles/index.html) and the [Mapping Observations](https://birdscanada.github.io/naturecounts/articles/articles/mapping-observations.html) how-to article. The materials are not repeated here. We encourage you to check this out if you are interested in mapping your data!
