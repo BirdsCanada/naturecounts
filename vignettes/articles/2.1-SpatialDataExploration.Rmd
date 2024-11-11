@@ -1,0 +1,198 @@
+---
+title: "Module 1 - Spatial Data Exploration"
+author: Dimitrios Markou
+date: "2024-11-11"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Module 1 - Spatial Data Exploration}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+# Module 1: Spatial Data Exploration
+
+##### Author: Dimitrios Markou
+
+Research analysis often starts with fundamental questions: *Where is the data and how can we best prepare it for analysis?* Understanding data types and how-to visualize them are key to how we interact with and interpret data and identify areas for conservation action. The [NatureCounts_SpatialData_Tutorial](#0) serves as a guide on how-to visualize and analyse NatureCounts, spatial, and environmental data in R to help users meet their conservation and research goals.
+
+# 1.0 Learning Objectives
+
+By the end of **Module 1 - Spatial Data Exploration**, users will know how to:
+
+-   Distinguish between types of spatial data (vector vs raster)
+
+-   Select from a variety of geoprocessing functions in the `sf` package
+
+-   Visualize NatureCounts data using spatio-temporal maps
+
+This R tutorial requires the following **packages**:
+
+
+``` r
+library(naturecounts)
+library(sf)
+library(terra)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(ggspatial)
+library(mapview)
+library(leaflet)
+library(leaflet.extras)
+library(leaflet.providers)
+```
+
+# 1.1 Spatial Data Types
+
+Spatial data is any type of vector or raster data that represents a feature or phenomena across geographic space.
+
+| **Vector data** is used to represent features with points, lines and polygons. This may include individual bird observations, rivers, or conservation area boundaries.
+
+| **Raster data** is used to represent spatially continuous data with a grid, where each cell has one value. This may include types of environmental data like temperature, elevation or land use.
+
+The most common format used to store vector data in a file on disk is the **ESRI Shapefile** format *(.shp)*. Shapefiles are always accompanied by files with *.dbf*, *.shx,* and *.prj* extensions.
+
+Raster data files are typically stored with TIFF or GeoTIFF files with a *(.tif)* or *(.tiff)* extension. Raster data manipulation will be in covered in subsequent chapters (see 02-ClimateData and 03-EnvironmentalData).
+
+Vector and raster data may also be associated with **attribute data** or **temporal data**. Attribute data provides additional information on the characteristics of spatial features while temporal data assigns a specific date or time range.
+
+The `sf` package provides [simple feature](https://r-spatial.github.io/sf/) access in R. This package works best with spatial data (point, line, polygon, multipolygon, etc) associated with tabular attributes (e.g shapefiles). You may be familiar with the `sp` package that has similar functionality in a different format, however, this package is no longer in use as of 2023 and does not support integration with `tidyverse` which is very popular among data scientists in R.
+
+# 1.2 Geo-processing Functions
+
+Geoprocessing functions allow us to manipulate or compute spatial objects based on interactions between their geometries. There are several useful functions integrated into the `sf` package including:
+
+| `st_transform()` - transforms the CRS of a specified CRS object
+| `st_drop_geometry()` - removes the geometry column of a sf object
+| `st_intersection(x, y)` - creates geometry of the shared portion of x and y
+| `st_crop(x, y, ..., xmin, ymin, xmax, ymax)` - creates geometry of x that intersects a specified range
+| `st_difference(x, y)` - creates geometry from x that does not intersect with y
+| `st_area`, `st_length`, and `st_distance` can also be used to compute geometric measurements
+
+More resources, including an `sf` package **cheatsheat** can be found [here](https://github.com/r-spatial/sf).
+
+# 1.3 Spatial Data Exploration: Spatio-temporal mapping
+
+#### *Example 1* - You would like to visualize the spatio-temporal distribution of Cedar Waxwing observations in June of each survey year using data from the Maritimes Breeding Bird Atlas (2006-2010).
+
+To download NatureCounts data you need to [sign up](https://naturecounts.ca/nc/default/register.jsp) for a **free** account.
+
+> The data download will not work unless you replace `"testuser"` with your actual user name. You will be prompted to enter your password.
+
+The [NatureCounts Introductory R Tutorial](#link) is where you should start if you're new to the `naturecounts` R package. It explains how to view, filter, manipulate, and visualize NatureCounts data. We recommend reviewing this tutorial before proceeding.
+
+Let's fetch the NatureCounts data.
+
+First, we look to find the `collection` code for the Maritimes Breeding Bird Atlas.
+
+
+``` r
+collections <- meta_collections()
+View(meta_collections())
+```
+
+Second, we look to find the numeric species id.
+
+
+``` r
+search_species("cedar waxwing")
+```
+
+Now we can download the data. Don't forget to change the `username`.
+
+
+``` r
+cedar_waxwing <- nc_data_dl(collections = "MBBA2PC", species = 16330, username = "testuser", info = "spatial_data_tutorial")
+```
+
+```
+## Using filters: collections (MBBA2PC); species (16330); fields_set (BMDE2.00-min)
+```
+
+```
+## Collecting available records...
+```
+
+```
+##   collection nrecords
+## 1    MBBA2PC     1659
+## Total records: 1,659
+```
+
+```
+## 
+## Downloading records for each collection:
+```
+
+```
+##   MBBA2PC
+```
+
+```
+##     Records 1 to 1659 / 1659
+```
+
+Use the `format_dates` function to create date and day-of-year (doy) columns.
+
+
+``` r
+cedar_waxwing <- format_dates(cedar_waxwing)
+```
+
+Filter the data to only include observations from the month of June.
+
+
+``` r
+cedar_waxwing_june <- cedar_waxwing %>%
+  filter(survey_month == 6)
+```
+
+Convert the NatureCounts data to a spatial object using the point count coordinates.
+
+
+``` r
+cedar_waxwing_june_sf <- sf::st_as_sf(cedar_waxwing_june,
+                        coords = c("longitude", "latitude"), crs = 4326)
+```
+
+Finally, use `ggplot2` to visualize the spatio-temporal distribution of Cedar Waxwing observations across the Maritime provinces by color-coding the data points by **survey_year** and creating a multi-panel plot based on this discrete variable:
+
+
+``` r
+ggplot(data = cedar_waxwing_june_sf) +
+  # Select a basemap
+  annotation_map_tile(type = "cartolight", zoom = NULL) +
+  # Plot the points, color-coded by survey_year
+  geom_sf(aes(color = as.factor(survey_year)), size = 1) +
+  # Facet by survey_year to create the multi-paneled map
+  facet_wrap(~ survey_year) +
+  # Customize the color scale
+  scale_color_brewer(palette = "Set1", name = "Survey Year") +
+  # Add a theme with a minimal design and change the font styles, to your preference
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  # To make the points in the legend larger without affecting map points
+  guides(color = guide_legend(override.aes = list(size = 3))) +
+  # Define the title and axis names
+  labs(title = "Cedar Waxwing June Observations by Survey Year",
+       x = "Longitude",
+       y = "Latitude")
+```
+
+```
+## Zoom: 5
+## Zoom: 5
+## Zoom: 5
+## Zoom: 5
+## Zoom: 5
+```
+
+![plot of chunk cedarwaxwing_map](figure/cedarwaxwing_map-1.png)
+
+![plot of chunk cedarwaxwing_map](figures/spatdatatutorial_cedarwaxwing_map-1.png)
+
+The map above provides a simple visualization of NatureCounts data over a broad spatial and temporal scale.
+
+**Congratulations!** You completed **Module 1: Spatial Data Exploration**. Here, you successfully visualized NatureCounts vector data over a wide spatial and temporal scale using a multi-panel plot. In [Module 2](02-ConservationAreas.Rmd), you can explore spatial data manipulation, apply geoprocessing functions, and visualize NatureCounts data within [Key Biodiversity Areas (KBAs)](https://kbacanada.org/about/) and [Priority Places - Open Government Portal](https://open.canada.ca/data/en/dataset/91219d24-e877-4c8a-8bd2-b2b662e573e0).
