@@ -71,6 +71,8 @@ articles:
   desc: A guide to help users work with NatureCounts and spatial data in R.
   contents:
   - '`articles/2.1-ManipSpatialData`'
+  - '`articles/2.1-SpatialDataExploration`'
+  - '`articles/2.2-ConservationAreas`'
 - title: Additional Tutorials
   desc: How-to articles describing common tasks
   contents:
