@@ -59,7 +59,7 @@ getwd()
 
 It helps if you assign these files a meaningful name! We can read in our KBA polygons using the `sf` package once it is in your working directory.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, echo = FALSE, message = FALSE}
 ontario_kba <- sf::st_read("C:/Users/dimit/Birds Canada/Data/kba/provontario_kba/ontario_kba.shp")
 ```
 
@@ -81,7 +81,7 @@ kba_attributes <- read.csv("ontario_kba.csv")
 
 Great! We can now join these dataframes using the handy `tidyverse` package. However, we'll want to select for specific columns first to avoid redundancies before performing our join:
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 kba_attributes <- kba_attributes %>%
   select("SiteCode",
          "DateAssessed",
@@ -97,7 +97,7 @@ kba_attributes <- kba_attributes %>%
 
 Both dataframes now contain unique columns, after our selection. We apply the `full_join()` function to hold all attributes within one dataframe.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 ontario_kba <- full_join(ontario_kba, kba_attributes, by = "SiteCode")
 ```
 
@@ -260,7 +260,7 @@ After geoprocessing our data in R, we can write out any sf objects to Shapefiles
 
 First, lets create a path to our downloaded Priority Place file.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, echo = FALSE, message = FALSE}
 gdb_path <- "C:/Users/dimit/Birds Canada/Data/priority_places/priorityplaces.gdb"
 ```
 
