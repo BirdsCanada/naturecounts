@@ -1,6 +1,5 @@
 ---
 title: "Module 2 - Conservation Areas"
-author: Dimitrios Markou
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
