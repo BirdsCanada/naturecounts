@@ -1,6 +1,5 @@
 ---
 title: "Module 1 - Spatial Data Exploration"
-author: Dimitrios Markou
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
