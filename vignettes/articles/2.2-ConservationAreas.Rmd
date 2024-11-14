@@ -1,7 +1,6 @@
 ---
 title: "Module 2 - Conservation Areas"
-author: Dimitrios Markou
-date: "2024-11-11"
+date: "2024-11-14"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Module 2 - Conservation Areas}
@@ -62,10 +61,6 @@ getwd()
 It helps if you assign these files a meaningful name! We can read in our KBA polygons using the `sf` package once it is in your working directory.
 
 
-``` r
-ontario_kba <- sf::st_read("C:/Users/dimit/Birds Canada/Data/kba/provontario_kba/ontario_kba.shp")
-```
-
 ```
 ## Reading layer `ontario_kba' from data source `C:\Users\dimit\Birds Canada\Data\kba\provontario_kba\ontario_kba.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 198 features and 8 fields
@@ -111,19 +106,11 @@ kba_attributes <- kba_attributes %>%
          "Species")
 ```
 
-```
-## Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'select': object 'kba_attributes' not found
-```
-
 Both dataframes now contain unique columns, after our selection. We apply the `full_join()` function to hold all attributes within one dataframe.
 
 
 ``` r
 ontario_kba <- full_join(ontario_kba, kba_attributes, by = "SiteCode")
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'kba_attributes' not found
 ```
 
 To visualize the **ontario_kba** data we can use `ggplot()`.
@@ -150,17 +137,31 @@ ggplot() +
 ## Zoom: 4
 ```
 
-![plot of chunk ontario_kbas](figure/ontario_kbas-1.png)
+```
+## Fetching 2 missing tiles
+```
 
-![plot of chunk ontario_kbas](figures/spatdatatutorial_ontario_kbas-1.png)
-
-We can also visualize the **ontario_kba** data with an interactive map, using the `leaflet` package.
+```
 
 
-``` r
-leaflet(width = "100%") %>%
-  addTiles() %>%
-  addPolygons(data=ontario_kba,color = "black", weight = 2, smoothFactor = 1,opacity = 1.0, fillOpacity = 0.5, fillColor = "red") %>% addFullscreenControl() %>%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   addLegend(colors = c("red"),labels = c("Ontario KBAs"),position = "bottomright")
 ```
 
@@ -250,6 +251,10 @@ atlas_on_sf <- sf::st_as_sf(atlas_on,
                         coords = c("longitude", "latitude"), crs = 4326)
 ```
 
+```
+## Error in eval(expr, envir, enclos): object 'atlas_on' not found
+```
+
 Now let's ensure that the conversion was successful. You'll notice a new geometry column where each observation is a point.
 
 
@@ -271,6 +276,10 @@ It can also be used to ensure that the CRS of our spatial objects match.
 atlas_on_sf <- st_transform(atlas_on_sf, crs = st_crs(ontario_kba))
 ```
 
+```
+## Error in eval(expr, envir, enclos): object 'atlas_on_sf' not found
+```
+
 To identify Wood Ducks observed across Ontario KBA's, we can apply the `st_intersection()` function.
 
 
@@ -279,7 +288,7 @@ wood_ducks_kba <- sf::st_intersection(ontario_kba, atlas_on_sf)
 ```
 
 ```
-## Warning: attribute variables are assumed to be spatially constant throughout all geometries
+## Error in eval(expr, envir, enclos): object 'atlas_on_sf' not found
 ```
 
 You will get a `warning` message, which you can safely ignore.
@@ -289,6 +298,10 @@ You will get a `warning` message, which you can safely ignore.
 # If need be, transform your spatial data back to EPSG:4326 to visualize with leaflet
 ontario_kba <- st_transform(ontario_kba, crs = 4326)
 wood_ducks_kba <- st_transform(wood_ducks_kba, crs = 4326)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'wood_ducks_kba' not found
 ```
 
 Using `ggplot`, we can visualize the polygon data and point data.
@@ -316,10 +329,8 @@ ggplot() +
 ```
 
 ```
-## Zoom: 9
+## Error in eval(expr, envir, enclos): object 'ontario_kba_LP' not found
 ```
-
-![plot of chunk longpoint_kba](figure/longpoint_kba-1.png)
 
 ![plot of chunk longpoint_kba](figures/spatdatatutorial_longpoint_kba-1.png)
 
@@ -351,9 +362,6 @@ After geoprocessing our data in R, we can write out any sf objects to Shapefiles
 First, lets create a path to our downloaded Priority Place file.
 
 
-``` r
-gdb_path <- "C:/Users/dimit/Birds Canada/Data/priority_places/priorityplaces.gdb"
-```
 
 
 ``` r
@@ -407,6 +415,10 @@ Then reproject the Wood Duck data to match our Priority Place using `st_transfor
 atlas_on_sf <- st_transform(atlas_on_sf, crs = st_crs(long_point_polygon))
 ```
 
+```
+## Error in eval(expr, envir, enclos): object 'atlas_on_sf' not found
+```
+
 Next, we'll apply our geoprocessing function to find the Wood Duck observations that intersect with our chosen Priority Place.
 
 
@@ -415,7 +427,7 @@ wood_ducks_longpoint <- sf::st_intersection(long_point_polygon, atlas_on_sf)
 ```
 
 ```
-## Warning: attribute variables are assumed to be spatially constant throughout all geometries
+## Error in eval(expr, envir, enclos): object 'atlas_on_sf' not found
 ```
 
 Finally, we'll transform our spatial objects one more time before visualizing them.
@@ -428,6 +440,10 @@ long_point_polygon <- st_transform(long_point_polygon, crs = 4326)
 
 ``` r
 wood_ducks_longpoint <- st_transform(wood_ducks_longpoint, crs = 4326)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'wood_ducks_longpoint' not found
 ```
 
 Use `ggplot` to visualize the polygon and point data.
@@ -457,10 +473,8 @@ ggplot() +
 ```
 
 ```
-## Zoom: 9
+## Error in eval(expr, envir, enclos): object 'wood_ducks_longpoint' not found
 ```
-
-![plot of chunk longpoint_prioriplace](figure/longpoint_prioriplace-1.png)
 
 ![plot of chunk longpoint_prioriplace](figures/spatdatatutorial_longpoint_prioriplace-1.png)
 
