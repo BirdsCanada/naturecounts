@@ -1,7 +1,6 @@
 ---
 title: "Module 1 - Spatial Data Exploration"
-author: Dimitrios Markou
-date: "2024-11-11"
+date: "2024-11-14"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Module 1 - Spatial Data Exploration}
@@ -183,6 +182,21 @@ ggplot(data = cedar_waxwing_june_sf) +
 
 ```
 ## Zoom: 5
+```
+
+```
+## Fetching 2 missing tiles
+```
+
+```
+##   |                                                                                                                                      |                                                                                                                              |   0%  |                                                                                                                                      |===============================================================                                                               |  50%  |                                                                                                                                      |==============================================================================================================================| 100%
+```
+
+```
+## ...complete!
+```
+
+```
 ## Zoom: 5
 ## Zoom: 5
 ## Zoom: 5
