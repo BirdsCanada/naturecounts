@@ -1,24 +1,22 @@
 ---
-title: "Module 1 - Spatial Data Exploration"
-date: "2024-11-14"
+title: "01-SpatialDataExploration"
+date: "2024-11-18"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Module 1 - Spatial Data Exploration}
+  %\VignetteIndexEntry{01-SpatialDataExploration}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
+# Chapter 1: Spatial Data Exploration
 
+##### Authors: Dimitrios Markou, Danielle Ethier
 
-# Module 1: Spatial Data Exploration
-
-##### Author: Dimitrios Markou
-
-Research analysis often starts with fundamental questions: *Where is the data and how can we best prepare it for analysis?* Understanding data types and how-to visualize them are key to how we interact with and interpret data and identify areas for conservation action. The [NatureCounts_SpatialData_Tutorial](#0) serves as a guide on how-to visualize and analyse NatureCounts, spatial, and environmental data in R to help users meet their conservation and research goals.
+| Exploring your data in a visual way is an important first step to any analysis. This chapter will give you a foundational understanding of how to work with your NatureCounts data spatially in R. This Chapter assumes that you have a basic understanding of how to access your data from NatureCounts. The [NatureCounts Introductory R Tutorial](https://github.com/BirdsCanada/NatureCounts_IntroTutorial.git) is where you should start if you're new to the `naturecounts` R package. It explains how to access, view, filter, manipulate, and visualize NatureCounts data. We recommend reviewing this tutorial before proceeding.
 
 # 1.0 Learning Objectives
 
-By the end of **Module 1 - Spatial Data Exploration**, users will know how to:
+By the end of **Chapter 1 - Spatial Data Exploration**, users will know how to:
 
 -   Distinguish between types of spatial data (vector vs raster)
 
@@ -32,15 +30,8 @@ This R tutorial requires the following **packages**:
 ``` r
 library(naturecounts)
 library(sf)
-library(terra)
 library(tidyverse)
-library(dplyr)
-library(ggplot2)
 library(ggspatial)
-library(mapview)
-library(leaflet)
-library(leaflet.extras)
-library(leaflet.providers)
 ```
 
 # 1.1 Spatial Data Types
@@ -53,7 +44,7 @@ Spatial data is any type of vector or raster data that represents a feature or p
 
 The most common format used to store vector data in a file on disk is the **ESRI Shapefile** format *(.shp)*. Shapefiles are always accompanied by files with *.dbf*, *.shx,* and *.prj* extensions.
 
-Raster data files are typically stored with TIFF or GeoTIFF files with a *(.tif)* or *(.tiff)* extension. Raster data manipulation will be in covered in subsequent chapters (see 02-ClimateData and 03-EnvironmentalData).
+Raster data files are typically stored with TIFF or GeoTIFF files with a *(.tif)* or *(.tiff)* extension. Raster data manipulation will be in covered in subsequent chapters (see [Chapter 3: Climate Data](03-ClimateData.Rmd), [Chapter 4: Elevation Data](), [Chapter 5: Landcover Data](05-LandcoverData.Rmd), [Chapter 6: Satellite Imagery](06-SatelliteImagery.Rmd), and [Chapter 7: RasterSummaryStats](07-RasterSummaryStats)).
 
 Vector and raster data may also be associated with **attribute data** or **temporal data**. Attribute data provides additional information on the characteristics of spatial features while temporal data assigns a specific date or time range.
 
@@ -72,15 +63,9 @@ Geoprocessing functions allow us to manipulate or compute spatial objects based 
 
 More resources, including an `sf` package **cheatsheat** can be found [here](https://github.com/r-spatial/sf).
 
-# 1.3 Spatial Data Exploration: Spatio-temporal mapping
+# 1.3 Spatio-temporal Mapping
 
 #### *Example 1* - You would like to visualize the spatio-temporal distribution of Cedar Waxwing observations in June of each survey year using data from the Maritimes Breeding Bird Atlas (2006-2010).
-
-To download NatureCounts data you need to [sign up](https://naturecounts.ca/nc/default/register.jsp) for a **free** account.
-
-> The data download will not work unless you replace `"testuser"` with your actual user name. You will be prompted to enter your password.
-
-The [NatureCounts Introductory R Tutorial](#link) is where you should start if you're new to the `naturecounts` R package. It explains how to view, filter, manipulate, and visualize NatureCounts data. We recommend reviewing this tutorial before proceeding.
 
 Let's fetch the NatureCounts data.
 
@@ -99,7 +84,9 @@ Second, we look to find the numeric species id.
 search_species("cedar waxwing")
 ```
 
-Now we can download the data. Don't forget to change the `username`.
+Now we can download the data.
+
+> The data download will not work unless you replace `"testuser"` with your actual user name. You will be prompted to enter your password.
 
 
 ``` r
@@ -133,7 +120,7 @@ cedar_waxwing <- nc_data_dl(collections = "MBBA2PC", species = 16330, username =
 ##     Records 1 to 1659 / 1659
 ```
 
-Use the `format_dates` function to create date and day-of-year (doy) columns.
+Use the [format_dates](https://rdrr.io/github/BirdStudiesCanada/naturecounts/man/format_dates.html) function to create date and day-of-year (doy) columns.
 
 
 ``` r
@@ -189,24 +176,28 @@ ggplot(data = cedar_waxwing_june_sf) +
 ```
 
 ```
-##   |                                                                                                                                      |                                                                                                                              |   0%  |                                                                                                                                      |===============================================================                                                               |  50%  |                                                                                                                                      |==============================================================================================================================| 100%
-```
 
-```
-## ...complete!
-```
 
-```
-## Zoom: 5
-## Zoom: 5
-## Zoom: 5
-## Zoom: 5
-```
 
-![plot of chunk cedarwaxwing_map](figure/cedarwaxwing_map-1.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ![plot of chunk cedarwaxwing_map](figures/spatdatatutorial_cedarwaxwing_map-1.png)
 
 The map above provides a simple visualization of NatureCounts data over a broad spatial and temporal scale.
 
-**Congratulations!** You completed **Module 1: Spatial Data Exploration**. Here, you successfully visualized NatureCounts vector data over a wide spatial and temporal scale using a multi-panel plot. In [Module 2](02-ConservationAreas.Rmd), you can explore spatial data manipulation, apply geoprocessing functions, and visualize NatureCounts data within [Key Biodiversity Areas (KBAs)](https://kbacanada.org/about/) and [Priority Places - Open Government Portal](https://open.canada.ca/data/en/dataset/91219d24-e877-4c8a-8bd2-b2b662e573e0).
+**Congratulations!** You completed **Chapter 1: Spatial Data Exploration**. Here, you successfully visualized NatureCounts vector data over a wide spatial and temporal scale using a multi-panel plot. In [Chapter 2](02-SpatialFiltering.Rmd), you can explore spatial data manipulation, apply geoprocessing functions, and visualize NatureCounts data within [Key Biodiversity Areas (KBAs)](https://kbacanada.org/about/) and [Priority Places](https://open.canada.ca/data/en/dataset/91219d24-e877-4c8a-8bd2-b2b662e573e0).

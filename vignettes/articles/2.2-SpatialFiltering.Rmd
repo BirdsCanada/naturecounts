@@ -1,55 +1,31 @@
 ---
-title: "Module 2 - Conservation Areas"
-date: "2024-11-14"
+title: "02-SpatialFiltering"
+date: "2024-11-18"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Module 2 - Conservation Areas}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{02-SpatialFiltering}
+  %\VignetteEngine{knitr::rmarkdown} 
   %\VignetteEncoding{UTF-8}
 ---
 
 
 
-# Module 2: Conservation Areas: KBA's and Priority Places
+# Chapter 2: Spatial Filtering: KBA's and Priority Places
 
-##### Author: Dimitrios Markou
+##### Authors: Dimitrios Markou, Danielle Ethier
 
-The [NatureCounts_SpatialData_Tutorial](https://github.com/BirdsCanada/NatureCounts_SpatialData_Tutorial) modules aim to help users integrate NatureCounts data with spatial and environmental layers in R and meet their conservation and research goals. In [**Module 1: Spatial Data Exploration**](01-SpatialDataExploration.Rmd), you distinguished between spatial data types (vector and raster) and explored NatureCounts data using a spatio-temporal map.
-
-Mapping the spatial distribution of avian and environmental data is critical to our understanding of ecological processes. Conservation actions are most effective when focused on areas of ecological importance. These areas typically host high levels of biodiversity, concentrations of rare species, or species at risk. In this way, analyzing NatureCounts data within specific boundaries might be relevant to your work.
+| In [**Chapter 1: Spatial Data Exploration**](01-SpatialDataExploration.Rmd), you distinguished between spatial data types (vector and raster) and explored NatureCounts data using a spatio-temporal map. Now you are ready to focus your data exploration to a specific geographic area. Analyzing NatureCounts data within specific boundaries is relevant to many research application. Here we use Key Biodiversity Areas (KBA) and Priority Places as examples of research areas of interest.
 
 # 2.0 Learning Objectives
 
-By the end of **Module 2 - Conservation Areas**, users will know how to:
+By the end of **Chapter 2 - Spatial Filtering**, users will know how to:
 
--   Apply basic geoprocessing functions to spatial objects.
-
-<!-- -->
-
+-   Import and map polygon boundary files based on attributes
+-   Reproject NatureCounts data to the coordinate reference system of your spatial layer
+-   Spatially filter and map NatureCounts data for an area of interest
 -   Read, process, and visualize spatial vector data in R within areas of significant conservation potential: [Key Biodiversity Areas (KBAs)](https://kbacanada.org/about/) and [Priority Places for Species at Risk](https://environmental-maps.canada.ca/CWS_Storylines/index-ca-en.html#/en/priority_places-lieux_prioritaires).
 
-The data used in this tutorial are downloaded from NatureCounts using R, the [KBA Canada Map Viewer](https://kbacanada.org/explore/map-viewer/), and the [Priority Places - Open Government Portal](https://open.canada.ca/data/en/dataset/91219d24-e877-4c8a-8bd2-b2b662e573e0).
-
-This R tutorial requires the following **packages**:
-
-
-``` r
-library(naturecounts)
-library(sf)
-library(terra)
-library(tidyverse)
-library(dplyr)
-library(ggplot2)
-library(ggspatial)
-library(mapview)
-library(leaflet)
-library(leaflet.extras)
-library(leaflet.providers)
-```
-
-# 2.1 Key Biodiversity Areas
-
-#### *Example 2a* - You want to assess the spatial distribution of Wood Ducks (Ontario Breeding Bird Atlas data) across the KBAs found within the province.
+The data used in this tutorial are downloaded from NatureCounts, the [KBA Canada Map Viewer](https://kbacanada.org/explore/map-viewer/), and the [Priority Places - Open Government Portal](https://open.canada.ca/data/en/dataset/91219d24-e877-4c8a-8bd2-b2b662e573e0). You will save the downloaded shapefiles to your working directory.
 
 To view your working directory.
 
@@ -58,7 +34,25 @@ To view your working directory.
 getwd()
 ```
 
-It helps if you assign these files a meaningful name! We can read in our KBA polygons using the `sf` package once it is in your working directory.
+This R tutorial requires the following **packages**:
+
+
+``` r
+library(naturecounts)
+library(sf)
+library(tidyverse)
+library(mapview)
+library(leaflet)
+library(leaflet.extras)
+```
+
+# 2.1 Key Biodiversity Areas
+
+#### *Example 2a* - You are interested in assessing the spatial distribution of Wood Ducks (Ontario Breeding Bird Atlas data) across the KBAs found within the province of Ontario.
+
+Navigate the the [KBA Canada Map Viewer](https://kbacanada.org/explore/map-viewer/) and filter the data for Ontario using the left hand `Province/Territory` filter. Then select 'Download'. You will want to select both `csv` and `shp` for this example.
+
+We can read in our KBA polygons using the `sf` package once it is in your working directory. The downloaded files was renamed for this example so you will need to change the code to match your file name.
 
 
 ```
@@ -117,7 +111,7 @@ To visualize the **ontario_kba** data we can use `ggplot()`.
 
 
 ``` r
-ggplot() +
+ggplot() + 
   # Select the basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
   # Add the polygon data
@@ -130,42 +124,27 @@ ggplot() +
   theme(legend.position = "bottomright") +
   labs(title = "Key Biodiversity Areas (KBAs) of Ontario" ,
        x = "Longitude",
-       y = "Latitude")
-```
-
-```
-## Zoom: 4
-```
-
-```
-## Fetching 2 missing tiles
-```
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+       y = "Latitude") +
   addLegend(colors = c("red"),labels = c("Ontario KBAs"),position = "bottomright")
 ```
 
-Similarly, the package `mapview` (based on leaflet) can also be used to make interactive plots. We can represent specific attributes like so:
+```
+## Error in addLegend(colors = c("red"), labels = c("Ontario KBAs"), position = "bottomright"): argument "map" is missing, with no default
+```
+
+![plot of chunk ontario_kba](figures/spatdatatutorial_ontario_kba-1.png)
+
+We can also visualize the **ontario_kba** data with an interactive map, using the `leaflet` package.
+
+
+``` r
+leaflet(width = "100%") %>%
+  addTiles() %>%
+  addPolygons(data=ontario_kba,color = "black", weight = 2, smoothFactor = 1,opacity = 1.0, fillOpacity = 0.5, fillColor = "red") %>% addFullscreenControl() %>%
+  addLegend(colors = c("red"),labels = c("Ontario KBAs"),position = "bottomright")
+```
+
+Similarly, the package `mapview` (based on leaflet) can be used to make interactive plots. We can represent specific attributes like so:
 
 
 ``` r
@@ -195,7 +174,18 @@ View(meta_collections())
 search_species("wood duck")
 ```
 
-Then let's filter and download the NatureCounts data.
+```
+## # A tibble: 5 × 5
+##   species_id scientific_name                    english_name                          french_name                               taxon_group
+##        <int> <chr>                              <chr>                                 <chr>                                     <chr>      
+## 1        360 Aix sponsa                         Wood Duck                             Canard branchu                            BIRDS      
+## 2      40938 Aix sponsa x Anas platyrhynchos    Wood Duck x Mallard (hybrid)          Hybride Canard branchu x C. colvert       BIRDS      
+## 3      41197 Aix sponsa x Lophodytes cucullatus Wood Duck x Hooded Merganser (hybrid) Hybride Canard branchu x Harle couronné   BIRDS      
+## 4      45989 Aix sponsa x Mareca americana      Wood Duck x American Wigeon (hybrid)  Hybride Canard branchu x C. d'Amérique    BIRDS      
+## 5      47173 Tadorna tadorna x Aix sponsa       Common Shelduck x Wood Duck (hybrid)  Hybride Tadorne de Belon x Canard branchu BIRDS
+```
+
+Now we can download the NatureCounts data. Remember to change `testuser` to your personal username.
 
 
 ``` r
@@ -334,7 +324,7 @@ ggplot() +
 
 ![plot of chunk longpoint_kba](figures/spatdatatutorial_longpoint_kba-1.png)
 
-You can also apply `leaflet` to create an interactive map, using the `addPolygons()` `addCircleMarkers()` arguments.
+You can also apply `leaflet` to visualize the polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 
 
 ``` r
@@ -348,7 +338,9 @@ leaflet(width = "100%") %>%
   addLegend(colors = c("violet", "orange"), labels = c("Ontario KBA", "Wood Duck Observations"), position = "bottomright")
 ```
 
-After geoprocessing our data in R, we can write out any sf objects to Shapefiles on a disk, where the argument delete_layer = TRUE is used to overwrite a file.
+After geoprocessing our data, we can write out any sf objects to Shapefiles on a disk, where the argument delete_layer = TRUE is used to overwrite an existing file.
+
+> To execute this code chunk, remove the \#
 
 
 ``` r
@@ -358,6 +350,8 @@ After geoprocessing our data in R, we can write out any sf objects to Shapefiles
 # 2.2 Priority Places
 
 #### *Example 2b* - You want to assess the spatial distribution of Wood Ducks (Ontario Breeding Bird Atlas data) across the Long Point Walsingham Forest Priority Place.
+
+Navigate to [Priority Places - Open Government Portal](https://open.canada.ca/data/en/dataset/91219d24-e877-4c8a-8bd2-b2b662e573e0). Scroll down to the **Data and Resources** section and select the Priority Places file labeled `English`, `dataset`, and `FGDB/GDB`.
 
 First, lets create a path to our downloaded Priority Place file.
 
@@ -400,12 +394,12 @@ priori_place_polygons <- st_read(dsn = gdb_path, layer = "PriorityPlacesBoundary
 ## Projected CRS: NAD83 / Canada Atlas Lambert
 ```
 
-Were interested in the spatial distribution of Wood Ducks across the Long Point Walsingham Forest Priority Place. We'll use `dplyr` to filter based on a variable condition.
+Were interested in the spatial distribution of Wood Ducks across the Long Point Walsingham Forest Priority Place. We'll filter based on a variable condition.
 
 
 ``` r
 long_point_polygon <- priori_place_polygons %>%
-  dplyr::filter(Name == "Long Point Walsingham Forest") # filters based on multipolygon name 
+  filter(Name == "Long Point Walsingham Forest") # filters based on multipolygon name 
 ```
 
 Then reproject the Wood Duck data to match our Priority Place using `st_transform`.
@@ -430,15 +424,11 @@ wood_ducks_longpoint <- sf::st_intersection(long_point_polygon, atlas_on_sf)
 ## Error in eval(expr, envir, enclos): object 'atlas_on_sf' not found
 ```
 
-Finally, we'll transform our spatial objects one more time before visualizing them.
+Finally, we'll transform our spatial objects one more time before visualizing them with `leaflet`.
 
 
 ``` r
 long_point_polygon <- st_transform(long_point_polygon, crs = 4326)
-```
-
-
-``` r
 wood_ducks_longpoint <- st_transform(wood_ducks_longpoint, crs = 4326)
 ```
 
@@ -446,7 +436,7 @@ wood_ducks_longpoint <- st_transform(wood_ducks_longpoint, crs = 4326)
 ## Error in eval(expr, envir, enclos): object 'wood_ducks_longpoint' not found
 ```
 
-Use `ggplot` to visualize the polygon and point data.
+Use `ggplot` to visualize the polygon and point data. 
 
 
 ``` r
@@ -454,7 +444,7 @@ ggplot() +
   # Select a basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
   # Plot the Long Point polygon
-  geom_sf(data = long_point_polygon, aes(fill = "Long Point Walsingham Forest"), 
+  geom_sf(data = long_point_polygon, aes(fill = "Long Point Walsingham Forest"),  
           color = "black", size = 0.5, alpha = 0.5) +
   # Plot the Wood Duck observations
   geom_sf(data = wood_ducks_longpoint, aes(color = "Wood Duck Observations"), 
@@ -478,11 +468,27 @@ ggplot() +
 
 ![plot of chunk longpoint_prioriplace](figures/spatdatatutorial_longpoint_prioriplace-1.png)
 
-After geoprocessing our data in R, we can write out any sf objects to Shapefiles on a disk, where the argument delete_layer = TRUE is used to overwrite a file.
+You can also apply leaflet to visualize our polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
+
+
+``` r
+leaflet(width = "100%") %>%
+  addTiles() %>%
+  addPolygons(data = long_point_polygon, color = "black", weight = 2, smoothFactor = 1, 
+  opacity = 1.0, fillOpacity = 0.5, fillColor = "red") %>%
+  addCircleMarkers(data = wood_ducks_longpoint, radius = 5, color = "green", 
+                   stroke = FALSE, fillOpacity = 0.8) %>%
+  addFullscreenControl() %>%
+  addLegend(colors = c("red", "green"), labels = c("Long Point Walsingham Forest", "Wood Duck Observations"), position = "bottomright")
+```
+
+After geoprocessing our data, we can write out any sf objects to Shapefiles on a disk, where the argument delete_layer = TRUE is used to overwrite an existing file.
+
+> To execute this code chunk, remove the \#
 
 
 ``` r
 # st_write(wood_ducks_longpoint,"wood_ducks_longpoint.shp", driver = "ESRI Shapefile", delete_layer = TRUE)
 ```
 
-**Congratulations**! You completed **Module 2 - Spatial Data Manipulation: KBA's and Priority Places**. Here, you successfully filtered and visualized NatureCounts data using spatio-temporal, KBA, and Priority Place maps. In [Module 3](03-ClimateData.Rmd), you can explore more spatial data visualization while linking climate data to NatureCounts observations.
+**Congratulations**! You completed **Chapter 2 - Spatial Filtering: KBA's and Priority Places**. Here, you successfully filtered and visualized NatureCounts data. In [Chapter 3](03-ClimateData.Rmd), you can explore more spatial data visualization while linking climate data to NatureCounts observations.
