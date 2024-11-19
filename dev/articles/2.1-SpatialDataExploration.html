@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Module 1 - Spatial Data Exploration • naturecounts</title>
+<title>01-SpatialDataExploration • naturecounts</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Module 1 - Spatial Data Exploration">
+<meta property="og:title" content="01-SpatialDataExploration">
 <meta name="robots" content="noindex">
 </head>
 <body>
@@ -54,11 +54,9 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Module 1 - Spatial Data Exploration</h1>
-                        <h4 data-toc-skip class="author">Dimitrios
-Markou</h4>
+      <h1>01-SpatialDataExploration</h1>
             
-            <h4 data-toc-skip class="date">2024-11-11</h4>
+            <h4 data-toc-skip class="date">2024-11-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.1-SpatialDataExploration.Rmd" class="external-link"><code>vignettes/articles/2.1-SpatialDataExploration.Rmd</code></a></small>
       <div class="d-none name"><code>2.1-SpatialDataExploration.Rmd</code></div>
@@ -67,25 +65,26 @@ Markou</h4>
     
     
 <div class="section level2">
-<h2 id="module-1-spatial-data-exploration">Module 1: Spatial Data Exploration<a class="anchor" aria-label="anchor" href="#module-1-spatial-data-exploration"></a>
+<h2 id="chapter-1-spatial-data-exploration">Chapter 1: Spatial Data Exploration<a class="anchor" aria-label="anchor" href="#chapter-1-spatial-data-exploration"></a>
 </h2>
 <div class="section level6">
-<h6 id="author-dimitrios-markou">Author: Dimitrios Markou<a class="anchor" aria-label="anchor" href="#author-dimitrios-markou"></a>
+<h6 id="authors-dimitrios-markou-danielle-ethier">Authors: Dimitrios Markou, Danielle Ethier<a class="anchor" aria-label="anchor" href="#authors-dimitrios-markou-danielle-ethier"></a>
 </h6>
-<p>Research analysis often starts with fundamental questions: <em>Where
-is the data and how can we best prepare it for analysis?</em>
-Understanding data types and how-to visualize them are key to how we
-interact with and interpret data and identify areas for conservation
-action. The <a href="#id_0">NatureCounts_SpatialData_Tutorial</a> serves
-as a guide on how-to visualize and analyse NatureCounts, spatial, and
-environmental data in R to help users meet their conservation and
-research goals.</p>
+<div class="line-block">Exploring your data in a visual way is an
+important first step to any analysis. This chapter will give you a
+foundational understanding of how to work with your NatureCounts data
+spatially in R. This Chapter assumes that you have a basic understanding
+of how to access your data from NatureCounts. The <a href="https://github.com/BirdsCanada/NatureCounts_IntroTutorial.git" class="external-link">NatureCounts
+Introductory R Tutorial</a> is where you should start if you’re new to
+the <code>naturecounts</code> R package. It explains how to access,
+view, filter, manipulate, and visualize NatureCounts data. We recommend
+reviewing this tutorial before proceeding.</div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="learning-objectives">1.0 Learning Objectives<a class="anchor" aria-label="anchor" href="#learning-objectives"></a>
 </h2>
-<p>By the end of <strong>Module 1 - Spatial Data Exploration</strong>,
+<p>By the end of <strong>Chapter 1 - Spatial Data Exploration</strong>,
 users will know how to:</p>
 <ul>
 <li><p>Distinguish between types of spatial data (vector vs
@@ -98,15 +97,8 @@ raster)</p></li>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paleolimbot.github.io/ggspatial/" class="external-link">ggspatial</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/leaflet/" class="external-link">leaflet</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trafficonese/leaflet.extras" class="external-link">leaflet.extras</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/leaflet.providers/" class="external-link">leaflet.providers</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paleolimbot.github.io/ggspatial/" class="external-link">ggspatial</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="spatial-data-types">1.1 Spatial Data Types<a class="anchor" aria-label="anchor" href="#spatial-data-types"></a>
@@ -129,8 +121,7 @@ are always accompanied by files with <em>.dbf</em>, <em>.shx,</em> and
 <em>.prj</em> extensions.</p>
 <p>Raster data files are typically stored with TIFF or GeoTIFF files
 with a <em>(.tif)</em> or <em>(.tiff)</em> extension. Raster data
-manipulation will be in covered in subsequent chapters (see
-02-ClimateData and 03-EnvironmentalData).</p>
+manipulation will be in covered in subsequent chapters (see <a href="03-ClimateData.Rmd">Chapter 3: Climate Data</a>, <a href="">Chapter 4: Elevation Data</a>, <a href="05-LandcoverData.Rmd">Chapter 5: Landcover Data</a>, <a href="06-SatelliteImagery.Rmd">Chapter 6: Satellite Imagery</a>, and <a href="07-RasterSummaryStats">Chapter 7: RasterSummaryStats</a>).</p>
 <p>Vector and raster data may also be associated with <strong>attribute
 data</strong> or <strong>temporal data</strong>. Attribute data provides
 additional information on the characteristics of spatial features while
@@ -164,7 +155,7 @@ measurements</div>
 <strong>cheatsheat</strong> can be found <a href="https://github.com/r-spatial/sf" class="external-link">here</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="spatial-data-exploration-spatio-temporal-mapping">1.3 Spatial Data Exploration: Spatio-temporal mapping<a class="anchor" aria-label="anchor" href="#spatial-data-exploration-spatio-temporal-mapping"></a>
+<h2 id="spatio-temporal-mapping">1.3 Spatio-temporal Mapping<a class="anchor" aria-label="anchor" href="#spatio-temporal-mapping"></a>
 </h2>
 <div class="section level5">
 <h5 id="example-1---you-would-like-to-visualize-the-spatio-temporal-distribution-of-cedar-waxwing-observations-in-june-of-each-survey-year-using-data-from-the-maritimes-breeding-bird-atlas-2006-2010-">
@@ -172,18 +163,6 @@ measurements</div>
 distribution of Cedar Waxwing observations in June of each survey year
 using data from the Maritimes Breeding Bird Atlas (2006-2010).<a class="anchor" aria-label="anchor" href="#example-1---you-would-like-to-visualize-the-spatio-temporal-distribution-of-cedar-waxwing-observations-in-june-of-each-survey-year-using-data-from-the-maritimes-breeding-bird-atlas-2006-2010-"></a>
 </h5>
-<p>To download NatureCounts data you need to <a href="https://naturecounts.ca/nc/default/register.jsp" class="external-link">sign up</a> for a
-<strong>free</strong> account.</p>
-<blockquote>
-<p>The data download will not work unless you replace
-<code>"testuser"</code> with your actual user name. You will be prompted
-to enter your password.</p>
-</blockquote>
-<p>The <a href="#link">NatureCounts Introductory R Tutorial</a> is where
-you should start if you’re new to the <code>naturecounts</code> R
-package. It explains how to view, filter, manipulate, and visualize
-NatureCounts data. We recommend reviewing this tutorial before
-proceeding.</p>
 <p>Let’s fetch the NatureCounts data.</p>
 <p>First, we look to find the <code>collection</code> code for the
 Maritimes Breeding Bird Atlas.</p>
@@ -193,8 +172,12 @@ Maritimes Breeding Bird Atlas.</p>
 <p>Second, we look to find the numeric species id.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"cedar waxwing"</span><span class="op">)</span></span></code></pre></div>
-<p>Now we can download the data. Don’t forget to change the
-<code>username</code>.</p>
+<p>Now we can download the data.</p>
+<blockquote>
+<p>The data download will not work unless you replace
+<code>"testuser"</code> with your actual user name. You will be prompted
+to enter your password.</p>
+</blockquote>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cedar_waxwing</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"MBBA2PC"</span>, species <span class="op">=</span> <span class="fl">16330</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"spatial_data_tutorial"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Using filters: collections (MBBA2PC); species (16330); fields_set (BMDE2.00-min)</span></span></code></pre>
@@ -206,8 +189,8 @@ Maritimes Breeding Bird Atlas.</p>
 <span><span class="co">## Downloading records for each collection:</span></span></code></pre>
 <pre><code><span><span class="co">##   MBBA2PC</span></span></code></pre>
 <pre><code><span><span class="co">##     Records 1 to 1659 / 1659</span></span></code></pre>
-<p>Use the <code>format_dates</code> function to create date and
-day-of-year (doy) columns.</p>
+<p>Use the <a href="https://rdrr.io/github/BirdStudiesCanada/naturecounts/man/format_dates.html" class="external-link">format_dates</a>
+function to create date and day-of-year (doy) columns.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cedar_waxwing</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_dates.html">format_dates</a></span><span class="op">(</span><span class="va">cedar_waxwing</span><span class="op">)</span></span></code></pre></div>
 <p>Filter the data to only include observations from the month of
@@ -229,7 +212,7 @@ creating a multi-panel plot based on this discrete variable:</p>
 <span>  <span class="co"># Select a basemap</span></span>
 <span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_map_tile.html" class="external-link">annotation_map_tile</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"cartolight"</span>, zoom <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Plot the points, color-coded by survey_year</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/is.bool.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Facet by survey_year to create the multi-paneled map</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">survey_year</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Customize the color scale</span></span>
@@ -243,27 +226,22 @@ creating a multi-panel plot based on this discrete variable:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Cedar Waxwing June Observations by Survey Year"</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
 <span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Zoom: 5</span></span>
-<span><span class="co">## Zoom: 5</span></span>
-<span><span class="co">## Zoom: 5</span></span>
-<span><span class="co">## Zoom: 5</span></span>
-<span><span class="co">## Zoom: 5</span></span></code></pre>
+<pre><code><span><span class="co">## Zoom: 5</span></span></code></pre>
+<pre><code><span><span class="co">## Fetching 2 missing tiles</span></span></code></pre>
+<p>```</p>
 <div class="float">
-<img src="figure/cedarwaxwing_map-1.png" alt="plot of chunk cedarwaxwing_map"><div class="figcaption">plot of chunk cedarwaxwing_map</div>
-</div>
-<div class="float">
-<img src="figures%2Fspatdatatutorial_cedarwaxwing_map-1.png" alt="plot of chunk cedarwaxwing_map"><div class="figcaption">plot of chunk cedarwaxwing_map</div>
+<img src="figures/spatdatatutorial_cedarwaxwing_map-1.png" alt="plot of chunk cedarwaxwing_map"><div class="figcaption">plot of chunk cedarwaxwing_map</div>
 </div>
 <p>The map above provides a simple visualization of NatureCounts data
 over a broad spatial and temporal scale.</p>
-<p><strong>Congratulations!</strong> You completed <strong>Module 1:
+<p><strong>Congratulations!</strong> You completed <strong>Chapter 1:
 Spatial Data Exploration</strong>. Here, you successfully visualized
 NatureCounts vector data over a wide spatial and temporal scale using a
-multi-panel plot. In <a href="02-ConservationAreas.Rmd">Module 2</a>,
+multi-panel plot. In <a href="02-SpatialFiltering.Rmd">Chapter 2</a>,
 you can explore spatial data manipulation, apply geoprocessing
 functions, and visualize NatureCounts data within <a href="https://kbacanada.org/about/" class="external-link">Key Biodiversity Areas (KBAs)</a>
 and <a href="https://open.canada.ca/data/en/dataset/91219d24-e877-4c8a-8bd2-b2b662e573e0" class="external-link">Priority
-Places - Open Government Portal</a>.</p>
+Places</a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
