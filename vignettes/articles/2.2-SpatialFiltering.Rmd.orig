@@ -53,7 +53,11 @@ Navigate the the [KBA Canada Map Viewer](https://kbacanada.org/explore/map-viewe
 We can read in our KBA polygons using the `sf` package once it is in your working directory. The downloaded files was renamed for this example so you will need to change the code to match your file name.
 
 ```{r, eval = TRUE, echo = FALSE, message = FALSE} 
-ontario_kba <- sf::st_read("C:/Users/dimit/Birds Canada/Data/kba/provontario_kba/ontario_kba.shp")
+ontario_kba <- suppressWarnings(
+  suppressMessages(
+    sf::st_read("C:/Users/dimit/Birds Canada/Data/kba/provontario_kba/ontario_kba.shp", quiet = TRUE)
+  )
+)
 ```
 
 ```{r, eval = FALSE}
@@ -101,17 +105,16 @@ ggplot() +
   # Select the basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
   # Add the polygon data
-  geom_sf(data = ontario_kba, fill = "red", color = "black", 
+  geom_sf(data = ontario_kba, aes(fill = "Ontario KBAs"), color = "black", 
           size = 0.5, alpha = 0.5) +
   # Add the map components
   theme_minimal() + 
-  labs(fill = "Ontario KBAs") +
-  scale_fill_manual(values = c("red")) +
-  theme(legend.position = "bottomright") +
-  labs(title = "Key Biodiversity Areas (KBAs) of Ontario" ,
+  scale_fill_manual(values = c("Ontario KBAs" = "red")) + 
+  theme(legend.position = "bottom") +
+  labs(title = "Key Biodiversity Areas (KBAs) of Ontario",
        x = "Longitude",
-       y = "Latitude") +
-  addLegend(colors = c("red"),labels = c("Ontario KBAs"),position = "bottomright")
+       y = "Latitude",
+       fill = "Legend")
 ```
 
 ![plot of chunk ontario_kba](figures/spatdatatutorial_ontario_kba-1.png)
@@ -153,8 +156,8 @@ search_species("wood duck")
 
 Now we can download the NatureCounts data. Remember to change `testuser` to your personal username.
 
-```{r, eval = TRUE}
-atlas_on <- nc_data_dl(collections = "ONATLAS3PC", species = 360, username = "testuser", info = "spatial_data_tutorial")
+```{r, eval = TRUE, error = FALSE, message = FALSE}
+atlas_on <- nc_data_dl(collections = "OBBA2PC", species = 360, username = "testuser", info = "spatial_data_tutorial")
 ```
 
 We can then convert our NatureCounts data into a spatial object. To do so, we deploy the `st_as_sf` function and specify the coordinate reference system (CRS).
@@ -167,7 +170,7 @@ sf::st_crs(ontario_kba)
 
 Our KBA sf object is stored with World Geodetic System 1984 (WGS 84) coordinates, EPSG = 4326. Now we can convert our **atlas_on** dataframe to an sf object using the same CRS.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, error = FALSE, message = FALSE}
 atlas_on_sf <- sf::st_as_sf(atlas_on,
                         coords = c("longitude", "latitude"), crs = 4326)
 ```
@@ -186,19 +189,19 @@ ontario_kba <- sf::st_transform(ontario_kba, crs = 26916)
 
 It can also be used to ensure that the CRS of our spatial objects match.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, error = FALSE, message = FALSE}
 atlas_on_sf <- st_transform(atlas_on_sf, crs = st_crs(ontario_kba))
 ```
 
 To identify Wood Ducks observed across Ontario KBA's, we can apply the `st_intersection()` function.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, error = FALSE, message = FALSE}
 wood_ducks_kba <- sf::st_intersection(ontario_kba, atlas_on_sf)
 ```
 
 You will get a `warning` message, which you can safely ignore.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, error = FALSE, message = FALSE}
 # If need be, transform your spatial data back to EPSG:4326 to visualize with leaflet
 ontario_kba <- st_transform(ontario_kba, crs = 4326)
 wood_ducks_kba <- st_transform(wood_ducks_kba, crs = 4326)
@@ -206,14 +209,14 @@ wood_ducks_kba <- st_transform(wood_ducks_kba, crs = 4326)
 
 Using `ggplot`, we can visualize the polygon data and point data.
 
-```{r longpoint_kba, eval = TRUE, fig.cap = NULL}
+```{r longpoint_kba, eval = TRUE, fig.cap = NULL, error = FALSE, message = FALSE}
 ggplot() +
   # Select a basemap
   annotation_map_tile(type = "osm", zoom = NULL) +
   # Plot the filtered KBA polygon (ON001)
-  geom_sf(data = ontario_kba_LP, aes(fill = "Ontario KBA"), color = "black", size = 0.5, alpha = 0.5) +
+  geom_sf(data = ontario_kba, aes(fill = "Ontario KBA"), color = "black", size = 0.5, alpha = 0.5) +
   # Plot the Wood Duck observations that are within the KBA
-  geom_sf(data = wood_ducks_kba_LP, aes(color = "Wood Duck Observations"), size = 3, alpha = 0.8) +
+  geom_sf(data = wood_ducks_kba, aes(color = "Wood Duck Observations"), size = 3, alpha = 0.8) +
   # Custom fill and color for the legend
   scale_fill_manual(values = c("Ontario KBA" = "violet"), name = "Legend") +
   scale_color_manual(values = c("Wood Duck Observations" = "orange"), name = "Legend") +
@@ -227,7 +230,7 @@ ggplot() +
        y = "Latitude")
 ```
 
-![plot of chunk longpoint_kba](figures/spatdatatutorial_longpoint_kba-1.png)
+![plot of chunk longpoint_kba](figure/longpoint_kba-1.png)
 
 You can also apply `leaflet` to visualize the polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 
@@ -275,7 +278,7 @@ print(gdb_layers)
 
 To read in our spatial data object, we apply the `st_read` function and specify our desired data layer.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, error = FALSE, message = FALSE}
 priori_place_polygons <- st_read(dsn = gdb_path, layer = "PriorityPlacesBoundary")
 ```
 
@@ -288,26 +291,26 @@ long_point_polygon <- priori_place_polygons %>%
 
 Then reproject the Wood Duck data to match our Priority Place using `st_transform`.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, error = FALSE, message = FALSE}
 atlas_on_sf <- st_transform(atlas_on_sf, crs = st_crs(long_point_polygon))
 ```
 
 Next, we'll apply our geoprocessing function to find the Wood Duck observations that intersect with our chosen Priority Place.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, error = FALSE, message = FALSE}
 wood_ducks_longpoint <- sf::st_intersection(long_point_polygon, atlas_on_sf)
 ```
 
 Finally, we'll transform our spatial objects one more time before visualizing them with `leaflet`.
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, error = FALSE, message = FALSE}
 long_point_polygon <- st_transform(long_point_polygon, crs = 4326)
 wood_ducks_longpoint <- st_transform(wood_ducks_longpoint, crs = 4326)
 ```
 
 Use `ggplot` to visualize the polygon and point data. 
 
-```{r longpoint_prioriplace, eval = TRUE, fig.cap = NULL}
+```{r longpoint_prioriplace, eval = TRUE, fig.cap = NULL, error = FALSE, message = FALSE}
 ggplot() +
   # Select a basemap
   annotation_map_tile(type = "cartolight", zoom = NULL) +
@@ -330,7 +333,7 @@ ggplot() +
        y = "Latitude")
 ```
 
-![plot of chunk longpoint_prioriplace](figures/spatdatatutorial_longpoint_prioriplace-1.png)
+![plot of chunk longpoint_prioriplace](figure/longpoint_prioriplace-1.png)
 
 You can also apply leaflet to visualize our polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 
