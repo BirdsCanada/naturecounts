@@ -1,6 +1,6 @@
 ---
 title: "01-SpatialDataExploration"
-date: "2024-11-18"
+date: "2024-11-20"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{01-SpatialDataExploration}

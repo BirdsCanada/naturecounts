@@ -72,6 +72,7 @@ articles:
   contents:
   - '`articles/2.1-SpatialDataExploration`'
   - '`articles/2.2-SpatialFiltering`'
+  - '`articles/2.3-ClimateData`'
 - title: Additional Tutorials
   desc: How-to articles describing common tasks
   contents:
