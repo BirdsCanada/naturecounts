@@ -306,7 +306,13 @@ ggplot() +
 ![plot of chunk longpoint_kba](figure/longpoint_kba-1.png)
 
 ```
-##   |                                                                                                                                     |                                                                                                                             |   0%  |                                                                                                                                     |==============================================================                                                               |  50%  |                                                                                                                                     |=============================================================================================================================| 100%
+## 
+  |                                                                                                                                   
+  |                                                                                                                             |   0%
+  |                                                                                                                                   
+  |==============================================================                                                               |  50%
+  |                                                                                                                                   
+  |=============================================================================================================================| 100%
 ```
 
 ![plot of chunk longpoint_kba](figure/longpoint_kba-1.png)
@@ -439,34 +445,21 @@ ggplot() +
   labs(title = "Wood Duck Observations within Long Point Walsingham",
        x = "Longitude",
        y = "Latitude")
+       
 ```
-
 ![plot of chunk longpoint_prioriplace](figure/longpoint_prioriplace-1.png)
-
 ```
 
 
+You can also apply leaflet to visualize our polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
+leaflet(width = "100%") %>%
+  addTiles() %>%
+  addPolygons(data = long_point_polygon, color = "black", weight = 2, smoothFactor = 1, 
+  opacity = 1.0, fillOpacity = 0.5, fillColor = "red") %>%
+  addCircleMarkers(data = wood_ducks_longpoint, radius = 5, color = "green", 
+                   stroke = FALSE, fillOpacity = 0.8) %>%
   addFullscreenControl() %>%
   addLegend(colors = c("red", "green"), labels = c("Long Point Walsingham Forest", "Wood Duck Observations"), position = "bottomright")
 ```
