@@ -434,43 +434,31 @@ visualizing them with <code>leaflet</code>.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Wood Duck Observations within Long Point Walsingham"</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
-<span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span></code></pre></div>
+<span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span>
+<span>       </span></code></pre></div>
 <div class="float">
 <img src="figure/longpoint_prioriplace-1.png" alt="plot of chunk longpoint_prioriplace"><div class="figcaption">plot of chunk longpoint_prioriplace</div>
 </div>
-<pre><code><span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span>  <span class="fu"><a href="https://trafficonese.github.io/leaflet.extras/reference/fullscreen.html" class="external-link">addFullscreenControl</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/addLegend.html" class="external-link">addLegend</a></span><span class="op">(</span>colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Long Point Walsingham Forest"</span>, <span class="st">"Wood Duck Observations"</span><span class="op">)</span>, position <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span></span></code></pre>
-<p>After geoprocessing our data, we can write out any sf objects to
-Shapefiles on a disk, where the argument delete_layer = TRUE is used to
-overwrite an existing file.</p>
-<blockquote>
-<p>To execute this code chunk, remove the #</p>
-</blockquote>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># st_write(wood_ducks_longpoint,"wood_ducks_longpoint.shp", driver = "ESRI Shapefile", delete_layer = TRUE)</span></span></code></pre></div>
+<pre><code>
+
+You can also apply leaflet to visualize our polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
+</code></pre>
+<p>leaflet(width = “100%”) %&gt;% addTiles() %&gt;% addPolygons(data =
+long_point_polygon, color = “black”, weight = 2, smoothFactor = 1,
+opacity = 1.0, fillOpacity = 0.5, fillColor = “red”) %&gt;%
+addCircleMarkers(data = wood_ducks_longpoint, radius = 5, color =
+“green”, stroke = FALSE, fillOpacity = 0.8) %&gt;%
+addFullscreenControl() %&gt;% addLegend(colors = c(“red”, “green”),
+labels = c(“Long Point Walsingham Forest”, “Wood Duck Observations”),
+position = “bottomright”)</p>
+<pre><code>
+After geoprocessing our data, we can write out any sf objects to Shapefiles on a disk, where the argument delete_layer = TRUE is used to overwrite an existing file.
+
+&gt; To execute this code chunk, remove the \#
+
+
+``` r
+# st_write(wood_ducks_longpoint,"wood_ducks_longpoint.shp", driver = "ESRI Shapefile", delete_layer = TRUE)</code></pre>
 <p><strong>Congratulations</strong>! You completed <strong>Chapter 2 -
 Spatial Filtering: KBA’s and Priority Places</strong>. Here, you
 successfully filtered and visualized NatureCounts data. In <a href="03-ClimateData.Rmd">Chapter 3</a>, you can explore more spatial
