@@ -39,12 +39,12 @@ This tutorial utilizes the following bird occurrence, spatial, and climate data 
 
 This tutorial requires the following **packages**:
 
-```{r package library, eval = TRUE, warning = FALSE, message = FALSE}
-library(tidyverse)
+```{r package library, warning = FALSE, message = FALSE}
 library(naturecounts)
 library(sf)
 library(lubridate)
-library(raster)
+library(dplyr)
+library(ggplot2)
 library(terra)
 library(leaflet)
 
@@ -72,19 +72,23 @@ To download the NatureCounts data, you can specify the collection and species co
 
 > The data download will not work unless you replace `"testuser"` with your actual user name. You will be prompted to enter your password.
 
-```{r, eval = TRUE, error = FALSE, message = FALSE}
-whooping_crane_data <- nc_data_dl(collections = c("ABATLAS1", "ABATLAS2", "ABBIRDRECS"), species = 4030, username = "testuser", info = "spatial_data_tutorial")
+```{r, message = FALSE}
+whooping_crane_data <- nc_data_dl(
+  collections = c("ABATLAS1", "ABATLAS2", "ABBIRDRECS"), species = 4030, 
+  username = "testuser", info = "spatial_data_tutorial")
 ```
 
 eBird has the greatest number of Whooping Crane records, however, this collection comprise data of Access Level 4. If you wish to access this collection you must sign up for a free account and make a [data request](https://naturecounts.ca/nc/default/explore.jsp#table). Otherwise, you can carry forward with the tutorial without these data and skip this code chunk.
 
 ```{r, eval = FALSE}
-whooping_crane_data <- nc_data_dl(collections = c("ABATLAS1", "ABATLAS2", "ABBIRDRECS","EBIRD-CA-PR"), species = 4030, username = "testuser", info = "spatial_data_tutorial")
+whooping_crane_data <- nc_data_dl(
+  collections = c("ABATLAS1", "ABATLAS2", "ABBIRDRECS","EBIRD-CA-PR"), species = 4030, 
+  username = "testuser", info = "spatial_data_tutorial")
 ```
 
 Grouping the NatureCounts data might provide more meaningful insight on species occurrences at each site and how they might vary across time and space. To create date and doy columns and ensure that the ObservationCount column is in the correct **numeric** format we can apply the `format_dates` and `mutate` functions :
 
-```{r, eval = TRUE}
+```{r}
 whooping_crane_data <- whooping_crane_data %>%
   format_dates() %>% # create the date and doy columns 
   mutate(ObservationCount = as.numeric(ObservationCount)) # convert to numeric
@@ -101,7 +105,7 @@ species_occurrence_summary <- whooping_crane_data %>%
 
 Lastly, you can summarize the NatureCounts data once more to get the annual total counts of Whooping Cranes, say between 1985 and 2011. To do so, we can 1) produce a regular dataframe called **cranes_summary** by dropping the geometry column (`st_drop_geometry`) 2) create the **date** column using `lubridate` and group by year 3) calculate the **annual_count** by using the `summarise` and `sum` functions and 4) filter for NA values and by **year:**
 
-```{r, eval = TRUE}
+```{r}
 cranes_summary <- species_occurrence_summary %>%
   st_drop_geometry() %>%
   mutate(year = year(date)) %>%
@@ -118,14 +122,13 @@ cranes_summary
 
 First, let's take a look at the built in **stations** dataset:
 
-```{r, eval = TRUE}
-stations <- weathercan::stations()
-head(stations)
+```{r}
+stations()
 ```
 
 You are ready to download weather data! For the purpose of this tutorial, let's perform a smaller weather data download by specifying specific station IDs. The weather stations closest to Wood Buffalo National Park are BIRCH MOUNTAIN LO (station_id = 2481) and BUCKTON LO (station_id = 2486). These stations were identified using the the ECCC [search option](https://climate.weather.gc.ca/historical_data/search_historic_data_stations_e.html?searchType=stnProx&timeframe=1&txtRadius=25&selCity=&optProxType=park&selPark=57%7C39%7C112%7C0%7CWood+Buffalo+National+Park&txtCentralLatDeg=&txtCentralLatMin=&txtCentralLatSec=&txtCentralLongDeg=&txtCentralLongMin=&txtCentralLongSec=&txtLatDecDeg=&txtLongDecDeg=&optLimit=yearRange&StartYear=1840&EndYear=2024&Year=2024&Month=10&Day=1&selRowPerPage=25) which helps you search for historical weather data based on proximity to a city, coordinate, or National Park.
 
-```{r, eval = TRUE, error = FALSE, message = FALSE}
+```{r, message = FALSE}
 birch_station <- stations_search(name = "BIRCH MOUNTAIN LO", interval = "day")
 buckton_station <- stations_search(name = "BUCKTON LO", interval = "day")
 wood_buff_stations <- rbind(birch_station, buckton_station) # combine 
@@ -133,11 +136,11 @@ wood_buff_stations <- rbind(birch_station, buckton_station) # combine
 
 Now you can perform the weather data download (give it a few minutes).
 
-```{r, eval = TRUE, error = FALSE, message = FALSE}
+```{r, message = FALSE}
 weather <- weather_dl(station_ids = wood_buff_stations$station_id,
-                         start = "1985-01-01",
-                         end = "2011-12-31",
-                         interval = "day", quiet = TRUE)
+                      start = "1985-01-01",
+                      end = "2011-12-31",
+                      interval = "day", quiet = TRUE)
 ```
 
 NOTE - Larger data downloads can be performed based on filtered stations datasets as well as start, end, and interval specifications. Large historical weather downloads can take a while!
@@ -159,20 +162,20 @@ Here is an example where we filtered based on province, interval, station operat
 
 ```{r, eval = FALSE}
 # weather <- weather_dl(station_ids = prov_stations$station_id,
-                         # start = "2000-01-01",
-                         # end = "2023-12-31",
-                         # interval = "day", quiet = TRUE)
+#                       start = "2000-01-01",
+#                       end = "2023-12-31",
+#                       interval = "day", quiet = TRUE)
 ```
 
 Next, convert the date column to Date data type. This will allow you to apply more filters based on month and survey year:
 
-```{r, eval = TRUE}
+```{r}
 weather$date <- as.Date(weather$date)
 ```
 
 Finally, to summarize the weather data by calculating the annual mean summer temperature and precipitation we can use the familiar `filter`, `group_by`, and `summarise` functions:
 
-```{r, eval = TRUE}
+```{r}
 yearly_climate <- weather %>%
   filter(month(date) %in% 5:8) %>%  # Filter for summer months May (5) through August (8)
   group_by(year = year(date)) %>%   # Group by year
@@ -185,8 +188,8 @@ yearly_climate
 
 Now that you have prepared the NatureCounts and weathercan climate data you can combine the data together for analysis.
 
-```{r, eval = TRUE}
-cranes_climate_summary <- left_join(cranes_summary, yearly_climate, by="year")
+```{r}
+cranes_climate_summary <- left_join(cranes_summary, yearly_climate, by = "year")
 cranes_climate_summary
 ```
 
@@ -234,29 +237,29 @@ getwd()
 
 Now point the `list.file` to this directory using the sample code below.
 
-```{r, eval = TRUE, echo = FALSE, error = FALSE, message = FALSE}
-worldclim_list <- list.files(path = "C:/Users/dimit/Birds Canada/Data/worldclim", pattern = "\\.tif$", full.names = TRUE)
+```{r, echo = FALSE, message = FALSE}
+worldclim_list <- list.files(path = here::here("misc/Data/worldclim"), pattern = "\\.tif$", full.names = TRUE)
 
 # Read and stack the raster files
 worldclim_stack <- rast(worldclim_list)
 
 # Print information about the stack
-print(worldclim_stack)
+worldclim_stack
 ```
 
 ```{r, eval = FALSE}
-worldclim_list <- list.files(path = "C:/YOUR/PATH/HERE", pattern = "\\.tif$", full.names = TRUE)
+worldclim_list <- list.files(path = "YOUR/PATH/HERE", pattern = "\\.tif$", full.names = TRUE)
 
 # Read and stack the raster files
 worldclim_stack <- rast(worldclim_list)
 
 # Print information about the stack
-print(worldclim_stack)
+worldclim_stack
 ```
 
 Great! The raster stack which includes the 19 bio-climatic variables has been read into R successfully. We can simplify the layer names which represent each variable, respectively:
 
-```{r, eval = TRUE}
+```{r}
 names(worldclim_stack) <- paste0("bio", 1:19)
 ```
 
@@ -273,26 +276,28 @@ summary(worldclim_stack)
 
 Convert the **species_occurences_summary**, which summarizes species occurrence by SiteCode, into a spatial object using the `st_as_sf` function:
 
-```{r, eval = TRUE}
-cranes_sf <- sf::st_as_sf(species_occurrence_summary,
-                        coords = c("longitude", "latitude"), crs = 4326)
+```{r}
+cranes_sf <- st_as_sf(species_occurrence_summary,
+                      coords = c("longitude", "latitude"), crs = 4326)
 ```
 
 Extract the bio-climatic variable values for each bird observation site, respectively.
 
-```{r, eval = TRUE}
+```{r}
 bioclim_values <- extract(worldclim_stack, cranes_sf)
 ```
 
 Then combine the bio-climatic values with the NatureCounts data.
 
-```{r, eval = TRUE}
-bioclim_data <- cbind(cranes_sf, bioclim_values, longitude = species_occurrence_summary$longitude, latitude =  species_occurrence_summary$latitude)
+```{r}
+bioclim_data <- cbind(cranes_sf, bioclim_values, 
+                      longitude = species_occurrence_summary$longitude, 
+                      latitude =  species_occurrence_summary$latitude)
 ```
 
 Filter the data to only include observations made post 1970 to match the temporal resolution of the climate dataset:
 
-```{r, eval = TRUE}
+```{r}
 bioclim_data <- bioclim_data %>%
   mutate(date = as.Date(date)) %>%
   filter(year(date) >= "1970")
@@ -314,7 +319,7 @@ ggplot(data = bioclim_data, aes(x = bio1, y = total_count)) +
 
 Map the NatureCounts data by grouping it by **SiteCode**, sizing the points by **total_count** and colorizing them by a bio-climatic variable (**bio1**):
 
-```{r, eval = TRUE}
+```{r}
 bioclim_data <- st_transform(bioclim_data, crs = 4326)
 ```
 
@@ -343,7 +348,9 @@ leaflet(bioclim_data) %>%
     radius = ~pmin(pmax(sqrt(total_count) * scaling_factor, 3), 15),  # Scale and limit radius
     fillColor = ~pal(bio1),      # Color points by bio1
     color = "black", stroke = TRUE, fillOpacity = 0.8,
-    popup = ~paste0("<strong>SiteCode:</strong> ", SiteCode, "<br>", "<strong>Total Count:</strong> ", total_count, "<br>",      "<strong>Bio1:</strong> ", bio1) # creates info popup labels
+    popup = ~paste0("<strong>SiteCode:</strong> ", SiteCode, "<br>", 
+                    "<strong>Total Count:</strong> ", total_count, "<br>",      
+                    "<strong>Bio1:</strong> ", bio1) # creates info popup labels
   ) %>%
   addLegend(pal = pal, values = ~bio1, title = "Bio1", position = "bottomright") %>%
   addScaleBar(position = "bottomleft", options = scaleBarOptions(imperial = FALSE))
