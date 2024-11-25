@@ -1,3 +1,4 @@
 *.html
 #*.R
 region-spatial_files
+*.R
