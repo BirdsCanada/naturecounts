@@ -70,7 +70,9 @@ articles:
 - title: The NatureCounts Spatial Data Tutorial
   desc: A guide to help users work with NatureCounts and spatial data in R.
   contents:
-  - '`articles/2.1-ManipSpatialData`'
+  - '`articles/2.1-SpatialDataExploration`'
+  - '`articles/2.2-SpatialFiltering`'
+  - '`articles/2.3-ClimateData`'
 - title: Additional Tutorials
   desc: How-to articles describing common tasks
   contents:
