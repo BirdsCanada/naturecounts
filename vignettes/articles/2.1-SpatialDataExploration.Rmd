@@ -157,7 +157,6 @@ ggplot(data = cedar_waxwing_june_sf) +
   labs(title = "Cedar Waxwing June Observations by Survey Year",
        x = "Longitude",
        y = "Latitude")
-#> Loading required namespace: raster
 ```
 
 <img src="figures/nc_sp1_cedarwaxwing_map-1.png" alt="Five annual maps of Maritime Canada showing observations of cedar waxings 2006-2010"  />
