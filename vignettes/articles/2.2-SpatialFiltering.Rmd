@@ -1,6 +1,6 @@
 ---
 title: "02-SpatialFiltering"
-date: "2024-11-20"
+date: "2024-11-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{02-SpatialFiltering}
@@ -40,7 +40,9 @@ This R tutorial requires the following **packages**:
 ``` r
 library(naturecounts)
 library(sf)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(ggspatial)
 library(mapview)
 library(leaflet)
 library(leaflet.extras)
@@ -58,7 +60,7 @@ We can read in our KBA polygons using the `sf` package once it is in your workin
 
 
 ``` r
-ontario_kba <- sf::st_read("ontario_kba.shp")
+ontario_kba <- st_read("ontario_kba.shp")
 ```
 
 `sf` objects are stored in R as a spatial dataframe which contains the attribute table of the vector along with the geometry type. When we examine the dataframe, it looks like there are many duplicate entries including duplicate geometries (vertices). To clean this up, we can apply the `st_make_valid()` and `distinct()` functions to our spatial dataframe:
@@ -105,7 +107,7 @@ To visualize the **ontario_kba** data we can use `ggplot()`.
 ``` r
 ggplot() + 
   # Select the basemap
-  annotation_map_tile(type = "cartolight", zoom = NULL) +
+  annotation_map_tile(type = "cartolight", zoom = NULL, progress = "none") +
   # Add the polygon data
   geom_sf(data = ontario_kba, aes(fill = "Ontario KBAs"), color = "black", 
           size = 0.5, alpha = 0.5) +
@@ -119,45 +121,25 @@ ggplot() +
        fill = "Legend")
 ```
 
-```
-## Zoom: 4
-```
+<img src="figures/nc_sp2_ontario_kba-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"  />
 
-```
-## Fetching 2 missing tiles
-```
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+We can also visualize the **ontario_kba** data with an interactive map, using the `leaflet` package.
 
 
 ``` r
 leaflet(width = "100%") %>%
   addTiles() %>%
-  addPolygons(data=ontario_kba,color = "black", weight = 2, smoothFactor = 1,opacity = 1.0, fillOpacity = 0.5, fillColor = "red") %>% addFullscreenControl() %>%
-  addLegend(colors = c("red"),labels = c("Ontario KBAs"),position = "bottomright")
+  addPolygons(data = ontario_kba, color = "black", weight = 2, smoothFactor = 1, 
+              opacity = 1.0, fillOpacity = 0.5, fillColor = "red") %>% 
+  addFullscreenControl() %>%
+  addLegend(colors = c("red"),labels = c("Ontario KBAs"), position = "bottomright")
 ```
 
 Similarly, the package `mapview` (based on leaflet) can be used to make interactive plots. We can represent specific attributes like so:
 
 
 ``` r
-mapview::mapview(ontario_kba, zcol = "PercentProtected")
+mapview(ontario_kba, zcol = "PercentProtected")
 ```
 
 In this example, were interested in all the KBA polygons of Ontario. However, if you were working with a larger data set, it is possible to filter your dataframe to retrieve only specific polygons that meet certain criteria relevant to your research. To do so, we can apply filters based on a variable condition. For example, say we only wanted KBA's greater than 100km\^2 in size:
@@ -167,7 +149,7 @@ In this example, were interested in all the KBA polygons of Ontario. However, if
 
 ``` r
 # kba_name <- ontario_kba %>% 
-  # dplyr::filter(Area > 100) 
+  # filter(Area > 100) 
 ```
 
 Let's search NatureCounts for the Ontario Breeding Bird Atlas point count dataset using `meta_collections()` and the Wood Duck species ID using `search_species()`.
@@ -181,24 +163,22 @@ View(meta_collections())
 
 ``` r
 search_species("wood duck")
-```
-
-```
-## # A tibble: 5 × 5
-##   species_id scientific_name                    english_name                          french_name                           taxon_group
-##        <int> <chr>                              <chr>                                 <chr>                                 <chr>      
-## 1        360 Aix sponsa                         Wood Duck                             Canard branchu                        BIRDS      
-## 2      40938 Aix sponsa x Anas platyrhynchos    Wood Duck x Mallard (hybrid)          Hybride Canard branchu x C. colvert   BIRDS      
-## 3      41197 Aix sponsa x Lophodytes cucullatus Wood Duck x Hooded Merganser (hybrid) Hybride Canard branchu x Harle couro… BIRDS      
-## 4      45989 Aix sponsa x Mareca americana      Wood Duck x American Wigeon (hybrid)  Hybride Canard branchu x C. d'Amériq… BIRDS      
-## 5      47173 Tadorna tadorna x Aix sponsa       Common Shelduck x Wood Duck (hybrid)  Hybride Tadorne de Belon x Canard br… BIRDS
+#> # A tibble: 5 × 5
+#>   species_id scientific_name                    english_name                          french_name       taxon_group
+#>        <int> <chr>                              <chr>                                 <chr>             <chr>      
+#> 1        360 Aix sponsa                         Wood Duck                             Canard branchu    BIRDS      
+#> 2      40938 Aix sponsa x Anas platyrhynchos    Wood Duck x Mallard (hybrid)          Hybride Canard b… BIRDS      
+#> 3      41197 Aix sponsa x Lophodytes cucullatus Wood Duck x Hooded Merganser (hybrid) Hybride Canard b… BIRDS      
+#> 4      45989 Aix sponsa x Mareca americana      Wood Duck x American Wigeon (hybrid)  Hybride Canard b… BIRDS      
+#> 5      47173 Tadorna tadorna x Aix sponsa       Common Shelduck x Wood Duck (hybrid)  Hybride Tadorne … BIRDS
 ```
 
 Now we can download the NatureCounts data. Remember to change `testuser` to your personal username.
 
 
 ``` r
-atlas_on <- nc_data_dl(collections = "OBBA2PC", species = 360, username = "testuser", info = "spatial_data_tutorial")
+atlas_on <- nc_data_dl(collections = "OBBA2PC", species = 360, 
+                       username = "testuser", info = "spatial_data_tutorial")
 ```
 
 We can then convert our NatureCounts data into a spatial object. To do so, we deploy the `st_as_sf` function and specify the coordinate reference system (CRS).
@@ -207,49 +187,105 @@ The CRS of our KBA sf object can be returned with `st_crs()`.
 
 
 ``` r
-sf::st_crs(ontario_kba)
-```
-
-```
-## Coordinate Reference System:
-##   User input: WGS 84 
-##   wkt:
-## GEOGCRS["WGS 84",
-##     DATUM["World Geodetic System 1984",
-##         ELLIPSOID["WGS 84",6378137,298.257223563,
-##             LENGTHUNIT["metre",1]]],
-##     PRIMEM["Greenwich",0,
-##         ANGLEUNIT["degree",0.0174532925199433]],
-##     CS[ellipsoidal,2],
-##         AXIS["latitude",north,
-##             ORDER[1],
-##             ANGLEUNIT["degree",0.0174532925199433]],
-##         AXIS["longitude",east,
-##             ORDER[2],
-##             ANGLEUNIT["degree",0.0174532925199433]],
-##     ID["EPSG",4326]]
+st_crs(ontario_kba)
+#> Coordinate Reference System:
+#>   User input: WGS 84 
+#>   wkt:
+#> GEOGCRS["WGS 84",
+#>     DATUM["World Geodetic System 1984",
+#>         ELLIPSOID["WGS 84",6378137,298.257223563,
+#>             LENGTHUNIT["metre",1]]],
+#>     PRIMEM["Greenwich",0,
+#>         ANGLEUNIT["degree",0.0174532925199433]],
+#>     CS[ellipsoidal,2],
+#>         AXIS["latitude",north,
+#>             ORDER[1],
+#>             ANGLEUNIT["degree",0.0174532925199433]],
+#>         AXIS["longitude",east,
+#>             ORDER[2],
+#>             ANGLEUNIT["degree",0.0174532925199433]],
+#>     ID["EPSG",4326]]
 ```
 
 Our KBA sf object is stored with World Geodetic System 1984 (WGS 84) coordinates, EPSG = 4326. Now we can convert our **atlas_on** dataframe to an sf object using the same CRS.
 
 
 ``` r
-atlas_on_sf <- sf::st_as_sf(atlas_on,
+atlas_on_sf <- st_as_sf(atlas_on,
                         coords = c("longitude", "latitude"), crs = 4326)
 ```
 
 Now let's ensure that the conversion was successful. You'll notice a new geometry column where each observation is a point.
 
 
-``` r
-str(atlas_on_sf) # view the sf object
+```
+#> Classes 'sf' and 'data.frame':	290 obs. of  56 variables:
+#>  $ record_id              : int  10339750 10340180 10342681 10343644 10344845 10351428 10353184 10354352 10355078 10357496 ...
+#>  $ collection             : chr  "OBBA2PC" "OBBA2PC" "OBBA2PC" "OBBA2PC" ...
+#>  $ project_id             : int  1007 1007 1007 1007 1007 1007 1007 1007 1007 1007 ...
+#>  $ protocol_id            : logi  NA NA NA NA NA NA ...
+#>  $ protocol_type          : int  1 1 1 1 1 1 1 1 1 1 ...
+#>  $ species_id             : int  360 360 360 360 360 360 360 360 360 360 ...
+#>  $ statprov_code          : chr  "ON" "ON" "ON" "ON" ...
+#>  $ country_code           : chr  "CA" "CA" "CA" "CA" ...
+#>  $ SiteCode               : chr  "17NJ64-14" "17MJ97-10" "17NH47-23" "17NJ31-6" ...
+#>  $ bcr                    : int  13 13 13 13 13 13 13 12 13 13 ...
+#>  $ subnational2_code      : chr  "CA.ON.WL" "CA.ON.BC" "CA.ON.BN" "CA.ON.WT" ...
+#>  $ iba_site               : chr  "N/A" "N/A" "N/A" "N/A" ...
+#>  $ utm_square             : chr  "17TNJ64" "17TMJ97" "17TNH47" "17TNJ31" ...
+#>  $ survey_year            : int  2001 2001 2001 2001 2001 2001 2001 2001 2001 2001 ...
+#>  $ survey_month           : int  6 5 5 6 6 6 6 6 6 6 ...
+#>  $ survey_week            : int  3 4 4 3 1 4 4 1 4 2 ...
+#>  $ survey_day             : int  21 31 31 24 4 28 28 2 27 15 ...
+#>  $ breeding_rank          : logi  NA NA NA NA NA NA ...
+#>  $ GlobalUniqueIdentifier : chr  "URN:catalog:BSC-EOC:OBBA2PC:850-WODU" "URN:catalog:BSC-EOC:OBBA2PC:392-WODU" "URN:catalog:BSC-EOC:OBBA2PC:269-WODU" "URN:catalog:BSC-EOC:OBBA2PC:961-WODU" ...
+#>  $ CatalogNumber          : chr  "850-WODU" "392-WODU" "269-WODU" "961-WODU" ...
+#>  $ Locality               : logi  NA NA NA NA NA NA ...
+#>  $ TimeCollected          : chr  "5.7166667" "8.9333334" "7.1999998" "6.2833333" ...
+#>  $ CollectorNumber        : chr  "356" "266" "1530" "1335" ...
+#>  $ FieldNumber            : logi  NA NA NA NA NA NA ...
+#>  $ Remarks                : logi  NA NA NA NA NA NA ...
+#>  $ ProjectCode            : chr  "OBBA2" "OBBA2" "OBBA2" "OBBA2" ...
+#>  $ ProtocolType           : chr  "Point Count" "Point Count" "Point Count" "Point Count" ...
+#>  $ ProtocolCode           : chr  "PointCount" "PointCount" "PointCount" "PointCount" ...
+#>  $ ProtocolURL            : chr  "http://www.bsc-eoc.org/norac/atlascont.htm" "http://www.bsc-eoc.org/norac/atlascont.htm" "http://www.bsc-eoc.org/norac/atlascont.htm" "http://www.bsc-eoc.org/norac/atlascont.htm" ...
+#>  $ SurveyAreaIdentifier   : chr  "17NJ64-14" "17MJ97-10" "17NH47-23" "17NJ31-6" ...
+#>  $ SamplingEventIdentifier: chr  "850" "392" "269" "961" ...
+#>  $ SamplingEventStructure : logi  NA NA NA NA NA NA ...
+#>  $ RouteIdentifier        : chr  "17NJ64" "17MJ97" "17NH47" "17NJ31" ...
+#>  $ TimeObservationsStarted: logi  NA NA NA NA NA NA ...
+#>  $ TimeObservationsEnded  : logi  NA NA NA NA NA NA ...
+#>  $ DurationInHours        : chr  "0.08333333" "0.08333333" "0.08333333" "0.08333333" ...
+#>  $ TimeIntervalStarted    : chr  "5.7166667" "8.9333334" "7.1999998" "6.2833333" ...
+#>  $ TimeIntervalEnded      : logi  NA NA NA NA NA NA ...
+#>  $ TimeIntervalsAdditive  : logi  NA NA NA NA NA NA ...
+#>  $ NumberOfObservers      : logi  NA NA NA NA NA NA ...
+#>  $ NoObservations         : logi  NA NA NA NA NA NA ...
+#>  $ ObservationCount       : chr  "2" "1" "1" "3" ...
+#>  $ ObservationDescriptor  : chr  "Total count" "Total count" "Total count" "Total count" ...
+#>  $ ObservationCount2      : chr  NA "1" NA "3" ...
+#>  $ ObservationDescriptor2 : chr  "0-100 m" "0-100 m" "0-100 m" "0-100 m" ...
+#>  $ ObservationCount3      : chr  "2" NA "1" NA ...
+#>  $ ObservationDescriptor3 : chr  ">100 m" ">100 m" ">100 m" ">100 m" ...
+#>  $ ObservationCount4      : logi  NA NA NA NA NA NA ...
+#>  $ ObservationDescriptor4 : logi  NA NA NA NA NA NA ...
+#>  $ ObservationCount5      : logi  NA NA NA NA NA NA ...
+#>  $ ObservationDescriptor5 : logi  NA NA NA NA NA NA ...
+#>  $ ObservationCount6      : logi  NA NA NA NA NA NA ...
+#>  $ ObservationDescriptor6 : logi  NA NA NA NA NA NA ...
+#>  $ AllIndividualsReported : chr  "Yes" "Yes" "Yes" "Yes" ...
+#>  $ AllSpeciesReported     : chr  "Yes" "Yes" "Yes" "Yes" ...
+#>  $ geometry               :sfc_POINT of length 290; first list element:  'XY' num  -80.1 43.7
+#>  - attr(*, "sf_column")= chr "geometry"
+#>  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...
+#>   ..- attr(*, "names")= chr [1:55] "record_id" "collection" "project_id" "protocol_id" ...
 ```
 
 The `st_transform()` function can be applied to project our spatial object using a different CRS like NAD83 / UTM zone 16N (EPSG = 26916).
 
 
 ``` r
-ontario_kba <- sf::st_transform(ontario_kba, crs = 26916) 
+ontario_kba <- st_transform(ontario_kba, crs = 26916) 
 ```
 
 It can also be used to ensure that the CRS of our spatial objects match.
@@ -263,11 +299,8 @@ To identify Wood Ducks observed across Ontario KBA's, we can apply the `st_inter
 
 
 ``` r
-wood_ducks_kba <- sf::st_intersection(ontario_kba, atlas_on_sf)
-```
-
-```
-## Warning: attribute variables are assumed to be spatially constant throughout all geometries
+wood_ducks_kba <- st_intersection(ontario_kba, atlas_on_sf)
+#> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 ```
 
 You will get a `warning` message, which you can safely ignore.
@@ -285,7 +318,7 @@ Using `ggplot`, we can visualize the polygon data and point data.
 ``` r
 ggplot() +
   # Select a basemap
-  annotation_map_tile(type = "osm", zoom = NULL) +
+  annotation_map_tile(type = "osm", zoom = NULL, progress = "none") +
   # Plot the filtered KBA polygon (ON001)
   geom_sf(data = ontario_kba, aes(fill = "Ontario KBA"), color = "black", size = 0.5, alpha = 0.5) +
   # Plot the Wood Duck observations that are within the KBA
@@ -303,19 +336,7 @@ ggplot() +
        y = "Latitude")
 ```
 
-![plot of chunk longpoint_kba](figure/longpoint_kba-1.png)
-
-```
-## 
-  |                                                                                                                                   
-  |                                                                                                                             |   0%
-  |                                                                                                                                   
-  |==============================================================                                                               |  50%
-  |                                                                                                                                   
-  |=============================================================================================================================| 100%
-```
-
-![plot of chunk longpoint_kba](figure/longpoint_kba-1.png)
+<img src="figures/nc_sp2_longpoint_kba-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"  />
 
 You can also apply `leaflet` to visualize the polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 
@@ -324,11 +345,13 @@ You can also apply `leaflet` to visualize the polygon data and point data, using
 leaflet(width = "100%") %>%
   addTiles() %>%
   addPolygons(data = ontario_kba, color = "black", weight = 2, smoothFactor = 1, 
-  opacity = 1.0, fillOpacity = 0.5, fillColor = "violet") %>%
+              opacity = 1.0, fillOpacity = 0.5, fillColor = "violet") %>%
   addCircleMarkers(data = wood_ducks_kba, radius = 3, color = "orange", 
                    stroke = FALSE, fillOpacity = 0.8) %>%
   addFullscreenControl() %>%
-  addLegend(colors = c("violet", "orange"), labels = c("Ontario KBA", "Wood Duck Observations"), position = "bottomright")
+  addLegend(colors = c("violet", "orange"), 
+            labels = c("Ontario KBA", "Wood Duck Observations"), 
+            position = "bottomright")
 ```
 
 After geoprocessing our data, we can write out any sf objects to Shapefiles on a disk, where the argument delete_layer = TRUE is used to overwrite an existing file.
@@ -361,14 +384,11 @@ Then, let's inspect the spatial data.
 ``` r
 gdb_layers <- st_layers(gdb_path)
 print(gdb_layers)
-```
-
-```
-## Driver: OpenFileGDB 
-## Available layers:
-##               layer_name geometry_type features fields                     crs_name
-## 1 PriorityPlacesBoundary Multi Polygon       11     11 NAD83 / Canada Atlas Lambert
-## 2  PriorityPlacesProject   Multi Point       89     13 NAD83 / Canada Atlas Lambert
+#> Driver: OpenFileGDB 
+#> Available layers:
+#>               layer_name geometry_type features fields                     crs_name
+#> 1 PriorityPlacesBoundary Multi Polygon       11     11 NAD83 / Canada Atlas Lambert
+#> 2  PriorityPlacesProject   Multi Point       89     13 NAD83 / Canada Atlas Lambert
 ```
 
 To read in our spatial data object, we apply the `st_read` function and specify our desired data layer.
@@ -376,15 +396,14 @@ To read in our spatial data object, we apply the `st_read` function and specify 
 
 ``` r
 priori_place_polygons <- st_read(dsn = gdb_path, layer = "PriorityPlacesBoundary")
-```
-
-```
-## Reading layer `PriorityPlacesBoundary' from data source `C:\Users\dimit\Birds Canada\Data\priority_places\priorityplaces.gdb' using driver `OpenFileGDB'
-## Simple feature collection with 11 features and 11 fields
-## Geometry type: MULTIPOLYGON
-## Dimension:     XY
-## Bounding box:  xmin: -2135754 ymin: -586679 xmax: 2450963 ymax: 2554209
-## Projected CRS: NAD83 / Canada Atlas Lambert
+#> Reading layer `PriorityPlacesBoundary' from data source 
+#>   `/home/steffi/Projects/Business/Birds Canada/NatureCounts/naturecounts/misc/Data/priority_places/priorityplaces.gdb' 
+#>   using driver `OpenFileGDB'
+#> Simple feature collection with 11 features and 11 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -2135754 ymin: -586679 xmax: 2450963 ymax: 2554209
+#> Projected CRS: NAD83 / Canada Atlas Lambert
 ```
 
 Were interested in the spatial distribution of Wood Ducks across the Long Point Walsingham Forest Priority Place. We'll filter based on a variable condition.
@@ -406,11 +425,8 @@ Next, we'll apply our geoprocessing function to find the Wood Duck observations 
 
 
 ``` r
-wood_ducks_longpoint <- sf::st_intersection(long_point_polygon, atlas_on_sf)
-```
-
-```
-## Warning: attribute variables are assumed to be spatially constant throughout all geometries
+wood_ducks_longpoint <- st_intersection(long_point_polygon, atlas_on_sf)
+#> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 ```
 
 Finally, we'll transform our spatial objects one more time before visualizing them with `leaflet`.
@@ -427,7 +443,7 @@ Use `ggplot` to visualize the polygon and point data.
 ``` r
 ggplot() +
   # Select a basemap
-  annotation_map_tile(type = "cartolight", zoom = NULL) +
+  annotation_map_tile(type = "cartolight", zoom = NULL, progress = "none") +
   # Plot the Long Point polygon
   geom_sf(data = long_point_polygon, aes(fill = "Long Point Walsingham Forest"),  
           color = "black", size = 0.5, alpha = 0.5) +
@@ -445,23 +461,26 @@ ggplot() +
   labs(title = "Wood Duck Observations within Long Point Walsingham",
        x = "Longitude",
        y = "Latitude")
-       
-```
-![plot of chunk longpoint_prioriplace](figure/longpoint_prioriplace-1.png)
 ```
 
+<img src="figures/nc_sp2_longpoint_prioriplace-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"  />
+
+![plot of chunk longpoint_prioriplace](figure/longpoint_prioriplace-1.png)
 
 You can also apply leaflet to visualize our polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 
-```
+
+``` r
 leaflet(width = "100%") %>%
   addTiles() %>%
-  addPolygons(data = long_point_polygon, color = "black", weight = 2, smoothFactor = 1, 
-  opacity = 1.0, fillOpacity = 0.5, fillColor = "red") %>%
+  addPolygons(data = long_point_polygon, color = "black", weight = 2, 
+              smoothFactor = 1, opacity = 1.0, fillOpacity = 0.5, fillColor = "red") %>%
   addCircleMarkers(data = wood_ducks_longpoint, radius = 5, color = "green", 
                    stroke = FALSE, fillOpacity = 0.8) %>%
   addFullscreenControl() %>%
-  addLegend(colors = c("red", "green"), labels = c("Long Point Walsingham Forest", "Wood Duck Observations"), position = "bottomright")
+  addLegend(colors = c("red", "green"), 
+            labels = c("Long Point Walsingham Forest", "Wood Duck Observations"), 
+            position = "bottomright")
 ```
 
 After geoprocessing our data, we can write out any sf objects to Shapefiles on a disk, where the argument delete_layer = TRUE is used to overwrite an existing file.
