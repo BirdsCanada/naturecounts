@@ -8,6 +8,17 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  # For pre-compiling and pkgdown (relative to pkg home)
+  fig.path = "vignettes/articles/figures/nc_sp1_",
+  dpi = 150
+)
+```
+
 # Chapter 1: Spatial Data Exploration
 
 ##### Authors: Dimitrios Markou, Danielle Ethier
@@ -113,7 +124,7 @@ cedar_waxwing_june_sf <- st_as_sf(cedar_waxwing_june,
 
 Finally, use `ggplot2` to visualize the spatio-temporal distribution of Cedar Waxwing observations across the Maritime provinces by color-coding the data points by **survey_year** and creating a multi-panel plot based on this discrete variable:
 
-```{r cedarwaxwing_map, eval = TRUE, warning = FALSE, error = FALSE, fig.cap = NULL}
+```{r cedarwaxwing_map, warning = FALSE, fig.cap = "", fig.alt = "Five annual maps of Maritime Canada showing observations of cedar waxings 2006-2010"}
 ggplot(data = cedar_waxwing_june_sf) +
   # Select a basemap
   annotation_map_tile(type = "cartolight", zoom = NULL, progress = "none") +
@@ -133,8 +144,6 @@ ggplot(data = cedar_waxwing_june_sf) +
        x = "Longitude",
        y = "Latitude")
 ```
-
-![plot of chunk cedarwaxwing_map](figures/spatdatatutorial_cedarwaxwing_map-1.png)
 
 The map above provides a simple visualization of NatureCounts data over a broad spatial and temporal scale.
 

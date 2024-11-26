@@ -8,7 +8,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  # For pre-compiling and pkgdown (relative to pkg home)
+  fig.path = "vignettes/articles/figures/nc_sp2_",
+  dpi = 150
+)
+```
 
 # Chapter 2: Spatial Filtering: KBA's and Priority Places
 
@@ -99,7 +107,7 @@ ontario_kba <- full_join(ontario_kba, kba_attributes, by = "SiteCode")
 
 To visualize the **ontario_kba** data we can use `ggplot()`.
 
-```{r ontario_kba, eval = TRUE, fig.cap = NULL}
+```{r ontario_kba, fig.alt = "Map showing key biodiversity areas in Ontario, outlined in pink", fig.cap = ""}
 ggplot() + 
   # Select the basemap
   annotation_map_tile(type = "cartolight", zoom = NULL, progress = "none") +
@@ -115,8 +123,6 @@ ggplot() +
        y = "Latitude",
        fill = "Legend")
 ```
-
-![plot of chunk ontario_kba](figures/spatdatatutorial_ontario_kba-1.png)
 
 We can also visualize the **ontario_kba** data with an interactive map, using the `leaflet` package.
 
@@ -211,7 +217,7 @@ wood_ducks_kba <- st_transform(wood_ducks_kba, crs = 4326)
 
 Using `ggplot`, we can visualize the polygon data and point data.
 
-```{r longpoint_kba, eval = TRUE, fig.cap = NULL, error = FALSE, message = FALSE}
+```{r longpoint_kba, fig.alt = "Map showing key biodiversity areas in Ontario, outlined in pink", fig.cap = "", message = FALSE}
 ggplot() +
   # Select a basemap
   annotation_map_tile(type = "osm", zoom = NULL, progress = "none") +
@@ -231,8 +237,6 @@ ggplot() +
        x = "Longitude",
        y = "Latitude")
 ```
-
-![plot of chunk longpoint_kba](figure/longpoint_kba-1.png)
 
 You can also apply `leaflet` to visualize the polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 
@@ -314,7 +318,7 @@ wood_ducks_longpoint <- st_transform(wood_ducks_longpoint, crs = 4326)
 
 Use `ggplot` to visualize the polygon and point data. 
 
-```{r longpoint_prioriplace, eval = TRUE, fig.cap = NULL, error = FALSE, message = FALSE}
+```{r longpoint_prioriplace, fig.alt = "Map showing key biodiversity areas in Ontario, outlined in pink", fig.cap = "", message = FALSE}
 ggplot() +
   # Select a basemap
   annotation_map_tile(type = "cartolight", zoom = NULL, progress = "none") +
