@@ -1,12 +1,15 @@
 ---
 title: "01-SpatialDataExploration"
-date: "2024-11-20"
+date: "2024-11-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{01-SpatialDataExploration}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+
+
 
 # Chapter 1: Spatial Data Exploration
 
@@ -30,7 +33,8 @@ This R tutorial requires the following **packages**:
 ``` r
 library(naturecounts)
 library(sf)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 library(ggspatial)
 ```
 
@@ -82,6 +86,11 @@ Second, we look to find the numeric species id.
 
 ``` r
 search_species("cedar waxwing")
+#> # A tibble: 2 × 5
+#>   species_id scientific_name              english_name           french_name                    taxon_group
+#>        <int> <chr>                        <chr>                  <chr>                          <chr>      
+#> 1      16330 Bombycilla cedrorum          Cedar Waxwing          Jaseur d'Amérique              BIRDS      
+#> 2      40749 Bombycilla garrulus/cedrorum Bohemian/Cedar Waxwing Jaseur boréal ou J. d'Amérique BIRDS
 ```
 
 Now we can download the data.
@@ -90,34 +99,17 @@ Now we can download the data.
 
 
 ``` r
-cedar_waxwing <- nc_data_dl(collections = "MBBA2PC", species = 16330, username = "testuser", info = "spatial_data_tutorial")
-```
-
-```
-## Using filters: collections (MBBA2PC); species (16330); fields_set (BMDE2.00-min)
-```
-
-```
-## Collecting available records...
-```
-
-```
-##   collection nrecords
-## 1    MBBA2PC     1659
-## Total records: 1,659
-```
-
-```
-## 
-## Downloading records for each collection:
-```
-
-```
-##   MBBA2PC
-```
-
-```
-##     Records 1 to 1659 / 1659
+cedar_waxwing <- nc_data_dl(collections = "MBBA2PC", species = 16330, 
+                            username = "testuser", info = "spatial_data_tutorial")
+#> Using filters: collections (MBBA2PC); species (16330); fields_set (BMDE2.00-min)
+#> Collecting available records...
+#>   collection nrecords
+#> 1    MBBA2PC     1659
+#> Total records: 1,659
+#> 
+#> Downloading records for each collection:
+#>   MBBA2PC
+#>     Records 1 to 1659 / 1659
 ```
 
 Use the [format_dates](https://rdrr.io/github/BirdStudiesCanada/naturecounts/man/format_dates.html) function to create date and day-of-year (doy) columns.
@@ -139,8 +131,8 @@ Convert the NatureCounts data to a spatial object using the point count coordina
 
 
 ``` r
-cedar_waxwing_june_sf <- sf::st_as_sf(cedar_waxwing_june,
-                        coords = c("longitude", "latitude"), crs = 4326)
+cedar_waxwing_june_sf <- st_as_sf(cedar_waxwing_june,
+                                  coords = c("longitude", "latitude"), crs = 4326)
 ```
 
 Finally, use `ggplot2` to visualize the spatio-temporal distribution of Cedar Waxwing observations across the Maritime provinces by color-coding the data points by **survey_year** and creating a multi-panel plot based on this discrete variable:
@@ -149,7 +141,7 @@ Finally, use `ggplot2` to visualize the spatio-temporal distribution of Cedar Wa
 ``` r
 ggplot(data = cedar_waxwing_june_sf) +
   # Select a basemap
-  annotation_map_tile(type = "cartolight", zoom = NULL) +
+  annotation_map_tile(type = "cartolight", zoom = NULL, progress = "none") +
   # Plot the points, color-coded by survey_year
   geom_sf(aes(color = as.factor(survey_year)), size = 1) +
   # Facet by survey_year to create the multi-paneled map
@@ -165,38 +157,10 @@ ggplot(data = cedar_waxwing_june_sf) +
   labs(title = "Cedar Waxwing June Observations by Survey Year",
        x = "Longitude",
        y = "Latitude")
+#> Loading required namespace: raster
 ```
 
-```
-## Zoom: 5
-```
-
-```
-## Fetching 2 missing tiles
-```
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-![plot of chunk cedarwaxwing_map](figures/spatdatatutorial_cedarwaxwing_map-1.png)
+<img src="figures/nc_sp1_cedarwaxwing_map-1.png" alt="Five annual maps of Maritime Canada showing observations of cedar waxings 2006-2010"  />
 
 The map above provides a simple visualization of NatureCounts data over a broad spatial and temporal scale.
 

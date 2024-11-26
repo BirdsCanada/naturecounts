@@ -1,6 +1,6 @@
 ---
 title: "03-ClimateData"
-date: "2024-11-20"
+date: "2024-11-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{03-ClimateData}
@@ -39,18 +39,20 @@ This tutorial requires the following **packages**:
 
 
 ``` r
-library(tidyverse)
 library(naturecounts)
 library(sf)
 library(lubridate)
-library(raster)
+library(dplyr)
+library(ggplot2)
 library(terra)
 library(leaflet)
 
-#since weathercan is not available in the recent version of R, we install the package a little differently
-#install.packages("weathercan", 
-#                 repos = c("https://ropensci.r-universe.dev", 
-#                           "https://cloud.r-project.org"))
+# weathercan is in the R-Universe rather than on CRAN, 
+# so we install the package a little differently
+#
+# install.packages("weathercan",
+#                  repos = c("https://ropensci.r-universe.dev",
+#                            "https://cloud.r-project.org"))
 
 library(weathercan)
 ```
@@ -75,14 +77,18 @@ To download the NatureCounts data, you can specify the collection and species co
 
 
 ``` r
-whooping_crane_data <- nc_data_dl(collections = c("ABATLAS1", "ABATLAS2", "ABBIRDRECS"), species = 4030, username = "testuser", info = "spatial_data_tutorial")
+whooping_crane_data <- nc_data_dl(
+  collections = c("ABATLAS1", "ABATLAS2", "ABBIRDRECS"), species = 4030, 
+  username = "testuser", info = "spatial_data_tutorial")
 ```
 
 eBird has the greatest number of Whooping Crane records, however, this collection comprise data of Access Level 4. If you wish to access this collection you must sign up for a free account and make a [data request](https://naturecounts.ca/nc/default/explore.jsp#table). Otherwise, you can carry forward with the tutorial without these data and skip this code chunk.
 
 
 ``` r
-whooping_crane_data <- nc_data_dl(collections = c("ABATLAS1", "ABATLAS2", "ABBIRDRECS","EBIRD-CA-PR"), species = 4030, username = "testuser", info = "spatial_data_tutorial")
+whooping_crane_data <- nc_data_dl(
+  collections = c("ABATLAS1", "ABATLAS2", "ABBIRDRECS","EBIRD-CA-PR"), species = 4030, 
+  username = "testuser", info = "spatial_data_tutorial")
 ```
 
 Grouping the NatureCounts data might provide more meaningful insight on species occurrences at each site and how they might vary across time and space. To create date and doy columns and ensure that the ObservationCount column is in the correct **numeric** format we can apply the `format_dates` and `mutate` functions :
@@ -102,10 +108,8 @@ species_occurrence_summary <- whooping_crane_data %>%
   group_by(SiteCode, date, longitude, latitude) %>%
   summarise(total_count = sum(as.numeric(ObservationCount), na.rm = TRUE)) %>%
   ungroup()
-```
-
-```
-## `summarise()` has grouped output by 'SiteCode', 'date', 'longitude'. You can override using the `.groups` argument.
+#> `summarise()` has grouped output by 'SiteCode', 'date', 'longitude'. You can override using the `.groups`
+#> argument.
 ```
 
 Lastly, you can summarize the NatureCounts data once more to get the annual total counts of Whooping Cranes, say between 1985 and 2011. To do so, we can 1) produce a regular dataframe called **cranes_summary** by dropping the geometry column (`st_drop_geometry`) 2) create the **date** column using `lubridate` and group by year 3) calculate the **annual_count** by using the `summarise` and `sum` functions and 4) filter for NA values and by **year:**
@@ -120,23 +124,20 @@ cranes_summary <- species_occurrence_summary %>%
   filter(!is.na(year)) %>%
   filter(year >= 1985 & year <= 2011)
 cranes_summary
-```
-
-```
-## # A tibble: 11 × 2
-##     year annual_count
-##    <dbl>        <dbl>
-##  1  1987            0
-##  2  1988            0
-##  3  1990            0
-##  4  1991            0
-##  5  1996            1
-##  6  2000           24
-##  7  2001           14
-##  8  2002           26
-##  9  2003           14
-## 10  2004           18
-## 11  2005          180
+#> # A tibble: 11 × 2
+#>     year annual_count
+#>    <dbl>        <dbl>
+#>  1  1987            0
+#>  2  1988            0
+#>  3  1990            0
+#>  4  1991            0
+#>  5  1996            1
+#>  6  2000           24
+#>  7  2001           14
+#>  8  2002           26
+#>  9  2003           14
+#> 10  2004           18
+#> 11  2005          180
 ```
 
 # 3.2 Weathercan (Vector) Data
@@ -147,28 +148,22 @@ First, let's take a look at the built in **stations** dataset:
 
 
 ``` r
-stations <- weathercan::stations()
-```
-
-```
-## The stations data frame hasn't been updated in over 4 weeks. Consider running `stations_dl()` to check for updates and make sure you have the most recent stations list available
-```
-
-``` r
-head(stations)
-```
-
-```
-## # A tibble: 6 × 16
-##   prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz      interval start   end normals normals_1981_2010
-##   <chr> <chr>                    <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr>   <chr>    <dbl> <dbl> <lgl>   <lgl>            
-## 1 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GM… day       1908  1922 FALSE   FALSE            
-## 2 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GM… hour        NA    NA FALSE   FALSE            
-## 3 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GM… month     1908  1922 FALSE   FALSE            
-## 4 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GM… day       1978  1979 FALSE   FALSE            
-## 5 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GM… hour        NA    NA FALSE   FALSE            
-## 6 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GM… month     1978  1979 FALSE   FALSE            
-## # ℹ 1 more variable: normals_1971_2000 <lgl>
+stations()
+#> # A tibble: 26,382 × 17
+#>    prov  station_name       station_id climate_id WMO_id TC_id   lat   lon  elev tz    interval start   end normals
+#>    <chr> <chr>                   <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr> <chr>    <dbl> <dbl> <lgl>  
+#>  1 AB    DAYSLAND                 1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… day       1908  1922 FALSE  
+#>  2 AB    DAYSLAND                 1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… hour        NA    NA FALSE  
+#>  3 AB    DAYSLAND                 1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… month     1908  1922 FALSE  
+#>  4 AB    EDMONTON CORONATI…       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… day       1978  1979 FALSE  
+#>  5 AB    EDMONTON CORONATI…       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… hour        NA    NA FALSE  
+#>  6 AB    EDMONTON CORONATI…       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… month     1978  1979 FALSE  
+#>  7 AB    FLEET                    1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… day       1987  1990 FALSE  
+#>  8 AB    FLEET                    1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… hour        NA    NA FALSE  
+#>  9 AB    FLEET                    1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… month     1987  1990 FALSE  
+#> 10 AB    GOLDEN VALLEY            1798 301B8LR        NA <NA>   53.2 -110.  640  Etc/… day       1987  1998 FALSE  
+#> # ℹ 26,372 more rows
+#> # ℹ 3 more variables: normals_1991_2020 <lgl>, normals_1981_2010 <lgl>, normals_1971_2000 <lgl>
 ```
 
 You are ready to download weather data! For the purpose of this tutorial, let's perform a smaller weather data download by specifying specific station IDs. The weather stations closest to Wood Buffalo National Park are BIRCH MOUNTAIN LO (station_id = 2481) and BUCKTON LO (station_id = 2486). These stations were identified using the the ECCC [search option](https://climate.weather.gc.ca/historical_data/search_historic_data_stations_e.html?searchType=stnProx&timeframe=1&txtRadius=25&selCity=&optProxType=park&selPark=57%7C39%7C112%7C0%7CWood+Buffalo+National+Park&txtCentralLatDeg=&txtCentralLatMin=&txtCentralLatSec=&txtCentralLongDeg=&txtCentralLongMin=&txtCentralLongSec=&txtLatDecDeg=&txtLongDecDeg=&optLimit=yearRange&StartYear=1840&EndYear=2024&Year=2024&Month=10&Day=1&selRowPerPage=25) which helps you search for historical weather data based on proximity to a city, coordinate, or National Park.
@@ -185,9 +180,9 @@ Now you can perform the weather data download (give it a few minutes).
 
 ``` r
 weather <- weather_dl(station_ids = wood_buff_stations$station_id,
-                         start = "1985-01-01",
-                         end = "2011-12-31",
-                         interval = "day", quiet = TRUE)
+                      start = "1985-01-01",
+                      end = "2011-12-31",
+                      interval = "day", quiet = TRUE)
 ```
 
 NOTE - Larger data downloads can be performed based on filtered stations datasets as well as start, end, and interval specifications. Large historical weather downloads can take a while!
@@ -211,9 +206,9 @@ Here is an example where we filtered based on province, interval, station operat
 
 ``` r
 # weather <- weather_dl(station_ids = prov_stations$station_id,
-                         # start = "2000-01-01",
-                         # end = "2023-12-31",
-                         # interval = "day", quiet = TRUE)
+#                       start = "2000-01-01",
+#                       end = "2023-12-31",
+#                       interval = "day", quiet = TRUE)
 ```
 
 Next, convert the date column to Date data type. This will allow you to apply more filters based on month and survey year:
@@ -235,48 +230,42 @@ yearly_climate <- weather %>%
     yearly_avg_precip = mean(total_precip, na.rm = TRUE)
   )
 yearly_climate
-```
-
-```
-## # A tibble: 27 × 3
-##     year yearly_avg_temp yearly_avg_precip
-##    <dbl>           <dbl>             <dbl>
-##  1  1985            11.6              1.14
-##  2  1986            11.7              2.96
-##  3  1987            11.8              2.71
-##  4  1988            12.1              3.40
-##  5  1989            13.0              1.85
-##  6  1990            13.1              2.44
-##  7  1991            13.4              3.40
-##  8  1992            11.2              2.40
-##  9  1993            10.7              3.00
-## 10  1994            13.2              3.39
-## # ℹ 17 more rows
+#> # A tibble: 27 × 3
+#>     year yearly_avg_temp yearly_avg_precip
+#>    <dbl>           <dbl>             <dbl>
+#>  1  1985            11.6              1.14
+#>  2  1986            11.7              2.96
+#>  3  1987            11.8              2.71
+#>  4  1988            12.1              3.40
+#>  5  1989            13.0              1.85
+#>  6  1990            13.1              2.44
+#>  7  1991            13.4              3.40
+#>  8  1992            11.2              2.40
+#>  9  1993            10.7              3.00
+#> 10  1994            13.2              3.39
+#> # ℹ 17 more rows
 ```
 
 Now that you have prepared the NatureCounts and weathercan climate data you can combine the data together for analysis.
 
 
 ``` r
-cranes_climate_summary <- left_join(cranes_summary, yearly_climate, by="year")
+cranes_climate_summary <- left_join(cranes_summary, yearly_climate, by = "year")
 cranes_climate_summary
-```
-
-```
-## # A tibble: 11 × 4
-##     year annual_count yearly_avg_temp yearly_avg_precip
-##    <dbl>        <dbl>           <dbl>             <dbl>
-##  1  1987            0            11.8              2.71
-##  2  1988            0            12.1              3.40
-##  3  1990            0            13.1              2.44
-##  4  1991            0            13.4              3.40
-##  5  1996            1            11.7              3.37
-##  6  2000           24            10.6              3.83
-##  7  2001           14            13.7              2.76
-##  8  2002           26            11.3              3.18
-##  9  2003           14            12.9              2.72
-## 10  2004           18            10.6              2.08
-## 11  2005          180            10.7              2.89
+#> # A tibble: 11 × 4
+#>     year annual_count yearly_avg_temp yearly_avg_precip
+#>    <dbl>        <dbl>           <dbl>             <dbl>
+#>  1  1987            0            11.8              2.71
+#>  2  1988            0            12.1              3.40
+#>  3  1990            0            13.1              2.44
+#>  4  1991            0            13.4              3.40
+#>  5  1996            1            11.7              3.37
+#>  6  2000           24            10.6              3.83
+#>  7  2001           14            13.7              2.76
+#>  8  2002           26            11.3              3.18
+#>  9  2003           14            12.9              2.72
+#> 10  2004           18            10.6              2.08
+#> 11  2005          180            10.7              2.89
 ```
 
 To visualize average annual summer temperature and total count, you can use a scatterplot.
@@ -291,14 +280,10 @@ ggplot(cranes_climate_summary, aes(x = yearly_avg_temp, y = annual_count)) +
        y = "Total Count", 
        title = "Whooping Crane Count vs. Annual Avg Summer Temp") +
   theme(plot.title = element_text(hjust = 0.5))  # Center the title
+#> `geom_smooth()` using formula = 'y ~ x'
 ```
 
-```
-## `geom_smooth()` using formula = 'y ~ x'
-```
-
-![plot of chunk annual_temp](figure/annual_temp-1.png)
-![plot of chunk annual_temp](figure/annual_temp-1.png)
+<img src="figures/nc_sp3_annual_temp-1.png" alt="Scatterplot showing a decreasing relationship between the total count of whooping crans and average summer temperature"  />
 
 And do the same for annual summer precipitation:
 
@@ -312,14 +297,10 @@ ggplot(cranes_climate_summary, aes(x = yearly_avg_precip, y = annual_count)) +
        y = "Total Count", 
        title = "Whooping Crane Count vs. Annual Avg Summer Precip") +
   theme(plot.title = element_text(hjust = 0.5))  # Center the title
+#> `geom_smooth()` using formula = 'y ~ x'
 ```
 
-```
-## `geom_smooth()` using formula = 'y ~ x'
-```
-
-![plot of chunk annual_precip](figure/annual_precip-1.png)
-![plot of chunk annual_precip](figures/spatdatatutorial_annual_precip-1.png)
+<img src="figures/nc_sp3_annual_precip-1.png" alt="Scatterplot showing no relationship between the total count of whooping crans and average summer precipitation, with one extremely high precipation point."  />
 
 # 3.3 WorldClim (Raster) Data
 
@@ -334,39 +315,36 @@ This code will get the path to your working directory.
 
 ``` r
 getwd()
-```
-
-```
-## [1] "C:/Users/dimit/Birds Canada/naturecounts/articles"
+#> [1] "/home/steffi/Projects/Business/Birds Canada/NatureCounts/naturecounts/vignettes/articles"
 ```
 
 Now point the `list.file` to this directory using the sample code below.
 
 
 ```
-## class       : SpatRaster 
-## dimensions  : 1080, 2160, 19  (nrow, ncol, nlyr)
-## resolution  : 0.1666667, 0.1666667  (x, y)
-## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
-## coord. ref. : lon/lat WGS 84 (EPSG:4326) 
-## sources     : wc2.1_10m_bio_1.tif  
-##               wc2.1_10m_bio_10.tif  
-##               wc2.1_10m_bio_11.tif  
-##               ... and 16 more source(s)
-## names       : wc2.1~bio_1, wc2.1~io_10, wc2.1~io_11, wc2.1~io_12, wc2.1~io_13, wc2.1~io_14, ... 
-## min values  :   -54.72435,   -37.78142,   -66.31125,           0,           0,           0, ... 
-## max values  :    30.98764,    38.21617,    29.15299,       11191,        2381,         484, ...
+#> class       : SpatRaster 
+#> dimensions  : 1080, 2160, 19  (nrow, ncol, nlyr)
+#> resolution  : 0.1666667, 0.1666667  (x, y)
+#> extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+#> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
+#> sources     : wc2.1_10m_bio_1.tif  
+#>               wc2.1_10m_bio_10.tif  
+#>               wc2.1_10m_bio_11.tif  
+#>               ... and 16 more source(s)
+#> names       : wc2.1~bio_1, wc2.1~io_10, wc2.1~io_11, wc2.1~io_12, wc2.1~io_13, wc2.1~io_14, ... 
+#> min values  :   -54.72435,   -37.78142,   -66.31125,           0,           0,           0, ... 
+#> max values  :    30.98764,    38.21617,    29.15299,       11191,        2381,         484, ...
 ```
 
 
 ``` r
-worldclim_list <- list.files(path = "C:/YOUR/PATH/HERE", pattern = "\\.tif$", full.names = TRUE)
+worldclim_list <- list.files(path = "YOUR/PATH/HERE", pattern = "\\.tif$", full.names = TRUE)
 
 # Read and stack the raster files
 worldclim_stack <- rast(worldclim_list)
 
 # Print information about the stack
-print(worldclim_stack)
+worldclim_stack
 ```
 
 Great! The raster stack which includes the 19 bio-climatic variables has been read into R successfully. We can simplify the layer names which represent each variable, respectively:
@@ -384,51 +362,53 @@ Let's take a look at the first layer 'bio1' which is Annual Mean Temperature. To
 plot(worldclim_stack[["bio1"]], main = "Annual Mean Temperature (bio1)")
 ```
 
-![plot of chunk raster_bio1](figure/raster_bio1-1.png)
+<img src="figures/nc_sp3_raster_bio1-1.png" alt="World map with Annual mean temperatures overlaid in blues, greens and yellows. Showing cooler poles and warmer equatorial regions."  />
 
 ``` r
+
 # Summary statistics for each layer
 summary(worldclim_stack)
+#> Warning: [summary] used a sample
+#>       bio1             bio2             bio3             bio4             bio5             bio6       
+#>  Min.   :-54.72   Min.   :-37.72   Min.   :-66.19   Min.   :   0.0   Min.   :   0.0   Min.   :  0.00  
+#>  1st Qu.:-22.81   1st Qu.:-10.58   1st Qu.:-34.22   1st Qu.: 110.0   1st Qu.:  28.0   1st Qu.:  0.00  
+#>  Median : -0.53   Median : 13.82   Median :-15.20   Median : 337.0   Median :  60.0   Median :  5.00  
+#>  Mean   : -4.05   Mean   :  7.19   Mean   :-13.90   Mean   : 550.3   Mean   :  93.5   Mean   : 15.39  
+#>  3rd Qu.: 19.02   3rd Qu.: 24.80   3rd Qu.: 12.13   3rd Qu.: 690.0   3rd Qu.: 112.0   3rd Qu.: 18.00  
+#>  Max.   : 30.71   Max.   : 38.18   Max.   : 28.62   Max.   :7011.0   Max.   :1965.0   Max.   :471.00  
+#>  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   
+#>       bio7             bio8             bio9             bio10            bio11            bio12      
+#>  Min.   :  0.00   Min.   :   0.0   Min.   :   0.00   Min.   :   0.0   Min.   :   0.0   Min.   : 1.00  
+#>  1st Qu.: 41.41   1st Qu.:  56.0   1st Qu.:   2.00   1st Qu.:   7.0   1st Qu.:  17.0   1st Qu.: 7.38  
+#>  Median : 64.80   Median : 152.0   Median :  23.00   Median : 107.0   Median :  47.0   Median : 9.34  
+#>  Mean   : 74.63   Mean   : 241.8   Mean   :  55.47   Mean   : 156.5   Mean   : 108.8   Mean   : 9.94  
+#>  3rd Qu.:100.13   3rd Qu.: 298.0   3rd Qu.:  66.00   3rd Qu.: 225.0   3rd Qu.: 109.0   3rd Qu.:12.36  
+#>  Max.   :228.88   Max.   :4503.0   Max.   :1477.00   Max.   :3159.0   Max.   :3849.0   Max.   :20.28  
+#>  NA's   :65591    NA's   :65591    NA's   :65591     NA's   :65591    NA's   :65591    NA's   :65591  
+#>      bio13            bio14            bio15            bio16            bio17           bio18       
+#>  Min.   :  9.65   Min.   :   0.0   Min.   :-29.60   Min.   :-72.40   Min.   : 1.00   Min.   :-66.19  
+#>  1st Qu.: 20.97   1st Qu.: 569.8   1st Qu.: -6.01   1st Qu.:-39.30   1st Qu.:26.11   1st Qu.:-26.12  
+#>  Median : 26.57   Median : 897.1   Median : 21.53   Median :-21.61   Median :33.38   Median : 10.69  
+#>  Mean   : 34.54   Mean   : 880.0   Mean   : 13.93   Mean   :-19.80   Mean   :33.72   Mean   : -0.93  
+#>  3rd Qu.: 45.35   3rd Qu.:1206.6   3rd Qu.: 31.35   3rd Qu.:  4.63   3rd Qu.:41.31   3rd Qu.: 21.46  
+#>  Max.   :100.00   Max.   :2342.4   Max.   : 47.95   Max.   : 26.20   Max.   :71.58   Max.   : 37.70  
+#>  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591   
+#>      bio19       
+#>  Min.   :-54.26  
+#>  1st Qu.:-24.25  
+#>  Median : -9.26  
+#>  Mean   : -5.38  
+#>  3rd Qu.: 18.52  
+#>  Max.   : 37.04  
+#>  NA's   :65591
 ```
-
-```
-## Warning: [summary] used a sample
-```
-
-```
-##       bio1             bio2             bio3             bio4             bio5             bio6             bio7       
-##  Min.   :-54.72   Min.   :-37.72   Min.   :-66.19   Min.   :   0.0   Min.   :   0.0   Min.   :  0.00   Min.   :  0.00  
-##  1st Qu.:-22.81   1st Qu.:-10.58   1st Qu.:-34.22   1st Qu.: 110.0   1st Qu.:  28.0   1st Qu.:  0.00   1st Qu.: 41.41  
-##  Median : -0.53   Median : 13.82   Median :-15.20   Median : 337.0   Median :  60.0   Median :  5.00   Median : 64.80  
-##  Mean   : -4.05   Mean   :  7.19   Mean   :-13.90   Mean   : 550.3   Mean   :  93.5   Mean   : 15.39   Mean   : 74.63  
-##  3rd Qu.: 19.02   3rd Qu.: 24.80   3rd Qu.: 12.13   3rd Qu.: 690.0   3rd Qu.: 112.0   3rd Qu.: 18.00   3rd Qu.:100.13  
-##  Max.   : 30.71   Max.   : 38.18   Max.   : 28.62   Max.   :7011.0   Max.   :1965.0   Max.   :471.00   Max.   :228.88  
-##  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   
-##       bio8             bio9             bio10            bio11            bio12           bio13            bio14       
-##  Min.   :   0.0   Min.   :   0.00   Min.   :   0.0   Min.   :   0.0   Min.   : 1.00   Min.   :  9.65   Min.   :   0.0  
-##  1st Qu.:  56.0   1st Qu.:   2.00   1st Qu.:   7.0   1st Qu.:  17.0   1st Qu.: 7.38   1st Qu.: 20.97   1st Qu.: 569.8  
-##  Median : 152.0   Median :  23.00   Median : 107.0   Median :  47.0   Median : 9.34   Median : 26.57   Median : 897.1  
-##  Mean   : 241.8   Mean   :  55.47   Mean   : 156.5   Mean   : 108.8   Mean   : 9.94   Mean   : 34.54   Mean   : 880.0  
-##  3rd Qu.: 298.0   3rd Qu.:  66.00   3rd Qu.: 225.0   3rd Qu.: 109.0   3rd Qu.:12.36   3rd Qu.: 45.35   3rd Qu.:1206.6  
-##  Max.   :4503.0   Max.   :1477.00   Max.   :3159.0   Max.   :3849.0   Max.   :20.28   Max.   :100.00   Max.   :2342.4  
-##  NA's   :65591    NA's   :65591     NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591   
-##      bio15            bio16            bio17           bio18            bio19       
-##  Min.   :-29.60   Min.   :-72.40   Min.   : 1.00   Min.   :-66.19   Min.   :-54.26  
-##  1st Qu.: -6.01   1st Qu.:-39.30   1st Qu.:26.11   1st Qu.:-26.12   1st Qu.:-24.25  
-##  Median : 21.53   Median :-21.61   Median :33.38   Median : 10.69   Median : -9.26  
-##  Mean   : 13.93   Mean   :-19.80   Mean   :33.72   Mean   : -0.93   Mean   : -5.38  
-##  3rd Qu.: 31.35   3rd Qu.:  4.63   3rd Qu.:41.31   3rd Qu.: 21.46   3rd Qu.: 18.52  
-##  Max.   : 47.95   Max.   : 26.20   Max.   :71.58   Max.   : 37.70   Max.   : 37.04  
-##  NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591
-```
-![plot of chunk raster_bio1](figure/raster_bio1.png)
 
 Convert the **species_occurences_summary**, which summarizes species occurrence by SiteCode, into a spatial object using the `st_as_sf` function:
 
 
 ``` r
-cranes_sf <- sf::st_as_sf(species_occurrence_summary,
-                        coords = c("longitude", "latitude"), crs = 4326)
+cranes_sf <- st_as_sf(species_occurrence_summary,
+                      coords = c("longitude", "latitude"), crs = 4326)
 ```
 
 Extract the bio-climatic variable values for each bird observation site, respectively.
@@ -436,13 +416,17 @@ Extract the bio-climatic variable values for each bird observation site, respect
 
 ``` r
 bioclim_values <- extract(worldclim_stack, cranes_sf)
+#> Error in UseMethod("extract"): no applicable method for 'extract' applied to an object of class "SpatRaster"
 ```
 
 Then combine the bio-climatic values with the NatureCounts data.
 
 
 ``` r
-bioclim_data <- cbind(cranes_sf, bioclim_values, longitude = species_occurrence_summary$longitude, latitude =  species_occurrence_summary$latitude)
+bioclim_data <- cbind(cranes_sf, bioclim_values, 
+                      longitude = species_occurrence_summary$longitude, 
+                      latitude =  species_occurrence_summary$latitude)
+#> Error in eval(expr, envir, enclos): object 'bioclim_values' not found
 ```
 
 Filter the data to only include observations made post 1970 to match the temporal resolution of the climate dataset:
@@ -452,38 +436,12 @@ Filter the data to only include observations made post 1970 to match the tempora
 bioclim_data <- bioclim_data %>%
   mutate(date = as.Date(date)) %>%
   filter(year(date) >= "1970")
-summary(bioclim_data)
+#> Error in eval(expr, envir, enclos): object 'bioclim_data' not found
 ```
 
-```
-##    SiteCode              date             total_count            ID             bio1             bio2            bio3        
-##  Length:82          Min.   :1987-06-01   Min.   :  0.000   Min.   : 1.00   Min.   :-2.727   Min.   :14.11   Min.   :-21.910  
-##  Class :character   1st Qu.:2001-06-01   1st Qu.:  1.000   1st Qu.:23.25   1st Qu.:-2.402   1st Qu.:14.73   1st Qu.:-21.183  
-##  Mode  :character   Median :2002-08-14   Median :  1.000   Median :43.50   Median :-2.356   Median :14.80   Median :-20.890  
-##                     Mean   :2002-01-29   Mean   :  3.378   Mean   :44.05   Mean   :-1.095   Mean   :14.92   Mean   :-18.647  
-##                     3rd Qu.:2004-06-22   3rd Qu.:  2.000   3rd Qu.:63.75   3rd Qu.: 0.914   3rd Qu.:15.06   3rd Qu.:-15.367  
-##                     Max.   :2005-08-01   Max.   :160.000   Max.   :90.00   Max.   : 4.088   Max.   :15.83   Max.   : -7.527  
-##       bio4            bio5             bio6            bio7            bio8            bio9           bio10           bio11      
-##  Min.   :346.0   Min.   : 52.00   Min.   :10.00   Min.   :42.27   Min.   :135.0   Min.   :34.00   Min.   :134.0   Min.   :34.00  
-##  1st Qu.:351.0   1st Qu.: 56.00   1st Qu.:14.00   1st Qu.:45.72   1st Qu.:144.0   1st Qu.:44.00   1st Qu.:144.0   1st Qu.:53.00  
-##  Median :352.0   Median : 56.00   Median :14.00   Median :46.59   Median :147.0   Median :44.00   Median :147.0   Median :53.00  
-##  Mean   :379.0   Mean   : 64.62   Mean   :13.82   Mean   :52.49   Mean   :168.9   Mean   :45.68   Mean   :168.8   Mean   :52.12  
-##  3rd Qu.:404.8   3rd Qu.: 75.00   3rd Qu.:14.00   3rd Qu.:65.52   3rd Qu.:205.8   3rd Qu.:46.75   3rd Qu.:205.8   3rd Qu.:53.00  
-##  Max.   :543.0   Max.   :104.00   Max.   :17.00   Max.   :74.12   Max.   :270.0   Max.   :56.00   Max.   :270.0   Max.   :58.00  
-##      bio12           bio13           bio14            bio15           bio16            bio17           bio18           bio19       
-##  Min.   :11.16   Min.   :21.53   Min.   : 940.5   Min.   :21.38   Min.   :-29.17   Min.   :39.16   Min.   :12.90   Min.   :-13.17  
-##  1st Qu.:11.90   1st Qu.:23.42   1st Qu.:1256.0   1st Qu.:22.80   1st Qu.:-28.41   1st Qu.:45.44   1st Qu.:14.73   1st Qu.:-11.01  
-##  Median :12.06   Median :23.68   Median :1449.9   Median :22.96   Median :-28.03   Median :51.00   Median :14.80   Median :-10.89  
-##  Mean   :12.01   Mean   :24.84   Mean   :1368.1   Mean   :22.86   Mean   :-25.84   Mean   :48.69   Mean   :14.90   Mean   :-10.84  
-##  3rd Qu.:12.07   3rd Qu.:25.74   3rd Qu.:1465.4   3rd Qu.:23.06   3rd Qu.:-22.64   3rd Qu.:51.47   3rd Qu.:15.06   3rd Qu.:-10.72  
-##  Max.   :13.45   Max.   :33.67   Max.   :1499.5   Max.   :23.69   Max.   :-15.46   Max.   :51.83   Max.   :15.83   Max.   : -3.01  
-##    longitude         latitude              geometry 
-##  Min.   :-117.1   Min.   :51.05   POINT        :82  
-##  1st Qu.:-113.3   1st Qu.:55.00   epsg:4326    : 0  
-##  Median :-113.0   Median :59.96   +proj=long...: 0  
-##  Mean   :-112.9   Mean   :58.09                     
-##  3rd Qu.:-113.0   3rd Qu.:59.98                     
-##  Max.   :-110.3   Max.   :60.21
+``` r
+summary(bioclim_data)
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'bioclim_data' not found
 ```
 
 Visualize the distribution of **bio1** compared to **total_count**:
@@ -497,16 +455,15 @@ ggplot(data = bioclim_data, aes(x = bio1, y = total_count)) +
        x = "Annual Mean Temperature",
        y = "ObservationCount") +
   theme_minimal()
+#> Error in eval(expr, envir, enclos): object 'bioclim_data' not found
 ```
-
-![plot of chunk scatter_bio1](figure/scatter_bio1-1.png)
-![plot of chunk scatter_bio1](figure/scatter_bio1-1.png)
 
 Map the NatureCounts data by grouping it by **SiteCode**, sizing the points by **total_count** and colorizing them by a bio-climatic variable (**bio1**):
 
 
 ``` r
 bioclim_data <- st_transform(bioclim_data, crs = 4326)
+#> Error in eval(expr, envir, enclos): object 'bioclim_data' not found
 ```
 
 To make an interactive map of total counts per site.
@@ -535,7 +492,9 @@ leaflet(bioclim_data) %>%
     radius = ~pmin(pmax(sqrt(total_count) * scaling_factor, 3), 15),  # Scale and limit radius
     fillColor = ~pal(bio1),      # Color points by bio1
     color = "black", stroke = TRUE, fillOpacity = 0.8,
-    popup = ~paste0("<strong>SiteCode:</strong> ", SiteCode, "<br>", "<strong>Total Count:</strong> ", total_count, "<br>",      "<strong>Bio1:</strong> ", bio1) # creates info popup labels
+    popup = ~paste0("<strong>SiteCode:</strong> ", SiteCode, "<br>", 
+                    "<strong>Total Count:</strong> ", total_count, "<br>",      
+                    "<strong>Bio1:</strong> ", bio1) # creates info popup labels
   ) %>%
   addLegend(pal = pal, values = ~bio1, title = "Bio1", position = "bottomright") %>%
   addScaleBar(position = "bottomleft", options = scaleBarOptions(imperial = FALSE))
