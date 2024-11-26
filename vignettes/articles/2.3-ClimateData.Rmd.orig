@@ -8,8 +8,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  # For pre-compiling and pkgdown (relative to pkg home)
+  fig.path = "vignettes/articles/figures/nc_sp3_",
+  dpi = 150
+)
 ```
 
 # Chapter 3: Climate Data
@@ -197,7 +203,7 @@ cranes_climate_summary
 
 To visualize average annual summer temperature and total count, you can use a scatterplot.
 
-```{r annual_temp, eval = TRUE}
+```{r annual_temp, fig.cap = "", fig.alt = "Scatterplot showing a decreasing relationship between the total count of whooping crans and average summer temperature"}
 ggplot(cranes_climate_summary, aes(x = yearly_avg_temp, y = annual_count)) +
   geom_point(color = "blue", size = 3, alpha = 0.7) +  # Simple blue points
   geom_smooth(method = "lm", se = FALSE, color = "red") +  # Add linear regression line
@@ -207,11 +213,10 @@ ggplot(cranes_climate_summary, aes(x = yearly_avg_temp, y = annual_count)) +
        title = "Whooping Crane Count vs. Annual Avg Summer Temp") +
   theme(plot.title = element_text(hjust = 0.5))  # Center the title
 ```
-![plot of chunk annual_temp](figure/annual_temp-1.png)
 
 And do the same for annual summer precipitation:
 
-```{r annual_precip, eval = TRUE}
+```{r annual_precip, fig.cap = "", fig.alt = "Scatterplot showing no relationship between the total count of whooping crans and average summer precipitation, with one extremely high precipation point."}
 ggplot(cranes_climate_summary, aes(x = yearly_avg_precip, y = annual_count)) +
   geom_point(color = "blue", size = 3, alpha = 0.7) +  # Simple blue points
   geom_smooth(method = "lm", se = FALSE, color = "red") +  # Add linear regression line
@@ -221,7 +226,6 @@ ggplot(cranes_climate_summary, aes(x = yearly_avg_precip, y = annual_count)) +
        title = "Whooping Crane Count vs. Annual Avg Summer Precip") +
   theme(plot.title = element_text(hjust = 0.5))  # Center the title
 ```
-![plot of chunk annual_precip](figures/spatdatatutorial_annual_precip-1.png)
 
 # 3.3 WorldClim (Raster) Data
 
@@ -267,14 +271,13 @@ names(worldclim_stack) <- paste0("bio", 1:19)
 
 Let's take a look at the first layer 'bio1' which is Annual Mean Temperature. To do so, you can subset the layers of the SpatRaster with \$ or two sets of square brackets [ [ ] ].
 
-```{r raster_bio1, eval = TRUE}
+```{r raster_bio1, fig.cap = "", fig.alt = "World map with Annual mean temperatures overlaid in blues, greens and yellows. Showing cooler poles and warmer equatorial regions."}
 # Plot the first bio-climatic layer (e.g., bio1: Annual Mean Temperature)
 plot(worldclim_stack[["bio1"]], main = "Annual Mean Temperature (bio1)")
 
 # Summary statistics for each layer
 summary(worldclim_stack)
 ```
-![plot of chunk raster_bio1](figure/raster_bio1.png)
 
 Convert the **species_occurences_summary**, which summarizes species occurrence by SiteCode, into a spatial object using the `st_as_sf` function:
 
@@ -308,7 +311,7 @@ summary(bioclim_data)
 
 Visualize the distribution of **bio1** compared to **total_count**:
 
-```{r scatter_bio1, eval = TRUE}
+```{r scatter_bio1, fig.cap = "", fig.alt = "Scatterplot showing little relationship between counts and annual mean temperature. With one extreme high count at particularly low temperatures."}
 # Scatter plot of bird observations against a bioclimatic variable (bio1 = Annual Mean Temperature)
 ggplot(data = bioclim_data, aes(x = bio1, y = total_count)) +
   geom_point(alpha = 0.6) +
@@ -317,7 +320,6 @@ ggplot(data = bioclim_data, aes(x = bio1, y = total_count)) +
        y = "ObservationCount") +
   theme_minimal()
 ```
-![plot of chunk scatter_bio1](figure/scatter_bio1-1.png)
 
 Map the NatureCounts data by grouping it by **SiteCode**, sizing the points by **total_count** and colorizing them by a bio-climatic variable (**bio1**):
 

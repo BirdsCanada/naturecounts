@@ -3,6 +3,9 @@ library(knitr)
 library(readr)
 library(stringr)
 
+# Remove the figures folder (start clean)
+unlink("vignettes/articles/figures", recursive = TRUE)
+
 # Make sure to put figures in local dir in knitr chunk options
 v <- list.files("vignettes", ".orig$", full.names = TRUE, recursive = TRUE)
 
@@ -11,7 +14,7 @@ for(i in v) {
   knit(i, new)
   
   read_lines(new) %>%
-    str_replace_all("vignettes(/articles)*/", "") %>%
+    str_replace_all("\"vignettes(/articles)*/", "\"") %>%
     write_lines(new)
 }
 
