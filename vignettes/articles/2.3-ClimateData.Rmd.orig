@@ -48,10 +48,12 @@ library(ggplot2)
 library(terra)
 library(leaflet)
 
-#since weathercan is not available in the recent version of R, we install the package a little differently
-#install.packages("weathercan", 
-#                 repos = c("https://ropensci.r-universe.dev", 
-#                           "https://cloud.r-project.org"))
+# weathercan is in the R-Universe rather than on CRAN, 
+# so we install the package a little differently
+#
+# install.packages("weathercan",
+#                  repos = c("https://ropensci.r-universe.dev",
+#                            "https://cloud.r-project.org"))
 
 library(weathercan)
 ```
