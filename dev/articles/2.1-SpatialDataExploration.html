@@ -56,7 +56,7 @@
 
       <h1>01-SpatialDataExploration</h1>
             
-            <h4 data-toc-skip class="date">2024-11-20</h4>
+            <h4 data-toc-skip class="date">2024-11-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.1-SpatialDataExploration.Rmd" class="external-link"><code>vignettes/articles/2.1-SpatialDataExploration.Rmd</code></a></small>
       <div class="d-none name"><code>2.1-SpatialDataExploration.Rmd</code></div>
@@ -97,7 +97,8 @@ raster)</p></li>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paleolimbot.github.io/ggspatial/" class="external-link">ggspatial</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -171,7 +172,12 @@ Maritimes Breeding Bird Atlas.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Second, we look to find the numeric species id.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"cedar waxwing"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"cedar waxwing"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 5</span></span>
+<span><span class="co">#&gt;   species_id scientific_name              english_name           french_name                    taxon_group</span></span>
+<span><span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;                        &lt;chr&gt;                  &lt;chr&gt;                          &lt;chr&gt;      </span></span>
+<span><span class="co">#&gt; 1      16330 Bombycilla cedrorum          Cedar Waxwing          Jaseur d'Amérique              BIRDS      </span></span>
+<span><span class="co">#&gt; 2      40749 Bombycilla garrulus/cedrorum Bohemian/Cedar Waxwing Jaseur boréal ou J. d'Amérique BIRDS</span></span></code></pre></div>
 <p>Now we can download the data.</p>
 <blockquote>
 <p>The data download will not work unless you replace
@@ -179,38 +185,39 @@ Maritimes Breeding Bird Atlas.</p>
 to enter your password.</p>
 </blockquote>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cedar_waxwing</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"MBBA2PC"</span>, species <span class="op">=</span> <span class="fl">16330</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"spatial_data_tutorial"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Using filters: collections (MBBA2PC); species (16330); fields_set (BMDE2.00-min)</span></span></code></pre>
-<pre><code><span><span class="co">## Collecting available records...</span></span></code></pre>
-<pre><code><span><span class="co">##   collection nrecords</span></span>
-<span><span class="co">## 1    MBBA2PC     1659</span></span>
-<span><span class="co">## Total records: 1,659</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Downloading records for each collection:</span></span></code></pre>
-<pre><code><span><span class="co">##   MBBA2PC</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 1 to 1659 / 1659</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">cedar_waxwing</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"MBBA2PC"</span>, species <span class="op">=</span> <span class="fl">16330</span>, </span>
+<span>                            username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"spatial_data_tutorial"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Using filters: collections (MBBA2PC); species (16330); fields_set (BMDE2.00-min)</span></span>
+<span><span class="co">#&gt; Collecting available records...</span></span>
+<span><span class="co">#&gt;   collection nrecords</span></span>
+<span><span class="co">#&gt; 1    MBBA2PC     1659</span></span>
+<span><span class="co">#&gt; Total records: 1,659</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Downloading records for each collection:</span></span>
+<span><span class="co">#&gt;   MBBA2PC</span></span>
+<span><span class="co">#&gt;     Records 1 to 1659 / 1659</span></span></code></pre></div>
 <p>Use the <a href="https://rdrr.io/github/BirdStudiesCanada/naturecounts/man/format_dates.html" class="external-link">format_dates</a>
 function to create date and day-of-year (doy) columns.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cedar_waxwing</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_dates.html">format_dates</a></span><span class="op">(</span><span class="va">cedar_waxwing</span><span class="op">)</span></span></code></pre></div>
 <p>Filter the data to only include observations from the month of
 June.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cedar_waxwing_june</span> <span class="op">&lt;-</span> <span class="va">cedar_waxwing</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">survey_month</span> <span class="op">==</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 <p>Convert the NatureCounts data to a spatial object using the point
 count coordinates.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cedar_waxwing_june_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">cedar_waxwing_june</span>,</span>
-<span>                        coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cedar_waxwing_june_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">cedar_waxwing_june</span>,</span>
+<span>                                  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, use <code>ggplot2</code> to visualize the spatio-temporal
 distribution of Cedar Waxwing observations across the Maritime provinces
 by color-coding the data points by <strong>survey_year</strong> and
 creating a multi-panel plot based on this discrete variable:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cedar_waxwing_june_sf</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Select a basemap</span></span>
-<span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_map_tile.html" class="external-link">annotation_map_tile</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"cartolight"</span>, zoom <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_map_tile.html" class="external-link">annotation_map_tile</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"cartolight"</span>, zoom <span class="op">=</span> <span class="cn">NULL</span>, progress <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Plot the points, color-coded by survey_year</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Facet by survey_year to create the multi-paneled map</span></span>
@@ -225,13 +232,9 @@ creating a multi-panel plot based on this discrete variable:</p>
 <span>  <span class="co"># Define the title and axis names</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Cedar Waxwing June Observations by Survey Year"</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
-<span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Zoom: 5</span></span></code></pre>
-<pre><code><span><span class="co">## Fetching 2 missing tiles</span></span></code></pre>
-<p>```</p>
-<div class="float">
-<img src="figures/spatdatatutorial_cedarwaxwing_map-1.png" alt="plot of chunk cedarwaxwing_map"><div class="figcaption">plot of chunk cedarwaxwing_map</div>
-</div>
+<span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required namespace: raster</span></span></code></pre></div>
+<p><img src="figures%2Fnc_sp1_cedarwaxwing_map-1.png" alt="Five annual maps of Maritime Canada showing observations of cedar waxings 2006-2010"></p>
 <p>The map above provides a simple visualization of NatureCounts data
 over a broad spatial and temporal scale.</p>
 <p><strong>Congratulations!</strong> You completed <strong>Chapter 1:
