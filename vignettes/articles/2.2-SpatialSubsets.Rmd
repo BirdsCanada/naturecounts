@@ -465,7 +465,6 @@ ggplot() +
 
 <img src="figures/nc_sp2_longpoint_prioriplace-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"  />
 
-![plot of chunk longpoint_prioriplace](figure/longpoint_prioriplace-1.png)
 
 You can also apply leaflet to visualize our polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 

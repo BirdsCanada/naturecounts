@@ -341,8 +341,6 @@ ggplot() +
        y = "Latitude")
 ```
 
-![plot of chunk longpoint_prioriplace](figure/longpoint_prioriplace-1.png)
-
 You can also apply leaflet to visualize our polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 
 ```{r, eval = FALSE}
