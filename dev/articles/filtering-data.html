@@ -56,7 +56,7 @@
 
       <h1>Filtering data after download</h1>
             
-            <h4 data-toc-skip class="date">2024-11-26</h4>
+            <h4 data-toc-skip class="date">2024-12-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/filtering-data.Rmd" class="external-link"><code>vignettes/filtering-data.Rmd</code></a></small>
       <div class="d-none name"><code>filtering-data.Rmd</code></div>
@@ -175,7 +175,7 @@ category.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">collection</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [1 x 1]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##   collection</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> BBS</span></span></code></pre>
@@ -195,7 +195,7 @@ category.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">collection</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [1 x 1]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##   collection</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> BBS</span></span></code></pre>
@@ -229,7 +229,7 @@ any variable that can be expressed as a number.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [1 x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##     min   max</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">1</span>966  <span style="text-decoration: underline;">2</span>010</span></span></code></pre>
@@ -251,7 +251,7 @@ explicitly)</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [1 x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##     min   max</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">2</span>000  <span style="text-decoration: underline;">2</span>010</span></span></code></pre>
@@ -276,7 +276,7 @@ means it’s pretty much the same as a numerical filter.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [1 x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##   min        max       </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> 1966-06-02 2010-07-07</span></span></code></pre>
@@ -298,7 +298,7 @@ explicitly)</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>            max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [1 x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.47.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##   min        max       </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> 2010-05-30 2010-07-07</span></span></code></pre>

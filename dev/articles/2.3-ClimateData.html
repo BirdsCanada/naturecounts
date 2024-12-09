@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>03-ClimateData • naturecounts</title>
+<title>Chapter 3 - Climate Data • naturecounts</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="03-ClimateData">
+<meta property="og:title" content="Chapter 3 - Climate Data">
 <meta name="robots" content="noindex">
 </head>
 <body>
@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>03-ClimateData</h1>
+      <h1>Chapter 3 - Climate Data</h1>
             
             <h4 data-toc-skip class="date">2024-11-26</h4>
       
@@ -70,7 +70,7 @@
 <div class="section level6">
 <h6 id="authors-dimitrios-markou-danielle-ethier">Authors: Dimitrios Markou, Danielle Ethier<a class="anchor" aria-label="anchor" href="#authors-dimitrios-markou-danielle-ethier"></a>
 </h6>
-<div class="line-block">In <a href="02-ConservationAreas.Rmd">Chapter
+<div class="line-block">In <a href="02-SpatialSubsets.Rmd">Chapter
 2</a>, you applied geoprocessing functions to spatial (vector) objects,
 and filtered and visualized NatureCounts data within KBAs and Priority
 Places. Now you are ready to explore your NatureCounts data in relation
@@ -189,41 +189,32 @@ these data and skip this code chunk.</p>
 <span>  username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"spatial_data_tutorial"</span><span class="op">)</span></span></code></pre></div>
 <p>Grouping the NatureCounts data might provide more meaningful insight
 on species occurrences at each site and how they might vary across time
-and space. To create date and doy columns and ensure that the
-ObservationCount column is in the correct <strong>numeric</strong>
-format we can apply the <code>format_dates</code> and
-<code>mutate</code> functions :</p>
+and space. You can achieve this by summarizing species occurrence by
+SiteCode and survey year, while keeping the coordinate information for
+each site using the <code>group_by</code> and <code>summarise</code>
+functions:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">whooping_crane_data</span> <span class="op">&lt;-</span> <span class="va">whooping_crane_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/format_dates.html">format_dates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># create the date and doy columns </span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ObservationCount <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span><span class="op">)</span> <span class="co"># convert to numeric</span></span></code></pre></div>
-<p>You can then summarize species occurrence by SiteCode and date while
-keeping the coordinate information for each site using the
-<code>group_by</code> and <code>summarise</code> functions:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">species_occurrence_summary</span> <span class="op">&lt;-</span> <span class="va">whooping_crane_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">date</span>, <span class="va">longitude</span>, <span class="va">latitude</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/format_dates.html">format_dates</a></span><span class="op">(</span><span class="op">)</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">survey_year</span>, <span class="va">longitude</span>, <span class="va">latitude</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>total_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; `summarise()` has grouped output by 'SiteCode', 'date', 'longitude'. You can override using the `.groups`</span></span>
-<span><span class="co">#&gt; argument.</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Lastly, you can summarize the NatureCounts data once more to get the
 annual total counts of Whooping Cranes, say between 1985 and 2011. To do
 so, we can 1) produce a regular dataframe called
 <strong>cranes_summary</strong> by dropping the geometry column
-(<code>st_drop_geometry</code>) 2) create the <strong>date</strong>
-column using <code>lubridate</code> and group by year 3) calculate the
+(<code>st_drop_geometry</code>) 2) calculate the
 <strong>annual_count</strong> by using the <code>summarise</code> and
-<code>sum</code> functions and 4) filter for NA values and by
+<code>sum</code> functions and 3) filter for NA values and by
 <strong>year:</strong></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cranes_summary</span> <span class="op">&lt;-</span> <span class="va">species_occurrence_summary</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>annual_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">total_count</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">&gt;=</span> <span class="fl">1985</span> <span class="op">&amp;</span> <span class="va">year</span> <span class="op">&lt;=</span> <span class="fl">2011</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">survey_year</span> <span class="op">&gt;=</span> <span class="fl">1985</span> <span class="op">&amp;</span> <span class="va">survey_year</span> <span class="op">&lt;=</span> <span class="fl">2011</span><span class="op">)</span></span>
 <span><span class="va">cranes_summary</span></span>
 <span><span class="co">#&gt; # A tibble: 11 × 2</span></span>
 <span><span class="co">#&gt;     year annual_count</span></span>
@@ -249,7 +240,7 @@ from weathercan</a>, provides more details on how to download, filter,
 and visualize weather data in R.</p>
 <p>First, let’s take a look at the built in <strong>stations</strong>
 dataset:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">stations</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 26,382 × 17</span></span>
 <span><span class="co">#&gt;    prov  station_name       station_id climate_id WMO_id TC_id   lat   lon  elev tz    interval start   end normals</span></span>
@@ -274,13 +265,13 @@ National Park are BIRCH MOUNTAIN LO (station_id = 2481) and BUCKTON LO
 <a href="https://climate.weather.gc.ca/historical_data/search_historic_data_stations_e.html?searchType=stnProx&amp;timeframe=1&amp;txtRadius=25&amp;selCity=&amp;optProxType=park&amp;selPark=57%7C39%7C112%7C0%7CWood+Buffalo+National+Park&amp;txtCentralLatDeg=&amp;txtCentralLatMin=&amp;txtCentralLatSec=&amp;txtCentralLongDeg=&amp;txtCentralLongMin=&amp;txtCentralLongSec=&amp;txtLatDecDeg=&amp;txtLongDecDeg=&amp;optLimit=yearRange&amp;StartYear=1840&amp;EndYear=2024&amp;Year=2024&amp;Month=10&amp;Day=1&amp;selRowPerPage=25" class="external-link">search
 option</a> which helps you search for historical weather data based on
 proximity to a city, coordinate, or National Park.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">birch_station</span> <span class="op">&lt;-</span> <span class="fu">stations_search</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"BIRCH MOUNTAIN LO"</span>, interval <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span></span>
 <span><span class="va">buckton_station</span> <span class="op">&lt;-</span> <span class="fu">stations_search</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"BUCKTON LO"</span>, interval <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span></span>
 <span><span class="va">wood_buff_stations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">birch_station</span>, <span class="va">buckton_station</span><span class="op">)</span> <span class="co"># combine </span></span></code></pre></div>
 <p>Now you can perform the weather data download (give it a few
 minutes).</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">weather</span> <span class="op">&lt;-</span> <span class="fu">weather_dl</span><span class="op">(</span>station_ids <span class="op">=</span> <span class="va">wood_buff_stations</span><span class="op">$</span><span class="va">station_id</span>,</span>
 <span>                      start <span class="op">=</span> <span class="st">"1985-01-01"</span>,</span>
 <span>                      end <span class="op">=</span> <span class="st">"2011-12-31"</span>,</span>
@@ -294,7 +285,7 @@ in the weather data download:</p>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
 </blockquote>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#prov_stations &lt;- stations %&gt;%</span></span>
 <span><span class="co">#  filter(prov %in% c("AB"),</span></span>
 <span><span class="co">#         interval == "day",</span></span>
@@ -304,23 +295,23 @@ in the weather data download:</p>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
 </blockquote>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># weather &lt;- weather_dl(station_ids = prov_stations$station_id,</span></span>
 <span><span class="co">#                       start = "2000-01-01",</span></span>
 <span><span class="co">#                       end = "2023-12-31",</span></span>
 <span><span class="co">#                       interval = "day", quiet = TRUE)</span></span></code></pre></div>
 <p>Next, convert the date column to Date data type. This will allow you
 to apply more filters based on month and survey year:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">weather</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">weather</span><span class="op">$</span><span class="va">date</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, to summarize the weather data by calculating the annual mean
 summer temperature and precipitation we can use the familiar
 <code>filter</code>, <code>group_by</code>, and <code>summarise</code>
 functions:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">yearly_climate</span> <span class="op">&lt;-</span> <span class="va">weather</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="fl">5</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># Filter for summer months May (5) through August (8)</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>   <span class="co"># Group by year</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>survey_year <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>   <span class="co"># Group by year</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
 <span>    yearly_avg_temp <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mean_temp</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    yearly_avg_precip <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">total_precip</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -342,8 +333,8 @@ functions:</p>
 <span><span class="co">#&gt; # ℹ 17 more rows</span></span></code></pre></div>
 <p>Now that you have prepared the NatureCounts and weathercan climate
 data you can combine the data together for analysis.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cranes_climate_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">cranes_summary</span>, <span class="va">yearly_climate</span>, by <span class="op">=</span> <span class="st">"year"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cranes_climate_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">cranes_summary</span>, <span class="va">yearly_climate</span>, by <span class="op">=</span> <span class="st">"survey_year"</span><span class="op">)</span></span>
 <span><span class="va">cranes_climate_summary</span></span>
 <span><span class="co">#&gt; # A tibble: 11 × 4</span></span>
 <span><span class="co">#&gt;     year annual_count yearly_avg_temp yearly_avg_precip</span></span>
@@ -361,7 +352,7 @@ data you can combine the data together for analysis.</p>
 <span><span class="co">#&gt; 11  2005          180            10.7              2.89</span></span></code></pre></div>
 <p>To visualize average annual summer temperature and total count, you
 can use a scatterplot.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">cranes_climate_summary</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">yearly_avg_temp</span>, y <span class="op">=</span> <span class="va">annual_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>  <span class="co"># Simple blue points</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>  <span class="co"># Add linear regression line</span></span>
@@ -373,7 +364,7 @@ can use a scatterplot.</p>
 <span><span class="co">#&gt; `geom_smooth()` using formula = 'y ~ x'</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp3_annual_temp-1.png" alt="Scatterplot showing a decreasing relationship between the total count of whooping crans and average summer temperature"></p>
 <p>And do the same for annual summer precipitation:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">cranes_climate_summary</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">yearly_avg_precip</span>, y <span class="op">=</span> <span class="va">annual_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>  <span class="co"># Simple blue points</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>  <span class="co"># Add linear regression line</span></span>
@@ -405,7 +396,7 @@ all the files in the raster stack by specifying the path to your folder
 (use <code>list.files</code> function) and read them into R using the
 <code>rast</code> function.</p>
 <p>This code will get the path to your working directory.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "/home/steffi/Projects/Business/Birds Canada/NatureCounts/naturecounts/vignettes/articles"</span></span></code></pre></div>
 <p>Now point the <code>list.file</code> to this directory using the
@@ -422,7 +413,7 @@ sample code below.</p>
 <span><span class="co">#&gt; names       : wc2.1~bio_1, wc2.1~io_10, wc2.1~io_11, wc2.1~io_12, wc2.1~io_13, wc2.1~io_14, ... </span></span>
 <span><span class="co">#&gt; min values  :   -54.72435,   -37.78142,   -66.31125,           0,           0,           0, ... </span></span>
 <span><span class="co">#&gt; max values  :    30.98764,    38.21617,    29.15299,       11191,        2381,         484, ...</span></span></code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">worldclim_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"YOUR/PATH/HERE"</span>, pattern <span class="op">=</span> <span class="st">"\\.tif$"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read and stack the raster files</span></span>
@@ -433,16 +424,16 @@ sample code below.</p>
 <p>Great! The raster stack which includes the 19 bio-climatic variables
 has been read into R successfully. We can simplify the layer names which
 represent each variable, respectively:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"bio"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s take a look at the first layer ‘bio1’ which is Annual Mean
 Temperature. To do so, you can subset the layers of the SpatRaster with
 $ or two sets of square brackets [ [ ] ].</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the first bio-climatic layer (e.g., bio1: Annual Mean Temperature)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">[[</span><span class="st">"bio1"</span><span class="op">]</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"Annual Mean Temperature (bio1)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp3_raster_bio1-1.png" alt="World map with Annual mean temperatures overlaid in blues, greens and yellows. Showing cooler poles and warmer equatorial regions."></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Summary statistics for each layer</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">)</span></span>
@@ -482,33 +473,33 @@ $ or two sets of square brackets [ [ ] ].</p>
 <p>Convert the <strong>species_occurences_summary</strong>, which
 summarizes species occurrence by SiteCode, into a spatial object using
 the <code>st_as_sf</code> function:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cranes_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">species_occurrence_summary</span>,</span>
 <span>                      coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
 <p>Extract the bio-climatic variable values for each bird observation
 site, respectively.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">worldclim_stack</span>, <span class="va">cranes_sf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in UseMethod("extract"): no applicable method for 'extract' applied to an object of class "SpatRaster"</span></span></code></pre></div>
 <p>Then combine the bio-climatic values with the NatureCounts data.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">cranes_sf</span>, <span class="va">bioclim_values</span>, </span>
 <span>                      longitude <span class="op">=</span> <span class="va">species_occurrence_summary</span><span class="op">$</span><span class="va">longitude</span>, </span>
 <span>                      latitude <span class="op">=</span>  <span class="va">species_occurrence_summary</span><span class="op">$</span><span class="va">latitude</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'bioclim_values' not found</span></span></code></pre></div>
 <p>Filter the data to only include observations made post 1970 to match
 the temporal resolution of the climate dataset:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="va">bioclim_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="st">"1970"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'bioclim_data' not found</span></span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">bioclim_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'bioclim_data' not found</span></span></code></pre></div>
 <p>Visualize the distribution of <strong>bio1</strong> compared to
 <strong>total_count</strong>:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scatter plot of bird observations against a bioclimatic variable (bio1 = Annual Mean Temperature)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bioclim_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bio1</span>, y <span class="op">=</span> <span class="va">total_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
@@ -521,11 +512,11 @@ the temporal resolution of the climate dataset:</p>
 <strong>SiteCode</strong>, sizing the points by
 <strong>total_count</strong> and colorizing them by a bio-climatic
 variable (<strong>bio1</strong>):</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">bioclim_data</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'bioclim_data' not found</span></span></code></pre></div>
 <p>To make an interactive map of total counts per site.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Group by SiteCode and summarize total_count</span></span>
 <span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="va">bioclim_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>

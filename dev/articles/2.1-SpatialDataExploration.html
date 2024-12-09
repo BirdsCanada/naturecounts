@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>01-SpatialDataExploration • naturecounts</title>
+<title>Chapter 1 - Spatial Data Exploration • naturecounts</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="01-SpatialDataExploration">
+<meta property="og:title" content="Chapter 1 - Spatial Data Exploration">
 <meta name="robots" content="noindex">
 </head>
 <body>
@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>01-SpatialDataExploration</h1>
+      <h1>Chapter 1 - Spatial Data Exploration</h1>
             
             <h4 data-toc-skip class="date">2024-11-26</h4>
       
@@ -122,19 +122,19 @@ are always accompanied by files with <em>.dbf</em>, <em>.shx,</em> and
 <em>.prj</em> extensions.</p>
 <p>Raster data files are typically stored with TIFF or GeoTIFF files
 with a <em>(.tif)</em> or <em>(.tiff)</em> extension. Raster data
-manipulation will be in covered in subsequent chapters (see <a href="03-ClimateData.Rmd">Chapter 3: Climate Data</a>, <a href="">Chapter 4: Elevation Data</a>, <a href="05-LandcoverData.Rmd">Chapter 5: Landcover Data</a>, <a href="06-SatelliteImagery.Rmd">Chapter 6: Satellite Imagery</a>, and <a href="07-RasterSummaryStats">Chapter 7: RasterSummaryStats</a>).</p>
+manipulation will be in covered in subsequent chapters (see <a href="03-ClimateData.Rmd">Chapter 3: Climate Data</a>, <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a>, <a href="05-LandcoverData.Rmd">Chapter 5: Land Cover Data</a>, <a href="06-SatelliteImagery.Rmd">Chapter 6: Satellite Imagery</a>, and <a href="07-RasterSummaryStats">Chapter 7: Raster Summary</a>).</p>
 <p>Vector and raster data may also be associated with <strong>attribute
 data</strong> or <strong>temporal data</strong>. Attribute data provides
 additional information on the characteristics of spatial features while
 temporal data assigns a specific date or time range.</p>
 <p>The <code>sf</code> package provides <a href="https://r-spatial.github.io/sf/" class="external-link">simple feature</a> access in R.
 This package works best with spatial data (point, line, polygon,
-multipolygon, etc) associated with tabular attributes (e.g shapefiles).
-You may be familiar with the <code>sp</code> package that has similar
+multipolygon) associated with tabular attributes (e.g shapefiles). You
+may be familiar with the <code>sp</code> package that has similar
 functionality in a different format, however, this package is no longer
 in use as of 2023 and does not support integration with
-<code>tidyverse</code> which is very popular among data scientists in
-R.</p>
+<code>tidyverse</code> which is very popular among data scientists who
+use R.</p>
 </div>
 <div class="section level2">
 <h2 id="geo-processing-functions">1.2 Geo-processing Functions<a class="anchor" aria-label="anchor" href="#geo-processing-functions"></a>
