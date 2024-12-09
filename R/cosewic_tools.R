@@ -44,6 +44,9 @@
 #'   Defaults to 0.95 for a 95% convex hull to ensure outlier points do not
 #'   artificially inflate the EOO. Note that for a final COSEWIC report, this
 #'   may not be appropriate. Set to 1 to include all points.
+#' @param eoo_clip sf (Multi)Polygon. A spatial object to clip the EOO to. May
+#'   be relevant when calculating EOOs for complex regions (i.e. long curved
+#'   areas) to avoid including area which cannot have observations.
 #' @param filter_unique Logical. Whether to filter observations to unique 
 #'   locations. Use this only if there are too many data points to work with. 
 #'   This changes the nature of what an observation is, and also may bias 
@@ -86,6 +89,15 @@
 #' r <- cosewic_ranges(mult)
 #' r <- cosewic_ranges(mult, spatial = FALSE)
 #' 
+#' # Clip to a specific region
+#' ON <- rnaturalearth::ne_states("Canada") |> 
+#'   dplyr::filter(postal == "ON")
+#' 
+#' r <- cosewic_ranges(mult)
+#' cosewic_plot(r, map = ON) # No clip
+#' 
+#' r <- cosewic_ranges(mult, eoo_clip = ON)
+#' cosewic_plot(r, map = ON) # With clip
 #'
 #' @export 
 
@@ -96,6 +108,7 @@ cosewic_ranges <- function(df_db,
                            species = "species_id",
                            iao_grid_size_km = 2,
                            eoo_p = 0.95,
+                           eoo_clip = NULL,
                            filter_unique = FALSE,
                            spatial = TRUE) {
   
@@ -108,6 +121,12 @@ cosewic_ranges <- function(df_db,
     stop("`coord_lat` and `coord_lon` must be columns in `df_db`", call. = FALSE)
   } else if (!all(is.numeric(df[[coord_lat]]), is.numeric(df[[coord_lat]]))) {
     stop("`coord_lat` and `coord_lon` must be numeric", call. = FALSE)
+  }
+  
+  # Clip
+  if(!is.null(eoo_clip) && !inherits(eoo_clip, "sf") && 
+     !all(sf::st_is(eoo_clip, c("POLYGON", "MULTIPOLYGON")))) {
+    stop("If provided, `eoo_clip` must be an sf polygon object", call. = FALSE)
   }
 
   # Columns
@@ -175,7 +194,7 @@ cosewic_ranges <- function(df_db,
     dplyr::left_join(n, by = species) %>%
     dplyr::relocate(dplyr::all_of(species), "n_records_total") %>%
     dplyr::mutate(
-      eoo = purrr::map(.data[["data"]], \(x) cosewic_eoo(x, p = eoo_p, spatial)),
+      eoo = purrr::map(.data[["data"]], \(x) cosewic_eoo(x, p = eoo_p, clip = eoo_clip, spatial)),
       iao = purrr::map(.data[["data"]], \(x) cosewic_iao(x, cell_size, record, spatial))) %>%
     dplyr::select(-"data")
   
@@ -269,20 +288,28 @@ cosewic_iao <- function(df_sf, cell_size, record, spatial) {
   iao  
 }
 
-cosewic_eoo <- function(df_sf, p, spatial) {
+cosewic_eoo <- function(df_sf, p, clip, spatial) {
   center <- df_sf %>%
     sf::st_union() %>%
     sf::st_convex_hull() %>%
     sf::st_centroid()
-  
+
   eoo <- df_sf %>%
     dplyr::mutate(dist = sf::st_distance(.data$geometry, .env$center)[, 1]) %>%
     dplyr::filter(.data$dist <= stats::quantile(.data$dist, .env$p)) %>%
     sf::st_cast(to = "POINT") %>%  
     sf::st_union() %>%
     sf::st_convex_hull() %>%
-    sf::st_as_sf() %>%
-    dplyr::mutate(eoo = sf::st_area(.),
+    sf::st_as_sf()
+  
+  if(!is.null(clip)) {
+    clip <- sf::st_transform(clip, sf::st_crs(eoo))
+    eoo <- sf::st_intersection(sf::st_set_agr(eoo, "constant"), 
+                               sf::st_set_agr(clip, "constant"))
+  }
+  
+  eoo <- eoo |>
+    dplyr::mutate(eoo = sf::st_area(eoo),
                   eoo = units::set_units(.data$eoo, "km^2"))
   
   if(!spatial) eoo <- sf::st_drop_geometry(eoo)

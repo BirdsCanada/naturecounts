@@ -254,6 +254,17 @@ test_that("cosewic_ranges() filter_unique", {
 })
 
 
+test_that("cosewic_ranges() eoo clip", {
+  ON <- rnaturalearth::ne_states("Canada") |> 
+    dplyr::filter(postal == "ON")
+  mult <- rbind(bcch, hofi)
+  
+  expect_silent(r0 <- cosewic_ranges(mult))
+  expect_silent(r1 <- cosewic_ranges(mult, eoo_clip = ON))
+  expect_true(all(r0$eoo$eoo_p95 > r1$eoo$eoo_p95))
+})
+
+
 test_that("cosewic_plot()", {
   
   expect_silent(r1 <- cosewic_ranges(bcch))
