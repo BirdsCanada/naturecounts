@@ -1,5 +1,5 @@
 ---
-title: "03-ClimateData"
+title: "Chapter 3 - Climate Data"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 ##### Authors: Dimitrios Markou, Danielle Ethier
 
-| In [Chapter 2](02-ConservationAreas.Rmd), you applied geoprocessing functions to spatial (vector) objects, and filtered and visualized NatureCounts data within KBAs and Priority Places. Now you are ready to explore your NatureCounts data in relation to environmental covariates. In this tutorial, you will use NatureCounts and climate data to explore possible patterns in Whooping Crane observations, annual mean temperature, and annual mean precipitation within the Wood Buffalo National Park, the province of Alberta, and beyond.
+| In [Chapter 2](02-SpatialSubsets.Rmd), you applied geoprocessing functions to spatial (vector) objects, and filtered and visualized NatureCounts data within KBAs and Priority Places. Now you are ready to explore your NatureCounts data in relation to environmental covariates. In this tutorial, you will use NatureCounts and climate data to explore possible patterns in Whooping Crane observations, annual mean temperature, and annual mean precipitation within the Wood Buffalo National Park, the province of Alberta, and beyond.
 
 # 3.0 Learning Objectives
 
@@ -94,33 +94,25 @@ whooping_crane_data <- nc_data_dl(
   username = "testuser", info = "spatial_data_tutorial")
 ```
 
-Grouping the NatureCounts data might provide more meaningful insight on species occurrences at each site and how they might vary across time and space. To create date and doy columns and ensure that the ObservationCount column is in the correct **numeric** format we can apply the `format_dates` and `mutate` functions :
-
-```{r}
-whooping_crane_data <- whooping_crane_data %>%
-  format_dates() %>% # create the date and doy columns 
-  mutate(ObservationCount = as.numeric(ObservationCount)) # convert to numeric
-```
-
-You can then summarize species occurrence by SiteCode and date while keeping the coordinate information for each site using the `group_by` and `summarise` functions:
+Grouping the NatureCounts data might provide more meaningful insight on species occurrences at each site and how they might vary across time and space. You can achieve this by summarizing species occurrence by SiteCode and survey year, while keeping the coordinate information for each site using the `group_by` and `summarise` functions:
 
 ```{r, error = TRUE}
 species_occurrence_summary <- whooping_crane_data %>%
-  group_by(SiteCode, date, longitude, latitude) %>%
+  format_dates() 
+  group_by(SiteCode, survey_year, longitude, latitude) %>%
   summarise(total_count = sum(as.numeric(ObservationCount), na.rm = TRUE)) %>%
   ungroup()
 ```
 
-Lastly, you can summarize the NatureCounts data once more to get the annual total counts of Whooping Cranes, say between 1985 and 2011. To do so, we can 1) produce a regular dataframe called **cranes_summary** by dropping the geometry column (`st_drop_geometry`) 2) create the **date** column using `lubridate` and group by year 3) calculate the **annual_count** by using the `summarise` and `sum` functions and 4) filter for NA values and by **year:**
+Lastly, you can summarize the NatureCounts data once more to get the annual total counts of Whooping Cranes, say between 1985 and 2011. To do so, we can 1) produce a regular dataframe called **cranes_summary** by dropping the geometry column (`st_drop_geometry`) 2) calculate the **annual_count** by using the `summarise` and `sum` functions and 3) filter for NA values and by **year:**
 
 ```{r}
 cranes_summary <- species_occurrence_summary %>%
   st_drop_geometry() %>%
-  mutate(year = year(date)) %>%
-  group_by(year) %>%
+  group_by(survey_year) %>%
   summarize(annual_count = sum(total_count, na.rm = TRUE)) %>%
-  filter(!is.na(year)) %>%
-  filter(year >= 1985 & year <= 2011)
+  filter(!is.na(survey_year)) %>%
+  filter(survey_year >= 1985 & survey_year <= 2011)
 cranes_summary
 ```
 
@@ -186,7 +178,7 @@ Finally, to summarize the weather data by calculating the annual mean summer tem
 ```{r}
 yearly_climate <- weather %>%
   filter(month(date) %in% 5:8) %>%  # Filter for summer months May (5) through August (8)
-  group_by(year = year(date)) %>%   # Group by year
+  group_by(survey_year = year(date)) %>%   # Group by year
   summarize(
     yearly_avg_temp = mean(mean_temp, na.rm = TRUE),
     yearly_avg_precip = mean(total_precip, na.rm = TRUE)
@@ -197,7 +189,7 @@ yearly_climate
 Now that you have prepared the NatureCounts and weathercan climate data you can combine the data together for analysis.
 
 ```{r}
-cranes_climate_summary <- left_join(cranes_summary, yearly_climate, by = "year")
+cranes_climate_summary <- left_join(cranes_summary, yearly_climate, by = "survey_year")
 cranes_climate_summary
 ```
 
