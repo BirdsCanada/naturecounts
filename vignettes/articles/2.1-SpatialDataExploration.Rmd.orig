@@ -1,5 +1,5 @@
 ---
-title: "01-SpatialDataExploration"
+title: "Chapter 1 - Spatial Data Exploration"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -55,11 +55,11 @@ Spatial data is any type of vector or raster data that represents a feature or p
 
 The most common format used to store vector data in a file on disk is the **ESRI Shapefile** format *(.shp)*. Shapefiles are always accompanied by files with *.dbf*, *.shx,* and *.prj* extensions.
 
-Raster data files are typically stored with TIFF or GeoTIFF files with a *(.tif)* or *(.tiff)* extension. Raster data manipulation will be in covered in subsequent chapters (see [Chapter 3: Climate Data](03-ClimateData.Rmd), [Chapter 4: Elevation Data](), [Chapter 5: Landcover Data](05-LandcoverData.Rmd), [Chapter 6: Satellite Imagery](06-SatelliteImagery.Rmd), and [Chapter 7: RasterSummaryStats](07-RasterSummaryStats)).
+Raster data files are typically stored with TIFF or GeoTIFF files with a *(.tif)* or *(.tiff)* extension. Raster data manipulation will be in covered in subsequent chapters (see [Chapter 3: Climate Data](03-ClimateData.Rmd), [Chapter 4: Elevation Data](04-ElevationData.Rmd), [Chapter 5: Land Cover Data](05-LandcoverData.Rmd), [Chapter 6: Satellite Imagery](06-SatelliteImagery.Rmd), and [Chapter 7: Raster Summary](07-RasterSummaryStats)).
 
 Vector and raster data may also be associated with **attribute data** or **temporal data**. Attribute data provides additional information on the characteristics of spatial features while temporal data assigns a specific date or time range.
 
-The `sf` package provides [simple feature](https://r-spatial.github.io/sf/) access in R. This package works best with spatial data (point, line, polygon, multipolygon, etc) associated with tabular attributes (e.g shapefiles). You may be familiar with the `sp` package that has similar functionality in a different format, however, this package is no longer in use as of 2023 and does not support integration with `tidyverse` which is very popular among data scientists in R.
+The `sf` package provides [simple feature](https://r-spatial.github.io/sf/) access in R. This package works best with spatial data (point, line, polygon, multipolygon) associated with tabular attributes (e.g shapefiles). You may be familiar with the `sp` package that has similar functionality in a different format, however, this package is no longer in use as of 2023 and does not support integration with `tidyverse` which is very popular among data scientists who use R.
 
 # 1.2 Geo-processing Functions
 
