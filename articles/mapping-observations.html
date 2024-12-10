@@ -8,8 +8,8 @@
 <title>Mapping Observations • naturecounts</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Mapping Observations">
 </head>
@@ -55,9 +55,9 @@
 
       <h1>Mapping Observations</h1>
             
-            <h4 data-toc-skip class="date">2024-09-11</h4>
+            <h4 data-toc-skip class="date">2024-12-10</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/main/vignettes/articles/mapping-observations.Rmd" class="external-link"><code>vignettes/articles/mapping-observations.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/vignettes/articles/mapping-observations.Rmd" class="external-link"><code>vignettes/articles/mapping-observations.Rmd</code></a></small>
       <div class="d-none name"><code>mapping-observations.Rmd</code></div>
     </div>
 
@@ -332,7 +332,7 @@ Alberta’s Bird Conservation Regions (BCRs).</p>
 Canada</a><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Bird Studies Canada and NABCI. 2014. Bird Conservation
 Regions. Published by Bird Studies Canada on behalf of the North
 American Bird Conservation Initiative. &lt;a href="https://birdscanada.org/bird-science/nabci-bird-conservation-regions" class="external-link uri"&gt;https://birdscanada.org/bird-science/nabci-bird-conservation-regions&lt;/a&gt;
-Accessed: 2024-09-11&lt;/p&gt;'><sup>1</sup></a>.</p>
+Accessed: 2024-12-10&lt;/p&gt;'><sup>1</sup></a>.</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://birdscanada.org/download/gislab/bcr_terrestrial_shape.zip"</span>, <span class="st">"bcr_terrestrial_shape.zip"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="st">"bcr_terrestrial_shape.zip"</span><span class="op">)</span></span>
@@ -421,14 +421,14 @@ where cardinals (<code>species_id</code> 19360) were not detected
 <pre><code><span><span class="co">## Using filters: collections (RCBIOTABASE); fields_set (BMDE2.00-min)</span></span></code></pre>
 <pre><code><span><span class="co">## Collecting available records...</span></span></code></pre>
 <pre><code><span><span class="co">##    collection nrecords</span></span>
-<span><span class="co">## 1 RCBIOTABASE    12863</span></span>
-<span><span class="co">## Total records: 12,863</span></span></code></pre>
+<span><span class="co">## 1 RCBIOTABASE    13053</span></span>
+<span><span class="co">## Total records: 13,053</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Downloading records for each collection:</span></span></code></pre>
 <pre><code><span><span class="co">##   RCBIOTABASE</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 1 to 5000 / 12863</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 5001 to 10000 / 12863</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 10001 to 12863 / 12863</span></span></code></pre>
+<pre><code><span><span class="co">##     Records 1 to 5000 / 13053</span></span></code></pre>
+<pre><code><span><span class="co">##     Records 5001 to 10000 / 13053</span></span></code></pre>
+<pre><code><span><span class="co">##     Records 10001 to 13053 / 13053</span></span></code></pre>
 <div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cardinals_zf</span> <span class="op">&lt;-</span> <span class="va">cardinals</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">AllSpeciesReported</span> <span class="op">==</span> <span class="st">"Yes"</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">latitude</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">longitude</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -507,7 +507,7 @@ observations</a></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
