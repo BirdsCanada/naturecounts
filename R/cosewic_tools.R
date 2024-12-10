@@ -452,6 +452,7 @@ map_canada <- function() {
 #' @examples
 #' r <- cosewic_ranges(bcch)
 #' cosewic_plot(r)
+#' cosewic_plot(r, scale = TRUE)
 #' cosewic_plot(r, points = bcch)
 #' cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
 #'              title = "Black-capped chickadees")
@@ -459,6 +460,7 @@ map_canada <- function() {
 #' m <- rbind(bcch, hofi)
 #' r <- cosewic_ranges(m)
 #' cosewic_plot(r)
+#' cosewic_plot(r, scale = TRUE)
 #' cosewic_plot(r, points = m)
 #' p <- cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
 #'                  title = c("14280" = "Black-capped chickadees", 
@@ -467,6 +469,7 @@ map_canada <- function() {
 #' p[[2]]
 #' 
 cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL, 
+                         scale = FALSE, 
                          species = "species_id",  title = "") {
   
   have_pkg_check("sf")
@@ -517,14 +520,14 @@ cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL,
   
   g <- purrr::pmap(
     list(e, i, points, title), 
-    \(e, i, points, title) cosewic_plot_indiv(e, i, points, grid, map, title))
+    \(e, i, points, title) cosewic_plot_indiv(e, i, points, grid, map, scale, title))
   
   if(length(g) == 1) g <- g[[1]]
   g
 }
 
 
-cosewic_plot_indiv <- function(e, a, points, grid, map, title) {
+cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title) {
   
   size_a <- unique(a$grid_size_km)
   
@@ -542,6 +545,11 @@ cosewic_plot_indiv <- function(e, a, points, grid, map, title) {
   } else {
     size_p <- size_a
   }
+  
+  if(scale) {
+    a <- dplyr::mutate(a, n_records = n_records / max(n_records, na.rm = TRUE))
+    leg_title <- "IAO\nProp. records"
+  } else leg_title <- "IAO\nNo. records"
 
   g <- ggplot2::ggplot() +
     ggplot2::theme_minimal() +
@@ -550,8 +558,11 @@ cosewic_plot_indiv <- function(e, a, points, grid, map, title) {
     ggplot2::scale_fill_viridis_c() +
     ggplot2::scale_colour_manual(name = "", values = "grey20") +
     ggplot2::labs(
-      fill = "IAO\nNo. records", 
+      fill = leg_title, 
       title = title,
+      subtitle = paste0("Showing ", a$n_records_total[1], 
+                        " records (ranging ", a$min_record[1], "-", a$max_record[1], 
+                        " per ", size_a, "x", size_a, " km grid)"),
       caption = 
         paste0("Showing ", size_p, "x", size_p, 
                "km grids\nAnalysis used ",
