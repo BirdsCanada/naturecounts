@@ -304,8 +304,13 @@ cosewic_eoo <- function(df_sf, p, clip, spatial) {
   
   if(!is.null(clip)) {
     clip <- sf::st_transform(clip, sf::st_crs(eoo))
-    eoo <- sf::st_intersection(sf::st_set_agr(eoo, "constant"), 
-                               sf::st_set_agr(clip, "constant"))
+    eoo_clipped <- sf::st_intersection(sf::st_set_agr(eoo, "constant"), 
+                                       sf::st_set_agr(clip, "constant"))
+    if(nrow(eoo_clipped) == 0) {
+      warning("Clipping EOO results in no EOO, using non-clipped EOO instead", call. = FALSE)
+    } else {
+      eoo <- eoo_clipped
+    }
   }
   
   eoo <- eoo |>
@@ -536,8 +541,8 @@ cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title) {
     stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
     toupper()
   
-  records <- paste0("Showing ", a$n_records_total[1], 
-                    " records (ranging ", a$min_record[1], "-", a$max_record[1], 
+  records <- paste0(a$n_records_total[1], 
+                    " records\n(", a$min_record[1], "-", a$max_record[1], 
                     " per ", size_a, "x", size_a, " km grid)")
   
   if(!is.null(grid)) {
