@@ -31,9 +31,21 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/1.1-Introduction.html">Chapter 1 - Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/1.2-LoadPackage.html">Chapter 2 - Loading R Packages</a></li>
+    <li><a class="dropdown-item" href="../articles/1.3-ViewData.html">Chapter 3 - Understanding and Viewing Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.4-DownloadData.html">Chapter 4 - Downloading and Filtering Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.5-ManipData.html">Chapter 5 - Data Manipulation</a></li>
+    <li><a class="dropdown-item" href="../articles/1.6-VisualData.html">Chapter 6 - Data Visualization</a></li>
+    <li><a class="dropdown-item" href="../articles/1.7-Answers.html">Chapter 7 - Answers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -56,7 +68,7 @@
 
       <h1>Chapter 4 - Downloading and Filtering Data</h1>
             
-            <h4 data-toc-skip class="date">2024-12-09</h4>
+            <h4 data-toc-skip class="date">2024-12-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/1.4-DownloadData.Rmd" class="external-link"><code>vignettes/articles/1.4-DownloadData.Rmd</code></a></small>
       <div class="d-none name"><code>1.4-DownloadData.Rmd</code></div>
@@ -69,6 +81,8 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
 <p>This chapter jumps right into downloading NatureCounts data, which
 builds directly on the skills developed in <a href="#Data3">Chapter
 3</a>.</p>
@@ -82,14 +96,14 @@ into a local data frame. To do so, we will use the
 <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code> download function. There is lots of data here,
 so this could take a couple minutes.</p>
 <p>First find the species id for the target species:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"American Bittern"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">##   species_id scientific_name       english_name     french_name      taxon_group</span></span>
 <span><span class="co">##        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span>       <span style="text-decoration: underline;">2</span>490 Botaurus lentiginosus American Bittern Butor d'Amérique BIRDS</span></span></code></pre>
 <p>Then use this id with <code><a href="../reference/nc_data_dl.html">nc_data_dl()</a></code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bittern</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"tutorial example"</span><span class="op">)</span></span></code></pre></div>
 <p>The bittern dataframe should now appear in the upper right panel of
 RStudio under the <em>Environment</em> tab. Notice we specified the
@@ -105,7 +119,7 @@ to enter your password.</p>
 collection (WPWI), since it is Open Access (Level 5) and contains
 relatively few records (n = 3012). Click <a href="https://naturecounts.ca/nc/default/datasets.jsp?code=WPWI" class="external-link">here</a>
 for more information on this dataset.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"WPWI"</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"tutorial example"</span><span class="op">)</span></span></code></pre></div>
 <p>Our data download was more specific, and way faster! This will depend
 on your research goals and data needs. Instead of specifying species id,
@@ -127,10 +141,10 @@ your request has been approved, which will contain your
 acquired dataset into R. There is also a build in function that allows
 you to check the status of your request and retrieve your
 <code>request_id</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nc_requests.html">nc_requests</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"testuser"</span><span class="op">)</span></span></code></pre></div>
 <p>Here is sample code to download Access Level 3 or 4 data:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>request_id <span class="op">=</span> <span class="fl">000000</span>, username <span class="op">=</span> <span class="st">"USER"</span>,</span>
 <span>                      info <span class="op">=</span> <span class="st">"MY REASON"</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Note: This code is not functional and is here to serve as a
@@ -179,7 +193,7 @@ research, you only want data collected during the main survey window.
 Further, the survey was Ontario-wide, but most effort and records are
 from southern Ontario. Let’s further limit the data to those collected
 south of the Canadian Shield, which is approximated with <a href="http://nabci-us.org/assets/images/bcr_map2.jpg" class="external-link">BCR</a> 13.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_filter</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"WPWI"</span>, years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2010</span>, <span class="fl">2012</span><span class="op">)</span>,region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bcr <span class="op">=</span> <span class="st">"13"</span><span class="op">)</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"tutorial example"</span><span class="op">)</span></span></code></pre></div>
 <p>You will notice that the number of records in the filtered WPWI
 download (<code>WPWI_filter</code> = 754) is substantially less than the
@@ -192,7 +206,7 @@ data to filter observations</a>. Specifically, you create a <a href="https://bir
 box</a>, using the <a href="https://naturecounts.ca/monitoring/georef_rec.jsp?lang=EN" class="external-link">Within
 Coordinates</a> tool to help you retrieve custom coordinates for your
 data query and/or download.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_bp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"WPWI"</span>, </span>
 <span>                      region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>left <span class="op">=</span> <span class="op">-</span><span class="fl">81.7</span>, bottom <span class="op">=</span> <span class="fl">44.5</span>, </span>
 <span>                                             right <span class="op">=</span> <span class="op">-</span><span class="fl">80.9</span>, top <span class="op">=</span> <span class="fl">45.3</span><span class="op">)</span><span class="op">)</span>, </span>

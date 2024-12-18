@@ -31,9 +31,21 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/1.1-Introduction.html">Chapter 1 - Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/1.2-LoadPackage.html">Chapter 2 - Loading R Packages</a></li>
+    <li><a class="dropdown-item" href="../articles/1.3-ViewData.html">Chapter 3 - Understanding and Viewing Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.4-DownloadData.html">Chapter 4 - Downloading and Filtering Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.5-ManipData.html">Chapter 5 - Data Manipulation</a></li>
+    <li><a class="dropdown-item" href="../articles/1.6-VisualData.html">Chapter 6 - Data Visualization</a></li>
+    <li><a class="dropdown-item" href="../articles/1.7-Answers.html">Chapter 7 - Answers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -56,7 +68,7 @@
 
       <h1>Chapter 5 - Data Manipulation</h1>
             
-            <h4 data-toc-skip class="date">2024-12-09</h4>
+            <h4 data-toc-skip class="date">2024-12-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/1.5-ManipData.Rmd" class="external-link"><code>vignettes/articles/1.5-ManipData.Rmd</code></a></small>
       <div class="d-none name"><code>1.5-ManipData.Rmd</code></div>
@@ -68,8 +80,11 @@
 <h2 id="Manip5">Data Manipulation<a class="anchor" aria-label="anchor" href="#Manip5"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> </span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> </span></code></pre></div>
+<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
 <p>You have successfully downloaded your NatureCounts dataset and are
 ready to explore and summarise the data. In this chapter we will
 demonstrate how to do some basic data manipulations and summaries. The
@@ -106,7 +121,7 @@ summary (often with <code><a href="https://dplyr.tidyverse.org/reference/group_b
 </ul>
 <p>Let’s continue using the full <a href="https://naturecounts.ca/nc/default/datasets.jsp?code=WPWI" class="external-link">Ontario
 Whip-poor-will</a> collection for this chapter.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"WPWI"</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"tutorial example"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="Manip5-1-1">Select<a class="anchor" aria-label="anchor" href="#Manip5-1-1"></a>
@@ -121,7 +136,7 @@ which allows you to subset the dataframe based on the names of the
 variables.</p>
 <p>For example, we are going to <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select()</a></code> a subset of
 variables from the WPWI dataset that we need for our summary:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_select</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">WPWI</span>, <span class="st">"SurveyAreaIdentifier"</span>, </span>
 <span>                      <span class="st">"RouteIdentifier"</span>, <span class="st">"species_id"</span>, <span class="st">"latitude"</span>, </span>
 <span>                      <span class="st">"longitude"</span>, <span class="st">"bcr"</span>, <span class="st">"survey_day"</span>, <span class="st">"survey_month"</span>, </span>
@@ -154,16 +169,16 @@ include:</p>
 <p>Here we provide a few additional examples for you to work with.
 First, lets apply a simple <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> that subsets the data
 based on a single survey month:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_June</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">WPWI_select</span>, <span class="va">survey_month</span> <span class="op">==</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 <p>Now lets try multiple survey months by adding a logical operator:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_JJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">WPWI_select</span>, <span class="va">survey_month</span> <span class="op">==</span> <span class="fl">6</span> <span class="op">|</span> <span class="va">survey_month</span> <span class="op">==</span> <span class="fl">7</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#Alternatively this can be written as:</span></span>
 <span><span class="va">WPWI_JJ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">WPWI_select</span>, <span class="va">survey_month</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We can continue to add to the complexity of our filter:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">WPWI_select</span>, </span>
 <span>                     <span class="va">survey_month</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">7</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">bcr</span> <span class="op">==</span> <span class="fl">12</span> <span class="op">&amp;</span> </span>
 <span>                       <span class="va">survey_year</span> <span class="op">&gt;=</span> <span class="fl">2010</span> <span class="op">&amp;</span> <span class="va">survey_year</span> <span class="op">&lt;=</span> <span class="fl">2012</span><span class="op">)</span></span></code></pre></div>
@@ -182,7 +197,7 @@ on each WPWI Route. We will want to group observations by
 <code>SurveyAreaIdentifier</code> entries using the
 <code><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct()</a></code> function and creating a new column named
 <code>Nstops</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_Route</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">WPWI_select</span>, <span class="va">RouteIdentifier</span><span class="op">)</span></span>
 <span><span class="va">WPWI_Route</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="va">WPWI_Route</span>, Nstops <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">SurveyAreaIdentifier</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>However, now that we’re getting on to more complex operations, we’ll
@@ -191,7 +206,7 @@ chain a sequence of functions, in order to avoid creating multiple
 intermediate objects which can clutter our Environment! This allows you
 to pass (pipe) the output of one line as input to the next line.
 Therefore, the previous code can be re-written as:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_Route</span> <span class="op">&lt;-</span> <span class="va">WPWI_select</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">RouteIdentifier</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>Nstops <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">SurveyAreaIdentifier</span><span class="op">)</span><span class="op">)</span></span>
@@ -203,7 +218,7 @@ once, at the very start. These two different codes achieve the exact
 same result.</p>
 <p>Back to our example, we might also want to know how many routes were
 run in each year.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_Year</span> <span class="op">&lt;-</span> <span class="va">WPWI_select</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>Nroute <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">RouteIdentifier</span><span class="op">)</span><span class="op">)</span></span>
@@ -216,7 +231,7 @@ unique year. We can do this by first removing the ‘NA’ using the
 <code>filter</code> function, and then use the <code>group_by</code> and
 <code>summarise</code> to determine the ‘length’ of the dataset (i.e.,
 the number of rows with WPWI sightings).</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">WPWI_Obs</span> <span class="op">&lt;-</span> <span class="va">WPWI_select</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span> <span class="op">(</span><span class="va">species_id</span> <span class="op">!=</span> <span class="st">"NA"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>SumObs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">species_id</span><span class="op">)</span><span class="op">)</span></span>
@@ -244,7 +259,7 @@ naturecounts.</p>
 column, but not alpha species code. For example, let’s pull a small
 amount of data from the second Alberta Breeding Bird Atlas (ABATLAS2)
 from Beaverhill Lake Important Bird Area (AB001) in 2005.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">AB_Atlas</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections<span class="op">=</span><span class="st">"ABATLAS2"</span>, region<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iba <span class="op">=</span> <span class="st">"AB001"</span><span class="op">)</span>, years<span class="op">=</span><span class="fl">2005</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"tutorial example"</span><span class="op">)</span></span></code></pre></div>
 <p>Notice there are 57 variables, including is a numeric species_id, but
 no alpha species code.</p>
@@ -252,7 +267,7 @@ no alpha species code.</p>
 <ol style="list-style-type: decimal">
 <li>Set the <code>fields_set</code> argument to <em>extended</em>.</li>
 </ol>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">AB_Atlas2</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections<span class="op">=</span><span class="st">"ABATLAS2"</span>, region<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>iba <span class="op">=</span> <span class="st">"AB001"</span><span class="op">)</span>, years<span class="op">=</span><span class="fl">2005</span>, fields_set<span class="op">=</span><span class="st">"extended"</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"tutorial example"</span><span class="op">)</span></span></code></pre></div>
 <p>Notice you are now pulling 285 variables, including the CommonName.
 However, for this particular dataset, there is still no alpha code
@@ -264,18 +279,18 @@ join this to your existing data table.</li>
 </ol>
 <p>First, identify the appropriate taxonomic authority using the
 metadata.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">authority</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/meta.html">meta_species_authority</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">authority</span><span class="op">)</span></span></code></pre></div>
 <p>Second, pull the species code table, and filter for the “ABATLAS2”
 authority.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">species</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/meta.html">meta_species_codes</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span></span>
 <span><span class="va">species</span><span class="op">&lt;-</span><span class="va">species</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">authority</span><span class="op">==</span><span class="st">"ABATLAS2"</span><span class="op">)</span></span></code></pre></div>
 <p>Third, join your tables so that it includes the desired species
 information.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">AB_Atlas_sp</span><span class="op">&lt;-</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">AB_Atlas</span>, <span class="va">species</span>, by<span class="op">=</span><span class="st">"species_id"</span><span class="op">)</span></span></code></pre></div>
 <p>Now your datatable contains the species code, which is familiar to
 most birders. You can also try joining the Atlas data to the

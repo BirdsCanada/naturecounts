@@ -31,9 +31,21 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/1.1-Introduction.html">Chapter 1 - Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/1.2-LoadPackage.html">Chapter 2 - Loading R Packages</a></li>
+    <li><a class="dropdown-item" href="../articles/1.3-ViewData.html">Chapter 3 - Understanding and Viewing Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.4-DownloadData.html">Chapter 4 - Downloading and Filtering Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.5-ManipData.html">Chapter 5 - Data Manipulation</a></li>
+    <li><a class="dropdown-item" href="../articles/1.6-VisualData.html">Chapter 6 - Data Visualization</a></li>
+    <li><a class="dropdown-item" href="../articles/1.7-Answers.html">Chapter 7 - Answers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -56,7 +68,7 @@
 
       <h1>Chapter 3 - Understanding and Viewing Data</h1>
             
-            <h4 data-toc-skip class="date">2024-12-09</h4>
+            <h4 data-toc-skip class="date">2024-12-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/1.3-ViewData.Rmd" class="external-link"><code>vignettes/articles/1.3-ViewData.Rmd</code></a></small>
       <div class="d-none name"><code>1.3-ViewData.Rmd</code></div>
@@ -73,6 +85,8 @@ how to create a user account. We then provide instructions on how to
 view data from various collections and apply filters.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
 <blockquote>
 <p>The code in this Chapter will not work unless you replace
 <code>"testuser"</code> with your actual user name. You will be prompted
@@ -133,7 +147,7 @@ usage.</p>
 <p>You can view the Data Access Level for each collection on the <a href="https://naturecounts.ca/nc/default/datasets.jsp" class="external-link">NatureCounts
 Datasets</a> page or using the <a href="#Data3.5">metadata</a> function
 (see <code>akn_level</code>):</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">collections</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">collections</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
@@ -142,7 +156,7 @@ similar syntax as above</p>
 </blockquote>
 <p>To retrieve the metadata for a specific set of collections based on
 its project_id, you can index the ‘collections’ dataframe.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Specify the project_id you want to retrieve</span></span>
 <span><span class="va">projectID</span> <span class="op">&lt;-</span> <span class="st">"insert_project_id_number"</span></span>
 <span></span>
@@ -181,12 +195,12 @@ setting.</p>
 <p>If a username is provided, the collections are filtered to only those
 available to the user. Otherwise all counts from all data sources are
 returned (default: <code>show = "all"</code>).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc_count</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">nc_count</span><span class="op">)</span></span></code></pre></div>
 <p>Or you can view the collections for which you have access using your
 username/password.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc_count</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"testuser"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">nc_count</span><span class="op">)</span></span></code></pre></div>
 <p>Further refinements can be applied to the <code><a href="../reference/nc_count.html">nc_count()</a></code>
@@ -233,7 +247,7 @@ descriptions</p></li>
 <p>Any of these functions can be used to browse the code lists relevant
 to your search. For example, you can view the metadata for Birds Canada
 projects, including project ids using:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">project_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta.html">meta_projects</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># retrieve the project_ids represented in the repository </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">project_ids</span><span class="op">)</span> <span class="co"># explore the dataframe </span></span></code></pre></div>
 <p>Using the above functions to search by country, state/province,
@@ -268,7 +282,7 @@ data query and/or download.</p></li>
 <p>The search_region function may be used to search a region by name
 (English or French) by specifying the ‘type’ argument.</p>
 <p>For example, by country;</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"États-Unis"</span>, type <span class="op">=</span> <span class="st">"country"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
 <span><span class="co">##   country_code country_name                         country_name_fr             </span></span>
@@ -277,7 +291,7 @@ data query and/or download.</p></li>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> US           United States                        États-Unis                  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> VI           Virgin Uslands, U.S.                 Îles Vierges des États-Unis</span></span></code></pre>
 <p>Or by Bird Conservation Region:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"rainforest"</span>, type <span class="op">=</span> <span class="st">"bcr"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">##     bcr bcr_name                    bcr_name_es                      bcr_name_fr</span></span>
@@ -288,16 +302,16 @@ helpful option of filtering data by region. Let’s demonstrate how to use
 this function and the <code>region</code> argument with a few
 examples.</p>
 <p>First, let’s limit our data search to Quebec:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov<span class="op">=</span><span class="st">"QC"</span><span class="op">)</span><span class="op">)</span> <span class="co"># filter nc_count by statprov</span></span></code></pre></div>
 <p>Next, let’s say we want to narrow down our search to the subnational
 level (Montreal and Toronto) but don’t know the corresponding codes for
 these regions.</p>
 <p>Browse the code list:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="fu"><a href="../reference/meta.html">meta_subnational2_codes</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Or, more efficiently, search by region:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Montreal"</span>, type <span class="op">=</span> <span class="st">"subnational2"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">##   country_code statprov_code subnational2_code subnational2_name      ebird_code</span></span>
@@ -305,27 +319,27 @@ these regions.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> CA           QC            CA.QC.MR          Communauté-Urbaine-de… CA-QC-MR</span></span></code></pre>
 <p>Great, we now know the codes we need and can view our metadata using
 <code><a href="../reference/nc_count.html">nc_count()</a></code>:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>subnational2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CA-QC-MR"</span>, <span class="st">"CA-ON-TO"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Without a username, using 'show = "all"'</span></span></code></pre>
 <pre><code><span><span class="co">## Using filters: subnational2 (CA-QC-MR, CA-ON-TO)</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 463 × 4</span></span></span>
-<span><span class="co">##    collection     akn_level access     nrecords</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> ABATLAS1               5 full         <span style="text-decoration: underline;">123</span>364</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> ABATLAS2               5 full         <span style="text-decoration: underline;">201</span>357</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> ABBIRDRECS             5 full         <span style="text-decoration: underline;">357</span>264</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> ATBANS                 3 by request      267</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> BBS                    5 full        5<span style="text-decoration: underline;">735</span>895</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> BBS50-CAN              5 full        4<span style="text-decoration: underline;">543</span>180</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> BBS50-US-EAST          5 full       10<span style="text-decoration: underline;">761</span>296</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> BBS50-US-WEST          5 full       11<span style="text-decoration: underline;">665</span>251</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> BCATLAS1BE_DO          5 full          <span style="text-decoration: underline;">41</span>412</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> BCATLAS1BE_RAW         5 full         <span style="text-decoration: underline;">344</span>433</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 453 more rows</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 466 × 4</span></span></span>
+<span><span class="co">##    collection    akn_level access     nrecords</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> ABATLAS1              5 full         <span style="text-decoration: underline;">123</span>364</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> ABATLAS2              5 full         <span style="text-decoration: underline;">201</span>357</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> ABBIRDRECS            5 full         <span style="text-decoration: underline;">357</span>264</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> ATBANS                3 by request      267</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> ATOWLS                4 by request    <span style="text-decoration: underline;">34</span>126</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AWSGS                <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">8</span>931</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> BBS                   5 full        5<span style="text-decoration: underline;">735</span>895</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> BBS50-CAN             5 full        4<span style="text-decoration: underline;">543</span>180</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> BBS50-US-EAST         5 full       10<span style="text-decoration: underline;">761</span>296</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> BBS50-US-WEST         5 full       11<span style="text-decoration: underline;">665</span>251</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 456 more rows</span></span></span></code></pre>
 <p>Similarly, this function can be used to view metadata for a bounding
 box using latitude and longitude coordinates:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>left <span class="op">=</span> <span class="op">-</span><span class="fl">125</span>, bottom <span class="op">=</span> <span class="fl">45</span>, </span>
 <span>                                right <span class="op">=</span> <span class="op">-</span><span class="fl">100</span>, top <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Without a username, using 'show = "all"'</span></span></code></pre>
@@ -350,13 +364,13 @@ codes. These are numeric codes that reflect species identity.</p>
 <p>For all species, you can search the NatureCounts repository by
 scientific, English or French name with the search_species()
 function.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"chickadee"</span><span class="op">)</span> <span class="co"># returns all chickadee species ids</span></span></code></pre></div>
 <p>The corresponding species id can then be used to download the data
 either directly or by saving and referencing the data frame: <a href="#Data4">see Chapter 4</a></p>
 <p>For birds, you can also search by alphanumeric species code with the
 search_species_code() function.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">species_codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># returns all species codes represented in the database.</span></span></code></pre></div>
 <p>This function, by default, uses the BSCDATA taxonomic authority and
 returns all species codes related to the search term including related
@@ -364,10 +378,10 @@ subspecies. For this reason, it is considered a more robust method for
 ensuring that you do not miss observations in your search.</p>
 <p>If you’re interested in a particular species, and any recognized
 subspecies, you can filter your search:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"BCCH"</span><span class="op">)</span> <span class="co"># Filters by species code</span></span></code></pre></div>
 <p>The search function is case insensitive:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"bcch"</span><span class="op">)</span> <span class="co"># Also filters by species code</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">##   species_id BSCDATA scientific_name      english_name           french_name    </span></span>
@@ -378,7 +392,7 @@ subpopulations, hybrids, etc.) can also be recognized with different
 codes across taxonomic authority (BSCDATA, CBC).</p>
 <p>For example, BSCDATA recognizes 3 sub groups of the Dark-eyed
 junco:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"DEJU"</span><span class="op">)</span> <span class="co"># Returns species ids for Junco hyemali and 3 related subgroups</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 5</span></span></span>
 <span><span class="co">##   species_id BSCDATA scientific_name                    english_name french_name</span></span>
@@ -390,7 +404,7 @@ junco:</p>
 <p>We have to modify our search when filtering by the CBC code system.
 This taxonomic authority recognizes 9 sub group hybrids of the Dark-eyed
 junco, as well as the Guadalupe junco:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"12385"</span>, authority <span class="op">=</span> <span class="st">"CBC"</span><span class="op">)</span> <span class="co"># Returns the species ids and CBC codes for Junco hyemali, 9 subgroups, and the Guadelupe junco</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 11 × 5</span></span></span>
 <span><span class="co">##    species_id CBC   scientific_name                     english_name french_name</span></span>
@@ -409,11 +423,11 @@ junco, as well as the Guadalupe junco:</p>
 <p>You can search by more than one authority at the same time. Note that
 your search term only needs to match one authority (not both), and that
 the information returned reflects both authorities combined.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"DEJU"</span>, authority <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BSCDATA"</span>, <span class="st">"CBC"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>If you do not want all subgroups, you can use the results = “exact”
 argument to return only an exact match.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"DEJU"</span>, results <span class="op">=</span> <span class="st">"exact"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">##   species_id BSCDATA scientific_name english_name    french_name  </span></span>
@@ -437,7 +451,7 @@ for a specific <em>region</em>. The options include:
 at the link provided.</p>
 <p>The following code will retrieve all available collections and number
 of records for British Columbia</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"British Columbia"</span>, type <span class="op">=</span> <span class="st">"statprov"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="st">"BC"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><em>Example 2</em>: Determine the number of records for a specific
@@ -446,7 +460,7 @@ based on 4 letter alpha code and <a href="https://birdstudiescanada.github.io/na
 based on common names at the links provided.</p>
 <p>The following code will retrieve all available collections and number
 of records for Red-headed Woodpecker</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"Red-headed Woodpecker"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/search_species_code.html">search_species_code</a></span><span class="op">(</span><span class="st">"RHWO"</span><span class="op">)</span></span>
 <span></span>
@@ -457,7 +471,7 @@ example (above) by filtering the species-specific data by region (e.g.,
 <a href="http://nabci-us.org/assets/images/bcr_map2.jpg" class="external-link">Bird
 Conservation Region</a> 11), time period (e.g., 2015-2019), or a
 combination of both.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">RHWO_11</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">10060</span>, region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bcr <span class="op">=</span> <span class="st">"11"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">RHWO_11</span><span class="op">)</span></span>
 <span></span>

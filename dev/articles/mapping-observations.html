@@ -31,9 +31,21 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/1.1-Introduction.html">Chapter 1 - Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/1.2-LoadPackage.html">Chapter 2 - Loading R Packages</a></li>
+    <li><a class="dropdown-item" href="../articles/1.3-ViewData.html">Chapter 3 - Understanding and Viewing Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.4-DownloadData.html">Chapter 4 - Downloading and Filtering Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.5-ManipData.html">Chapter 5 - Data Manipulation</a></li>
+    <li><a class="dropdown-item" href="../articles/1.6-VisualData.html">Chapter 6 - Data Visualization</a></li>
+    <li><a class="dropdown-item" href="../articles/1.7-Answers.html">Chapter 7 - Answers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -56,7 +68,7 @@
 
       <h1>Mapping Observations</h1>
             
-            <h4 data-toc-skip class="date">2024-12-09</h4>
+            <h4 data-toc-skip class="date">2024-12-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/mapping-observations.Rmd" class="external-link"><code>vignettes/articles/mapping-observations.Rmd</code></a></small>
       <div class="d-none name"><code>mapping-observations.Rmd</code></div>
@@ -79,8 +91,11 @@ username.</p>
 </h2>
 <p>To do so we’re going to use the following packages:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rnaturalearth/" class="external-link">rnaturalearth</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paleolimbot.github.io/ggspatial/" class="external-link">ggspatial</a></span><span class="op">)</span></span>
@@ -88,7 +103,7 @@ username.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span></code></pre></div>
 <p>First we’ll use download some data:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">house_finches</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">20350</span>, region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="st">"AB"</span><span class="op">)</span>, </span>
 <span>                            username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_tutorial"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Using filters: species (20350); fields_set (BMDE2.00-min); statprov (AB)</span></span></code></pre>
@@ -131,7 +146,7 @@ username.</p>
 <pre><code><span><span class="co">##     Records 1 to 1 / 1</span></span></code></pre>
 <pre><code><span><span class="co">##   WILDTRAX41</span></span></code></pre>
 <pre><code><span><span class="co">##     Records 1 to 1 / 1</span></span></code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">house_finches</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   record_id collection project_id protocol_id protocol_type species_id</span></span>
 <span><span class="co">## 1 225617858   ABATLAS1       1048          NA            NA      20350</span></span>
@@ -240,10 +255,10 @@ using <code>ggplot2</code> and <code>ggspatial</code> to get some
 basemaps.</p>
 <p>First let’s get an idea of how many distinct points there are (often
 multiple observations are recorded for the same location).</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">house_finches</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 7211</span></span></code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">house_finches</span>, <span class="va">longitude</span>, <span class="va">latitude</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -254,7 +269,7 @@ spatially (i.e. make a map!). Note that we’re using CRS EPSG code of
 4326 because that’s reflects unprojected, GPS data in lat/lon. First we
 omit <code>NA</code>s because <code>sf</code> data frames cannot have
 missing locations.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">house_finches</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="va">house_finches</span>, <span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span></span>
 <span><span class="va">house_finches_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">house_finches</span>, </span>
 <span>                             coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
@@ -262,7 +277,7 @@ missing locations.</p>
 observations.</p>
 <p>We’ll use a baselayer from OpenStreetMap and then add our
 observations.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_map_tile.html" class="external-link">annotation_map_tile</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"osm"</span>, zoomin <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">house_finches_sf</span><span class="op">)</span> <span class="op">+</span></span>
@@ -273,7 +288,7 @@ observations.</p>
 <pre><code><span><span class="co">## ...complete!</span></span></code></pre>
 <p><img src="mapping-observations_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>Let’s count our observations for each site.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cnt</span> <span class="op">&lt;-</span> <span class="va">house_finches_sf</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">geometry</span><span class="op">)</span></span>
 <span></span>
@@ -290,7 +305,7 @@ observations.</p>
 <p>If we want to get fancy we can also create interactive maps using the
 <code>mapview</code> packages (see also the <a href="https://rstudio.github.io/leaflet/" class="external-link"><code>leaflet</code> for R
 package</a>).</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html" class="external-link">mapview</a></span><span class="op">(</span><span class="va">house_finches_sf</span>, zcol <span class="op">=</span> <span class="st">"survey_year"</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1965</span>, <span class="fl">2005</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
 <span>        map.types <span class="op">=</span> <span class="st">"Esri.WorldImagery"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -301,7 +316,7 @@ package</a>).</p>
 data files to layer our data over maps of the area.</p>
 <p>For this we’ll get some outlines of Canada and it’s Provinces and
 Territories from <code>rnaturalearth</code>.</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">canada</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_states.html" class="external-link">ne_states</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"canada"</span>, returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="fl">3347</span><span class="op">)</span></span>
 <span></span>
@@ -312,14 +327,14 @@ Territories from <code>rnaturalearth</code>.</p>
 <p>Let’s add our observations (note that the data are transformed to
 match the projection of the first layer, here the <code>canada</code>
 data).</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">canada</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">house_finches_sf</span>, size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mapping-observations_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>We can also focus on Alberta</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">canada</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"Alberta"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -333,8 +348,8 @@ Alberta’s Bird Conservation Regions (BCRs).</p>
 Canada</a><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Bird Studies Canada and NABCI. 2014. Bird Conservation
 Regions. Published by Bird Studies Canada on behalf of the North
 American Bird Conservation Initiative. &lt;a href="https://birdscanada.org/bird-science/nabci-bird-conservation-regions" class="external-link uri"&gt;https://birdscanada.org/bird-science/nabci-bird-conservation-regions&lt;/a&gt;
-Accessed: 2024-12-09&lt;/p&gt;'><sup>1</sup></a>.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+Accessed: 2024-12-18&lt;/p&gt;'><sup>1</sup></a>.</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://birdscanada.org/download/gislab/bcr_terrestrial_shape.zip"</span>, <span class="st">"bcr_terrestrial_shape.zip"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="st">"bcr_terrestrial_shape.zip"</span><span class="op">)</span></span>
 <span><span class="va">bcr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"BCR_Terrestrial/BCR_Terrestrial_master.shp"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -349,7 +364,7 @@ Accessed: 2024-12-09&lt;/p&gt;'><sup>1</sup></a>.</p>
 <span><span class="co">## Bounding box:  xmin: -179.1413 ymin: 14.53287 xmax: 179.7785 ymax: 83.11063</span></span>
 <span><span class="co">## Geodetic CRS:  NAD83</span></span></code></pre>
 <p>Add this layer to our plot.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ab</span><span class="op">)</span> <span class="op">+</span></span>
@@ -365,12 +380,12 @@ the observations by BCR as well.</p>
 observations, based on whether the observations overlap a BCR polygon
 (by default this is a left join). Now we have a BCR designation for each
 observation.</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">house_finches_sf</span> <span class="op">&lt;-</span> <span class="va">house_finches_sf</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">bcr</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_join</a></span><span class="op">(</span><span class="va">bcr</span><span class="op">)</span></span></code></pre></div>
 <p>Those border cases are now resolved.</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ab</span><span class="op">)</span> <span class="op">+</span></span>
@@ -380,19 +395,19 @@ observation.</p>
 <p><img src="mapping-observations_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <p>We might also be interested in observations over time.</p>
 <p>First we’ll bin our yearly observations</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">house_finches_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">house_finches_sf</span>, </span>
 <span>                           years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">survey_year</span>, </span>
 <span>                                       breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1960</span>, <span class="fl">2010</span>, <span class="fl">10</span><span class="op">)</span>, </span>
 <span>                                       labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1960</span>, <span class="fl">2000</span>, <span class="fl">10</span><span class="op">)</span>, right <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We’ll also want to see how many sample years there are per
 decade.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">years</span> <span class="op">&lt;-</span> <span class="va">house_finches_sf</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">years</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">survey_year</span><span class="op">)</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span></code></pre></div>
 <p>Now we can see how House Finch observations change over the years</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ab</span><span class="op">)</span> <span class="op">+</span></span>
@@ -416,7 +431,7 @@ TRUE, FALSE, or NA for each sampling event. Finally we use the
 <code><a href="../reference/format_zero_fill.html">format_zero_fill()</a></code> function to fill in sampling events
 where cardinals (<code>species_id</code> 19360) were not detected
 (presence would then be 0).</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collection <span class="op">=</span> <span class="st">"RCBIOTABASE"</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, </span>
 <span>                        info <span class="op">=</span> <span class="st">"nc_tutorial"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Using filters: collections (RCBIOTABASE); fields_set (BMDE2.00-min)</span></span></code></pre>
@@ -430,7 +445,7 @@ where cardinals (<code>species_id</code> 19360) were not detected
 <pre><code><span><span class="co">##     Records 1 to 5000 / 13053</span></span></code></pre>
 <pre><code><span><span class="co">##     Records 5001 to 10000 / 13053</span></span></code></pre>
 <pre><code><span><span class="co">##     Records 10001 to 13053 / 13053</span></span></code></pre>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cardinals_zf</span> <span class="op">&lt;-</span> <span class="va">cardinals</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">AllSpeciesReported</span> <span class="op">==</span> <span class="st">"Yes"</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">latitude</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">longitude</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">species_id</span>, <span class="va">AllSpeciesReported</span>, <span class="va">SamplingEventIdentifier</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -441,7 +456,7 @@ where cardinals (<code>species_id</code> 19360) were not detected
 <p>A bit convoluted, but here we’ll grab coordinates for each Sampling
 Event. This is only necessary if there are errors (worth reporting!)
 where there are more than one lat/lon combo for each sampling event.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">coords</span> <span class="op">&lt;-</span> <span class="va">cardinals</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"SamplingEventIdentifier"</span>, <span class="st">"latitude"</span>, <span class="st">"longitude"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SamplingEventIdentifier</span>, <span class="va">latitude</span>, <span class="va">longitude</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -462,7 +477,7 @@ where there are more than one lat/lon combo for each sampling event.</p>
 <span><span class="co">## 6     RCBIOTABASE-10005-1      19360        0 45.51110 -77.50533</span></span></code></pre>
 <p>Now that we have our presence/absence data for cardinals, we can
 create a map.</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cnt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">cardinals_zf</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">presence</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">geometry</span><span class="op">)</span></span>
@@ -484,7 +499,7 @@ create a map.</p>
 <div class="section level2">
 <h2 id="clean-up-the-mapping-files-if-you-no-longer-need-them">Clean up the mapping files if you no longer need them<a class="anchor" aria-label="anchor" href="#clean-up-the-mapping-files-if-you-no-longer-need-them"></a>
 </h2>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"alberta_parks/"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">

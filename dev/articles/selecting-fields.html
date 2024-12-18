@@ -31,9 +31,21 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/1.1-Introduction.html">Chapter 1 - Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/1.2-LoadPackage.html">Chapter 2 - Loading R Packages</a></li>
+    <li><a class="dropdown-item" href="../articles/1.3-ViewData.html">Chapter 3 - Understanding and Viewing Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.4-DownloadData.html">Chapter 4 - Downloading and Filtering Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.5-ManipData.html">Chapter 5 - Data Manipulation</a></li>
+    <li><a class="dropdown-item" href="../articles/1.6-VisualData.html">Chapter 6 - Data Visualization</a></li>
+    <li><a class="dropdown-item" href="../articles/1.7-Answers.html">Chapter 7 - Answers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -56,7 +68,7 @@
 
       <h1>Selecting columns and fields to download</h1>
             
-            <h4 data-toc-skip class="date">2024-12-09</h4>
+            <h4 data-toc-skip class="date">2024-12-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/selecting-fields.Rmd" class="external-link"><code>vignettes/selecting-fields.Rmd</code></a></small>
       <div class="d-none name"><code>selecting-fields.Rmd</code></div>
@@ -65,8 +77,11 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 <p>In <code>naturecounts</code>, by default default data is downloaded
 with a specific set of fields/columns. However, for more advanced
 applications, users may wish to specify which fields/columns to return.
@@ -89,7 +104,7 @@ field/columns sets.</p>
 <li>You can get a list of the different versions with the
 <code><a href="../reference/meta.html">meta_bmde_versions()</a></code> function.</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/meta.html">meta_bmde_versions</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 8 × 3</span></span></span>
 <span><span class="co">##   descr                                           shorthand version            </span></span>
@@ -106,7 +121,7 @@ field/columns sets.</p>
 <li>You can get a list of the specific fields/columns included in each
 version using the <code><a href="../reference/meta.html">meta_bmde_fields()</a></code> function</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"BMDE-BAND-2.00"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
@@ -122,7 +137,7 @@ version using the <code><a href="../reference/meta.html">meta_bmde_fields()</a><
 <li>You can see which BMDE versions are used by different collections by
 looking at the metadata associated with that collection.</li>
 </ol>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 11</span></span></span>
@@ -143,7 +158,7 @@ looking at the metadata associated with that collection.</li>
 <p>By default, the <code>BMDE2.00-min</code> or <code>minimum</code>
 BMDE version is used when downloading data, but you can specify other
 versions with either the version name, or the shorthand.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"core"</span>, </span>
 <span>                        collection <span class="op">=</span> <span class="st">"ABATLAS2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                        username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span></span>
@@ -346,7 +361,7 @@ which are <strong>in addition</strong> to the BMDE fields. These are
 additional, basic, indexed fields used in the database.</p>
 <p>You can figure out exactly which fields these are, by removing all
 the fields from the <code>core</code> BMDE field set.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"core"</span><span class="op">)</span><span class="op">$</span><span class="va">local_name</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] "record_id"         "collection"        "project_id"       </span></span>
 <span><span class="co">##  [4] "protocol_id"       "protocol_type"     "species_id"       </span></span>
@@ -364,7 +379,7 @@ request. However, you can choose which fields/columns to include in
 addition to these basic fields, by specifying
 <code>fields_set = custom</code>, and listing all additional
 <code>fields</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"custom"</span>, </span>
 <span>                        fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"SamplingEventIdentifier"</span><span class="op">)</span>, </span>
 <span>                        collection <span class="op">=</span> <span class="st">"ABATLAS2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -407,7 +422,7 @@ addition to these basic fields, by specifying
 fields, you could combine the core fields with the extras you want, and
 pass them on as a custom field set.</p>
 <p>For example, first collect the minimum field/column names.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_fields</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"minimum"</span><span class="op">)</span><span class="op">$</span><span class="va">local_name</span></span>
 <span><span class="va">my_fields</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          </span></span>
@@ -430,7 +445,7 @@ pass them on as a custom field set.</p>
 <span><span class="co">## [35] "ObservationDescriptor6"  "AllIndividualsReported" </span></span>
 <span><span class="co">## [37] "AllSpeciesReported"</span></span></code></pre>
 <p>Then add in the extra fields.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_fields</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">my_fields</span>, <span class="st">"Sex"</span>, <span class="st">"LifeStage"</span><span class="op">)</span></span>
 <span><span class="va">my_fields</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] "GlobalUniqueIdentifier"  "CatalogNumber"          </span></span>
@@ -454,7 +469,7 @@ pass them on as a custom field set.</p>
 <span><span class="co">## [37] "AllSpeciesReported"      "Sex"                    </span></span>
 <span><span class="co">## [39] "LifeStage"</span></span></code></pre>
 <p>Now download the data.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"custom"</span>, </span>
 <span>                        fields <span class="op">=</span> <span class="va">my_fields</span>, </span>
 <span>                        collection <span class="op">=</span> <span class="st">"ABATLAS2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
