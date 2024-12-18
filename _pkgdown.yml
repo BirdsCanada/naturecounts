@@ -10,12 +10,12 @@ template:
 navbar:
   bg: dark
   structure:
-    left: [home, reference, articles, news]
+    left: [home, articles, reference, news]
     right: [search, github]
   components:
-    home:
-      icon: fa-home
-      href: index.html
+    reference:
+      text: Functions
+      href: reference/index.html
 
 reference:
 - title: Learning about this package
@@ -59,6 +59,7 @@ reference:
 articles:
 - title: The NatureCounts Intro Tutorial
   desc: An R walkthrough on how to import, explore, and visualize NatureCounts data. 
+  navbar: ~
   contents:
   - '`articles/1.1-Introduction`'
   - '`articles/1.2-LoadPackage`'
