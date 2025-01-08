@@ -75,15 +75,6 @@ queries <- dplyr::tribble(
   "subnational2",  "subNat2",       FALSE,
   "site_type",     "siteType",      TRUE)
 
-# Testing Data ------------------------------------------------------------
-test_rc <- nc_data_dl(request_id = 152518, fields_set = "core",
-                      username = "sample", info = "sample_data") |>
-  dplyr::filter(CommonName %in% c("Monarch",
-                                  "Black Swallowtail",
-                                  "Red Admiral"),
-                AllSpeciesReported == "Yes") |>
-  dplyr::mutate(presence = as.numeric(ObservationCount > 0)) |>
-  format_dates()
 
 # Field order - Non BMDE fields
 field_order <- c("record_id", "collection", "project_id", "protocol_id",
@@ -96,22 +87,6 @@ field_order <- c("record_id", "collection", "project_id", "protocol_id",
                  "source_table", "breeding_rank", "is_unconfirmed")
 
 # Save all internal datasets
-usethis::use_data(ua, api, keys, queries, test_rc, field_order,
+usethis::use_data(ua, api, keys, queries, field_order,
                   internal = TRUE, overwrite = TRUE)
 
-# Get Example Data ------------------------------------------------------------
-
-# Create example databases
-bcch <- nc_data_dl(request_id = 152543, username = "sample")
-usethis::use_data(bcch, internal = FALSE, overwrite = TRUE)
-
-hofi <- nc_data_dl(species = 20350, username = "sample", info = "pkg_data")
-usethis::use_data(hofi, internal = FALSE, overwrite = TRUE)
-
-unlink(file.path("inst", "extdata", "bcch.nc"))
-nc_data_dl(request_id = 152543, username = "sample", 
-           sql_db = file.path("inst", "extdata", "bcch"))
-
-unlink(file.path("inst", "extdata", "hofi.nc"))
-nc_data_dl(species = 20350, username = "sample", info = "pkg_data",
-           sql_db = file.path("inst", "extdata", "hofi"))
