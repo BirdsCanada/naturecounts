@@ -30,12 +30,12 @@ metadata_v_remote <- function() {
 
 metadata_save <- function(data, path, name = deparse(substitute(data)),
                           compress = TRUE) {
-  save(data, file = file.path(path, paste0(name, ".rds")), compress = compress)
+  save(data, file = file.path(path, paste0("meta_", name, ".rds")), compress = compress)
 }
 
 metadata_read <- function(name) {
   data <- NULL # load(f) reads data into envir as 'data', use this to avoid NOTE
-  f <- system.file("extdata", paste0(name, ".rds"), package = "naturecounts")
+  f <- system.file("extdata", paste0("meta_", name, ".rds"), package = "naturecounts")
   if(!file.exists(f)) stop("Could not find metadata file '", name, "'",
                            call. = FALSE)
   load(f)
@@ -156,8 +156,8 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
 
     # Update metadata version
     message("Metadata version updated to ", metadata_v_remote())
-    metadata_save(metadata_v_remote(), name = "metadata_v_local", path = path)
+    metadata_save(metadata_v_remote(), name = "v_local", path = path)
   }
 }
 
-metadata_v_local <- function() {metadata_read("metadata_v_local")}
+metadata_v_local <- function() {metadata_read("v_local")}
