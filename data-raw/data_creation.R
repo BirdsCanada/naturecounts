@@ -4,7 +4,7 @@ ua <- httr::user_agent(agent = "https://github.com/birdscanada/naturecounts")
 # API URLs
 meta_info <- dplyr::tribble(
   ~package_name,         ~api_url,                              ~primary_keys,
-  "api",                 "https://birdscanada.org/api", NA,
+  "api",                 "https://naturecounts.ca/api",        NA,
 
   "auth",                "/data/authenticate",                  NA,
 

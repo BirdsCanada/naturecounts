@@ -1,6 +1,7 @@
 # naturecounts dev
 * Add option to clip EOO in `cosewic_ranges()` to a particular shapefile before calculating area
 * Add option to scale records in `cosewic_plot()`
+* Change API to naturecounts.ca
 
 # naturecounts 0.4.1
 * Fix use of species_id and record_id in `cosewic_ranges()`.
