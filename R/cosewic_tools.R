@@ -562,7 +562,7 @@ cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title) {
   }
   
   if(scale) {
-    a <- dplyr::mutate(a, n_records = n_records / max(n_records, na.rm = TRUE))
+    a <- dplyr::mutate(a, n_records = .data$n_records / max(.data$n_records, na.rm = TRUE))
     leg_title <- "IAO\nProp. records"
   } else leg_title <- "IAO\nNo. records"
 
