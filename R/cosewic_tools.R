@@ -446,6 +446,9 @@ map_canada <- function() {
 #' @param grid sf data frame. Optional grid over which to summarize IAO values
 #'   (useful for species with many points over a broad distribution).
 #' @param map sf data frame. Optional base map over which to plot the values.
+#' @param scale Logical. Whether to scale the IAO legends to a proportion for
+#'   easier plotting of mutliple species (allows collecting legends by
+#'   patchwork).
 #' @param species Character. Name of the column containing species
 #'   identification.
 #' @param title Character. Optional title to add to the map. Can be a named by

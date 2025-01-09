@@ -9,6 +9,7 @@ cosewic_plot(
   points = NULL,
   grid = NULL,
   map = NULL,
+  scale = FALSE,
   species = "species_id",
   title = ""
 )
@@ -23,6 +24,10 @@ Raw data points will be added to the plot if provided.}
 (useful for species with many points over a broad distribution).}
 
 \item{map}{sf data frame. Optional base map over which to plot the values.}
+
+\item{scale}{Logical. Whether to scale the IAO legends to a proportion for
+easier plotting of mutliple species (allows collecting legends by
+patchwork).}
 
 \item{species}{Character. Name of the column containing species
 identification.}
@@ -39,6 +44,7 @@ Creates a plot of COSEWIC ranges for illustration and checking.
 \examples{
 r <- cosewic_ranges(bcch)
 cosewic_plot(r)
+cosewic_plot(r, scale = TRUE)
 cosewic_plot(r, points = bcch)
 cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
              title = "Black-capped chickadees")
@@ -46,6 +52,7 @@ cosewic_plot(r, grid = grid_canada(50), map = map_canada(),
 m <- rbind(bcch, hofi)
 r <- cosewic_ranges(m)
 cosewic_plot(r)
+cosewic_plot(r, scale = TRUE)
 cosewic_plot(r, points = m)
 p <- cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
                  title = c("14280" = "Black-capped chickadees", 
