@@ -17,34 +17,34 @@ test_that("prep_spatial() diff cols", {
 
 test_that("cosewic_eoo()", {
   df <- prep_spatial(bcch)
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE))
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
   expect_named(e, "eoo")
   expect_equal(e[["eoo"]], units::set_units(1243.421, "km2"), tolerance = 0.001)
   
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE))
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE, clip = NULL))
   expect_s3_class(e, "sf")
   expect_equal(nrow(e), 1)
   expect_equal(as.character(sf::st_geometry_type(e)), "POLYGON")
   
-  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE))
+  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE, clip = NULL))
   expect_equal(e[["eoo"]], units::set_units(4861.251, "km2"), tolerance = 0.001)
 })
 
 test_that("cosewic_eoo() diff cols", {
   df <- dplyr::rename(bcch, sp = species_id, rec = record_id) |>
     prep_spatial(extra = "rec")
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE))
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
   expect_named(e, "eoo")
   expect_equal(e[["eoo"]], units::set_units(1243.421, "km2"), tolerance = 0.001)
   
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE))
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE, clip = NULL))
   expect_s3_class(e, "sf")
   expect_equal(nrow(e), 1)
   expect_equal(as.character(sf::st_geometry_type(e)), "POLYGON")
   
-  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE))
+  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE, clip = NULL))
   expect_equal(e[["eoo"]], units::set_units(4861.251, "km2"), tolerance = 0.001)
 })
 
@@ -52,17 +52,17 @@ test_that("cosewic_eoo() no cols", {
   df <- dplyr::select(bcch, -"species_id") |>
     dplyr::mutate(record_id = dplyr::row_number()) |>
     prep_spatial()
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE))
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
   expect_named(e, "eoo")
   expect_equal(e[["eoo"]], units::set_units(1243.421, "km2"), tolerance = 0.001)
   
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE))
+  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE, clip = NULL))
   expect_s3_class(e, "sf")
   expect_equal(nrow(e), 1)
   expect_equal(as.character(sf::st_geometry_type(e)), "POLYGON")
   
-  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE))
+  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE, clip = NULL))
   expect_equal(e[["eoo"]], units::set_units(4861.251, "km2"), tolerance = 0.001)
 })
 
