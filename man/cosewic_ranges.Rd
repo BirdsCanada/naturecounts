@@ -124,7 +124,10 @@ r <- cosewic_ranges(mult)
 r <- cosewic_ranges(mult, spatial = FALSE)
 
 # Clip to a specific region
-ON <- rnaturalearth::ne_states("Canada") |> 
+\dontshow{if (requireNamespace("rnaturalearth", quietly = TRUE) & requireNamespace("rnaturalearthhires", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+library(rnaturalearth)
+ON <- ne_states("Canada") |> 
   dplyr::filter(postal == "ON")
 
 r <- cosewic_ranges(mult)
@@ -132,5 +135,5 @@ cosewic_plot(r, map = ON) # No clip
 
 r <- cosewic_ranges(mult, eoo_clip = ON)
 cosewic_plot(r, map = ON) # With clip
-
+\dontshow{\}) # examplesIf}
 }

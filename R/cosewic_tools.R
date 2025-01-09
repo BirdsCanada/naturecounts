@@ -90,7 +90,10 @@
 #' r <- cosewic_ranges(mult, spatial = FALSE)
 #' 
 #' # Clip to a specific region
-#' ON <- rnaturalearth::ne_states("Canada") |> 
+#' @examplesIf requireNamespace("rnaturalearth", quietly = TRUE) & requireNamespace("rnaturalearthhires", quietly = TRUE)
+#' 
+#' library(rnaturalearth)
+#' ON <- ne_states("Canada") |> 
 #'   dplyr::filter(postal == "ON")
 #' 
 #' r <- cosewic_ranges(mult)
