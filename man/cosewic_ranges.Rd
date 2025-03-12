@@ -13,6 +13,7 @@ cosewic_ranges(
   iao_grid_size_km = 2,
   eoo_p = 0.95,
   eoo_clip = NULL,
+  crs = crs_albers_canada(),
   filter_unique = FALSE,
   spatial = TRUE
 )
@@ -122,6 +123,9 @@ r <- cosewic_ranges(bcch, spatial = FALSE)
 mult <- rbind(bcch, hofi)
 r <- cosewic_ranges(mult)
 r <- cosewic_ranges(mult, spatial = FALSE)
+
+# Consider the Ontario MNR Lambert projection (all observations are in Ontario)
+r2 <- cosewic_ranges(mult, crs = 3162)
 
 # Clip to a specific region
 \dontshow{if (requireNamespace("rnaturalearth", quietly = TRUE) & requireNamespace("rnaturalearthhires", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

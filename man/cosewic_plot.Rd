@@ -10,8 +10,10 @@ cosewic_plot(
   grid = NULL,
   map = NULL,
   scale = FALSE,
+  crs = 3347,
   species = "species_id",
-  title = ""
+  title = "",
+  verbose = TRUE
 )
 }
 \arguments{

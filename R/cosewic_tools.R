@@ -89,6 +89,9 @@
 #' r <- cosewic_ranges(mult)
 #' r <- cosewic_ranges(mult, spatial = FALSE)
 #' 
+#' # Consider the Ontario MNR Lambert projection (all observations are in Ontario)
+#' r2 <- cosewic_ranges(mult, crs = 3162)
+#' 
 #' # Clip to a specific region
 #' @examplesIf requireNamespace("rnaturalearth", quietly = TRUE) & requireNamespace("rnaturalearthhires", quietly = TRUE)
 #' 
@@ -112,6 +115,7 @@ cosewic_ranges <- function(df_db,
                            iao_grid_size_km = 2,
                            eoo_p = 0.95,
                            eoo_clip = NULL,
+                           crs = crs_albers_canada(),
                            filter_unique = FALSE,
                            spatial = TRUE) {
   
@@ -175,18 +179,14 @@ cosewic_ranges <- function(df_db,
       dplyr::distinct() %>%
       dplyr::mutate(!!record := 1:dplyr::n())
   }
-    
-  # Note on CRS
-  # GeoCAT uses Google's projection EPSG:3857, Web Mercator because of backend
-  # Probably should use Canadian projection. Currently using 3347 (Stats 
-  # Canada).
-  
+
   # Set units
   cell_size <- units::as_units(iao_grid_size_km, "km")
   
   df_sf <- prep_spatial(df, 
                         coords = c(coord_lon, coord_lat),
-                        extra = c(record, species))
+                        extra = c(record, species),
+                        crs = crs)
 
   n <- dplyr::count(df, .data[[species]], name = "n_records_total")
   
@@ -197,8 +197,12 @@ cosewic_ranges <- function(df_db,
     dplyr::left_join(n, by = species) %>%
     dplyr::relocate(dplyr::all_of(species), "n_records_total") %>%
     dplyr::mutate(
-      eoo = purrr::map(.data[["data"]], \(x) cosewic_eoo(x, p = eoo_p, clip = eoo_clip, spatial)),
-      iao = purrr::map(.data[["data"]], \(x) cosewic_iao(x, cell_size, record, spatial))) %>%
+      eoo = purrr::map(
+        .data[["data"]], 
+        \(x) cosewic_eoo(x, p = eoo_p, clip = eoo_clip, spatial)),
+      iao = purrr::map(
+        .data[["data"]], 
+        \(x) cosewic_iao(x, cell_size, record, spatial, crs = .env$crs))) %>%
     dplyr::select(-"data")
   
   eoo <- dplyr::select(ranges, -"iao") |>
@@ -242,9 +246,9 @@ cosewic_ranges <- function(df_db,
 }
 
 # Faster grids https://github.com/r-spatial/sf/issues/1579
-cosewic_iao <- function(df_sf, cell_size, record, spatial) {
+cosewic_iao <- function(df_sf, cell_size, record, spatial, crs) {
 
-  grid_ca <- grid_canada(buffer = 500)
+  grid_ca <- grid_canada(buffer = 500, crs = crs)
   
   # Check if all points in grid
   missing <- !sf::st_within(df_sf, sf::st_union(grid_ca), sparse = FALSE)
@@ -328,11 +332,12 @@ cosewic_eoo <- function(df_sf, p, clip, spatial) {
 
 prep_spatial <- function(df, 
                          coords = c("longitude", "latitude"), 
-                         extra = "record_id") {
+                         extra = "record_id",
+                         crs) {
   df %>%
     dplyr::select(dplyr::all_of(c(extra, coords))) %>%
     sf::st_as_sf(coords = coords, crs = 4326) %>%
-    sf::st_transform(3347)
+    sf::st_transform(crs)
 }
 
 
@@ -364,9 +369,10 @@ prep_spatial <- function(df,
 #'   geom_sf(data = gc_buff, fill = NA) +
 #'   labs(caption = "No buffer")
  
-grid_canada <- function(cell_size = 200, buffer = 500){
+grid_canada <- function(cell_size = 200, buffer = 500, 
+                        crs = crs_albers_canada()){
   have_pkg_check("sf")
-  map_canada() %>%
+  map_canada(crs = crs) %>%
     sf::st_buffer(units::set_units(buffer, "km")) %>%
     make_grid(cell_size) %>%
     sf::st_as_sf() %>%
@@ -385,12 +391,18 @@ grid_canada <- function(cell_size = 200, buffer = 500){
 #' @param cell_size 
 #'
 #' @examples
+#' # Convert to spatial
 #' bcch_sf <- sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326)
-#' bcch_sf <- sf::st_transform(bcch_sf, crs = 3347)
 #' grid_filter(grid_canada(), bcch_sf, cell_size = 5)
 #' 
 #' @noRd
-grid_filter <- function(grid, df_sf, cell_size) {
+grid_filter <- function(grid, df_sf, cell_size, verbose = TRUE) {
+  
+  if(sf::st_crs(grid) != sf::st_crs(df_sf)) {
+    if(verbose) message("Transforming `df_sf` to CRS of `grid`")
+    df_sf <- sf::st_transform(df_sf, sf::st_crs(grid))
+  }
+  
   sf::st_filter(grid, df_sf) %>% 
     dplyr::mutate(id = 1:dplyr::n()) %>%
     split(.$id) %>%
@@ -412,9 +424,12 @@ make_grid <- function(df_sf, cell_size) {
 #' Map of Canada
 #' 
 #' Wrapper around `rnaturalearth::ne_countries()` to creates a simple features
-#' basic map of Canada with CRS 3347 (Statistics Canada Lambert).
+#' basic map of Canada with a custom CRS (3347, Statistics Canada Lambert by
+#' default).
 #'
-#' @return Sf data frame
+#' @inheritParams common_docs
+#' 
+#' @return sf data frame
 #' @export
 #'
 #' @examples
@@ -426,14 +441,14 @@ make_grid <- function(df_sf, cell_size) {
 #' library(ggplot2)
 #' ggplot(data = map_canada()) + geom_sf()
 #' 
-map_canada <- function() {
+map_canada <- function(crs = 3347) {
   have_pkg_check("rnaturalearth")
   have_pkg_check("sf")
   
   # TODO: revert to no suppression once sf migration complete
   suppressPackageStartupMessages({
     rnaturalearth::ne_countries(country = "Canada", returnclass = "sf") %>% 
-      sf::st_transform(crs = 3347)
+      sf::st_transform(crs = crs)
   })
 }
 
@@ -480,8 +495,9 @@ map_canada <- function() {
 #' p[[2]]
 #' 
 cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL, 
-                         scale = FALSE, 
-                         species = "species_id",  title = "") {
+                         scale = FALSE, crs = 3347,
+                         species = "species_id",  title = "",
+                         verbose = TRUE) {
   
   have_pkg_check("sf")
   
@@ -531,15 +547,17 @@ cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL,
   
   g <- purrr::pmap(
     list(e, i, points, title), 
-    \(e, i, points, title) cosewic_plot_indiv(e, i, points, grid, map, scale, title))
+    \(e, i, points, title) {
+      cosewic_plot_indiv(e, i, points, grid, map, scale, title, crs, verbose)
+    })
   
   if(length(g) == 1) g <- g[[1]]
   g
 }
 
 
-cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title) {
-  
+cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title, crs, verbose) {
+
   size_a <- unique(a$grid_size_km)
   
   eoo_lab <- stringr::str_subset(names(e), "eoo") %>%
@@ -552,6 +570,12 @@ cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title) {
                     " per ", size_a, "x", size_a, " km grid)")
   
   if(!is.null(grid)) {
+    if(sf::st_crs(a) != sf::st_crs(grid)) {
+      a <- sf::st_transform(a, sf::st_crs(grid))
+      if(verbose) {
+        message("Transforming IAO spatial data to grid CRS for summarizing")
+      }
+    }
     a <- a %>%
       sf::st_join(grid, ., left = FALSE) %>% # Inner join
       dplyr::group_by(.data$grid_ca_id) %>%
@@ -583,9 +607,52 @@ cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title) {
   
   if(!is.null(map)) g <- g + ggplot2::geom_sf(data = map, fill = NA)
   if(!is.null(points)) {
-    points <- prep_spatial(points, extra = NULL) 
+    points <- prep_spatial(points, extra = NULL, crs = crs) 
     g <- g + ggplot2::geom_sf(data = points)
   }
   
   g
 }
+
+
+#' Create the Canada Albers Equal Area projection
+#' 
+#' For area calculations it's best to use a projection which preserves area. 
+#' The Equal Areas Conic Projection is good for this, and can be customized to
+#' Canada.
+#' 
+#' This definition is from https://epsg.io/102001.
+#'
+#' @returns CRS
+#' @export
+#'
+#' @examples
+#' crs_albers_canada()
+
+crs_albers_canada <- function() {
+  sf::st_crs(
+  'PROJCS["Canada Albers Equal Area Conic",
+    GEOGCS["NAD83",
+        DATUM["North_American_Datum_1983",
+            SPHEROID["GRS 1980",6378137,298.257222101,
+                AUTHORITY["EPSG","7019"]],
+            AUTHORITY["EPSG","6269"]],
+        PRIMEM["Greenwich",0,
+            AUTHORITY["EPSG","8901"]],
+        UNIT["degree",0.0174532925199433,
+            AUTHORITY["EPSG","9122"]],
+        AUTHORITY["EPSG","4269"]],
+    PROJECTION["Albers_Conic_Equal_Area"],
+    PARAMETER["latitude_of_center",40],
+    PARAMETER["longitude_of_center",-96],
+    PARAMETER["standard_parallel_1",50],
+    PARAMETER["standard_parallel_2",70],
+    PARAMETER["false_easting",0],
+    PARAMETER["false_northing",0],
+    UNIT["metre",1,
+        AUTHORITY["EPSG","9001"]],
+    AXIS["Easting",EAST],
+    AXIS["Northing",NORTH],
+    AUTHORITY["ESRI","102001"]]')
+}
+  

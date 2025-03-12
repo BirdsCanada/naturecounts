@@ -28,6 +28,11 @@
 #' @param request_id Numeric. Specific request id to check or download.
 #' @param timeout Numeric. Number of seconds before connecting to the server
 #'   times out.
+#' @param crs A coordinate reference system (see `?sf::st_transform()`).
+#'   Defaults to 3347 (Statistics Canada Lambert) for plots and a customized
+#'   Albers Equal-Area for Canada (see `?crs_albers_canada()`) for area
+#'   calculations. Note that it must be a projection (i.e. not simply a
+#'   reference system like 4326 used for GPS) for area calculations.
 #' @param verbose Logical. Show messages?
 #'
 #' @section NatureCounts account:

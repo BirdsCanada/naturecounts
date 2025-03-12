@@ -4,14 +4,15 @@
 \alias{map_canada}
 \title{Map of Canada}
 \usage{
-map_canada()
+map_canada(crs = 3347)
 }
 \value{
-Sf data frame
+sf data frame
 }
 \description{
 Wrapper around \code{rnaturalearth::ne_countries()} to creates a simple features
-basic map of Canada with CRS 3347 (Statistics Canada Lambert).
+basic map of Canada with a custom CRS (3347, Statistics Canada Lambert by
+default).
 }
 \examples{
 
