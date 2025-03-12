@@ -3,6 +3,8 @@
 * Add option to scale records in `cosewic_plot()`
 * Change API to naturecounts.ca
 * Add option to change the CRS for all COSEWIC-related functions.
+* Update default CRS for `cosweic_ranges()` to an equal area projection 
+  (add `crs_albers_canada()` to this effect)
 
 # naturecounts 0.4.1
 * Fix use of species_id and record_id in `cosewic_ranges()`.
