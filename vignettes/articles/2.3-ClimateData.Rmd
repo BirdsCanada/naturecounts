@@ -1,6 +1,6 @@
 ---
 title: "Chapter 3 - Climate Data"
-date: "2024-11-26"
+date: "2025-03-14"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{03-ClimateData}
@@ -60,15 +60,14 @@ library(weathercan)
 # 3.1 Data Setup
 
 
-``` r
-collections <- meta_collections() 
-View(meta_collections())
+
+
 ```
-
-
-``` r
-search_species("whooping crane")
-View(search_species("whooping crane"))
+#> # A tibble: 2 × 5
+#>   species_id scientific_name                      english_name                       french_name                         taxon_group
+#>        <int> <chr>                                <chr>                              <chr>                               <chr>      
+#> 1       4030 Grus americana                       Whooping Crane                     Grue blanche                        BIRDS      
+#> 2      43080 Antigone canadensis x Grus americana Sandhill x Whooping Crane (hybrid) Hybride Grue du Canada x G. blanche BIRDS
 ```
 
 To download the NatureCounts data, you can specify the collection and species code relevant to your research. Replace `testuser` with your user name.
@@ -100,6 +99,7 @@ species_occurrence_summary <- whooping_crane_data %>%
   group_by(SiteCode, survey_year, longitude, latitude) %>%
   summarise(total_count = sum(as.numeric(ObservationCount), na.rm = TRUE)) %>%
   ungroup()
+#> Error in eval(expr, envir, enclos): object 'SiteCode' not found
 ```
 
 Lastly, you can summarize the NatureCounts data once more to get the annual total counts of Whooping Cranes, say between 1985 and 2011. To do so, we can 1) produce a regular dataframe called **cranes_summary** by dropping the geometry column (`st_drop_geometry`) 2) calculate the **annual_count** by using the `summarise` and `sum` functions and 3) filter for NA values and by **year:**
@@ -108,26 +108,17 @@ Lastly, you can summarize the NatureCounts data once more to get the annual tota
 ``` r
 cranes_summary <- species_occurrence_summary %>%
   st_drop_geometry() %>%
-  mutate(year = year(date)) %>%
   group_by(survey_year) %>%
   summarize(annual_count = sum(total_count, na.rm = TRUE)) %>%
   filter(!is.na(survey_year)) %>%
   filter(survey_year >= 1985 & survey_year <= 2011)
+#> Error in `summarize()`:
+#> ℹ In argument: `annual_count = sum(total_count, na.rm = TRUE)`.
+#> ℹ In group 1: `survey_year = 1987`.
+#> Caused by error:
+#> ! object 'total_count' not found
 cranes_summary
-#> # A tibble: 11 × 2
-#>     year annual_count
-#>    <dbl>        <dbl>
-#>  1  1987            0
-#>  2  1988            0
-#>  3  1990            0
-#>  4  1991            0
-#>  5  1996            1
-#>  6  2000           24
-#>  7  2001           14
-#>  8  2002           26
-#>  9  2003           14
-#> 10  2004           18
-#> 11  2005          180
+#> Error in eval(expr, envir, enclos): object 'cranes_summary' not found
 ```
 
 # 3.2 Weathercan (Vector) Data
@@ -139,21 +130,21 @@ First, let's take a look at the built in **stations** dataset:
 
 ``` r
 stations()
-#> # A tibble: 26,382 × 17
-#>    prov  station_name       station_id climate_id WMO_id TC_id   lat   lon  elev tz    interval start   end normals
-#>    <chr> <chr>                   <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr> <chr>    <dbl> <dbl> <lgl>  
-#>  1 AB    DAYSLAND                 1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… day       1908  1922 FALSE  
-#>  2 AB    DAYSLAND                 1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… hour        NA    NA FALSE  
-#>  3 AB    DAYSLAND                 1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… month     1908  1922 FALSE  
-#>  4 AB    EDMONTON CORONATI…       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… day       1978  1979 FALSE  
-#>  5 AB    EDMONTON CORONATI…       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… hour        NA    NA FALSE  
-#>  6 AB    EDMONTON CORONATI…       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… month     1978  1979 FALSE  
-#>  7 AB    FLEET                    1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… day       1987  1990 FALSE  
-#>  8 AB    FLEET                    1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… hour        NA    NA FALSE  
-#>  9 AB    FLEET                    1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… month     1987  1990 FALSE  
-#> 10 AB    GOLDEN VALLEY            1798 301B8LR        NA <NA>   53.2 -110.  640  Etc/… day       1987  1998 FALSE  
+#> The stations data frame hasn't been updated in over 4 weeks. Consider running `stations_dl()` to check for updates and make sure you have the most recent stations list available
+#> # A tibble: 26,382 × 16
+#>    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz        interval start   end normals normals_1981_2010 normals_1971_2000
+#>    <chr> <chr>                    <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr>     <chr>    <dbl> <dbl> <lgl>   <lgl>             <lgl>            
+#>  1 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GMT+7 day       1908  1922 FALSE   FALSE             FALSE            
+#>  2 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            
+#>  3 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GMT+7 month     1908  1922 FALSE   FALSE             FALSE            
+#>  4 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GMT+7 day       1978  1979 FALSE   FALSE             FALSE            
+#>  5 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            
+#>  6 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GMT+7 month     1978  1979 FALSE   FALSE             FALSE            
+#>  7 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/GMT+7 day       1987  1990 FALSE   FALSE             FALSE            
+#>  8 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            
+#>  9 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/GMT+7 month     1987  1990 FALSE   FALSE             FALSE            
+#> 10 AB    GOLDEN VALLEY             1798 301B8LR        NA <NA>   53.2 -110.  640  Etc/GMT+7 day       1987  1998 FALSE   FALSE             FALSE            
 #> # ℹ 26,372 more rows
-#> # ℹ 3 more variables: normals_1991_2020 <lgl>, normals_1981_2010 <lgl>, normals_1971_2000 <lgl>
 ```
 
 You are ready to download weather data! For the purpose of this tutorial, let's perform a smaller weather data download by specifying specific station IDs. The weather stations closest to Wood Buffalo National Park are BIRCH MOUNTAIN LO (station_id = 2481) and BUCKTON LO (station_id = 2486). These stations were identified using the the ECCC [search option](https://climate.weather.gc.ca/historical_data/search_historic_data_stations_e.html?searchType=stnProx&timeframe=1&txtRadius=25&selCity=&optProxType=park&selPark=57%7C39%7C112%7C0%7CWood+Buffalo+National+Park&txtCentralLatDeg=&txtCentralLatMin=&txtCentralLatSec=&txtCentralLongDeg=&txtCentralLongMin=&txtCentralLongSec=&txtLatDecDeg=&txtLongDecDeg=&optLimit=yearRange&StartYear=1840&EndYear=2024&Year=2024&Month=10&Day=1&selRowPerPage=25) which helps you search for historical weather data based on proximity to a city, coordinate, or National Park.
@@ -221,18 +212,18 @@ yearly_climate <- weather %>%
   )
 yearly_climate
 #> # A tibble: 27 × 3
-#>     year yearly_avg_temp yearly_avg_precip
-#>    <dbl>           <dbl>             <dbl>
-#>  1  1985            11.6              1.14
-#>  2  1986            11.7              2.96
-#>  3  1987            11.8              2.71
-#>  4  1988            12.1              3.40
-#>  5  1989            13.0              1.85
-#>  6  1990            13.1              2.44
-#>  7  1991            13.4              3.40
-#>  8  1992            11.2              2.40
-#>  9  1993            10.7              3.00
-#> 10  1994            13.2              3.39
+#>    survey_year yearly_avg_temp yearly_avg_precip
+#>          <dbl>           <dbl>             <dbl>
+#>  1        1985            11.6              1.14
+#>  2        1986            11.7              2.96
+#>  3        1987            11.8              2.71
+#>  4        1988            12.1              3.40
+#>  5        1989            13.0              1.85
+#>  6        1990            13.1              2.44
+#>  7        1991            13.4              3.40
+#>  8        1992            11.2              2.40
+#>  9        1993            10.7              3.00
+#> 10        1994            13.2              3.39
 #> # ℹ 17 more rows
 ```
 
@@ -241,21 +232,9 @@ Now that you have prepared the NatureCounts and weathercan climate data you can 
 
 ``` r
 cranes_climate_summary <- left_join(cranes_summary, yearly_climate, by = "survey_year")
+#> Error in eval(expr, envir, enclos): object 'cranes_summary' not found
 cranes_climate_summary
-#> # A tibble: 11 × 4
-#>     year annual_count yearly_avg_temp yearly_avg_precip
-#>    <dbl>        <dbl>           <dbl>             <dbl>
-#>  1  1987            0            11.8              2.71
-#>  2  1988            0            12.1              3.40
-#>  3  1990            0            13.1              2.44
-#>  4  1991            0            13.4              3.40
-#>  5  1996            1            11.7              3.37
-#>  6  2000           24            10.6              3.83
-#>  7  2001           14            13.7              2.76
-#>  8  2002           26            11.3              3.18
-#>  9  2003           14            12.9              2.72
-#> 10  2004           18            10.6              2.08
-#> 11  2005          180            10.7              2.89
+#> Error in eval(expr, envir, enclos): object 'cranes_climate_summary' not found
 ```
 
 To visualize average annual summer temperature and total count, you can use a scatterplot.
@@ -270,10 +249,8 @@ ggplot(cranes_climate_summary, aes(x = yearly_avg_temp, y = annual_count)) +
        y = "Total Count", 
        title = "Whooping Crane Count vs. Annual Avg Summer Temp") +
   theme(plot.title = element_text(hjust = 0.5))  # Center the title
-#> `geom_smooth()` using formula = 'y ~ x'
+#> Error in eval(expr, envir, enclos): object 'cranes_climate_summary' not found
 ```
-
-<img src="figures/nc_sp3_annual_temp-1.png" alt="Scatterplot showing a decreasing relationship between the total count of whooping crans and average summer temperature"  />
 
 And do the same for annual summer precipitation:
 
@@ -287,10 +264,8 @@ ggplot(cranes_climate_summary, aes(x = yearly_avg_precip, y = annual_count)) +
        y = "Total Count", 
        title = "Whooping Crane Count vs. Annual Avg Summer Precip") +
   theme(plot.title = element_text(hjust = 0.5))  # Center the title
-#> `geom_smooth()` using formula = 'y ~ x'
+#> Error in eval(expr, envir, enclos): object 'cranes_climate_summary' not found
 ```
-
-<img src="figures/nc_sp3_annual_precip-1.png" alt="Scatterplot showing no relationship between the total count of whooping crans and average summer precipitation, with one extremely high precipation point."  />
 
 # 3.3 WorldClim (Raster) Data
 
@@ -305,25 +280,15 @@ This code will get the path to your working directory.
 
 ``` r
 getwd()
-#> [1] "/home/steffi/Projects/Business/Birds Canada/NatureCounts/naturecounts/vignettes/articles"
+#> [1] "C:/Users/dimit/Birds Canada/naturecounts/vignettes/articles"
 ```
 
 Now point the `list.file` to this directory using the sample code below.
 
 
 ```
-#> class       : SpatRaster 
-#> dimensions  : 1080, 2160, 19  (nrow, ncol, nlyr)
-#> resolution  : 0.1666667, 0.1666667  (x, y)
-#> extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
-#> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
-#> sources     : wc2.1_10m_bio_1.tif  
-#>               wc2.1_10m_bio_10.tif  
-#>               wc2.1_10m_bio_11.tif  
-#>               ... and 16 more source(s)
-#> names       : wc2.1~bio_1, wc2.1~io_10, wc2.1~io_11, wc2.1~io_12, wc2.1~io_13, wc2.1~io_14, ... 
-#> min values  :   -54.72435,   -37.78142,   -66.31125,           0,           0,           0, ... 
-#> max values  :    30.98764,    38.21617,    29.15299,       11191,        2381,         484, ...
+#> Error: [rast] filename is empty. Provide a valid filename
+#> Error in eval(expr, envir, enclos): object 'worldclim_stack' not found
 ```
 
 
@@ -342,6 +307,7 @@ Great! The raster stack which includes the 19 bio-climatic variables has been re
 
 ``` r
 names(worldclim_stack) <- paste0("bio", 1:19)
+#> Error: object 'worldclim_stack' not found
 ```
 
 Let's take a look at the first layer 'bio1' which is Annual Mean Temperature. To do so, you can subset the layers of the SpatRaster with \$ or two sets of square brackets [ [ ] ].
@@ -350,47 +316,11 @@ Let's take a look at the first layer 'bio1' which is Annual Mean Temperature. To
 ``` r
 # Plot the first bio-climatic layer (e.g., bio1: Annual Mean Temperature)
 plot(worldclim_stack[["bio1"]], main = "Annual Mean Temperature (bio1)")
-```
-
-<img src="figures/nc_sp3_raster_bio1-1.png" alt="World map with Annual mean temperatures overlaid in blues, greens and yellows. Showing cooler poles and warmer equatorial regions."  />
-
-``` r
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 'worldclim_stack' not found
 
 # Summary statistics for each layer
 summary(worldclim_stack)
-#> Warning: [summary] used a sample
-#>       bio1             bio2             bio3             bio4             bio5             bio6       
-#>  Min.   :-54.72   Min.   :-37.72   Min.   :-66.19   Min.   :   0.0   Min.   :   0.0   Min.   :  0.00  
-#>  1st Qu.:-22.81   1st Qu.:-10.58   1st Qu.:-34.22   1st Qu.: 110.0   1st Qu.:  28.0   1st Qu.:  0.00  
-#>  Median : -0.53   Median : 13.82   Median :-15.20   Median : 337.0   Median :  60.0   Median :  5.00  
-#>  Mean   : -4.05   Mean   :  7.19   Mean   :-13.90   Mean   : 550.3   Mean   :  93.5   Mean   : 15.39  
-#>  3rd Qu.: 19.02   3rd Qu.: 24.80   3rd Qu.: 12.13   3rd Qu.: 690.0   3rd Qu.: 112.0   3rd Qu.: 18.00  
-#>  Max.   : 30.71   Max.   : 38.18   Max.   : 28.62   Max.   :7011.0   Max.   :1965.0   Max.   :471.00  
-#>  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   
-#>       bio7             bio8             bio9             bio10            bio11            bio12      
-#>  Min.   :  0.00   Min.   :   0.0   Min.   :   0.00   Min.   :   0.0   Min.   :   0.0   Min.   : 1.00  
-#>  1st Qu.: 41.41   1st Qu.:  56.0   1st Qu.:   2.00   1st Qu.:   7.0   1st Qu.:  17.0   1st Qu.: 7.38  
-#>  Median : 64.80   Median : 152.0   Median :  23.00   Median : 107.0   Median :  47.0   Median : 9.34  
-#>  Mean   : 74.63   Mean   : 241.8   Mean   :  55.47   Mean   : 156.5   Mean   : 108.8   Mean   : 9.94  
-#>  3rd Qu.:100.13   3rd Qu.: 298.0   3rd Qu.:  66.00   3rd Qu.: 225.0   3rd Qu.: 109.0   3rd Qu.:12.36  
-#>  Max.   :228.88   Max.   :4503.0   Max.   :1477.00   Max.   :3159.0   Max.   :3849.0   Max.   :20.28  
-#>  NA's   :65591    NA's   :65591    NA's   :65591     NA's   :65591    NA's   :65591    NA's   :65591  
-#>      bio13            bio14            bio15            bio16            bio17           bio18       
-#>  Min.   :  9.65   Min.   :   0.0   Min.   :-29.60   Min.   :-72.40   Min.   : 1.00   Min.   :-66.19  
-#>  1st Qu.: 20.97   1st Qu.: 569.8   1st Qu.: -6.01   1st Qu.:-39.30   1st Qu.:26.11   1st Qu.:-26.12  
-#>  Median : 26.57   Median : 897.1   Median : 21.53   Median :-21.61   Median :33.38   Median : 10.69  
-#>  Mean   : 34.54   Mean   : 880.0   Mean   : 13.93   Mean   :-19.80   Mean   :33.72   Mean   : -0.93  
-#>  3rd Qu.: 45.35   3rd Qu.:1206.6   3rd Qu.: 31.35   3rd Qu.:  4.63   3rd Qu.:41.31   3rd Qu.: 21.46  
-#>  Max.   :100.00   Max.   :2342.4   Max.   : 47.95   Max.   : 26.20   Max.   :71.58   Max.   : 37.70  
-#>  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591   
-#>      bio19       
-#>  Min.   :-54.26  
-#>  1st Qu.:-24.25  
-#>  Median : -9.26  
-#>  Mean   : -5.38  
-#>  3rd Qu.: 18.52  
-#>  Max.   : 37.04  
-#>  NA's   :65591
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'worldclim_stack' not found
 ```
 
 Convert the **species_occurences_summary**, which summarizes species occurrence by SiteCode, into a spatial object using the `st_as_sf` function:
@@ -406,7 +336,7 @@ Extract the bio-climatic variable values for each bird observation site, respect
 
 ``` r
 bioclim_values <- extract(worldclim_stack, cranes_sf)
-#> Error in UseMethod("extract"): no applicable method for 'extract' applied to an object of class "SpatRaster"
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'worldclim_stack' not found
 ```
 
 Then combine the bio-climatic values with the NatureCounts data.
@@ -427,9 +357,6 @@ bioclim_data <- bioclim_data %>%
   mutate(date = as.Date(date)) %>%
   filter(year(date) >= "1970")
 #> Error in eval(expr, envir, enclos): object 'bioclim_data' not found
-```
-
-``` r
 summary(bioclim_data)
 #> Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'bioclim_data' not found
 ```
