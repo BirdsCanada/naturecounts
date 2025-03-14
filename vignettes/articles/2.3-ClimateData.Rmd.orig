@@ -66,12 +66,12 @@ library(weathercan)
 
 # 3.1 Data Setup
 
-```{r, eval = FALSE}
+```{r, echo = FALSE}
 collections <- meta_collections() 
 View(meta_collections())
 ```
 
-```{r, eval = FALSE}
+```{r, echo = FALSE}
 search_species("whooping crane")
 View(search_species("whooping crane"))
 ```

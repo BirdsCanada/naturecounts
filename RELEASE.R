@@ -84,6 +84,8 @@ pkgdown::build_article("articles/region-spatial")
 pkgdown::build_article("articles/2.1-SpatialDataExploration")
 pkgdown::build_article("articles/2.2-SpatialFiltering")
 pkgdown::build_article("articles/2.3-ClimateData")
+pkgdown::build_article("articles/2.4-ElevationData")
+pkgdown::build_article("articles/2.5-LandcoverData")
 
 # Don't push resources
 unlink("vignettes/articles/BCR_Terrestrial/", recursive = TRUE)
