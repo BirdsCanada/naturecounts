@@ -427,20 +427,19 @@ make_grid <- function(df_sf, cell_size) {
 #' basic map of Canada with a custom CRS (3347, Statistics Canada Lambert by
 #' default).
 #'
-#' @inheritParams common_docs
+#' @inheritParams args
 #' 
 #' @return sf data frame
 #' @export
 #'
 #' @examples
-#' 
 #' map_canada()
 #' 
 #' plot(map_canada())
 #' 
 #' library(ggplot2)
 #' ggplot(data = map_canada()) + geom_sf()
-#' 
+
 map_canada <- function(crs = 3347) {
   have_pkg_check("rnaturalearth")
   have_pkg_check("sf")

@@ -95,7 +95,7 @@
 #' Use `nc_count(username = "USER", show = "all")`, to see the accessibility of
 #' collections.
 #'
-#' "Full" access means that data can be immediately requested directly through
+#' "Full" access means that data can be immediately downloaded directly through
 #' the `naturecounts` R package. "By request" means that a request must be
 #' [submitted
 #' online](https://naturecounts.ca/nc/default/searchquery.jsp) and

@@ -6,6 +6,13 @@
 \usage{
 map_canada(crs = 3347)
 }
+\arguments{
+\item{crs}{A coordinate reference system (see \code{?sf::st_transform()}).
+Defaults to 3347 (Statistics Canada Lambert) for plots and a customized
+Albers Equal-Area for Canada (see \code{?crs_albers_canada()}) for area
+calculations. Note that it must be a projection (i.e. not simply a
+reference system like 4326 used for GPS) for area calculations.}
+}
 \value{
 sf data frame
 }
@@ -15,12 +22,10 @@ basic map of Canada with a custom CRS (3347, Statistics Canada Lambert by
 default).
 }
 \examples{
-
 map_canada()
 
 plot(map_canada())
 
 library(ggplot2)
 ggplot(data = map_canada()) + geom_sf()
-
 }

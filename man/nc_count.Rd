@@ -117,7 +117,7 @@ Access to a data collection is either available as "full" or "by request".
 Use \code{nc_count(username = "USER", show = "all")}, to see the accessibility of
 collections.
 
-"Full" access means that data can be immediately requested directly through
+"Full" access means that data can be immediately downloaded directly through
 the \code{naturecounts} R package. "By request" means that a request must be
 \href{https://naturecounts.ca/nc/default/searchquery.jsp}{submitted online} and
 approved before the data can be downloaded through \code{naturecounts}.
