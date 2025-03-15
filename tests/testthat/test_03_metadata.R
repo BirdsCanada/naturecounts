@@ -2,7 +2,7 @@
 test_that("Metadata updates", {
   # Get original file dates
   loc <- list.files(system.file("extdata", package = "naturecounts"),
-                    pattern = ".rds", full.names = TRUE) %>%
+                    pattern = "meta_", full.names = TRUE) %>%
     subset(!stringr::str_detect(., "utm")) %>%
     file.info()
 
@@ -11,7 +11,7 @@ test_that("Metadata updates", {
     suppressMessages()
 
   loc2 <- list.files(system.file("extdata", package = "naturecounts"),
-                     pattern = ".rds", full.names = TRUE) %>%
+                     pattern = "meta_", full.names = TRUE) %>%
     subset(!stringr::str_detect(., "utm")) %>%
     file.info()
 
@@ -23,7 +23,7 @@ test_that("Metadata updates", {
   expect_message(nc_metadata(force = FALSE), "already up-to-date with server")
 
   loc3 <- list.files(system.file("extdata", package = "naturecounts"),
-                     pattern = ".rds", full.names = TRUE) %>%
+                     pattern = "meta_", full.names = TRUE) %>%
     subset(!stringr::str_detect(., "utm")) %>%
     file.info()
 

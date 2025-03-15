@@ -4,22 +4,28 @@
 \alias{map_canada}
 \title{Map of Canada}
 \usage{
-map_canada()
+map_canada(crs = 3347)
+}
+\arguments{
+\item{crs}{A coordinate reference system (see \code{?sf::st_transform()}).
+Defaults to 3347 (Statistics Canada Lambert) for plots and a customized
+Albers Equal-Area for Canada (see \code{?crs_albers_canada()}) for area
+calculations. Note that it must be a projection (i.e. not simply a
+reference system like 4326 used for GPS) for area calculations.}
 }
 \value{
-Sf data frame
+sf data frame
 }
 \description{
 Wrapper around \code{rnaturalearth::ne_countries()} to creates a simple features
-basic map of Canada with CRS 3347 (Statistics Canada Lambert).
+basic map of Canada with a custom CRS (3347, Statistics Canada Lambert by
+default).
 }
 \examples{
-
 map_canada()
 
 plot(map_canada())
 
 library(ggplot2)
 ggplot(data = map_canada()) + geom_sf()
-
 }

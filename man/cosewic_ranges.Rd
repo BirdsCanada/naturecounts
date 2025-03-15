@@ -12,6 +12,8 @@ cosewic_ranges(
   species = "species_id",
   iao_grid_size_km = 2,
   eoo_p = 0.95,
+  eoo_clip = NULL,
+  crs = crs_albers_canada(),
   filter_unique = FALSE,
   spatial = TRUE
 )
@@ -37,6 +39,10 @@ IAO. Default is COSEWIC requirement (2). Use caution if changing.}
 Defaults to 0.95 for a 95\% convex hull to ensure outlier points do not
 artificially inflate the EOO. Note that for a final COSEWIC report, this
 may not be appropriate. Set to 1 to include all points.}
+
+\item{eoo_clip}{sf (Multi)Polygon. A spatial object to clip the EOO to. May
+be relevant when calculating EOOs for complex regions (i.e. long curved
+areas) to avoid including area which cannot have observations.}
 
 \item{filter_unique}{Logical. Whether to filter observations to unique
 locations. Use this only if there are too many data points to work with.
@@ -118,5 +124,20 @@ mult <- rbind(bcch, hofi)
 r <- cosewic_ranges(mult)
 r <- cosewic_ranges(mult, spatial = FALSE)
 
+# Consider the Ontario MNR Lambert projection (all observations are in Ontario)
+r2 <- cosewic_ranges(mult, crs = 3162)
 
+# Clip to a specific region
+\dontshow{if (requireNamespace("rnaturalearth", quietly = TRUE) & requireNamespace("rnaturalearthhires", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+library(rnaturalearth)
+ON <- ne_states("Canada") |> 
+  dplyr::filter(postal == "ON")
+
+r <- cosewic_ranges(mult)
+cosewic_plot(r, map = ON) # No clip
+
+r <- cosewic_ranges(mult, eoo_clip = ON)
+cosewic_plot(r, map = ON) # With clip
+\dontshow{\}) # examplesIf}
 }

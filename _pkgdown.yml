@@ -39,12 +39,13 @@ reference:
   desc: Functions for searching through metadata
   contents: starts_with("search_")
 - title: Helper functions
-  desc: Functions for formating, cleaning or transforming downloaded data
+  desc: Functions for formating, cleaning or transforming downloaded data, as well as for working with spatial data
   contents:
   - format_dates
   - format_zero_fill
   - map_canada
   - grid_canada
+  - crs_albers_canada
 - title: COSEWIC functions
   desc: Functions for helping with COSEWIC assessments
   contents:

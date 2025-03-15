@@ -28,6 +28,11 @@
 #' @param request_id Numeric. Specific request id to check or download.
 #' @param timeout Numeric. Number of seconds before connecting to the server
 #'   times out.
+#' @param crs A coordinate reference system (see `?sf::st_transform()`).
+#'   Defaults to 3347 (Statistics Canada Lambert) for plots and a customized
+#'   Albers Equal-Area for Canada (see `?crs_albers_canada()`) for area
+#'   calculations. Note that it must be a projection (i.e. not simply a
+#'   reference system like 4326 used for GPS) for area calculations.
 #' @param verbose Logical. Show messages?
 #'
 #' @section NatureCounts account:
@@ -90,7 +95,7 @@
 #' Use `nc_count(username = "USER", show = "all")`, to see the accessibility of
 #' collections.
 #'
-#' "Full" access means that data can be immediately requested directly through
+#' "Full" access means that data can be immediately downloaded directly through
 #' the `naturecounts` R package. "By request" means that a request must be
 #' [submitted
 #' online](https://naturecounts.ca/nc/default/searchquery.jsp) and

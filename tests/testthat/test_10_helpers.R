@@ -1,3 +1,7 @@
+expect_silent(
+  test_rc <- readRDS(system.file("extdata", "test_data.rds", package = "naturecounts"))
+)
+
 # format_dates() ----------------------------------------------------------
 test_that("format_dates() with data frame", {
   for(i in 1:2) {

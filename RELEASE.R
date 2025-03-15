@@ -7,7 +7,9 @@
 devtools::test()
 
 # - Update internal data files
-source("data-raw/data_creation.R")
+source("data-raw/data_internal.R")
+source("data-raw/data_example.R")
+source("data-raw/data_test.R")
 
 # - Update metadata stored in inst/extdata (Check URLS in data-raw/data_creation.R)
 # - Utm codes take time to update

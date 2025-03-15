@@ -4,7 +4,7 @@
 \alias{grid_canada}
 \title{Create grid across Canada}
 \usage{
-grid_canada(cell_size = 200, buffer = 500)
+grid_canada(cell_size = 200, buffer = 500, crs = crs_albers_canada())
 }
 \arguments{
 \item{cell_size}{Numeric. Size of grid (km) to use when creating grid.

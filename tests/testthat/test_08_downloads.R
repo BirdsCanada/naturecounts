@@ -273,3 +273,38 @@ test_that("Data download returns informative errors/messages", {
                           username = "testuser", verbose = FALSE),
                "'info' is required text if not using a 'request_id'")
 })
+
+
+# Data - by request_id --------------------------------
+
+test_that("Data download returns informative errors/messages", {
+  
+  r <- 155889 
+  
+  req_all <- data.frame(
+    request_id = r,
+    collection = c("PFW-US-EAST", "PFW-US-WEST"),
+    status = c("approved", "approved"),
+    nrecords = c(1269, 4080))
+  
+  req_some <- dplyr::mutate(req_all, status = c("approved", "pending"))
+  
+  # Normal download
+  with_mocked_bindings(
+    nc_requests_internal = function(...) req_all,
+    code = {
+      expect_message(d <- nc_data_dl(request_id = r, username = "testuser"),
+                     "Total records: 5,349") %>%
+        suppressMessages()
+    })
+  
+  # Drop a collection
+  with_mocked_bindings(
+    nc_requests_internal = function(...) req_some,
+    code = {
+      expect_message(d <- nc_data_dl(request_id = r, username = "testuser"), 
+                     "Not all collections were approved, downloading 1/2") %>%
+        expect_message("Total records: 1,269") %>%
+        suppressMessages()
+    })
+})

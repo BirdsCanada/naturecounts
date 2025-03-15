@@ -105,8 +105,14 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
       species <- years <- doy <- region <- site_type <- NULL
     }
 
-    requests <- nc_requests_internal(request_id, token)
-    if(is.null(requests)) stop("No valid requests for this id and this user", call. = FALSE)
+    requests0 <- nc_requests_internal(request_id, token)
+    if(is.null(requests0)) stop("No valid requests for this id and this user", call. = FALSE)
+    requests <- dplyr::filter(requests0, status == "approved")
+    if(nrow(requests) == 0) stop("No approved requests for this id and this user", call. = FALSE)
+    if(nrow(requests0) != nrow(requests) & verbose) {
+      message("Not all collections were approved, downloading ", nrow(requests),
+              "/", nrow(requests0), " requested collections")
+    }
 
     if(!is.null(collections)) {
       if(any(!collections %in% requests$collection)) {
