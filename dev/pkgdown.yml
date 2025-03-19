@@ -12,6 +12,8 @@ articles:
   articles/2.1-SpatialDataExploration: 2.1-SpatialDataExploration.html
   articles/2.2-SpatialSubsets: 2.2-SpatialSubsets.html
   articles/2.3-ClimateData: 2.3-ClimateData.html
+  articles/2.4-ElevationData: 2.4-ElevationData.html
+  articles/2.5-LandcoverData: 2.5-LandcoverData.html
   data-access: data-access.html
   filtering-data: filtering-data.html
   format-zero-fill: format-zero-fill.html
@@ -21,7 +23,7 @@ articles:
   articles/region-spatial: region-spatial.html
   selecting-fields: selecting-fields.html
   species-codes: species-codes.html
-last_built: 2024-12-18T21:37Z
+last_built: 2025-03-19T19:47Z
 urls:
   reference: https://birdscanada.github.io/naturecounts/reference
   article: https://birdscanada.github.io/naturecounts/articles

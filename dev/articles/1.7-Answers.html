@@ -68,7 +68,7 @@
 
       <h1>Chapter 7 - Answers</h1>
             
-            <h4 data-toc-skip class="date">2024-12-18</h4>
+            <h4 data-toc-skip class="date">2025-03-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/1.7-Answers.Rmd" class="external-link"><code>vignettes/articles/1.7-Answers.Rmd</code></a></small>
       <div class="d-none name"><code>1.7-Answers.Rmd</code></div>
@@ -80,11 +80,8 @@
 <h2 id="Ans7">Exercise Answers<a class="anchor" aria-label="anchor" href="#Ans7"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> </span></code></pre></div>
-<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="Ans7-1">Chapter 3<a class="anchor" aria-label="anchor" href="#Ans7-1"></a>
@@ -92,7 +89,7 @@
 <p>Exercise 1: If you are interesting in doing a research project on
 Snowy Owls in Quebec, which three collections are you most likely to
 consider using (i.e., which have the most data)?</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"Snowy Owl"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Quebec"</span>, type <span class="op">=</span> <span class="st">"statprov"</span><span class="op">)</span></span>
 <span><span class="va">SNOW</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>species<span class="op">=</span><span class="fl">7450</span>, region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov<span class="op">=</span><span class="st">"QC"</span><span class="op">)</span><span class="op">)</span></span>
@@ -101,7 +98,7 @@ consider using (i.e., which have the most data)?</p>
 <p>Exercise 2: How many records of Gadwal are in the British Columbia
 Coastal Waterbird Survey collection? What if you are only interested in
 records from 2010-2019, how many records are available?</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"Gadwal"</span><span class="op">)</span></span>
 <span><span class="va">collection</span><span class="op">&lt;-</span><span class="va">collections</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">collection</span><span class="op">)</span></span>
@@ -123,7 +120,7 @@ nc_count() function (i.e., which has the most data). Next, you decide to
 focus your download to only include Blackpoll Warbler data collected
 over the past 5 years (2015-2020). How many observation records did you
 download?</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Northwest Territories"</span>, type <span class="op">=</span> <span class="st">"statprov"</span><span class="op">)</span></span>
 <span><span class="va">NT</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov<span class="op">=</span><span class="st">"NT"</span><span class="op">)</span>, username<span class="op">=</span><span class="st">"testuser"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">NT</span><span class="op">)</span></span>
@@ -137,7 +134,7 @@ this species has been detected here in the month of May. You choose to
 download the records you have authorization to freely access from
 NatureCounts. How many observation records did you download? What year
 are these records from?</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_region.html">search_region</a></span><span class="op">(</span><span class="st">"Beaverhill Lake"</span>, type <span class="op">=</span> <span class="st">"iba"</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"Bobolink"</span><span class="op">)</span></span>
 <span><span class="co">#May = doy 122-152</span></span>
@@ -154,7 +151,7 @@ monitoring data collected at Vaseux Lake Bird Observatory, British
 Columbia. You request the open access data from 2017-2020. After you
 request this subset of the collection, you need to determine the number
 of unique days Gray catbirds were records in each year?</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">collections</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"Gray Catbird"</span><span class="op">)</span> </span>
 <span></span>
@@ -169,7 +166,7 @@ of unique days Gray catbirds were records in each year?</p>
 want to zero-fill the dataframe to ensure it is complete for your study
 on Gray catbirds. How many records (rows) are in the zero-fill Gray
 catbird dataframe?</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#You will pull all the data for this exercise, not just the records for Gray catbird. This ensures the zero-fill works correctly</span></span>
 <span></span>
 <span><span class="va">VLBO</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"CMMN-DET-VLBO"</span>, years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2017</span>, <span class="fl">2020</span><span class="op">)</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"tutorial example"</span><span class="op">)</span></span>

@@ -68,7 +68,7 @@
 
       <h1>Zero-filling data</h1>
             
-            <h4 data-toc-skip class="date">2024-12-18</h4>
+            <h4 data-toc-skip class="date">2025-03-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/format-zero-fill.Rmd" class="external-link"><code>vignettes/format-zero-fill.Rmd</code></a></small>
       <div class="d-none name"><code>format-zero-fill.Rmd</code></div>
@@ -100,11 +100,8 @@ username.</p>
 <h3 id="packages">Packages<a class="anchor" aria-label="anchor" href="#packages"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -112,7 +109,7 @@ username.</p>
 </h3>
 <p>We’ll use the ‘core’ version of BMDE fields so that we include
 <code>CommonName</code> for convenience.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"RCBIOTABASE"</span>, fields_set <span class="op">=</span> <span class="st">"core"</span>,</span>
 <span>                 species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">252456</span>, <span class="fl">252494</span>, <span class="fl">252491</span><span class="op">)</span>,</span>
 <span>                 username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span></span></code></pre></div>
@@ -130,14 +127,14 @@ username.</p>
 <h3 id="initial-exploration">Initial Exploration<a class="anchor" aria-label="anchor" href="#initial-exploration"></a>
 </h3>
 <p>Let’s take a look at the butterfly species observations we have</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">rc</span>, <span class="va">CommonName</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##          CommonName   n</span></span>
 <span><span class="co">## 1 Black Swallowtail  40</span></span>
 <span><span class="co">## 2           Monarch 215</span></span>
 <span><span class="co">## 3       Red Admiral  94</span></span></code></pre>
 <p>How many sampling events?</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">rc</span>, <span class="va">SamplingEventIdentifier</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     SamplingEventIdentifier   n</span></span>
 <span><span class="co">## 1       RCBIOTABASE-10008-1   1</span></span>
@@ -274,7 +271,7 @@ username.</p>
 <p>Lot’s of sampling events too. But some are missing
 (<code>NA</code>).</p>
 <p>Were all species reported?</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">rc</span>, <span class="va">AllSpeciesReported</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   AllSpeciesReported   n</span></span>
 <span><span class="co">## 1                 No 176</span></span>
@@ -282,12 +279,12 @@ username.</p>
 <p>Sometimes, but not all the time.</p>
 <p>Finally, let’s take a peak at the observations recorded for these
 three species</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">rc</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">CommonName</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Number of individuals observed"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="format-zero-fill_files/figure-html/unnamed-chunk-6-1.png" alt="Boxplots showing counts for three butterflies, Monarchs showing the most" width="700"></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">rc</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">CommonName</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Number of sampling events the species was observed"</span><span class="op">)</span></span></code></pre></div>
@@ -304,7 +301,7 @@ not.</p>
 you know if a species was or was not observed, if it wasn’t reported?),
 <code>format_zero_fill</code> will return an error if some of the
 records are not valid.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_filled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span><span class="va">rc</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Error: Column 'AllSpeciesReported' must be present and 'Yes'</span></span></code></pre>
 <p>Therefore, the first thing we need to do is limit our data to only
@@ -314,17 +311,17 @@ recorded.</p>
 always be strictly true, as bird identification events (e.g., Christmas
 Bird Counts) may report all <em>bird</em> species, but would probably
 not report all mammalian species, plants, etc. and vice versa.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_all_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">rc</span>, <span class="va">AllSpeciesReported</span> <span class="op">==</span> <span class="st">"Yes"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">rc_all_species</span>, <span class="va">AllSpeciesReported</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   AllSpeciesReported   n</span></span>
 <span><span class="co">## 1                Yes 173</span></span></code></pre>
 <p>Now we can fill in all species missing from other sampling
 events.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_filled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span><span class="va">rc_all_species</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  - Converted 'fill' column (ObservationCount) from character to numeric</span></span></code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rc_filled</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   SamplingEventIdentifier species_id ObservationCount</span></span>
 <span><span class="co">## 1     RCBIOTABASE-10008-1     252456                1</span></span>
@@ -333,7 +330,7 @@ events.</p>
 <span><span class="co">## 4     RCBIOTABASE-10015-1     252456                2</span></span>
 <span><span class="co">## 5     RCBIOTABASE-10015-1     252491                0</span></span>
 <span><span class="co">## 6     RCBIOTABASE-10015-1     252494                0</span></span></code></pre>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">rc_filled</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">species_id</span><span class="op">)</span>, fill <span class="op">=</span> <span class="va">ObservationCount</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Number of sampling events the species was observed"</span><span class="op">)</span></span></code></pre></div>
@@ -346,11 +343,11 @@ of zero-filling, extra columns have been removed.</p>
 </h2>
 <p>To keep other columns associated with species id, specify them with
 the <code>extra_species</code> argument.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_filled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span><span class="va">rc_all_species</span>, </span>
 <span>                              extra_species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CommonName"</span>, <span class="st">"ScientificName"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  - Converted 'fill' column (ObservationCount) from character to numeric</span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rc_filled</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   SamplingEventIdentifier species_id ObservationCount        CommonName</span></span>
 <span><span class="co">## 1     RCBIOTABASE-10008-1     252456                1           Monarch</span></span>
@@ -370,13 +367,13 @@ the <code>extra_species</code> argument.</p>
 them, in addition to the sampling event id, in the <code>by</code>
 argument. By default, <code>SamplingEventIdentifier</code> is used to
 identify specific sampling events.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_filled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span><span class="va">rc_all_species</span>, </span>
 <span>                              by <span class="op">=</span> <span class="st">"SamplingEventIdentifier"</span>,</span>
 <span>                              extra_event <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"latitude"</span>, <span class="st">"longitude"</span><span class="op">)</span>,</span>
 <span>                              extra_species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CommonName"</span>, <span class="st">"ScientificName"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  - Converted 'fill' column (ObservationCount) from character to numeric</span></span></code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rc_filled</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   SamplingEventIdentifier species_id ObservationCount        CommonName</span></span>
 <span><span class="co">## 1     RCBIOTABASE-10008-1     252456                1           Monarch</span></span>
@@ -399,12 +396,12 @@ identify specific sampling events.</p>
 <p>Sampling events aren’t the only way of zero-filling data. Perhaps
 you’re only interested in whether a species has/has not been observed in
 a particular location.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_loc_filled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span><span class="va">rc_all_species</span>, </span>
 <span>                                  by <span class="op">=</span> <span class="st">"utm_square"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  - Consider summarizing multiple observations per set of 'by' before zero-filling to increase speed</span></span></code></pre>
 <pre><code><span><span class="co">##  - Converted 'fill' column (ObservationCount) from character to numeric</span></span></code></pre>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rc_loc_filled</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   utm_square species_id ObservationCount</span></span>
 <span><span class="co">## 1    18TTR94     252456                1</span></span>
@@ -417,7 +414,7 @@ a particular location.</p>
 have multiple observations per <code>utm_square</code>. This example
 isn’t large enough to be slowed down much, but in larger examples, it
 can be much faster to simplify the dataset first.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_sum</span> <span class="op">&lt;-</span> <span class="va">rc_all_species</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">utm_square</span>, <span class="va">species_id</span>, <span class="va">AllSpeciesReported</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>ObservationCount <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -434,7 +431,7 @@ can be much faster to simplify the dataset first.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> 18TUR27        <span style="text-decoration: underline;">252</span>491 Yes                               1</span></span></code></pre>
 <p>Now if we zero-fill this data set, we get a zero-filled, aggregated
 dataset.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_sum_filled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span><span class="va">rc_sum</span>, by <span class="op">=</span> <span class="st">"utm_square"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rc_sum_filled</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   utm_square species_id ObservationCount</span></span>
@@ -452,10 +449,10 @@ dataset.</p>
 present in the data, but often you might be only interested in one or
 two species. We can specify which species with the <code>species</code>
 argument.</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_sp_filled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span><span class="va">rc_all_species</span>, species <span class="op">=</span> <span class="st">"252456"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  - Converted 'fill' column (ObservationCount) from character to numeric</span></span></code></pre>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rc_sp_filled</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   SamplingEventIdentifier species_id ObservationCount</span></span>
 <span><span class="co">## 1     RCBIOTABASE-10008-1     252456                1</span></span>
@@ -474,7 +471,7 @@ zero fill.</p>
 <p>For example, if you wanted to deal only with Presence/Absence you
 could create a new <code>presence</code> column and zero-fill this
 column.</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_presence</span> <span class="op">&lt;-</span> <span class="va">rc_all_species</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">species_id</span>, <span class="va">AllSpeciesReported</span>, <span class="va">ObservationCount</span>, <span class="va">SamplingEventIdentifier</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>presence <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
@@ -493,10 +490,10 @@ column.</p>
 <span><span class="co">## 4     TRUE</span></span>
 <span><span class="co">## 5     TRUE</span></span>
 <span><span class="co">## 6     TRUE</span></span></code></pre>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rc_presence_filled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_zero_fill.html">format_zero_fill</a></span><span class="op">(</span><span class="va">rc_presence</span>, fill <span class="op">=</span> <span class="st">"presence"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  - Converted 'fill' column (presence) from logical to numeric</span></span></code></pre>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">rc_presence_filled</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   SamplingEventIdentifier species_id presence</span></span>
 <span><span class="co">## 1     RCBIOTABASE-10008-1     252456        1</span></span>
