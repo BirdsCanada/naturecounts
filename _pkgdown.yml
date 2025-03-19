@@ -89,7 +89,7 @@ articles:
   - '`filtering-data`'
   - '`articles/region-spatial`'
   - '`region-areas`'
-  # - '`articles/mapping-observations`' # Omit because data source has changed
+  - '`articles/mapping-observations`'
 - title: Reference
   desc: Reference articles for metadata codes and descriptions.
   contents:
