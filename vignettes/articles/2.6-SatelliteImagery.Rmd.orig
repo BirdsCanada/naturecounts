@@ -71,8 +71,6 @@ These interactions also mean that we can represent multispectral imagery through
 Specify the path to your folder containing the satellite images in the code chunk below. Each image represents a distinct band. If you downloaded the data by following [Section 6.3](#6.3CopernicusDataDownload), look for the folder labeled S2A_MSIL2A. Copy the file path to S2A_MSIL2A... \> GRANULE \> L2A... \> IMG_DATA \> R10m which contains the satellite images we will use here.
 
 ```{r, message = FALSE, warning = FALSE}
-getwd()
-
 bands <- list.files(path = here::here("misc/data/R10m"), 
                     pattern = "\\.jp2$", full.names = TRUE)
 

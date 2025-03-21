@@ -249,4 +249,4 @@ ggplot() +
 
 ```
 
-\*\*Congratulations!\*\* You completed \*\*Chapter 2: Auxiliary Tables\*\*. Here, you accessed NatureCounts auxiliary tables using the `nc_query_tables` function. You also created basic data summaries and maps using rNest and ecodistricts data.
+**Congratulations!** You completed \*\*Chapter 2: Auxiliary Tables\*\*. Here, you accessed NatureCounts auxiliary tables using the `nc_query_tables` function. You also created basic data summaries and maps using rNest and ecodistricts data.

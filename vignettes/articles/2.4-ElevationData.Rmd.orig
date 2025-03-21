@@ -423,7 +423,7 @@ There does not appear to be a clear relationship between species diversity and e
 
 ------------------------------------------------------------------------
 
-Congratulations! You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](05-LandcoverData.Rmd), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data.
+**Congratulations!** You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](05-LandcoverData.Rmd), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data.
 
 Below are some additional resources you may find useful to further your understanding of LiDAR data.
 
