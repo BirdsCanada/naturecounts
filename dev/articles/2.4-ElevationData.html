@@ -68,7 +68,7 @@
 
       <h1>Chapter 4 - Elevation Data</h1>
             
-            <h4 data-toc-skip class="date">2025-03-14</h4>
+            <h4 data-toc-skip class="date">2025-03-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.4-ElevationData.Rmd" class="external-link"><code>vignettes/articles/2.4-ElevationData.Rmd</code></a></small>
       <div class="d-none name"><code>2.4-ElevationData.Rmd</code></div>
@@ -163,14 +163,16 @@ store the parks spatial data.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">"data/nationalparks"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Move the files from your Downloads to the <code>nationalparks</code>
 subdirectory before applying the <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read()</a></code> function.</p>
-<pre><code><span><span class="co">#&gt; Reading layer `vw_Places_Public_lieux_public_APCA' from data source </span></span>
-<span><span class="co">#&gt;   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># specify the path to your shapefile</span></span>
+<span><span class="va">national_parks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"misc/data/nationalparks/vw_Places_Public_lieux_public_APCA.shp"</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; Reading layer `vw_Places_Public_lieux_public_APCA' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'</span></span>
 <span><span class="co">#&gt; Simple feature collection with 52 features and 9 fields</span></span>
 <span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY, XYZ</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -141.0019 ymin: 41.68134 xmax: -53.68772 ymax: 83.15114</span></span>
 <span><span class="co">#&gt; z_range:       zmin: 0 zmax: 0</span></span>
-<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span></code></pre>
+<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span></code></pre></div>
 <p>Filter the <strong>national_parks</strong> dataset for La Mauricie
 National Park.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -206,84 +208,7 @@ in the province.</p>
 username. You will be prompted for your password.</p>
 <p>Download NatureCounts data:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">quebec_atlas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"QCATLAS2PC"</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"spatial_data_tutorial"</span>, timeout <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using filters: collections (QCATLAS2PC); fields_set (BMDE2.00-min)</span></span>
-<span><span class="co">#&gt; Collecting available records...</span></span>
-<span><span class="co">#&gt;   collection nrecords</span></span>
-<span><span class="co">#&gt; 1 QCATLAS2PC   341902</span></span>
-<span><span class="co">#&gt; Total records: 341,902</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Downloading records for each collection:</span></span>
-<span><span class="co">#&gt;   QCATLAS2PC</span></span>
-<span><span class="co">#&gt;     Records 1 to 5000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 5001 to 10000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 10001 to 15000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 15001 to 20000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 20001 to 25000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 25001 to 30000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 30001 to 35000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 35001 to 40000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 40001 to 45000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 45001 to 50000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 50001 to 55000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 55001 to 60000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 60001 to 65000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 65001 to 70000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 70001 to 75000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 75001 to 80000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 80001 to 85000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 85001 to 90000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 90001 to 95000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 95001 to 1e+05 / 341902</span></span>
-<span><span class="co">#&gt;     Records 100001 to 105000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 105001 to 110000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 110001 to 115000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 115001 to 120000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 120001 to 125000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 125001 to 130000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 130001 to 135000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 135001 to 140000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 140001 to 145000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 145001 to 150000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 150001 to 155000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 155001 to 160000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 160001 to 165000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 165001 to 170000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 170001 to 175000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 175001 to 180000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 180001 to 185000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 185001 to 190000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 190001 to 195000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 195001 to 2e+05 / 341902</span></span>
-<span><span class="co">#&gt;     Records 200001 to 205000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 205001 to 210000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 210001 to 215000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 215001 to 220000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 220001 to 225000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 225001 to 230000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 230001 to 235000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 235001 to 240000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 240001 to 245000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 245001 to 250000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 250001 to 255000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 255001 to 260000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 260001 to 265000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 265001 to 270000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 270001 to 275000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 275001 to 280000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 280001 to 285000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 285001 to 290000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 290001 to 295000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 295001 to 3e+05 / 341902</span></span>
-<span><span class="co">#&gt;     Records 300001 to 305000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 305001 to 310000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 310001 to 315000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 315001 to 320000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 320001 to 325000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 325001 to 330000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 330001 to 335000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 335001 to 340000 / 341902</span></span>
-<span><span class="co">#&gt;     Records 340001 to 341902 / 341902</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">quebec_atlas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"QCATLAS2PC"</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"spatial_data_tutorial"</span>, timeout <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <p>Read in the list of species names from NatureCounts which can be
 linked to the species id:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -444,7 +369,7 @@ after download. The code below will produce an error if there are other
 <span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a><span class="co">#&gt; resolution  : 1, 1  (x, y)</span></span>
 <span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a><span class="co">#&gt; extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)</span></span>
 <span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a><span class="co">#&gt; coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) </span></span>
-<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a><span class="co">#&gt; source      : spat_2b2028ed5d52_11040.tif </span></span>
+<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a><span class="co">#&gt; source      : spat_84d0114d7602_34000.tif </span></span>
 <span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a><span class="co">#&gt; varname     : MNT_31I10NO </span></span>
 <span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a><span class="co">#&gt; name        :  Band_1 </span></span>
 <span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a><span class="co">#&gt; min value   : 102.277 </span></span>
@@ -470,70 +395,70 @@ the <code>terra</code> package which uses the SpatVector format. Here,
 we crop the extent of the raster while converting the National Park
 Boundary to a SpatVector using <code><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect()</a></code>.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>dtm_crop <span class="ot">&lt;-</span> <span class="fu">crop</span>(dtm_mosaic, <span class="fu">vect</span>(mauricie_boundary))</span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a></span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a></span>
-<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a></span>
-<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a></span>
-<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a></span>
-<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a></span>
-<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a></span>
-<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a></span>
-<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a></span>
-<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a></span>
-<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a></span>
-<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a></span>
-<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a></span>
-<span id="cb21-22"><a href="#cb21-22" tabindex="-1"></a></span>
-<span id="cb21-23"><a href="#cb21-23" tabindex="-1"></a></span>
-<span id="cb21-24"><a href="#cb21-24" tabindex="-1"></a></span>
-<span id="cb21-25"><a href="#cb21-25" tabindex="-1"></a></span>
-<span id="cb21-26"><a href="#cb21-26" tabindex="-1"></a></span>
-<span id="cb21-27"><a href="#cb21-27" tabindex="-1"></a></span>
-<span id="cb21-28"><a href="#cb21-28" tabindex="-1"></a></span>
-<span id="cb21-29"><a href="#cb21-29" tabindex="-1"></a></span>
-<span id="cb21-30"><a href="#cb21-30" tabindex="-1"></a></span>
-<span id="cb21-31"><a href="#cb21-31" tabindex="-1"></a></span>
-<span id="cb21-32"><a href="#cb21-32" tabindex="-1"></a></span>
-<span id="cb21-33"><a href="#cb21-33" tabindex="-1"></a></span>
-<span id="cb21-34"><a href="#cb21-34" tabindex="-1"></a></span>
-<span id="cb21-35"><a href="#cb21-35" tabindex="-1"></a></span>
-<span id="cb21-36"><a href="#cb21-36" tabindex="-1"></a></span>
-<span id="cb21-37"><a href="#cb21-37" tabindex="-1"></a></span>
-<span id="cb21-38"><a href="#cb21-38" tabindex="-1"></a><span class="st">```</span><span class="at"> r</span></span>
-<span id="cb21-39"><a href="#cb21-39" tabindex="-1"></a><span class="at"># Set up a 1x2 plotting layout</span></span>
-<span id="cb21-40"><a href="#cb21-40" tabindex="-1"></a><span class="at">par(mfrow = c(1, 2))</span></span>
-<span id="cb21-41"><a href="#cb21-41" tabindex="-1"></a></span>
-<span id="cb21-42"><a href="#cb21-42" tabindex="-1"></a><span class="at"># Plot dtm_mosaic</span></span>
-<span id="cb21-43"><a href="#cb21-43" tabindex="-1"></a><span class="at">plot(dtm_mosaic, main = "regional DTM")</span></span>
-<span id="cb21-44"><a href="#cb21-44" tabindex="-1"></a></span>
-<span id="cb21-45"><a href="#cb21-45" tabindex="-1"></a><span class="at"># Overlay the National Park boundary on the first plot</span></span>
-<span id="cb21-46"><a href="#cb21-46" tabindex="-1"></a><span class="at">plot(mauricie_boundary, add = TRUE, border = "red", col = NA, lwd = 2)</span></span>
-<span id="cb21-47"><a href="#cb21-47" tabindex="-1"></a><span class="at">#&gt; Warning in plot.sf(mauricie_boundary, add = TRUE, border = "red", col = NA, : ignoring all but the first attribute</span></span>
-<span id="cb21-48"><a href="#cb21-48" tabindex="-1"></a></span>
-<span id="cb21-49"><a href="#cb21-49" tabindex="-1"></a><span class="at"># Plot dtm_mask</span></span>
-<span id="cb21-50"><a href="#cb21-50" tabindex="-1"></a><span class="at">plot(dtm_mask, main = "masked DTM")</span></span>
-<span id="cb21-51"><a href="#cb21-51" tabindex="-1"></a></span>
-<span id="cb21-52"><a href="#cb21-52" tabindex="-1"></a><span class="at"># Overlay the National Park boundary on the second plot</span></span>
-<span id="cb21-53"><a href="#cb21-53" tabindex="-1"></a><span class="at">plot(mauricie_boundary, add = TRUE, border = "red", col = NA, lwd = 2)</span></span>
-<span id="cb21-54"><a href="#cb21-54" tabindex="-1"></a><span class="at">#&gt; Warning in plot.sf(mauricie_boundary, add = TRUE, border = "red", col = NA, : ignoring all but the first attribute</span></span></code></pre></div>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="sc">|---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="er">=========================================</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>                                          </span></code></pre></div>
+<p><strong>Masking</strong> assigns NA values to cells of a raster not
+covered by a vector extent.</p>
+<p>To mask a raster to a vector extent we can apply the
+<code><a href="https://rspatial.github.io/terra/reference/mask.html" class="external-link">mask()</a></code> function from the <code>terra</code> package which
+also uses the SpatVector format.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>dtm_mask <span class="ot">&lt;-</span> <span class="fu">mask</span>(dtm_mosaic, <span class="fu">vect</span>(mauricie_boundary))</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="sc">|---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="er">=========================================</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>                                          </span></code></pre></div>
+<p>OPTIONAL: To write the masked raster to your disk, you can use the
+<code><a href="https://rspatial.github.io/terra/reference/writeRaster.html" class="external-link">writeRaster()</a></code> function from <code>terra</code>.
+<strong>This raster will be used in</strong> <a href="07-SummaryTools.Rmd">Chapter 7: Summary Tools</a>. We have
+uploaded this file to the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
+Drive data folder</strong></a> for your convenience.</p>
+<blockquote>
+<p>To execute this code chunk, remove the #</p>
+</blockquote>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># output_dir &lt;- "path/to/your/subdirectory/data/dtm_mask.tif" # include the masked raster name and '.tif' argument </span></span>
+<span></span>
+<span><span class="co"># writeRaster(dtm_mask, output_dir, overwrite = TRUE)</span></span></code></pre></div>
+<p><strong>Note: Make sure to include the ‘.tif’ argument when
+specifying the <code>output_dir</code> and name of your masked raster
+file. This specifies the file type while using
+<code><a href="https://rspatial.github.io/terra/reference/writeRaster.html" class="external-link">writeRaster()</a></code> which will, otherwise, produce an
+error.</strong></p>
+</div>
+<div class="section level2">
+<h2 id="id_4-4Map-Extract">4.4 Map and Extract Digital Elevation Data<a class="anchor" aria-label="anchor" href="#id_4-4Map-Extract"></a>
+</h2>
+<p>Visualize the regional and masked DTM’s with a two-panel plot.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set up a 1x2 plotting layout</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot dtm_mosaic</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_mosaic</span>, main <span class="op">=</span> <span class="st">"regional DTM"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Overlay the National Park boundary on the first plot</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mauricie_boundary</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"red"</span>, col <span class="op">=</span> <span class="cn">NA</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in plot.sf(mauricie_boundary, add = TRUE, border = "red", col = NA, : ignoring all but the first attribute</span></span>
+<span></span>
+<span><span class="co"># Plot dtm_mask</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_mask</span>, main <span class="op">=</span> <span class="st">"masked DTM"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Overlay the National Park boundary on the second plot</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mauricie_boundary</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"red"</span>, col <span class="op">=</span> <span class="cn">NA</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in plot.sf(mauricie_boundary, add = TRUE, border = "red", col = NA, : ignoring all but the first attribute</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp4_masked_dem-1.png" alt="Two-panel plot visualizing the regional and masked DTM's"></p>
 <p>Summarize the NatureCounts data for mapping. Here we will determine
 the number of species observed at each site.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Group by SiteCode and summarize mean annual count across all species</span></span>
 <span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="va">mauricie_birds_sf</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">geometry</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n_species <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">english_name</span><span class="op">)</span><span class="op">)</span> <span class="co"># count the number of unique species</span></span>
 <span><span class="co">#&gt; `summarise()` has grouped output by 'SiteCode'. You can override using the `.groups` argument.</span></span></code></pre></div>
 <p>Now we can map the NatureCounts summary output with the DTM data.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Match the CRS</span></span>
 <span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_mask</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -571,12 +496,12 @@ the number of species observed at each site.</p>
 <span>       xpd <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>                     <span class="co"># Allows placing legend outside the plot</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp4_elevation_map-1.png" alt="Map depicts species diversity summary points and cropped DTM in La Mauricie National Park"></p>
 <p>Rename the elevation raster layer.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dtm_mask</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"elevation"</span></span></code></pre></div>
 <p>Extract elevation values for each bird observation record and append
 it to <code>mauricie_birds</code>. First, make sure the CRS of both
 spatial data match and then use <code><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">terra::extract()</a></code>.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Match the CRS</span></span>
 <span><span class="va">mauricie_birds_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_birds_sf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_mask</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -584,14 +509,14 @@ spatial data match and then use <code><a href="https://rspatial.github.io/terra/
 <span><span class="va">elevation_values_sv</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">dtm_mask</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">mauricie_birds_sf</span><span class="op">)</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Convert the SpatVector containing the elevation values to an
 <code>sf</code> object.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">elevation_values_sf</span> <span class="op">&lt;-</span> <span class="va">elevation_values_sv</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># converts to sf object</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">elevation</span>, <span class="va">geometry</span><span class="op">)</span> <span class="co"># select relevant columns</span></span>
 <span>  </span></code></pre></div>
 <p>Assign a point id identifier to each location based on its unique
 geometry and return the result as a dataframe.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">elevation_values_df</span> <span class="op">&lt;-</span> <span class="va">elevation_values_sf</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">geometry</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>point_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_group_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -600,6 +525,7 @@ geometry and return the result as a dataframe.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># drop the geometry column</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># convert to a regular dataframe</span></span>
+<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, elevation)</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.</span></span></code></pre></div>
@@ -612,17 +538,17 @@ Tools</a></strong>. We have uploaded this file to the <a href="https://drive.goo
 Drive data folder</strong></a> for your convenience.</p>
 <p>Create a subdirectory called <code>env_covariates</code> to neatly
 store the output environmental data.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">"data/env_covariates"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
 </blockquote>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># write.csv(elevation_values_df, "data/env_covariates/elevation_values_df.csv", row.names = FALSE)</span></span></code></pre></div>
 <p>Now, let’s combine the elevation dataframe with the NatureCounts
 summary data you previously created in order to assess how elevation
 influences your metric of species diversity.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_mask</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract the elevation values for each site</span></span>
@@ -657,7 +583,7 @@ position and height, and aircraft altitude for the orientation of the
 instrument. The accuracy of LiDAR measurements depends on the strength
 of point returns, instrument precision &amp; accuracy, and terrain
 characteristics, among other factors.</p>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("images/spatdata11.PNG"): Cannot find the file(s): "images/spatdata11.PNG"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics(here::here("misc/images/spatdata11.PNG")): Cannot find the file(s): "misc/images/spatdata11.PNG"</span></span></code></pre>
 <p>Conceptual figure depicts an airborne LiDAR system (‘LiDAR-i lend’,
 <a href="https://commons.wikimedia.org/wiki/File:LiDAR-i_lend.gif" class="external-link">Marek9134
 (2012)</a> CC-BY-SA-3.0).</p>
@@ -688,20 +614,20 @@ interactive</strong> &gt; <strong>Forêt ouverte</strong> select
 (<strong>Explorer &gt; Accéder</strong>) next to the
 <strong>Téléchargement</strong> option to explore the Lidar tiles on an
 interactive map .</p>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("images/spatdata1.PNG"): Cannot find the file(s): "images/spatdata1.PNG"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics(here::here("misc/images/spatdata1.PNG")): Cannot find the file(s): "misc/images/spatdata1.PNG"</span></span></code></pre>
 <p><strong>Step 2</strong>: Using the search bar, search for
 <strong>Parc national de la Mauricie</strong>. Under Layers, toggle on
 <strong>Parc nationaux du Canada</strong> to visualize the park
 boundary.</p>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("images/spatdata0.PNG"): Cannot find the file(s): "images/spatdata0.PNG"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics(here::here("misc/images/spatdata0.PNG")): Cannot find the file(s): "misc/images/spatdata0.PNG"</span></span></code></pre>
 <p>Alternatively, you can import your own <strong>.shp</strong> or
 <strong>.kml</strong> file using the <strong>Import and Export</strong>
 tab.</p>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("images/spatdata2.PNG"): Cannot find the file(s): "images/spatdata2.PNG"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics(here::here("misc/images/spatdata2.PNG")): Cannot find the file(s): "misc/images/spatdata2.PNG"</span></span></code></pre>
 <p>Specify the coordinate reference system (WGS84), click
 <strong>Import</strong>, and select your <strong>.shp</strong> or
 <strong>.kml</strong> file to display on the map.</p>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("images/spatdata3.PNG"): Cannot find the file(s): "images/spatdata3.PNG"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics(here::here("misc/images/spatdata3.PNG")): Cannot find the file(s): "misc/images/spatdata3.PNG"</span></span></code></pre>
 <p><strong>Step 3</strong>: Download the Modèle num. terrain (MNT)
 (Résolution spatiale 1 m) for each of the six Lidar tiles that intersect
 with the park (14NE, 15NO, 14SE, 15SO, 11NE, 10NO).</p>
@@ -709,24 +635,24 @@ with the park (14NE, 15NO, 14SE, 15SO, 11NE, 10NO).</p>
 visibility for the boundary and Lidar MNT layers by clicking on the eye
 symbol, if necessary. Hovering over this icon will display either the
 <strong>Show Layer</strong> or <strong>Hide layer</strong> option.</p>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("images/spatdata4.PNG"): Cannot find the file(s): "images/spatdata4.PNG"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics(here::here("misc/images/spatdata4.PNG")): Cannot find the file(s): "misc/images/spatdata4.PNG"</span></span></code></pre>
 <p>Your interactive map should now look something like this:</p>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("images/spatdata5.PNG"): Cannot find the file(s): "images/spatdata5.PNG"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics(here::here("misc/images/spatdata5.PNG")): Cannot find the file(s): "misc/images/spatdata5.PNG"</span></span></code></pre>
 <p>One by one, click and download the terrain data for each of the 6
 Lidar tiles that intersect with the park boundary. Click your target
 tile, expand the <strong>Téléchargement</strong> window and click
 <strong>Accéder</strong> next to the MNT (1 m spatial resolution) data
 to download. Repeat for each tile.</p>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("images/spatdata6.PNG"): Cannot find the file(s): "images/spatdata6.PNG"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics(here::here("misc/images/spatdata6.PNG")): Cannot find the file(s): "misc/images/spatdata6.PNG"</span></span></code></pre>
 <p>This will open a webpage directory displaying a list of spatial data
 files available for the selected tile. Choose the MNT (.tif) file that
 includes the tile code in its name. For instance, for the first tile
 covering northern tip of the national park), select “MNT_31I14NE.tif.”
 Repeat this process for each respective tile.</p>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("images/spatdata10.PNG"): Cannot find the file(s): "images/spatdata10.PNG"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics(here::here("misc/images/spatdata10.PNG")): Cannot find the file(s): "misc/images/spatdata10.PNG"</span></span></code></pre>
 <p>Save these files in your working directory for easy access during
 this tutorial.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

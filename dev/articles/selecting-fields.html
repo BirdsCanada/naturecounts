@@ -68,7 +68,7 @@
 
       <h1>Selecting columns and fields to download</h1>
             
-            <h4 data-toc-skip class="date">2025-03-19</h4>
+            <h4 data-toc-skip class="date">2025-03-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/selecting-fields.Rmd" class="external-link"><code>vignettes/selecting-fields.Rmd</code></a></small>
       <div class="d-none name"><code>selecting-fields.Rmd</code></div>
@@ -120,7 +120,7 @@ version using the <code><a href="../reference/meta.html">meta_bmde_fields()</a><
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"BMDE-BAND-2.00"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">##   field_order version        local_name            </span></span>
 <span><span class="co">##         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span></span>
@@ -136,7 +136,7 @@ looking at the metadata associated with that collection.</li>
 </ol>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 11</span></span></span>
 <span><span class="co">##   bmdr_code  bmde_version project_id n_locations collection_name_fr   collection</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
@@ -381,7 +381,7 @@ addition to these basic fields, by specifying
 <span>                        fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"SamplingEventIdentifier"</span><span class="op">)</span>, </span>
 <span>                        collection <span class="op">=</span> <span class="st">"ABATLAS2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                        username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   record_id collection project_id protocol_id protocol_type species_id</span></span>
 <span><span class="co">## 1 225121054   ABATLAS2       1048          NA            NA      19360</span></span>
 <span><span class="co">## 2 225167193   ABATLAS2       1048          NA            NA      19360</span></span>
@@ -471,7 +471,7 @@ pass them on as a custom field set.</p>
 <span>                        fields <span class="op">=</span> <span class="va">my_fields</span>, </span>
 <span>                        collection <span class="op">=</span> <span class="st">"ABATLAS2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                        username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   record_id collection project_id protocol_id protocol_type species_id</span></span>
 <span><span class="co">## 1 225121054   ABATLAS2       1048          NA            NA      19360</span></span>
 <span><span class="co">## 2 225167193   ABATLAS2       1048          NA            NA      19360</span></span>

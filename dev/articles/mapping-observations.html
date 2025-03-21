@@ -68,7 +68,7 @@
 
       <h1>Mapping Observations</h1>
             
-            <h4 data-toc-skip class="date">2025-03-19</h4>
+            <h4 data-toc-skip class="date">2025-03-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/mapping-observations.Rmd" class="external-link"><code>vignettes/articles/mapping-observations.Rmd</code></a></small>
       <div class="d-none name"><code>mapping-observations.Rmd</code></div>
@@ -144,7 +144,7 @@ username.</p>
 <pre><code><span><span class="co">##   WILDTRAX41</span></span></code></pre>
 <pre><code><span><span class="co">##     Records 1 to 1 / 1</span></span></code></pre>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">house_finches</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">house_finches</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   record_id collection project_id protocol_id protocol_type species_id</span></span>
 <span><span class="co">## 1 225617858   ABATLAS1       1048          NA            NA      20350</span></span>
 <span><span class="co">## 2 225620472   ABATLAS1       1048          NA            NA      20350</span></span>
@@ -345,7 +345,7 @@ Alberta’s Bird Conservation Regions (BCRs).</p>
 Canada</a><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Bird Studies Canada and NABCI. 2014. Bird Conservation
 Regions. Published by Bird Studies Canada on behalf of the North
 American Bird Conservation Initiative. &lt;a href="https://birdscanada.org/bird-science/nabci-bird-conservation-regions" class="external-link uri"&gt;https://birdscanada.org/bird-science/nabci-bird-conservation-regions&lt;/a&gt;
-Accessed: 2025-03-19&lt;/p&gt;'><sup>1</sup></a>.</p>
+Accessed: 2025-03-21&lt;/p&gt;'><sup>1</sup></a>.</p>
 <p>We’ll download the zip file and extracted to a folder easier to work
 with. Note that these spatial data are in the GDB format, so we’re
 working with a folder named <code>XXX.gdb</code>.</p>
@@ -474,7 +474,7 @@ where there are more than one lat/lon combo for each sampling event.</p>
 <span></span>
 <span><span class="va">cardinals_zf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">cardinals_zf</span>, <span class="va">coords</span>, by <span class="op">=</span> <span class="st">"SamplingEventIdentifier"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals_zf</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cardinals_zf</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   SamplingEventIdentifier species_id presence latitude longitude</span></span>
 <span><span class="co">## 1     RCBIOTABASE-10000-1      19360        0 45.58604 -77.48721</span></span>
 <span><span class="co">## 2     RCBIOTABASE-10001-1      19360        0 45.51110 -77.50533</span></span>
