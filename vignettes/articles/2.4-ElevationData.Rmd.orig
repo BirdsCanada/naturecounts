@@ -66,7 +66,7 @@ dir.create("data/nationalparks", recursive = TRUE)
 
 Move the files from your Downloads to the `nationalparks` subdirectory before applying the `st_read()` function.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE}
 # specify the path to your shapefile
 national_parks <- st_read(here::here("misc/data/nationalparks/vw_Places_Public_lieux_public_APCA.shp")) 
 ```
@@ -105,7 +105,7 @@ Don't forget to replace `testuser` with your NatureCounts username. You will be 
 
 Download NatureCounts data:
 
-```{r}
+```{r, message = FALSE}
 quebec_atlas <- nc_data_dl(collections = "QCATLAS2PC", username = "testuser", info = "spatial_data_tutorial", timeout = 1000)
 ```
 
@@ -432,7 +432,7 @@ Below are some additional resources you may find useful to further your understa
 [LiDAR](https://natural-resources.canada.ca/sites/nrcan/files/mapstoolspublications/lidar-Nov-2023-EN.pdf) systems help produce extremely accurate measurements of surface elevation to digital terrain and elevation models across landscapes. These systems use instruments (sensors) that are commonly flown on aircraft and incorporate laser ranging for distance, GPS for geographic position and height, and aircraft altitude for the orientation of the instrument. The accuracy of LiDAR measurements depends on the strength of point returns, instrument precision & accuracy, and terrain characteristics, among other factors.
 
 ```{r image11, echo=FALSE, out.width="700px", fig.align ='center'}
-knitr::include_graphics("images/spatdata11.PNG")
+knitr::include_graphics(here::here("misc/images/spatdata11.PNG"))
 ```
 
 Conceptual figure depicts an airborne LiDAR system (‘LiDAR-i lend’, [Marek9134 (2012)](https://commons.wikimedia.org/wiki/File:LiDAR-i_lend.gif) CC-BY-SA-3.0).

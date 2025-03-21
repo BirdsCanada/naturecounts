@@ -76,6 +76,11 @@ articles:
   - '`articles/2.3-ClimateData`'
   - '`articles/2.4-ElevationData`'
   - '`articles/2.5-LandcoverData`'
+  - '`articles/2.6-SatelliteImagery`'
+  - '`articles/2.7-SummaryTools`'
+- title: The NatureCounts Analysis Tools Tutorial
+  - '`articles/3.1-ZeroFilling`'
+  - '`articles/3.2-AuxiliaryTables`'
 - title: Additional Tutorials
   desc: How-to articles describing common tasks
   contents:

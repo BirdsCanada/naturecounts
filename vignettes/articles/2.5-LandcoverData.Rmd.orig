@@ -67,13 +67,13 @@ This tutorial uses the following spatial data:
 
 Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-mauricie_boundary <- st_read(here::here("data/boundary/mauricie_boundary.shp"))
+```{r, message = FALSE, warning = FALSE}
+mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"))
 ```
 
 To read in the land cover dataset, navigate to [2015 Land Cover of Canada](https://open.canada.ca/data/en/dataset/4e615eae-b90c-420b-adee-2ca35896caf6), scroll down to **Data and Resources** and select the TIFF file to download by clicking "Go to resource". Extract the data download and save the file to your `data` subdirectory before applying `terra::rast()`.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE}
 # set the path to your landcover data
 landcover <- rast(here::here("misc/data/landcover-2015-classification.tif"))
 
@@ -92,7 +92,7 @@ mauricie_boundary <- st_transform(mauricie_boundary, crs = st_crs(landcover))
 
 To crop a raster we can apply the `crop()` function from the `terra` package which uses the SpatVector format. Here, we crop the extent of the land cover raster to the extent of the National Park. To do this we need to convert the National Park Boundary to a SpatVector using `vect()`.
 
-```{r, echo = FALSE}
+```{r}
 landcover_crop <- crop(landcover, vect(mauricie_boundary))
 print(landcover_crop)
 ```
@@ -101,7 +101,7 @@ print(landcover_crop)
 
 To mask the landcover raster to the National Parks vector extent we can apply the `mask()` function from the `terra` package which also uses the SpatVector format. This will apply NA values to all cells outside the extent of the National Park.
 
-```{r, echo = FALSE}
+```{r, message = FALSE}
 landcover_mask <- mask(landcover_crop, vect(mauricie_boundary))
 print(landcover_mask)
 ```
@@ -187,7 +187,7 @@ Buffers allow us to generate polygons at a specified distance around points, lin
 
 Read in the NatureCounts data you saved from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or downloaded from the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing).
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE}
 mauricie_birds_df <- read.csv(here::here("misc/data/mauricie_birds_df.csv")
 ```
 
@@ -318,7 +318,7 @@ ggplot(lsm_mean, aes(x = landcover_name, y = mean_value, color = metric)) +
 
 Calculate the landscape-level ED and NP for each point buffer. Store the result in a dataframe.
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 lsm_landscape <- list()
 
 for (i in seq_len(nrow(mauricie_birds_buffer))) {

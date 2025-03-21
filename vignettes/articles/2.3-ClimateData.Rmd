@@ -1,6 +1,6 @@
 ---
 title: "Chapter 3 - Climate Data"
-date: "2025-03-14"
+date: "2025-03-21"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{03-ClimateData}
@@ -336,7 +336,7 @@ Extract the bio-climatic variable values for each bird observation site, respect
 
 ``` r
 bioclim_values <- extract(worldclim_stack, cranes_sf)
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'worldclim_stack' not found
+#> Error in eval(expr, envir, enclos): object 'worldclim_stack' not found
 ```
 
 Then combine the bio-climatic values with the NatureCounts data.
