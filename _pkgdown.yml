@@ -69,7 +69,7 @@ articles:
   - '`articles/1.6-VisualData`'
   - '`articles/1.7-Answers`'
 - title: The NatureCounts Spatial Data Tutorial
-  desc: A guide to help users work with NatureCounts and spatial data in R.
+  desc: An R guide to help download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers.
   contents:
   - '`articles/2.1-SpatialDataExploration`'
   - '`articles/2.2-SpatialSubsets`'
@@ -79,6 +79,8 @@ articles:
   - '`articles/2.6-SatelliteImagery`'
   - '`articles/2.7-SummaryTools`'
 - title: The NatureCounts Analysis Tools Tutorial
+  desc: An R guide to help analyze data hosted on NatureCounts.
+  contents:
   - '`articles/3.1-ZeroFilling`'
   - '`articles/3.2-AuxiliaryTables`'
 - title: Additional Tutorials
