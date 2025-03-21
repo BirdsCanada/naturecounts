@@ -1,6 +1,6 @@
 ---
 title: "Chapter 6 - Satellite Imagery"
-date: "`r Sys.Date()`"
+date: "2025-03-21"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{06-SatelliteImagery}
@@ -8,15 +8,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  # For pre-compiling and pkgdown (relative to pkg home)
-  fig.path = "vignettes/articles/figures/nc_sp6_",
-  dpi = 150
-)
-```
+
 
 # Chapter 6: Satellite Imagery
 
@@ -39,7 +31,8 @@ By the end of **Chapter 6 - Satellite Imagery**, users will know how to:
 
 Load the necessary packages:
 
-```{r, package library, warning = FALSE, message = FALSE}
+
+``` r
 library(naturecounts)
 library(sf)
 library(terra)
@@ -70,8 +63,10 @@ These interactions also mean that we can represent multispectral imagery through
 
 Specify the path to your folder containing the satellite images in the code chunk below. Each image represents a distinct band. If you downloaded the data by following [Section 6.3](#6.3CopernicusDataDownload), look for the folder labeled S2A_MSIL2A. Copy the file path to S2A_MSIL2A... \> GRANULE \> L2A... \> IMG_DATA \> R10m which contains the satellite images we will use here.
 
-```{r, message = FALSE, warning = FALSE}
+
+``` r
 getwd()
+#> [1] "C:/Users/dimit/Birds Canada/naturecounts/vignettes/articles"
 
 bands <- list.files(path = here::here("misc/data/R10m"), 
                     pattern = "\\.jp2$", full.names = TRUE)
@@ -84,32 +79,45 @@ names(sentinel_imagery) <- c("AOT", "blue", "green", "red", "nir", "TCI_r", "TCI
 
 # Check the assigned names
 print(names(sentinel_imagery))
+#> [1] "AOT"   "blue"  "green" "red"   "nir"   "TCI_r" "TCI_g" "TCI_b" "WVP"
 
 # Check resolution, number of layers, and extent
 res(sentinel_imagery)
+#> [1] 10 10
 nlyr(sentinel_imagery)
+#> [1] 9
 ext(sentinel_imagery)
+#> SpatExtent : 6e+05, 709800, 5090220, 5200020 (xmin, xmax, ymin, ymax)
 ```
 
 Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
 
-```{r, message = FALSE, warning = FALSE}
+
+``` r
 mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"))
+#> Reading layer `mauricie_boundary' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\boundary\mauricie_boundary.shp' using driver `ESRI Shapefile'
+#> Simple feature collection with 1 feature and 9 fields
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -73.17948 ymin: 46.64563 xmax: -72.76572 ymax: 46.91888
+#> Geodetic CRS:  WGS 84
 ```
 
 Transform the coordinate reference system (CRS) of the National Park boundary to match that of the `sentinel_imagery` SpatRaster.
 
-```{r}
+
+``` r
 mauricie_boundary <- mauricie_boundary %>%
   sf::st_make_valid() %>% # fix performance issues with layer + faster computation
   st_transform(crs = st_crs(sentinel_imagery))
-
 ```
 
 Crop `sentinel_imagery` to the extent of `mauricie_boundary` then plot the cropped image in true color.
 
-```{r, true_color_comp, fig.cap = "", fig.alt = "Plot shows the cropped Mauricie park in true color."}
+
+``` r
 mauricie_sl <- crop(sentinel_imagery, vect(mauricie_boundary))
+#> |---------|---------|---------|---------|=========================================                                          
 
 # Plot the RGB composite
 terra::plotRGB(mauricie_sl, r = 4, g = 3, b = 2, stretch = "lin", lwd = 2, axes = FALSE)
@@ -118,15 +126,20 @@ terra::plotRGB(mauricie_sl, r = 4, g = 3, b = 2, stretch = "lin", lwd = 2, axes 
 plot(st_geometry(mauricie_boundary), col = NA, border ="red", add = TRUE)
 ```
 
+<img src="figures/nc_sp6_true_color_comp-1.png" alt="Plot shows the cropped Mauricie park in true color."  />
+
 Now plot the cropped image in false color. Here, we'll use the standard false color composite where red, green, and blue channels are used to visualize NIR, red, and green respectively.
 
-```{r, false_color_comp, fig.cap = "", fig.alt = "Plot shows the cropped Mauricie park in false color."}
+
+``` r
 # Plot the false color composite
 terra::plotRGB(mauricie_sl, r = 5, g = 4, b = 3, stretch = "lin", lwd = 2, axes = FALSE)
 
 # Add the boundary shapefile to the plot
 plot(st_geometry(mauricie_boundary), col = NA, border ="green", add = TRUE)
 ```
+
+<img src="figures/nc_sp6_false_color_comp-1.png" alt="Plot shows the cropped Mauricie park in false color."  />
 
 # 6.2 Calculate Spectral Indices {#6.2SpectralIndices}
 
@@ -140,7 +153,8 @@ Create a water mask using the following function:
 
 $$NDWI = \frac{GREEN - NIR}{GREEN + NIR}$$
 
-```{r}
+
+``` r
 calc_ndwi <- function(green, nir) {
   ndwi <- c((green - nir)/(green + nir))
   return(ndwi)
@@ -155,7 +169,8 @@ water_mask <- mauricie_sl_ndwi >= 0
 
 Plot NDWI and the water mask.
 
-```{r ndwi_water_mask, fig.cap = "", fig.alt = "Plot shows the Normalized Difference Water Index distribution and water mask for La Mauricie."}
+
+``` r
 # Set up the plot area for 1 row and 2 columns
 par(mfrow = c(1, 2))
 
@@ -170,6 +185,11 @@ plot(water_mask, main = "Water mask")
 
 # Add National Park boundary
 plot(st_geometry(mauricie_boundary), col = NA, border ="red", add = TRUE)
+```
+
+<img src="figures/nc_sp6_ndwi_water_mask-1.png" alt="Plot shows the Normalized Difference Water Index distribution and water mask for La Mauricie."  />
+
+``` r
 
 # Reset plotting layout to default
 par(mfrow = c(1, 1))
@@ -177,7 +197,8 @@ par(mfrow = c(1, 1))
 
 Use the function `focal()` to apply a convolution filter returning the **mode** of each pixel of `water_mask` in a 3 x 3 windows of equal weights (argument `w = 3`). Name the output raster `water_mask_mode`. The *mode* of a vector `x` is the value that appears the most often in `x`.
 
-```{r}
+
+``` r
 get_mode <- function(x, na.rm = TRUE) {
   
   if (na.rm) {
@@ -193,41 +214,51 @@ get_mode <- function(x, na.rm = TRUE) {
 
 Calculate `water_mask_mode`.
 
-```{r}
+
+``` r
 water_mask_mode <- focal(water_mask, w = 3, fun = get_mode)
 ```
 
 Combine the `water_mask` and `water_mask_mode`.
 
-```{r}
+
+``` r
 water_mask_combined <- c(water_mask, water_mask_mode)
 ```
 
 Assign meaningful names to each raster mask and plot them.
 
-```{r, water_mask_combo, fig.cap = "", fig.alt = "Plot shows the difference between the water mask and water mask mode images of La Mauricie park."}
+
+``` r
 names(water_mask_combined) <- c("water mask", "water mask mode")
 
 plot(water_mask_combined)
 ```
 
+<img src="figures/nc_sp6_water_mask_combo-1.png" alt="Plot shows the difference between the water mask and water mask mode images of La Mauricie park."  />
+
 > Look very closely at the side-by-side depictions of the water mask and water mask mode above. Notice how some tiny yellow areas previously identified as water in the water mask extent are now absent from the water mask mode extent?
 
 Apply the `water_mask_mode` to `mauricie_sl`.
 
-```{r}
+
+``` r
 mauricie_sl_water_mask <- mask(mauricie_sl, water_mask_mode, maskvalues = 1)
+#> |---------|---------|---------|---------|=========================================                                          
 ```
 
 Apply another mask to assign NA values to those pixels outside of the National Park boundary.
 
-```{r}
+
+``` r
 mauricie_sl_mask <- mask(mauricie_sl_water_mask, vect(mauricie_boundary))
+#> |---------|---------|---------|---------|=========================================                                          
 ```
 
 Plot a true color composite of `mauricie_sl_mask` and the National Park boundary.
 
-```{r true_color_mask, fig.cap = "", fig.alt = "Plot depicts a true color composite image of the masked National Park boundary area."}
+
+``` r
 # Plot RGB with both water and boundary masks applied
 terra::plotRGB(mauricie_sl_mask, r = 4, g = 3, b = 2, stretch = "lin", axes = FALSE)
 
@@ -235,11 +266,14 @@ terra::plotRGB(mauricie_sl_mask, r = 4, g = 3, b = 2, stretch = "lin", axes = FA
 plot(st_geometry(mauricie_boundary), col = NA, border ="red", add = TRUE)
 ```
 
+<img src="figures/nc_sp6_true_color_mask-1.png" alt="Plot depicts a true color composite image of the masked National Park boundary area."  />
+
 To calculate NDVI, we will create and apply the following function on the masked satellite image:
 
 $$NDVI = \frac{NIR - RED}{NIR + RED}$$
 
-```{r}
+
+``` r
 calc_ndvi <- function(nir, red) {
   ndvi <- c((nir - red)/(nir  + red))
   return(ndvi)
@@ -253,7 +287,8 @@ mauricie_sl_ndvi <- calc_ndvi(mauricie_sl_mask$nir, mauricie_sl_mask$red)
 
 Plot `mauricie_sl_ndvi` and the National Park boundary.
 
-```{r, ndvi_plot, fig.cap = "", fig.alt = "Plot shows the NDVI values within La Mauricie park."}
+
+``` r
 # Plot NDVI
 plot(mauricie_sl_ndvi, main = "NDVI values across La Mauricie National Park")
 
@@ -261,22 +296,26 @@ plot(mauricie_sl_ndvi, main = "NDVI values across La Mauricie National Park")
 plot(st_geometry(mauricie_boundary), col = NA, border ="red", add = TRUE)
 ```
 
+<img src="figures/nc_sp6_ndvi_plot-1.png" alt="Plot shows the NDVI values within La Mauricie park."  />
+
 Rename the NDVI raster layer.
 
-```{r}
-names(mauricie_sl_ndvi) <- "ndvi"
 
+``` r
+names(mauricie_sl_ndvi) <- "ndvi"
 ```
 
 Read in the NatureCounts data you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or the [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) data folder.
 
-```{r, message = FALSE, warning = FALSE}
+
+``` r
 mauricie_birds_df <- read_csv(here::here("misc/data/mauricie_birds_df.csv")) 
 ```
 
 To convert the NatureCounts data to a spatial object and transform its CRS to match the National Park boundary we can use the `st_as_sf()` and `st_transform()` functions, respectively.
 
-```{r}
+
+``` r
 mauricie_birds_sf <- sf::st_as_sf(mauricie_birds_df, 
                         coords = c("longitude", "latitude"), crs = 4326)              # convert to sf object
 
@@ -285,22 +324,26 @@ mauricie_boundary <- st_transform(mauricie_boundary, crs = st_crs(mauricie_birds
 
 Transform the CRS of the National Park boundary to match the NatureCounts data.
 
-```{r}
+
+``` r
 mauricie_boundary <- st_transform(mauricie_boundary, crs = st_crs(mauricie_birds_sf)) # match the CRS
 ```
 
 Summarize the NatureCounts data for mapping. Here we will determine the number of species observed at each site like we did in [Chapter 4](04-ElevationData.Rmd) and [Chapter 5](05-LandcoverData.Rmd).
 
-```{r}
+
+``` r
 # Group by SiteCode and summarize mean annual count across all species
 mauricie_site_summary <- mauricie_birds_sf %>%
   group_by(SiteCode, geometry) %>% 
   summarise(n_species = n_distinct(english_name)) # count the number of unique species
+#> `summarise()` has grouped output by 'SiteCode'. You can override using the `.groups` argument.
 ```
 
 To map NatureCounts species richness and NDVI data:
 
-```{r ndvi_map,  fig.alt = "Map depicts species diversity summary points and NDVI values in La Mauricie National Park", fig.cap = ""}
+
+``` r
 # Match the CRS
 mauricie_site_summary <- st_transform(mauricie_site_summary, crs = st_crs(mauricie_sl_ndvi))
 
@@ -336,12 +379,14 @@ legend("topright",                     # Position
        title.cex = 0.6,                # Adjust legend title size
        bty = "y",                      # Place box around legend
        xpd = TRUE)                     # Allows placing legend outside the plot
-
 ```
+
+<img src="figures/nc_sp6_ndvi_map-1.png" alt="Map depicts species diversity summary points and NDVI values in La Mauricie National Park"  />
 
 Extract NDVI values for each survey site and append it to `mauricie_birds`. First, make sure the CRS of both spatial data match and then use `terra::extract()`.
 
-```{r}
+
+``` r
 mauricie_birds_sf <- st_transform(mauricie_birds_sf, crs = st_crs(mauricie_sl_ndvi)) # Match the CRS
 
 ndvi_values_sv <- terra::extract(mauricie_sl_ndvi, vect(mauricie_birds_sf), bind = TRUE) # Extracts the NDVI values for each point
@@ -349,7 +394,8 @@ ndvi_values_sv <- terra::extract(mauricie_sl_ndvi, vect(mauricie_birds_sf), bind
 
 Convert the SpatVector containing the elevation values to an `sf` object.
 
-```{r}
+
+``` r
 ndvi_values_sf <- ndvi_values_sv %>%
   st_as_sf() %>% # converts to sf object
   dplyr::select(SiteCode, ndvi, geometry) # select relevant columns
@@ -357,7 +403,8 @@ ndvi_values_sf <- ndvi_values_sv %>%
 
 Assign a point id identifier to each location based on its unique geometry and return the result as a dataframe.
 
-```{r}
+
+``` r
 ndvi_values_df <- ndvi_values_sf %>% 
   group_by(SiteCode, geometry) %>%
   mutate(point_id = cur_group_id()) %>% 
@@ -366,6 +413,7 @@ ndvi_values_df <- ndvi_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, ndvi)
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
@@ -375,13 +423,15 @@ OPTIONAL: To save the NDVI data as a *.csv* to your disk, use the `write.csv()` 
 
 > To execute this code chunk, remove the \#
 
-```{r}
+
+``` r
 # write.csv(ndvi_values_df, "data/env_covariates/ndvi_values_df.csv", row.names = FALSE)
 ```
 
 Now, let's combine the NDVI dataframe with the NatureCounts summary data you previously created in order to assess how NDVI influences your metric of species diversity.
 
-```{r richness_plots_ndvi,  fig.alt = "Plot explores the relationship between species richness and NDVI", fig.cap = ""}
+
+``` r
 mauricie_site_summary <- st_transform(mauricie_site_summary, crs = st_crs(mauricie_sl_ndvi))
 
 # Extract the elevation values for each site
@@ -392,6 +442,8 @@ plot(ndvi_sitesum_sf$ndvi, ndvi_sitesum_sf$n_species,
      xlab = "NDVI", ylab = "Number of Species", 
      main = "Species Diversity vs. NDVI")
 ```
+
+<img src="figures/nc_sp6_richness_plots_ndvi-1.png" alt="Plot explores the relationship between species richness and NDVI"  />
 
 Overall, the number of observations increases with NDVI. Areas of La Mauricie National Park with better vegetation health seem to have a slightly higher number of species however this relationship does not appear to be strong.
 
@@ -419,16 +471,19 @@ The Copernicus Data Space Ecosystem Browser is the central hub for accessing and
 
 3)  Click the info icon in the bottom right corner of your search result and the **Product info** window will pop up. Once here, verify that you have selected the satellite image you want and then download it by clicking the **Download** option in the lower righthand corner.
 
-```{r image7, echo=FALSE, out.width="700px", fig.align='center'}
-knitr::include_graphics(here::here("misc/images/spatdata7.PNG"))
+
+```
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata7.PNG")): Cannot find the file(s): "misc/images/spatdata7.PNG"
 ```
 
-```{r image8, echo=FALSE, out.width="700px", fig.align='center'}
-knitr::include_graphics(here::here("misc/images/spatdata8.PNG"))
+
+```
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata8.PNG")): Cannot find the file(s): "misc/images/spatdata8.PNG"
 ```
 
 Note: The **Visualize** tab will help you visualize your satellite image using true color and false color composites and NDVI, among other layers. These are based on a combination of bands stored in our image download. This tutorial will guide you through custom satellite image visualizations and spectral index calculation with corrections.
 
-```{r image9, echo=FALSE, out.width="700px", fig.align='center'}
-knitr::include_graphics(here::here("misc/images/spatdata9.PNG"))
+
+```
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata9.PNG")): Cannot find the file(s): "misc/images/spatdata9.PNG"
 ```

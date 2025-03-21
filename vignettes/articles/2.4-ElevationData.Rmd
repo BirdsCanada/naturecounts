@@ -1,6 +1,6 @@
 ---
 title: "Chapter 4 - Elevation Data"
-date: "2025-03-14"
+date: "2025-03-21"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{04-ElevationData}
@@ -61,9 +61,10 @@ dir.create("data/nationalparks", recursive = TRUE)
 Move the files from your Downloads to the `nationalparks` subdirectory before applying the `st_read()` function.
 
 
-```
-#> Reading layer `vw_Places_Public_lieux_public_APCA' from data source 
-#>   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
+``` r
+# specify the path to your shapefile
+national_parks <- st_read(here::here("misc/data/nationalparks/vw_Places_Public_lieux_public_APCA.shp")) 
+#> Reading layer `vw_Places_Public_lieux_public_APCA' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 52 features and 9 fields
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY, XYZ
@@ -112,83 +113,6 @@ Download NatureCounts data:
 
 ``` r
 quebec_atlas <- nc_data_dl(collections = "QCATLAS2PC", username = "testuser", info = "spatial_data_tutorial", timeout = 1000)
-#> Using filters: collections (QCATLAS2PC); fields_set (BMDE2.00-min)
-#> Collecting available records...
-#>   collection nrecords
-#> 1 QCATLAS2PC   341902
-#> Total records: 341,902
-#> 
-#> Downloading records for each collection:
-#>   QCATLAS2PC
-#>     Records 1 to 5000 / 341902
-#>     Records 5001 to 10000 / 341902
-#>     Records 10001 to 15000 / 341902
-#>     Records 15001 to 20000 / 341902
-#>     Records 20001 to 25000 / 341902
-#>     Records 25001 to 30000 / 341902
-#>     Records 30001 to 35000 / 341902
-#>     Records 35001 to 40000 / 341902
-#>     Records 40001 to 45000 / 341902
-#>     Records 45001 to 50000 / 341902
-#>     Records 50001 to 55000 / 341902
-#>     Records 55001 to 60000 / 341902
-#>     Records 60001 to 65000 / 341902
-#>     Records 65001 to 70000 / 341902
-#>     Records 70001 to 75000 / 341902
-#>     Records 75001 to 80000 / 341902
-#>     Records 80001 to 85000 / 341902
-#>     Records 85001 to 90000 / 341902
-#>     Records 90001 to 95000 / 341902
-#>     Records 95001 to 1e+05 / 341902
-#>     Records 100001 to 105000 / 341902
-#>     Records 105001 to 110000 / 341902
-#>     Records 110001 to 115000 / 341902
-#>     Records 115001 to 120000 / 341902
-#>     Records 120001 to 125000 / 341902
-#>     Records 125001 to 130000 / 341902
-#>     Records 130001 to 135000 / 341902
-#>     Records 135001 to 140000 / 341902
-#>     Records 140001 to 145000 / 341902
-#>     Records 145001 to 150000 / 341902
-#>     Records 150001 to 155000 / 341902
-#>     Records 155001 to 160000 / 341902
-#>     Records 160001 to 165000 / 341902
-#>     Records 165001 to 170000 / 341902
-#>     Records 170001 to 175000 / 341902
-#>     Records 175001 to 180000 / 341902
-#>     Records 180001 to 185000 / 341902
-#>     Records 185001 to 190000 / 341902
-#>     Records 190001 to 195000 / 341902
-#>     Records 195001 to 2e+05 / 341902
-#>     Records 200001 to 205000 / 341902
-#>     Records 205001 to 210000 / 341902
-#>     Records 210001 to 215000 / 341902
-#>     Records 215001 to 220000 / 341902
-#>     Records 220001 to 225000 / 341902
-#>     Records 225001 to 230000 / 341902
-#>     Records 230001 to 235000 / 341902
-#>     Records 235001 to 240000 / 341902
-#>     Records 240001 to 245000 / 341902
-#>     Records 245001 to 250000 / 341902
-#>     Records 250001 to 255000 / 341902
-#>     Records 255001 to 260000 / 341902
-#>     Records 260001 to 265000 / 341902
-#>     Records 265001 to 270000 / 341902
-#>     Records 270001 to 275000 / 341902
-#>     Records 275001 to 280000 / 341902
-#>     Records 280001 to 285000 / 341902
-#>     Records 285001 to 290000 / 341902
-#>     Records 290001 to 295000 / 341902
-#>     Records 295001 to 3e+05 / 341902
-#>     Records 300001 to 305000 / 341902
-#>     Records 305001 to 310000 / 341902
-#>     Records 310001 to 315000 / 341902
-#>     Records 315001 to 320000 / 341902
-#>     Records 320001 to 325000 / 341902
-#>     Records 325001 to 330000 / 341902
-#>     Records 330001 to 335000 / 341902
-#>     Records 335001 to 340000 / 341902
-#>     Records 340001 to 341902 / 341902
 ```
 
 Read in the list of species names from NatureCounts which can be linked to the species id:
@@ -345,7 +269,7 @@ print(dtm_mosaic)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) 
-#> source      : spat_2b2028ed5d52_11040.tif 
+#> source      : spat_84d0114d7602_34000.tif 
 #> varname     : MNT_31I10NO 
 #> name        :  Band_1 
 #> min value   : 102.277 
@@ -376,40 +300,35 @@ To crop a raster we can apply the `crop()` function from the `terra` package whi
 
 ``` r
 dtm_crop <- crop(dtm_mosaic, vect(mauricie_boundary))
+#> |---------|---------|---------|---------|=========================================                                          
+```
+
+**Masking** assigns NA values to cells of a raster not covered by a vector extent.
+
+To mask a raster to a vector extent we can apply the `mask()` function from the `terra` package which also uses the SpatVector format.
 
 
+``` r
+dtm_mask <- mask(dtm_mosaic, vect(mauricie_boundary))
+#> |---------|---------|---------|---------|=========================================                                          
+```
+
+OPTIONAL: To write the masked raster to your disk, you can use the `writeRaster()` function from `terra`. **This raster will be used in** [Chapter 7: Summary Tools](07-SummaryTools.Rmd). We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
+
+> To execute this code chunk, remove the \#
 
 
+``` r
+# output_dir <- "path/to/your/subdirectory/data/dtm_mask.tif" # include the masked raster name and '.tif' argument 
 
+# writeRaster(dtm_mask, output_dir, overwrite = TRUE)
+```
 
+**Note: Make sure to include the '.tif' argument when specifying the `output_dir` and name of your masked raster file. This specifies the file type while using `writeRaster()` which will, otherwise, produce an error.**
 
+# 4.4 Map and Extract Digital Elevation Data {#4.4Map-Extract}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Visualize the regional and masked DTM's with a two-panel plot.
 
 
 ``` r
@@ -527,6 +446,7 @@ elevation_values_df <- elevation_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, elevation)
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
@@ -579,7 +499,7 @@ Below are some additional resources you may find useful to further your understa
 
 
 ```
-#> Error in knitr::include_graphics("images/spatdata11.PNG"): Cannot find the file(s): "images/spatdata11.PNG"
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata11.PNG")): Cannot find the file(s): "misc/images/spatdata11.PNG"
 ```
 
 Conceptual figure depicts an airborne LiDAR system (‘LiDAR-i lend’, [Marek9134 (2012)](https://commons.wikimedia.org/wiki/File:LiDAR-i_lend.gif) CC-BY-SA-3.0).
@@ -596,28 +516,28 @@ If you wish to access LiDAR data for La Mauricie National Park yourself to gain 
 
 
 ```
-#> Error in knitr::include_graphics("images/spatdata1.PNG"): Cannot find the file(s): "images/spatdata1.PNG"
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata1.PNG")): Cannot find the file(s): "misc/images/spatdata1.PNG"
 ```
 
 **Step 2**: Using the search bar, search for **Parc national de la Mauricie**. Under Layers, toggle on **Parc nationaux du Canada** to visualize the park boundary.
 
 
 ```
-#> Error in knitr::include_graphics("images/spatdata0.PNG"): Cannot find the file(s): "images/spatdata0.PNG"
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata0.PNG")): Cannot find the file(s): "misc/images/spatdata0.PNG"
 ```
 
 Alternatively, you can import your own **.shp** or **.kml** file using the **Import and Export** tab.
 
 
 ```
-#> Error in knitr::include_graphics("images/spatdata2.PNG"): Cannot find the file(s): "images/spatdata2.PNG"
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata2.PNG")): Cannot find the file(s): "misc/images/spatdata2.PNG"
 ```
 
 Specify the coordinate reference system (WGS84), click **Import**, and select your **.shp** or **.kml** file to display on the map.
 
 
 ```
-#> Error in knitr::include_graphics("images/spatdata3.PNG"): Cannot find the file(s): "images/spatdata3.PNG"
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata3.PNG")): Cannot find the file(s): "misc/images/spatdata3.PNG"
 ```
 
 **Step 3**: Download the Modèle num. terrain (MNT) (Résolution spatiale 1 m) for each of the six Lidar tiles that intersect with the park (14NE, 15NO, 14SE, 15SO, 11NE, 10NO).
@@ -626,28 +546,28 @@ First, navigate to the **Map** tab and toggle on the visibility for the boundary
 
 
 ```
-#> Error in knitr::include_graphics("images/spatdata4.PNG"): Cannot find the file(s): "images/spatdata4.PNG"
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata4.PNG")): Cannot find the file(s): "misc/images/spatdata4.PNG"
 ```
 
 Your interactive map should now look something like this:
 
 
 ```
-#> Error in knitr::include_graphics("images/spatdata5.PNG"): Cannot find the file(s): "images/spatdata5.PNG"
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata5.PNG")): Cannot find the file(s): "misc/images/spatdata5.PNG"
 ```
 
 One by one, click and download the terrain data for each of the 6 Lidar tiles that intersect with the park boundary. Click your target tile, expand the **Téléchargement** window and click **Accéder** next to the MNT (1 m spatial resolution) data to download. Repeat for each tile.
 
 
 ```
-#> Error in knitr::include_graphics("images/spatdata6.PNG"): Cannot find the file(s): "images/spatdata6.PNG"
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata6.PNG")): Cannot find the file(s): "misc/images/spatdata6.PNG"
 ```
 
 This will open a webpage directory displaying a list of spatial data files available for the selected tile. Choose the MNT (.tif) file that includes the tile code in its name. For instance, for the first tile covering northern tip of the national park), select "MNT_31I14NE.tif." Repeat this process for each respective tile.
 
 
 ```
-#> Error in knitr::include_graphics("images/spatdata10.PNG"): Cannot find the file(s): "images/spatdata10.PNG"
+#> Error in knitr::include_graphics(here::here("misc/images/spatdata10.PNG")): Cannot find the file(s): "misc/images/spatdata10.PNG"
 ```
 
 Save these files in your working directory for easy access during this tutorial.
