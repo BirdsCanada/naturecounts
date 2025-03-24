@@ -63,8 +63,8 @@ Navigate the the [KBA Canada Map Viewer](https://kbacanada.org/explore/map-viewe
 We can read in our KBA polygons using the `sf` package once it is in your working directory. The downloaded files was renamed for this example so you will need to change the code to match your file name.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE} 
-ontario_kba <- st_read(here::here("misc/Data/provontario_kba/ontario_kba.shp"), quiet = TRUE)
-kba_attributes <- read.csv(here::here("misc/Data/provontario_kba/ontario_kba.csv"))
+ontario_kba <- st_read(here::here("misc/data/kba/provontario_kba/ontario_kba.shp"), quiet = TRUE)
+kba_attributes <- read.csv(here::here("misc/data/kba/provontario_kba/ontario_kba.csv"))
 ```
 
 ```{r, eval = FALSE}
@@ -185,7 +185,7 @@ atlas_on_sf <- st_as_sf(atlas_on,
 
 Now let's ensure that the conversion was successful. You'll notice a new geometry column where each observation is a point.
 
-```{r echo = FALSE}
+```{r, message = FALSE}
 str(atlas_on_sf) # view the sf object
 ```
 
@@ -270,7 +270,7 @@ Navigate to [Priority Places - Open Government Portal](https://open.canada.ca/da
 First, lets create a path to our downloaded Priority Place file.
 
 ```{r, echo = FALSE, message = FALSE}
-gdb_path <- here::here("misc/Data/priority_places/priorityplaces.gdb")
+gdb_path <- here::here("misc/data/priority_places/priorityplaces.gdb")
 ```
 
 ```{r, eval = FALSE}
