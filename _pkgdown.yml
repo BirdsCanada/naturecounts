@@ -100,5 +100,7 @@ articles:
 - title: Formating
   desc: How to format downloaded data
   contents: '`format-zero-fill`'
-
-
+- title: internal
+  desc: Internal articles for reference
+  contents:
+  - '`articles/test`'

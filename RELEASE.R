@@ -73,6 +73,7 @@ pkgdown::build_news()
 pkgdown::build_articles(lazy = TRUE)
 
 # Build a specific article
+pkgdown::build_article("articles/test")
 pkgdown::build_article("species-codes")
 pkgdown::build_article("format-zero-fill")
 pkgdown::build_article("selecting-fields")
