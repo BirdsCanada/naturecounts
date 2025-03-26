@@ -71,7 +71,7 @@ These interactions also mean that we can represent multispectral imagery through
 Specify the path to your folder containing the satellite images in the code chunk below. Each image represents a distinct band. If you downloaded the data by following [Section 6.3](#6.3CopernicusDataDownload), look for the folder labeled S2A_MSIL2A. Copy the file path to S2A_MSIL2A... \> GRANULE \> L2A... \> IMG_DATA \> R10m which contains the satellite images we will use here.
 
 ```{r, message = FALSE, warning = FALSE}
-bands <- list.files(path = here::here("misc/data/R10m"), 
+bands <- list.files(path = here::here("misc/data/R10m"), # drop `here::here()` and specify the path to your folder
                     pattern = "\\.jp2$", full.names = TRUE)
 
 # Read all the bands into a raster stack 
@@ -271,8 +271,11 @@ names(mauricie_sl_ndvi) <- "ndvi"
 
 Read in the NatureCounts data you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or the [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) data folder.
 
-```{r, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 mauricie_birds_df <- read_csv(here::here("misc/data/mauricie_birds_df.csv")) 
+```
+```{r, eval = FALSE}
+mauricie_birds_df <- read_csv("path/to/your/mauricie_birds_df.csv")
 ```
 
 To convert the NatureCounts data to a spatial object and transform its CRS to match the National Park boundary we can use the `st_as_sf()` and `st_transform()` functions, respectively.
@@ -362,7 +365,7 @@ Assign a point id identifier to each location based on its unique geometry and r
 ndvi_values_df <- ndvi_values_sf %>% 
   group_by(SiteCode, geometry) %>%
   mutate(point_id = cur_group_id()) %>% 
-  select(point_id, ndvi) %>% 
+  dplyr::select(point_id, ndvi) %>% 
   distinct() %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
