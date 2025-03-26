@@ -71,6 +71,7 @@ articles:
 - title: The NatureCounts Spatial Data Tutorial
   desc: An R guide to help download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers.
   contents:
+  - '`articles/2.0-TableofContents`'
   - '`articles/2.1-SpatialDataExploration`'
   - '`articles/2.2-SpatialSubsets`'
   - '`articles/2.3-ClimateData`'
