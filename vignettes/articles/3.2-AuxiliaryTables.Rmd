@@ -178,8 +178,13 @@ geojson_url <- "https://agriculture.canada.ca/atlas/data_donnees/nationalEcologi
 
 # Read the GeoJSON file directly from the URL
 ecodistricts <- st_read(geojson_url)
-#> Warning in CPL_read_ogr(dsn, layer, query, as.character(options), quiet, : GDAL Error 1: HTTP error code : 502
-#> Error: Cannot open "https://agriculture.canada.ca/atlas/data_donnees/nationalEcologicalFramework/data_donnees/geoJSON/ed/nef_ca_ter_ecodistrict_v2_2.geojson"; The file doesn't seem to exist.
+#> Reading layer `nef_ca_ter_ecodistrict_v2_2' from data source 
+#>   `https://agriculture.canada.ca/atlas/data_donnees/nationalEcologicalFramework/data_donnees/geoJSON/ed/nef_ca_ter_ecodistrict_v2_2.geojson' using driver `GeoJSON'
+#> Simple feature collection with 1025 features and 7 fields
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -140.9994 ymin: 41.67355 xmax: -52.36457 ymax: 83.63317
+#> Geodetic CRS:  WGS 84
 
 # Inspect the data
 print(ecodistricts)

@@ -1,5 +1,5 @@
 ---
-title: "NatureCounts Spatial Data Tutorial in R: Table of Contents"
+title: "Table of Contents"
 date: "2025-03-26"
 output: rmarkdown::html_vignette
 vignette: >
@@ -20,61 +20,61 @@ The NatureCounts Spatial Data Tutorial in R is a data exploration resource for t
 
 ### Prerequisites
 Before starting this tutorial, we recommend that users:
-- Familiarize themselves with the [NatureCounts Intro R Tutorial](https://github.com/BirdsCanada/NatureCounts_IntroTutorial.git).
-- Install the latest versions of **R** and **RStudio**.
+-   Familiarize themselves with the [NatureCounts Intro R Tutorial](https://github.com/BirdsCanada/NatureCounts_IntroTutorial.git).
+-   Install the latest versions of **R** and **RStudio**.
 
 ## Learning Objectives
 This tutorial follows a structured format with seven focused chapters:
 
 ### [**Chapter 1: Spatial Data Exploration**](01-SpatialDataExploration.Rmd)
 Learn how to distinguish between vector and raster data, apply geoprocessing functions, and use these functions to visualize NatureCounts data using a spatiotemporal map.
-- **1.1.** Spatial Data Types
-- **1.2.** Geoprocessing Functions
-- **1.3.** Spatiotemporal Mapping
+-   **1.1.** Spatial Data Types
+-   **1.2.** Geoprocessing Functions
+-   **1.3.** Spatiotemporal Mapping
 
 ### [**Chapter 2: Spatial Subsets**](02-SpatialSubsets.Rmd)
 Learn how to download, process, and visualize spatial vector data from NatureCounts within conservation areas: Key Biodiversity Areas and Priority Places for Species at Risk. 
-- **2.1.** Key Biodiversity Areas
-- **2.2.** Priority Places for Species at Risk
+-   **2.1.** Key Biodiversity Areas
+-   **2.2.** Priority Places for Species at Risk
 
 ### [**Chapter 3: Climate Data**](03-ClimateData.Rmd)
 Learn how to download, process, and visualize NatureCounts data with vector and raster climate data sources: Weathercan and WorldClim. 
-- **3.1.** Data Setup
-- **3.2.** Weathercan (Vector) Data
-- **3.3.** WorldClim (Raster) Data
+-   **3.1.** Data Setup
+-   **3.2.** Weathercan (Vector) Data
+-   **3.3.** WorldClim (Raster) Data
 
 ### [**Chapter 4: Elevation Data**](04-ElevationData.Rmd)
 Learn how to distinguish between types of elevation models, crop and mask LiDAR-derived Digital Terrain Models (DTMs), and extract elevation (raster) values at observation sites (vector points).
-- **4.1.** Data Setup
-- **4.2.** Elevation Models
-- **4.3.** Spatial Extents (Crop & Mask)
-- **4.4.** Map and Extract Digital Elevation Data
-- **4.5.** LiDAR Data Resources
-- **4.6.** Manual Data Download
+-   **4.1.** Data Setup
+-   **4.2.** Elevation Models
+-   **4.3.** Spatial Extents (Crop & Mask)
+-   **4.4.** Map and Extract Digital Elevation Data
+-   **4.5.** LiDAR Data Resources
+-   **4.6.** Manual Data Download
 
 ### [**Chapter 5: Land Cover Data**](05-LandcoverData.Rmd)
 Learn how to crop and mask land cover data, assign land cover class labels, create point buffers, calculate landscape metrics like Percent Land Cover (PLAND) and Edge Density (ED) across point buffers, and perform a spatial join using land cover and NatureCounts data. 
-- **5.1.** Data Setup
-- **5.2.** Spatial Extents (Crop & Mask)
-- **5.3.** Class Labels
-- **5.4.** Point Buffers
-- **5.5.** Landscape Metrics
-- **5.6.** Spatial Join
+-   **5.1.** Data Setup
+-   **5.2.** Spatial Extents (Crop & Mask)
+-   **5.3.** Class Labels
+-   **5.4.** Point Buffers
+-   **5.5.** Landscape Metrics
+-   **5.6.** Spatial Join
 
 ### [**Chapter 6: Satellite Imagery**](06-SatelliteImagery.Rmd)
 Learn how to plot true and false color composites of satellite imagery, calculate spectral indices like NDVI, and combine NatureCounts data with spectral values for analysis. 
-- **6.1.** Color Composite Images
-- **6.2.** Calculate Spectral Indices
-- **6.3.** Map and Extract Spectral Indices
-- **6.4.** Copernicus Data Download
+-   **6.1.** Color Composite Images
+-   **6.2.** Calculate Spectral Indices
+-   **6.3.** Map and Extract Spectral Indices
+-   **6.4.** Copernicus Data Download
 
 ### [**Chapter 7: Summary Tools**](07-SummaryTools.Rmd)
 Learn how to summarize and visualize environmental data and biodiversity counts using various plotting techniques.
-- **7.1.** Data Setup
-- **7.2.** Diagnostic Plots
-- **7.3.** Species Rank Plots
-- **7.4.** Regression Plots
-- **7.5.** Presence/Absence
+-   **7.1.** Data Setup
+-   **7.2.** Diagnostic Plots
+-   **7.3.** Species Rank Plots
+-   **7.4.** Regression Plots
+-   **7.5.** Presence/Absence
 
 
 Throughout the Spatial Data R Tutorial, we use diverse and real data to demonstrate some common conservation scenarios relevant to the greater Birds Canada community. This tutorial aims to enrich the learning of R users in academia, consulting, conservation, and beyond and assist them in meeting their project objectives. The most up-to-date version of this tutorial is available on the NatureCounts GitHub repository, with an adapted version and additional resources accessible in article format online. 
