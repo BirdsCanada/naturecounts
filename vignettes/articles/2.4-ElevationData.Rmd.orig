@@ -66,9 +66,13 @@ dir.create("data/nationalparks", recursive = TRUE)
 
 Move the files from your Downloads to the `nationalparks` subdirectory before applying the `st_read()` function.
 
-```{r, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 # specify the path to your shapefile
 national_parks <- st_read(here::here("misc/data/nationalparks/vw_Places_Public_lieux_public_APCA.shp")) 
+```
+```{r, eval = FALSE}
+# specify the path to your shapefile
+national_parks <- st_read("path/to/your/shapefile.shp")
 ```
 
 Filter the **national_parks** dataset for La Mauricie National Park.
@@ -431,8 +435,8 @@ Below are some additional resources you may find useful to further your understa
 
 [LiDAR](https://natural-resources.canada.ca/sites/nrcan/files/mapstoolspublications/lidar-Nov-2023-EN.pdf) systems help produce extremely accurate measurements of surface elevation to digital terrain and elevation models across landscapes. These systems use instruments (sensors) that are commonly flown on aircraft and incorporate laser ranging for distance, GPS for geographic position and height, and aircraft altitude for the orientation of the instrument. The accuracy of LiDAR measurements depends on the strength of point returns, instrument precision & accuracy, and terrain characteristics, among other factors.
 
-```{r image11, echo=FALSE, out.width="700px", fig.align ='center'}
-knitr::include_graphics(here::here("vignettes/articles/figures_other/spatdata11.png"))
+```{r image11, echo=FALSE, out.width="700px", fig.align ='center', fig.alt = "LiDAR infographic.", fig.cap = ""}
+knitr::include_graphics("figures_other/spatdata11.png")
 ```
 
 Conceptual figure depicts an airborne LiDAR system (‘LiDAR-i lend’, [Marek9134 (2012)](https://commons.wikimedia.org/wiki/File:LiDAR-i_lend.gif) CC-BY-SA-3.0).
@@ -474,13 +478,13 @@ knitr::include_graphics("figures_other/spatdata3.PNG")
 First, navigate to the **Map** tab and toggle on the visibility for the boundary and Lidar MNT layers by clicking on the eye symbol, if necessary. Hovering over this icon will display either the **Show Layer** or **Hide layer** option.
 
 ```{r image4, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 3.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata4.PNG"))
+knitr::include_graphics("figures_other/spatdata4.PNG")
 ```
 
 Your interactive map should now look something like this:
 
 ```{r image5, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 3.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata5.PNG"))
+knitr::include_graphics("figures_other/spatdata5.PNG")
 ```
 
 One by one, click and download the terrain data for each of the 6 Lidar tiles that intersect with the park boundary. Click your target tile, expand the **Téléchargement** window and click **Accéder** next to the MNT (1 m spatial resolution) data to download. Repeat for each tile.

@@ -229,14 +229,14 @@ After dowloading the WorldClim data to your working directory, list all the file
 
 This code will get the path to your working directory.
 
-```{r}
+```{r, eval = FALSE}
 getwd()
 ```
 
 Now point the `list.file` to this directory using the sample code below.
 
 ```{r, echo = FALSE, message = FALSE}
-worldclim_list <- list.files(path = here::here("misc/Data/worldclim"), pattern = "\\.tif$", full.names = TRUE)
+worldclim_list <- list.files(path = here::here("misc/data/worldclim"), pattern = "\\.tif$", full.names = TRUE)
 
 # Read and stack the raster files
 worldclim_stack <- rast(worldclim_list)

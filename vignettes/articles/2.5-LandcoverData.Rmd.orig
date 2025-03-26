@@ -67,16 +67,24 @@ This tutorial uses the following spatial data:
 
 Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
 
-```{r, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"))
+```
+```{r, eval = FALSE}
+mauricie_boundary <- st_read("path/to/your/mauricie_boundary.shp")
 ```
 
 To read in the land cover dataset, navigate to [2015 Land Cover of Canada](https://open.canada.ca/data/en/dataset/4e615eae-b90c-420b-adee-2ca35896caf6), scroll down to **Data and Resources** and select the TIFF file to download by clicking "Go to resource". Extract the data download and save the file to your `data` subdirectory before applying `terra::rast()`.
 
-```{r, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 # set the path to your landcover data
 landcover <- rast(here::here("misc/data/landcover-2015-classification.tif"))
-
+```
+```{r, eval = FALSE}
+# set the path to your landcover data
+landcover <- rast("path/to/your/landcover-2015-classification.tif")
+```
+```{r, message = FALSE, warning = FALSE}
 print(landcover)
 ```
 
@@ -188,7 +196,7 @@ Buffers allow us to generate polygons at a specified distance around points, lin
 Read in the NatureCounts data you saved from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or downloaded from the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing).
 
 ```{r, message = FALSE, warning = FALSE}
-mauricie_birds_df <- read.csv(here::here("misc/data/mauricie_birds_df.csv")
+mauricie_birds_df <- read.csv(here::here("misc/data/mauricie_birds_df.csv"))
 ```
 
 **Note: The land cover data (2015) represents a static environmental variable in this scenario. Here, we assume that land cover within the National Park did not change drastically across the survey years (2011 - 2014).**
