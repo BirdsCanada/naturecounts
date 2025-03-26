@@ -421,15 +421,15 @@ The Copernicus Data Space Ecosystem Browser is the central hub for accessing and
 3)  Click the info icon in the bottom right corner of your search result and the **Product info** window will pop up. Once here, verify that you have selected the satellite image you want and then download it by clicking the **Download** option in the lower righthand corner.
 
 ```{r image7, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 3.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata7.PNG")
+knitr::include_graphics("figures_other/spatdata7.png")
 ```
 
 ```{r image8, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 3.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata8.PNG")
+knitr::include_graphics("figures_other/spatdata8.png")
 ```
 
 Note: The **Visualize** tab will help you visualize your satellite image using true color and false color composites and NDVI, among other layers. These are based on a combination of bands stored in our image download. This tutorial will guide you through custom satellite image visualizations and spectral index calculation with corrections.
 
 ```{r image9, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 3.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata9.PNG")
+knitr::include_graphics("figures_other/spatdata9.png")
 ```

@@ -1,5 +1,5 @@
 ---
-title: "NatureCounts Spatial Data Tutorial in R: Table of Contents"
+title: "Table of Contents"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
