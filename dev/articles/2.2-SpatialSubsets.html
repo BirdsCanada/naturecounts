@@ -68,7 +68,7 @@
 
       <h1>Chapter 2 - Spatial Subsetting</h1>
             
-            <h4 data-toc-skip class="date">2025-03-21</h4>
+            <h4 data-toc-skip class="date">2025-03-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.2-SpatialSubsets.Rmd" class="external-link"><code>vignettes/articles/2.2-SpatialSubsets.Rmd</code></a></small>
       <div class="d-none name"><code>2.2-SpatialSubsets.Rmd</code></div>
@@ -124,8 +124,10 @@ shapefiles to your working directory.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://paleolimbot.github.io/ggspatial/" class="external-link">ggspatial</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'mapview' was built under R version 4.3.3</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/leaflet/" class="external-link">leaflet</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trafficonese/leaflet.extras" class="external-link">leaflet.extras</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trafficonese/leaflet.extras" class="external-link">leaflet.extras</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'leaflet.extras' was built under R version 4.3.3</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="key-biodiversity-areas">2.1 Key Biodiversity Areas<a class="anchor" aria-label="anchor" href="#key-biodiversity-areas"></a>
@@ -145,9 +147,7 @@ example.</p>
 once it is in your working directory. The downloaded files was renamed
 for this example so you will need to change the code to match your file
 name.</p>
-<pre><code><span><span class="co">#&gt; Error: Cannot open "C:/Users/dimit/Birds Canada/naturecounts/misc/Data/provontario_kba/ontario_kba.shp"; The file doesn't seem to exist.</span></span>
-<span><span class="co">#&gt; Error in file(file, "rt"): cannot open the connection</span></span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ontario_kba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"ontario_kba.shp"</span><span class="op">)</span></span></code></pre></div>
 <p><code>sf</code> objects are stored in R as a spatial dataframe which
 contains the attribute table of the vector along with the geometry type.
@@ -155,19 +155,18 @@ When we examine the dataframe, it looks like there are many duplicate
 entries including duplicate geometries (vertices). To clean this up, we
 can apply the <code><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct()</a></code>
 functions to our spatial dataframe:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ontario_kba</span> <span class="op">&lt;-</span> <span class="va">ontario_kba</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ontario_kba' not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ontario_kba</span> <span class="op">&lt;-</span> <span class="va">ontario_kba</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/valid.html" class="external-link">st_make_valid</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Our spatial data is also accompanied by a CSV file that contains
 additional useful attributes (landcover, species, etc) concerning our
 KBAs. Let’s read in the accompanying CSV file for our KBA layer.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kba_attributes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"ontario_kba.csv"</span><span class="op">)</span></span></code></pre></div>
 <p>Great! We can now join these dataframes using the handy
 <code>tidyverse</code> package. However, we’ll want to select for
 specific columns first to avoid redundancies before performing our
 join:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kba_attributes</span> <span class="op">&lt;-</span> <span class="va">kba_attributes</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"SiteCode"</span>,</span>
 <span>         <span class="st">"DateAssessed"</span>,</span>
@@ -178,17 +177,15 @@ join:</p>
 <span>         <span class="st">"ConservationActions"</span>,</span>
 <span>         <span class="st">"Landcover"</span>,</span>
 <span>         <span class="st">"Province"</span>,</span>
-<span>         <span class="st">"Species"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in select(., "SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", : unused arguments ("SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", "Level", "CriteriaMet", "ConservationActions", "Landcover", "Province", "Species")</span></span></code></pre></div>
+<span>         <span class="st">"Species"</span><span class="op">)</span></span></code></pre></div>
 <p>Both dataframes now contain unique columns, after our selection. We
 apply the <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join()</a></code> function to hold all attributes
 within one dataframe.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ontario_kba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join</a></span><span class="op">(</span><span class="va">ontario_kba</span>, <span class="va">kba_attributes</span>, by <span class="op">=</span> <span class="st">"SiteCode"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ontario_kba' not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ontario_kba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join</a></span><span class="op">(</span><span class="va">ontario_kba</span>, <span class="va">kba_attributes</span>, by <span class="op">=</span> <span class="st">"SiteCode"</span><span class="op">)</span></span></code></pre></div>
 <p>To visualize the <strong>ontario_kba</strong> data we can use
 <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="co"># Select the basemap</span></span>
 <span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_map_tile.html" class="external-link">annotation_map_tile</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"cartolight"</span>, zoom <span class="op">=</span> <span class="cn">NULL</span>, progress <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -202,11 +199,11 @@ within one dataframe.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Key Biodiversity Areas (KBAs) of Ontario"</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
 <span>       y <span class="op">=</span> <span class="st">"Latitude"</span>,</span>
-<span>       fill <span class="op">=</span> <span class="st">"Legend"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ontario_kba' not found</span></span></code></pre></div>
+<span>       fill <span class="op">=</span> <span class="st">"Legend"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="figures%2Fnc_sp2_ontario_kba-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"></p>
 <p>We can also visualize the <strong>ontario_kba</strong> data with an
 interactive map, using the <code>leaflet</code> package.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/leaflet.html" class="external-link">leaflet</a></span><span class="op">(</span>width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addTiles</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addPolygons</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ontario_kba</span>, color <span class="op">=</span> <span class="st">"black"</span>, weight <span class="op">=</span> <span class="fl">2</span>, smoothFactor <span class="op">=</span> <span class="fl">1</span>, </span>
@@ -216,7 +213,7 @@ interactive map, using the <code>leaflet</code> package.</p>
 <p>Similarly, the package <code>mapview</code> (based on leaflet) can be
 used to make interactive plots. We can represent specific attributes
 like so:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html" class="external-link">mapview</a></span><span class="op">(</span><span class="va">ontario_kba</span>, zcol <span class="op">=</span> <span class="st">"PercentProtected"</span><span class="op">)</span></span></code></pre></div>
 <p>In this example, were interested in all the KBA polygons of Ontario.
 However, if you were working with a larger data set, it is possible to
@@ -227,28 +224,28 @@ KBA’s greater than 100km^2 in size:</p>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
 </blockquote>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># kba_name &lt;- ontario_kba %&gt;% </span></span>
 <span>  <span class="co"># filter(Area &gt; 100) </span></span></code></pre></div>
 <p>Let’s search NatureCounts for the Ontario Breeding Bird Atlas point
 count dataset using <code><a href="../reference/meta.html">meta_collections()</a></code> and the Wood Duck
 species ID using <code><a href="../reference/search_species.html">search_species()</a></code>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">collections</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="fu"><a href="../reference/meta.html">meta_collections</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="st">"wood duck"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 5 × 5</span></span>
-<span><span class="co">#&gt;   species_id scientific_name                    english_name                          french_name                               taxon_group</span></span>
-<span><span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;                              &lt;chr&gt;                                 &lt;chr&gt;                                     &lt;chr&gt;      </span></span>
-<span><span class="co">#&gt; 1        360 Aix sponsa                         Wood Duck                             Canard branchu                            BIRDS      </span></span>
-<span><span class="co">#&gt; 2      40938 Aix sponsa x Anas platyrhynchos    Wood Duck x Mallard (hybrid)          Hybride Canard branchu x C. colvert       BIRDS      </span></span>
-<span><span class="co">#&gt; 3      41197 Aix sponsa x Lophodytes cucullatus Wood Duck x Hooded Merganser (hybrid) Hybride Canard branchu x Harle couronné   BIRDS      </span></span>
-<span><span class="co">#&gt; 4      45989 Aix sponsa x Mareca americana      Wood Duck x American Wigeon (hybrid)  Hybride Canard branchu x C. d'Amérique    BIRDS      </span></span>
-<span><span class="co">#&gt; 5      47173 Tadorna tadorna x Aix sponsa       Common Shelduck x Wood Duck (hybrid)  Hybride Tadorne de Belon x Canard branchu BIRDS</span></span></code></pre></div>
+<span><span class="co">#&gt;   species_id scientific_name                    english_name                          french_name                           taxon_group</span></span>
+<span><span class="co">#&gt;        &lt;int&gt; &lt;chr&gt;                              &lt;chr&gt;                                 &lt;chr&gt;                                 &lt;chr&gt;      </span></span>
+<span><span class="co">#&gt; 1        360 Aix sponsa                         Wood Duck                             Canard branchu                        BIRDS      </span></span>
+<span><span class="co">#&gt; 2      40938 Aix sponsa x Anas platyrhynchos    Wood Duck x Mallard (hybrid)          Hybride Canard branchu x C. colvert   BIRDS      </span></span>
+<span><span class="co">#&gt; 3      41197 Aix sponsa x Lophodytes cucullatus Wood Duck x Hooded Merganser (hybrid) Hybride Canard branchu x Harle couro… BIRDS      </span></span>
+<span><span class="co">#&gt; 4      45989 Aix sponsa x Mareca americana      Wood Duck x American Wigeon (hybrid)  Hybride Canard branchu x C. d'Amériq… BIRDS      </span></span>
+<span><span class="co">#&gt; 5      47173 Tadorna tadorna x Aix sponsa       Common Shelduck x Wood Duck (hybrid)  Hybride Tadorne de Belon x Canard br… BIRDS</span></span></code></pre></div>
 <p>Now we can download the NatureCounts data. Remember to change
 <code>testuser</code> to your personal username.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atlas_on</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"OBBA2PC"</span>, species <span class="op">=</span> <span class="fl">360</span>, </span>
 <span>                       username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"spatial_data_tutorial"</span><span class="op">)</span></span></code></pre></div>
 <p>We can then convert our NatureCounts data into a spatial object. To
@@ -256,19 +253,37 @@ do so, we deploy the <code>st_as_sf</code> function and specify the
 coordinate reference system (CRS).</p>
 <p>The CRS of our KBA sf object can be returned with
 <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs()</a></code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">ontario_kba</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ontario_kba' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; Coordinate Reference System:</span></span>
+<span><span class="co">#&gt;   User input: WGS 84 </span></span>
+<span><span class="co">#&gt;   wkt:</span></span>
+<span><span class="co">#&gt; GEOGCRS["WGS 84",</span></span>
+<span><span class="co">#&gt;     DATUM["World Geodetic System 1984",</span></span>
+<span><span class="co">#&gt;         ELLIPSOID["WGS 84",6378137,298.257223563,</span></span>
+<span><span class="co">#&gt;             LENGTHUNIT["metre",1]]],</span></span>
+<span><span class="co">#&gt;     PRIMEM["Greenwich",0,</span></span>
+<span><span class="co">#&gt;         ANGLEUNIT["degree",0.0174532925199433]],</span></span>
+<span><span class="co">#&gt;     CS[ellipsoidal,2],</span></span>
+<span><span class="co">#&gt;         AXIS["latitude",north,</span></span>
+<span><span class="co">#&gt;             ORDER[1],</span></span>
+<span><span class="co">#&gt;             ANGLEUNIT["degree",0.0174532925199433]],</span></span>
+<span><span class="co">#&gt;         AXIS["longitude",east,</span></span>
+<span><span class="co">#&gt;             ORDER[2],</span></span>
+<span><span class="co">#&gt;             ANGLEUNIT["degree",0.0174532925199433]],</span></span>
+<span><span class="co">#&gt;     ID["EPSG",4326]]</span></span></code></pre></div>
 <p>Our KBA sf object is stored with World Geodetic System 1984 (WGS 84)
 coordinates, EPSG = 4326. Now we can convert our
 <strong>atlas_on</strong> dataframe to an sf object using the same
 CRS.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atlas_on_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">atlas_on</span>,</span>
 <span>                        coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
 <p>Now let’s ensure that the conversion was successful. You’ll notice a
 new geometry column where each observation is a point.</p>
-<pre><code><span><span class="co">#&gt; Classes 'sf' and 'data.frame':   290 obs. of  56 variables:</span></span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">atlas_on_sf</span><span class="op">)</span> <span class="co"># view the sf object</span></span>
+<span><span class="co">#&gt; Classes 'sf' and 'data.frame':   290 obs. of  56 variables:</span></span>
 <span><span class="co">#&gt;  $ record_id              : int  10339750 10340180 10342681 10343644 10344845 10351428 10353184 10354352 10355078 10357496 ...</span></span>
 <span><span class="co">#&gt;  $ collection             : chr  "OBBA2PC" "OBBA2PC" "OBBA2PC" "OBBA2PC" ...</span></span>
 <span><span class="co">#&gt;  $ project_id             : int  1007 1007 1007 1007 1007 1007 1007 1007 1007 1007 ...</span></span>
@@ -327,34 +342,30 @@ new geometry column where each observation is a point.</p>
 <span><span class="co">#&gt;  $ geometry               :sfc_POINT of length 290; first list element:  'XY' num  -80.1 43.7</span></span>
 <span><span class="co">#&gt;  - attr(*, "sf_column")= chr "geometry"</span></span>
 <span><span class="co">#&gt;  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "names")= chr [1:55] "record_id" "collection" "project_id" "protocol_id" ...</span></span></code></pre>
+<span><span class="co">#&gt;   ..- attr(*, "names")= chr [1:55] "record_id" "collection" "project_id" "protocol_id" ...</span></span></code></pre></div>
 <p>The <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform()</a></code> function can be applied to project
 our spatial object using a different CRS like NAD83 / UTM zone 16N (EPSG
 = 26916).</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ontario_kba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">ontario_kba</span>, crs <span class="op">=</span> <span class="fl">26916</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ontario_kba' not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ontario_kba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">ontario_kba</span>, crs <span class="op">=</span> <span class="fl">26916</span><span class="op">)</span> </span></code></pre></div>
 <p>It can also be used to ensure that the CRS of our spatial objects
 match.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">atlas_on_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">atlas_on_sf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">ontario_kba</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ontario_kba' not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">atlas_on_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">atlas_on_sf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">ontario_kba</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>To identify Wood Ducks observed across Ontario KBA’s, we can apply
 the <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection()</a></code> function.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wood_ducks_kba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></span><span class="op">(</span><span class="va">ontario_kba</span>, <span class="va">atlas_on_sf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ontario_kba' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></span></code></pre></div>
 <p>You will get a <code>warning</code> message, which you can safely
 ignore.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># If need be, transform your spatial data back to EPSG:4326 to visualize with leaflet</span></span>
 <span><span class="va">ontario_kba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">ontario_kba</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ontario_kba' not found</span></span>
-<span><span class="va">wood_ducks_kba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">wood_ducks_kba</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'wood_ducks_kba' not found</span></span></code></pre></div>
+<span><span class="va">wood_ducks_kba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">wood_ducks_kba</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
 <p>Using <code>ggplot</code>, we can visualize the polygon data and
 point data.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Select a basemap</span></span>
 <span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_map_tile.html" class="external-link">annotation_map_tile</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"osm"</span>, zoom <span class="op">=</span> <span class="cn">NULL</span>, progress <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -372,12 +383,12 @@ point data.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Key Biodiversity Area (KBA) - Long Point Peninsula and Marshes"</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
-<span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ontario_kba' not found</span></span></code></pre></div>
+<span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="figures%2Fnc_sp2_longpoint_kba-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"></p>
 <p>You can also apply <code>leaflet</code> to visualize the polygon data
 and point data, using the <code><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addPolygons()</a></code>
 <code><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addCircleMarkers()</a></code> arguments.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/leaflet.html" class="external-link">leaflet</a></span><span class="op">(</span>width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addTiles</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addPolygons</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ontario_kba</span>, color <span class="op">=</span> <span class="st">"black"</span>, weight <span class="op">=</span> <span class="fl">2</span>, smoothFactor <span class="op">=</span> <span class="fl">1</span>, </span>
@@ -394,7 +405,7 @@ overwrite an existing file.</p>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
 </blockquote>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># st_write(wood_ducks_kba,"wood_ducks_kba.shp", driver = "ESRI Shapefile", delete_layer = TRUE)</span></span></code></pre></div>
 </div>
 </div>
@@ -413,46 +424,50 @@ Resources</strong> section and select the Priority Places file labeled
 <code>English</code>, <code>dataset</code>, and
 <code>FGDB/GDB</code>.</p>
 <p>First, lets create a path to our downloaded Priority Place file.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gdb_path</span> <span class="op">&lt;-</span> <span class="st">"PriorityPlaces.gdb"</span></span></code></pre></div>
 <p>Then, let’s inspect the spatial data.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gdb_layers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_layers.html" class="external-link">st_layers</a></span><span class="op">(</span><span class="va">gdb_path</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Cannot open data source C:/Users/dimit/Birds Canada/naturecounts/misc/Data/priority_places/priorityplaces.gdb</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): Open failed.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gdb_layers</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'gdb_layers' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; Driver: OpenFileGDB </span></span>
+<span><span class="co">#&gt; Available layers:</span></span>
+<span><span class="co">#&gt;               layer_name geometry_type features fields                     crs_name</span></span>
+<span><span class="co">#&gt; 1 PriorityPlacesBoundary Multi Polygon       11     11 NAD83 / Canada Atlas Lambert</span></span>
+<span><span class="co">#&gt; 2  PriorityPlacesProject   Multi Point       89     13 NAD83 / Canada Atlas Lambert</span></span></code></pre></div>
 <p>To read in our spatial data object, we apply the <code>st_read</code>
 function and specify our desired data layer.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">priori_place_polygons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="va">gdb_path</span>, layer <span class="op">=</span> <span class="st">"PriorityPlacesBoundary"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: Cannot open "C:/Users/dimit/Birds Canada/naturecounts/misc/Data/priority_places/priorityplaces.gdb"; The file doesn't seem to exist.</span></span></code></pre></div>
+<span><span class="co">#&gt; Reading layer `PriorityPlacesBoundary' from data source </span></span>
+<span><span class="co">#&gt;   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\priority_places\priorityplaces.gdb' using driver `OpenFileGDB'</span></span>
+<span><span class="co">#&gt; Simple feature collection with 11 features and 11 fields</span></span>
+<span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -2135754 ymin: -586679 xmax: 2450963 ymax: 2554209</span></span>
+<span><span class="co">#&gt; Projected CRS: NAD83 / Canada Atlas Lambert</span></span></code></pre></div>
 <p>Were interested in the spatial distribution of Wood Ducks across the
 Long Point Walsingham Forest Priority Place. We’ll filter based on a
 variable condition.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">long_point_polygon</span> <span class="op">&lt;-</span> <span class="va">priori_place_polygons</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Name</span> <span class="op">==</span> <span class="st">"Long Point Walsingham Forest"</span><span class="op">)</span> <span class="co"># filters based on multipolygon name </span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'priori_place_polygons' not found</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Name</span> <span class="op">==</span> <span class="st">"Long Point Walsingham Forest"</span><span class="op">)</span> <span class="co"># filters based on multipolygon name </span></span></code></pre></div>
 <p>Then reproject the Wood Duck data to match our Priority Place using
 <code>st_transform</code>.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">atlas_on_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">atlas_on_sf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">long_point_polygon</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'long_point_polygon' not found</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">atlas_on_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">atlas_on_sf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">long_point_polygon</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Next, we’ll apply our geoprocessing function to find the Wood Duck
 observations that intersect with our chosen Priority Place.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wood_ducks_longpoint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></span><span class="op">(</span><span class="va">long_point_polygon</span>, <span class="va">atlas_on_sf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'long_point_polygon' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></span></code></pre></div>
 <p>Finally, we’ll transform our spatial objects one more time before
 visualizing them with <code>leaflet</code>.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">long_point_polygon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">long_point_polygon</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'long_point_polygon' not found</span></span>
-<span><span class="va">wood_ducks_longpoint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">wood_ducks_longpoint</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'wood_ducks_longpoint' not found</span></span></code></pre></div>
+<span><span class="va">wood_ducks_longpoint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">wood_ducks_longpoint</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
 <p>Use <code>ggplot</code> to visualize the polygon and point data.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Select a basemap</span></span>
 <span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_map_tile.html" class="external-link">annotation_map_tile</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"cartolight"</span>, zoom <span class="op">=</span> <span class="cn">NULL</span>, progress <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -472,12 +487,12 @@ visualizing them with <code>leaflet</code>.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottomright"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Wood Duck Observations within Long Point Walsingham"</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
-<span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'long_point_polygon' not found</span></span></code></pre></div>
+<span>       y <span class="op">=</span> <span class="st">"Latitude"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="figures%2Fnc_sp2_longpoint_prioriplace-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"></p>
 <p>You can also apply leaflet to visualize our polygon data and point
 data, using the <code><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addPolygons()</a></code>
 <code><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addCircleMarkers()</a></code> arguments.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/leaflet.html" class="external-link">leaflet</a></span><span class="op">(</span>width <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addTiles</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addPolygons</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">long_point_polygon</span>, color <span class="op">=</span> <span class="st">"black"</span>, weight <span class="op">=</span> <span class="fl">2</span>, </span>
@@ -494,7 +509,7 @@ overwrite an existing file.</p>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
 </blockquote>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># st_write(wood_ducks_longpoint,"wood_ducks_longpoint.shp", driver = "ESRI Shapefile", delete_layer = TRUE)</span></span></code></pre></div>
 <p><strong>Congratulations</strong>! You completed <strong>Chapter 2 -
 Spatial Subsetting: KBA’s and Priority Places</strong>. Here, you

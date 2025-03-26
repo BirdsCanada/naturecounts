@@ -68,7 +68,7 @@
 
       <h1>Chapter 1 - Zero-filling</h1>
             
-            <h4 data-toc-skip class="date">2025-03-21</h4>
+            <h4 data-toc-skip class="date">2025-03-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/3.1-ZeroFilling.Rmd" class="external-link"><code>vignettes/articles/3.1-ZeroFilling.Rmd</code></a></small>
       <div class="d-none name"><code>3.1-ZeroFilling.Rmd</code></div>
@@ -194,8 +194,7 @@ stops, Canada) dataset.</p>
 for easier interpretation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sp.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">sp.list</span> <span class="op">&lt;-</span> <span class="va">sp.list</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">species_id</span>,<span class="va">english_name</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in select(., species_id, english_name): unused arguments (species_id, english_name)</span></span></code></pre></div>
+<span><span class="va">sp.list</span> <span class="op">&lt;-</span> <span class="va">sp.list</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">species_id</span>, <span class="va">english_name</span><span class="op">)</span></span></code></pre></div>
 <p>Read in the BBS data from NatureCounts from 2015 to 2020 from the
 province of Saskatchewan as an example data set. Because we want to
 zero-fill the dataframe, we need to download the full collection for the
@@ -264,9 +263,8 @@ data by zero-filling a custom column.</p>
 a presence column based on <code>ObservationCount</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bbs50_can_presence</span> <span class="op">&lt;-</span> <span class="va">bbs50_can</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">AllSpeciesReported</span>, <span class="va">SamplingEventIdentifier</span>, <span class="va">species_id</span>, <span class="va">ObservationCount</span>, <span class="va">latitude</span>, <span class="va">longitude</span>, <span class="va">english_name</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>presence <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in select(., AllSpeciesReported, SamplingEventIdentifier, species_id, : unused arguments (AllSpeciesReported, SamplingEventIdentifier, species_id, ObservationCount, latitude, longitude, english_name)</span></span></code></pre></div>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">AllSpeciesReported</span>, <span class="va">SamplingEventIdentifier</span>, <span class="va">species_id</span>, <span class="va">ObservationCount</span>, <span class="va">latitude</span>, <span class="va">longitude</span>, <span class="va">english_name</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>presence <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Zero-fill the data while specifying the presence column in the
 <code>fill</code> argument. This also converts the presence column from
 logical to numeric.</p>
@@ -276,7 +274,7 @@ logical to numeric.</p>
 <span>                                          by <span class="op">=</span> <span class="st">"SamplingEventIdentifier"</span>,</span>
 <span>                                          extra_event <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"latitude"</span>, <span class="st">"longitude"</span><span class="op">)</span>, </span>
 <span>                                          extra_species <span class="op">=</span> <span class="st">"english_name"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'bbs50_can_presence' not found</span></span></code></pre></div>
+<span><span class="co">#&gt;  - Converted 'fill' column (presence) from logical to numeric</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="id_1-3events_matrix">1.3 Zero-filling: Events matrix<a class="anchor" aria-label="anchor" href="#id_1-3events_matrix"></a>
@@ -334,13 +332,14 @@ values for events where the species was not observed.</p>
 to inspect your data.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">longspur_zero_fill</span> <span class="op">&lt;-</span> <span class="va">longspur_events</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ObservationCount <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/replace.html" class="external-link">replace</a></span><span class="op">(</span><span class="va">ObservationCount</span>, <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">survey_day</span>, <span class="va">survey_month</span>, <span class="va">survey_year</span>, <span class="va">latitude</span>, <span class="va">longitude</span>, <span class="va">ObservationCount</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; Error in select(., SiteCode, survey_day, survey_month, survey_year, latitude, : unused arguments (SiteCode, survey_day, survey_month, survey_year, latitude, longitude, ObservationCount)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ObservationCount <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/replace.html" class="external-link">replace</a></span><span class="op">(</span><span class="va">ObservationCount</span>, <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ObservationCount</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">survey_day</span>, <span class="va">survey_month</span>, <span class="va">survey_year</span>, <span class="va">latitude</span>, <span class="va">longitude</span>, <span class="va">ObservationCount</span><span class="op">)</span> </span></code></pre></div>
 <p>Plot a histogram of your zero-filled observation counts of
 Chestnut-collared Longspur to see how the data are distributed.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">longspur_zero_fill</span><span class="op">$</span><span class="va">ObservationCount</span>, breaks <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'hist': object 'longspur_zero_fill' not found</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">longspur_zero_fill</span><span class="op">$</span><span class="va">ObservationCount</span>, breaks <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="articles/articles/figures/nc_at1_unnamed-chunk-13-1.png" alt="plot of chunk unnamed-chunk-13"><div class="figcaption">plot of chunk unnamed-chunk-13</div>
+</div>
 <p>Now your data frame is zero filled. You can repeat this process for
 other species of interest or learn in the next section how to zero-fill
 multiple species in sequence using a loop.</p>

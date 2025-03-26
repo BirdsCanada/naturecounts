@@ -68,7 +68,7 @@
 
       <h1>Chapter 3 - Climate Data</h1>
             
-            <h4 data-toc-skip class="date">2025-03-21</h4>
+            <h4 data-toc-skip class="date">2025-03-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.3-ClimateData.Rmd" class="external-link"><code>vignettes/articles/2.3-ClimateData.Rmd</code></a></small>
       <div class="d-none name"><code>2.3-ClimateData.Rmd</code></div>
@@ -247,19 +247,20 @@ dataset:</p>
 <code class="sourceCode R"><span><span class="fu">stations</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; The stations data frame hasn't been updated in over 4 weeks. Consider running `stations_dl()` to check for updates and make sure you have the most recent stations list available</span></span>
 <span><span class="co">#&gt; # A tibble: 26,382 × 16</span></span>
-<span><span class="co">#&gt;    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz        interval start   end normals normals_1981_2010 normals_1971_2000</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt;             &lt;lgl&gt;            </span></span>
-<span><span class="co">#&gt;  1 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/GMT+7 day       1908  1922 FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt;  2 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt;  3 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/GMT+7 month     1908  1922 FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt;  4 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/GMT+7 day       1978  1979 FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt;  5 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt;  6 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/GMT+7 month     1978  1979 FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt;  7 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/GMT+7 day       1987  1990 FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt;  8 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt;  9 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/GMT+7 month     1987  1990 FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt; 10 AB    GOLDEN VALLEY             1798 301B8LR        NA &lt;NA&gt;   53.2 -110.  640  Etc/GMT+7 day       1987  1998 FALSE   FALSE             FALSE            </span></span>
-<span><span class="co">#&gt; # ℹ 26,372 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt;    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz     interval start   end normals normals_1981_2010</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt;            </span></span>
+<span><span class="co">#&gt;  1 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/G… day       1908  1922 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  2 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/G… hour        NA    NA FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  3 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/G… month     1908  1922 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  4 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/G… day       1978  1979 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  5 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/G… hour        NA    NA FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  6 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/G… month     1978  1979 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  7 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/G… day       1987  1990 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  8 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/G… hour        NA    NA FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  9 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/G… month     1987  1990 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt; 10 AB    GOLDEN VALLEY             1798 301B8LR        NA &lt;NA&gt;   53.2 -110.  640  Etc/G… day       1987  1998 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt; # ℹ 26,372 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: normals_1971_2000 &lt;lgl&gt;</span></span></code></pre></div>
 <p>You are ready to download weather data! For the purpose of this
 tutorial, let’s perform a smaller weather data download by specifying
 specific station IDs. The weather stations closest to Wood Buffalo
@@ -427,7 +428,7 @@ the <code>st_as_sf</code> function:</p>
 site, respectively.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">worldclim_stack</span>, <span class="va">cranes_sf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'worldclim_stack' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'worldclim_stack' not found</span></span></code></pre></div>
 <p>Then combine the bio-climatic values with the NatureCounts data.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">cranes_sf</span>, <span class="va">bioclim_values</span>, </span>

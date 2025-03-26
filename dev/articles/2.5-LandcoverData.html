@@ -68,7 +68,7 @@
 
       <h1>Chapter 5 - Land Cover Data</h1>
             
-            <h4 data-toc-skip class="date">2025-03-21</h4>
+            <h4 data-toc-skip class="date">2025-03-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.5-LandcoverData.Rmd" class="external-link"><code>vignettes/articles/2.5-LandcoverData.Rmd</code></a></small>
       <div class="d-none name"><code>2.5-LandcoverData.Rmd</code></div>
@@ -568,8 +568,7 @@ the landscape-level metrics we calculated in the <a href="#id_5.4LandscapeMetric
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">point_id</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># Ensure no duplicates based on point_id, but keep all columns</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">lsm_landscape</span>, by <span class="op">=</span> <span class="st">"point_id"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">point_id</span>, <span class="va">ed</span>, <span class="va">np</span><span class="op">)</span>  <span class="co"># Keep point_id, ed, and np columns</span></span>
-<span><span class="co">#&gt; Error in select(., point_id, ed, np): unused arguments (point_id, ed, np)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">point_id</span>, <span class="va">ed</span>, <span class="va">np</span><span class="op">)</span>  <span class="co"># Keep point_id, ed, and np columns</span></span></code></pre></div>
 <p>Append the class level PLAND metric values and keep the
 <code>point_id</code> column.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
