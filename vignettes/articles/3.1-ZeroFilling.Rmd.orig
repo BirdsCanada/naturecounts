@@ -83,7 +83,7 @@ Let's bring in the list of common names to append to the dataframe for easier in
 
 ```{r, message = FALSE}
 sp.list <- search_species()
-sp.list <- sp.list %>% select(species_id,english_name)
+sp.list <- sp.list %>% dplyr::select(species_id, english_name)
 ```
 
 Read in the BBS data from NatureCounts from 2015 to 2020 from the province of Saskatchewan as an example data set. Because we want to zero-fill the dataframe, we need to download the full collection for the given time period and geography of interest. NOT just the data for the species of interest. This will ensure that all the sampling events are correctly identified for zero-filling.
@@ -122,7 +122,7 @@ First, select relevant columns from the original dataframe and create a presence
 
 ```{r}
 bbs50_can_presence <- bbs50_can %>%
-  select(AllSpeciesReported, SamplingEventIdentifier, species_id, ObservationCount, latitude, longitude, english_name) %>%
+  dplyr::select(AllSpeciesReported, SamplingEventIdentifier, species_id, ObservationCount, latitude, longitude, english_name) %>%
   mutate(presence = if_else(as.numeric(ObservationCount) > 0, TRUE, FALSE))
 ```
 
@@ -176,7 +176,7 @@ Zero-fill for specific species. Here, we replace the NA values in the `Observati
 
 ```{r}
 longspur_zero_fill <- longspur_events %>% 
-  mutate(ObservationCount = replace(ObservationCount, is.na(ObservationCount), 0)) %>% select(SiteCode, survey_day, survey_month, survey_year, latitude, longitude, ObservationCount) 
+  mutate(ObservationCount = replace(ObservationCount, is.na(ObservationCount), 0)) %>% dplyr::select(SiteCode, survey_day, survey_month, survey_year, latitude, longitude, ObservationCount) 
 ```
 
 Plot a histogram of your zero-filled observation counts of Chestnut-collared Longspur to see how the data are distributed.

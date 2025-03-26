@@ -1,6 +1,6 @@
 ---
 title: "Chapter 3 - Climate Data"
-date: "2025-03-21"
+date: "2025-03-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{03-ClimateData}
@@ -132,19 +132,20 @@ First, let's take a look at the built in **stations** dataset:
 stations()
 #> The stations data frame hasn't been updated in over 4 weeks. Consider running `stations_dl()` to check for updates and make sure you have the most recent stations list available
 #> # A tibble: 26,382 × 16
-#>    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz        interval start   end normals normals_1981_2010 normals_1971_2000
-#>    <chr> <chr>                    <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr>     <chr>    <dbl> <dbl> <lgl>   <lgl>             <lgl>            
-#>  1 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GMT+7 day       1908  1922 FALSE   FALSE             FALSE            
-#>  2 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            
-#>  3 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GMT+7 month     1908  1922 FALSE   FALSE             FALSE            
-#>  4 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GMT+7 day       1978  1979 FALSE   FALSE             FALSE            
-#>  5 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            
-#>  6 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GMT+7 month     1978  1979 FALSE   FALSE             FALSE            
-#>  7 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/GMT+7 day       1987  1990 FALSE   FALSE             FALSE            
-#>  8 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            
-#>  9 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/GMT+7 month     1987  1990 FALSE   FALSE             FALSE            
-#> 10 AB    GOLDEN VALLEY             1798 301B8LR        NA <NA>   53.2 -110.  640  Etc/GMT+7 day       1987  1998 FALSE   FALSE             FALSE            
+#>    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz     interval start   end normals normals_1981_2010
+#>    <chr> <chr>                    <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr>  <chr>    <dbl> <dbl> <lgl>   <lgl>            
+#>  1 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/G… day       1908  1922 FALSE   FALSE            
+#>  2 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/G… hour        NA    NA FALSE   FALSE            
+#>  3 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/G… month     1908  1922 FALSE   FALSE            
+#>  4 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/G… day       1978  1979 FALSE   FALSE            
+#>  5 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/G… hour        NA    NA FALSE   FALSE            
+#>  6 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/G… month     1978  1979 FALSE   FALSE            
+#>  7 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/G… day       1987  1990 FALSE   FALSE            
+#>  8 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/G… hour        NA    NA FALSE   FALSE            
+#>  9 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/G… month     1987  1990 FALSE   FALSE            
+#> 10 AB    GOLDEN VALLEY             1798 301B8LR        NA <NA>   53.2 -110.  640  Etc/G… day       1987  1998 FALSE   FALSE            
 #> # ℹ 26,372 more rows
+#> # ℹ 1 more variable: normals_1971_2000 <lgl>
 ```
 
 You are ready to download weather data! For the purpose of this tutorial, let's perform a smaller weather data download by specifying specific station IDs. The weather stations closest to Wood Buffalo National Park are BIRCH MOUNTAIN LO (station_id = 2481) and BUCKTON LO (station_id = 2486). These stations were identified using the the ECCC [search option](https://climate.weather.gc.ca/historical_data/search_historic_data_stations_e.html?searchType=stnProx&timeframe=1&txtRadius=25&selCity=&optProxType=park&selPark=57%7C39%7C112%7C0%7CWood+Buffalo+National+Park&txtCentralLatDeg=&txtCentralLatMin=&txtCentralLatSec=&txtCentralLongDeg=&txtCentralLongMin=&txtCentralLongSec=&txtLatDecDeg=&txtLongDecDeg=&optLimit=yearRange&StartYear=1840&EndYear=2024&Year=2024&Month=10&Day=1&selRowPerPage=25) which helps you search for historical weather data based on proximity to a city, coordinate, or National Park.
@@ -336,7 +337,7 @@ Extract the bio-climatic variable values for each bird observation site, respect
 
 ``` r
 bioclim_values <- extract(worldclim_stack, cranes_sf)
-#> Error in eval(expr, envir, enclos): object 'worldclim_stack' not found
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'worldclim_stack' not found
 ```
 
 Then combine the bio-climatic values with the NatureCounts data.
