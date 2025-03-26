@@ -241,8 +241,9 @@ Buffers allow us to generate polygons at a specified distance around points, lin
 Read in the NatureCounts data you saved from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or downloaded from the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing).
 
 
+
 ``` r
-mauricie_birds_df <- read.csv(here::here("misc/data/mauricie_birds_df.csv"))
+mauricie_birds_df <- read.csv("path/to/your/mauricie_birds_df.csv")
 ```
 
 **Note: The land cover data (2015) represents a static environmental variable in this scenario. Here, we assume that land cover within the National Park did not change drastically across the survey years (2011 - 2014).**

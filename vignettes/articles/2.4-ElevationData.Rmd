@@ -62,7 +62,8 @@ Move the files from your Downloads to the `nationalparks` subdirectory before ap
 
 
 ```
-#> Reading layer `vw_Places_Public_lieux_public_APCA' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
+#> Reading layer `vw_Places_Public_lieux_public_APCA' from data source 
+#>   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 52 features and 9 fields
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY, XYZ
@@ -272,7 +273,7 @@ print(dtm_mosaic)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) 
-#> source      : spat_290041744b42_10496.tif 
+#> source      : spat_290025363012_10496.tif 
 #> varname     : MNT_31I10NO 
 #> name        :  Band_1 
 #> min value   : 102.277 

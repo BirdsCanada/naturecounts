@@ -179,7 +179,8 @@ geojson_url <- "https://agriculture.canada.ca/atlas/data_donnees/nationalEcologi
 # Read the GeoJSON file directly from the URL
 ecodistricts <- st_read(geojson_url)
 #> Reading layer `nef_ca_ter_ecodistrict_v2_2' from data source 
-#>   `https://agriculture.canada.ca/atlas/data_donnees/nationalEcologicalFramework/data_donnees/geoJSON/ed/nef_ca_ter_ecodistrict_v2_2.geojson' using driver `GeoJSON'
+#>   `https://agriculture.canada.ca/atlas/data_donnees/nationalEcologicalFramework/data_donnees/geoJSON/ed/nef_ca_ter_ecodistrict_v2_2.geojson' 
+#>   using driver `GeoJSON'
 #> Simple feature collection with 1025 features and 7 fields
 #> Geometry type: POLYGON
 #> Dimension:     XY

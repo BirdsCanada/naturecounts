@@ -65,7 +65,7 @@ Specify the path to your folder containing the satellite images in the code chun
 
 
 ``` r
-bands <- list.files(path = here::here("misc/data/R10m"), 
+bands <- list.files(path = here::here("misc/data/R10m"), # drop `here::here()` and specify the path to your folder
                     pattern = "\\.jp2$", full.names = TRUE)
 
 # Read all the bands into a raster stack 
@@ -117,7 +117,6 @@ Crop `sentinel_imagery` to the extent of `mauricie_boundary` then plot the cropp
 
 ``` r
 mauricie_sl <- crop(sentinel_imagery, vect(mauricie_boundary))
-#> |---------|---------|---------|---------|=========================================                                          
 
 # Plot the RGB composite
 terra::plotRGB(mauricie_sl, r = 4, g = 3, b = 2, stretch = "lin", lwd = 2, axes = FALSE)
@@ -308,8 +307,9 @@ names(mauricie_sl_ndvi) <- "ndvi"
 Read in the NatureCounts data you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or the [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) data folder.
 
 
+
 ``` r
-mauricie_birds_df <- read_csv(here::here("misc/data/mauricie_birds_df.csv")) 
+mauricie_birds_df <- read_csv("path/to/your/mauricie_birds_df.csv")
 ```
 
 To convert the NatureCounts data to a spatial object and transform its CRS to match the National Park boundary we can use the `st_as_sf()` and `st_transform()` functions, respectively.
@@ -408,12 +408,11 @@ Assign a point id identifier to each location based on its unique geometry and r
 ndvi_values_df <- ndvi_values_sf %>% 
   group_by(SiteCode, geometry) %>%
   mutate(point_id = cur_group_id()) %>% 
-  select(point_id, ndvi) %>% 
+  dplyr::select(point_id, ndvi) %>% 
   distinct() %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unable to find an inherited method for function 'select' for signature '"sf"'
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
