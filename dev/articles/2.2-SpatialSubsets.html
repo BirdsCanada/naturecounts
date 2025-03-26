@@ -176,7 +176,7 @@ join:</p>
 <span>         <span class="st">"Landcover"</span>,</span>
 <span>         <span class="st">"Province"</span>,</span>
 <span>         <span class="st">"Species"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in select(., "SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", : unused arguments ("SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", "Level", "CriteriaMet", "ConservationActions", "Landcover", "Province", "Species")</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'select' for signature '"data.frame"'</span></span></code></pre></div>
 <p>Both dataframes now contain unique columns, after our selection. We
 apply the <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join()</a></code> function to hold all attributes
 within one dataframe.</p>

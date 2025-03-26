@@ -222,14 +222,17 @@ SpatRaster.</p>
 <p>Crop <code>sentinel_imagery</code> to the extent of
 <code>mauricie_boundary</code> then plot the cropped image in true
 color.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mauricie_sl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="va">sentinel_imagery</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Plot the RGB composite</span></span>
-<span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plotRGB.html" class="external-link">plotRGB</a></span><span class="op">(</span><span class="va">mauricie_sl</span>, r <span class="op">=</span> <span class="fl">4</span>, g <span class="op">=</span> <span class="fl">3</span>, b <span class="op">=</span> <span class="fl">2</span>, stretch <span class="op">=</span> <span class="st">"lin"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, axes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Add the boundary shapefile to the plot</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span>, col <span class="op">=</span> <span class="cn">NA</span>, border <span class="op">=</span><span class="st">"red"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>mauricie_sl <span class="ot">&lt;-</span> <span class="fu">crop</span>(sentinel_imagery, <span class="fu">vect</span>(mauricie_boundary))</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="sc">|---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="er">=========================================</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>                                          </span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co"># Plot the RGB composite</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plotRGB</span>(mauricie_sl, <span class="at">r =</span> <span class="dv">4</span>, <span class="at">g =</span> <span class="dv">3</span>, <span class="at">b =</span> <span class="dv">2</span>, <span class="at">stretch =</span> <span class="st">"lin"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co"># Add the boundary shapefile to the plot</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(mauricie_boundary), <span class="at">col =</span> <span class="cn">NA</span>, <span class="at">border =</span><span class="st">"red"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="figures%2Fnc_sp6_true_color_comp-1.png" alt="Plot shows the cropped Mauricie park in true color."></p>
 <p>Now plot the cropped image in false color. Here, we’ll use the
 standard false color composite where red, green, and blue channels are
@@ -475,7 +478,7 @@ geometry and return the result as a dataframe.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># drop the geometry column</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># convert to a regular dataframe</span></span>
-<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, ndvi)</span></span>
+<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unable to find an inherited method for function 'select' for signature '"sf"'</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.</span></span></code></pre></div>
@@ -554,15 +557,15 @@ here, verify that you have selected the satellite image you want and
 then download it by clicking the <strong>Download</strong> option in the
 lower righthand corner.</p></li>
 </ol>
-<p><img src="figures_other/spatdata7.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;"></p>
-<p><img src="figures_other/spatdata8.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;"></p>
+<p><img src="figures_other%2Fspatdata7.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;"></p>
+<p><img src="figures_other%2Fspatdata8.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;"></p>
 <p>Note: The <strong>Visualize</strong> tab will help you visualize your
 satellite image using true color and false color composites and NDVI,
 among other layers. These are based on a combination of bands stored in
 our image download. This tutorial will guide you through custom
 satellite image visualizations and spectral index calculation with
 corrections.</p>
-<p><img src="figures_other/spatdata9.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;"></p>
+<p><img src="figures_other%2Fspatdata9.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -137,30 +137,31 @@ detect a species.</p>
 <p>Here are some important considerations to keep in mind when applying
 zero-filling methods:</p>
 <ul>
-<li><p>Biological Relevance: Ensure that the zeros you are adding
-accurately reflect true absences rather than just missing data. This
-distinction is crucial for valid interpretations.</p></li>
+<li><p><strong>Biological Relevance</strong>: Ensure that the zeros you
+are adding accurately reflect true absences rather than just missing
+data. This distinction is crucial for valid interpretations.</p></li>
 <li><p>Sampling Bias: Consider potential biases in your sampling
 methods. If certain areas or times are under-sampled, zero-filling may
 misrepresent the actual distribution and abundance of species.</p></li>
-<li><p>Data Structure: Understand the structure of your dataset.
-Zero-filling may be more appropriate for certain types of data (e.g.,
-count data) than others (e.g., presence-only data).</p></li>
-<li><p>Statistical Methods: Choose appropriate statistical methods that
-can handle zero-inflated data. Some models are specifically designed for
-datasets with many zeros, while others may not be suitable.</p></li>
-<li><p>Impact on Analysis: Assess how zero-filling will affect your
-analysis outcomes. Adding zeros can influence mean values, variances,
-and other statistical metrics, potentially leading to misleading
-conclusions.</p></li>
-<li><p>Documentation: Clearly document your zero-filling process,
-including the rationale for your chosen method and any assumptions made.
-This transparency is essential for reproducibility and for others to
-understand your analysis.</p></li>
-<li><p>Contextual Factors: Take into account environmental or temporal
-factors that may influence species presence or absence. These factors
-can help inform whether zeros are appropriate in specific
-contexts.</p></li>
+<li><p><strong>Data Structure</strong>: Understand the structure of your
+dataset. Zero-filling may be more appropriate for certain types of data
+(e.g., count data) than others (e.g., presence-only data).</p></li>
+<li><p><strong>Statistical Methods</strong>: Choose appropriate
+statistical methods that can handle zero-inflated data. Some models are
+specifically designed for datasets with many zeros, while others may not
+be suitable.</p></li>
+<li><p><strong>Impact on Analysis</strong>: Assess how zero-filling will
+affect your analysis outcomes. Adding zeros can influence mean values,
+variances, and other statistical metrics, potentially leading to
+misleading conclusions.</p></li>
+<li><p><strong>Documentation</strong>: Clearly document your
+zero-filling process, including the rationale for your chosen method and
+any assumptions made. This transparency is essential for reproducibility
+and for others to understand your analysis.</p></li>
+<li><p><strong>Contextual Factors</strong>: Take into account
+environmental or temporal factors that may influence species presence or
+absence. These factors can help inform whether zeros are appropriate in
+specific contexts.</p></li>
 </ul>
 <p>By carefully considering these factors, you can make more informed
 decisions about zero-filling and its implications for your dataset and
@@ -202,32 +203,7 @@ given time period and geography of interest. NOT just the data for the
 species of interest. This will ensure that all the sampling events are
 correctly identified for zero-filling.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bbs50_can</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"BBS50-CAN"</span>, years<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>,<span class="fl">2020</span><span class="op">)</span>, region<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov<span class="op">=</span><span class="st">"SK"</span><span class="op">)</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"zero fill example"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using filters: collections (BBS50-CAN); fields_set (BMDE2.00-min); start_year (2015); end_year (2020); statprov (SK)</span></span>
-<span><span class="co">#&gt; Collecting available records...</span></span>
-<span><span class="co">#&gt;   collection nrecords</span></span>
-<span><span class="co">#&gt; 1  BBS50-CAN    80385</span></span>
-<span><span class="co">#&gt; Total records: 80,385</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Downloading records for each collection:</span></span>
-<span><span class="co">#&gt;   BBS50-CAN</span></span>
-<span><span class="co">#&gt;     Records 1 to 5000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 5001 to 10000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 10001 to 15000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 15001 to 20000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 20001 to 25000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 25001 to 30000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 30001 to 35000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 35001 to 40000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 40001 to 45000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 45001 to 50000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 50001 to 55000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 55001 to 60000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 60001 to 65000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 65001 to 70000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 70001 to 75000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 75001 to 80000 / 80385</span></span>
-<span><span class="co">#&gt;     Records 80001 to 80385 / 80385</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">bbs50_can</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"BBS50-CAN"</span>, years<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>,<span class="fl">2020</span><span class="op">)</span>, region<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov<span class="op">=</span><span class="st">"SK"</span><span class="op">)</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"zero fill example"</span><span class="op">)</span></span></code></pre></div>
 <p>Append the english name to the BBS dataframe and ensure
 <code>ObservationCount</code> is numeric.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -297,14 +273,13 @@ select will be specific to your analysis. Generally, the following
 variables from the NatureCounts BMDE work well:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">events_matrix</span> <span class="op">&lt;-</span> <span class="va">bbs50_can</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SiteCode</span>,</span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SiteCode</span>,</span>
 <span>         <span class="va">survey_year</span>,</span>
 <span>         <span class="va">survey_month</span>,</span>
 <span>         <span class="va">survey_day</span>,</span>
 <span>         <span class="va">latitude</span>, </span>
 <span>         <span class="va">longitude</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in select(., SiteCode, survey_year, survey_month, survey_day, latitude, : unused arguments (SiteCode, survey_year, survey_month, survey_day, latitude, longitude)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>From this, you can see there are 9510 unique survey events in the BBS
 dataset from 2015-2020 in Saskatchewan.</p>
 <p>Filter the NatureCounts data for a species of interest and then merge
@@ -337,9 +312,7 @@ to inspect your data.</p>
 Chestnut-collared Longspur to see how the data are distributed.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">longspur_zero_fill</span><span class="op">$</span><span class="va">ObservationCount</span>, breaks <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="articles/articles/figures/nc_at1_unnamed-chunk-13-1.png" alt="plot of chunk unnamed-chunk-13"><div class="figcaption">plot of chunk unnamed-chunk-13</div>
-</div>
+<p><img src="figures%2Fnc_at1_longspur_histogram-1.png" alt="Plot shows histogram of zero-filled Chestnut-collared Longspur observation counts."></p>
 <p>Now your data frame is zero filled. You can repeat this process for
 other species of interest or learn in the next section how to zero-fill
 multiple species in sequence using a loop.</p>
