@@ -1,6 +1,6 @@
 ---
 title: "Testing image creation"
-date: "2025-03-25"
+date: "2025-03-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Testing image creation}
@@ -70,7 +70,7 @@ knitr::opts_chunk$set(
 
 ## Images: Created in R
 
->  **Note**: Must use `fig.alt` and set `fig.cap = ""`**
+>  **Note**: Must use `fig.alt` and set `fig.cap = ""`
 
 
 ``` r

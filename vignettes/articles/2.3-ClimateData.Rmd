@@ -132,20 +132,19 @@ First, let's take a look at the built in **stations** dataset:
 stations()
 #> The stations data frame hasn't been updated in over 4 weeks. Consider running `stations_dl()` to check for updates and make sure you have the most recent stations list available
 #> # A tibble: 26,382 × 16
-#>    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz     interval start   end normals normals_1981_2010
-#>    <chr> <chr>                    <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr>  <chr>    <dbl> <dbl> <lgl>   <lgl>            
-#>  1 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/G… day       1908  1922 FALSE   FALSE            
-#>  2 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/G… hour        NA    NA FALSE   FALSE            
-#>  3 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/G… month     1908  1922 FALSE   FALSE            
-#>  4 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/G… day       1978  1979 FALSE   FALSE            
-#>  5 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/G… hour        NA    NA FALSE   FALSE            
-#>  6 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/G… month     1978  1979 FALSE   FALSE            
-#>  7 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/G… day       1987  1990 FALSE   FALSE            
-#>  8 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/G… hour        NA    NA FALSE   FALSE            
-#>  9 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/G… month     1987  1990 FALSE   FALSE            
-#> 10 AB    GOLDEN VALLEY             1798 301B8LR        NA <NA>   53.2 -110.  640  Etc/G… day       1987  1998 FALSE   FALSE            
+#>    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz    interval start   end normals normals_1981_2010 normals_1971_2000
+#>    <chr> <chr>                    <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr> <chr>    <dbl> <dbl> <lgl>   <lgl>             <lgl>            
+#>  1 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… day       1908  1922 FALSE   FALSE             FALSE            
+#>  2 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… hour        NA    NA FALSE   FALSE             FALSE            
+#>  3 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… month     1908  1922 FALSE   FALSE             FALSE            
+#>  4 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… day       1978  1979 FALSE   FALSE             FALSE            
+#>  5 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… hour        NA    NA FALSE   FALSE             FALSE            
+#>  6 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… month     1978  1979 FALSE   FALSE             FALSE            
+#>  7 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… day       1987  1990 FALSE   FALSE             FALSE            
+#>  8 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… hour        NA    NA FALSE   FALSE             FALSE            
+#>  9 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… month     1987  1990 FALSE   FALSE             FALSE            
+#> 10 AB    GOLDEN VALLEY             1798 301B8LR        NA <NA>   53.2 -110.  640  Etc/… day       1987  1998 FALSE   FALSE             FALSE            
 #> # ℹ 26,372 more rows
-#> # ℹ 1 more variable: normals_1971_2000 <lgl>
 ```
 
 You are ready to download weather data! For the purpose of this tutorial, let's perform a smaller weather data download by specifying specific station IDs. The weather stations closest to Wood Buffalo National Park are BIRCH MOUNTAIN LO (station_id = 2481) and BUCKTON LO (station_id = 2486). These stations were identified using the the ECCC [search option](https://climate.weather.gc.ca/historical_data/search_historic_data_stations_e.html?searchType=stnProx&timeframe=1&txtRadius=25&selCity=&optProxType=park&selPark=57%7C39%7C112%7C0%7CWood+Buffalo+National+Park&txtCentralLatDeg=&txtCentralLatMin=&txtCentralLatSec=&txtCentralLongDeg=&txtCentralLongMin=&txtCentralLongSec=&txtLatDecDeg=&txtLongDecDeg=&optLimit=yearRange&StartYear=1840&EndYear=2024&Year=2024&Month=10&Day=1&selRowPerPage=25) which helps you search for historical weather data based on proximity to a city, coordinate, or National Park.
@@ -281,15 +280,24 @@ This code will get the path to your working directory.
 
 ``` r
 getwd()
-#> [1] "C:/Users/dimit/Birds Canada/naturecounts/vignettes/articles"
 ```
 
 Now point the `list.file` to this directory using the sample code below.
 
 
 ```
-#> Error: [rast] filename is empty. Provide a valid filename
-#> Error in eval(expr, envir, enclos): object 'worldclim_stack' not found
+#> class       : SpatRaster 
+#> dimensions  : 1080, 2160, 19  (nrow, ncol, nlyr)
+#> resolution  : 0.1666667, 0.1666667  (x, y)
+#> extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+#> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
+#> sources     : wc2.1_10m_bio_1.tif  
+#>               wc2.1_10m_bio_10.tif  
+#>               wc2.1_10m_bio_11.tif  
+#>               ... and 16 more source(s)
+#> names       : wc2.1~bio_1, wc2.1~io_10, wc2.1~io_11, wc2.1~io_12, wc2.1~io_13, wc2.1~io_14, ... 
+#> min values  :   -54.72435,   -37.78142,   -66.31125,           0,           0,           0, ... 
+#> max values  :    30.98764,    38.21617,    29.15299,       11191,        2381,         484, ...
 ```
 
 
@@ -308,7 +316,6 @@ Great! The raster stack which includes the 19 bio-climatic variables has been re
 
 ``` r
 names(worldclim_stack) <- paste0("bio", 1:19)
-#> Error: object 'worldclim_stack' not found
 ```
 
 Let's take a look at the first layer 'bio1' which is Annual Mean Temperature. To do so, you can subset the layers of the SpatRaster with \$ or two sets of square brackets [ [ ] ].
@@ -317,11 +324,39 @@ Let's take a look at the first layer 'bio1' which is Annual Mean Temperature. To
 ``` r
 # Plot the first bio-climatic layer (e.g., bio1: Annual Mean Temperature)
 plot(worldclim_stack[["bio1"]], main = "Annual Mean Temperature (bio1)")
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 'worldclim_stack' not found
+```
+
+<img src="figures/nc_sp3_raster_bio1-1.png" alt="World map with Annual mean temperatures overlaid in blues, greens and yellows. Showing cooler poles and warmer equatorial regions."  />
+
+``` r
 
 # Summary statistics for each layer
 summary(worldclim_stack)
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'worldclim_stack' not found
+#> Warning: [summary] used a sample
+#>       bio1             bio2             bio3             bio4             bio5             bio6             bio7             bio8       
+#>  Min.   :-54.72   Min.   :-37.72   Min.   :-66.19   Min.   :   0.0   Min.   :   0.0   Min.   :  0.00   Min.   :  0.00   Min.   :   0.0  
+#>  1st Qu.:-22.81   1st Qu.:-10.58   1st Qu.:-34.22   1st Qu.: 110.0   1st Qu.:  28.0   1st Qu.:  0.00   1st Qu.: 41.41   1st Qu.:  56.0  
+#>  Median : -0.53   Median : 13.82   Median :-15.20   Median : 337.0   Median :  60.0   Median :  5.00   Median : 64.80   Median : 152.0  
+#>  Mean   : -4.05   Mean   :  7.19   Mean   :-13.90   Mean   : 550.3   Mean   :  93.5   Mean   : 15.39   Mean   : 74.63   Mean   : 241.8  
+#>  3rd Qu.: 19.02   3rd Qu.: 24.80   3rd Qu.: 12.13   3rd Qu.: 690.0   3rd Qu.: 112.0   3rd Qu.: 18.00   3rd Qu.:100.13   3rd Qu.: 298.0  
+#>  Max.   : 30.71   Max.   : 38.18   Max.   : 28.62   Max.   :7011.0   Max.   :1965.0   Max.   :471.00   Max.   :228.88   Max.   :4503.0  
+#>  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   
+#>       bio9             bio10            bio11            bio12           bio13            bio14            bio15            bio16       
+#>  Min.   :   0.00   Min.   :   0.0   Min.   :   0.0   Min.   : 1.00   Min.   :  9.65   Min.   :   0.0   Min.   :-29.60   Min.   :-72.40  
+#>  1st Qu.:   2.00   1st Qu.:   7.0   1st Qu.:  17.0   1st Qu.: 7.38   1st Qu.: 20.97   1st Qu.: 569.8   1st Qu.: -6.01   1st Qu.:-39.30  
+#>  Median :  23.00   Median : 107.0   Median :  47.0   Median : 9.34   Median : 26.57   Median : 897.1   Median : 21.53   Median :-21.61  
+#>  Mean   :  55.47   Mean   : 156.5   Mean   : 108.8   Mean   : 9.94   Mean   : 34.54   Mean   : 880.0   Mean   : 13.93   Mean   :-19.80  
+#>  3rd Qu.:  66.00   3rd Qu.: 225.0   3rd Qu.: 109.0   3rd Qu.:12.36   3rd Qu.: 45.35   3rd Qu.:1206.6   3rd Qu.: 31.35   3rd Qu.:  4.63  
+#>  Max.   :1477.00   Max.   :3159.0   Max.   :3849.0   Max.   :20.28   Max.   :100.00   Max.   :2342.4   Max.   : 47.95   Max.   : 26.20  
+#>  NA's   :65591     NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   
+#>      bio17           bio18            bio19       
+#>  Min.   : 1.00   Min.   :-66.19   Min.   :-54.26  
+#>  1st Qu.:26.11   1st Qu.:-26.12   1st Qu.:-24.25  
+#>  Median :33.38   Median : 10.69   Median : -9.26  
+#>  Mean   :33.72   Mean   : -0.93   Mean   : -5.38  
+#>  3rd Qu.:41.31   3rd Qu.: 21.46   3rd Qu.: 18.52  
+#>  Max.   :71.58   Max.   : 37.70   Max.   : 37.04  
+#>  NA's   :65591   NA's   :65591    NA's   :65591
 ```
 
 Convert the **species_occurences_summary**, which summarizes species occurrence by SiteCode, into a spatial object using the `st_as_sf` function:
@@ -337,7 +372,7 @@ Extract the bio-climatic variable values for each bird observation site, respect
 
 ``` r
 bioclim_values <- extract(worldclim_stack, cranes_sf)
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'worldclim_stack' not found
+#> Error in UseMethod("extract"): no applicable method for 'extract' applied to an object of class "SpatRaster"
 ```
 
 Then combine the bio-climatic values with the NatureCounts data.

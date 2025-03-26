@@ -73,7 +73,7 @@ Let's download all the environmental covariates and join them to a common datafr
 
 ``` r
 # List the dataframes
-env_covariates <- list.files(path = here::here("misc/data/env_covariates"),
+env_covariates <- list.files(path = here::here("misc/data/env_covariates"), # drop `here::here()` and paste appropriate path to your data
                              pattern = "\\.csv$", 
                              full.names = TRUE)
 
@@ -148,30 +148,22 @@ Retrieve basic summary info for the environmental data.
 
 ``` r
 summary(enviro_data_df)
-#>     point_id        elevation           ed              np        pland_needleleaf pland_broadleaf   pland_mixed_forest
-#>  Min.   :  1.00   Min.   :110.8   Min.   :104.8   Min.   :158.0   Min.   : 3.786   Min.   : 0.2404   Min.   :33.86     
-#>  1st Qu.: 60.75   1st Qu.:209.2   1st Qu.:123.6   1st Qu.:202.0   1st Qu.: 9.579   1st Qu.: 4.1029   1st Qu.:49.23     
-#>  Median :120.50   Median :266.6   Median :134.5   Median :236.5   Median :18.256   Median : 9.1959   Median :56.54     
-#>  Mean   :120.50   Mean   :271.6   Mean   :134.6   Mean   :245.0   Mean   :20.410   Mean   :12.1587   Mean   :54.79     
-#>  3rd Qu.:180.25   3rd Qu.:343.6   3rd Qu.:143.9   3rd Qu.:287.0   3rd Qu.:28.252   3rd Qu.:20.4434   3rd Qu.:61.10     
-#>  Max.   :240.00   Max.   :426.9   Max.   :168.7   Max.   :369.0   Max.   :55.681   Max.   :45.2773   Max.   :76.11     
-#>                                                                                                                        
-#>  pland_shrubland   pland_grassland   pland_wetland      pland_barren      pland_urban       pland_water           ndvi        
-#>  Min.   :0.02405   Min.   :0.01202   Min.   :0.01201   Min.   :0.01202   Min.   :0.01203   Min.   : 0.6377   Min.   :0.03471  
-#>  1st Qu.:0.22852   1st Qu.:0.09623   1st Qu.:0.01204   1st Qu.:0.01203   1st Qu.:0.11729   1st Qu.: 4.8373   1st Qu.:0.44175  
-#>  Median :0.52980   Median :0.22842   Median :0.03602   Median :0.01203   Median :0.42151   Median : 9.4500   Median :0.54457  
-#>  Mean   :1.31667   Mean   :0.24828   Mean   :0.03624   Mean   :0.01303   Mean   :0.56084   Mean   :10.5240   Mean   :0.50169  
-#>  3rd Qu.:2.05114   3rd Qu.:0.34302   3rd Qu.:0.05112   3rd Qu.:0.01204   3rd Qu.:0.61389   3rd Qu.:13.5206   3rd Qu.:0.60198  
-#>  Max.   :5.93750   Max.   :0.67356   Max.   :0.09627   Max.   :0.02404   Max.   :6.62260   Max.   :32.1897   Max.   :0.66887  
-#>                    NA's   :17        NA's   :164       NA's   :228                                                            
-#>    n_species      n_individuals  
-#>  Min.   : 1.000   Min.   : 1.00  
-#>  1st Qu.: 5.000   1st Qu.: 6.00  
-#>  Median : 8.000   Median :11.00  
-#>  Mean   : 9.108   Mean   :13.93  
-#>  3rd Qu.:11.250   3rd Qu.:19.00  
-#>  Max.   :24.000   Max.   :47.00  
-#> 
+#>     point_id        elevation           ed              np        pland_needleleaf pland_broadleaf   pland_mixed_forest pland_shrubland  
+#>  Min.   :  1.00   Min.   :110.8   Min.   :104.8   Min.   :158.0   Min.   : 3.786   Min.   : 0.2404   Min.   :33.86      Min.   :0.02405  
+#>  1st Qu.: 60.75   1st Qu.:209.2   1st Qu.:123.6   1st Qu.:202.0   1st Qu.: 9.579   1st Qu.: 4.1029   1st Qu.:49.23      1st Qu.:0.22852  
+#>  Median :120.50   Median :266.6   Median :134.5   Median :236.5   Median :18.256   Median : 9.1959   Median :56.54      Median :0.52980  
+#>  Mean   :120.50   Mean   :271.6   Mean   :134.6   Mean   :245.0   Mean   :20.410   Mean   :12.1587   Mean   :54.79      Mean   :1.31667  
+#>  3rd Qu.:180.25   3rd Qu.:343.6   3rd Qu.:143.9   3rd Qu.:287.0   3rd Qu.:28.252   3rd Qu.:20.4434   3rd Qu.:61.10      3rd Qu.:2.05114  
+#>  Max.   :240.00   Max.   :426.9   Max.   :168.7   Max.   :369.0   Max.   :55.681   Max.   :45.2773   Max.   :76.11      Max.   :5.93750  
+#>                                                                                                                                          
+#>  pland_grassland   pland_wetland      pland_barren      pland_urban       pland_water           ndvi           n_species      n_individuals  
+#>  Min.   :0.01202   Min.   :0.01201   Min.   :0.01202   Min.   :0.01203   Min.   : 0.6377   Min.   :0.03471   Min.   : 1.000   Min.   : 1.00  
+#>  1st Qu.:0.09623   1st Qu.:0.01204   1st Qu.:0.01203   1st Qu.:0.11729   1st Qu.: 4.8373   1st Qu.:0.44175   1st Qu.: 5.000   1st Qu.: 6.00  
+#>  Median :0.22842   Median :0.03602   Median :0.01203   Median :0.42151   Median : 9.4500   Median :0.54457   Median : 8.000   Median :11.00  
+#>  Mean   :0.24828   Mean   :0.03624   Mean   :0.01303   Mean   :0.56084   Mean   :10.5240   Mean   :0.50169   Mean   : 9.108   Mean   :13.93  
+#>  3rd Qu.:0.34302   3rd Qu.:0.05112   3rd Qu.:0.01204   3rd Qu.:0.61389   3rd Qu.:13.5206   3rd Qu.:0.60198   3rd Qu.:11.250   3rd Qu.:19.00  
+#>  Max.   :0.67356   Max.   :0.09627   Max.   :0.02404   Max.   :6.62260   Max.   :32.1897   Max.   :0.66887   Max.   :24.000   Max.   :47.00  
+#>  NA's   :17        NA's   :164       NA's   :228
 ```
 
 Create a scatterplot matrix to assess the collinearity of the variables.
@@ -238,10 +230,6 @@ ggplot(species_rank, aes(x = reorder(english_name, rank), y = total_abundance)) 
   theme(
     axis.text.x = element_text(size = 8, angle = 60, hjust = 1)
   )
-#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-#> ℹ Please use `linewidth` instead.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
 ```
 
 <img src="figures/nc_sp7_speciesrank_plot-1.png" alt="Plot shows the ranked relative abundance of the most dominant species across La Mauricie park"  />

@@ -61,8 +61,7 @@ This tutorial uses the following spatial data:
 Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
 
 
-``` r
-mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"))
+```
 #> Reading layer `mauricie_boundary' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\boundary\mauricie_boundary.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 1 feature and 9 fields
 #> Geometry type: POLYGON
@@ -71,13 +70,20 @@ mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.sh
 #> Geodetic CRS:  WGS 84
 ```
 
+``` r
+mauricie_boundary <- st_read("path/to/your/mauricie_boundary.shp")
+```
+
 To read in the land cover dataset, navigate to [2015 Land Cover of Canada](https://open.canada.ca/data/en/dataset/4e615eae-b90c-420b-adee-2ca35896caf6), scroll down to **Data and Resources** and select the TIFF file to download by clicking "Go to resource". Extract the data download and save the file to your `data` subdirectory before applying `terra::rast()`.
+
 
 
 ``` r
 # set the path to your landcover data
-landcover <- rast(here::here("misc/data/landcover-2015-classification.tif"))
+landcover <- rast("path/to/your/landcover-2015-classification.tif")
+```
 
+``` r
 print(landcover)
 #> class       : SpatRaster 
 #> dimensions  : 160001, 190001, 1  (nrow, ncol, nlyr)
@@ -236,10 +242,7 @@ Read in the NatureCounts data you saved from [Chapter 4: Elevation Data](04-Elev
 
 
 ``` r
-mauricie_birds_df <- read.csv(here::here("misc/data/mauricie_birds_df.csv")
-#> Error: <text>:2:0: unexpected end of input
-#> 1: mauricie_birds_df <- read.csv(here::here("misc/data/mauricie_birds_df.csv")
-#>    ^
+mauricie_birds_df <- read.csv(here::here("misc/data/mauricie_birds_df.csv"))
 ```
 
 **Note: The land cover data (2015) represents a static environmental variable in this scenario. Here, we assume that land cover within the National Park did not change drastically across the survey years (2011 - 2014).**
@@ -500,6 +503,7 @@ landscape_metrics_df <- mauricie_birds_sf %>%
   distinct(point_id, .keep_all = TRUE) %>%  # Ensure no duplicates based on point_id, but keep all columns
   left_join(lsm_landscape, by = "point_id") %>%
   select(point_id, ed, np)  # Keep point_id, ed, and np columns
+#> Error in select(., point_id, ed, np): unused arguments (point_id, ed, np)
 ```
 
 Append the class level PLAND metric values and keep the `point_id` column.
