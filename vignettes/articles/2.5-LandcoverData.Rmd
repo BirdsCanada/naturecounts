@@ -61,14 +61,6 @@ This tutorial uses the following spatial data:
 Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
 
 
-```
-#> Reading layer `mauricie_boundary' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\boundary\mauricie_boundary.shp' using driver `ESRI Shapefile'
-#> Simple feature collection with 1 feature and 9 fields
-#> Geometry type: POLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: -73.17948 ymin: 46.64563 xmax: -72.76572 ymax: 46.91888
-#> Geodetic CRS:  WGS 84
-```
 
 ``` r
 mauricie_boundary <- st_read("path/to/your/mauricie_boundary.shp")

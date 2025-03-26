@@ -68,7 +68,7 @@ Move the files from your Downloads to the `nationalparks` subdirectory before ap
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 # specify the path to your shapefile
-national_parks <- st_read(here::here("misc/data/nationalparks/vw_Places_Public_lieux_public_APCA.shp")) 
+national_parks <- st_read(here::here("misc/data/nationalparks/vw_Places_Public_lieux_public_APCA.shp"), quiet = TRUE) 
 ```
 ```{r, eval = FALSE}
 # specify the path to your shapefile
