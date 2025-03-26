@@ -247,20 +247,19 @@ dataset:</p>
 <code class="sourceCode R"><span><span class="fu">stations</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; The stations data frame hasn't been updated in over 4 weeks. Consider running `stations_dl()` to check for updates and make sure you have the most recent stations list available</span></span>
 <span><span class="co">#&gt; # A tibble: 26,382 × 16</span></span>
-<span><span class="co">#&gt;    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz     interval start   end normals normals_1981_2010</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt;            </span></span>
-<span><span class="co">#&gt;  1 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/G… day       1908  1922 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  2 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/G… hour        NA    NA FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  3 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/G… month     1908  1922 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  4 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/G… day       1978  1979 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  5 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/G… hour        NA    NA FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  6 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/G… month     1978  1979 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  7 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/G… day       1987  1990 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  8 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/G… hour        NA    NA FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  9 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/G… month     1987  1990 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt; 10 AB    GOLDEN VALLEY             1798 301B8LR        NA &lt;NA&gt;   53.2 -110.  640  Etc/G… day       1987  1998 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt; # ℹ 26,372 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 1 more variable: normals_1971_2000 &lt;lgl&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt;    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz    interval start   end normals normals_1981_2010 normals_1971_2000</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt;             &lt;lgl&gt;            </span></span>
+<span><span class="co">#&gt;  1 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/… day       1908  1922 FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt;  2 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/… hour        NA    NA FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt;  3 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/… month     1908  1922 FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt;  4 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/… day       1978  1979 FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt;  5 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/… hour        NA    NA FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt;  6 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/… month     1978  1979 FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt;  7 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/… day       1987  1990 FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt;  8 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/… hour        NA    NA FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt;  9 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/… month     1987  1990 FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt; 10 AB    GOLDEN VALLEY             1798 301B8LR        NA &lt;NA&gt;   53.2 -110.  640  Etc/… day       1987  1998 FALSE   FALSE             FALSE            </span></span>
+<span><span class="co">#&gt; # ℹ 26,372 more rows</span></span></code></pre></div>
 <p>You are ready to download weather data! For the purpose of this
 tutorial, let’s perform a smaller weather data download by specifying
 specific station IDs. The weather stations closest to Wood Buffalo
@@ -387,12 +386,21 @@ all the files in the raster stack by specifying the path to your folder
 <code>rast</code> function.</p>
 <p>This code will get the path to your working directory.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "C:/Users/dimit/Birds Canada/naturecounts/vignettes/articles"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Now point the <code>list.file</code> to this directory using the
 sample code below.</p>
-<pre><code><span><span class="co">#&gt; Error: [rast] filename is empty. Provide a valid filename</span></span>
-<span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'worldclim_stack' not found</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; class       : SpatRaster </span></span>
+<span><span class="co">#&gt; dimensions  : 1080, 2160, 19  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; resolution  : 0.1666667, 0.1666667  (x, y)</span></span>
+<span><span class="co">#&gt; extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span></span>
+<span><span class="co">#&gt; sources     : wc2.1_10m_bio_1.tif  </span></span>
+<span><span class="co">#&gt;               wc2.1_10m_bio_10.tif  </span></span>
+<span><span class="co">#&gt;               wc2.1_10m_bio_11.tif  </span></span>
+<span><span class="co">#&gt;               ... and 16 more source(s)</span></span>
+<span><span class="co">#&gt; names       : wc2.1~bio_1, wc2.1~io_10, wc2.1~io_11, wc2.1~io_12, wc2.1~io_13, wc2.1~io_14, ... </span></span>
+<span><span class="co">#&gt; min values  :   -54.72435,   -37.78142,   -66.31125,           0,           0,           0, ... </span></span>
+<span><span class="co">#&gt; max values  :    30.98764,    38.21617,    29.15299,       11191,        2381,         484, ...</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">worldclim_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"YOUR/PATH/HERE"</span>, pattern <span class="op">=</span> <span class="st">"\\.tif$"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -405,39 +413,63 @@ sample code below.</p>
 has been read into R successfully. We can simplify the layer names which
 represent each variable, respectively:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"bio"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error: object 'worldclim_stack' not found</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"bio"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s take a look at the first layer ‘bio1’ which is Annual Mean
 Temperature. To do so, you can subset the layers of the SpatRaster with
 $ or two sets of square brackets [ [ ] ].</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the first bio-climatic layer (e.g., bio1: Annual Mean Temperature)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">[[</span><span class="st">"bio1"</span><span class="op">]</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"Annual Mean Temperature (bio1)"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'plot': object 'worldclim_stack' not found</span></span>
-<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">[[</span><span class="st">"bio1"</span><span class="op">]</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"Annual Mean Temperature (bio1)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="figures%2Fnc_sp3_raster_bio1-1.png" alt="World map with Annual mean temperatures overlaid in blues, greens and yellows. Showing cooler poles and warmer equatorial regions."></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Summary statistics for each layer</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'worldclim_stack' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: [summary] used a sample</span></span>
+<span><span class="co">#&gt;       bio1             bio2             bio3             bio4             bio5             bio6             bio7             bio8       </span></span>
+<span><span class="co">#&gt;  Min.   :-54.72   Min.   :-37.72   Min.   :-66.19   Min.   :   0.0   Min.   :   0.0   Min.   :  0.00   Min.   :  0.00   Min.   :   0.0  </span></span>
+<span><span class="co">#&gt;  1st Qu.:-22.81   1st Qu.:-10.58   1st Qu.:-34.22   1st Qu.: 110.0   1st Qu.:  28.0   1st Qu.:  0.00   1st Qu.: 41.41   1st Qu.:  56.0  </span></span>
+<span><span class="co">#&gt;  Median : -0.53   Median : 13.82   Median :-15.20   Median : 337.0   Median :  60.0   Median :  5.00   Median : 64.80   Median : 152.0  </span></span>
+<span><span class="co">#&gt;  Mean   : -4.05   Mean   :  7.19   Mean   :-13.90   Mean   : 550.3   Mean   :  93.5   Mean   : 15.39   Mean   : 74.63   Mean   : 241.8  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 19.02   3rd Qu.: 24.80   3rd Qu.: 12.13   3rd Qu.: 690.0   3rd Qu.: 112.0   3rd Qu.: 18.00   3rd Qu.:100.13   3rd Qu.: 298.0  </span></span>
+<span><span class="co">#&gt;  Max.   : 30.71   Max.   : 38.18   Max.   : 28.62   Max.   :7011.0   Max.   :1965.0   Max.   :471.00   Max.   :228.88   Max.   :4503.0  </span></span>
+<span><span class="co">#&gt;  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   </span></span>
+<span><span class="co">#&gt;       bio9             bio10            bio11            bio12           bio13            bio14            bio15            bio16       </span></span>
+<span><span class="co">#&gt;  Min.   :   0.00   Min.   :   0.0   Min.   :   0.0   Min.   : 1.00   Min.   :  9.65   Min.   :   0.0   Min.   :-29.60   Min.   :-72.40  </span></span>
+<span><span class="co">#&gt;  1st Qu.:   2.00   1st Qu.:   7.0   1st Qu.:  17.0   1st Qu.: 7.38   1st Qu.: 20.97   1st Qu.: 569.8   1st Qu.: -6.01   1st Qu.:-39.30  </span></span>
+<span><span class="co">#&gt;  Median :  23.00   Median : 107.0   Median :  47.0   Median : 9.34   Median : 26.57   Median : 897.1   Median : 21.53   Median :-21.61  </span></span>
+<span><span class="co">#&gt;  Mean   :  55.47   Mean   : 156.5   Mean   : 108.8   Mean   : 9.94   Mean   : 34.54   Mean   : 880.0   Mean   : 13.93   Mean   :-19.80  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:  66.00   3rd Qu.: 225.0   3rd Qu.: 109.0   3rd Qu.:12.36   3rd Qu.: 45.35   3rd Qu.:1206.6   3rd Qu.: 31.35   3rd Qu.:  4.63  </span></span>
+<span><span class="co">#&gt;  Max.   :1477.00   Max.   :3159.0   Max.   :3849.0   Max.   :20.28   Max.   :100.00   Max.   :2342.4   Max.   : 47.95   Max.   : 26.20  </span></span>
+<span><span class="co">#&gt;  NA's   :65591     NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   </span></span>
+<span><span class="co">#&gt;      bio17           bio18            bio19       </span></span>
+<span><span class="co">#&gt;  Min.   : 1.00   Min.   :-66.19   Min.   :-54.26  </span></span>
+<span><span class="co">#&gt;  1st Qu.:26.11   1st Qu.:-26.12   1st Qu.:-24.25  </span></span>
+<span><span class="co">#&gt;  Median :33.38   Median : 10.69   Median : -9.26  </span></span>
+<span><span class="co">#&gt;  Mean   :33.72   Mean   : -0.93   Mean   : -5.38  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:41.31   3rd Qu.: 21.46   3rd Qu.: 18.52  </span></span>
+<span><span class="co">#&gt;  Max.   :71.58   Max.   : 37.70   Max.   : 37.04  </span></span>
+<span><span class="co">#&gt;  NA's   :65591   NA's   :65591    NA's   :65591</span></span></code></pre></div>
 <p>Convert the <strong>species_occurences_summary</strong>, which
 summarizes species occurrence by SiteCode, into a spatial object using
 the <code>st_as_sf</code> function:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cranes_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">species_occurrence_summary</span>,</span>
 <span>                      coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
 <p>Extract the bio-climatic variable values for each bird observation
 site, respectively.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bioclim_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">worldclim_stack</span>, <span class="va">cranes_sf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'worldclim_stack' not found</span></span></code></pre></div>
-<p>Then combine the bio-climatic values with the NatureCounts data.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bioclim_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">worldclim_stack</span>, <span class="va">cranes_sf</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in UseMethod("extract"): no applicable method for 'extract' applied to an object of class "SpatRaster"</span></span></code></pre></div>
+<p>Then combine the bio-climatic values with the NatureCounts data.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">cranes_sf</span>, <span class="va">bioclim_values</span>, </span>
 <span>                      longitude <span class="op">=</span> <span class="va">species_occurrence_summary</span><span class="op">$</span><span class="va">longitude</span>, </span>
 <span>                      latitude <span class="op">=</span>  <span class="va">species_occurrence_summary</span><span class="op">$</span><span class="va">latitude</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'bioclim_values' not found</span></span></code></pre></div>
 <p>Filter the data to only include observations made post 1970 to match
 the temporal resolution of the climate dataset:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="va">bioclim_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="st">"1970"</span><span class="op">)</span></span>
@@ -446,7 +478,7 @@ the temporal resolution of the climate dataset:</p>
 <span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'bioclim_data' not found</span></span></code></pre></div>
 <p>Visualize the distribution of <strong>bio1</strong> compared to
 <strong>total_count</strong>:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scatter plot of bird observations against a bioclimatic variable (bio1 = Annual Mean Temperature)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bioclim_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bio1</span>, y <span class="op">=</span> <span class="va">total_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
@@ -459,11 +491,11 @@ the temporal resolution of the climate dataset:</p>
 <strong>SiteCode</strong>, sizing the points by
 <strong>total_count</strong> and colorizing them by a bio-climatic
 variable (<strong>bio1</strong>):</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">bioclim_data</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'bioclim_data' not found</span></span></code></pre></div>
 <p>To make an interactive map of total counts per site.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Group by SiteCode and summarize total_count</span></span>
 <span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="va">bioclim_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>

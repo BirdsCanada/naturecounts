@@ -155,25 +155,25 @@ Land Cover of Canada</a> - Land Cover map (30 m resolution)</p></li>
 <h2 id="id_5-1DataSetup">5.1 Data Setup<a class="anchor" aria-label="anchor" href="#id_5-1DataSetup"></a>
 </h2>
 <p>Read in the National Park boundary you saved or downloaded from <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mauricie_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"misc/data/boundary/mauricie_boundary.shp"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reading layer `mauricie_boundary' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\boundary\mauricie_boundary.shp' using driver `ESRI Shapefile'</span></span>
+<pre><code><span><span class="co">#&gt; Reading layer `mauricie_boundary' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\boundary\mauricie_boundary.shp' using driver `ESRI Shapefile'</span></span>
 <span><span class="co">#&gt; Simple feature collection with 1 feature and 9 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: -73.17948 ymin: 46.64563 xmax: -72.76572 ymax: 46.91888</span></span>
-<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span></code></pre></div>
+<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mauricie_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"path/to/your/mauricie_boundary.shp"</span><span class="op">)</span></span></code></pre></div>
 <p>To read in the land cover dataset, navigate to <a href="https://open.canada.ca/data/en/dataset/4e615eae-b90c-420b-adee-2ca35896caf6" class="external-link">2015
 Land Cover of Canada</a>, scroll down to <strong>Data and
 Resources</strong> and select the TIFF file to download by clicking “Go
 to resource”. Extract the data download and save the file to your
 <code>data</code> subdirectory before applying
 <code><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">terra::rast()</a></code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set the path to your landcover data</span></span>
-<span><span class="va">landcover</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"misc/data/landcover-2015-classification.tif"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">landcover</span><span class="op">)</span></span>
+<span><span class="va">landcover</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="st">"path/to/your/landcover-2015-classification.tif"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">landcover</span><span class="op">)</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
 <span><span class="co">#&gt; dimensions  : 160001, 190001, 1  (nrow, ncol, nlyr)</span></span>
 <span><span class="co">#&gt; resolution  : 30, 30  (x, y)</span></span>
@@ -184,7 +184,7 @@ to resource”. Extract the data download and save the file to your
 <span><span class="co">#&gt; name        : Canada2015</span></span></code></pre></div>
 <p>Transform the coordinate reference system (crs) of the National Park
 boundary to match that of the land cover dataset.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_boundary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">landcover</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -197,7 +197,7 @@ the <code>terra</code> package which uses the SpatVector format. Here,
 we crop the extent of the land cover raster to the extent of the
 National Park. To do this we need to convert the National Park Boundary
 to a SpatVector using <code><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect()</a></code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">landcover_crop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="va">landcover</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">landcover_crop</span><span class="op">)</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
@@ -217,7 +217,7 @@ covered by a vector.</p>
 can apply the <code><a href="https://rspatial.github.io/terra/reference/mask.html" class="external-link">mask()</a></code> function from the <code>terra</code>
 package which also uses the SpatVector format. This will apply NA values
 to all cells outside the extent of the National Park.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">landcover_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/mask.html" class="external-link">mask</a></span><span class="op">(</span><span class="va">landcover_crop</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">landcover_mask</span><span class="op">)</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
@@ -233,7 +233,7 @@ to all cells outside the extent of the National Park.</p>
 <span><span class="co">#&gt; max value   :         18</span></span></code></pre></div>
 <p>Visualize the cropped and masked land cover rasters with a two-panel
 plot.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set up the plot area for 1 row and 2 columns</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -249,7 +249,7 @@ plot.</p>
 <span><span class="co"># Add National Park boundary</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span>, col <span class="op">=</span> <span class="cn">NA</span>, border <span class="op">=</span><span class="st">"purple"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp5_masked_landcover-1.png" alt="Two-panel plot visualizing the cropped and masked land cover rasters"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Reset plotting layout to default</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -261,7 +261,7 @@ Drive data folder</strong></a> for your convenience in the subfolder
 labeled <strong>mauricie</strong>.</p>
 <p>To execute this code chunk, remove the # and make sure to specify the
 file format (.tif) in the output path</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># output_dir &lt;- "path/to/your/subdirectory/data/landcover_mask.tif" # include the masked raster name and '.tif' argument </span></span>
 <span></span>
 <span><span class="co"># writeRaster(landcover_mask, output_dir, overwrite = TRUE)</span></span></code></pre></div>
@@ -276,7 +276,7 @@ error.</p>
 <p>To assign the appropriate labels to each land cover class, refer to
 the [Class Index](<a href="https://open.canada.ca/data/en/dataset/ee1580ab-a23d-4f86-a09b-79763677eb47/resource/b8411562-49b7-4cf6-ac61-dbb893b182cc" class="external-link uri">https://open.canada.ca/data/en/dataset/ee1580ab-a23d-4f86-a09b-79763677eb47/resource/b8411562-49b7-4cf6-ac61-dbb893b182cc</a><a href="https://open.canada.ca/data/en/dataset/ee1580ab-a23d-4f86-a09b-79763677eb47/resource/b8411562-49b7-4cf6-ac61-dbb893b182cc" class="external-link">)</a>)
 and use the <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when()</a></code> function.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">landcover_mask_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">landcover_mask</span>, xy <span class="op">=</span> <span class="cn">TRUE</span>, cells <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">landcover_mask_df</span><span class="op">$</span><span class="va">Canada2015</span><span class="op">)</span><span class="op">)</span> <span class="co"># determine unique land cover class values in the cropped dataset</span></span>
@@ -299,7 +299,7 @@ and use the <code><a href="https://dplyr.tidyverse.org/reference/case_when.html"
 <span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Now we can plot the cropped land cover raster with meaningful names
 using <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">land_cover_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, fill <span class="op">=</span> <span class="va">landcover_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
@@ -324,22 +324,20 @@ neighborhood.</p>
 <p>Read in the NatureCounts data you saved from <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a> or downloaded
 from the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
 Drive data folder</strong></a>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>mauricie_birds_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"misc/data/mauricie_birds_df.csv"</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; Error: &lt;text&gt;:2:0: unexpected end of input</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; 1: mauricie_birds_df &lt;- read.csv(here::here("misc/data/mauricie_birds_df.csv")</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt;    ^</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mauricie_birds_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"misc/data/mauricie_birds_df.csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Note: The land cover data (2015) represents a static
 environmental variable in this scenario. Here, we assume that land cover
 within the National Park did not change drastically across the survey
 years (2011 - 2014).</strong></p>
 <p>Create an <code>sf</code> object from the NatureCounts data that
 represents the unique point count locations.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_birds_local</span> <span class="op">&lt;-</span> <span class="va">mauricie_birds_df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span>coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> </span></code></pre></div>
 <p>Assign a point id identifier to each location based on its unique
 geometry.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_birds_local</span> <span class="op">&lt;-</span> <span class="va">mauricie_birds_local</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">geometry</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>point_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_group_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -350,7 +348,7 @@ geometry.</p>
 <p>Use the <code>st_buffer</code> function to generate 3 km diameter
 circular neighborhoods (or 1.5 km radius) centered at each observation
 location.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_birds_buffer</span> <span class="op">&lt;-</span> <span class="va">mauricie_birds_local</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_buffer</a></span><span class="op">(</span>dist <span class="op">=</span> <span class="fu"><a href="https://r-quantities.github.io/units/reference/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="st">"km"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -388,7 +386,7 @@ the 4-neighbour or 8-neighbour rules.</p>
 <p>For each point buffer, crop and mask the land cover data and
 calculate the class-level PLAND and ED. We will do this using a
 <code>for</code> loop and store the result in a dataframe.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lsm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mauricie_birds_buffer</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -409,7 +407,7 @@ calculate the class-level PLAND and ED. We will do this using a
 <p>Add land cover class labels to the dataframe containing the
 calculated landscape metrics. Ensure that both columns are the same data
 type (factor).</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define the land cover class labels </span></span>
 <span><span class="va">lc_classes</span> <span class="op">&lt;-</span> <span class="va">land_cover_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Canada2015</span>, <span class="va">landcover_name</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -419,7 +417,7 @@ type (factor).</p>
 <span><span class="va">lsm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">lc_classes</span>, <span class="va">lsm</span>, by <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span></code></pre></div>
 <p>Create a PLAND column for each land cover type, associated with each
 <code>point_id</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pland_values</span> <span class="op">&lt;-</span> <span class="va">lsm</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">metric</span> <span class="op">==</span> <span class="st">"pland"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>                      <span class="co"># Filter for 'pland' metric</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">point_id</span>, <span class="va">landcover_name</span>, <span class="va">value</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>        <span class="co"># Keep relevant columns</span></span>
@@ -433,7 +431,7 @@ point buffer, hence why some rows might be populated with NA
 values.</strong></p>
 <p>Calculate the mean class-level PLAND and ED across all point
 buffers.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lsm_mean</span> <span class="op">&lt;-</span> <span class="va">lsm</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">landcover_name</span>, <span class="va">metric</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mean_value <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> </span>
@@ -462,7 +460,7 @@ buffers.</p>
 <span><span class="co">#&gt; 17 wetland        ed         0.400 </span></span>
 <span><span class="co">#&gt; 18 wetland        pland      0.0362</span></span></code></pre></div>
 <p>Compare the mean class-level PLAND and ED values.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot mean PLAND and ED for each landcover class</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">lsm_mean</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">landcover_name</span>, y <span class="op">=</span> <span class="va">mean_value</span>, color <span class="op">=</span> <span class="va">metric</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span>, alpha <span class="op">=</span> <span class="fl">0.8</span>, position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html" class="external-link">position_dodge</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -480,7 +478,7 @@ all point buffers. This class also has the highest edge density.</p>
 </blockquote>
 <p>Calculate the landscape-level ED and NP for each point buffer. Store
 the result in a dataframe.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lsm_landscape</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mauricie_birds_buffer</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -514,24 +512,24 @@ you interpret results.</strong></p>
 <p>Create a spatial dataframe from the NatureCounts data and join the
 unique point_id from the buffer geometry to the NatureCounts data by
 latitude and longitude using <code>st_join</code>.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_birds_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">mauricie_birds_df</span>, </span>
 <span>                        coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>    <span class="co"># convert to sf object</span></span>
 <span></span>
 <span><span class="va">mauricie_birds_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html" class="external-link">st_join</a></span><span class="op">(</span><span class="va">mauricie_birds_sf</span>, <span class="va">mauricie_birds_local</span>, join <span class="op">=</span> <span class="va">st_intersects</span><span class="op">)</span></span></code></pre></div>
 <p>Transform the CRS of the National Park boundary to match the
 NatureCounts data.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_boundary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">mauricie_birds_sf</span><span class="op">)</span><span class="op">)</span> <span class="co"># match the CRS</span></span></code></pre></div>
 <p>Summarize the NatureCounts data for mapping. Here we will determine
 the number of species observed at each site.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Group by point_id and summarize total_count</span></span>
 <span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="va">mauricie_birds_sf</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">point_id</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">point_id</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># Filter out NA values</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n_species <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">english_name</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Next we can map both the NatureCounts and land cover data.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Match the CRS</span></span>
 <span><span class="va">mauricie_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_boundary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">landcover</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
@@ -563,15 +561,16 @@ the number of species observed at each site.</p>
 <p>Convert the NatureCounts data back to a regular dataframe called
 <code>landscape_metrics_df</code>, now labeled by point_id, and append
 the landscape-level metrics we calculated in the <a href="#id_5.4LandscapeMetrics">previous section</a>.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">landscape_metrics_df</span> <span class="op">&lt;-</span> <span class="va">mauricie_birds_sf</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">point_id</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># Ensure no duplicates based on point_id, but keep all columns</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">lsm_landscape</span>, by <span class="op">=</span> <span class="st">"point_id"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">point_id</span>, <span class="va">ed</span>, <span class="va">np</span><span class="op">)</span>  <span class="co"># Keep point_id, ed, and np columns</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">point_id</span>, <span class="va">ed</span>, <span class="va">np</span><span class="op">)</span>  <span class="co"># Keep point_id, ed, and np columns</span></span>
+<span><span class="co">#&gt; Error in select(., point_id, ed, np): unused arguments (point_id, ed, np)</span></span></code></pre></div>
 <p>Append the class level PLAND metric values and keep the
 <code>point_id</code> column.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">landscape_metrics_df</span> <span class="op">&lt;-</span> <span class="va">landscape_metrics_df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">pland_values</span>, by <span class="op">=</span> <span class="st">"point_id"</span><span class="op">)</span></span></code></pre></div>
 <p>OPTIONAL: To save the landscape metrics data as a <em>.csv</em> to
@@ -584,12 +583,12 @@ Drive data folder</strong></a> for your convenience.</p>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
 </blockquote>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># write.csv(landscape_metrics_df , "data/env_covariates/landscape_metrics_df.csv", row.names = FALSE)</span></span></code></pre></div>
 <p>Now let’s combine the landscape-level metrics you derived with the
 NatureCounts summary data to assess how the landscape composition and
 configuration might influence species diversity.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Join the landscape metrics with the NatureCounts summary data</span></span>
 <span><span class="va">lsm_sitesum_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span>, <span class="va">landscape_metrics_df</span>, by <span class="op">=</span> <span class="st">"point_id"</span><span class="op">)</span></span>
 <span></span>
@@ -603,7 +602,7 @@ configuration might influence species diversity.</p>
 <span>       y <span class="op">=</span> <span class="st">"Number of Species"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp5_richness_plots_landcover-1.png" alt="Plot explores the relationship between species richness and landscape metrics"></p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># n_species vs. number of patches (NP)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">lsm_sitesum_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">np</span>, y <span class="op">=</span> <span class="va">n_species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
