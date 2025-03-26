@@ -68,7 +68,7 @@ This tutorial uses the following spatial data:
 Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"))
+mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"), quiet = TRUE)
 ```
 ```{r, eval = FALSE}
 mauricie_boundary <- st_read("path/to/your/mauricie_boundary.shp")

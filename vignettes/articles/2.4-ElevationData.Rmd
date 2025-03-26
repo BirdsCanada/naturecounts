@@ -61,16 +61,6 @@ dir.create("data/nationalparks", recursive = TRUE)
 Move the files from your Downloads to the `nationalparks` subdirectory before applying the `st_read()` function.
 
 
-```
-#> Reading layer `vw_Places_Public_lieux_public_APCA' from data source 
-#>   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
-#> Simple feature collection with 52 features and 9 fields
-#> Geometry type: MULTIPOLYGON
-#> Dimension:     XY, XYZ
-#> Bounding box:  xmin: -141.0019 ymin: 41.68134 xmax: -53.68772 ymax: 83.15114
-#> z_range:       zmin: 0 zmax: 0
-#> Geodetic CRS:  WGS 84
-```
 
 ``` r
 # specify the path to your shapefile
@@ -273,7 +263,7 @@ print(dtm_mosaic)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) 
-#> source      : spat_290025363012_10496.tif 
+#> source      : spat_60807fd919bf_24704.tif 
 #> varname     : MNT_31I10NO 
 #> name        :  Band_1 
 #> min value   : 102.277 
@@ -450,7 +440,6 @@ elevation_values_df <- elevation_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unable to find an inherited method for function 'select' for signature '"sf"'
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.

@@ -90,8 +90,11 @@ env_covariates_df <- Reduce(function(x, y) left_join(x, y, by = "point_id"), env
 
 Read in the NatureCounts data you downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or the [Google Drive](https://drive.google.com/file/d/1ZDo4OUaxqtHuaM1CaGD7BfFGMg1JzOqv/view?usp=drive_link). This file should be in your `data` folder.
 
-```{r, warning = FALSE, message = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
 mauricie_birds_df <- read_csv(here::here("misc/data/mauricie_birds_df.csv")) 
+```
+```{r, eval = FALSE}
+mauricie_birds_df <- read_csv(path/to/your/mauricie_birds_df.csv")) 
 ```
 
 Create an `sf` object from the NatureCounts data that represents the unique point count locations.

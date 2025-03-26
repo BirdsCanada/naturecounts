@@ -87,8 +87,9 @@ env_covariates_df <- Reduce(function(x, y) left_join(x, y, by = "point_id"), env
 Read in the NatureCounts data you downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or the [Google Drive](https://drive.google.com/file/d/1ZDo4OUaxqtHuaM1CaGD7BfFGMg1JzOqv/view?usp=drive_link). This file should be in your `data` folder.
 
 
+
 ``` r
-mauricie_birds_df <- read_csv(here::here("misc/data/mauricie_birds_df.csv")) 
+mauricie_birds_df <- read_csv(path/to/your/mauricie_birds_df.csv")) 
 ```
 
 Create an `sf` object from the NatureCounts data that represents the unique point count locations.
@@ -230,6 +231,10 @@ ggplot(species_rank, aes(x = reorder(english_name, rank), y = total_abundance)) 
   theme(
     axis.text.x = element_text(size = 8, angle = 60, hjust = 1)
   )
+#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+#> ℹ Please use `linewidth` instead.
+#> This warning is displayed once every 8 hours.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
 ```
 
 <img src="figures/nc_sp7_speciesrank_plot-1.png" alt="Plot shows the ranked relative abundance of the most dominant species across La Mauricie park"  />
