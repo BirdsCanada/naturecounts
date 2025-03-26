@@ -60,14 +60,15 @@ library(weathercan)
 # 3.1 Data Setup
 
 
-
-
+``` r
+collections <- meta_collections() 
+View(meta_collections())
 ```
-#> # A tibble: 2 × 5
-#>   species_id scientific_name                      english_name                       french_name                         taxon_group
-#>        <int> <chr>                                <chr>                              <chr>                               <chr>      
-#> 1       4030 Grus americana                       Whooping Crane                     Grue blanche                        BIRDS      
-#> 2      43080 Antigone canadensis x Grus americana Sandhill x Whooping Crane (hybrid) Hybride Grue du Canada x G. blanche BIRDS
+
+
+``` r
+search_species("whooping crane")
+View(search_species("whooping crane"))
 ```
 
 To download the NatureCounts data, you can specify the collection and species code relevant to your research. Replace `testuser` with your user name.
@@ -132,18 +133,18 @@ First, let's take a look at the built in **stations** dataset:
 stations()
 #> The stations data frame hasn't been updated in over 4 weeks. Consider running `stations_dl()` to check for updates and make sure you have the most recent stations list available
 #> # A tibble: 26,382 × 16
-#>    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz    interval start   end normals normals_1981_2010 normals_1971_2000
-#>    <chr> <chr>                    <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr> <chr>    <dbl> <dbl> <lgl>   <lgl>             <lgl>            
-#>  1 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… day       1908  1922 FALSE   FALSE             FALSE            
-#>  2 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… hour        NA    NA FALSE   FALSE             FALSE            
-#>  3 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/… month     1908  1922 FALSE   FALSE             FALSE            
-#>  4 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… day       1978  1979 FALSE   FALSE             FALSE            
-#>  5 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… hour        NA    NA FALSE   FALSE             FALSE            
-#>  6 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/… month     1978  1979 FALSE   FALSE             FALSE            
-#>  7 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… day       1987  1990 FALSE   FALSE             FALSE            
-#>  8 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… hour        NA    NA FALSE   FALSE             FALSE            
-#>  9 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/… month     1987  1990 FALSE   FALSE             FALSE            
-#> 10 AB    GOLDEN VALLEY             1798 301B8LR        NA <NA>   53.2 -110.  640  Etc/… day       1987  1998 FALSE   FALSE             FALSE            
+#>    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz        interval start   end normals normals_1981_2010 normals_1971_2000
+#>    <chr> <chr>                    <dbl> <chr>       <dbl> <chr> <dbl> <dbl> <dbl> <chr>     <chr>    <dbl> <dbl> <lgl>   <lgl>             <lgl>            
+#>  1 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GMT+7 day       1908  1922 FALSE   FALSE             FALSE            
+#>  2 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            
+#>  3 AB    DAYSLAND                  1795 301AR54        NA <NA>   52.9 -112.  689. Etc/GMT+7 month     1908  1922 FALSE   FALSE             FALSE            
+#>  4 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GMT+7 day       1978  1979 FALSE   FALSE             FALSE            
+#>  5 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            
+#>  6 AB    EDMONTON CORONATION       1796 301BK03        NA <NA>   53.6 -114.  671. Etc/GMT+7 month     1978  1979 FALSE   FALSE             FALSE            
+#>  7 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/GMT+7 day       1987  1990 FALSE   FALSE             FALSE            
+#>  8 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/GMT+7 hour        NA    NA FALSE   FALSE             FALSE            
+#>  9 AB    FLEET                     1797 301B6L0        NA <NA>   52.2 -112.  838. Etc/GMT+7 month     1987  1990 FALSE   FALSE             FALSE            
+#> 10 AB    GOLDEN VALLEY             1798 301B8LR        NA <NA>   53.2 -110.  640  Etc/GMT+7 day       1987  1998 FALSE   FALSE             FALSE            
 #> # ℹ 26,372 more rows
 ```
 
@@ -333,30 +334,22 @@ plot(worldclim_stack[["bio1"]], main = "Annual Mean Temperature (bio1)")
 # Summary statistics for each layer
 summary(worldclim_stack)
 #> Warning: [summary] used a sample
-#>       bio1             bio2             bio3             bio4             bio5             bio6             bio7             bio8       
-#>  Min.   :-54.72   Min.   :-37.72   Min.   :-66.19   Min.   :   0.0   Min.   :   0.0   Min.   :  0.00   Min.   :  0.00   Min.   :   0.0  
-#>  1st Qu.:-22.81   1st Qu.:-10.58   1st Qu.:-34.22   1st Qu.: 110.0   1st Qu.:  28.0   1st Qu.:  0.00   1st Qu.: 41.41   1st Qu.:  56.0  
-#>  Median : -0.53   Median : 13.82   Median :-15.20   Median : 337.0   Median :  60.0   Median :  5.00   Median : 64.80   Median : 152.0  
-#>  Mean   : -4.05   Mean   :  7.19   Mean   :-13.90   Mean   : 550.3   Mean   :  93.5   Mean   : 15.39   Mean   : 74.63   Mean   : 241.8  
-#>  3rd Qu.: 19.02   3rd Qu.: 24.80   3rd Qu.: 12.13   3rd Qu.: 690.0   3rd Qu.: 112.0   3rd Qu.: 18.00   3rd Qu.:100.13   3rd Qu.: 298.0  
-#>  Max.   : 30.71   Max.   : 38.18   Max.   : 28.62   Max.   :7011.0   Max.   :1965.0   Max.   :471.00   Max.   :228.88   Max.   :4503.0  
-#>  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   
-#>       bio9             bio10            bio11            bio12           bio13            bio14            bio15            bio16       
-#>  Min.   :   0.00   Min.   :   0.0   Min.   :   0.0   Min.   : 1.00   Min.   :  9.65   Min.   :   0.0   Min.   :-29.60   Min.   :-72.40  
-#>  1st Qu.:   2.00   1st Qu.:   7.0   1st Qu.:  17.0   1st Qu.: 7.38   1st Qu.: 20.97   1st Qu.: 569.8   1st Qu.: -6.01   1st Qu.:-39.30  
-#>  Median :  23.00   Median : 107.0   Median :  47.0   Median : 9.34   Median : 26.57   Median : 897.1   Median : 21.53   Median :-21.61  
-#>  Mean   :  55.47   Mean   : 156.5   Mean   : 108.8   Mean   : 9.94   Mean   : 34.54   Mean   : 880.0   Mean   : 13.93   Mean   :-19.80  
-#>  3rd Qu.:  66.00   3rd Qu.: 225.0   3rd Qu.: 109.0   3rd Qu.:12.36   3rd Qu.: 45.35   3rd Qu.:1206.6   3rd Qu.: 31.35   3rd Qu.:  4.63  
-#>  Max.   :1477.00   Max.   :3159.0   Max.   :3849.0   Max.   :20.28   Max.   :100.00   Max.   :2342.4   Max.   : 47.95   Max.   : 26.20  
-#>  NA's   :65591     NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   
-#>      bio17           bio18            bio19       
-#>  Min.   : 1.00   Min.   :-66.19   Min.   :-54.26  
-#>  1st Qu.:26.11   1st Qu.:-26.12   1st Qu.:-24.25  
-#>  Median :33.38   Median : 10.69   Median : -9.26  
-#>  Mean   :33.72   Mean   : -0.93   Mean   : -5.38  
-#>  3rd Qu.:41.31   3rd Qu.: 21.46   3rd Qu.: 18.52  
-#>  Max.   :71.58   Max.   : 37.70   Max.   : 37.04  
-#>  NA's   :65591   NA's   :65591    NA's   :65591
+#>       bio1             bio2             bio3             bio4             bio5             bio6             bio7             bio8             bio9             bio10       
+#>  Min.   :-54.72   Min.   :-37.72   Min.   :-66.19   Min.   :   0.0   Min.   :   0.0   Min.   :  0.00   Min.   :  0.00   Min.   :   0.0   Min.   :   0.00   Min.   :   0.0  
+#>  1st Qu.:-22.81   1st Qu.:-10.58   1st Qu.:-34.22   1st Qu.: 110.0   1st Qu.:  28.0   1st Qu.:  0.00   1st Qu.: 41.41   1st Qu.:  56.0   1st Qu.:   2.00   1st Qu.:   7.0  
+#>  Median : -0.53   Median : 13.82   Median :-15.20   Median : 337.0   Median :  60.0   Median :  5.00   Median : 64.80   Median : 152.0   Median :  23.00   Median : 107.0  
+#>  Mean   : -4.05   Mean   :  7.19   Mean   :-13.90   Mean   : 550.3   Mean   :  93.5   Mean   : 15.39   Mean   : 74.63   Mean   : 241.8   Mean   :  55.47   Mean   : 156.5  
+#>  3rd Qu.: 19.02   3rd Qu.: 24.80   3rd Qu.: 12.13   3rd Qu.: 690.0   3rd Qu.: 112.0   3rd Qu.: 18.00   3rd Qu.:100.13   3rd Qu.: 298.0   3rd Qu.:  66.00   3rd Qu.: 225.0  
+#>  Max.   : 30.71   Max.   : 38.18   Max.   : 28.62   Max.   :7011.0   Max.   :1965.0   Max.   :471.00   Max.   :228.88   Max.   :4503.0   Max.   :1477.00   Max.   :3159.0  
+#>  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591     NA's   :65591   
+#>      bio11            bio12           bio13            bio14            bio15            bio16            bio17           bio18            bio19       
+#>  Min.   :   0.0   Min.   : 1.00   Min.   :  9.65   Min.   :   0.0   Min.   :-29.60   Min.   :-72.40   Min.   : 1.00   Min.   :-66.19   Min.   :-54.26  
+#>  1st Qu.:  17.0   1st Qu.: 7.38   1st Qu.: 20.97   1st Qu.: 569.8   1st Qu.: -6.01   1st Qu.:-39.30   1st Qu.:26.11   1st Qu.:-26.12   1st Qu.:-24.25  
+#>  Median :  47.0   Median : 9.34   Median : 26.57   Median : 897.1   Median : 21.53   Median :-21.61   Median :33.38   Median : 10.69   Median : -9.26  
+#>  Mean   : 108.8   Mean   : 9.94   Mean   : 34.54   Mean   : 880.0   Mean   : 13.93   Mean   :-19.80   Mean   :33.72   Mean   : -0.93   Mean   : -5.38  
+#>  3rd Qu.: 109.0   3rd Qu.:12.36   3rd Qu.: 45.35   3rd Qu.:1206.6   3rd Qu.: 31.35   3rd Qu.:  4.63   3rd Qu.:41.31   3rd Qu.: 21.46   3rd Qu.: 18.52  
+#>  Max.   :3849.0   Max.   :20.28   Max.   :100.00   Max.   :2342.4   Max.   : 47.95   Max.   : 26.20   Max.   :71.58   Max.   : 37.70   Max.   : 37.04  
+#>  NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591
 ```
 
 Convert the **species_occurences_summary**, which summarizes species occurrence by SiteCode, into a spatial object using the `st_as_sf` function:
@@ -372,7 +365,6 @@ Extract the bio-climatic variable values for each bird observation site, respect
 
 ``` r
 bioclim_values <- extract(worldclim_stack, cranes_sf)
-#> Error in UseMethod("extract"): no applicable method for 'extract' applied to an object of class "SpatRaster"
 ```
 
 Then combine the bio-climatic values with the NatureCounts data.
@@ -382,7 +374,6 @@ Then combine the bio-climatic values with the NatureCounts data.
 bioclim_data <- cbind(cranes_sf, bioclim_values, 
                       longitude = species_occurrence_summary$longitude, 
                       latitude =  species_occurrence_summary$latitude)
-#> Error in eval(expr, envir, enclos): object 'bioclim_values' not found
 ```
 
 Filter the data to only include observations made post 1970 to match the temporal resolution of the climate dataset:
@@ -392,9 +383,70 @@ Filter the data to only include observations made post 1970 to match the tempora
 bioclim_data <- bioclim_data %>%
   mutate(date = as.Date(date)) %>%
   filter(year(date) >= "1970")
-#> Error in eval(expr, envir, enclos): object 'bioclim_data' not found
 summary(bioclim_data)
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'bioclim_data' not found
+#>    record_id          collection          project_id   protocol_id    protocol_type    species_id   statprov_code      country_code         SiteCode              bcr        
+#>  Min.   :225188068   Length:82          Min.   :1048   Mode:logical   Mode:logical   Min.   :4030   Length:82          Length:82          Length:82          Min.   : 6.000  
+#>  1st Qu.:225216682   Class :character   1st Qu.:1048   NA's:82        NA's:82        1st Qu.:4030   Class :character   Class :character   Class :character   1st Qu.: 6.000  
+#>  Median :225419410   Mode  :character   Median :1048                                 Median :4030   Mode  :character   Mode  :character   Mode  :character   Median : 6.000  
+#>  Mean   :225400377                      Mean   :1048                                 Mean   :4030                                                            Mean   : 6.976  
+#>  3rd Qu.:225481809                      3rd Qu.:1048                                 3rd Qu.:4030                                                            3rd Qu.: 6.000  
+#>  Max.   :225689315                      Max.   :1048                                 Max.   :4030                                                            Max.   :11.000  
+#>  subnational2_code    iba_site          utm_square         survey_year    survey_month    survey_week      survey_day    breeding_rank    GlobalUniqueIdentifier CatalogNumber     
+#>  Length:82          Length:82          Length:82          Min.   :1987   Min.   :4.000   Min.   :1.000   Min.   : 1.00   Min.   :  0.00   Length:82              Length:82         
+#>  Class :character   Class :character   Class :character   1st Qu.:2001   1st Qu.:5.000   1st Qu.:1.000   1st Qu.: 1.00   1st Qu.:  0.00   Class :character       Class :character  
+#>  Mode  :character   Mode  :character   Mode  :character   Median :2002   Median :6.000   Median :2.000   Median :13.50   Median :130.00   Mode  :character       Mode  :character  
+#>                                                           Mean   :2002   Mean   :6.183   Mean   :1.976   Mean   :11.32   Mean   : 97.07                                            
+#>                                                           3rd Qu.:2004   3rd Qu.:8.000   3rd Qu.:3.000   3rd Qu.:17.00   3rd Qu.:140.00                                            
+#>                                                           Max.   :2005   Max.   :9.000   Max.   :4.000   Max.   :30.00   Max.   :180.00                                            
+#>    Locality         TimeCollected  CollectorNumber    FieldNumber      Remarks          ProjectCode        ProtocolType       ProtocolCode   ProtocolURL    SurveyAreaIdentifier
+#>  Length:82          Mode:logical   Length:82          Mode:logical   Length:82          Length:82          Length:82          Mode:logical   Mode:logical   Length:82           
+#>  Class :character   NA's:82        Class :character   NA's:82        Class :character   Class :character   Class :character   NA's:82        NA's:82        Class :character    
+#>  Mode  :character                  Mode  :character                  Mode  :character   Mode  :character   Mode  :character                                 Mode  :character    
+#>                                                                                                                                                                                 
+#>                                                                                                                                                                                 
+#>                                                                                                                                                                                 
+#>  SamplingEventIdentifier SamplingEventStructure RouteIdentifier TimeObservationsStarted TimeObservationsEnded DurationInHours    TimeIntervalStarted TimeIntervalEnded
+#>  Length:82               Mode:logical           Mode:logical    Length:82               Mode:logical          Length:82          Mode:logical        Mode:logical     
+#>  Class :character        NA's:82                NA's:82         Class :character        NA's:82               Class :character   NA's:82             NA's:82          
+#>  Mode  :character                                               Mode  :character                              Mode  :character                                        
+#>                                                                                                                                                                       
+#>                                                                                                                                                                       
+#>                                                                                                                                                                       
+#>  TimeIntervalsAdditive NumberOfObservers  NoObservations ObservationCount   ObservationDescriptor ObservationCount2 ObservationDescriptor2 ObservationCount3 ObservationDescriptor3
+#>  Mode:logical          Length:82          Mode:logical   Length:82          Mode:logical          Mode:logical      Mode:logical           Mode:logical      Mode:logical          
+#>  NA's:82               Class :character   NA's:82        Class :character   NA's:82               NA's:82           NA's:82                NA's:82           NA's:82               
+#>                        Mode  :character                  Mode  :character                                                                                                          
+#>                                                                                                                                                                                    
+#>                                                                                                                                                                                    
+#>                                                                                                                                                                                    
+#>  ObservationCount4 ObservationDescriptor4 ObservationCount5 ObservationDescriptor5 ObservationCount6 ObservationDescriptor6 AllIndividualsReported AllSpeciesReported
+#>  Mode:logical      Mode:logical           Mode:logical      Mode:logical           Mode:logical      Mode:logical           Mode:logical           Length:82         
+#>  NA's:82           NA's:82                NA's:82           NA's:82                NA's:82           NA's:82                NA's:82                Class :character  
+#>                                                                                                                                                    Mode  :character  
+#>                                                                                                                                                                      
+#>                                                                                                                                                                      
+#>                                                                                                                                                                      
+#>       date                 doy            ID             bio1             bio2            bio3              bio4            bio5             bio6            bio7      
+#>  Min.   :1987-06-01   Min.   : 97   Min.   : 2.00   Min.   :-2.727   Min.   :14.11   Min.   :-21.910   Min.   :346.0   Min.   : 52.00   Min.   :10.00   Min.   :42.27  
+#>  1st Qu.:2001-06-01   1st Qu.:136   1st Qu.:30.25   1st Qu.:-2.402   1st Qu.:14.73   1st Qu.:-21.183   1st Qu.:351.0   1st Qu.: 56.00   1st Qu.:14.00   1st Qu.:45.72  
+#>  Median :2002-08-14   Median :152   Median :50.50   Median :-2.356   Median :14.80   Median :-20.890   Median :352.0   Median : 56.00   Median :14.00   Median :46.59  
+#>  Mean   :2002-01-29   Mean   :168   Mean   :50.21   Mean   :-1.095   Mean   :14.92   Mean   :-18.647   Mean   :379.0   Mean   : 64.62   Mean   :13.82   Mean   :52.49  
+#>  3rd Qu.:2004-06-22   3rd Qu.:213   3rd Qu.:70.75   3rd Qu.: 0.914   3rd Qu.:15.06   3rd Qu.:-15.367   3rd Qu.:404.8   3rd Qu.: 75.00   3rd Qu.:14.00   3rd Qu.:65.52  
+#>  Max.   :2005-08-01   Max.   :260   Max.   :91.00   Max.   : 4.088   Max.   :15.83   Max.   : -7.527   Max.   :543.0   Max.   :104.00   Max.   :17.00   Max.   :74.12  
+#>       bio8            bio9           bio10           bio11           bio12           bio13           bio14            bio15           bio16            bio17           bio18      
+#>  Min.   :135.0   Min.   :34.00   Min.   :134.0   Min.   :34.00   Min.   :11.16   Min.   :21.53   Min.   : 940.5   Min.   :21.38   Min.   :-29.17   Min.   :39.16   Min.   :12.90  
+#>  1st Qu.:144.0   1st Qu.:44.00   1st Qu.:144.0   1st Qu.:53.00   1st Qu.:11.90   1st Qu.:23.42   1st Qu.:1256.0   1st Qu.:22.80   1st Qu.:-28.41   1st Qu.:45.44   1st Qu.:14.73  
+#>  Median :147.0   Median :44.00   Median :147.0   Median :53.00   Median :12.06   Median :23.68   Median :1449.9   Median :22.96   Median :-28.03   Median :51.00   Median :14.80  
+#>  Mean   :168.9   Mean   :45.68   Mean   :168.8   Mean   :52.12   Mean   :12.01   Mean   :24.84   Mean   :1368.1   Mean   :22.86   Mean   :-25.84   Mean   :48.69   Mean   :14.90  
+#>  3rd Qu.:205.8   3rd Qu.:46.75   3rd Qu.:205.8   3rd Qu.:53.00   3rd Qu.:12.07   3rd Qu.:25.74   3rd Qu.:1465.4   3rd Qu.:23.06   3rd Qu.:-22.64   3rd Qu.:51.47   3rd Qu.:15.06  
+#>  Max.   :270.0   Max.   :56.00   Max.   :270.0   Max.   :58.00   Max.   :13.45   Max.   :33.67   Max.   :1499.5   Max.   :23.69   Max.   :-15.46   Max.   :51.83   Max.   :15.83  
+#>      bio19          longitude         latitude              geometry 
+#>  Min.   :-13.17   Min.   :-117.1   Min.   :51.05   POINT        :82  
+#>  1st Qu.:-11.01   1st Qu.:-113.3   1st Qu.:55.00   epsg:4326    : 0  
+#>  Median :-10.89   Median :-113.0   Median :59.96   +proj=long...: 0  
+#>  Mean   :-10.84   Mean   :-112.9   Mean   :58.09                     
+#>  3rd Qu.:-10.72   3rd Qu.:-113.0   3rd Qu.:59.98                     
+#>  Max.   : -3.01   Max.   :-110.3   Max.   :60.21
 ```
 
 Visualize the distribution of **bio1** compared to **total_count**:
@@ -408,7 +460,11 @@ ggplot(data = bioclim_data, aes(x = bio1, y = total_count)) +
        x = "Annual Mean Temperature",
        y = "ObservationCount") +
   theme_minimal()
-#> Error in eval(expr, envir, enclos): object 'bioclim_data' not found
+#> Error in `geom_point()`:
+#> ! Problem while computing aesthetics.
+#> ℹ Error occurred in the 1st layer.
+#> Caused by error:
+#> ! object 'total_count' not found
 ```
 
 Map the NatureCounts data by grouping it by **SiteCode**, sizing the points by **total_count** and colorizing them by a bio-climatic variable (**bio1**):
@@ -416,7 +472,6 @@ Map the NatureCounts data by grouping it by **SiteCode**, sizing the points by *
 
 ``` r
 bioclim_data <- st_transform(bioclim_data, crs = 4326)
-#> Error in eval(expr, envir, enclos): object 'bioclim_data' not found
 ```
 
 To make an interactive map of total counts per site.

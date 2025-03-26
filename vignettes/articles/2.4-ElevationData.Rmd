@@ -62,8 +62,7 @@ Move the files from your Downloads to the `nationalparks` subdirectory before ap
 
 
 ```
-#> Reading layer `vw_Places_Public_lieux_public_APCA' from data source 
-#>   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
+#> Reading layer `vw_Places_Public_lieux_public_APCA' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 52 features and 9 fields
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY, XYZ
@@ -273,7 +272,7 @@ print(dtm_mosaic)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) 
-#> source      : spat_2900441952a4_10496.tif 
+#> source      : spat_290041744b42_10496.tif 
 #> varname     : MNT_31I10NO 
 #> name        :  Band_1 
 #> min value   : 102.277 
@@ -450,7 +449,7 @@ elevation_values_df <- elevation_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, elevation)
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unable to find an inherited method for function 'select' for signature '"sf"'
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
@@ -493,7 +492,7 @@ There does not appear to be a clear relationship between species diversity and e
 
 ------------------------------------------------------------------------
 
-**Congratulations!** You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](05-LandcoverData.Rmd), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data.
+**Congratulations!** You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](05-LandcoverData.Rmd), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data. 
 
 Below are some additional resources you may find useful to further your understanding of LiDAR data.
 
@@ -515,37 +514,37 @@ If you wish to access LiDAR data for La Mauricie National Park yourself to gain 
 
 **Step 1**: Navigate to the Lidar data site. Under **Données et ressources** \> **Carte interactive** \> **Forêt ouverte** select (**Explorer \> Accéder**) next to the **Téléchargement** option to explore the Lidar tiles on an interactive map .
 
-<img src="figures_other/spatdata1.PNG" alt="Data download step 1." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata1.png" alt="Data download step 1." width="700px" style="display: block; margin: auto;" />
 
 **Step 2**: Using the search bar, search for **Parc national de la Mauricie**. Under Layers, toggle on **Parc nationaux du Canada** to visualize the park boundary.
 
-<img src="figures_other/spatdata0.PNG" alt="Data download step 2." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata0.png" alt="Data download step 2." width="700px" style="display: block; margin: auto;" />
 
 Alternatively, you can import your own **.shp** or **.kml** file using the **Import and Export** tab.
 
-<img src="figures_other/spatdata2.PNG" alt="Data download step 2." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata2.png" alt="Data download step 2." width="700px" style="display: block; margin: auto;" />
 
 Specify the coordinate reference system (WGS84), click **Import**, and select your **.shp** or **.kml** file to display on the map.
 
-<img src="figures_other/spatdata3.PNG" alt="Data download step 2." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata3.png" alt="Data download step 2." width="700px" style="display: block; margin: auto;" />
 
 **Step 3**: Download the Modèle num. terrain (MNT) (Résolution spatiale 1 m) for each of the six Lidar tiles that intersect with the park (14NE, 15NO, 14SE, 15SO, 11NE, 10NO).
 
 First, navigate to the **Map** tab and toggle on the visibility for the boundary and Lidar MNT layers by clicking on the eye symbol, if necessary. Hovering over this icon will display either the **Show Layer** or **Hide layer** option.
 
-<img src="figures_other/spatdata4.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata4.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 Your interactive map should now look something like this:
 
-<img src="figures_other/spatdata5.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata5.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 One by one, click and download the terrain data for each of the 6 Lidar tiles that intersect with the park boundary. Click your target tile, expand the **Téléchargement** window and click **Accéder** next to the MNT (1 m spatial resolution) data to download. Repeat for each tile.
 
-<img src="figures_other/spatdata6.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata6.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 This will open a webpage directory displaying a list of spatial data files available for the selected tile. Choose the MNT (.tif) file that includes the tile code in its name. For instance, for the first tile covering northern tip of the national park), select "MNT_31I14NE.tif." Repeat this process for each respective tile.
 
-<img src="figures_other/spatdata10.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata10.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 Save these files in your working directory for easy access during this tutorial.
 

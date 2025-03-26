@@ -502,8 +502,7 @@ landscape_metrics_df <- mauricie_birds_sf %>%
   st_drop_geometry() %>%
   distinct(point_id, .keep_all = TRUE) %>%  # Ensure no duplicates based on point_id, but keep all columns
   left_join(lsm_landscape, by = "point_id") %>%
-  select(point_id, ed, np)  # Keep point_id, ed, and np columns
-#> Error in select(., point_id, ed, np): unused arguments (point_id, ed, np)
+  dplyr::select(point_id, ed, np)  # Keep point_id, ed, and np columns
 ```
 
 Append the class level PLAND metric values and keep the `point_id` column.

@@ -117,6 +117,7 @@ Crop `sentinel_imagery` to the extent of `mauricie_boundary` then plot the cropp
 
 ``` r
 mauricie_sl <- crop(sentinel_imagery, vect(mauricie_boundary))
+#> |---------|---------|---------|---------|=========================================                                          
 
 # Plot the RGB composite
 terra::plotRGB(mauricie_sl, r = 4, g = 3, b = 2, stretch = "lin", lwd = 2, axes = FALSE)
@@ -412,7 +413,7 @@ ndvi_values_df <- ndvi_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, ndvi)
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unable to find an inherited method for function 'select' for signature '"sf"'
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
@@ -470,10 +471,10 @@ The Copernicus Data Space Ecosystem Browser is the central hub for accessing and
 
 3)  Click the info icon in the bottom right corner of your search result and the **Product info** window will pop up. Once here, verify that you have selected the satellite image you want and then download it by clicking the **Download** option in the lower righthand corner.
 
-<img src="figures_other/spatdata7.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata7.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
-<img src="figures_other/spatdata8.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata8.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 Note: The **Visualize** tab will help you visualize your satellite image using true color and false color composites and NDVI, among other layers. These are based on a combination of bands stored in our image download. This tutorial will guide you through custom satellite image visualizations and spectral index calculation with corrections.
 
-<img src="figures_other/spatdata9.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
+<img src="figures_other/spatdata9.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
