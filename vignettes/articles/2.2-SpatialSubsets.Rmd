@@ -1,6 +1,6 @@
 ---
 title: "Chapter 2 - Spatial Subsetting"
-date: "2025-03-21"
+date: "2025-03-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{02-SpatialSubsets}
@@ -44,8 +44,10 @@ library(dplyr)
 library(ggplot2)
 library(ggspatial)
 library(mapview)
+#> Warning: package 'mapview' was built under R version 4.3.3
 library(leaflet)
 library(leaflet.extras)
+#> Warning: package 'leaflet.extras' was built under R version 4.3.3
 ```
 
 # 2.1 Key Biodiversity Areas
@@ -57,10 +59,6 @@ Navigate the the [KBA Canada Map Viewer](https://kbacanada.org/explore/map-viewe
 We can read in our KBA polygons using the `sf` package once it is in your working directory. The downloaded files was renamed for this example so you will need to change the code to match your file name.
 
 
-```
-#> Error: Cannot open "C:/Users/dimit/Birds Canada/naturecounts/misc/Data/provontario_kba/ontario_kba.shp"; The file doesn't seem to exist.
-#> Error in file(file, "rt"): cannot open the connection
-```
 
 
 ``` r
@@ -72,7 +70,6 @@ ontario_kba <- st_read("ontario_kba.shp")
 
 ``` r
 ontario_kba <- ontario_kba %>% st_make_valid() %>% distinct()
-#> Error in eval(expr, envir, enclos): object 'ontario_kba' not found
 ```
 
 Our spatial data is also accompanied by a CSV file that contains additional useful attributes (landcover, species, etc) concerning our KBAs. Let's read in the accompanying CSV file for our KBA layer.
@@ -97,7 +94,6 @@ kba_attributes <- kba_attributes %>%
          "Landcover",
          "Province",
          "Species")
-#> Error in select(., "SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", : unused arguments ("SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", "Level", "CriteriaMet", "ConservationActions", "Landcover", "Province", "Species")
 ```
 
 Both dataframes now contain unique columns, after our selection. We apply the `full_join()` function to hold all attributes within one dataframe.
@@ -105,7 +101,6 @@ Both dataframes now contain unique columns, after our selection. We apply the `f
 
 ``` r
 ontario_kba <- full_join(ontario_kba, kba_attributes, by = "SiteCode")
-#> Error in eval(expr, envir, enclos): object 'ontario_kba' not found
 ```
 
 To visualize the **ontario_kba** data we can use `ggplot()`.
@@ -126,8 +121,9 @@ ggplot() +
        x = "Longitude",
        y = "Latitude",
        fill = "Legend")
-#> Error in eval(expr, envir, enclos): object 'ontario_kba' not found
 ```
+
+<img src="figures/nc_sp2_ontario_kba-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"  />
 
 We can also visualize the **ontario_kba** data with an interactive map, using the `leaflet` package.
 
@@ -170,13 +166,13 @@ View(meta_collections())
 ``` r
 search_species("wood duck")
 #> # A tibble: 5 × 5
-#>   species_id scientific_name                    english_name                          french_name                               taxon_group
-#>        <int> <chr>                              <chr>                                 <chr>                                     <chr>      
-#> 1        360 Aix sponsa                         Wood Duck                             Canard branchu                            BIRDS      
-#> 2      40938 Aix sponsa x Anas platyrhynchos    Wood Duck x Mallard (hybrid)          Hybride Canard branchu x C. colvert       BIRDS      
-#> 3      41197 Aix sponsa x Lophodytes cucullatus Wood Duck x Hooded Merganser (hybrid) Hybride Canard branchu x Harle couronné   BIRDS      
-#> 4      45989 Aix sponsa x Mareca americana      Wood Duck x American Wigeon (hybrid)  Hybride Canard branchu x C. d'Amérique    BIRDS      
-#> 5      47173 Tadorna tadorna x Aix sponsa       Common Shelduck x Wood Duck (hybrid)  Hybride Tadorne de Belon x Canard branchu BIRDS
+#>   species_id scientific_name                    english_name                          french_name                           taxon_group
+#>        <int> <chr>                              <chr>                                 <chr>                                 <chr>      
+#> 1        360 Aix sponsa                         Wood Duck                             Canard branchu                        BIRDS      
+#> 2      40938 Aix sponsa x Anas platyrhynchos    Wood Duck x Mallard (hybrid)          Hybride Canard branchu x C. colvert   BIRDS      
+#> 3      41197 Aix sponsa x Lophodytes cucullatus Wood Duck x Hooded Merganser (hybrid) Hybride Canard branchu x Harle couro… BIRDS      
+#> 4      45989 Aix sponsa x Mareca americana      Wood Duck x American Wigeon (hybrid)  Hybride Canard branchu x C. d'Amériq… BIRDS      
+#> 5      47173 Tadorna tadorna x Aix sponsa       Common Shelduck x Wood Duck (hybrid)  Hybride Tadorne de Belon x Canard br… BIRDS
 ```
 
 Now we can download the NatureCounts data. Remember to change `testuser` to your personal username.
@@ -194,7 +190,23 @@ The CRS of our KBA sf object can be returned with `st_crs()`.
 
 ``` r
 st_crs(ontario_kba)
-#> Error in eval(expr, envir, enclos): object 'ontario_kba' not found
+#> Coordinate Reference System:
+#>   User input: WGS 84 
+#>   wkt:
+#> GEOGCRS["WGS 84",
+#>     DATUM["World Geodetic System 1984",
+#>         ELLIPSOID["WGS 84",6378137,298.257223563,
+#>             LENGTHUNIT["metre",1]]],
+#>     PRIMEM["Greenwich",0,
+#>         ANGLEUNIT["degree",0.0174532925199433]],
+#>     CS[ellipsoidal,2],
+#>         AXIS["latitude",north,
+#>             ORDER[1],
+#>             ANGLEUNIT["degree",0.0174532925199433]],
+#>         AXIS["longitude",east,
+#>             ORDER[2],
+#>             ANGLEUNIT["degree",0.0174532925199433]],
+#>     ID["EPSG",4326]]
 ```
 
 Our KBA sf object is stored with World Geodetic System 1984 (WGS 84) coordinates, EPSG = 4326. Now we can convert our **atlas_on** dataframe to an sf object using the same CRS.
@@ -208,7 +220,8 @@ atlas_on_sf <- st_as_sf(atlas_on,
 Now let's ensure that the conversion was successful. You'll notice a new geometry column where each observation is a point.
 
 
-```
+``` r
+str(atlas_on_sf) # view the sf object
 #> Classes 'sf' and 'data.frame':	290 obs. of  56 variables:
 #>  $ record_id              : int  10339750 10340180 10342681 10343644 10344845 10351428 10353184 10354352 10355078 10357496 ...
 #>  $ collection             : chr  "OBBA2PC" "OBBA2PC" "OBBA2PC" "OBBA2PC" ...
@@ -276,7 +289,6 @@ The `st_transform()` function can be applied to project our spatial object using
 
 ``` r
 ontario_kba <- st_transform(ontario_kba, crs = 26916) 
-#> Error in eval(expr, envir, enclos): object 'ontario_kba' not found
 ```
 
 It can also be used to ensure that the CRS of our spatial objects match.
@@ -284,7 +296,6 @@ It can also be used to ensure that the CRS of our spatial objects match.
 
 ``` r
 atlas_on_sf <- st_transform(atlas_on_sf, crs = st_crs(ontario_kba))
-#> Error in eval(expr, envir, enclos): object 'ontario_kba' not found
 ```
 
 To identify Wood Ducks observed across Ontario KBA's, we can apply the `st_intersection()` function.
@@ -292,7 +303,7 @@ To identify Wood Ducks observed across Ontario KBA's, we can apply the `st_inter
 
 ``` r
 wood_ducks_kba <- st_intersection(ontario_kba, atlas_on_sf)
-#> Error in eval(expr, envir, enclos): object 'ontario_kba' not found
+#> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 ```
 
 You will get a `warning` message, which you can safely ignore.
@@ -301,9 +312,7 @@ You will get a `warning` message, which you can safely ignore.
 ``` r
 # If need be, transform your spatial data back to EPSG:4326 to visualize with leaflet
 ontario_kba <- st_transform(ontario_kba, crs = 4326)
-#> Error in eval(expr, envir, enclos): object 'ontario_kba' not found
 wood_ducks_kba <- st_transform(wood_ducks_kba, crs = 4326)
-#> Error in eval(expr, envir, enclos): object 'wood_ducks_kba' not found
 ```
 
 Using `ggplot`, we can visualize the polygon data and point data.
@@ -328,8 +337,9 @@ ggplot() +
   labs(title = "Key Biodiversity Area (KBA) - Long Point Peninsula and Marshes",
        x = "Longitude",
        y = "Latitude")
-#> Error in eval(expr, envir, enclos): object 'ontario_kba' not found
 ```
+
+<img src="figures/nc_sp2_longpoint_kba-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"  />
 
 You can also apply `leaflet` to visualize the polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 
@@ -376,10 +386,12 @@ Then, let's inspect the spatial data.
 
 ``` r
 gdb_layers <- st_layers(gdb_path)
-#> Cannot open data source C:/Users/dimit/Birds Canada/naturecounts/misc/Data/priority_places/priorityplaces.gdb
-#> Error in eval(expr, envir, enclos): Open failed.
 print(gdb_layers)
-#> Error in eval(expr, envir, enclos): object 'gdb_layers' not found
+#> Driver: OpenFileGDB 
+#> Available layers:
+#>               layer_name geometry_type features fields                     crs_name
+#> 1 PriorityPlacesBoundary Multi Polygon       11     11 NAD83 / Canada Atlas Lambert
+#> 2  PriorityPlacesProject   Multi Point       89     13 NAD83 / Canada Atlas Lambert
 ```
 
 To read in our spatial data object, we apply the `st_read` function and specify our desired data layer.
@@ -387,7 +399,13 @@ To read in our spatial data object, we apply the `st_read` function and specify 
 
 ``` r
 priori_place_polygons <- st_read(dsn = gdb_path, layer = "PriorityPlacesBoundary")
-#> Error: Cannot open "C:/Users/dimit/Birds Canada/naturecounts/misc/Data/priority_places/priorityplaces.gdb"; The file doesn't seem to exist.
+#> Reading layer `PriorityPlacesBoundary' from data source 
+#>   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\priority_places\priorityplaces.gdb' using driver `OpenFileGDB'
+#> Simple feature collection with 11 features and 11 fields
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -2135754 ymin: -586679 xmax: 2450963 ymax: 2554209
+#> Projected CRS: NAD83 / Canada Atlas Lambert
 ```
 
 Were interested in the spatial distribution of Wood Ducks across the Long Point Walsingham Forest Priority Place. We'll filter based on a variable condition.
@@ -396,7 +414,6 @@ Were interested in the spatial distribution of Wood Ducks across the Long Point 
 ``` r
 long_point_polygon <- priori_place_polygons %>%
   filter(Name == "Long Point Walsingham Forest") # filters based on multipolygon name 
-#> Error in eval(expr, envir, enclos): object 'priori_place_polygons' not found
 ```
 
 Then reproject the Wood Duck data to match our Priority Place using `st_transform`.
@@ -404,7 +421,6 @@ Then reproject the Wood Duck data to match our Priority Place using `st_transfor
 
 ``` r
 atlas_on_sf <- st_transform(atlas_on_sf, crs = st_crs(long_point_polygon))
-#> Error in eval(expr, envir, enclos): object 'long_point_polygon' not found
 ```
 
 Next, we'll apply our geoprocessing function to find the Wood Duck observations that intersect with our chosen Priority Place.
@@ -412,7 +428,7 @@ Next, we'll apply our geoprocessing function to find the Wood Duck observations 
 
 ``` r
 wood_ducks_longpoint <- st_intersection(long_point_polygon, atlas_on_sf)
-#> Error in eval(expr, envir, enclos): object 'long_point_polygon' not found
+#> Warning: attribute variables are assumed to be spatially constant throughout all geometries
 ```
 
 Finally, we'll transform our spatial objects one more time before visualizing them with `leaflet`.
@@ -420,9 +436,7 @@ Finally, we'll transform our spatial objects one more time before visualizing th
 
 ``` r
 long_point_polygon <- st_transform(long_point_polygon, crs = 4326)
-#> Error in eval(expr, envir, enclos): object 'long_point_polygon' not found
 wood_ducks_longpoint <- st_transform(wood_ducks_longpoint, crs = 4326)
-#> Error in eval(expr, envir, enclos): object 'wood_ducks_longpoint' not found
 ```
 
 Use `ggplot` to visualize the polygon and point data. 
@@ -449,8 +463,9 @@ ggplot() +
   labs(title = "Wood Duck Observations within Long Point Walsingham",
        x = "Longitude",
        y = "Latitude")
-#> Error in eval(expr, envir, enclos): object 'long_point_polygon' not found
 ```
+
+<img src="figures/nc_sp2_longpoint_prioriplace-1.png" alt="Map showing key biodiversity areas in Ontario, outlined in pink"  />
 
 You can also apply leaflet to visualize our polygon data and point data, using the `addPolygons()` `addCircleMarkers()` arguments.
 

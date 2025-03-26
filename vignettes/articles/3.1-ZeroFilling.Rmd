@@ -1,6 +1,6 @@
 ---
 title: "Chapter 1 - Zero-filling"
-date: "2025-03-21"
+date: "2025-03-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{01-ZeroFilling}
@@ -78,8 +78,7 @@ Let's bring in the list of common names to append to the dataframe for easier in
 
 ``` r
 sp.list <- search_species()
-sp.list <- sp.list %>% select(species_id,english_name)
-#> Error in select(., species_id, english_name): unused arguments (species_id, english_name)
+sp.list <- sp.list %>% dplyr::select(species_id, english_name)
 ```
 
 Read in the BBS data from NatureCounts from 2015 to 2020 from the province of Saskatchewan as an example data set. Because we want to zero-fill the dataframe, we need to download the full collection for the given time period and geography of interest. NOT just the data for the species of interest. This will ensure that all the sampling events are correctly identified for zero-filling.
@@ -150,9 +149,8 @@ First, select relevant columns from the original dataframe and create a presence
 
 ``` r
 bbs50_can_presence <- bbs50_can %>%
-  select(AllSpeciesReported, SamplingEventIdentifier, species_id, ObservationCount, latitude, longitude, english_name) %>%
+  dplyr::select(AllSpeciesReported, SamplingEventIdentifier, species_id, ObservationCount, latitude, longitude, english_name) %>%
   mutate(presence = if_else(as.numeric(ObservationCount) > 0, TRUE, FALSE))
-#> Error in select(., AllSpeciesReported, SamplingEventIdentifier, species_id, : unused arguments (AllSpeciesReported, SamplingEventIdentifier, species_id, ObservationCount, latitude, longitude, english_name)
 ```
 
 Zero-fill the data while specifying the presence column in the `fill` argument. This also converts the presence column from logical to numeric.
@@ -164,7 +162,7 @@ bbs50_can_pres_filled <- format_zero_fill(bbs50_can_presence,
                                           by = "SamplingEventIdentifier",
                                           extra_event = c("latitude", "longitude"), 
                                           extra_species = "english_name")
-#> Error in eval(expr, envir, enclos): object 'bbs50_can_presence' not found
+#>  - Converted 'fill' column (presence) from logical to numeric
 ```
 
 # 1.3 Zero-filling: Events matrix {#1.3events_matrix}
@@ -215,8 +213,7 @@ Zero-fill for specific species. Here, we replace the NA values in the `Observati
 
 ``` r
 longspur_zero_fill <- longspur_events %>% 
-  mutate(ObservationCount = replace(ObservationCount, is.na(ObservationCount), 0)) %>% select(SiteCode, survey_day, survey_month, survey_year, latitude, longitude, ObservationCount) 
-#> Error in select(., SiteCode, survey_day, survey_month, survey_year, latitude, : unused arguments (SiteCode, survey_day, survey_month, survey_year, latitude, longitude, ObservationCount)
+  mutate(ObservationCount = replace(ObservationCount, is.na(ObservationCount), 0)) %>% dplyr::select(SiteCode, survey_day, survey_month, survey_year, latitude, longitude, ObservationCount) 
 ```
 
 Plot a histogram of your zero-filled observation counts of Chestnut-collared Longspur to see how the data are distributed.
@@ -224,8 +221,9 @@ Plot a histogram of your zero-filled observation counts of Chestnut-collared Lon
 
 ``` r
 hist(longspur_zero_fill$ObservationCount, breaks = 10)
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'hist': object 'longspur_zero_fill' not found
 ```
+
+![plot of chunk unnamed-chunk-13](vignettes/articles/figures/nc_at1_unnamed-chunk-13-1.png)
 
 Now your data frame is zero filled. You can repeat this process for other species of interest or learn in the next section how to zero-fill multiple species in sequence using a loop.
 

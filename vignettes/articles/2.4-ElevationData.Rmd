@@ -1,6 +1,6 @@
 ---
 title: "Chapter 4 - Elevation Data"
-date: "2025-03-21"
+date: "2025-03-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{04-ElevationData}
@@ -64,7 +64,8 @@ Move the files from your Downloads to the `nationalparks` subdirectory before ap
 ``` r
 # specify the path to your shapefile
 national_parks <- st_read(here::here("misc/data/nationalparks/vw_Places_Public_lieux_public_APCA.shp")) 
-#> Reading layer `vw_Places_Public_lieux_public_APCA' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
+#> Reading layer `vw_Places_Public_lieux_public_APCA' from data source 
+#>   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 52 features and 9 fields
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY, XYZ
@@ -269,7 +270,7 @@ print(dtm_mosaic)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) 
-#> source      : spat_84d0114d7602_34000.tif 
+#> source      : spat_290063bb4771_10496.tif 
 #> varname     : MNT_31I10NO 
 #> name        :  Band_1 
 #> min value   : 102.277 
@@ -446,7 +447,6 @@ elevation_values_df <- elevation_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, elevation)
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
@@ -489,7 +489,7 @@ There does not appear to be a clear relationship between species diversity and e
 
 ------------------------------------------------------------------------
 
-Congratulations! You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](05-LandcoverData.Rmd), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data.
+**Congratulations!** You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](05-LandcoverData.Rmd), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data.
 
 Below are some additional resources you may find useful to further your understanding of LiDAR data.
 
@@ -499,7 +499,7 @@ Below are some additional resources you may find useful to further your understa
 
 
 ```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata11.PNG")): Cannot find the file(s): "misc/images/spatdata11.PNG"
+#> Error in knitr::include_graphics(here::here("figures_other/spatdata11.png")): Cannot find the file(s): "figures_other/spatdata11.png"
 ```
 
 Conceptual figure depicts an airborne LiDAR system (‘LiDAR-i lend’, [Marek9134 (2012)](https://commons.wikimedia.org/wiki/File:LiDAR-i_lend.gif) CC-BY-SA-3.0).
@@ -514,31 +514,19 @@ If you wish to access LiDAR data for La Mauricie National Park yourself to gain 
 
 **Step 1**: Navigate to the Lidar data site. Under **Données et ressources** \> **Carte interactive** \> **Forêt ouverte** select (**Explorer \> Accéder**) next to the **Téléchargement** option to explore the Lidar tiles on an interactive map .
 
-
-```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata1.PNG")): Cannot find the file(s): "misc/images/spatdata1.PNG"
-```
+<img src="figures_other/spatdata1.PNG" alt="Data download step 1." width="700px" style="display: block; margin: auto;" />
 
 **Step 2**: Using the search bar, search for **Parc national de la Mauricie**. Under Layers, toggle on **Parc nationaux du Canada** to visualize the park boundary.
 
-
-```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata0.PNG")): Cannot find the file(s): "misc/images/spatdata0.PNG"
-```
+<img src="figures_other/spatdata0.PNG" alt="Data download step 2." width="700px" style="display: block; margin: auto;" />
 
 Alternatively, you can import your own **.shp** or **.kml** file using the **Import and Export** tab.
 
-
-```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata2.PNG")): Cannot find the file(s): "misc/images/spatdata2.PNG"
-```
+<img src="figures_other/spatdata2.PNG" alt="Data download step 2." width="700px" style="display: block; margin: auto;" />
 
 Specify the coordinate reference system (WGS84), click **Import**, and select your **.shp** or **.kml** file to display on the map.
 
-
-```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata3.PNG")): Cannot find the file(s): "misc/images/spatdata3.PNG"
-```
+<img src="figures_other/spatdata3.PNG" alt="Data download step 2." width="700px" style="display: block; margin: auto;" />
 
 **Step 3**: Download the Modèle num. terrain (MNT) (Résolution spatiale 1 m) for each of the six Lidar tiles that intersect with the park (14NE, 15NO, 14SE, 15SO, 11NE, 10NO).
 
@@ -546,29 +534,27 @@ First, navigate to the **Map** tab and toggle on the visibility for the boundary
 
 
 ```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata4.PNG")): Cannot find the file(s): "misc/images/spatdata4.PNG"
+#> Error: <text>:1:55: unexpected ')'
+#> 1: knitr::include_graphics("figures_other/spatdata4.PNG"))
+#>                                                           ^
 ```
 
 Your interactive map should now look something like this:
 
 
 ```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata5.PNG")): Cannot find the file(s): "misc/images/spatdata5.PNG"
+#> Error: <text>:1:55: unexpected ')'
+#> 1: knitr::include_graphics("figures_other/spatdata5.PNG"))
+#>                                                           ^
 ```
 
 One by one, click and download the terrain data for each of the 6 Lidar tiles that intersect with the park boundary. Click your target tile, expand the **Téléchargement** window and click **Accéder** next to the MNT (1 m spatial resolution) data to download. Repeat for each tile.
 
-
-```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata6.PNG")): Cannot find the file(s): "misc/images/spatdata6.PNG"
-```
+<img src="figures_other/spatdata6.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 This will open a webpage directory displaying a list of spatial data files available for the selected tile. Choose the MNT (.tif) file that includes the tile code in its name. For instance, for the first tile covering northern tip of the national park), select "MNT_31I14NE.tif." Repeat this process for each respective tile.
 
-
-```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata10.PNG")): Cannot find the file(s): "misc/images/spatdata10.PNG"
-```
+<img src="figures_other/spatdata10.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 Save these files in your working directory for easy access during this tutorial.
 

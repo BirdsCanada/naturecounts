@@ -1,6 +1,6 @@
 ---
 title: "Chapter 5 - Land Cover Data"
-date: "2025-03-21"
+date: "2025-03-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{05-LandcoverData}
@@ -500,7 +500,6 @@ landscape_metrics_df <- mauricie_birds_sf %>%
   distinct(point_id, .keep_all = TRUE) %>%  # Ensure no duplicates based on point_id, but keep all columns
   left_join(lsm_landscape, by = "point_id") %>%
   select(point_id, ed, np)  # Keep point_id, ed, and np columns
-#> Error in select(., point_id, ed, np): unused arguments (point_id, ed, np)
 ```
 
 Append the class level PLAND metric values and keep the `point_id` column.

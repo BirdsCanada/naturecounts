@@ -1,6 +1,6 @@
 ---
 title: "Chapter 6 - Satellite Imagery"
-date: "2025-03-21"
+date: "2025-03-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{06-SatelliteImagery}
@@ -65,9 +65,6 @@ Specify the path to your folder containing the satellite images in the code chun
 
 
 ``` r
-getwd()
-#> [1] "C:/Users/dimit/Birds Canada/naturecounts/vignettes/articles"
-
 bands <- list.files(path = here::here("misc/data/R10m"), 
                     pattern = "\\.jp2$", full.names = TRUE)
 
@@ -413,7 +410,6 @@ ndvi_values_df <- ndvi_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, ndvi)
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
@@ -471,19 +467,10 @@ The Copernicus Data Space Ecosystem Browser is the central hub for accessing and
 
 3)  Click the info icon in the bottom right corner of your search result and the **Product info** window will pop up. Once here, verify that you have selected the satellite image you want and then download it by clicking the **Download** option in the lower righthand corner.
 
+<img src="figures_other/spatdata7.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
-```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata7.PNG")): Cannot find the file(s): "misc/images/spatdata7.PNG"
-```
-
-
-```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata8.PNG")): Cannot find the file(s): "misc/images/spatdata8.PNG"
-```
+<img src="figures_other/spatdata8.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 Note: The **Visualize** tab will help you visualize your satellite image using true color and false color composites and NDVI, among other layers. These are based on a combination of bands stored in our image download. This tutorial will guide you through custom satellite image visualizations and spectral index calculation with corrections.
 
-
-```
-#> Error in knitr::include_graphics(here::here("misc/images/spatdata9.PNG")): Cannot find the file(s): "misc/images/spatdata9.PNG"
-```
+<img src="figures_other/spatdata9.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />

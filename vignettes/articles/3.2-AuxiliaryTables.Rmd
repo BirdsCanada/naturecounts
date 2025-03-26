@@ -1,6 +1,6 @@
 ---
 title: "Chapter 2 - Auxiliary Tables"
-date: "2025-03-21"
+date: "2025-03-26"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{02-AuxiliaryTables}
@@ -144,7 +144,7 @@ rnest_query <- rnest_query %>%
     fledging_month = month(fledging_date),
     fledging_day = day(fledging_date)
   ) %>%
-  select(
+  dplyr::select(
     speciesID,
     speciesEnglish,
     speciesFrench,
@@ -159,7 +159,6 @@ rnest_query <- rnest_query %>%
     districtID,
     districtNameEn
   )
-#> Error in select(., speciesID, speciesEnglish, speciesFrench, initiation, : unused arguments (speciesID, speciesEnglish, speciesFrench, initiation, initiation_month, initiation_day, initiation_time, fledging, fledging_month, fledging_day, fledging_time, districtID, districtNameEn)
 ```
 
 # 2.4 rNest: Ecodistricts {#2.4rNest_ecodistricts}
@@ -251,12 +250,9 @@ ggplot(rnest_robin, aes(x = factor(initiation_month), y = fledge_age)) +
   labs(x = "Initiation Month", y = "Fledge Age (Days)", 
        title = "Mean Fledge Age of the American Robin by Initiation Month") +
   theme_minimal()
-#> Error in `geom_boxplot()`:
-#> ! Problem while computing aesthetics.
-#> ℹ Error occurred in the 1st layer.
-#> Caused by error:
-#> ! object 'initiation_month' not found
 ```
+
+<img src="figures/nc_at2_fledge_age_boxplot-1.png" alt="Boxplot represents the mean fledge age from each initiation month."  />
 
 The mean fledge age for the American Robin appears to decrease with each subsequent initiation month.
 
@@ -295,4 +291,4 @@ ggplot() +
 
 <img src="figures/nc_at2_ecodistricts-1.png" alt="Map visualizes the ecodistricts by fledging data using a color ramp."  />
 
-\*\*Congratulations!\*\* You completed \*\*Chapter 2: Auxiliary Tables\*\*. Here, you accessed NatureCounts auxiliary tables using the `nc_query_tables` function. You also created basic data summaries and maps using rNest and ecodistricts data.
+**Congratulations!** You completed **Chapter 2: Auxiliary Tables**. Here, you accessed NatureCounts auxiliary tables using the `nc_query_tables` function. You also created basic data summaries and maps using rNest and ecodistricts data.
