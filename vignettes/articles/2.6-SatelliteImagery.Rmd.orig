@@ -91,8 +91,11 @@ ext(sentinel_imagery)
 
 Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
 
-```{r, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"))
+```
+```{r, eval = FALSE}
+mauricie_boundary <- st_read("path/to/your/mauricie_boundary.shp")
 ```
 
 Transform the coordinate reference system (CRS) of the National Park boundary to match that of the `sentinel_imagery` SpatRaster.

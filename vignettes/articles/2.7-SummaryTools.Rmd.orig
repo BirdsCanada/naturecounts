@@ -77,7 +77,7 @@ Let's download all the environmental covariates and join them to a common datafr
 
 ```{r, message = FALSE}
 # List the dataframes
-env_covariates <- list.files(path = here::here("misc/data/env_covariates"),
+env_covariates <- list.files(path = here::here("misc/data/env_covariates"), # drop `here::here()` and paste appropriate path to your data
                              pattern = "\\.csv$", 
                              full.names = TRUE)
 
