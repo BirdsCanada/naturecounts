@@ -178,8 +178,7 @@ common dataframe.</p>
 <span><span class="va">env_covariates_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, by <span class="op">=</span> <span class="st">"point_id"</span><span class="op">)</span>, <span class="va">env_covariates_list</span><span class="op">)</span></span></code></pre></div>
 <p>Read in the NatureCounts data you downloaded from <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a> or the <a href="https://drive.google.com/file/d/1ZDo4OUaxqtHuaM1CaGD7BfFGMg1JzOqv/view?usp=drive_link" class="external-link">Google
 Drive</a>. This file should be in your <code>data</code> folder.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mauricie_birds_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"misc/data/mauricie_birds_df.csv"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>mauricie_birds_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(path<span class="sc">/</span>to<span class="sc">/</span>your<span class="sc">/</span>mauricie_birds_df.csv<span class="st">")) </span></span></code></pre></div>
 <p>Create an <code>sf</code> object from the NatureCounts data that
 represents the unique point count locations.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -295,7 +294,11 @@ park.</p>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
 <span>    axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">8</span>, angle <span class="op">=</span> <span class="fl">60</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; ℹ Please use `linewidth` instead.</span></span>
+<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp7_speciesrank_plot-1.png" alt="Plot shows the ranked relative abundance of the most dominant species across La Mauricie park"></p>
 </div>
 <div class="section level2">
