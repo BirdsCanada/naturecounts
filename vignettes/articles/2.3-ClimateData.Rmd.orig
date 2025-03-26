@@ -98,7 +98,7 @@ Grouping the NatureCounts data might provide more meaningful insight on species 
 
 ```{r, error = TRUE}
 species_occurrence_summary <- whooping_crane_data %>%
-  format_dates() 
+  format_dates() %>% 
   group_by(SiteCode, survey_year, longitude, latitude) %>%
   summarise(total_count = sum(as.numeric(ObservationCount), na.rm = TRUE)) %>%
   ungroup()
@@ -235,8 +235,8 @@ getwd()
 
 Now point the `list.file` to this directory using the sample code below.
 
-```{r, echo = FALSE, message = FALSE}
-worldclim_list <- list.files(path = here::here("misc/data/worldclim"), pattern = "\\.tif$", full.names = TRUE)
+```{r, eval = FALSE}
+worldclim_list <- list.files(path = "YOUR/PATH/HERE", pattern = "\\.tif$", full.names = TRUE)
 
 # Read and stack the raster files
 worldclim_stack <- rast(worldclim_list)
@@ -244,9 +244,8 @@ worldclim_stack <- rast(worldclim_list)
 # Print information about the stack
 worldclim_stack
 ```
-
-```{r, eval = FALSE}
-worldclim_list <- list.files(path = "YOUR/PATH/HERE", pattern = "\\.tif$", full.names = TRUE)
+```{r, echo = FALSE, message = FALSE}
+worldclim_list <- list.files(path = here::here("misc/data/worldclim"), pattern = "\\.tif$", full.names = TRUE)
 
 # Read and stack the raster files
 worldclim_stack <- rast(worldclim_list)
