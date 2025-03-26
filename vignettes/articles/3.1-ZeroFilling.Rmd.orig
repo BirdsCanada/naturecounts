@@ -48,19 +48,19 @@ When observers are collecting point count data in the field, they are recording 
 
 Here are some important considerations to keep in mind when applying zero-filling methods:
 
--   Biological Relevance: Ensure that the zeros you are adding accurately reflect true absences rather than just missing data. This distinction is crucial for valid interpretations.
+-   **Biological Relevance**: Ensure that the zeros you are adding accurately reflect true absences rather than just missing data. This distinction is crucial for valid interpretations.
 
 -   Sampling Bias: Consider potential biases in your sampling methods. If certain areas or times are under-sampled, zero-filling may misrepresent the actual distribution and abundance of species.
 
--   Data Structure: Understand the structure of your dataset. Zero-filling may be more appropriate for certain types of data (e.g., count data) than others (e.g., presence-only data).
+-   **Data Structure**: Understand the structure of your dataset. Zero-filling may be more appropriate for certain types of data (e.g., count data) than others (e.g., presence-only data).
 
--   Statistical Methods: Choose appropriate statistical methods that can handle zero-inflated data. Some models are specifically designed for datasets with many zeros, while others may not be suitable.
+-   **Statistical Methods**: Choose appropriate statistical methods that can handle zero-inflated data. Some models are specifically designed for datasets with many zeros, while others may not be suitable.
 
--   Impact on Analysis: Assess how zero-filling will affect your analysis outcomes. Adding zeros can influence mean values, variances, and other statistical metrics, potentially leading to misleading conclusions.
+-   **Impact on Analysis**: Assess how zero-filling will affect your analysis outcomes. Adding zeros can influence mean values, variances, and other statistical metrics, potentially leading to misleading conclusions.
 
--   Documentation: Clearly document your zero-filling process, including the rationale for your chosen method and any assumptions made. This transparency is essential for reproducibility and for others to understand your analysis.
+-   **Documentation**: Clearly document your zero-filling process, including the rationale for your chosen method and any assumptions made. This transparency is essential for reproducibility and for others to understand your analysis.
 
--   Contextual Factors: Take into account environmental or temporal factors that may influence species presence or absence. These factors can help inform whether zeros are appropriate in specific contexts.
+-   **Contextual Factors**: Take into account environmental or temporal factors that may influence species presence or absence. These factors can help inform whether zeros are appropriate in specific contexts.
 
 By carefully considering these factors, you can make more informed decisions about zero-filling and its implications for your dataset and subsequent analyses.
 
@@ -88,7 +88,7 @@ sp.list <- sp.list %>% dplyr::select(species_id, english_name)
 
 Read in the BBS data from NatureCounts from 2015 to 2020 from the province of Saskatchewan as an example data set. Because we want to zero-fill the dataframe, we need to download the full collection for the given time period and geography of interest. NOT just the data for the species of interest. This will ensure that all the sampling events are correctly identified for zero-filling.
 
-```{r}
+```{r, message = FALSE}
 bbs50_can <- nc_data_dl(collections = "BBS50-CAN", years=c(2015,2020), region=list(statprov="SK"), username = "testuser", info = "zero fill example")
 ```
 
@@ -144,7 +144,7 @@ To create the events matrix, we extract unique combinations of survey time (e.g.
 
 ```{r}
 events_matrix <- bbs50_can %>%
-  select(SiteCode,
+  dplyr::select(SiteCode,
          survey_year,
          survey_month,
          survey_day,
@@ -181,7 +181,7 @@ longspur_zero_fill <- longspur_events %>%
 
 Plot a histogram of your zero-filled observation counts of Chestnut-collared Longspur to see how the data are distributed.
 
-```{r}
+```{r longspur_histogram, fig.alt = "Plot shows histogram of zero-filled Chestnut-collared Longspur observation counts.", fig.cap = ""}
 hist(longspur_zero_fill$ObservationCount, breaks = 10)
 ```
 

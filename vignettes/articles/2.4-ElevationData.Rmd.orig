@@ -427,7 +427,7 @@ There does not appear to be a clear relationship between species diversity and e
 
 ------------------------------------------------------------------------
 
-**Congratulations!** You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](05-LandcoverData.Rmd), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data.
+**Congratulations!** You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](05-LandcoverData.Rmd), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data. 
 
 Below are some additional resources you may find useful to further your understanding of LiDAR data.
 
@@ -452,25 +452,25 @@ If you wish to access LiDAR data for La Mauricie National Park yourself to gain 
 **Step 1**: Navigate to the Lidar data site. Under **Données et ressources** \> **Carte interactive** \> **Forêt ouverte** select (**Explorer \> Accéder**) next to the **Téléchargement** option to explore the Lidar tiles on an interactive map .
 
 ```{r image1, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 1.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata1.PNG")
+knitr::include_graphics("figures_other/spatdata1.png")
 ```
 
 **Step 2**: Using the search bar, search for **Parc national de la Mauricie**. Under Layers, toggle on **Parc nationaux du Canada** to visualize the park boundary.
 
 ```{r image0, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 2.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata0.PNG")
+knitr::include_graphics("figures_other/spatdata0.png")
 ```
 
 Alternatively, you can import your own **.shp** or **.kml** file using the **Import and Export** tab.
 
 ```{r image2, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 2.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata2.PNG")
+knitr::include_graphics("figures_other/spatdata2.png")
 ```
 
 Specify the coordinate reference system (WGS84), click **Import**, and select your **.shp** or **.kml** file to display on the map.
 
 ```{r image3, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 2.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata3.PNG")
+knitr::include_graphics("figures_other/spatdata3.png")
 ```
 
 **Step 3**: Download the Modèle num. terrain (MNT) (Résolution spatiale 1 m) for each of the six Lidar tiles that intersect with the park (14NE, 15NO, 14SE, 15SO, 11NE, 10NO).
@@ -478,25 +478,25 @@ knitr::include_graphics("figures_other/spatdata3.PNG")
 First, navigate to the **Map** tab and toggle on the visibility for the boundary and Lidar MNT layers by clicking on the eye symbol, if necessary. Hovering over this icon will display either the **Show Layer** or **Hide layer** option.
 
 ```{r image4, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 3.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata4.PNG")
+knitr::include_graphics("figures_other/spatdata4.png")
 ```
 
 Your interactive map should now look something like this:
 
 ```{r image5, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 3.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata5.PNG")
+knitr::include_graphics("figures_other/spatdata5.png")
 ```
 
 One by one, click and download the terrain data for each of the 6 Lidar tiles that intersect with the park boundary. Click your target tile, expand the **Téléchargement** window and click **Accéder** next to the MNT (1 m spatial resolution) data to download. Repeat for each tile.
 
 ```{r image6, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 3.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata6.PNG")
+knitr::include_graphics("figures_other/spatdata6.png")
 ```
 
 This will open a webpage directory displaying a list of spatial data files available for the selected tile. Choose the MNT (.tif) file that includes the tile code in its name. For instance, for the first tile covering northern tip of the national park), select "MNT_31I14NE.tif." Repeat this process for each respective tile.
 
 ```{r image10, echo=FALSE, out.width="700px", fig.align='center', fig.alt = "Data download step 3.", fig.cap = ""}
-knitr::include_graphics("figures_other/spatdata10.PNG")
+knitr::include_graphics("figures_other/spatdata10.png")
 ```
 
 Save these files in your working directory for easy access during this tutorial.
