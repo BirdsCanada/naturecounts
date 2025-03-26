@@ -61,9 +61,7 @@ dir.create("data/nationalparks", recursive = TRUE)
 Move the files from your Downloads to the `nationalparks` subdirectory before applying the `st_read()` function.
 
 
-``` r
-# specify the path to your shapefile
-national_parks <- st_read(here::here("misc/data/nationalparks/vw_Places_Public_lieux_public_APCA.shp")) 
+```
 #> Reading layer `vw_Places_Public_lieux_public_APCA' from data source 
 #>   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\nationalparks\vw_Places_Public_lieux_public_APCA.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 52 features and 9 fields
@@ -72,6 +70,11 @@ national_parks <- st_read(here::here("misc/data/nationalparks/vw_Places_Public_l
 #> Bounding box:  xmin: -141.0019 ymin: 41.68134 xmax: -53.68772 ymax: 83.15114
 #> z_range:       zmin: 0 zmax: 0
 #> Geodetic CRS:  WGS 84
+```
+
+``` r
+# specify the path to your shapefile
+national_parks <- st_read("path/to/your/shapefile.shp")
 ```
 
 Filter the **national_parks** dataset for La Mauricie National Park.
@@ -270,7 +273,7 @@ print(dtm_mosaic)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) 
-#> source      : spat_290063bb4771_10496.tif 
+#> source      : spat_2900441952a4_10496.tif 
 #> varname     : MNT_31I10NO 
 #> name        :  Band_1 
 #> min value   : 102.277 
@@ -447,6 +450,7 @@ elevation_values_df <- elevation_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, elevation)
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
@@ -497,10 +501,7 @@ Below are some additional resources you may find useful to further your understa
 
 [LiDAR](https://natural-resources.canada.ca/sites/nrcan/files/mapstoolspublications/lidar-Nov-2023-EN.pdf) systems help produce extremely accurate measurements of surface elevation to digital terrain and elevation models across landscapes. These systems use instruments (sensors) that are commonly flown on aircraft and incorporate laser ranging for distance, GPS for geographic position and height, and aircraft altitude for the orientation of the instrument. The accuracy of LiDAR measurements depends on the strength of point returns, instrument precision & accuracy, and terrain characteristics, among other factors.
 
-
-```
-#> Error in knitr::include_graphics(here::here("figures_other/spatdata11.png")): Cannot find the file(s): "figures_other/spatdata11.png"
-```
+<img src="figures_other/spatdata11.png" alt="LiDAR infographic." width="700px" style="display: block; margin: auto;" />
 
 Conceptual figure depicts an airborne LiDAR system (‘LiDAR-i lend’, [Marek9134 (2012)](https://commons.wikimedia.org/wiki/File:LiDAR-i_lend.gif) CC-BY-SA-3.0).
 
@@ -532,21 +533,11 @@ Specify the coordinate reference system (WGS84), click **Import**, and select yo
 
 First, navigate to the **Map** tab and toggle on the visibility for the boundary and Lidar MNT layers by clicking on the eye symbol, if necessary. Hovering over this icon will display either the **Show Layer** or **Hide layer** option.
 
-
-```
-#> Error: <text>:1:55: unexpected ')'
-#> 1: knitr::include_graphics("figures_other/spatdata4.PNG"))
-#>                                                           ^
-```
+<img src="figures_other/spatdata4.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 Your interactive map should now look something like this:
 
-
-```
-#> Error: <text>:1:55: unexpected ')'
-#> 1: knitr::include_graphics("figures_other/spatdata5.PNG"))
-#>                                                           ^
-```
+<img src="figures_other/spatdata5.PNG" alt="Data download step 3." width="700px" style="display: block; margin: auto;" />
 
 One by one, click and download the terrain data for each of the 6 Lidar tiles that intersect with the park boundary. Click your target tile, expand the **Téléchargement** window and click **Accéder** next to the MNT (1 m spatial resolution) data to download. Repeat for each tile.
 

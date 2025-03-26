@@ -33,13 +33,9 @@ This R tutorial requires the following **packages**:
 ``` r
 library(naturecounts)
 library(sf)
-#> Warning: package 'sf' was built under R version 4.3.3
 library(dplyr)
-#> Warning: package 'dplyr' was built under R version 4.3.2
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 4.3.3
 library(ggspatial)
-#> Warning: package 'ggspatial' was built under R version 4.3.3
 ```
 
 # 1.1 Spatial Data Types

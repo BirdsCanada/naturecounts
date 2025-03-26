@@ -90,14 +90,17 @@ ext(sentinel_imagery)
 Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
 
 
-``` r
-mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"))
+```
 #> Reading layer `mauricie_boundary' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\boundary\mauricie_boundary.shp' using driver `ESRI Shapefile'
 #> Simple feature collection with 1 feature and 9 fields
 #> Geometry type: POLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: -73.17948 ymin: 46.64563 xmax: -72.76572 ymax: 46.91888
 #> Geodetic CRS:  WGS 84
+```
+
+``` r
+mauricie_boundary <- st_read("path/to/your/mauricie_boundary.shp")
 ```
 
 Transform the coordinate reference system (CRS) of the National Park boundary to match that of the `sentinel_imagery` SpatRaster.
@@ -114,7 +117,6 @@ Crop `sentinel_imagery` to the extent of `mauricie_boundary` then plot the cropp
 
 ``` r
 mauricie_sl <- crop(sentinel_imagery, vect(mauricie_boundary))
-#> |---------|---------|---------|---------|=========================================                                          
 
 # Plot the RGB composite
 terra::plotRGB(mauricie_sl, r = 4, g = 3, b = 2, stretch = "lin", lwd = 2, axes = FALSE)
@@ -410,6 +412,7 @@ ndvi_values_df <- ndvi_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, ndvi)
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.

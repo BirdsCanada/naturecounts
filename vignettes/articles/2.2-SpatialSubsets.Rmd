@@ -44,10 +44,8 @@ library(dplyr)
 library(ggplot2)
 library(ggspatial)
 library(mapview)
-#> Warning: package 'mapview' was built under R version 4.3.3
 library(leaflet)
 library(leaflet.extras)
-#> Warning: package 'leaflet.extras' was built under R version 4.3.3
 ```
 
 # 2.1 Key Biodiversity Areas
@@ -94,6 +92,7 @@ kba_attributes <- kba_attributes %>%
          "Landcover",
          "Province",
          "Species")
+#> Error in select(., "SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", : unused arguments ("SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", "Level", "CriteriaMet", "ConservationActions", "Landcover", "Province", "Species")
 ```
 
 Both dataframes now contain unique columns, after our selection. We apply the `full_join()` function to hold all attributes within one dataframe.
@@ -166,13 +165,13 @@ View(meta_collections())
 ``` r
 search_species("wood duck")
 #> # A tibble: 5 × 5
-#>   species_id scientific_name                    english_name                          french_name                           taxon_group
-#>        <int> <chr>                              <chr>                                 <chr>                                 <chr>      
-#> 1        360 Aix sponsa                         Wood Duck                             Canard branchu                        BIRDS      
-#> 2      40938 Aix sponsa x Anas platyrhynchos    Wood Duck x Mallard (hybrid)          Hybride Canard branchu x C. colvert   BIRDS      
-#> 3      41197 Aix sponsa x Lophodytes cucullatus Wood Duck x Hooded Merganser (hybrid) Hybride Canard branchu x Harle couro… BIRDS      
-#> 4      45989 Aix sponsa x Mareca americana      Wood Duck x American Wigeon (hybrid)  Hybride Canard branchu x C. d'Amériq… BIRDS      
-#> 5      47173 Tadorna tadorna x Aix sponsa       Common Shelduck x Wood Duck (hybrid)  Hybride Tadorne de Belon x Canard br… BIRDS
+#>   species_id scientific_name                    english_name                          french_name                               taxon_group
+#>        <int> <chr>                              <chr>                                 <chr>                                     <chr>      
+#> 1        360 Aix sponsa                         Wood Duck                             Canard branchu                            BIRDS      
+#> 2      40938 Aix sponsa x Anas platyrhynchos    Wood Duck x Mallard (hybrid)          Hybride Canard branchu x C. colvert       BIRDS      
+#> 3      41197 Aix sponsa x Lophodytes cucullatus Wood Duck x Hooded Merganser (hybrid) Hybride Canard branchu x Harle couronné   BIRDS      
+#> 4      45989 Aix sponsa x Mareca americana      Wood Duck x American Wigeon (hybrid)  Hybride Canard branchu x C. d'Amérique    BIRDS      
+#> 5      47173 Tadorna tadorna x Aix sponsa       Common Shelduck x Wood Duck (hybrid)  Hybride Tadorne de Belon x Canard branchu BIRDS
 ```
 
 Now we can download the NatureCounts data. Remember to change `testuser` to your personal username.
@@ -399,8 +398,7 @@ To read in our spatial data object, we apply the `st_read` function and specify 
 
 ``` r
 priori_place_polygons <- st_read(dsn = gdb_path, layer = "PriorityPlacesBoundary")
-#> Reading layer `PriorityPlacesBoundary' from data source 
-#>   `C:\Users\dimit\Birds Canada\naturecounts\misc\data\priority_places\priorityplaces.gdb' using driver `OpenFileGDB'
+#> Reading layer `PriorityPlacesBoundary' from data source `C:\Users\dimit\Birds Canada\naturecounts\misc\data\priority_places\priorityplaces.gdb' using driver `OpenFileGDB'
 #> Simple feature collection with 11 features and 11 fields
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
