@@ -109,7 +109,7 @@ mauricie_boundary <- mauricie_boundary %>%
 
 Crop `sentinel_imagery` to the extent of `mauricie_boundary` then plot the cropped image in true color.
 
-```{r, true_color_comp, fig.cap = "", fig.alt = "Plot shows the cropped Mauricie park in true color."}
+```{r true_color_comp, fig.cap = "", fig.alt = "Plot shows the cropped Mauricie park in true color."}
 mauricie_sl <- crop(sentinel_imagery, vect(mauricie_boundary))
 
 # Plot the RGB composite
@@ -121,7 +121,7 @@ plot(st_geometry(mauricie_boundary), col = NA, border ="red", add = TRUE)
 
 Now plot the cropped image in false color. Here, we'll use the standard false color composite where red, green, and blue channels are used to visualize NIR, red, and green respectively.
 
-```{r, false_color_comp, fig.cap = "", fig.alt = "Plot shows the cropped Mauricie park in false color."}
+```{r false_color_comp, fig.cap = "", fig.alt = "Plot shows the cropped Mauricie park in false color."}
 # Plot the false color composite
 terra::plotRGB(mauricie_sl, r = 5, g = 4, b = 3, stretch = "lin", lwd = 2, axes = FALSE)
 
