@@ -68,7 +68,7 @@
 
       <h1>Chapter 3 - Climate Data</h1>
             
-            <h4 data-toc-skip class="date">2025-03-26</h4>
+            <h4 data-toc-skip class="date">2025-03-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.3-ClimateData.Rmd" class="external-link"><code>vignettes/articles/2.3-ClimateData.Rmd</code></a></small>
       <div class="d-none name"><code>2.3-ClimateData.Rmd</code></div>
@@ -485,7 +485,8 @@ the <code>st_as_sf</code> function:</p>
 <p>Extract the bio-climatic variable values for each bird observation
 site, respectively.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bioclim_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">worldclim_stack</span>, <span class="va">cranes_sf</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">bioclim_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">worldclim_stack</span>, <span class="va">cranes_sf</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in UseMethod("extract"): no applicable method for 'extract' applied to an object of class "SpatRaster"</span></span></code></pre></div>
 <p>Then combine the bio-climatic values with the NatureCounts data.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">cranes_sf</span>, <span class="va">bioclim_values</span>, </span>

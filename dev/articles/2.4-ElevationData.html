@@ -68,7 +68,7 @@
 
       <h1>Chapter 4 - Elevation Data</h1>
             
-            <h4 data-toc-skip class="date">2025-03-26</h4>
+            <h4 data-toc-skip class="date">2025-03-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.4-ElevationData.Rmd" class="external-link"><code>vignettes/articles/2.4-ElevationData.Rmd</code></a></small>
       <div class="d-none name"><code>2.4-ElevationData.Rmd</code></div>
@@ -362,7 +362,7 @@ after download. The code below will produce an error if there are other
 <span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a><span class="co">#&gt; resolution  : 1, 1  (x, y)</span></span>
 <span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a><span class="co">#&gt; extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)</span></span>
 <span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a><span class="co">#&gt; coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) </span></span>
-<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a><span class="co">#&gt; source      : spat_60807fd919bf_24704.tif </span></span>
+<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a><span class="co">#&gt; source      : spat_7de84981442f_32232.tif </span></span>
 <span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a><span class="co">#&gt; varname     : MNT_31I10NO </span></span>
 <span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a><span class="co">#&gt; name        :  Band_1 </span></span>
 <span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a><span class="co">#&gt; min value   : 102.277 </span></span>
@@ -518,6 +518,7 @@ geometry and return the result as a dataframe.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># drop the geometry column</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># convert to a regular dataframe</span></span>
+<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, elevation)</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.</span></span></code></pre></div>
