@@ -257,17 +257,18 @@ color.</p>
 <span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a><span class="er">$$</span>NDWI <span class="ot">=</span> \frac{GREEN <span class="sc">-</span> NIR}{GREEN <span class="sc">+</span> NIR}<span class="sc">$</span><span class="er">$</span></span>
 <span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a></span>
 <span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a></span>
-<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a><span class="st">```</span><span class="at"> r</span></span>
-<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a><span class="at">calc_ndwi &lt;- function(green, nir) {</span></span>
-<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="at">  ndwi &lt;- c((green - nir)/(green + nir))</span></span>
-<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a><span class="at">  return(ndwi)</span></span>
-<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a><span class="at">}</span></span>
-<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a></span>
-<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a><span class="at"># Calculate NDWI</span></span>
-<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a><span class="at">mauricie_sl_ndwi &lt;- calc_ndwi(mauricie_sl$green, mauricie_sl$nir)</span></span>
-<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a></span>
-<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a><span class="at"># Create water mask</span></span>
-<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a><span class="at">water_mask &lt;- mauricie_sl_ndwi &gt;= 0</span></span></code></pre></div>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a><span class="st">```</span><span class="at"> r</span></span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="at">calc_ndwi &lt;- function(green, nir) {</span></span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a><span class="at">  ndwi &lt;- c((green - nir)/(green + nir))</span></span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a><span class="at">  return(ndwi)</span></span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a><span class="at">}</span></span>
+<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a><span class="at"># Calculate NDWI</span></span>
+<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a><span class="at">mauricie_sl_ndwi &lt;- calc_ndwi(mauricie_sl$green, mauricie_sl$nir)</span></span>
+<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a></span>
+<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a><span class="at"># Create water mask</span></span>
+<span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a><span class="at">water_mask &lt;- mauricie_sl_ndwi &gt;= 0</span></span></code></pre></div>
 <p>Plot NDWI and the water mask.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set up the plot area for 1 row and 2 columns</span></span>
