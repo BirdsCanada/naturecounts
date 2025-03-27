@@ -94,6 +94,7 @@ Read in the National Park boundary you saved or downloaded from [Chapter 4: Elev
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"), quiet = TRUE)
 ```
+
 ```{r, eval = FALSE}
 mauricie_boundary <- st_read("path/to/your/mauricie_boundary.shp")
 ```
@@ -104,7 +105,6 @@ Transform the coordinate reference system (CRS) of the National Park boundary to
 mauricie_boundary <- mauricie_boundary %>%
   sf::st_make_valid() %>% # fix performance issues with layer + faster computation
   st_transform(crs = st_crs(sentinel_imagery))
-
 ```
 
 Crop `sentinel_imagery` to the extent of `mauricie_boundary` then plot the cropped image in true color.
@@ -140,6 +140,7 @@ Annual cumulative NDVI has a strong positive relationship with species richness 
 Create a water mask using the following function:
 
 $$NDWI = \frac{GREEN - NIR}{GREEN + NIR}$$
+
 
 ```{r}
 calc_ndwi <- function(green, nir) {
