@@ -1,6 +1,6 @@
 ---
 title: "Chapter 6 - Satellite Imagery"
-date: "2025-03-26"
+date: "2025-03-27"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{06-SatelliteImagery}
@@ -110,27 +110,31 @@ Crop `sentinel_imagery` to the extent of `mauricie_boundary` then plot the cropp
 ``` r
 mauricie_sl <- crop(sentinel_imagery, vect(mauricie_boundary))
 
-# Plot the RGB composite
-terra::plotRGB(mauricie_sl, r = 4, g = 3, b = 2, stretch = "lin", lwd = 2, axes = FALSE)
-
-# Add the boundary shapefile to the plot
-plot(st_geometry(mauricie_boundary), col = NA, border ="red", add = TRUE)
-```
-
-<img src="figures/nc_sp6_true_color_comp-1.png" alt="Plot shows the cropped Mauricie park in true color."  />
-
-Now plot the cropped image in false color. Here, we'll use the standard false color composite where red, green, and blue channels are used to visualize NIR, red, and green respectively.
 
 
-``` r
-# Plot the false color composite
-terra::plotRGB(mauricie_sl, r = 5, g = 4, b = 3, stretch = "lin", lwd = 2, axes = FALSE)
 
-# Add the boundary shapefile to the plot
-plot(st_geometry(mauricie_boundary), col = NA, border ="green", add = TRUE)
-```
 
-<img src="figures/nc_sp6_false_color_comp-1.png" alt="Plot shows the cropped Mauricie park in false color."  />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 6.2 Calculate Spectral Indices {#6.2SpectralIndices}
 

@@ -1,6 +1,6 @@
 ---
 title: "Chapter 2 - Auxiliary Tables"
-date: "2025-03-26"
+date: "2025-03-27"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{02-AuxiliaryTables}

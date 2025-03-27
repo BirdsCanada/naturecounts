@@ -1,6 +1,6 @@
 ---
 title: "Testing image creation"
-date: "2025-03-26"
+date: "2025-03-27"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Testing image creation}

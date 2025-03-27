@@ -1,6 +1,6 @@
 ---
 title: "Chapter 4 - Elevation Data"
-date: "2025-03-26"
+date: "2025-03-27"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{04-ElevationData}
@@ -263,7 +263,7 @@ print(dtm_mosaic)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) 
-#> source      : spat_60807fd919bf_24704.tif 
+#> source      : spat_7de8f6d431f_32232.tif 
 #> varname     : MNT_31I10NO 
 #> name        :  Band_1 
 #> min value   : 102.277 
@@ -440,6 +440,7 @@ elevation_values_df <- elevation_values_sf %>%
   ungroup() %>%
   sf::st_drop_geometry() %>%  # drop the geometry column
   as.data.frame()  # convert to a regular dataframe
+#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, elevation)
 
 
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.

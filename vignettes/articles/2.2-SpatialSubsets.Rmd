@@ -1,6 +1,6 @@
 ---
 title: "Chapter 2 - Spatial Subsetting"
-date: "2025-03-26"
+date: "2025-03-27"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{02-SpatialSubsets}
@@ -44,10 +44,8 @@ library(dplyr)
 library(ggplot2)
 library(ggspatial)
 library(mapview)
-#> Warning: package 'mapview' was built under R version 4.3.3
 library(leaflet)
 library(leaflet.extras)
-#> Warning: package 'leaflet.extras' was built under R version 4.3.3
 ```
 
 # 2.1 Key Biodiversity Areas
@@ -94,6 +92,7 @@ kba_attributes <- kba_attributes %>%
          "Landcover",
          "Province",
          "Species")
+#> Error in select(., "SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", : unused arguments ("SiteCode", "DateAssessed", "PercentProtected", "BoundaryGeneralized", "Level", "CriteriaMet", "ConservationActions", "Landcover", "Province", "Species")
 ```
 
 Both dataframes now contain unique columns, after our selection. We apply the `full_join()` function to hold all attributes within one dataframe.

@@ -1,6 +1,6 @@
 ---
 title: "Chapter 3 - Climate Data"
-date: "2025-03-26"
+date: "2025-03-27"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{03-ClimateData}
@@ -399,6 +399,7 @@ Extract the bio-climatic variable values for each bird observation site, respect
 
 ``` r
 bioclim_values <- extract(worldclim_stack, cranes_sf)
+#> Error in UseMethod("extract"): no applicable method for 'extract' applied to an object of class "SpatRaster"
 ```
 
 Then combine the bio-climatic values with the NatureCounts data.
