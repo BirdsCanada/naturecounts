@@ -207,7 +207,7 @@ water_mask_combined <- c(water_mask, water_mask_mode)
 
 Assign meaningful names to each raster mask and plot them.
 
-```{r, water_mask_combo, fig.cap = "", fig.alt = "Plot shows the difference between the water mask and water mask mode images of La Mauricie park."}
+```{r water_mask_combo, fig.cap = "", fig.alt = "Plot shows the difference between the water mask and water mask mode images of La Mauricie park."}
 names(water_mask_combined) <- c("water mask", "water mask mode")
 
 plot(water_mask_combined)
@@ -255,7 +255,7 @@ mauricie_sl_ndvi <- calc_ndvi(mauricie_sl_mask$nir, mauricie_sl_mask$red)
 
 Plot `mauricie_sl_ndvi` and the National Park boundary.
 
-```{r, ndvi_plot, fig.cap = "", fig.alt = "Plot shows the NDVI values within La Mauricie park."}
+```{r ndvi_plot, fig.cap = "", fig.alt = "Plot shows the NDVI values within La Mauricie park."}
 # Plot NDVI
 plot(mauricie_sl_ndvi, main = "NDVI values across La Mauricie National Park")
 
