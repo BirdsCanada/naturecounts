@@ -14,7 +14,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   # For pre-compiling and pkgdown (relative to pkg home)
   fig.path = "vignettes/articles/figures/nc_sp6_",
-  dpi = 150
+  dpi = 150,
+  error = FALSE
 )
 ```
 

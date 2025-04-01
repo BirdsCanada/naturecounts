@@ -1,6 +1,6 @@
 ---
 title: "Chapter 6 - Satellite Imagery"
-date: "2025-03-27"
+date: "2025-04-01"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{06-SatelliteImagery}
@@ -111,31 +111,27 @@ Crop `sentinel_imagery` to the extent of `mauricie_boundary` then plot the cropp
 ``` r
 mauricie_sl <- crop(sentinel_imagery, vect(mauricie_boundary))
 
+# Plot the RGB composite
+terra::plotRGB(mauricie_sl, r = 4, g = 3, b = 2, stretch = "lin", lwd = 2, axes = FALSE)
+
+# Add the boundary shapefile to the plot
+plot(st_geometry(mauricie_boundary), col = NA, border ="red", add = TRUE)
+```
+
+<img src="figures/nc_sp6_true_color_comp-1.png" alt="Plot shows the cropped Mauricie park in true color."  />
+
+Now plot the cropped image in false color. Here, we'll use the standard false color composite where red, green, and blue channels are used to visualize NIR, red, and green respectively.
 
 
+``` r
+# Plot the false color composite
+terra::plotRGB(mauricie_sl, r = 5, g = 4, b = 3, stretch = "lin", lwd = 2, axes = FALSE)
 
+# Add the boundary shapefile to the plot
+plot(st_geometry(mauricie_boundary), col = NA, border ="green", add = TRUE)
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<img src="figures/nc_sp6_false_color_comp-1.png" alt="Plot shows the cropped Mauricie park in false color."  />
 
 # 6.2 Calculate Spectral Indices {#6.2SpectralIndices}
 
@@ -241,7 +237,6 @@ Apply the `water_mask_mode` to `mauricie_sl`.
 
 ``` r
 mauricie_sl_water_mask <- mask(mauricie_sl, water_mask_mode, maskvalues = 1)
-#> |---------|---------|---------|---------|=========================================                                          
 ```
 
 Apply another mask to assign NA values to those pixels outside of the National Park boundary.
@@ -249,7 +244,6 @@ Apply another mask to assign NA values to those pixels outside of the National P
 
 ``` r
 mauricie_sl_mask <- mask(mauricie_sl_water_mask, vect(mauricie_boundary))
-#> |---------|---------|---------|---------|=========================================                                          
 ```
 
 Plot a true color composite of `mauricie_sl_mask` and the National Park boundary.
@@ -300,6 +294,7 @@ Rename the NDVI raster layer.
 
 ``` r
 names(mauricie_sl_ndvi) <- "ndvi"
+
 ```
 
 Read in the NatureCounts data you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or the [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) data folder.
