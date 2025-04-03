@@ -68,7 +68,7 @@
 
       <h1>Chapter 3 - Climate Data</h1>
             
-            <h4 data-toc-skip class="date">2025-03-27</h4>
+            <h4 data-toc-skip class="date">2025-04-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.3-ClimateData.Rmd" class="external-link"><code>vignettes/articles/2.3-ClimateData.Rmd</code></a></small>
       <div class="d-none name"><code>2.3-ClimateData.Rmd</code></div>
@@ -248,29 +248,29 @@ so, we can 1) produce a regular dataframe called
 <h2 id="weathercan-vector-data">3.2 Weathercan (Vector) Data<a class="anchor" aria-label="anchor" href="#weathercan-vector-data"></a>
 </h2>
 <p><code>weathercan</code> is an R package designed to help access
-historical weather data from ECCC. Steffi LaZerte’s online tutorial, <a href="https://ropensci.org/blog/2018/03/06/weathercan/" class="external-link">Integrating data
-from weathercan</a>, provides more details on how to download, filter,
-and visualize weather data in R.</p>
+historical weather data from ECCC. Steffi LaZerte’s <a href="https://docs.ropensci.org/weathercan/articles/weathercan.html" class="external-link">online
+documentation</a>, provides more details on how to download, filter, and
+visualize weather data in R.</p>
 <p>First, let’s take a look at the built in <strong>stations</strong>
 dataset:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">stations</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; The stations data frame hasn't been updated in over 4 weeks. Consider running `stations_dl()` to check for updates and make sure you have the most recent stations list available</span></span>
-<span><span class="co">#&gt; # A tibble: 26,382 × 16</span></span>
-<span><span class="co">#&gt;    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz        interval start   end normals normals_1981_2010</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt;            </span></span>
-<span><span class="co">#&gt;  1 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/GMT+7 day       1908  1922 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  2 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/GMT+7 hour        NA    NA FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  3 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/GMT+7 month     1908  1922 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  4 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/GMT+7 day       1978  1979 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  5 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/GMT+7 hour        NA    NA FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  6 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/GMT+7 month     1978  1979 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  7 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/GMT+7 day       1987  1990 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  8 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/GMT+7 hour        NA    NA FALSE   FALSE            </span></span>
-<span><span class="co">#&gt;  9 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/GMT+7 month     1987  1990 FALSE   FALSE            </span></span>
-<span><span class="co">#&gt; 10 AB    GOLDEN VALLEY             1798 301B8LR        NA &lt;NA&gt;   53.2 -110.  640  Etc/GMT+7 day       1987  1998 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt; # A tibble: 26,382 × 17</span></span>
+<span><span class="co">#&gt;    prov  station_name        station_id climate_id WMO_id TC_id   lat   lon  elev tz     interval start   end normals normals_1991_2020</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt;            </span></span>
+<span><span class="co">#&gt;  1 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/G… day       1908  1922 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  2 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/G… hour        NA    NA FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  3 AB    DAYSLAND                  1795 301AR54        NA &lt;NA&gt;   52.9 -112.  689. Etc/G… month     1908  1922 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  4 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/G… day       1978  1979 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  5 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/G… hour        NA    NA FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  6 AB    EDMONTON CORONATION       1796 301BK03        NA &lt;NA&gt;   53.6 -114.  671. Etc/G… month     1978  1979 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  7 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/G… day       1987  1990 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  8 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/G… hour        NA    NA FALSE   FALSE            </span></span>
+<span><span class="co">#&gt;  9 AB    FLEET                     1797 301B6L0        NA &lt;NA&gt;   52.2 -112.  838. Etc/G… month     1987  1990 FALSE   FALSE            </span></span>
+<span><span class="co">#&gt; 10 AB    GOLDEN VALLEY             1798 301B8LR        NA &lt;NA&gt;   53.2 -110.  640  Etc/G… day       1987  1998 FALSE   FALSE            </span></span>
 <span><span class="co">#&gt; # ℹ 26,372 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 1 more variable: normals_1971_2000 &lt;lgl&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; # ℹ 2 more variables: normals_1981_2010 &lt;lgl&gt;, normals_1971_2000 &lt;lgl&gt;</span></span></code></pre></div>
 <p>You are ready to download weather data! For the purpose of this
 tutorial, let’s perform a smaller weather data download by specifying
 specific station IDs. The weather stations closest to Wood Buffalo
@@ -314,15 +314,11 @@ in the weather data download:</p>
 <span><span class="co">#                       start = "2000-01-01",</span></span>
 <span><span class="co">#                       end = "2023-12-31",</span></span>
 <span><span class="co">#                       interval = "day", quiet = TRUE)</span></span></code></pre></div>
-<p>Next, convert the date column to Date data type. This will allow you
-to apply more filters based on month and survey year:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">weather</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">weather</span><span class="op">$</span><span class="va">date</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, to summarize the weather data by calculating the annual mean
 summer temperature and precipitation we can use the familiar
 <code>filter</code>, <code>group_by</code>, and <code>summarise</code>
 functions:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">yearly_climate</span> <span class="op">&lt;-</span> <span class="va">weather</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="fl">5</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># Filter for summer months May (5) through August (8)</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>survey_year <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>   <span class="co"># Group by year</span></span>
@@ -347,7 +343,7 @@ functions:</p>
 <span><span class="co">#&gt; # ℹ 17 more rows</span></span></code></pre></div>
 <p>Now that you have prepared the NatureCounts and weathercan climate
 data you can combine the data together for analysis.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cranes_climate_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">cranes_summary</span>, <span class="va">yearly_climate</span>, by <span class="op">=</span> <span class="st">"survey_year"</span><span class="op">)</span></span>
 <span><span class="va">cranes_climate_summary</span></span>
 <span><span class="co">#&gt; # A tibble: 12 × 4</span></span>
@@ -367,7 +363,7 @@ data you can combine the data together for analysis.</p>
 <span><span class="co">#&gt; 12        2005          180            10.7              2.89</span></span></code></pre></div>
 <p>To visualize average annual summer temperature and total count, you
 can use a scatterplot.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">cranes_climate_summary</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">yearly_avg_temp</span>, y <span class="op">=</span> <span class="va">annual_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>  <span class="co"># Simple blue points</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>  <span class="co"># Add linear regression line</span></span>
@@ -379,7 +375,7 @@ can use a scatterplot.</p>
 <span><span class="co">#&gt; `geom_smooth()` using formula = 'y ~ x'</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp3_annual_temp-1.png" alt="Scatterplot showing a decreasing relationship between the total count of whooping crans and average summer temperature"></p>
 <p>And do the same for annual summer precipitation:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">cranes_climate_summary</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">yearly_avg_precip</span>, y <span class="op">=</span> <span class="va">annual_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>  <span class="co"># Simple blue points</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>  <span class="co"># Add linear regression line</span></span>
@@ -411,11 +407,11 @@ all the files in the raster stack by specifying the path to your folder
 (use <code>list.files</code> function) and read them into R using the
 <code>rast</code> function.</p>
 <p>This code will get the path to your working directory.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Now point the <code>list.file</code> to this directory using the
 sample code below.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">worldclim_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"YOUR/PATH/HERE"</span>, pattern <span class="op">=</span> <span class="st">"\\.tif$"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read and stack the raster files</span></span>
@@ -431,109 +427,103 @@ sample code below.</p>
 <span><span class="co">#&gt; sources     : wc2.1_10m_bio_1.tif  </span></span>
 <span><span class="co">#&gt;               wc2.1_10m_bio_10.tif  </span></span>
 <span><span class="co">#&gt;               wc2.1_10m_bio_11.tif  </span></span>
-<span><span class="co">#&gt;               ... and 16 more source(s)</span></span>
+<span><span class="co">#&gt;               ... and 16 more sources</span></span>
 <span><span class="co">#&gt; names       : wc2.1~bio_1, wc2.1~io_10, wc2.1~io_11, wc2.1~io_12, wc2.1~io_13, wc2.1~io_14, ... </span></span>
 <span><span class="co">#&gt; min values  :   -54.72435,   -37.78142,   -66.31125,           0,           0,           0, ... </span></span>
 <span><span class="co">#&gt; max values  :    30.98764,    38.21617,    29.15299,       11191,        2381,         484, ...</span></span></code></pre>
 <p>Great! The raster stack which includes the 19 bio-climatic variables
 has been read into R successfully. We can simplify the layer names which
 represent each variable, respectively:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"bio"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s take a look at the first layer ‘bio1’ which is Annual Mean
 Temperature. To do so, you can subset the layers of the SpatRaster with
 $ or two sets of square brackets [ [ ] ].</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the first bio-climatic layer (e.g., bio1: Annual Mean Temperature)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">[[</span><span class="st">"bio1"</span><span class="op">]</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"Annual Mean Temperature (bio1)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp3_raster_bio1-1.png" alt="World map with Annual mean temperatures overlaid in blues, greens and yellows. Showing cooler poles and warmer equatorial regions."></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Summary statistics for each layer</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">worldclim_stack</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: [summary] used a sample</span></span>
-<span><span class="co">#&gt;       bio1             bio2             bio3             bio4             bio5             bio6             bio7             bio8       </span></span>
-<span><span class="co">#&gt;  Min.   :-54.72   Min.   :-37.72   Min.   :-66.19   Min.   :   0.0   Min.   :   0.0   Min.   :  0.00   Min.   :  0.00   Min.   :   0.0  </span></span>
-<span><span class="co">#&gt;  1st Qu.:-22.81   1st Qu.:-10.58   1st Qu.:-34.22   1st Qu.: 110.0   1st Qu.:  28.0   1st Qu.:  0.00   1st Qu.: 41.41   1st Qu.:  56.0  </span></span>
-<span><span class="co">#&gt;  Median : -0.53   Median : 13.82   Median :-15.20   Median : 337.0   Median :  60.0   Median :  5.00   Median : 64.80   Median : 152.0  </span></span>
-<span><span class="co">#&gt;  Mean   : -4.05   Mean   :  7.19   Mean   :-13.90   Mean   : 550.3   Mean   :  93.5   Mean   : 15.39   Mean   : 74.63   Mean   : 241.8  </span></span>
-<span><span class="co">#&gt;  3rd Qu.: 19.02   3rd Qu.: 24.80   3rd Qu.: 12.13   3rd Qu.: 690.0   3rd Qu.: 112.0   3rd Qu.: 18.00   3rd Qu.:100.13   3rd Qu.: 298.0  </span></span>
-<span><span class="co">#&gt;  Max.   : 30.71   Max.   : 38.18   Max.   : 28.62   Max.   :7011.0   Max.   :1965.0   Max.   :471.00   Max.   :228.88   Max.   :4503.0  </span></span>
-<span><span class="co">#&gt;  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   </span></span>
-<span><span class="co">#&gt;       bio9             bio10            bio11            bio12           bio13            bio14            bio15            bio16       </span></span>
-<span><span class="co">#&gt;  Min.   :   0.00   Min.   :   0.0   Min.   :   0.0   Min.   : 1.00   Min.   :  9.65   Min.   :   0.0   Min.   :-29.60   Min.   :-72.40  </span></span>
-<span><span class="co">#&gt;  1st Qu.:   2.00   1st Qu.:   7.0   1st Qu.:  17.0   1st Qu.: 7.38   1st Qu.: 20.97   1st Qu.: 569.8   1st Qu.: -6.01   1st Qu.:-39.30  </span></span>
-<span><span class="co">#&gt;  Median :  23.00   Median : 107.0   Median :  47.0   Median : 9.34   Median : 26.57   Median : 897.1   Median : 21.53   Median :-21.61  </span></span>
-<span><span class="co">#&gt;  Mean   :  55.47   Mean   : 156.5   Mean   : 108.8   Mean   : 9.94   Mean   : 34.54   Mean   : 880.0   Mean   : 13.93   Mean   :-19.80  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:  66.00   3rd Qu.: 225.0   3rd Qu.: 109.0   3rd Qu.:12.36   3rd Qu.: 45.35   3rd Qu.:1206.6   3rd Qu.: 31.35   3rd Qu.:  4.63  </span></span>
-<span><span class="co">#&gt;  Max.   :1477.00   Max.   :3159.0   Max.   :3849.0   Max.   :20.28   Max.   :100.00   Max.   :2342.4   Max.   : 47.95   Max.   : 26.20  </span></span>
-<span><span class="co">#&gt;  NA's   :65591     NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   </span></span>
-<span><span class="co">#&gt;      bio17           bio18            bio19       </span></span>
-<span><span class="co">#&gt;  Min.   : 1.00   Min.   :-66.19   Min.   :-54.26  </span></span>
-<span><span class="co">#&gt;  1st Qu.:26.11   1st Qu.:-26.12   1st Qu.:-24.25  </span></span>
-<span><span class="co">#&gt;  Median :33.38   Median : 10.69   Median : -9.26  </span></span>
-<span><span class="co">#&gt;  Mean   :33.72   Mean   : -0.93   Mean   : -5.38  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:41.31   3rd Qu.: 21.46   3rd Qu.: 18.52  </span></span>
-<span><span class="co">#&gt;  Max.   :71.58   Max.   : 37.70   Max.   : 37.04  </span></span>
-<span><span class="co">#&gt;  NA's   :65591   NA's   :65591    NA's   :65591</span></span></code></pre></div>
+<span><span class="co">#&gt;       bio1             bio2             bio3             bio4             bio5             bio6             bio7       </span></span>
+<span><span class="co">#&gt;  Min.   :-54.72   Min.   :-37.72   Min.   :-66.19   Min.   :   0.0   Min.   :   0.0   Min.   :  0.00   Min.   :  0.00  </span></span>
+<span><span class="co">#&gt;  1st Qu.:-22.81   1st Qu.:-10.58   1st Qu.:-34.22   1st Qu.: 110.0   1st Qu.:  28.0   1st Qu.:  0.00   1st Qu.: 41.41  </span></span>
+<span><span class="co">#&gt;  Median : -0.53   Median : 13.82   Median :-15.20   Median : 337.0   Median :  60.0   Median :  5.00   Median : 64.80  </span></span>
+<span><span class="co">#&gt;  Mean   : -4.05   Mean   :  7.19   Mean   :-13.90   Mean   : 550.3   Mean   :  93.5   Mean   : 15.39   Mean   : 74.63  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 19.02   3rd Qu.: 24.80   3rd Qu.: 12.13   3rd Qu.: 690.0   3rd Qu.: 112.0   3rd Qu.: 18.00   3rd Qu.:100.13  </span></span>
+<span><span class="co">#&gt;  Max.   : 30.71   Max.   : 38.18   Max.   : 28.62   Max.   :7011.0   Max.   :1965.0   Max.   :471.00   Max.   :228.88  </span></span>
+<span><span class="co">#&gt;  NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591    NA's   :65591   </span></span>
+<span><span class="co">#&gt;       bio8             bio9             bio10            bio11            bio12           bio13            bio14       </span></span>
+<span><span class="co">#&gt;  Min.   :   0.0   Min.   :   0.00   Min.   :   0.0   Min.   :   0.0   Min.   : 1.00   Min.   :  9.65   Min.   :   0.0  </span></span>
+<span><span class="co">#&gt;  1st Qu.:  56.0   1st Qu.:   2.00   1st Qu.:   7.0   1st Qu.:  17.0   1st Qu.: 7.38   1st Qu.: 20.97   1st Qu.: 569.8  </span></span>
+<span><span class="co">#&gt;  Median : 152.0   Median :  23.00   Median : 107.0   Median :  47.0   Median : 9.34   Median : 26.57   Median : 897.1  </span></span>
+<span><span class="co">#&gt;  Mean   : 241.8   Mean   :  55.47   Mean   : 156.5   Mean   : 108.8   Mean   : 9.94   Mean   : 34.54   Mean   : 880.0  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 298.0   3rd Qu.:  66.00   3rd Qu.: 225.0   3rd Qu.: 109.0   3rd Qu.:12.36   3rd Qu.: 45.35   3rd Qu.:1206.6  </span></span>
+<span><span class="co">#&gt;  Max.   :4503.0   Max.   :1477.00   Max.   :3159.0   Max.   :3849.0   Max.   :20.28   Max.   :100.00   Max.   :2342.4  </span></span>
+<span><span class="co">#&gt;  NA's   :65591    NA's   :65591     NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591   </span></span>
+<span><span class="co">#&gt;      bio15            bio16            bio17           bio18            bio19       </span></span>
+<span><span class="co">#&gt;  Min.   :-29.60   Min.   :-72.40   Min.   : 1.00   Min.   :-66.19   Min.   :-54.26  </span></span>
+<span><span class="co">#&gt;  1st Qu.: -6.01   1st Qu.:-39.30   1st Qu.:26.11   1st Qu.:-26.12   1st Qu.:-24.25  </span></span>
+<span><span class="co">#&gt;  Median : 21.53   Median :-21.61   Median :33.38   Median : 10.69   Median : -9.26  </span></span>
+<span><span class="co">#&gt;  Mean   : 13.93   Mean   :-19.80   Mean   :33.72   Mean   : -0.93   Mean   : -5.38  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 31.35   3rd Qu.:  4.63   3rd Qu.:41.31   3rd Qu.: 21.46   3rd Qu.: 18.52  </span></span>
+<span><span class="co">#&gt;  Max.   : 47.95   Max.   : 26.20   Max.   :71.58   Max.   : 37.70   Max.   : 37.04  </span></span>
+<span><span class="co">#&gt;  NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591</span></span></code></pre></div>
 <p>Convert the <strong>species_occurences_summary</strong>, which
 summarizes species occurrence by SiteCode, into a spatial object using
 the <code>st_as_sf</code> function:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cranes_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">species_occurrence_summary</span>,</span>
 <span>                      coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
 <p>Extract the bio-climatic variable values for each bird observation
 site, respectively.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bioclim_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">worldclim_stack</span>, <span class="va">cranes_sf</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in UseMethod("extract"): no applicable method for 'extract' applied to an object of class "SpatRaster"</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bioclim_values</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">worldclim_stack</span>, <span class="va">cranes_sf</span><span class="op">)</span></span></code></pre></div>
 <p>Then combine the bio-climatic values with the NatureCounts data.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">cranes_sf</span>, <span class="va">bioclim_values</span>, </span>
 <span>                      longitude <span class="op">=</span> <span class="va">species_occurrence_summary</span><span class="op">$</span><span class="va">longitude</span>, </span>
 <span>                      latitude <span class="op">=</span>  <span class="va">species_occurrence_summary</span><span class="op">$</span><span class="va">latitude</span><span class="op">)</span></span></code></pre></div>
 <p>Filter the data to only include observations made post 1970 to match
 the temporal resolution of the climate dataset:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="va">bioclim_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="st">"1970"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `stopifnot()`:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `date = as.Date(date)`.</span></span>
-<span><span class="co">#&gt; Caused by error in `as.Date.default()`:</span></span>
-<span><span class="co">#&gt; ! do not know how to convert 'date' to class "Date"</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">survey_year</span> <span class="op">&gt;=</span> <span class="st">"1970"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">bioclim_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    SiteCode          survey_year    total_count            ID            bio1              bio2            bio3              bio4      </span></span>
-<span><span class="co">#&gt;  Length:67          Min.   :1987   Min.   :  0.000   Min.   : 1.0   Min.   :-2.7267   Min.   :14.11   Min.   :-21.910   Min.   :346.0  </span></span>
-<span><span class="co">#&gt;  Class :character   1st Qu.:2000   1st Qu.:  1.000   1st Qu.:17.5   1st Qu.:-2.4017   1st Qu.:14.73   1st Qu.:-21.183   1st Qu.:352.0  </span></span>
-<span><span class="co">#&gt;  Mode  :character   Median :2002   Median :  1.000   Median :34.0   Median :-2.3429   Median :14.80   Median :-20.766   Median :354.0  </span></span>
-<span><span class="co">#&gt;                     Mean   :2000   Mean   :  4.134   Mean   :34.0   Mean   :-0.6792   Mean   :14.99   Mean   :-17.939   Mean   :390.0  </span></span>
-<span><span class="co">#&gt;                     3rd Qu.:2003   3rd Qu.:  2.000   3rd Qu.:50.5   3rd Qu.: 1.3970   3rd Qu.:15.31   3rd Qu.:-14.532   3rd Qu.:425.5  </span></span>
-<span><span class="co">#&gt;                     Max.   :2005   Max.   :160.000   Max.   :67.0   Max.   : 4.0880   Max.   :15.83   Max.   : -7.527   Max.   :543.0  </span></span>
-<span><span class="co">#&gt;       bio5            bio6            bio7            bio8            bio9           bio10           bio11           bio12      </span></span>
-<span><span class="co">#&gt;  Min.   : 52.0   Min.   :10.00   Min.   :42.27   Min.   :135.0   Min.   :34.00   Min.   :134.0   Min.   :34.00   Min.   :10.98  </span></span>
-<span><span class="co">#&gt;  1st Qu.: 56.0   1st Qu.:14.00   1st Qu.:46.05   1st Qu.:145.0   1st Qu.:44.00   1st Qu.:145.0   1st Qu.:51.50   1st Qu.:11.82  </span></span>
-<span><span class="co">#&gt;  Median : 56.0   Median :14.00   Median :46.59   Median :147.0   Median :44.00   Median :147.0   Median :53.00   Median :12.06  </span></span>
-<span><span class="co">#&gt;  Mean   : 67.9   Mean   :13.88   Mean   :54.81   Mean   :178.3   Mean   :46.51   Mean   :178.3   Mean   :52.15   Mean   :11.99  </span></span>
-<span><span class="co">#&gt;  3rd Qu.: 80.5   3rd Qu.:14.00   3rd Qu.:65.93   3rd Qu.:215.0   3rd Qu.:49.50   3rd Qu.:215.0   3rd Qu.:53.00   3rd Qu.:12.07  </span></span>
-<span><span class="co">#&gt;  Max.   :104.0   Max.   :17.00   Max.   :74.12   Max.   :270.0   Max.   :56.00   Max.   :270.0   Max.   :61.00   Max.   :13.89  </span></span>
-<span><span class="co">#&gt;      bio13           bio14            bio15           bio16            bio17           bio18           bio19          longitude     </span></span>
-<span><span class="co">#&gt;  Min.   :21.53   Min.   : 940.5   Min.   :21.38   Min.   :-29.17   Min.   :39.16   Min.   :12.90   Min.   :-13.17   Min.   :-117.1  </span></span>
-<span><span class="co">#&gt;  1st Qu.:23.42   1st Qu.:1214.9   1st Qu.:22.73   1st Qu.:-28.41   1st Qu.:44.32   1st Qu.:14.73   1st Qu.:-11.26   1st Qu.:-113.3  </span></span>
-<span><span class="co">#&gt;  Median :23.86   Median :1443.2   Median :22.96   Median :-27.86   Median :50.79   Median :14.80   Median :-10.89   Median :-113.0  </span></span>
-<span><span class="co">#&gt;  Mean   :25.17   Mean   :1342.1   Mean   :22.83   Mean   :-25.21   Mean   :48.04   Mean   :14.96   Mean   :-10.78   Mean   :-112.7  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:26.12   3rd Qu.:1465.4   3rd Qu.:23.06   3rd Qu.:-21.73   3rd Qu.:51.47   3rd Qu.:15.31   3rd Qu.:-10.72   3rd Qu.:-111.7  </span></span>
-<span><span class="co">#&gt;  Max.   :33.67   Max.   :1499.5   Max.   :24.50   Max.   :-15.46   Max.   :51.83   Max.   :15.83   Max.   : -3.01   Max.   :-110.2  </span></span>
-<span><span class="co">#&gt;     latitude              geometry </span></span>
-<span><span class="co">#&gt;  Min.   :51.05   POINT        :67  </span></span>
-<span><span class="co">#&gt;  1st Qu.:54.24   epsg:4326    : 0  </span></span>
-<span><span class="co">#&gt;  Median :59.90   +proj=long...: 0  </span></span>
-<span><span class="co">#&gt;  Mean   :57.49                     </span></span>
-<span><span class="co">#&gt;  3rd Qu.:59.97                     </span></span>
-<span><span class="co">#&gt;  Max.   :60.21</span></span></code></pre></div>
+<span><span class="co">#&gt;    SiteCode          survey_year    total_count            ID            bio1              bio2            bio3        </span></span>
+<span><span class="co">#&gt;  Length:67          Min.   :1987   Min.   :  0.000   Min.   : 1.0   Min.   :-2.7267   Min.   :14.11   Min.   :-21.910  </span></span>
+<span><span class="co">#&gt;  Class :character   1st Qu.:2000   1st Qu.:  1.000   1st Qu.:17.5   1st Qu.:-2.4017   1st Qu.:14.73   1st Qu.:-21.183  </span></span>
+<span><span class="co">#&gt;  Mode  :character   Median :2002   Median :  1.000   Median :34.0   Median :-2.3429   Median :14.80   Median :-20.766  </span></span>
+<span><span class="co">#&gt;                     Mean   :2000   Mean   :  4.134   Mean   :34.0   Mean   :-0.6792   Mean   :14.99   Mean   :-17.939  </span></span>
+<span><span class="co">#&gt;                     3rd Qu.:2003   3rd Qu.:  2.000   3rd Qu.:50.5   3rd Qu.: 1.3970   3rd Qu.:15.31   3rd Qu.:-14.532  </span></span>
+<span><span class="co">#&gt;                     Max.   :2005   Max.   :160.000   Max.   :67.0   Max.   : 4.0880   Max.   :15.83   Max.   : -7.527  </span></span>
+<span><span class="co">#&gt;       bio4            bio5            bio6            bio7            bio8            bio9           bio10           bio11      </span></span>
+<span><span class="co">#&gt;  Min.   :346.0   Min.   : 52.0   Min.   :10.00   Min.   :42.27   Min.   :135.0   Min.   :34.00   Min.   :134.0   Min.   :34.00  </span></span>
+<span><span class="co">#&gt;  1st Qu.:352.0   1st Qu.: 56.0   1st Qu.:14.00   1st Qu.:46.05   1st Qu.:145.0   1st Qu.:44.00   1st Qu.:145.0   1st Qu.:51.50  </span></span>
+<span><span class="co">#&gt;  Median :354.0   Median : 56.0   Median :14.00   Median :46.59   Median :147.0   Median :44.00   Median :147.0   Median :53.00  </span></span>
+<span><span class="co">#&gt;  Mean   :390.0   Mean   : 67.9   Mean   :13.88   Mean   :54.81   Mean   :178.3   Mean   :46.51   Mean   :178.3   Mean   :52.15  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:425.5   3rd Qu.: 80.5   3rd Qu.:14.00   3rd Qu.:65.93   3rd Qu.:215.0   3rd Qu.:49.50   3rd Qu.:215.0   3rd Qu.:53.00  </span></span>
+<span><span class="co">#&gt;  Max.   :543.0   Max.   :104.0   Max.   :17.00   Max.   :74.12   Max.   :270.0   Max.   :56.00   Max.   :270.0   Max.   :61.00  </span></span>
+<span><span class="co">#&gt;      bio12           bio13           bio14            bio15           bio16            bio17           bio18           bio19       </span></span>
+<span><span class="co">#&gt;  Min.   :10.98   Min.   :21.53   Min.   : 940.5   Min.   :21.38   Min.   :-29.17   Min.   :39.16   Min.   :12.90   Min.   :-13.17  </span></span>
+<span><span class="co">#&gt;  1st Qu.:11.82   1st Qu.:23.42   1st Qu.:1214.9   1st Qu.:22.73   1st Qu.:-28.41   1st Qu.:44.32   1st Qu.:14.73   1st Qu.:-11.26  </span></span>
+<span><span class="co">#&gt;  Median :12.06   Median :23.86   Median :1443.2   Median :22.96   Median :-27.86   Median :50.79   Median :14.80   Median :-10.89  </span></span>
+<span><span class="co">#&gt;  Mean   :11.99   Mean   :25.17   Mean   :1342.1   Mean   :22.83   Mean   :-25.21   Mean   :48.04   Mean   :14.96   Mean   :-10.78  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:12.07   3rd Qu.:26.12   3rd Qu.:1465.4   3rd Qu.:23.06   3rd Qu.:-21.73   3rd Qu.:51.47   3rd Qu.:15.31   3rd Qu.:-10.72  </span></span>
+<span><span class="co">#&gt;  Max.   :13.89   Max.   :33.67   Max.   :1499.5   Max.   :24.50   Max.   :-15.46   Max.   :51.83   Max.   :15.83   Max.   : -3.01  </span></span>
+<span><span class="co">#&gt;    longitude         latitude              geometry </span></span>
+<span><span class="co">#&gt;  Min.   :-117.1   Min.   :51.05   POINT        :67  </span></span>
+<span><span class="co">#&gt;  1st Qu.:-113.3   1st Qu.:54.24   epsg:4326    : 0  </span></span>
+<span><span class="co">#&gt;  Median :-113.0   Median :59.90   +proj=long...: 0  </span></span>
+<span><span class="co">#&gt;  Mean   :-112.7   Mean   :57.49                     </span></span>
+<span><span class="co">#&gt;  3rd Qu.:-111.7   3rd Qu.:59.97                     </span></span>
+<span><span class="co">#&gt;  Max.   :-110.2   Max.   :60.21</span></span></code></pre></div>
 <p>Visualize the distribution of <strong>bio1</strong> compared to
 <strong>total_count</strong>:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scatter plot of bird observations against a bioclimatic variable (bio1 = Annual Mean Temperature)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bioclim_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bio1</span>, y <span class="op">=</span> <span class="va">total_count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
@@ -546,10 +536,10 @@ the temporal resolution of the climate dataset:</p>
 <strong>SiteCode</strong>, sizing the points by
 <strong>total_count</strong> and colorizing them by a bio-climatic
 variable (<strong>bio1</strong>):</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">bioclim_data</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre></div>
 <p>To make an interactive map of total counts per site.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Group by SiteCode and summarize total_count</span></span>
 <span><span class="va">bioclim_data</span> <span class="op">&lt;-</span> <span class="va">bioclim_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
