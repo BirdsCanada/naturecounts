@@ -68,7 +68,7 @@
 
       <h1>Chapter 4 - Elevation Data</h1>
             
-            <h4 data-toc-skip class="date">2025-03-27</h4>
+            <h4 data-toc-skip class="date">2025-04-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/docs-update/vignettes/articles/2.4-ElevationData.Rmd" class="external-link"><code>vignettes/articles/2.4-ElevationData.Rmd</code></a></small>
       <div class="d-none name"><code>2.4-ElevationData.Rmd</code></div>
@@ -133,7 +133,7 @@ Elevation Data</a>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/stars/" class="external-link">stars</a></span><span class="op">)</span>  <span class="co"># Another package for working with raster data</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span></code></pre></div>
 <p>This tutorial uses the following spatial data.</p>
 <ol style="list-style-type: decimal">
@@ -201,7 +201,9 @@ in the province.</p>
 username. You will be prompted for your password.</p>
 <p>Download NatureCounts data:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">quebec_atlas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>collections <span class="op">=</span> <span class="st">"QCATLAS2PC"</span>, username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"spatial_data_tutorial"</span>, timeout <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">quebec_atlas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span></span>
+<span>  collections <span class="op">=</span> <span class="st">"QCATLAS2PC"</span>,  </span>
+<span>  username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"spatial_data_tutorial"</span>, timeout <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <p>Read in the list of species names from NatureCounts which can be
 linked to the species id:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -342,31 +344,17 @@ downloaded TIF files. Move them from your Downloads to the
 after download. The code below will produce an error if there are other
 .tif files in your subdirectory (like the ones you downloaded in Chapter
 3).</strong></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># list all the TIFF files in your directory</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>dtm_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(output_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.tif$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co"># Read into a list of SpatRaster objects</span></span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>dtm_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(dtm_files, rast)</span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co"># Combine into a single SpatRaster object</span></span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>dtm_mosaic <span class="ot">&lt;-</span> <span class="fu">do.call</span>(mosaic, dtm_list)</span>
-<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="sc">|---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span></span>
-<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="er">=========================================</span></span>
-<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>                                          </span>
-<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a></span>
-<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co"># Print information about the stack</span></span>
-<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="fu">print</span>(dtm_mosaic)</span>
-<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt; class       : SpatRaster </span></span>
-<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a><span class="co">#&gt; dimensions  : 41933, 38429, 1  (nrow, ncol, nlyr)</span></span>
-<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a><span class="co">#&gt; resolution  : 1, 1  (x, y)</span></span>
-<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a><span class="co">#&gt; extent      : 323809, 362238, 5165069, 5207002  (xmin, xmax, ymin, ymax)</span></span>
-<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a><span class="co">#&gt; coord. ref. : NAD83(CSRS) / MTM zone 8 (EPSG:2950) </span></span>
-<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a><span class="co">#&gt; source      : spat_7de810865d68_32232.tif </span></span>
-<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a><span class="co">#&gt; varname     : MNT_31I10NO </span></span>
-<span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a><span class="co">#&gt; name        :  Band_1 </span></span>
-<span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a><span class="co">#&gt; min value   : 102.277 </span></span>
-<span id="cb18-25"><a href="#cb18-25" tabindex="-1"></a><span class="co">#&gt; max value   : 542.817</span></span></code></pre></div>
+<p>Here we use the <code>stars</code> package which allows us to create
+‘proxy’ objects, meaning that the files aren’t loaded into memory until
+the absolutely must be. This allows us to work much more quickly with
+the files, especially for plotting.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># list all the TIFF files in your directory</span></span>
+<span><span class="va">dtm_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">output_dir</span>, pattern <span class="op">=</span> <span class="st">"\\.tif$"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># Combine into a single stars object (use proxy to only load what we need)</span></span>
+<span><span class="va">dtm_mosaic</span> <span class="op">&lt;-</span> <span class="fu">st_mosaic</span><span class="op">(</span><span class="va">dtm_files</span><span class="op">)</span></span>
+<span><span class="va">dtm_mosaic</span> <span class="op">&lt;-</span> <span class="fu">read_stars</span><span class="op">(</span><span class="va">dtm_mosaic</span>, proxy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s check if the DTM and National Park boundary have the same crs
 by using the <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs()</a></code> function and equality operator
 (<strong>==</strong>) which will generate either TRUE or FALSE.</p>
@@ -381,39 +369,33 @@ by using the <code><a href="https://r-spatial.github.io/sf/reference/st_crs.html
 <div class="section level2">
 <h2 id="id_4-3Crop-Mask">4.3 Spatial Extents: Crop &amp; Mask<a class="anchor" aria-label="anchor" href="#id_4-3Crop-Mask"></a>
 </h2>
-<p><strong>Cropping</strong> reduces the extent of a raster to the
-extent of another raster or vector.</p>
-<p>To crop a raster we can apply the <code><a href="https://rspatial.github.io/terra/reference/crop.html" class="external-link">crop()</a></code> function from
-the <code>terra</code> package which uses the SpatVector format. Here,
-we crop the extent of the raster while converting the National Park
-Boundary to a SpatVector using <code><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect()</a></code>.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>dtm_crop <span class="ot">&lt;-</span> <span class="fu">crop</span>(dtm_mosaic, <span class="fu">vect</span>(mauricie_boundary))</span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="sc">|---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span></span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="er">=========================================</span></span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>                                          </span></code></pre></div>
-<p><strong>Masking</strong> assigns NA values to cells of a raster not
-covered by a vector extent.</p>
-<p>To mask a raster to a vector extent we can apply the
-<code><a href="https://rspatial.github.io/terra/reference/mask.html" class="external-link">mask()</a></code> function from the <code>terra</code> package which
-also uses the SpatVector format.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>dtm_mask <span class="ot">&lt;-</span> <span class="fu">mask</span>(dtm_mosaic, <span class="fu">vect</span>(mauricie_boundary))</span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="sc">|---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span><span class="sc">---------</span><span class="er">|</span></span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="er">=========================================</span></span>
-<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>                                          </span></code></pre></div>
+<ul>
+<li>
+<strong>Cropping</strong> reduces the extent of a raster to the
+extent of another raster or vector.</li>
+<li>
+<strong>Masking</strong> assigns NA values to cells of a raster not
+covered by a vector extent.</li>
+</ul>
+<p>The <code>stars</code> package function <code><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop()</a></code>
+performs both of these steps in one.</p>
+<p>Here, we crop the extent of the raster to the National Park
+Boundary.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dtm_crop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crop.html" class="external-link">st_crop</a></span><span class="op">(</span><span class="va">dtm_mosaic</span>, <span class="va">mauricie_boundary</span><span class="op">)</span></span></code></pre></div>
 <p>OPTIONAL: To write the masked raster to your disk, you can use the
-<code><a href="https://rspatial.github.io/terra/reference/writeRaster.html" class="external-link">writeRaster()</a></code> function from <code>terra</code>.
-<strong>This raster will be used in</strong> <a href="07-SummaryTools.Rmd">Chapter 7: Summary Tools</a>. We have
-uploaded this file to the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
+<code>write_stars()</code> function from <code>stars</code> (this will
+take a while as it is a large file). <strong>This raster will be used
+in</strong> <a href="07-SummaryTools.Rmd">Chapter 7: Summary Tools</a>.
+We have uploaded this file to the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
 Drive data folder</strong></a> for your convenience.</p>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
 </blockquote>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># output_dir &lt;- "path/to/your/subdirectory/data/dtm_mask.tif" # include the masked raster name and '.tif' argument </span></span>
 <span></span>
-<span><span class="co"># writeRaster(dtm_mask, output_dir, overwrite = TRUE)</span></span></code></pre></div>
+<span><span class="co"># write_stars(dtm_crop, output_dir)</span></span></code></pre></div>
 <p><strong>Note: Make sure to include the ‘.tif’ argument when
 specifying the <code>output_dir</code> and name of your masked raster
 file. This specifies the file type while using
@@ -424,52 +406,59 @@ error.</strong></p>
 <h2 id="id_4-4Map-Extract">4.4 Map and Extract Digital Elevation Data<a class="anchor" aria-label="anchor" href="#id_4-4Map-Extract"></a>
 </h2>
 <p>Visualize the regional and masked DTM’s with a two-panel plot.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Set up a 1x2 plotting layout</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Plot dtm_mosaic</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_mosaic</span>, main <span class="op">=</span> <span class="st">"regional DTM"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot dtm_mosaic</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_mosaic</span>, main <span class="op">=</span> <span class="st">"regional DTM"</span>, </span>
+<span>     col <span class="op">=</span> <span class="fu">viridisLite</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># reset = FALSE allows us to stack plots</span></span>
+<span><span class="co">#&gt; downsample set to 37</span></span>
 <span></span>
 <span><span class="co"># Overlay the National Park boundary on the first plot</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mauricie_boundary</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"red"</span>, col <span class="op">=</span> <span class="cn">NA</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in plot.sf(mauricie_boundary, add = TRUE, border = "red", col = NA, : ignoring all but the first attribute</span></span>
-<span></span>
-<span><span class="co"># Plot dtm_mask</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_mask</span>, main <span class="op">=</span> <span class="st">"masked DTM"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Overlay the National Park boundary on the second plot</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mauricie_boundary</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"red"</span>, col <span class="op">=</span> <span class="cn">NA</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in plot.sf(mauricie_boundary, add = TRUE, border = "red", col = NA, : ignoring all but the first attribute</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp4_masked_dem-1.png" alt="Two-panel plot visualizing the regional and masked DTM's"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Plot dtm_mask</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_crop</span>, main <span class="op">=</span> <span class="st">"masked DTM"</span>, </span>
+<span>     col <span class="op">=</span> <span class="fu">viridisLite</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; downsample set to 28</span></span></code></pre></div>
+<p><img src="figures%2Fnc_sp4_masked_dem-2.png" alt="Two-panel plot visualizing the regional and masked DTM's"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Overlay the National Park boundary on the second plot</span></span>
+<span><span class="co">#plot(st_as_sfc(mauricie_boundary), add = TRUE, border = "red", lwd = 2, col = NA, reset = FALSE)</span></span></code></pre></div>
 <p>Summarize the NatureCounts data for mapping. Here we will determine
 the number of species observed at each site.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Group by SiteCode and summarize mean annual count across all species</span></span>
 <span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="va">mauricie_birds_sf</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">geometry</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n_species <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">english_name</span><span class="op">)</span><span class="op">)</span> <span class="co"># count the number of unique species</span></span>
 <span><span class="co">#&gt; `summarise()` has grouped output by 'SiteCode'. You can override using the `.groups` argument.</span></span></code></pre></div>
 <p>Now we can map the NatureCounts summary output with the DTM data.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Match the CRS</span></span>
-<span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_mask</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_crop</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot the dtm_mask raster</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_mask</span>, main <span class="op">=</span> <span class="st">"Elevation with Species Diversity Summary Points across La Mauricie"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_crop</span>, </span>
+<span>     main <span class="op">=</span> <span class="st">"Elevation with Species Diversity Summary Points across La Mauricie"</span>,</span>
+<span>     col <span class="op">=</span> <span class="fu">viridisLite</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; downsample set to 28</span></span>
 <span></span>
 <span><span class="co"># Overlay the National Park boundary in red</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span>, col <span class="op">=</span> <span class="cn">NA</span>, border <span class="op">=</span> <span class="st">"red"</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span>, </span>
+<span>     col <span class="op">=</span> <span class="cn">NA</span>, border <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>     reset <span class="op">=</span> <span class="cn">FALSE</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#scale the n_species column to range from 0-5 for plotting</span></span>
 <span><span class="va">mauricie_site_summary</span><span class="op">$</span><span class="va">n_species_scale</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/rescale.html" class="external-link">rescale</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span><span class="op">$</span><span class="va">n_species</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Overlay mauricie_site_summary points</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span><span class="op">)</span>, </span>
-<span>     add <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>     pch <span class="op">=</span> <span class="fl">19</span>,       <span class="co"># Solid circle</span></span>
+<span>     pch <span class="op">=</span> <span class="fl">19</span>,        <span class="co"># Solid circle</span></span>
 <span>     col <span class="op">=</span> <span class="st">"black"</span>,   <span class="co"># Point color</span></span>
-<span>     cex <span class="op">=</span> <span class="va">mauricie_site_summary</span><span class="op">$</span><span class="va">n_species_scale</span><span class="op">)</span>      <span class="co"># Point size based on total</span></span>
+<span>     cex <span class="op">=</span> <span class="va">mauricie_site_summary</span><span class="op">$</span><span class="va">n_species_scale</span>, <span class="co"># Point size based on total</span></span>
+<span>     reset <span class="op">=</span> <span class="cn">FALSE</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>      </span>
 <span></span>
 <span><span class="co"># Define legend values for the point size scale</span></span>
 <span><span class="va">legend_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span><span class="op">$</span><span class="va">n_species</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
@@ -489,27 +478,25 @@ the number of species observed at each site.</p>
 <span>       xpd <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>                     <span class="co"># Allows placing legend outside the plot</span></span></code></pre></div>
 <p><img src="figures%2Fnc_sp4_elevation_map-1.png" alt="Map depicts species diversity summary points and cropped DTM in La Mauricie National Park"></p>
 <p>Rename the elevation raster layer.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dtm_mask</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"elevation"</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dtm_crop</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"elevation"</span></span></code></pre></div>
 <p>Extract elevation values for each bird observation record and append
 it to <code>mauricie_birds</code>. First, make sure the CRS of both
-spatial data match and then use <code><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">terra::extract()</a></code>.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+spatial data match and then use <code>st_extract()</code>.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Match the CRS</span></span>
-<span><span class="va">mauricie_birds_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_birds_sf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_mask</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mauricie_birds_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_birds_sf</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_crop</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract the elevation values for each site</span></span>
-<span><span class="va">elevation_values_sv</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">dtm_mask</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">mauricie_birds_sf</span><span class="op">)</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Convert the SpatVector containing the elevation values to an
-<code>sf</code> object.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">elevation_values_sf</span> <span class="op">&lt;-</span> <span class="va">elevation_values_sv</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># converts to sf object</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">elevation</span>, <span class="va">geometry</span><span class="op">)</span> <span class="co"># select relevant columns</span></span>
-<span>  </span></code></pre></div>
+<span><span class="va">elevation_values_sf</span> <span class="op">&lt;-</span> <span class="fu">stars</span><span class="fu">::</span><span class="fu">st_extract</span><span class="op">(</span><span class="va">dtm_crop</span>, <span class="va">mauricie_birds_sf</span><span class="op">)</span></span></code></pre></div>
+<p>Add in the data columns we want</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">elevation_values_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">elevation_values_sf</span>, </span>
+<span>                                 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">mauricie_birds_sf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">elevation</span><span class="op">)</span></span></code></pre></div>
 <p>Assign a point id identifier to each location based on its unique
 geometry and return the result as a dataframe.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">elevation_values_df</span> <span class="op">&lt;-</span> <span class="va">elevation_values_sf</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">SiteCode</span>, <span class="va">geometry</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>point_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_group_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -518,7 +505,6 @@ geometry and return the result as a dataframe.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># drop the geometry column</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># convert to a regular dataframe</span></span>
-<span><span class="co">#&gt; Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': unused arguments (point_id, elevation)</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.</span></span></code></pre></div>
@@ -531,21 +517,22 @@ Tools</a></strong>. We have uploaded this file to the <a href="https://drive.goo
 Drive data folder</strong></a> for your convenience.</p>
 <p>Create a subdirectory called <code>env_covariates</code> to neatly
 store the output environmental data.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">"data/env_covariates"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
 </blockquote>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># write.csv(elevation_values_df, "data/env_covariates/elevation_values_df.csv", row.names = FALSE)</span></span></code></pre></div>
 <p>Now, let’s combine the elevation dataframe with the NatureCounts
 summary data you previously created in order to assess how elevation
 influences your metric of species diversity.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_mask</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_crop</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract the elevation values for each site</span></span>
-<span><span class="va">elevation_sitesum_sf</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">dtm_mask</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span><span class="op">)</span>, bind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">elevation_sitesum_sf</span> <span class="op">&lt;-</span> <span class="fu">stars</span><span class="fu">::</span><span class="fu">st_extract</span><span class="op">(</span><span class="va">dtm_crop</span>, <span class="va">mauricie_site_summary</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot the relationship between elevation and species diversity </span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">elevation_sitesum_sf</span><span class="op">$</span><span class="va">elevation</span>, <span class="va">elevation_sitesum_sf</span><span class="op">$</span><span class="va">n_species</span>, </span>
@@ -645,7 +632,7 @@ Repeat this process for each respective tile.</p>
 <p><img src="figures_other%2Fspatdata10.png" alt="Data download step 3." width="700px" style="display: block; margin: auto;"></p>
 <p>Save these files in your working directory for easy access during
 this tutorial.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
