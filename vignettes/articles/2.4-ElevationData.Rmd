@@ -298,11 +298,10 @@ OPTIONAL: To write the masked raster to your disk, you can use the `write_stars(
 
 ``` r
 # output_dir <- "path/to/your/subdirectory/data/dtm_mask.tif" # include the masked raster name and '.tif' argument 
-
 # write_stars(dtm_crop, output_dir)
 ```
 
-**Note: Make sure to include the '.tif' argument when specifying the `output_dir` and name of your masked raster file. This specifies the file type while using `writeRaster()` which will, otherwise, produce an error.**
+**Note: Make sure to include the '.tif' argument when specifying the `output_dir` and name of your masked raster file. This specifies the file type while using `write_stars()` which will, otherwise, produce an error.**
 
 # 4.4 Map and Extract Digital Elevation Data {#4.4Map-Extract}
 
@@ -319,7 +318,7 @@ plot(dtm_mosaic, main = "regional DTM",
 plot(st_as_sfc(mauricie_boundary), add = TRUE, border = "red", lwd = 2)
 ```
 
-<img src="figures/nc_sp4_masked_dem-1.png" alt="Two-panel plot visualizing the regional and masked DTM's"  />
+<img src="figures/nc_sp4_masked_dem-1.png" alt="Plots visualizing the regional and masked DTM's"  />
 
 ``` r
 
@@ -329,7 +328,7 @@ plot(dtm_crop, main = "masked DTM",
 #> downsample set to 28
 ```
 
-<img src="figures/nc_sp4_masked_dem-2.png" alt="Two-panel plot visualizing the regional and masked DTM's"  />
+<img src="figures/nc_sp4_masked_dem-2.png" alt="Plots visualizing the regional and masked DTM's"  />
 
 ``` r
 
@@ -355,19 +354,14 @@ Now we can map the NatureCounts summary output with the DTM data.
 # Match the CRS
 mauricie_site_summary <- st_transform(mauricie_site_summary, crs = st_crs(dtm_crop))
 
-# Plot the dtm_mask raster
-plot(dtm_crop, 
-     main = "Elevation with Species Diversity Summary Points across La Mauricie",
-     col = viridisLite::viridis(n = 100), reset = FALSE)
-#> downsample set to 28
-
-# Overlay the National Park boundary in red
-plot(st_geometry(mauricie_boundary), 
-     col = NA, border = "red", lwd = 2, 
-     reset = FALSE, add = TRUE)
-
 #scale the n_species column to range from 0-5 for plotting
 mauricie_site_summary$n_species_scale <- scales::rescale(mauricie_site_summary$n_species, to = c(0, 2))
+
+# Plot the dtm_mask raster
+plot(dtm_crop, 
+     main = "Elevation & Species Diversity Summarized across La Mauricie",
+     col = viridisLite::viridis(n = 100), reset = FALSE)
+#> downsample set to 28
 
 # Overlay mauricie_site_summary points
 plot(st_geometry(mauricie_site_summary), 
@@ -384,7 +378,7 @@ legend_sizes <- scales::rescale(legend_values, to = c(0.5, 2))
 
 # Add legend for the point size scale beside elevation scale
 legend("topright",                     # Position
-       inset = c(-0.10, 0),            # Moves the legend outside the map extent
+       inset = c(0.05, 0.03),            # Moves the legend outside the map extent
        legend = legend_values, 
        pch = 19, col = "black", 
        pt.cex = legend_sizes, 

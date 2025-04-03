@@ -275,8 +275,7 @@ OPTIONAL: To write the masked raster to your disk, you can use the `write_stars(
 
 ```{r}
 # output_dir <- "path/to/your/subdirectory/data/dtm_mask.tif" # include the masked raster name and '.tif' argument 
-output_dir <- "test.tif"
-write_stars(dtm_crop, output_dir)
+# write_stars(dtm_crop, output_dir)
 ```
 
 **Note: Make sure to include the '.tif' argument when specifying the `output_dir` and name of your masked raster file. This specifies the file type while using `write_stars()` which will, otherwise, produce an error.**
@@ -285,7 +284,7 @@ write_stars(dtm_crop, output_dir)
 
 Visualize the regional and masked DTM's with a two-panel plot.
 
-```{r masked_dem,  fig.alt = "Two-panel plot visualizing the regional and masked DTM's", fig.cap = ""}
+```{r masked_dem,  fig.alt = "Plots visualizing the regional and masked DTM's", fig.cap = ""}
 # Plot dtm_mosaic
 plot(dtm_mosaic, main = "regional DTM", 
      col = viridisLite::viridis(n = 100), reset = FALSE) # reset = FALSE allows us to stack plots
@@ -316,18 +315,13 @@ Now we can map the NatureCounts summary output with the DTM data.
 # Match the CRS
 mauricie_site_summary <- st_transform(mauricie_site_summary, crs = st_crs(dtm_crop))
 
-# Plot the dtm_mask raster
-plot(dtm_crop, 
-     main = "Elevation with Species Diversity Summary Points across La Mauricie",
-     col = viridisLite::viridis(n = 100), reset = FALSE)
-
-# Overlay the National Park boundary in red
-plot(st_geometry(mauricie_boundary), 
-     col = NA, border = "red", lwd = 2, 
-     reset = FALSE, add = TRUE)
-
 #scale the n_species column to range from 0-5 for plotting
 mauricie_site_summary$n_species_scale <- scales::rescale(mauricie_site_summary$n_species, to = c(0, 2))
+
+# Plot the dtm_mask raster
+plot(dtm_crop, 
+     main = "Elevation & Species Diversity Summarized across La Mauricie",
+     col = viridisLite::viridis(n = 100), reset = FALSE)
 
 # Overlay mauricie_site_summary points
 plot(st_geometry(mauricie_site_summary), 
@@ -344,7 +338,7 @@ legend_sizes <- scales::rescale(legend_values, to = c(0.5, 2))
 
 # Add legend for the point size scale beside elevation scale
 legend("topright",                     # Position
-       inset = c(-0.10, 0),            # Moves the legend outside the map extent
+       inset = c(0.05, 0.03),            # Moves the legend outside the map extent
        legend = legend_values, 
        pch = 19, col = "black", 
        pt.cex = legend_sizes, 
