@@ -96,7 +96,7 @@ whooping_crane_data <- nc_data_dl(
 
 Grouping the NatureCounts data might provide more meaningful insight on species occurrences at each site and how they might vary across time and space. You can achieve this by summarizing species occurrence by SiteCode and survey year, while keeping the coordinate information for each site using the `group_by` and `summarise` functions:
 
-```{r, error = TRUE}
+```{r}
 species_occurrence_summary <- whooping_crane_data %>%
   format_dates() %>% 
   group_by(SiteCode, survey_year, longitude, latitude) %>%
@@ -118,7 +118,7 @@ cranes_summary
 
 # 3.2 Weathercan (Vector) Data
 
-`weathercan` is an R package designed to help access historical weather data from ECCC. Steffi LaZerte's online tutorial, [Integrating data from weathercan](https://ropensci.org/blog/2018/03/06/weathercan/), provides more details on how to download, filter, and visualize weather data in R.
+`weathercan` is an R package designed to help access historical weather data from ECCC. Steffi LaZerte's [online documentation](https://docs.ropensci.org/weathercan/articles/weathercan.html), provides more details on how to download, filter, and visualize weather data in R.
 
 First, let's take a look at the built in **stations** dataset:
 
@@ -165,12 +165,6 @@ Here is an example where we filtered based on province, interval, station operat
 #                       start = "2000-01-01",
 #                       end = "2023-12-31",
 #                       interval = "day", quiet = TRUE)
-```
-
-Next, convert the date column to Date data type. This will allow you to apply more filters based on month and survey year:
-
-```{r}
-weather$date <- as.Date(weather$date)
 ```
 
 Finally, to summarize the weather data by calculating the annual mean summer temperature and precipitation we can use the familiar `filter`, `group_by`, and `summarise` functions:
@@ -280,7 +274,7 @@ cranes_sf <- st_as_sf(species_occurrence_summary,
 Extract the bio-climatic variable values for each bird observation site, respectively.
 
 ```{r}
-bioclim_values <- extract(worldclim_stack, cranes_sf)
+bioclim_values <- terra::extract(worldclim_stack, cranes_sf)
 ```
 
 Then combine the bio-climatic values with the NatureCounts data.
@@ -295,8 +289,7 @@ Filter the data to only include observations made post 1970 to match the tempora
 
 ```{r}
 bioclim_data <- bioclim_data %>%
-  mutate(date = as.Date(date)) %>%
-  filter(year(date) >= "1970")
+  filter(survey_year >= "1970")
 summary(bioclim_data)
 ```
 
