@@ -394,12 +394,11 @@ Drive data folder</strong></a> for your convenience.</p>
 </blockquote>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># output_dir &lt;- "path/to/your/subdirectory/data/dtm_mask.tif" # include the masked raster name and '.tif' argument </span></span>
-<span></span>
 <span><span class="co"># write_stars(dtm_crop, output_dir)</span></span></code></pre></div>
 <p><strong>Note: Make sure to include the ‘.tif’ argument when
 specifying the <code>output_dir</code> and name of your masked raster
 file. This specifies the file type while using
-<code><a href="https://rspatial.github.io/terra/reference/writeRaster.html" class="external-link">writeRaster()</a></code> which will, otherwise, produce an
+<code>write_stars()</code> which will, otherwise, produce an
 error.</strong></p>
 </div>
 <div class="section level2">
@@ -414,14 +413,14 @@ error.</strong></p>
 <span></span>
 <span><span class="co"># Overlay the National Park boundary on the first plot</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figures%2Fnc_sp4_masked_dem-1.png" alt="Two-panel plot visualizing the regional and masked DTM's"></p>
+<p><img src="figures%2Fnc_sp4_masked_dem-1.png" alt="Plots visualizing the regional and masked DTM's"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Plot dtm_mask</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_crop</span>, main <span class="op">=</span> <span class="st">"masked DTM"</span>, </span>
 <span>     col <span class="op">=</span> <span class="fu">viridisLite</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; downsample set to 28</span></span></code></pre></div>
-<p><img src="figures%2Fnc_sp4_masked_dem-2.png" alt="Two-panel plot visualizing the regional and masked DTM's"></p>
+<p><img src="figures%2Fnc_sp4_masked_dem-2.png" alt="Plots visualizing the regional and masked DTM's"></p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Overlay the National Park boundary on the second plot</span></span>
@@ -439,19 +438,14 @@ the number of species observed at each site.</p>
 <code class="sourceCode R"><span><span class="co"># Match the CRS</span></span>
 <span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">dtm_crop</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Plot the dtm_mask raster</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_crop</span>, </span>
-<span>     main <span class="op">=</span> <span class="st">"Elevation with Species Diversity Summary Points across La Mauricie"</span>,</span>
-<span>     col <span class="op">=</span> <span class="fu">viridisLite</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; downsample set to 28</span></span>
-<span></span>
-<span><span class="co"># Overlay the National Park boundary in red</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">mauricie_boundary</span><span class="op">)</span>, </span>
-<span>     col <span class="op">=</span> <span class="cn">NA</span>, border <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, </span>
-<span>     reset <span class="op">=</span> <span class="cn">FALSE</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
 <span><span class="co">#scale the n_species column to range from 0-5 for plotting</span></span>
 <span><span class="va">mauricie_site_summary</span><span class="op">$</span><span class="va">n_species_scale</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/rescale.html" class="external-link">rescale</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span><span class="op">$</span><span class="va">n_species</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot the dtm_mask raster</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dtm_crop</span>, </span>
+<span>     main <span class="op">=</span> <span class="st">"Elevation &amp; Species Diversity Summarized across La Mauricie"</span>,</span>
+<span>     col <span class="op">=</span> <span class="fu">viridisLite</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; downsample set to 28</span></span>
 <span></span>
 <span><span class="co"># Overlay mauricie_site_summary points</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">mauricie_site_summary</span><span class="op">)</span>, </span>
@@ -468,7 +462,7 @@ the number of species observed at each site.</p>
 <span></span>
 <span><span class="co"># Add legend for the point size scale beside elevation scale</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>,                     <span class="co"># Position</span></span>
-<span>       inset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.10</span>, <span class="fl">0</span><span class="op">)</span>,            <span class="co"># Moves the legend outside the map extent</span></span>
+<span>       inset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.03</span><span class="op">)</span>,            <span class="co"># Moves the legend outside the map extent</span></span>
 <span>       legend <span class="op">=</span> <span class="va">legend_values</span>, </span>
 <span>       pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"black"</span>, </span>
 <span>       pt.cex <span class="op">=</span> <span class="va">legend_sizes</span>, </span>
