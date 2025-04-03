@@ -42,7 +42,7 @@ Load the necessary packages:
 ```{r, package library, warning = FALSE, message = FALSE}
 library(naturecounts)
 library(sf)
-library(terra)
+library(stars)  # Another package for working with raster data
 library(tidyverse)
 ```
 
@@ -110,7 +110,9 @@ Don't forget to replace `testuser` with your NatureCounts username. You will be 
 Download NatureCounts data:
 
 ```{r, message = FALSE}
-quebec_atlas <- nc_data_dl(collections = "QCATLAS2PC", username = "testuser", info = "spatial_data_tutorial", timeout = 1000)
+quebec_atlas <- nc_data_dl(
+  collections = "QCATLAS2PC",  
+  username = "testuser", info = "spatial_data_tutorial", timeout = 1000)
 ```
 
 Read in the list of species names from NatureCounts which can be linked to the species id:
@@ -227,18 +229,18 @@ Create a mosaic of the adjacent DTM rasters.
 
 **Reminder: You should store the DTM's in their own folder after download. The code below will produce an error if there are other .tif files in your subdirectory (like the ones you downloaded in Chapter 3).**
 
+Here we use the `stars` package which allows us to create 'proxy' objects, 
+meaning that the files aren't loaded into memory until the absolutely must be.
+This allows us to work much more quickly with the files, especially for plotting.
+
 ```{r}
 # list all the TIFF files in your directory
 dtm_files <- list.files(output_dir, pattern = "\\.tif$", full.names = TRUE) 
 
-# Read into a list of SpatRaster objects
-dtm_list <- lapply(dtm_files, rast)
+# Combine into a single stars object (use proxy to only load what we need)
+dtm_mosaic <- st_mosaic(dtm_files)
+dtm_mosaic <- read_stars(dtm_mosaic, proxy = TRUE)
 
-# Combine into a single SpatRaster object
-dtm_mosaic <- do.call(mosaic, dtm_list)
-
-# Print information about the stack
-print(dtm_mosaic)
 ```
 
 Let's check if the DTM and National Park boundary have the same crs by using the `st_crs()` function and equality operator (**==**) which will generate either TRUE or FALSE.
@@ -255,53 +257,48 @@ mauricie_boundary <- st_transform(mauricie_boundary, crs = st_crs(dtm_mosaic))
 
 # 4.3 Spatial Extents: Crop & Mask {#4.3Crop-Mask}
 
-**Cropping** reduces the extent of a raster to the extent of another raster or vector.
+- **Cropping** reduces the extent of a raster to the extent of another raster or vector.
+- **Masking** assigns NA values to cells of a raster not covered by a vector extent.
 
-To crop a raster we can apply the `crop()` function from the `terra` package which uses the SpatVector format. Here, we crop the extent of the raster while converting the National Park Boundary to a SpatVector using `vect()`.
+The `stars` package function `st_crop()` performs both of these steps in one.
+
+Here, we crop the extent of the raster to the National Park Boundary.
 
 ```{r}
-dtm_crop <- crop(dtm_mosaic, vect(mauricie_boundary))
+dtm_crop <- st_crop(dtm_mosaic, mauricie_boundary)
 ```
 
-**Masking** assigns NA values to cells of a raster not covered by a vector extent.
-
-To mask a raster to a vector extent we can apply the `mask()` function from the `terra` package which also uses the SpatVector format.
-
-```{r, warning = FALSE}
-dtm_mask <- mask(dtm_mosaic, vect(mauricie_boundary))
-```
-
-OPTIONAL: To write the masked raster to your disk, you can use the `writeRaster()` function from `terra`. **This raster will be used in** [Chapter 7: Summary Tools](07-SummaryTools.Rmd). We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
+OPTIONAL: To write the masked raster to your disk, you can use the `write_stars()` function from `stars` (this will take a while as it is a large file).
+**This raster will be used in** [Chapter 7: Summary Tools](07-SummaryTools.Rmd). We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
 
 > To execute this code chunk, remove the \#
 
 ```{r}
 # output_dir <- "path/to/your/subdirectory/data/dtm_mask.tif" # include the masked raster name and '.tif' argument 
-
-# writeRaster(dtm_mask, output_dir, overwrite = TRUE)
+output_dir <- "test.tif"
+write_stars(dtm_crop, output_dir)
 ```
 
-**Note: Make sure to include the '.tif' argument when specifying the `output_dir` and name of your masked raster file. This specifies the file type while using `writeRaster()` which will, otherwise, produce an error.**
+**Note: Make sure to include the '.tif' argument when specifying the `output_dir` and name of your masked raster file. This specifies the file type while using `write_stars()` which will, otherwise, produce an error.**
 
 # 4.4 Map and Extract Digital Elevation Data {#4.4Map-Extract}
 
 Visualize the regional and masked DTM's with a two-panel plot.
 
 ```{r masked_dem,  fig.alt = "Two-panel plot visualizing the regional and masked DTM's", fig.cap = ""}
-# Set up a 1x2 plotting layout
-par(mfrow = c(1, 2))
-
 # Plot dtm_mosaic
-plot(dtm_mosaic, main = "regional DTM")
+plot(dtm_mosaic, main = "regional DTM", 
+     col = viridisLite::viridis(n = 100), reset = FALSE) # reset = FALSE allows us to stack plots
 
 # Overlay the National Park boundary on the first plot
-plot(mauricie_boundary, add = TRUE, border = "red", col = NA, lwd = 2)
+plot(st_as_sfc(mauricie_boundary), add = TRUE, border = "red", lwd = 2)
 
 # Plot dtm_mask
-plot(dtm_mask, main = "masked DTM")
+plot(dtm_crop, main = "masked DTM", 
+     col = viridisLite::viridis(n = 100), reset = FALSE)
 
 # Overlay the National Park boundary on the second plot
-plot(mauricie_boundary, add = TRUE, border = "red", col = NA, lwd = 2)
+#plot(st_as_sfc(mauricie_boundary), add = TRUE, border = "red", lwd = 2, col = NA, reset = FALSE)
 ```
 
 Summarize the NatureCounts data for mapping. Here we will determine the number of species observed at each site.
@@ -317,23 +314,27 @@ Now we can map the NatureCounts summary output with the DTM data.
 
 ```{r elevation_map,  fig.alt = "Map depicts species diversity summary points and cropped DTM in La Mauricie National Park", fig.cap = ""}
 # Match the CRS
-mauricie_site_summary <- st_transform(mauricie_site_summary, crs = st_crs(dtm_mask))
+mauricie_site_summary <- st_transform(mauricie_site_summary, crs = st_crs(dtm_crop))
 
 # Plot the dtm_mask raster
-plot(dtm_mask, main = "Elevation with Species Diversity Summary Points across La Mauricie")
+plot(dtm_crop, 
+     main = "Elevation with Species Diversity Summary Points across La Mauricie",
+     col = viridisLite::viridis(n = 100), reset = FALSE)
 
 # Overlay the National Park boundary in red
-plot(st_geometry(mauricie_boundary), col = NA, border = "red", add = TRUE, lwd = 2)
+plot(st_geometry(mauricie_boundary), 
+     col = NA, border = "red", lwd = 2, 
+     reset = FALSE, add = TRUE)
 
 #scale the n_species column to range from 0-5 for plotting
 mauricie_site_summary$n_species_scale <- scales::rescale(mauricie_site_summary$n_species, to = c(0, 2))
 
 # Overlay mauricie_site_summary points
 plot(st_geometry(mauricie_site_summary), 
-     add = TRUE, 
-     pch = 19,       # Solid circle
+     pch = 19,        # Solid circle
      col = "black",   # Point color
-     cex = mauricie_site_summary$n_species_scale)      # Point size based on total
+     cex = mauricie_site_summary$n_species_scale, # Point size based on total
+     reset = FALSE, add = TRUE)      
 
 # Define legend values for the point size scale
 legend_values <- c(min(mauricie_site_summary$n_species, na.rm = TRUE), 
@@ -356,26 +357,25 @@ legend("topright",                     # Position
 Rename the elevation raster layer.
 
 ```{r}
-names(dtm_mask) <- "elevation"
+names(dtm_crop) <- "elevation"
 ```
 
-Extract elevation values for each bird observation record and append it to `mauricie_birds`. First, make sure the CRS of both spatial data match and then use `terra::extract()`.
+Extract elevation values for each bird observation record and append it to `mauricie_birds`. First, make sure the CRS of both spatial data match and then use `st_extract()`.
 
 ```{r}
 # Match the CRS
-mauricie_birds_sf <- st_transform(mauricie_birds_sf, crs = st_crs(dtm_mask))
+mauricie_birds_sf <- st_transform(mauricie_birds_sf, crs = st_crs(dtm_crop))
 
 # Extract the elevation values for each site
-elevation_values_sv <- terra::extract(dtm_mask, vect(mauricie_birds_sf), bind = TRUE)
+elevation_values_sf <- stars::st_extract(dtm_crop, mauricie_birds_sf)
 ```
 
-Convert the SpatVector containing the elevation values to an `sf` object.
+Add in the data columns we want
 
 ```{r}
-elevation_values_sf <- elevation_values_sv %>%
-  st_as_sf() %>% # converts to sf object
-  dplyr::select(SiteCode, elevation, geometry) # select relevant columns
-  
+elevation_values_sf <- bind_cols(elevation_values_sf, 
+                                 st_drop_geometry(mauricie_birds_sf)) %>%
+  dplyr::select(SiteCode, elevation)
 ```
 
 Assign a point id identifier to each location based on its unique geometry and return the result as a dataframe.
@@ -411,10 +411,11 @@ dir.create("data/env_covariates", recursive = TRUE)
 Now, let's combine the elevation dataframe with the NatureCounts summary data you previously created in order to assess how elevation influences your metric of species diversity.
 
 ```{r richness_plots_elevation,  fig.alt = "Plot explores the relationship between species richness and elevation", fig.cap = ""}
-mauricie_site_summary <- st_transform(mauricie_site_summary, crs = st_crs(dtm_mask))
+mauricie_site_summary <- st_transform(mauricie_site_summary, crs = st_crs(dtm_crop))
 
 # Extract the elevation values for each site
-elevation_sitesum_sf <- terra::extract(dtm_mask, vect(mauricie_site_summary), bind = TRUE)
+elevation_sitesum_sf <- stars::st_extract(dtm_crop, mauricie_site_summary) %>%
+  bind_cols(st_drop_geometry(mauricie_site_summary))
 
 # Plot the relationship between elevation and species diversity 
 plot(elevation_sitesum_sf$elevation, elevation_sitesum_sf$n_species, 
