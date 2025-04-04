@@ -22,11 +22,11 @@ knitr::opts_chunk$set(
 
 ##### Authors: Dimitrios Markou, Danielle Ethier
 
-> In [Chapter 4](04-ElevationData.Rmd), you processed Digital Terrain Models, applied crop and mask procedures, and extracted elevation values to combine with NatureCounts data. This chapter will build on these skills by extracting land cover data over [La Mauricie National Park](https://parks.canada.ca/pn-np/qc/mauricie/nature) and combine these values to NatureCounts data from the [Quebec Breeding Bird Atlas (2010 - 2014)](https://naturecounts.ca/nc/default/datasets.jsp?code=QCATLAS2PC&sec=bmdr).
+> In [Chapter 4](2.4-ElevationData.html), you processed Digital Terrain Models, applied crop and mask procedures, and extracted elevation values to combine with NatureCounts data. This chapter will build on these skills by extracting land cover data over [La Mauricie National Park](https://parks.canada.ca/pn-np/qc/mauricie/nature) and combine these values to NatureCounts data from the [Quebec Breeding Bird Atlas (2010 - 2014)](https://naturecounts.ca/nc/default/datasets.jsp?code=QCATLAS2PC&sec=bmdr).
 
 **Land cover** describes the surface cover on the ground like vegetation, urban, water, and bare soil while **land use** describes the purpose that the land serves like recreation, wildlife habitat, and agriculture. See [Land Cover & Land Use](https://natural-resources.canada.ca/maps-tools-and-publications/satellite-imagery-elevation-data-and-air-photos/tutorial-fundamentals-remote-sensing/educational-resources-applications/land-cover-land-use/land-cover-land-use/9373) from Natural Resources Canada for more information.
 
-**To proceed with this chapter, complete section 4.1 Data Setup from [Chapter 4: Elevation Data](04-ElevationData.Rmd)**. **This Chapter will guide you through how to download the National Park boundary and NatureCounts data which are used in this lesson. Alternatively, you can access these files on [Google Drive data folder](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing).**
+**To proceed with this chapter, complete section 4.1 Data Setup from [Chapter 4: Elevation Data](2.4-ElevationData.html)**. **This Chapter will guide you through how to download the National Park boundary and NatureCounts data which are used in this lesson. Alternatively, you can access these files on [Google Drive data folder](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing).**
 
 # 5.0 Learning Objectives {#5.0LearningObjectives}
 
@@ -59,13 +59,13 @@ This tutorial uses the following spatial data:
 
 2.  [Quebec Breeding Bird Atlas (2010 - 2014)](https://naturecounts.ca/nc/default/datasets.jsp?code=QCATLAS2PC&sec=bmdr) - NatureCounts bird observations
 
-    These data are available for download via Section 4.1: Data Setup in [Chapter 4](04-ElevationData.Rmd), or on [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing)
+    These data are available for download via Section 4.1: Data Setup in [Chapter 4](2.4-ElevationData.html), or on [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing)
 
 3.  [2015 Land Cover of Canada](https://open.canada.ca/data/en/dataset/4e615eae-b90c-420b-adee-2ca35896caf6) - Land Cover map (30 m resolution)
 
 # 5.1 Data Setup {#5.1DataSetup}
 
-Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
+Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](2.4-ElevationData.html).
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"), quiet = TRUE)
@@ -136,7 +136,7 @@ plot(st_geometry(mauricie_boundary), col = NA, border ="purple", lwd = 2, add = 
 par(mfrow = c(1, 1))
 ```
 
-OPTIONAL: To write the masked raster to your disk, you can use the writeRaster() function from terra. **This raster will be used in [Chapter 7: Summary Tools](07-SummaryTools.Rmd)**. We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience in the subfolder labeled **mauricie**.
+OPTIONAL: To write the masked raster to your disk, you can use the writeRaster() function from terra. **This raster will be used in [Chapter 7: Summary Tools](2.7-SummaryTools.html)**. We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience in the subfolder labeled **mauricie**.
 
 To execute this code chunk, remove the \# and make sure to specify the file format (.tif) in the output path
 
@@ -193,7 +193,7 @@ ggplot() +
 
 Buffers allow us to generate polygons at a specified distance around points, lines or other polygons. Because birds use their habitat at the landscape-level and not at a single observation point, buffers allow us to summarize land cover and habitat information within the local neighborhood.
 
-Read in the NatureCounts data you saved from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or downloaded from the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing).
+Read in the NatureCounts data you saved from [Chapter 4: Elevation Data](2.4-ElevationData.html) or downloaded from the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing).
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 mauricie_birds_df <- read.csv(here::here("misc/data/mauricie_birds_df.csv"))
@@ -431,7 +431,7 @@ landscape_metrics_df <- landscape_metrics_df %>%
   left_join(pland_values, by = "point_id")
 ```
 
-OPTIONAL: To save the landscape metrics data as a *.csv* to your disk, use the `write.csv()` function, specify the name of your .*csv* file, and use the row.names = FALSE argument to exclude row numbers from the output. **The extracted landcover values will be used to complete [Chapter 7: Summary Tools](07-SummaryTools.Rmd)**. We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
+OPTIONAL: To save the landscape metrics data as a *.csv* to your disk, use the `write.csv()` function, specify the name of your .*csv* file, and use the row.names = FALSE argument to exclude row numbers from the output. **The extracted landcover values will be used to complete [Chapter 7: Summary Tools](2.7-SummaryTools.html)**. We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
 
 > To execute this code chunk, remove the \#
 
@@ -468,4 +468,4 @@ There does not appear to be a clear relationship between species diversity, edge
 
 ------------------------------------------------------------------------
 
-**Congratulations**! You completed **Chapter 5 - Land Cover Data**. In this chapter, you successfully plotted land cover (raster) data and combined NatureCounts data with landscape metrics derived from land cover data. In [Chapter 6](06-SatelliteImagery.Rmd), you will explore how to download satellite imagery and calculate spectral indices to combine with NatureCounts data.
+**Congratulations**! You completed **Chapter 5 - Land Cover Data**. In this chapter, you successfully plotted land cover (raster) data and combined NatureCounts data with landscape metrics derived from land cover data. In [Chapter 6](2.6-SatelliteImagery.html), you will explore how to download satellite imagery and calculate spectral indices to combine with NatureCounts data.

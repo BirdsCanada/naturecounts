@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 ##### Authors: Dimitrios Markou, Danielle Ethier
 
-| In [Chapter 2](02-SpatialSubsets.Rmd), you applied geoprocessing functions to spatial (vector) objects, and filtered and visualized NatureCounts data within KBAs and Priority Places. Now you are ready to explore your NatureCounts data in relation to environmental covariates. In this tutorial, you will use NatureCounts and climate data to explore possible patterns in Whooping Crane observations, annual mean temperature, and annual mean precipitation within the Wood Buffalo National Park, the province of Alberta, and beyond.
+| In [Chapter 2](2.2-SpatialSubsets.html), you applied geoprocessing functions to spatial (vector) objects, and filtered and visualized NatureCounts data within KBAs and Priority Places. Now you are ready to explore your NatureCounts data in relation to environmental covariates. In this tutorial, you will use NatureCounts and climate data to explore possible patterns in Whooping Crane observations, annual mean temperature, and annual mean precipitation within the Wood Buffalo National Park, the province of Alberta, and beyond.
 
 # 3.0 Learning Objectives
 
@@ -344,4 +344,4 @@ leaflet(bioclim_data) %>%
   addScaleBar(position = "bottomleft", options = scaleBarOptions(imperial = FALSE))
 ```
 
-**Congratulations**! You've completed **Chapter 3 - Climate Data**. Here, you successfully combined NatureCounts data with vector and raster climate data in R. In [Chapter 4](04-ElevationData.Rmd) you can explore how-to link NatureCounts observations with elevation data.
+**Congratulations**! You've completed **Chapter 3 - Climate Data**. Here, you successfully combined NatureCounts data with vector and raster climate data in R. In [Chapter 4](2.4-ElevationData.html) you can explore how-to link NatureCounts observations with elevation data.

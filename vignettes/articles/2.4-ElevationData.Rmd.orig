@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 ##### Authors: Dimitrios Markou, Danielle Ethier
 
-> In [Chapter 3](03-ClimateData.Rmd), you processed vector and raster climate data, combined them with NatureCounts observations, and visualized them using plots and spatiotemporal maps. In this tutorial, you will process **LiDAR**-derived Digital Terrain Models, apply cropping and masking procedures, and extract elevation values to combine with NatureCounts data. Your focus will be on the NatureCounts and spatial data within [La Mauricie National Park](https://parks.canada.ca/pn-np/qc/mauricie/nature).
+> In [Chapter 3](2.3-ClimateData.html), you processed vector and raster climate data, combined them with NatureCounts observations, and visualized them using plots and spatiotemporal maps. In this tutorial, you will process **LiDAR**-derived Digital Terrain Models, apply cropping and masking procedures, and extract elevation values to combine with NatureCounts data. Your focus will be on the NatureCounts and spatial data within [La Mauricie National Park](https://parks.canada.ca/pn-np/qc/mauricie/nature).
 
 La Mauricie National Park is situated in the Laurentian mountains and covers 536 km2 within the Eastern Canadian Temperate-Boreal Forest transition ecoregion. The environment is characterized by mixed forests, lakes, rivers, and hills that range from from 150 m to over 500 m in elevation. The park provides suitable habitat for a variety of wildlife including at least 215 bird species.
 
@@ -269,7 +269,7 @@ dtm_crop <- st_crop(dtm_mosaic, mauricie_boundary)
 ```
 
 OPTIONAL: To write the masked raster to your disk, you can use the `write_stars()` function from `stars` (this will take a while as it is a large file).
-**This raster will be used in** [Chapter 7: Summary Tools](07-SummaryTools.Rmd). We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
+**This raster will be used in** [Chapter 7: Summary Tools](2.7-SummaryTools.html). We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
 
 > To execute this code chunk, remove the \#
 
@@ -388,7 +388,7 @@ elevation_values_df <- elevation_values_sf %>%
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
 ```
 
-OPTIONAL: To save the elevation data as a *.csv* to your disk, use the `write.csv()` function, specify the name of your .csv file, and use the row.names = FALSE argument to exclude row numbers from the output. **The extracted elevation values will be required to complete [Chapter 7: Summary Tools](07-SummaryTools.Rmd)**. We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
+OPTIONAL: To save the elevation data as a *.csv* to your disk, use the `write.csv()` function, specify the name of your .csv file, and use the row.names = FALSE argument to exclude row numbers from the output. **The extracted elevation values will be required to complete [Chapter 7: Summary Tools](2.7-SummaryTools.html)**. We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
 
 Create a subdirectory called `env_covariates` to neatly store the output environmental data.
 
@@ -422,7 +422,7 @@ There does not appear to be a clear relationship between species diversity and e
 
 ------------------------------------------------------------------------
 
-**Congratulations!** You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](05-LandcoverData.Rmd), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data. 
+**Congratulations!** You completed **Chapter 4 - Digital Elevation Data**. In this chapter, you successfully 1) processed raster DTM's 2) performed cropping and masking procedures and 3) extracted elevation data over vector data points. In [Chapter 5](2.5-LandcoverData.html), you will explore how to extract unique pixel values from landcover data and link it to NatureCounts data. 
 
 Below are some additional resources you may find useful to further your understanding of LiDAR data.
 

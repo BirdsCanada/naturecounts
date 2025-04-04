@@ -12,7 +12,7 @@ vignette: >
 
 # Chapter 2: Auxiliary Tables from NatureCounts
 
-> In [**Chapter 1: Zero-filling**](01-ZeroFilling.Rmd), you explored three different methods that can be used to zero-fill NatureCounts data and generate presence/absence records. In this tutorial, you will explore custom table queries and create basic data summaries and maps using the rNest auxiliary table.
+> In [**Chapter 1: Zero-filling**](3.1-ZeroFilling.html), you explored three different methods that can be used to zero-fill NatureCounts data and generate presence/absence records. In this tutorial, you will explore custom table queries and create basic data summaries and maps using the rNest auxiliary table.
 
 # 2.0 Learning Objectives
 

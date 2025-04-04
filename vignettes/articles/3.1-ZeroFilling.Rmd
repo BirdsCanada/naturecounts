@@ -260,4 +260,4 @@ We can then combine the results from the loop into a single dataframe which cont
 zero_filled_dataframe <- bind_rows(zero_filled_data, .id = "species_id")
 ```
 
-**Congratulations!** You completed **Chapter 1: Zero-filling**. Here, you explored three methods for zero-filling observation counts and generated presence/absence data. For more examples on zero-filling, see this [supplementary article](https://birdscanada.github.io/naturecounts/articles/format-zero-fill.html#zero-filling). In [Chapter 2](02-AuxiliaryTables.Rmd), you can explore how to access auxiliary datatables in the NatureCounts database using the `nc_query_table()` function.
+**Congratulations!** You completed **Chapter 1: Zero-filling**. Here, you explored three methods for zero-filling observation counts and generated presence/absence data. For more examples on zero-filling, see this [supplementary article](https://birdscanada.github.io/naturecounts/articles/format-zero-fill.html#zero-filling). In [Chapter 2](3.2-AuxiliaryTables.html), you can explore how to access auxiliary datatables in the NatureCounts database using the `nc_query_table()` function.

@@ -16,7 +16,7 @@ vignette: >
 
 > In Chapter 6, you downloaded satellite imagery from the Copernicus SENTINEL-2 mission and calculated spectral indices (NDWI, NDVI) over [La Mauricie National Park](https://parks.canada.ca/pn-np/qc/mauricie/nature) to combine with NatureCounts data from the [Quebec Breeding Bird Atlas (2010 - 2014)](https://naturecounts.ca/nc/default/datasets.jsp?code=QCATLAS2PC&sec=bmdr). In this chapter, you will create data summaries and visualizations using NatureCounts data and environmental covariates.
 
-**This chapter uses the data products prepared in Chapters 4-6, and the National Park boundary and NatureCounts data downloaded in section 4.1 Data Setup from [Chapter 4: Elevation Data](04-ElevationData.Rmd). For quick access, all data are available for download via the [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) data folder. If you wish to gain experience in how to download, process, and save the environmental layers yourself, return to the earlier chapters of this tutorial series and explore the Additional Resources articles.**
+**This chapter uses the data products prepared in Chapters 4-6, and the National Park boundary and NatureCounts data downloaded in section 4.1 Data Setup from [Chapter 4: Elevation Data](2.4-ElevationData.html). For quick access, all data are available for download via the [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) data folder. If you wish to gain experience in how to download, process, and save the environmental layers yourself, return to the earlier chapters of this tutorial series and explore the Additional Resources articles.**
 
 # 7.0 Learning Objectives {#7.0LearningObjectives}
 
@@ -49,11 +49,11 @@ This tutorial uses environmental data extracted or calculated from previous chap
 -   Edge density (ED) - total boundary length of all patches of a given class per unit area
 -   Number of patches (NP) - number of unique contiguous units
 
-In [Chapter 6: Satellite Imagery](06-SatelliteImagery.Rmd), the Normalized Difference Vegetation Index (NDVI) was calculated using Sentinel-2 imagery and custom functions .
+In [Chapter 6: Satellite Imagery](2.6-SatelliteImagery.html), the Normalized Difference Vegetation Index (NDVI) was calculated using Sentinel-2 imagery and custom functions .
 
 # 7.1 Data Setup {#7.1DataSetup}
 
-In [Chapter 4](04-ElevationData.Rmd), [Chapter 5](05-LandcoverData.Rmd), and [Chapter 6](06-SatelliteImagery.Rmd) you extracted elevation, land cover, and NDVI values, respectively, at surveys sites across La Mauricie National Park. These data were uploaded to the [Google Drive](https://drive.google.com/drive/folders/1j6PHoUJaFDucWe8V5xXNzdGD00WJu0hq?usp=drive_link) for your convenience. These data should be neatly stored in your `env_covariates` subdirectory.
+In [Chapter 4](2.4-ElevationData.html), [Chapter 5](2.5-LandcoverData.html), and [Chapter 6](2.6-SatelliteImagery.html) you extracted elevation, land cover, and NDVI values, respectively, at surveys sites across La Mauricie National Park. These data were uploaded to the [Google Drive](https://drive.google.com/drive/folders/1j6PHoUJaFDucWe8V5xXNzdGD00WJu0hq?usp=drive_link) for your convenience. These data should be neatly stored in your `env_covariates` subdirectory.
 
 Run the code chunk below to create your subdirectory, if necessary.
 
@@ -84,7 +84,7 @@ env_covariates_list <- lapply(env_covariates, read_csv)
 env_covariates_df <- Reduce(function(x, y) left_join(x, y, by = "point_id"), env_covariates_list)
 ```
 
-Read in the NatureCounts data you downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or the [Google Drive](https://drive.google.com/file/d/1ZDo4OUaxqtHuaM1CaGD7BfFGMg1JzOqv/view?usp=drive_link). This file should be in your `data` folder.
+Read in the NatureCounts data you downloaded from [Chapter 4: Elevation Data](2.4-ElevationData.html) or the [Google Drive](https://drive.google.com/file/d/1ZDo4OUaxqtHuaM1CaGD7BfFGMg1JzOqv/view?usp=drive_link). This file should be in your `data` folder.
 
 
 
@@ -458,4 +458,6 @@ As edge density increase, the probability of a Golden Crown Kinglet increase sli
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-**Congratulations!** You completed **Chapter 7 - Summary Tools**. In this chapter, you successfully summarized and visualized environmental data, biodiversity counts, and presence/absence data using various plotting techniques. If you'd like to explore some Additional Resources based on previous Spatial Data chapters, the [Raster Tools](Additional%20Resources%20-%20Raster%20Tools.Rmd) article is also available.
+**Congratulations!** You completed **Chapter 7 - Summary Tools**. In this chapter, you successfully summarized and visualized environmental data, biodiversity counts, and presence/absence data using various plotting techniques. 
+
+<!-- If you'd like to explore some Additional Resources based on previous Spatial Data chapters, the [Raster Tools](Additional%20Resources%20-%20Raster%20Tools.Rmd) article is also available. -->

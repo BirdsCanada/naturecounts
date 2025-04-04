@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 ##### Authors: Dimitrios Markou, Danielle Ethier
 
-| In [**Chapter 1: Spatial Data Exploration**](01-SpatialDataExploration.Rmd), you distinguished between spatial data types (vector and raster) and explored NatureCounts data using a spatio-temporal map. Now you are ready to focus your data exploration to a specific geographic area. Analyzing NatureCounts data within specific boundaries is relevant to many research application. Here we use Key Biodiversity Areas (KBA) and Priority Places as examples of research areas of interest.
+| In [**Chapter 1: Spatial Data Exploration**](2.1-SpatialDataExploration.html), you distinguished between spatial data types (vector and raster) and explored NatureCounts data using a spatio-temporal map. Now you are ready to focus your data exploration to a specific geographic area. Analyzing NatureCounts data within specific boundaries is relevant to many research application. Here we use Key Biodiversity Areas (KBA) and Priority Places as examples of research areas of interest.
 
 # 2.0 Learning Objectives
 
@@ -364,4 +364,4 @@ After geoprocessing our data, we can write out any sf objects to Shapefiles on a
 # st_write(wood_ducks_longpoint,"wood_ducks_longpoint.shp", driver = "ESRI Shapefile", delete_layer = TRUE)
 ```
 
-**Congratulations**! You completed **Chapter 2 - Spatial Subsetting: KBA's and Priority Places**. Here, you spatially filtered and visualized NatureCounts data. In [Chapter 3](03-ClimateData.Rmd), you can explore more spatial data visualization while linking climate data to NatureCounts observations.
+**Congratulations**! You completed **Chapter 2 - Spatial Subsetting: KBA's and Priority Places**. Here, you spatially filtered and visualized NatureCounts data. In [Chapter 3](2.3-ClimateData.html), you can explore more spatial data visualization while linking climate data to NatureCounts observations.

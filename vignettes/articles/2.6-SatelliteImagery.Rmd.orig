@@ -23,11 +23,11 @@ knitr::opts_chunk$set(
 
 ##### Authors: Dimitrios Markou, Danielle Ethier
 
-> In [Chapter 5](05-LandcoverData.Rmd), you processed land cover (raster) data, calculated landscape metrics derived from land cover, and combined them with NatureCounts data. In this tutorial, you will use satellite imagery from the Copernicus Sentinel-2 mission to calculate spectral index values (NDVI, NDWI) over [La Mauricie National Park](https://parks.canada.ca/pn-np/qc/mauricie/nature) and combine these values to NatureCounts data from the [Quebec Breeding Bird Atlas (2010 - 2014)](https://naturecounts.ca/nc/default/datasets.jsp?code=QCATLAS2PC&sec=bmdr).
+> In [Chapter 5](2.5-LandcoverData.html), you processed land cover (raster) data, calculated landscape metrics derived from land cover, and combined them with NatureCounts data. In this tutorial, you will use satellite imagery from the Copernicus Sentinel-2 mission to calculate spectral index values (NDVI, NDWI) over [La Mauricie National Park](https://parks.canada.ca/pn-np/qc/mauricie/nature) and combine these values to NatureCounts data from the [Quebec Breeding Bird Atlas (2010 - 2014)](https://naturecounts.ca/nc/default/datasets.jsp?code=QCATLAS2PC&sec=bmdr).
 
 The Copernicus Sentinel-2 mission comprises twin satellites flying in polar sun-synchronous orbit phased at 180° to each other. The satellites carry multispectral sensors with 13 spectral bands and have a revisit frequency of 5 days and orbital swath width of 290 km. Their high resolution products support a variety of services and applications including land management, agriculture, forestry, disaster control, humanitarian relief operations, risk mapping, and security concerns.
 
-**For this tutorial, complete section 4.1 Data Setup from [Chapter 4: Elevation Data](04-ElevationData.Rmd). It helps you download the National Park boundary and NatureCounts data which are used in this chapter. Alternatively, you can access these files in the [Google Drive data folder](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing).**
+**For this tutorial, complete section 4.1 Data Setup from [Chapter 4: Elevation Data](2.4-ElevationData.html). It helps you download the National Park boundary and NatureCounts data which are used in this chapter. Alternatively, you can access these files in the [Google Drive data folder](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing).**
 
 # 6.0 Learning Objectives {#6.0LearningObjectives}
 
@@ -90,7 +90,7 @@ nlyr(sentinel_imagery)
 ext(sentinel_imagery)
 ```
 
-Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd).
+Read in the National Park boundary you saved or downloaded from [Chapter 4: Elevation Data](2.4-ElevationData.html).
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 mauricie_boundary <- st_read(here::here("misc/data/boundary/mauricie_boundary.shp"), quiet = TRUE)
@@ -271,7 +271,7 @@ names(mauricie_sl_ndvi) <- "ndvi"
 
 ```
 
-Read in the NatureCounts data you saved or downloaded from [Chapter 4: Elevation Data](04-ElevationData.Rmd) or the [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) data folder.
+Read in the NatureCounts data you saved or downloaded from [Chapter 4: Elevation Data](2.4-ElevationData.html) or the [Google Drive](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) data folder.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 mauricie_birds_df <- read_csv(here::here("misc/data/mauricie_birds_df.csv")) 
@@ -295,7 +295,7 @@ Transform the CRS of the National Park boundary to match the NatureCounts data.
 mauricie_boundary <- st_transform(mauricie_boundary, crs = st_crs(mauricie_birds_sf)) # match the CRS
 ```
 
-Summarize the NatureCounts data for mapping. Here we will determine the number of species observed at each site like we did in [Chapter 4](04-ElevationData.Rmd) and [Chapter 5](05-LandcoverData.Rmd).
+Summarize the NatureCounts data for mapping. Here we will determine the number of species observed at each site like we did in [Chapter 4](2.4-ElevationData.html) and [Chapter 5](2.5-LandcoverData.html).
 
 ```{r}
 # Group by SiteCode and summarize mean annual count across all species
@@ -377,7 +377,7 @@ ndvi_values_df <- ndvi_values_sf %>%
 # Note that usually the SiteCode is the unique identifier for each observation site. However, this was not the case for the Quebec Breeding Bird Atlas data. We therefore use the geometry to create a unique identifier for each point.
 ```
 
-OPTIONAL: To save the NDVI data as a *.csv* to your disk, use the `write.csv()` function, specify the name of your .csv file, and use the row.names = FALSE argument to exclude row numbers from the output. **The extracted NDVI values will be used in [Chapter 7: Summary Tools](07-SummaryTools.Rmd)** We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
+OPTIONAL: To save the NDVI data as a *.csv* to your disk, use the `write.csv()` function, specify the name of your .csv file, and use the row.names = FALSE argument to exclude row numbers from the output. **The extracted NDVI values will be used in [Chapter 7: Summary Tools](2.7-SummaryTools.html)** We have uploaded this file to the [**Google Drive data folder**](https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing) for your convenience.
 
 > To execute this code chunk, remove the \#
 
@@ -403,7 +403,7 @@ Overall, the number of observations increases with NDVI. Areas of La Mauricie Na
 
 ------------------------------------------------------------------------
 
-**Congratulations**! You completed **Chapter 6 - Satellite Imagery**. In this chapter, you successfully calculated NDVI and NDWI spectral indices and extracted spectral index values over vector data points. In [Chapter 7](07-SummaryTools.Rmd), you can explore simple functions that will help you reclassify raster objects and calculate raster summary statistics.
+**Congratulations**! You completed **Chapter 6 - Satellite Imagery**. In this chapter, you successfully calculated NDVI and NDWI spectral indices and extracted spectral index values over vector data points. In [Chapter 7](2.7-SummaryTools.html), you can explore simple functions that will help you reclassify raster objects and calculate raster summary statistics.
 
 # 6.4 Copernicus Data Download {#6.4CopernicusDataDownload}
 
