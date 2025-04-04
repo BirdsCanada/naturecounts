@@ -4,3 +4,7 @@ inst/doc
 .RData
 .Ruserdata
 docs
+misc
+cache
+rosm.cache
+*.zip
