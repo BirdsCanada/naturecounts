@@ -83,7 +83,7 @@
 <h6 id="authors-dimitrios-markou-danielle-ethier">Authors: Dimitrios Markou, Danielle Ethier<a class="anchor" aria-label="anchor" href="#authors-dimitrios-markou-danielle-ethier"></a>
 </h6>
 <blockquote>
-<p>In <a href="04-ElevationData.Rmd">Chapter 4</a>, you processed
+<p>In <a href="2.4-ElevationData.html">Chapter 4</a>, you processed
 Digital Terrain Models, applied crop and mask procedures, and extracted
 elevation values to combine with NatureCounts data. This chapter will
 build on these skills by extracting land cover data over <a href="https://parks.canada.ca/pn-np/qc/mauricie/nature" class="external-link">La Mauricie
@@ -98,7 +98,7 @@ wildlife habitat, and agriculture. See <a href="https://natural-resources.canada
 Cover &amp; Land Use</a> from Natural Resources Canada for more
 information.</p>
 <p><strong>To proceed with this chapter, complete section 4.1 Data Setup
-from <a href="04-ElevationData.Rmd">Chapter 4: Elevation
+from <a href="2.4-ElevationData.html">Chapter 4: Elevation
 Data</a></strong>. <strong>This Chapter will guide you through how to
 download the National Park boundary and NatureCounts data which are used
 in this lesson. Alternatively, you can access these files on <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link">Google
@@ -144,7 +144,7 @@ administered by Parks Canada</a> - Boundary shapefiles</p></li>
 Breeding Bird Atlas (2010 - 2014)</a> - NatureCounts bird
 observations</p>
 <p>These data are available for download via Section 4.1: Data Setup in
-<a href="04-ElevationData.Rmd">Chapter 4</a>, or on <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link">Google
+<a href="2.4-ElevationData.html">Chapter 4</a>, or on <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link">Google
 Drive</a></p>
 </li>
 <li><p><a href="https://open.canada.ca/data/en/dataset/4e615eae-b90c-420b-adee-2ca35896caf6" class="external-link">2015
@@ -154,7 +154,7 @@ Land Cover of Canada</a> - Land Cover map (30 m resolution)</p></li>
 <div class="section level2">
 <h2 id="id_5-1DataSetup">5.1 Data Setup<a class="anchor" aria-label="anchor" href="#id_5-1DataSetup"></a>
 </h2>
-<p>Read in the National Park boundary you saved or downloaded from <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a>.</p>
+<p>Read in the National Park boundary you saved or downloaded from <a href="2.4-ElevationData.html">Chapter 4: Elevation Data</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"path/to/your/mauricie_boundary.shp"</span><span class="op">)</span></span></code></pre></div>
 <p>To read in the land cover dataset, navigate to <a href="https://open.canada.ca/data/en/dataset/4e615eae-b90c-420b-adee-2ca35896caf6" class="external-link">2015
@@ -249,8 +249,8 @@ plot.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>OPTIONAL: To write the masked raster to your disk, you can use the
 writeRaster() function from terra. <strong>This raster will be used in
-<a href="07-SummaryTools.Rmd">Chapter 7: Summary Tools</a></strong>. We
-have uploaded this file to the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
+<a href="2.7-SummaryTools.html">Chapter 7: Summary Tools</a></strong>.
+We have uploaded this file to the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
 Drive data folder</strong></a> for your convenience in the subfolder
 labeled <strong>mauricie</strong>.</p>
 <p>To execute this code chunk, remove the # and make sure to specify the
@@ -315,8 +315,8 @@ points, lines or other polygons. Because birds use their habitat at the
 landscape-level and not at a single observation point, buffers allow us
 to summarize land cover and habitat information within the local
 neighborhood.</p>
-<p>Read in the NatureCounts data you saved from <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a> or downloaded
-from the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
+<p>Read in the NatureCounts data you saved from <a href="2.4-ElevationData.html">Chapter 4: Elevation Data</a> or
+downloaded from the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
 Drive data folder</strong></a>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_birds_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"path/to/your/mauricie_birds_df.csv"</span><span class="op">)</span></span></code></pre></div>
@@ -570,8 +570,8 @@ the landscape-level metrics we calculated in the <a href="#id_5.4LandscapeMetric
 your disk, use the <code><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv()</a></code> function, specify the name
 of your .<em>csv</em> file, and use the row.names = FALSE argument to
 exclude row numbers from the output. <strong>The extracted landcover
-values will be used to complete <a href="07-SummaryTools.Rmd">Chapter 7:
-Summary Tools</a></strong>. We have uploaded this file to the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
+values will be used to complete <a href="2.7-SummaryTools.html">Chapter
+7: Summary Tools</a></strong>. We have uploaded this file to the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
 Drive data folder</strong></a> for your convenience.</p>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
@@ -612,7 +612,7 @@ sites in La Mauricie National Park.</p>
 <p><strong>Congratulations</strong>! You completed <strong>Chapter 5 -
 Land Cover Data</strong>. In this chapter, you successfully plotted land
 cover (raster) data and combined NatureCounts data with landscape
-metrics derived from land cover data. In <a href="06-SatelliteImagery.Rmd">Chapter 6</a>, you will explore how to
+metrics derived from land cover data. In <a href="2.6-SatelliteImagery.html">Chapter 6</a>, you will explore how to
 download satellite imagery and calculate spectral indices to combine
 with NatureCounts data.</p>
 </div>

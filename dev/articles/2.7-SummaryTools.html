@@ -92,7 +92,7 @@ environmental covariates.</p>
 </blockquote>
 <p><strong>This chapter uses the data products prepared in Chapters 4-6,
 and the National Park boundary and NatureCounts data downloaded in
-section 4.1 Data Setup from <a href="04-ElevationData.Rmd">Chapter 4:
+section 4.1 Data Setup from <a href="2.4-ElevationData.html">Chapter 4:
 Elevation Data</a>. For quick access, all data are available for
 download via the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link">Google
 Drive</a> data folder. If you wish to gain experience in how to
@@ -141,14 +141,14 @@ class</li>
 class per unit area</li>
 <li>Number of patches (NP) - number of unique contiguous units</li>
 </ul>
-<p>In <a href="06-SatelliteImagery.Rmd">Chapter 6: Satellite
+<p>In <a href="2.6-SatelliteImagery.html">Chapter 6: Satellite
 Imagery</a>, the Normalized Difference Vegetation Index (NDVI) was
 calculated using Sentinel-2 imagery and custom functions .</p>
 </div>
 <div class="section level2">
 <h2 id="id_7-1DataSetup">7.1 Data Setup<a class="anchor" aria-label="anchor" href="#id_7-1DataSetup"></a>
 </h2>
-<p>In <a href="04-ElevationData.Rmd">Chapter 4</a>, <a href="05-LandcoverData.Rmd">Chapter 5</a>, and <a href="06-SatelliteImagery.Rmd">Chapter 6</a> you extracted elevation,
+<p>In <a href="2.4-ElevationData.html">Chapter 4</a>, <a href="2.5-LandcoverData.html">Chapter 5</a>, and <a href="2.6-SatelliteImagery.html">Chapter 6</a> you extracted elevation,
 land cover, and NDVI values, respectively, at surveys sites across La
 Mauricie National Park. These data were uploaded to the <a href="https://drive.google.com/drive/folders/1j6PHoUJaFDucWe8V5xXNzdGD00WJu0hq?usp=drive_link" class="external-link">Google
 Drive</a> for your convenience. These data should be neatly stored in
@@ -176,7 +176,7 @@ common dataframe.</p>
 <span></span>
 <span><span class="co"># Combine NatureCounts and environmental covariates </span></span>
 <span><span class="va">env_covariates_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, by <span class="op">=</span> <span class="st">"point_id"</span><span class="op">)</span>, <span class="va">env_covariates_list</span><span class="op">)</span></span></code></pre></div>
-<p>Read in the NatureCounts data you downloaded from <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a> or the <a href="https://drive.google.com/file/d/1ZDo4OUaxqtHuaM1CaGD7BfFGMg1JzOqv/view?usp=drive_link" class="external-link">Google
+<p>Read in the NatureCounts data you downloaded from <a href="2.4-ElevationData.html">Chapter 4: Elevation Data</a> or the <a href="https://drive.google.com/file/d/1ZDo4OUaxqtHuaM1CaGD7BfFGMg1JzOqv/view?usp=drive_link" class="external-link">Google
 Drive</a>. This file should be in your <code>data</code> folder.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>mauricie_birds_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(path<span class="sc">/</span>to<span class="sc">/</span>your<span class="sc">/</span>mauricie_birds_df.csv<span class="st">")) </span></span></code></pre></div>
 <p>Create an <code>sf</code> object from the NatureCounts data that
@@ -484,9 +484,8 @@ environmental covariates.</p>
 <p><strong>Congratulations!</strong> You completed <strong>Chapter 7 -
 Summary Tools</strong>. In this chapter, you successfully summarized and
 visualized environmental data, biodiversity counts, and presence/absence
-data using various plotting techniques. If you’d like to explore some
-Additional Resources based on previous Spatial Data chapters, the <a href="Additional%20Resources%20-%20Raster%20Tools.Rmd">Raster Tools</a>
-article is also available.</p>
+data using various plotting techniques.</p>
+<!-- If you'd like to explore some Additional Resources based on previous Spatial Data chapters, the [Raster Tools](Additional%20Resources%20-%20Raster%20Tools.Rmd) article is also available. -->
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

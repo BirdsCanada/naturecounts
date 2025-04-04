@@ -83,7 +83,7 @@
 <h6 id="authors-dimitrios-markou-danielle-ethier">Authors: Dimitrios Markou, Danielle Ethier<a class="anchor" aria-label="anchor" href="#authors-dimitrios-markou-danielle-ethier"></a>
 </h6>
 <blockquote>
-<p>In <a href="05-LandcoverData.Rmd">Chapter 5</a>, you processed land
+<p>In <a href="2.5-LandcoverData.html">Chapter 5</a>, you processed land
 cover (raster) data, calculated landscape metrics derived from land
 cover, and combined them with NatureCounts data. In this tutorial, you
 will use satellite imagery from the Copernicus Sentinel-2 mission to
@@ -99,9 +99,10 @@ frequency of 5 days and orbital swath width of 290 km. Their high
 resolution products support a variety of services and applications
 including land management, agriculture, forestry, disaster control,
 humanitarian relief operations, risk mapping, and security concerns.</p>
-<p><strong>For this tutorial, complete section 4.1 Data Setup from <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a>. It helps you
-download the National Park boundary and NatureCounts data which are used
-in this chapter. Alternatively, you can access these files in the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link">Google
+<p><strong>For this tutorial, complete section 4.1 Data Setup from <a href="2.4-ElevationData.html">Chapter 4: Elevation Data</a>. It helps
+you download the National Park boundary and NatureCounts data which are
+used in this chapter. Alternatively, you can access these files in the
+<a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link">Google
 Drive data folder</a>.</strong></p>
 </div>
 </div>
@@ -203,7 +204,7 @@ images we will use here.</p>
 <span><span class="co">#&gt; [1] 9</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/ext.html" class="external-link">ext</a></span><span class="op">(</span><span class="va">sentinel_imagery</span><span class="op">)</span></span>
 <span><span class="co">#&gt; SpatExtent : 6e+05, 709800, 5090220, 5200020 (xmin, xmax, ymin, ymax)</span></span></code></pre></div>
-<p>Read in the National Park boundary you saved or downloaded from <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a>.</p>
+<p>Read in the National Park boundary you saved or downloaded from <a href="2.4-ElevationData.html">Chapter 4: Elevation Data</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"path/to/your/mauricie_boundary.shp"</span><span class="op">)</span></span></code></pre></div>
 <p>Transform the coordinate reference system (CRS) of the National Park
@@ -376,7 +377,7 @@ boundary.</p>
 <p>Rename the NDVI raster layer.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mauricie_sl_ndvi</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"ndvi"</span></span></code></pre></div>
-<p>Read in the NatureCounts data you saved or downloaded from <a href="04-ElevationData.Rmd">Chapter 4: Elevation Data</a> or the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link">Google
+<p>Read in the NatureCounts data you saved or downloaded from <a href="2.4-ElevationData.html">Chapter 4: Elevation Data</a> or the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link">Google
 Drive</a> data folder.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_birds_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"path/to/your/mauricie_birds_df.csv"</span><span class="op">)</span></span></code></pre></div>
@@ -394,7 +395,7 @@ NatureCounts data.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mauricie_boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">mauricie_boundary</span>, crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">mauricie_birds_sf</span><span class="op">)</span><span class="op">)</span> <span class="co"># match the CRS</span></span></code></pre></div>
 <p>Summarize the NatureCounts data for mapping. Here we will determine
-the number of species observed at each site like we did in <a href="04-ElevationData.Rmd">Chapter 4</a> and <a href="05-LandcoverData.Rmd">Chapter 5</a>.</p>
+the number of species observed at each site like we did in <a href="2.4-ElevationData.html">Chapter 4</a> and <a href="2.5-LandcoverData.html">Chapter 5</a>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Group by SiteCode and summarize mean annual count across all species</span></span>
 <span><span class="va">mauricie_site_summary</span> <span class="op">&lt;-</span> <span class="va">mauricie_birds_sf</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -469,8 +470,8 @@ geometry and return the result as a dataframe.</p>
 <p>OPTIONAL: To save the NDVI data as a <em>.csv</em> to your disk, use
 the <code><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv()</a></code> function, specify the name of your .csv
 file, and use the row.names = FALSE argument to exclude row numbers from
-the output. <strong>The extracted NDVI values will be used in <a href="07-SummaryTools.Rmd">Chapter 7: Summary Tools</a></strong> We have
-uploaded this file to the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
+the output. <strong>The extracted NDVI values will be used in <a href="2.7-SummaryTools.html">Chapter 7: Summary Tools</a></strong> We
+have uploaded this file to the <a href="https://drive.google.com/drive/folders/1gLUC6fROl4kNBvTGselhZif-arPexZbY?usp=sharing" class="external-link"><strong>Google
 Drive data folder</strong></a> for your convenience.</p>
 <blockquote>
 <p>To execute this code chunk, remove the #</p>
@@ -499,8 +500,8 @@ appear to be strong.</p>
 <p><strong>Congratulations</strong>! You completed <strong>Chapter 6 -
 Satellite Imagery</strong>. In this chapter, you successfully calculated
 NDVI and NDWI spectral indices and extracted spectral index values over
-vector data points. In <a href="07-SummaryTools.Rmd">Chapter 7</a>, you
-can explore simple functions that will help you reclassify raster
+vector data points. In <a href="2.7-SummaryTools.html">Chapter 7</a>,
+you can explore simple functions that will help you reclassify raster
 objects and calculate raster summary statistics.</p>
 </div>
 <div class="section level2">
