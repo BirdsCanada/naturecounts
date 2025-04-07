@@ -2,6 +2,23 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
+  articles/1.1-Introduction: 1.1-Introduction.html
+  articles/1.2-LoadPackage: 1.2-LoadPackage.html
+  articles/1.3-ViewData: 1.3-ViewData.html
+  articles/1.4-DownloadData: 1.4-DownloadData.html
+  articles/1.5-ManipData: 1.5-ManipData.html
+  articles/1.6-VisualData: 1.6-VisualData.html
+  articles/1.7-Answers: 1.7-Answers.html
+  articles/2.0-TableOfContents: 2.0-TableOfContents.html
+  articles/2.1-SpatialDataExploration: 2.1-SpatialDataExploration.html
+  articles/2.2-SpatialSubsets: 2.2-SpatialSubsets.html
+  articles/2.3-ClimateData: 2.3-ClimateData.html
+  articles/2.4-ElevationData: 2.4-ElevationData.html
+  articles/2.5-LandcoverData: 2.5-LandcoverData.html
+  articles/2.6-SatelliteImagery: 2.6-SatelliteImagery.html
+  articles/2.7-SummaryTools: 2.7-SummaryTools.html
+  articles/3.1-ZeroFilling: 3.1-ZeroFilling.html
+  articles/3.2-AuxiliaryTables: 3.2-AuxiliaryTables.html
   data-access: data-access.html
   filtering-data: filtering-data.html
   format-zero-fill: format-zero-fill.html
@@ -11,7 +28,8 @@ articles:
   articles/region-spatial: region-spatial.html
   selecting-fields: selecting-fields.html
   species-codes: species-codes.html
-last_built: 2024-12-10T22:36Z
+  articles/test: test.html
+last_built: 2025-04-07T19:19Z
 urls:
   reference: https://birdscanada.github.io/naturecounts/reference
   article: https://birdscanada.github.io/naturecounts/articles

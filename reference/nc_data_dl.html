@@ -25,9 +25,19 @@ vignette("filtering_data", package = "naturecounts").'></head><body>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
-<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/1.1-Introduction.html">Chapter 1 - Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/1.2-LoadPackage.html">Chapter 2 - Loading R Packages</a></li>
+    <li><a class="dropdown-item" href="../articles/1.3-ViewData.html">Chapter 3 - Understanding and Viewing Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.4-DownloadData.html">Chapter 4 - Downloading and Filtering Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.5-ManipData.html">Chapter 5 - Data Manipulation</a></li>
+    <li><a class="dropdown-item" href="../articles/1.6-VisualData.html">Chapter 6 - Data Visualization</a></li>
+    <li><a class="dropdown-item" href="../articles/1.7-Answers.html">Chapter 7 - Answers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -41,7 +51,7 @@ vignette("filtering_data", package = "naturecounts").'></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Download NatureCounts data records</h1>
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/R/download.R" class="external-link"><code>R/download.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/main/R/download.R" class="external-link"><code>R/download.R</code></a></small>
       <div class="d-none name"><code>nc_data_dl.Rd</code></div>
     </div>
 
@@ -494,6 +504,7 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-in"><span>                    info <span class="op">=</span> <span class="st">"nc_example"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: species (14280); fields_set (BMDE2.00-min); bbox_left (-100); bbox_bottom (45); bbox_right (-80); bbox_top (60)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Collecting available records...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The server did not respond within 120s. Trying again...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   collection nrecords</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1    SAMPLE1        3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 2    SAMPLE2        2</span>

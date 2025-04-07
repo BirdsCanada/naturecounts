@@ -30,9 +30,21 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/1.1-Introduction.html">Chapter 1 - Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/1.2-LoadPackage.html">Chapter 2 - Loading R Packages</a></li>
+    <li><a class="dropdown-item" href="../articles/1.3-ViewData.html">Chapter 3 - Understanding and Viewing Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.4-DownloadData.html">Chapter 4 - Downloading and Filtering Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.5-ManipData.html">Chapter 5 - Data Manipulation</a></li>
+    <li><a class="dropdown-item" href="../articles/1.6-VisualData.html">Chapter 6 - Data Visualization</a></li>
+    <li><a class="dropdown-item" href="../articles/1.7-Answers.html">Chapter 7 - Answers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -55,9 +67,9 @@
 
       <h1>Selecting columns and fields to download</h1>
             
-            <h4 data-toc-skip class="date">2024-12-10</h4>
+            <h4 data-toc-skip class="date">2025-04-07</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/vignettes/selecting-fields.Rmd" class="external-link"><code>vignettes/selecting-fields.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/main/vignettes/selecting-fields.Rmd" class="external-link"><code>vignettes/selecting-fields.Rmd</code></a></small>
       <div class="d-none name"><code>selecting-fields.Rmd</code></div>
     </div>
 
@@ -130,9 +142,9 @@ looking at the metadata associated with that collection.</li>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> ABATLAS1   BMDE2.00           <span style="text-decoration: underline;">1</span>042        <span style="text-decoration: underline;">2</span>209 Atlas des oiseaux n… ABATLAS1  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> ABATLAS2   BMDE2.00           <span style="text-decoration: underline;">1</span>042        <span style="text-decoration: underline;">5</span>359 Atlas des oiseaux n… ABATLAS2  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> ABBIRDRECS BMDE2.00           <span style="text-decoration: underline;">1</span>042       <span style="text-decoration: underline;">21</span>962 Observations d'oise… ABBIRDRECS</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> ATBANS     BMDE2.00           <span style="text-decoration: underline;">1</span>074         110 <span style="color: #BB0000;">NA</span>                   ATBANS    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> ATOWLS     BMDE2.00           <span style="text-decoration: underline;">1</span>011        <span style="text-decoration: underline;">1</span>932 Inventaire des hibo… ATOWLS    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> BBS        BMDE2.00           <span style="text-decoration: underline;">1</span>019        <span style="text-decoration: underline;">5</span>009 Relevés des oiseaux… BBS       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> ABOWLS     BMDE2.00           <span style="text-decoration: underline;">1</span>012         213 Inventaire des hibo… ABOWLS    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> ACCWS      BMDE2.00           <span style="text-decoration: underline;">1</span>062          16 <span style="color: #BB0000;">NA</span>                   ACCWS     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> ATBANS     BMDE2.00           <span style="text-decoration: underline;">1</span>074         132 <span style="color: #BB0000;">NA</span>                   ATBANS    </span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more variables: min_year &lt;int&gt;, max_year &lt;int&gt;, collection_name &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   akn_level &lt;int&gt;, n_records &lt;int&gt;</span></span></span></code></pre>
 </div>
@@ -146,7 +158,7 @@ versions with either the version name, or the shorthand.</p>
 <code class="sourceCode R"><span><span class="va">cardinals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nc_data_dl.html">nc_data_dl</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">19360</span>, fields_set <span class="op">=</span> <span class="st">"core"</span>, </span>
 <span>                        collection <span class="op">=</span> <span class="st">"ABATLAS2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                        username <span class="op">=</span> <span class="st">"testuser"</span>, info <span class="op">=</span> <span class="st">"nc_vignette"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   [1] "record_id"                             </span></span>
 <span><span class="co">##   [2] "collection"                            </span></span>
 <span><span class="co">##   [3] "project_id"                            </span></span>
@@ -346,7 +358,7 @@ additional, basic, indexed fields used in the database.</p>
 <p>You can figure out exactly which fields these are, by removing all
 the fields from the <code>core</code> BMDE field set.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"core"</span><span class="op">)</span><span class="op">$</span><span class="va">local_name</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">cardinals</span><span class="op">)</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="../reference/meta.html">meta_bmde_fields</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"core"</span><span class="op">)</span><span class="op">$</span><span class="va">local_name</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] "record_id"         "collection"        "project_id"       </span></span>
 <span><span class="co">##  [4] "protocol_id"       "protocol_type"     "species_id"       </span></span>
 <span><span class="co">##  [7] "statprov_code"     "country_code"      "SiteCode"         </span></span>

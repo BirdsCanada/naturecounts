@@ -15,9 +15,19 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+      <ul class="navbar-nav me-auto"><li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/1.1-Introduction.html">Chapter 1 - Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/1.2-LoadPackage.html">Chapter 2 - Loading R Packages</a></li>
+    <li><a class="dropdown-item" href="../articles/1.3-ViewData.html">Chapter 3 - Understanding and Viewing Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.4-DownloadData.html">Chapter 4 - Downloading and Filtering Data</a></li>
+    <li><a class="dropdown-item" href="../articles/1.5-ManipData.html">Chapter 5 - Data Manipulation</a></li>
+    <li><a class="dropdown-item" href="../articles/1.6-VisualData.html">Chapter 6 - Data Visualization</a></li>
+    <li><a class="dropdown-item" href="../articles/1.7-Answers.html">Chapter 7 - Answers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -34,29 +44,78 @@
     </div>
 
     <div class="section ">
+      <h3>The NatureCounts Intro Tutorial</h3>
+      <div class="section-desc"><p>An R walkthrough on how to import, explore, and visualize NatureCounts data.</p></div>
+
+      <dl><dt><a href="1.1-Introduction.html">Chapter 1 - Introduction</a></dt>
+        <dd>
+        </dd><dt><a href="1.2-LoadPackage.html">Chapter 2 - Loading R Packages</a></dt>
+        <dd>
+        </dd><dt><a href="1.3-ViewData.html">Chapter 3 - Understanding and Viewing Data</a></dt>
+        <dd>
+        </dd><dt><a href="1.4-DownloadData.html">Chapter 4 - Downloading and Filtering Data</a></dt>
+        <dd>
+        </dd><dt><a href="1.5-ManipData.html">Chapter 5 - Data Manipulation</a></dt>
+        <dd>
+        </dd><dt><a href="1.6-VisualData.html">Chapter 6 - Data Visualization</a></dt>
+        <dd>
+        </dd><dt><a href="1.7-Answers.html">Chapter 7 - Answers</a></dt>
+        <dd>
+      </dd></dl></div>
+    <div class="section ">
+      <h3>The NatureCounts Spatial Data Tutorial</h3>
+      <div class="section-desc"><p>An R guide to help download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers.</p></div>
+
+      <dl><dt><a href="2.0-TableOfContents.html">Table of Contents</a></dt>
+        <dd>
+        </dd><dt><a href="2.1-SpatialDataExploration.html">Chapter 1 - Spatial Data Exploration</a></dt>
+        <dd>
+        </dd><dt><a href="2.2-SpatialSubsets.html">Chapter 2 - Spatial Subsetting</a></dt>
+        <dd>
+        </dd><dt><a href="2.3-ClimateData.html">Chapter 3 - Climate Data</a></dt>
+        <dd>
+        </dd><dt><a href="2.4-ElevationData.html">Chapter 4 - Elevation Data</a></dt>
+        <dd>
+        </dd><dt><a href="2.5-LandcoverData.html">Chapter 5 - Land Cover Data</a></dt>
+        <dd>
+        </dd><dt><a href="2.6-SatelliteImagery.html">Chapter 6 - Satellite Imagery</a></dt>
+        <dd>
+        </dd><dt><a href="2.7-SummaryTools.html">Chapter 7 - Spatial Summary Tools</a></dt>
+        <dd>
+      </dd></dl></div>
+    <div class="section ">
+      <h3>The NatureCounts Analysis Tools Tutorial</h3>
+      <div class="section-desc"><p>An R guide to help analyze data hosted on NatureCounts.</p></div>
+
+      <dl><dt><a href="3.1-ZeroFilling.html">Chapter 1 - Zero-filling</a></dt>
+        <dd>
+        </dd><dt><a href="3.2-AuxiliaryTables.html">Chapter 2 - Auxiliary Tables</a></dt>
+        <dd>
+      </dd></dl></div>
+    <div class="section ">
+      <h3>Additional Tutorials</h3>
+      <div class="section-desc"><p>How-to articles describing common tasks</p></div>
+
+      <dl><dt><a href="data-access.html">Data Access</a></dt>
+        <dd>
+        </dd><dt><a href="selecting-fields.html">Selecting columns and fields to download</a></dt>
+        <dd>
+        </dd><dt><a href="filtering-data.html">Filtering data after download</a></dt>
+        <dd>
+        </dd><dt><a href="region-spatial.html">Using spatial data to filter observations</a></dt>
+        <dd>
+        </dd><dt><a href="region-areas.html">Exploring IBAs and BCRs</a></dt>
+        <dd>
+        </dd><dt><a href="mapping-observations.html">Mapping Observations</a></dt>
+        <dd>
+      </dd></dl></div>
+    <div class="section ">
       <h3>Reference</h3>
       <div class="section-desc"><p>Reference articles for metadata codes and descriptions.</p></div>
 
       <dl><dt><a href="region-codes.html">Region Codes</a></dt>
         <dd>
         </dd><dt><a href="species-codes.html">Species codes</a></dt>
-        <dd>
-      </dd></dl></div>
-    <div class="section ">
-      <h3>Tutorials</h3>
-      <div class="section-desc"><p>How-to articles describing common tasks</p></div>
-
-      <dl><dt><a href="data-access.html">Data Access</a></dt>
-        <dd>
-        </dd><dt><a href="region-areas.html">Exploring IBAs and BCRs</a></dt>
-        <dd>
-        </dd><dt><a href="region-spatial.html">Using spatial data to filter observations</a></dt>
-        <dd>
-        </dd><dt><a href="filtering-data.html">Filtering data after download</a></dt>
-        <dd>
-        </dd><dt><a href="mapping-observations.html">Mapping Observations</a></dt>
-        <dd>
-        </dd><dt><a href="selecting-fields.html">Selecting columns and fields to download</a></dt>
         <dd>
       </dd></dl></div>
     <div class="section ">
