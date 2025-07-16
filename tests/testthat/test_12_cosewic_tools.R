@@ -3,7 +3,7 @@ test_that("prep_spatial()", {
   expect_s3_class(s, "sf")
   expect_named(s, c("record_id", "geometry")) 
   expect_equal(nrow(s), nrow(bcch))
-  expect_equal(format(sf::st_crs(s)), "Canada Albers Equal Area Conic") 
+  expect_equal(format(sf::st_crs(s)), "Canada_Albers_Equal_Area_Conic") 
 })
 
 test_that("prep_spatial() diff cols", {
