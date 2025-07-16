@@ -132,12 +132,19 @@ First we'll grab the BCR shape file from [Birds Canada](https://www.birdscanada.
 
 [^1]: Bird Studies Canada and NABCI.  2014.  Bird Conservation Regions.  Published by Bird Studies Canada on behalf of the North American Bird Conservation Initiative.   https://birdscanada.org/bird-science/nabci-bird-conservation-regions  Accessed: `r Sys.Date()`
 
+We'll download the zip file and extracted to a folder easier to work with. 
+Note that these spatial data are in the GDB format, so we're working with a
+folder named `XXX.gdb`.
 ```{r}
-download.file("https://birdscanada.org/download/gislab/bcr_terrestrial_shape.zip", "bcr_terrestrial_shape.zip")
-unzip("bcr_terrestrial_shape.zip")
-bcr <- st_read("BCR_Terrestrial/BCR_Terrestrial_master.shp") |>
-  filter(PROVINCE_S == "ALBERTA") |>
-  st_transform(3347)
+download.file("https://services1.arcgis.com/d5M16PKlQTMEVyua/arcgis/rest/services/BCR_terrestrial_master/FeatureServer/replicafilescache/BCR_terrestrial_master_-8688020410858769740.zip", "BCR_terrestrial_master.zip")
+unzip("BCR_terrestrial_master.zip", junkpaths = TRUE, exdir = "BCR_terrestrial_master.gdb")
+```
+
+
+```{r}
+bcr <- st_read("BCR_terrestrial_master.gdb") |>
+  st_transform(3347) |>
+  st_intersection(ab)
 ```
 
 Add this layer to our plot.
@@ -146,7 +153,7 @@ Add this layer to our plot.
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
-  geom_sf(data = bcr, aes(fill = factor(BCR)), alpha = 0.5, colour = NA) +
+  geom_sf(data = bcr, aes(fill = factor(bcr_label)), alpha = 0.5, colour = NA) +
   geom_sf(data = house_finches_sf, size = 0.5) +
   scale_fill_viridis_d(name = "BCR")
 ```
@@ -169,8 +176,8 @@ Those border cases are now resolved.
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
-  geom_sf(data = bcr, aes(fill = factor(BCR)), alpha = 0.25, colour = NA) +
-  geom_sf(data = house_finches_sf, aes(fill = factor(BCR)), shape = 21) +
+  geom_sf(data = bcr, aes(fill = factor(bcr_label)), alpha = 0.25, colour = NA) +
+  geom_sf(data = house_finches_sf, aes(fill = factor(bcr_label)), shape = 21) +
   scale_fill_viridis_d(name = "BCR")
 ```
 
@@ -198,7 +205,7 @@ Now we can see how House Finch observations change over the years
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
-  geom_sf(data = bcr, aes(fill = factor(BCR)), alpha = 0.5, colour = NA) +
+  geom_sf(data = bcr, aes(fill = factor(bcr_label)), alpha = 0.5, colour = NA) +
   geom_sf(data = house_finches_sf, size = 0.5) +
   scale_fill_viridis_d(name = "BCR") +
   geom_sf_text(data = years, x = 4427134, y = 2965275, hjust = 0, vjust = 1, 
