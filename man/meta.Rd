@@ -66,6 +66,29 @@ associated with the data downloaded from NatureCounts.
 \details{
 Some of these metadata are stored locally and can be updated with
 the \code{\link[=nc_metadata]{nc_metadata()}} function. Others are downloaded as requested.
+
+\strong{Metadata stored locally} - use \code{nc_metadata()} to update
+\itemize{
+\item \code{meta_country_codes()}
+\item \code{meta_statprov_codes()}
+\item \code{meta_subnational2_codes()}
+\item \code{meta_iba_codes()}
+\item \code{meta_bcr_codes()}
+\item \code{meta_utm_squares()} - use \code{nc_metadata(utm = TRUE)} to update (big update)
+\item \code{meta_species_authority()}
+\item \code{meta_species_codes()}
+\item \code{meta_species_taxonomy()}
+}
+
+\strong{Metadata always fetched from NatureCounts}
+\itemize{
+\item \code{meta_collections()()}
+\item \code{meta_breeding_codes()}
+\item \code{meta_project_protocols()}
+\item \code{meta_projects()}
+\item \code{meta_protocol_types()}
+\item \code{meta_bmde_versions()}
+}
 }
 \section{Functions}{
 \itemize{

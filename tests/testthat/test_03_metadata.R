@@ -1,4 +1,14 @@
 # Metadata update ---------------------------------------------------------
+test_that("Out of date metadata notified", {
+  with_mocked_bindings(
+    metadata_up2date = function(...) FALSE,
+    code = {
+      expect_message(d <- meta_species_codes(),
+                     "Metadata hasn't been updated in >4 weeks") %>%
+        suppressMessages()
+    })
+})
+
 test_that("Metadata updates", {
   # Get original file dates
   loc <- list.files(system.file("extdata", package = "naturecounts"),
@@ -30,6 +40,8 @@ test_that("Metadata updates", {
   # Expect all file dates to be newer now
   expect_true(all(lubridate::ymd_hms(loc2$mtime) ==
                     lubridate::ymd_hms(loc3$mtime)))
+  
+  expect_true(metadata_up2date())
 
 })
 

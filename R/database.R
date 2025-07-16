@@ -85,7 +85,7 @@ db_create <- function(con) {
 
   # Create versions table with current versions
   v <- data.frame(Rpackage = as.character(utils::packageVersion("naturecounts")),
-                  metadata = metadata_v_local())
+                  metadata = nc_metadata_version())
   dplyr::copy_to(con, v, name = "versions", temporary = FALSE)
 
 }

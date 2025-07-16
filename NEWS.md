@@ -2,9 +2,12 @@
 * Add option to clip EOO in `cosewic_ranges()` to a particular shapefile before calculating area
 * Add option to scale records in `cosewic_plot()`
 * Change API to naturecounts.ca
-* Add option to change the CRS for all COSEWIC-related functions.
+* Add option to change the CRS for all COSEWIC-related functions
 * Update default CRS for `cosweic_ranges()` to an Albers Equal Area Projection for Canada (ESRI:102001)
-* Fix bug with request ids where tried to download unapproved collections.
+* Fix bug with request ids where tried to download unapproved collections
+* Clarify metadata versions as dates
+* Clarify which metadata is stored locally
+* Add checks and warn users if local metadata >4 weeks old
 
 # naturecounts 0.4.1
 * Fix use of species_id and record_id in `cosewic_ranges()`.

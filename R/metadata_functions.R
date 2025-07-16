@@ -5,6 +5,26 @@
 #'
 #' @details Some of these metadata are stored locally and can be updated with
 #'   the [nc_metadata()] function. Others are downloaded as requested.
+#' 
+#' **Metadata stored locally** - use `nc_metadata()` to update
+#' - `meta_country_codes()`
+#' - `meta_statprov_codes()`
+#' - `meta_subnational2_codes()`
+#' - `meta_iba_codes()`
+#' - `meta_bcr_codes()`
+#' - `meta_utm_squares()` - use `nc_metadata(utm = TRUE)` to update (big update)
+#' - `meta_species_authority()`
+#' - `meta_species_codes()`
+#' - `meta_species_taxonomy()`
+#' 
+#' **Metadata always fetched from NatureCounts**
+#' - `meta_collections()()`
+#' - `meta_breeding_codes()`
+#' - `meta_project_protocols()`
+#' - `meta_projects()`
+#' - `meta_protocol_types()`
+#' - `meta_bmde_versions()`
+#' 
 #'
 #' @return Data frame
 #'

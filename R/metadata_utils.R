@@ -18,12 +18,12 @@ nc_metadata <- function(force = FALSE, utm = FALSE, verbose = TRUE) {
 }
 
 
-#' Fetch API metadata version
+#' Fetch API version
 #'
-#' Returns the current version of the metadata on the API
+#' Returns the current version of the API
 #'
-#' @keywords internal
-metadata_v_remote <- function() {
+#' @noRd
+api_version <- function() {
  srv_query(api$version) %>%
     unlist()
 }
@@ -39,9 +39,26 @@ metadata_read <- function(name) {
   if(!file.exists(f)) stop("Could not find metadata file '", name, "'",
                            call. = FALSE)
   load(f)
+  
+  if(name != "version" && !metadata_up2date()) {
+    message("Metadata hasn't been updated in >4 weeks, consider using ",
+            "`nc_metadata()` to update local copies.")
+  }
+  
   data
 }
 
+
+#' Check date of last download
+#'
+#' @returns TRUE/FALSE (Up-to-date or Out-of-date)
+#'
+#' @noRd
+#' @examples
+#' metadata_up2date()
+metadata_up2date <- function() {
+ as.Date(metadata_read("version")[[1]]) >= (Sys.Date() - lubridate::weeks(4))
+}
 
 nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
                                  utm = FALSE, verbose = TRUE) {
@@ -49,9 +66,8 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
   # Check if update necessary
   # (either no version file, force = TRUE, or out of date)
 
-  if(all(class(try(metadata_v_local(), silent = TRUE)) != "try-error") &&
-    !force &&
-    metadata_v_local() == metadata_v_remote()) {
+  if(all(!inherits(try(nc_metadata_version(), silent = TRUE), "try-error")) &&
+    !force && metadata_up2date()) {
 
     message("Local metadata already up-to-date with server")
 
@@ -155,9 +171,34 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
     metadata_save(bmde_fields, path)
 
     # Update metadata version
-    message("Metadata version updated to ", metadata_v_remote())
-    metadata_save(metadata_v_remote(), name = "v_local", path = path)
+    message("Metadata version updated to ", Sys.Date())
+    metadata_save(c("metadata_updated" = Sys.Date()), 
+                  name = "version", path = path)
   }
 }
 
-metadata_v_local <- function() {metadata_read("v_local")}
+#' Check the last time metadata was updated
+#' 
+#' Some metadata is stored locally and can be updated with `nc_metadata()`. 
+#' Use `nc_metadata_version()` to see when these files were last updated.
+#' 
+#' **Metadata stored locally** - use `nc_metadata()` to update
+#' - `meta_country_codes()`
+#' - `meta_statprov_codes()`
+#' - `meta_subnational2_codes()`
+#' - `meta_iba_codes()`
+#' - `meta_bcr_codes()`
+#' - `meta_utm_squares()` - use `nc_metadata(utm = TRUE)` to update (big update)
+#' - `meta_species_authority()`
+#' - `meta_species_codes()`
+#' - `meta_species_taxonomy()`
+#'
+#' @returns Date of the last update
+#' @export
+#'
+#' @examples
+#' nc_metadata_version()
+
+nc_metadata_version <- function() {
+  metadata_read("version")
+}
