@@ -45,7 +45,6 @@ reference:
   - format_zero_fill
   - map_canada
   - grid_canada
-  - crs_albers_canada
 - title: COSEWIC functions
   desc: Functions for helping with COSEWIC assessments
   contents:

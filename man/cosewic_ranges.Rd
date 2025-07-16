@@ -13,7 +13,7 @@ cosewic_ranges(
   iao_grid_size_km = 2,
   eoo_p = 0.95,
   eoo_clip = NULL,
-  crs = crs_albers_canada(),
+  crs = "ESRI:102001",
   filter_unique = FALSE,
   spatial = TRUE
 )

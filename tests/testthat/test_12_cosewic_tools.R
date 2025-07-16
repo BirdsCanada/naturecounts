@@ -1,5 +1,5 @@
 test_that("prep_spatial()", {
-  expect_silent(s <- prep_spatial(bcch, crs = crs_albers_canada()))
+  expect_silent(s <- prep_spatial(bcch, crs = "ESRI:102001"))
   expect_s3_class(s, "sf")
   expect_named(s, c("record_id", "geometry")) 
   expect_equal(nrow(s), nrow(bcch))
@@ -32,7 +32,7 @@ test_that("cosewic_eoo()", {
   expect_equal(e[["eoo"]], units::set_units(4861.251, "km2"), tolerance = 0.001)
   
   # Albers
-  df <- prep_spatial(bcch, crs = crs_albers_canada())
+  df <- prep_spatial(bcch, crs = "ESRI:102001")
   expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
   expect_named(e, "eoo")
@@ -110,11 +110,11 @@ test_that("cosewic_iao()", {
   expect_snapshot_value(a, style = "json2")
   
   # Albers
-  df <- prep_spatial(bcch, crs = crs_albers_canada())
+  df <- prep_spatial(bcch, crs = "ESRI:102001")
   expect_silent(a <- cosewic_iao(df, 
                                  cell_size = units::set_units(2, "km"), 
                                  record = "record_id", 
-                                 spatial = FALSE, crs = crs_albers_canada()))
+                                 spatial = FALSE, crs = "ESRI:102001"))
   expect_s3_class(a, "data.frame")
   expect_equal(a, 
                dplyr::tibble(min_record = 1, max_record = 35, median_record = 1, 
@@ -124,7 +124,7 @@ test_that("cosewic_iao()", {
   expect_silent(a <- cosewic_iao(df, 
                                  cell_size = units::set_units(2, "km"), 
                                  record = "record_id", 
-                                 spatial = TRUE, crs = crs_albers_canada()))
+                                 spatial = TRUE, crs = "ESRI:102001"))
   expect_s3_class(a, "sf")
   expect_equal(sum(a$n_records), nrow(bcch))
   expect_equal(nrow(a), 475)
@@ -212,11 +212,11 @@ test_that("cosewic_ranges()", {
   expect_equal(r$iao, r$eoo_p95)
   
   # Albers
-  expect_silent(r <- cosewic_ranges(bcch, crs = crs_albers_canada()))
+  expect_silent(r <- cosewic_ranges(bcch, crs = "ESRI:102001"))
   expect_type(r, "list")
   expect_named(r, c("iao", "eoo"))
   
-  expect_silent(r <- cosewic_ranges(bcch, spatial = FALSE, crs = crs_albers_canada()))
+  expect_silent(r <- cosewic_ranges(bcch, spatial = FALSE, crs = "ESRI:102001"))
   expect_s3_class(r, "data.frame")
   expect_equal(
     r, 
