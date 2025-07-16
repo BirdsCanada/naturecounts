@@ -161,6 +161,12 @@ test_that("Filter region works as expected", {
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
   expect_equal(unique(d$statprov_code), "PE")
+  
+  # Subnational
+  expect_silent(d <- nc_data_dl(region = list(subnational2 = "CA.PE.KI"),
+                                username = "testuser", verbose = FALSE,
+                                info = "nc_test"))
+  expect_equal(unique(d$statprov_code), "PE")
 
 })
 
