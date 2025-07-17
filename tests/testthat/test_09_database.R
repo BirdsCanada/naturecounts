@@ -184,7 +184,8 @@ test_that("db_insert adds new cols as required", {
                           dplyr::select(bcch, record_id, collection)))
   expect_equal(length(n), length(DBI::dbListFields(con, "naturecounts")))
 
-  dplyr::collect(dplyr::tbl(con, "naturecounts")) %>% # All new cols are NA
+  # All new cols are NA
+  dplyr::collect(dplyr::tbl(con, "naturecounts")) %>% 
     apply(., 2, function(x) all(is.na(x))) %>%
     sum() %>%
     expect_equal(length(n) - 2)
@@ -211,6 +212,7 @@ test_that("db_insert adds new cols as required", {
 test_that("Data download to sql", {
   unlink("test.nc")
   expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,
+                                 fields_set = "minimum", 
                                  username = "testuser", info = "nc_test",
                                  sql_db = "test")) %>%
     suppressMessages()

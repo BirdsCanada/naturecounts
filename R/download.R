@@ -81,7 +81,7 @@
 nc_data_dl <- function(collections = NULL, project_ids = NULL,
                        species = NULL, years = NULL,
                        doy = NULL, region = NULL, site_type = NULL,
-                       fields_set = "minimum", fields = NULL,
+                       fields_set = "extended", fields = NULL,
                        username, info = NULL, request_id = NULL,
                        sql_db = NULL, warn = TRUE, timeout = 120,
                        verbose = TRUE) {

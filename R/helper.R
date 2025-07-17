@@ -125,8 +125,8 @@ format_dates_db <- function(db, overwrite) {
 #' @return Data frame
 #'
 #' @examples
-#' # Download data (with "core" fields to include 'CommonName')
-#' sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"), fields_set = "core",
+#' # Download data
+#' sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"),
 #'                      username = "sample", info = "nc_example")
 #'
 #' # Remove casual observations (i.e. 'AllSpeciesReported' = "No")

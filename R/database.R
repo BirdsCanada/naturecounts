@@ -55,7 +55,7 @@ db_create_primary <- function(con, df, primary_key) {
 db_create_empty <- function(con) {
   # Download and copy empty naturecounts table
   naturecounts <- nc_data_dl(collections = "SAMPLE1", species = 14280,
-                             username = "sample",
+                             username = "sample", fields_set = "minimum",
                              info = "nc: create database",
                              verbose = FALSE)[0, ]
   db_create_primary(con, naturecounts, primary_key = keys$data)

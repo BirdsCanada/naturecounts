@@ -66,7 +66,7 @@
 #'   for more information.
 #'
 #' @section Data Fields/Columns (`fields_set` and `fields`):
-#'   By default data is downloaded with the `minimum` set of fields/columns.
+#'   By default data is downloaded with the `extended` set of fields/columns.
 #'   However, for more advanced applications, users may wish to specify which
 #'   fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
 #'   keeps track of variables used to augment observation data. There are
@@ -74,8 +74,8 @@
 #'   be specified for download in one of four ways:
 #'
 #'   1. `fields_set` can be a specific shorthand reflecting a BMDE version:
-#'   `core`, `extended` or `minimum` (default). See [meta_bmde_versions()] to see
-#'   which BMDE version the shorthand refers to.
+#'   `core`, `extended` (default) or `minimum`. See [meta_bmde_versions()] to
+#'   see which BMDE version the shorthand refers to.
 #'   2. `fields_set` can be `default` which uses the default BMDE version for a
 #'   particular collection (note that if you download more than one collection,
 #'   the field sets will expand to cover all fields/columns in the combined

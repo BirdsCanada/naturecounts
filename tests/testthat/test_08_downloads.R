@@ -97,6 +97,7 @@ test_that("Data filters work as expected", {
   # single project_id
   expect_silent(d <- nc_data_dl(project_ids = 1030,
                                 species = 14280, years = 2000,
+                                fields_set = "minimum",
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
   expect_equal(unique(d$collection), "RCBIOTABASE")
@@ -105,6 +106,7 @@ test_that("Data filters work as expected", {
   # single collection/species/year/
   expect_silent(d1 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = 14280, years = 2000,
+                                fields_set = "minimum",
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
   expect_equal(unique(d1$species_id), 14280)
@@ -116,6 +118,7 @@ test_that("Data filters work as expected", {
   expect_silent(d2 <- nc_data_dl(collections = "ABBIRDRECS",
                                 species = c(15770, 14280),
                                 years = c(2003, 2004),
+                                fields_set = "minimum",
                                 username = "testuser", verbose = FALSE,
                                 info = "nc_test"))
   expect_equal(sort(unique(d2$species_id)), c(14280, 15770))
