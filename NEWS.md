@@ -9,6 +9,7 @@
 * Clarify which metadata is stored locally
 * Add checks and warn users if local metadata >4 weeks old
 * Make 'extended' the default field set (#31)
+* Explicitly alert users if `format_zero_fill()` used when there are 'X' values (#8)
 
 # naturecounts 0.4.1
 * Fix use of species_id and record_id in `cosewic_ranges()`.

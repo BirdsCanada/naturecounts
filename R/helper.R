@@ -156,8 +156,6 @@ format_dates_db <- function(db, overwrite) {
 #' # Only return event information
 #' events <- format_zero_fill(sample, fill = NA,
 #'                            extra_event = c("latitude", "longitude"))
-#'
-#'
 #' @export
 format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
                              species = "all", fill = "ObservationCount",
@@ -177,6 +175,7 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
   if(!fill %in% names(df) && !is.na(fill)) {
     stop("'fill' column ('", fill, "') is missing from the data", call. = FALSE)
   }
+  
   # All species reported?
   if(!"AllSpeciesReported" %in% names(df) ||
      any(is.na(df$AllSpeciesReported)) ||
@@ -249,13 +248,20 @@ format_zero_fill <- function(df_db, by = "SamplingEventIdentifier",
 
   # Convert fill column to numeric
   if(!is.numeric(df[[fill]]) && !is.na(fill)) {
+    
+    if(any(df[[fill]] == "X")) {
+      stop("There are 'X' values in the 'fill' column ('", fill, "'). ",
+           "Please remove or replace these values before continuing", 
+           call. = FALSE)
+    }
+    
     orig <- class(df[[fill]])
     df[[fill]] <- as_numeric(df[[fill]])
     if(!is.numeric(df[[fill]])) {
       stop("'fill' column cannot be converted to numeric (non-numeric entries)",
            call. = FALSE)
     }
-    if(verbose) message(" - Converted 'fill' column (", fill, ") from ",
+    if(verbose) message(" - Converted 'fill' column ('", fill, "') from ",
                         orig, " to numeric")
   }
 

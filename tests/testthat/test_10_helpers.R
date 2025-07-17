@@ -109,6 +109,20 @@ test_that("format_zero_fill() checks AllIndividualsReported", {
   expect_error(format_zero_fill(rc1), "must be present and 'Yes'")
 })
 
+test_that("format_zero_fill() checks for 'X' in ObservationCount", {
+  t <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"),
+                  username = "sample", info = "nc_example", verbose = FALSE) %>%
+    dplyr::filter(AllSpeciesReported == "Yes")
+
+  expect_error(
+    format_zero_fill(t), 
+    "There are 'X' values in the 'fill' column \\('ObservationCount'\\)")
+  
+  tt <- dplyr::filter(t, .data$ObservationCount != "X")
+  expect_message(format_zero_fill(tt), 
+                 "Converted 'fill' column \\('ObservationCount'\\)")
+})
+
 test_that("format_zero_fill() detects NA Sampling Events", {
   rc1 <- dplyr::filter(test_rc, AllSpeciesReported == "Yes")[1:100,]
   expect_silent(a <- format_zero_fill(rc1, verbose = FALSE))
