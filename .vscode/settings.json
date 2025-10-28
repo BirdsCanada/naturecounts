@@ -1,10 +1,27 @@
 {
     "[r]": {
-        "editor.formatOnSave": false,
+        "editor.formatOnSave": true,
         "editor.defaultFormatter": "Posit.air-vscode"
     },
     "[quarto]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "quarto.quarto"
-    }
+    },
+    "cSpell.words": [
+        "ABBIRDRECS",
+        "ATOWLS",
+        "bcch",
+        "cosewic",
+        "gdal",
+        "hofi",
+        "indiv",
+        "mult",
+        "nrecords",
+        "RCBIOTABASE",
+        "returnclass",
+        "statprov",
+        "Subnational",
+        "testuser",
+        "vdiffr"
+    ]
 }

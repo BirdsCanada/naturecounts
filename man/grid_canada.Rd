@@ -22,7 +22,7 @@ Create grid across Canada
 }
 \examples{
 
-gc <- grid_canada(200) 
+gc <- grid_canada(200)
 gc_buff <- grid_canada(200, buffer = 0)
 
 # Plot to illustrate
@@ -31,7 +31,7 @@ ggplot() +
   geom_sf(data = map_canada()) +
   geom_sf(data = gc, fill = NA) +
   labs(caption = "200km buffer")
-  
+
 ggplot() +
   geom_sf(data = map_canada()) +
   geom_sf(data = gc_buff, fill = NA) +

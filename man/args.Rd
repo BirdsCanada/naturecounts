@@ -93,7 +93,7 @@ for more information.
 
 \section{Data Fields/Columns (\code{fields_set} and \code{fields})}{
 
-By default data is downloaded with the \code{minimum} set of fields/columns.
+By default data is downloaded with the \code{extended} set of fields/columns.
 However, for more advanced applications, users may wish to specify which
 fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
 keeps track of variables used to augment observation data. There are
@@ -101,8 +101,8 @@ different versions reflecting different collections of variables which can
 be specified for download in one of four ways:
 \enumerate{
 \item \code{fields_set} can be a specific shorthand reflecting a BMDE version:
-\code{core}, \code{extended} or \code{minimum} (default). See \code{\link[=meta_bmde_versions]{meta_bmde_versions()}} to see
-which BMDE version the shorthand refers to.
+\code{core}, \code{extended} (default) or \code{minimum}. See \code{\link[=meta_bmde_versions]{meta_bmde_versions()}} to
+see which BMDE version the shorthand refers to.
 \item \code{fields_set} can be \code{default} which uses the default BMDE version for a
 particular collection (note that if you download more than one collection,
 the field sets will expand to cover all fields/columns in the combined

@@ -63,8 +63,8 @@ presence/absence), will be converted to a list of 0's for the individual
 species.
 }
 \examples{
-# Download data (with "core" fields to include 'CommonName')
-sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"), fields_set = "core",
+# Download data
+sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"),
                      username = "sample", info = "nc_example")
 
 # Remove casual observations (i.e. 'AllSpeciesReported' = "No")
@@ -94,6 +94,4 @@ goose_coords <- format_zero_fill(sample, species = "230",
 # Only return event information
 events <- format_zero_fill(sample, fill = NA,
                            extra_event = c("latitude", "longitude"))
-
-
 }

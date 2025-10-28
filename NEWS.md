@@ -1,15 +1,20 @@
-# naturecounts dev
-* Add option to clip EOO in `cosewic_ranges()` to a particular shapefile before calculating area
-* Add option to scale records in `cosewic_plot()`
-* Change API to naturecounts.ca
-* Add option to change the CRS for all COSEWIC-related functions
-* Update default CRS for `cosweic_ranges()` to an Albers Equal Area Projection for Canada (ESRI:102001)
-* Fix bug with request ids where tried to download unapproved collections
-* Clarify metadata versions as dates
-* Clarify which metadata is stored locally
-* Add checks and warn users if local metadata >4 weeks old
-* Make 'extended' the default field set (#31)
-* Explicitly alert users if `format_zero_fill()` used when there are 'X' values (#8)
+# naturecounts 0.5.0
+* Generalize `cosewic_ranges()` (fixes [#40](https://github.com/BirdsCanada/naturecounts/issues/40))
+    * Add option to supply custom IAO grid to `cosewic_ranges()`
+    * Add option to clip EOO in `cosewic_ranges()` to a particular shapefile before calculating area
+    * Add option to change the CRS
+    * Update default CRS for `cosewic_ranges()` to an Albers Equal Area Projection for Canada (ESRI:102001)
+* Make `cosewic_plot()`s report-ready (fixes [#41](https://github.com/BirdsCanada/naturecounts/issues/41))
+    * Add option to scale records in `cosewic_plot()`
+    * Add option to change the CRS
+* Change API to naturecounts.ca ([#29](https://github.com/BirdsCanada/naturecounts/issues/29))
+* Fix bug with request ids where tried to download unapproved collections  ([#32](https://github.com/BirdsCanada/naturecounts/issues/32))
+* Clarify metadata (fixes [#30](https://github.com/BirdsCanada/naturecounts/issues/30)
+    * Clarify metadata versions as dates
+    * Clarify which metadata is stored locally
+    * Add checks and warn users if local metadata >4 weeks old
+* Make 'extended' the default field set ([#31](https://github.com/BirdsCanada/naturecounts/issues/31))
+* Explicitly alert users if `format_zero_fill()` used when there are 'X' values ([#8](https://github.com/BirdsCanada/naturecounts/issues/8))
 
 # naturecounts 0.4.1
 * Fix use of species_id and record_id in `cosewic_ranges()`.

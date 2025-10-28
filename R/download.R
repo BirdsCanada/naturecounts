@@ -65,6 +65,10 @@
 #'                       fields = c("Locality", "AllSpeciesReported"),
 #'                       username = "sample", info = "nc_example")
 #'
+#' bittern <- nc_data_dl(species = 2490, fields_set = "custom",
+#'                       fields = NULL,
+#'                       username = "sample", info = "nc_example")
+#'
 #' \dontrun{
 #' # All collections by request id
 # my_data <- nc_data_dl(request_id = 000000, username = "USER",
@@ -110,7 +114,7 @@ nc_data_dl <- function(
     if (any(!is.null(c(species, years, doy, region, site_type)))) {
       message(
         "Donwloading previously logged request_id ",
-              "(ignoring filters 'species', 'years', 'doy', ",
+        "(ignoring filters 'species', 'years', 'doy', ",
         "'region', and 'site_type')"
       )
       species <- years <- doy <- region <- site_type <- NULL
@@ -159,7 +163,7 @@ nc_data_dl <- function(
     years = years,
     doy = doy,
     region = region,
-                          site_type = site_type,
+    site_type = site_type,
     fields_set = fields_set,
     fields = fields
   )
@@ -230,7 +234,7 @@ nc_data_dl <- function(
   if (verbose) {
     message(
       capture_df(records),
-                      "\nTotal records: ",
+      "\nTotal records: ",
       format(sum(records$nrecords), scientific = FALSE, big.mark = ",")
     )
   }
@@ -240,13 +244,13 @@ nc_data_dl <- function(
     if (is.null(sql_db)) {
       msg <- paste0(
         msg,
-                                      "Consider using a SQLite data ",
+        "Consider using a SQLite data ",
         "base with 'sql_db'. "
       )
     }
     msg <- paste0(
       msg,
-                  "\nAre you sure you wish to proceed? ",
+      "\nAre you sure you wish to proceed? ",
       "(To always proceed use 'warn = FALSE')"
     )
 
@@ -378,9 +382,9 @@ nc_coll_dl <- function(coll, query, filter, timeout, token, df_db, verbose) {
 nc_single_dl <- function(query, filter, timeout, token) {
   request <- srv_query(
     api$data,
-                       query = query,
-                       filter = filter,
-                       token = token,
+    query = query,
+    filter = filter,
+    token = token,
     timeout = timeout
   )
 
@@ -558,8 +562,8 @@ nc_count <- function(
   p %>%
     dplyr::mutate(
       access = dplyr::case_when(
-      .data$access == "full" ~ "full",
-      is.na(.data$access) & .data$akn_level >= 3 ~ "by request",
+        .data$access == "full" ~ "full",
+        is.na(.data$access) & .data$akn_level >= 3 ~ "by request",
         is.na(.data$access) & .data$akn_level < 3 ~ "no access"
       ),
       nrecords = dplyr::if_else(

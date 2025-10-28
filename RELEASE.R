@@ -39,14 +39,13 @@ source("vignettes/_PRECOMPILE.R")
 # Final checks --------------------------------------------------
 
 # - Checks
-devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
+devtools::check(run_dont_test = TRUE) # Local, run long-running examples
 
 # - Run in console
 system("cd ..; R CMD build naturecounts")
 system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")
 
 # - Check GH Actions on GitHub
-
 
 # Release! ------------------------------------------------------
 
@@ -60,7 +59,6 @@ usethis::use_github_release()
 # - Create sandbox/dev branch
 # - Change API in data-raw/data_creation.R to sandbox
 # - Add dev components to version in DESCRIPTION and NEWS.md
-
 
 # Testing ----------------------
 

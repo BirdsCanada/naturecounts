@@ -11,9 +11,11 @@ cosewic_ranges(
   coord_lat = "latitude",
   species = "species_id",
   iao_grid_size_km = 2,
+  iao_grid = NULL,
   eoo_p = 0.95,
   eoo_clip = NULL,
   crs = "ESRI:102001",
+  which = c("eoo", "iao"),
   filter_unique = FALSE,
   spatial = TRUE
 )
@@ -33,7 +35,11 @@ identification.}
 identification.}
 
 \item{iao_grid_size_km}{Numeric. Size of grid (km) to use when calculating
-IAO. Default is COSEWIC requirement (2). Use caution if changing.}
+IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2).
+Use caution if changing.}
+
+\item{iao_grid}{sf Polygon. Supply your own IAO grid rather than creating
+one. The CRS of this grid must be the same as \code{crs}.}
 
 \item{eoo_p}{Numeric. The percentile to calculate the convex hull over.
 Defaults to 0.95 for a 95\% convex hull to ensure outlier points do not
@@ -43,6 +49,8 @@ may not be appropriate. Set to 1 to include all points.}
 \item{eoo_clip}{sf (Multi)Polygon. A spatial object to clip the EOO to. May
 be relevant when calculating EOOs for complex regions (i.e. long curved
 areas) to avoid including area which cannot have observations.}
+
+\item{which}{Character vector. Any combination of "eoo" and "iao", which ranges to calculate.}
 
 \item{filter_unique}{Logical. Whether to filter observations to unique
 locations. Use this only if there are too many data points to work with.
@@ -131,7 +139,7 @@ r2 <- cosewic_ranges(mult, crs = 3162)
 \dontshow{if (requireNamespace("rnaturalearth", quietly = TRUE) & requireNamespace("rnaturalearthhires", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 library(rnaturalearth)
-ON <- ne_states("Canada") |> 
+ON <- ne_states("Canada") |>
   dplyr::filter(postal == "ON")
 
 r <- cosewic_ranges(mult)
@@ -139,5 +147,16 @@ cosewic_plot(r, map = ON) # No clip
 
 r <- cosewic_ranges(mult, eoo_clip = ON)
 cosewic_plot(r, map = ON) # With clip
+
+# Use a custom IAO grid
+
+# Load the demo grid for the bcch data set
+grid <- sf::st_read(system.file("extdata", "iao_bcch_grid.gpkg", package = "naturecounts"))
+r <- cosewic_ranges(bcch, iao_grid = grid)
+cosewic_plot(r)
+
+# Slight differences when compared to internally created grid, just due to where the observations line up
+r <- cosewic_ranges(bcch)
+cosewic_plot(r)
 \dontshow{\}) # examplesIf}
 }

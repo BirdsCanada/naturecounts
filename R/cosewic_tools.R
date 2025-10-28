@@ -39,7 +39,8 @@
 #' @param species Character. Name of the column containing species
 #'   identification.
 #' @param iao_grid_size_km Numeric. Size of grid (km) to use when calculating
-#'   IAO. Default is COSEWIC requirement (2). Use caution if changing.
+#'   IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2).
+#'   Use caution if changing.
 #' @param eoo_p Numeric. The percentile to calculate the convex hull over.
 #'   Defaults to 0.95 for a 95% convex hull to ensure outlier points do not
 #'   artificially inflate the EOO. Note that for a final COSEWIC report, this
