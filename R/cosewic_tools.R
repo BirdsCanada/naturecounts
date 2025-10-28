@@ -117,65 +117,84 @@ cosewic_ranges <- function(df_db,
                            eoo_clip = NULL,
                            crs = "ESRI:102001",
                            filter_unique = FALSE,
-                           spatial = TRUE) {
-  
+  spatial = TRUE
+) {
   # Checks
   have_pkg_check("sf")
   df <- df_db_check(df_db)
   
   # Coords
-  if(!all(c(coord_lat, coord_lon) %in% names(df))) {
-    stop("`coord_lat` and `coord_lon` must be columns in `df_db`", call. = FALSE)
+  if (!all(c(coord_lat, coord_lon) %in% names(df))) {
+    stop(
+      "`coord_lat` and `coord_lon` must be columns in `df_db`",
+      call. = FALSE
+    )
   } else if (!all(is.numeric(df[[coord_lat]]), is.numeric(df[[coord_lat]]))) {
     stop("`coord_lat` and `coord_lon` must be numeric", call. = FALSE)
   }
   
   # Clip
-  if(!is.null(eoo_clip) && !inherits(eoo_clip, "sf") && 
-     !all(sf::st_is(eoo_clip, c("POLYGON", "MULTIPOLYGON")))) {
+  if (
+    !is.null(eoo_clip) &&
+      !inherits(eoo_clip, "sf") &&
+      !all(sf::st_is(eoo_clip, c("POLYGON", "MULTIPOLYGON")))
+  ) {
     stop("If provided, `eoo_clip` must be an sf polygon object", call. = FALSE)
   }
 
   # Columns
-  if(!is.null(species) && !species %in% names(df)) {
+  if (!is.null(species) && !species %in% names(df)) {
     warning(
-      "Column \"", species, "\" not found in `df_db`. ",
+      "Column \"",
+      species,
+      "\" not found in `df_db`. ",
       "Treating data as single species.\n",
       "Use `species = NULL` to remove this warning or ",
       "`species = \"COLUMN_NAME\"` to specify the species id column.",
-      call. = FALSE)
+      call. = FALSE
+    )
     df[[species]] <- "PLACEHOLDER"
   }
-  if(is.null(species)) {
+  if (is.null(species)) {
     species <- "species_id"
     df[[species]] <- "PLACEHOLDER"
   }
   
-  if(!is.null(record) && !record %in% names(df)) {
+  if (!is.null(record) && !record %in% names(df)) {
     warning(
-      "Column \"", record, "\" not found in `df_db`. ", 
+      "Column \"",
+      record,
+      "\" not found in `df_db`. ",
       "Using row number as record id.\n",
       "use `record = NULL` to remove this warning or ",
       "`record = \"COLUMN_NAME\"` to specify the record id column.", 
-      call. = FALSE)
+      call. = FALSE
+    )
     df[[record]] <- dplyr::row_number(df[[1]])
   }
   
-  if(is.null(record)) {
+  if (is.null(record)) {
     record <- "record_id"
     df[[record]] <- dplyr::row_number(df[[1]])
   }
   
   # Filter to unique locations?
-  if(filter_unique) {
-    warning("Filtering to unique lat/lon locations (records now equal locations).\n",
-            dplyr::if_else(eoo_p != 1, "This may bias non-100% EOO calculations\n", ""),
+  if (filter_unique) {
+    warning(
+      "Filtering to unique lat/lon locations (records now equal locations).\n",
+      dplyr::if_else(
+        eoo_p != 1,
+        "This may bias non-100% EOO calculations\n",
+        ""
+      ),
             "Only do this if the number of observations is too high to process", 
-            call. = FALSE)
+      call. = FALSE
+    )
     
     df <- df %>%
       dplyr::select(
-        dplyr::all_of(c(species, coord_lon, coord_lat))) %>%
+        dplyr::all_of(c(species, coord_lon, coord_lat))
+      ) %>%
       dplyr::distinct() %>%
       dplyr::mutate(!!record := 1:dplyr::n())
   }
@@ -183,7 +202,8 @@ cosewic_ranges <- function(df_db,
   # Set units
   cell_size <- units::as_units(iao_grid_size_km, "km")
   
-  df_sf <- prep_spatial(df, 
+  df_sf <- prep_spatial(
+    df,
                         coords = c(coord_lon, coord_lat),
                         extra = c(record, species),
                         crs = crs)
@@ -274,20 +294,22 @@ cosewic_iao <- function(df_sf, cell_size, record, spatial, crs) {
     dplyr::group_by(.data$grid_id) %>%
     dplyr::summarize(n_records = sum(!is.na(.data[[record]])), .groups = "drop")
   
-  if(sum(iao_full$n_records) != nrow(df_sf)) {
-    stop("Records incorrectly assigned to grids", call.= FALSE)
+  if (sum(iao_full$n_records) != nrow(df_sf)) {
+    stop("Records incorrectly assigned to grids", call. = FALSE)
   }
 
   iao <- iao_full %>%
     dplyr::filter(.data$n_records > 0) %>%
-    dplyr::summarize(min_record = min(.data$n_records),
+    dplyr::summarize(
+      min_record = min(.data$n_records),
                      max_record = max(.data$n_records),
                      median_record = stats::median(.data$n_records),
                      grid_size_km = .env$cell_size,
                      n_occupied = dplyr::n(), 
-                     iao = .data$n_occupied * .env$cell_size^2)
+      iao = .data$n_occupied * .env$cell_size^2
+    )
 
-  if(spatial) {
+  if (spatial) {
     iao <- dplyr::right_join(grid, iao_full, by = "grid_id") %>%
       dplyr::bind_cols(iao)
   }
@@ -309,28 +331,38 @@ cosewic_eoo <- function(df_sf, p, clip, spatial) {
     sf::st_convex_hull() %>%
     sf::st_as_sf()
   
-  if(!is.null(clip)) {
+  if (!is.null(clip)) {
     clip <- sf::st_transform(clip, sf::st_crs(eoo))
-    eoo_clipped <- sf::st_intersection(sf::st_set_agr(eoo, "constant"), 
-                                       sf::st_set_agr(clip, "constant"))
-    if(nrow(eoo_clipped) == 0) {
-      warning("Clipping EOO results in no EOO, using non-clipped EOO instead", call. = FALSE)
+    eoo_clipped <- sf::st_intersection(
+      sf::st_set_agr(eoo, "constant"),
+      sf::st_set_agr(clip, "constant")
+    )
+    if (nrow(eoo_clipped) == 0) {
+      warning(
+        "Clipping EOO results in no EOO, using non-clipped EOO instead",
+        call. = FALSE
+      )
     } else {
       eoo <- eoo_clipped
     }
   }
   
   eoo <- eoo |>
-    dplyr::mutate(eoo = sf::st_area(eoo),
-                  eoo = units::set_units(.data$eoo, "km^2"))
+    dplyr::mutate(
+      eoo = sf::st_area(eoo),
+      eoo = units::set_units(.data$eoo, "km^2")
+    )
   
-  if(!spatial) eoo <- sf::st_drop_geometry(eoo)
+  if (!spatial) {
+    eoo <- sf::st_drop_geometry(eoo)
+  }
   
   eoo
 }
 
 
-prep_spatial <- function(df, 
+prep_spatial <- function(
+  df,
                          coords = c("longitude", "latitude"), 
                          extra = "record_id",
                          crs) {
@@ -369,17 +401,15 @@ prep_spatial <- function(df,
 #'   geom_sf(data = gc_buff, fill = NA) +
 #'   labs(caption = "No buffer")
  
-grid_canada <- function(cell_size = 200, buffer = 500, 
-                        crs = "ESRI:102001"){
+grid_canada <- function(cell_size = 200, buffer = 500, crs = "ESRI:102001") {
   have_pkg_check("sf")
+
   map_canada(crs = crs) %>%
     sf::st_buffer(units::set_units(buffer, "km")) %>%
     make_grid(cell_size) %>%
     sf::st_as_sf() %>%
-    dplyr::mutate(grid_ca_id = 1:dplyr::n(),
-                  grid_size = .env$cell_size)
+    dplyr::mutate(grid_ca_id = 1:dplyr::n(), grid_size = .env$cell_size)
 }
-
 
 
 #' Filter df by a grid and create a smaller grid
@@ -397,9 +427,10 @@ grid_canada <- function(cell_size = 200, buffer = 500,
 #' 
 #' @noRd
 grid_filter <- function(grid, df_sf, cell_size, verbose = TRUE) {
-  
-  if(sf::st_crs(grid) != sf::st_crs(df_sf)) {
-    if(verbose) message("Transforming `df_sf` to CRS of `grid`")
+  if (sf::st_crs(grid) != sf::st_crs(df_sf)) {
+    if (verbose) {
+      message("Transforming `df_sf` to CRS of `grid`")
+    }
     df_sf <- sf::st_transform(df_sf, sf::st_crs(grid))
   }
   
@@ -452,7 +483,6 @@ map_canada <- function(crs = 3347) {
 }
 
 
-
 #' Plot COSEWIC IAO and EOO
 #' 
 #' Creates a plot of COSEWIC ranges for illustration and checking.
@@ -464,7 +494,7 @@ map_canada <- function(crs = 3347) {
 #'   (useful for species with many points over a broad distribution).
 #' @param map sf data frame. Optional base map over which to plot the values.
 #' @param scale Logical. Whether to scale the IAO legends to a proportion for
-#'   easier plotting of mutliple species (allows collecting legends by
+#'   easier plotting of multiple species (allows collecting legends by
 #'   patchwork).
 #' @param species Character. Name of the column containing species
 #'   identification.
@@ -500,9 +530,12 @@ cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL,
   
   have_pkg_check("sf")
   
-  if(!inherits(ranges[["iao"]], "sf")) {
-    stop("`ranges` must be spatial (i.e. use `spatial = TRUE` in ",
-       "`cosewic_ranges()`)", call. = FALSE)
+  if (!inherits(ranges[["iao"]], "sf")) {
+    stop(
+      "`ranges` must be spatial (i.e. use `spatial = TRUE` in ",
+      "`cosewic_ranges()`)",
+      call. = FALSE
+    )
   }
   
   # Extract ranges
@@ -512,51 +545,74 @@ cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL,
   eoo <- ranges[["eoo"]]
   
   # Check Species Columns
-  if(!is.null(species) && !species %in% names(iao)) {
+  if (!is.null(species) && !species %in% names(iao)) {
     warning(
-      "Column \"", species, "\" not found in spatial data in `ranges`. ",
+      "Column \"",
+      species,
+      "\" not found in spatial data in `ranges`. ",
       "Treating data as single species.\n",
       "Use `species = NULL` to remove this warning or ",
       "`species = \"COLUMN_NAME\"` to specify the species id column.",
-      call. = FALSE)
+      call. = FALSE
+    )
     iao[[species]] <- "PLACEHOLDER"
     eoo[[species]] <- "PLACEHOLDER"
-  } else if(is.null(species)) {
+  } else if (is.null(species)) {
     species <- "species_id"
     iao[[species]] <- "PLACEHOLDER"
     eoo[[species]] <- "PLACEHOLDER"
   }
   
   # Check/set titles
-  if(length(title) > 1 && 
-     !all(names(title) %in% unique(iao[[species]]))) {
-    stop("`title` must be named by species if providing more than one", 
-         call. = FALSE)
+  if (
+    length(title) > 1 &&
+      !all(names(title) %in% unique(iao[[species]]))
+  ) {
+    stop(
+      "`title` must be named by species if providing more than one",
+      call. = FALSE
+    )
   }
   
   g <- list()
-  if(all(title == "") & iao[[species]][1] != "PLACEHOLDER") {
+  if (all(title == "") & iao[[species]][1] != "PLACEHOLDER") {
     title <- stats::setNames(nm = unique(iao[[species]]))
   }
   
   # Split by species (if applicable)
   e <- split(eoo, eoo[[species]])
   i <- split(iao, iao[[species]])
-  if(!is.null(points)) points <- split(points, points[[species]]) else points <- list(points)
+  if (!is.null(points)) {
+    points <- split(points, points[[species]])
+  } else {
+    points <- list(points)
+  }
   
   g <- purrr::pmap(
     list(e, i, points, title), 
     \(e, i, points, title) {
       cosewic_plot_indiv(e, i, points, grid, map, scale, title, crs, verbose)
-    })
+    }
+  )
   
-  if(length(g) == 1) g <- g[[1]]
+  if (length(g) == 1) {
+    g <- g[[1]]
+  }
   g
 }
 
 
-cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title, crs, verbose) {
-
+cosewic_plot_indiv <- function(
+  e,
+  a,
+  points,
+  grid,
+  map,
+  scale,
+  title,
+  crs,
+  verbose
+) {
   size_a <- unique(a$grid_size_km)
   
   eoo_lab <- stringr::str_subset(names(e), "eoo") %>%
@@ -564,14 +620,23 @@ cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title, crs, verbo
     stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
     toupper()
   
-  records <- paste0(a$n_records_total[1], 
-                    " records\n(", a$min_record[1], "-", a$max_record[1], 
-                    " per ", size_a, "x", size_a, " km grid)")
+  records <- paste0(
+    a$n_records_total[1],
+    " records\n(",
+    a$min_record[1],
+    "-",
+    a$max_record[1],
+    " per ",
+    size_a,
+    "x",
+    size_a,
+    " km grid)"
+  )
   
-  if(!is.null(grid)) {
-    if(sf::st_crs(a) != sf::st_crs(grid)) {
+  if (!is.null(grid)) {
+    if (sf::st_crs(a) != sf::st_crs(grid)) {
       a <- sf::st_transform(a, sf::st_crs(grid))
-      if(verbose) {
+      if (verbose) {
         message("Transforming IAO spatial data to grid CRS for summarizing")
       }
     }
@@ -584,25 +649,42 @@ cosewic_plot_indiv <- function(e, a, points, grid, map, scale, title, crs, verbo
     size_p <- size_a
   }
   
-  if(scale) {
-    a <- dplyr::mutate(a, n_records = .data$n_records / max(.data$n_records, na.rm = TRUE))
+  if (scale) {
+    a <- dplyr::mutate(
+      a,
+      n_records = .data$n_records / max(.data$n_records, na.rm = TRUE)
+    )
     leg_title <- "IAO\nProp. records"
-  } else leg_title <- "IAO\nNo. records"
+  } else {
+    leg_title <- "IAO\nNo. records"
+  }
 
   g <- ggplot2::ggplot() +
     ggplot2::theme_minimal() +
     ggplot2::geom_sf(data = e, ggplot2::aes(colour = !!eoo_lab)) +
-    ggplot2::geom_sf(data = a, ggplot2::aes(fill = .data$n_records), colour = NA) +
+    ggplot2::geom_sf(
+      data = a,
+      ggplot2::aes(fill = .data$n_records),
+      colour = NA
+    ) +
     ggplot2::scale_fill_viridis_c() +
     ggplot2::scale_colour_manual(name = "", values = "grey20") +
     ggplot2::labs(
       fill = leg_title, 
       title = title,
       subtitle = records,
-      caption = 
-        paste0("Showing ", size_p, "x", size_p, 
+      caption = paste0(
+        "Showing ",
+        size_p,
+        "x",
+        size_p,
                "km grids\nAnalysis used ",
-               size_a, "x", size_a, " km"))
+        size_a,
+        "x",
+        size_a,
+        " km"
+      )
+    )
   
   if(!is.null(map)) g <- g + ggplot2::geom_sf(data = map, fill = NA)
   if(!is.null(points)) {
