@@ -32,3 +32,23 @@ nc_data_dl(
   info = "pkg_data",
   sql_db = file.path("inst", "extdata", "hofi")
 )
+
+# Only rerun as necessary
+if (FALSE) {
+  path <- file.path("inst", "extdata", "iao_bcch_grid.gpkg")
+  file.remove(path)
+  # Create example Grid
+  ext <- sf::st_as_sf(
+    bcch,
+    coords = c("longitude", "latitude"),
+    crs = 4326
+  ) |>
+    sf::st_bbox() |>
+    sf::st_transform("ESRI:102001")
+
+  grid <- sf::st_read("misc/data/IAO Grid/") |>
+    sf::st_crop(ext) |>
+    dplyr::select("geometry") |>
+    dplyr::mutate(grid_id = dplyr::row_number()) |>
+    sf::st_write(path)
+}

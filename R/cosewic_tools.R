@@ -47,6 +47,9 @@
 #' @param eoo_clip sf (Multi)Polygon. A spatial object to clip the EOO to. May
 #'   be relevant when calculating EOOs for complex regions (i.e. long curved
 #'   areas) to avoid including area which cannot have observations.
+#' @param iao_grid sf Polygon. Supply your own IAO grid rather than creating
+#'   one. The CRS of this grid must be the same as `crs`.
+#' @param which Character vector. Any combination of "eoo" and "iao", which ranges to calculate.
 #' @param filter_unique Logical. Whether to filter observations to unique 
 #'   locations. Use this only if there are too many data points to work with. 
 #'   This changes the nature of what an observation is, and also may bias 
@@ -105,17 +108,31 @@
 #' r <- cosewic_ranges(mult, eoo_clip = ON)
 #' cosewic_plot(r, map = ON) # With clip
 #'
+#' # Use a custom IAO grid
+#'
+#' # Load the demo grid for the bcch data set
+#' grid <- sf::st_read(system.file("extdata", "iao_bcch_grid.gpkg", package = "naturecounts"))
+#' r <- cosewic_ranges(bcch, iao_grid = grid)
+#' cosewic_plot(r)
+#'
+#' # Slight differences when compared to internally created grid, just due to where the observations line up
+#' r <- cosewic_ranges(bcch)
+#' cosewic_plot(r)
+#'
 #' @export 
 
-cosewic_ranges <- function(df_db, 
+cosewic_ranges <- function(
+  df_db,
                            record = "record_id", 
                            coord_lon = "longitude",
                            coord_lat = "latitude",
                            species = "species_id",
                            iao_grid_size_km = 2,
+  iao_grid = NULL,
                            eoo_p = 0.95,
                            eoo_clip = NULL,
                            crs = "ESRI:102001",
+  which = c("eoo", "iao"),
                            filter_unique = FALSE,
   spatial = TRUE
 ) {
@@ -140,6 +157,19 @@ cosewic_ranges <- function(df_db,
       !all(sf::st_is(eoo_clip, c("POLYGON", "MULTIPOLYGON")))
   ) {
     stop("If provided, `eoo_clip` must be an sf polygon object", call. = FALSE)
+  }
+
+  # IAO Grid
+  if (
+    !is.null(iao_grid) &&
+      !inherits(iao_grid, "sf") &&
+      !all(sf::st_is(eoo_clip, c("POLYGON", "MULTIPOLYGON")))
+  ) {
+    stop("If provided, `iao_grid` must be an sf polygon object", call. = FALSE)
+  }
+  # Check custom grid
+  if (!is.null(iao_grid) && sf::st_crs(iao_grid) != sf::st_crs(crs)) {
+    stop("`crs` must match the CRS of `iao_grid`", call. = FALSE)
   }
 
   # Columns
@@ -206,7 +236,9 @@ cosewic_ranges <- function(df_db,
     df,
                         coords = c(coord_lon, coord_lat),
                         extra = c(record, species),
-                        crs = crs)
+    crs = crs,
+    check_projected = TRUE
+  )
 
   n <- dplyr::count(df, .data[[species]], name = "n_records_total")
   
@@ -215,69 +247,110 @@ cosewic_ranges <- function(df_db,
 
   ranges <- tidyr::nest(df_sf, .by = dplyr::all_of(species)) %>%
     dplyr::left_join(n, by = species) %>%
-    dplyr::relocate(dplyr::all_of(species), "n_records_total") %>%
-    dplyr::mutate(
-      eoo = purrr::map(
-        .data[["data"]], 
-        \(x) cosewic_eoo(x, p = eoo_p, clip = eoo_clip, spatial)),
+    dplyr::relocate(dplyr::all_of(species), "n_records_total")
+
+  if ("iao" %in% which) {
+    iao <- dplyr::mutate(
+      ranges,
       iao = purrr::map(
         .data[["data"]], 
-        \(x) cosewic_iao(x, cell_size, record, spatial, crs = .env$crs))) %>%
-    dplyr::select(-"data")
-  
-  eoo <- dplyr::select(ranges, -"iao") |>
+        \(x) {
+          cosewic_iao(
+            x,
+            cell_size,
+            record,
+            spatial,
+            crs = .env$crs,
+            grid = iao_grid
+          )
+        }
+      )
+    ) |>
+      dplyr::select(-"data") |>
+      tidyr::unnest("iao")
+  }
+
+  if ("eoo" %in% which) {
+    eoo <- dplyr::mutate(
+      ranges,
+      eoo = purrr::map(
+        .data[["data"]],
+        \(x) cosewic_eoo(x, p = eoo_p, clip = eoo_clip, spatial)
+      )
+    ) |>
+      dplyr::select(-"data") |>
     tidyr::unnest("eoo")
   
-  iao <- dplyr::select(ranges, -"eoo") |>
-    tidyr::unnest("iao")
-
-
+    if ("iao" %in% which) {
   # Check eoo size
   i <- iao %>%
     sf::st_drop_geometry() %>%
     dplyr::select(dplyr::all_of(c(species, "iao"))) %>%
     dplyr::distinct()
-  if(any(eoo$eoo < unique(i$iao))) {
+
+      if (any(eoo$eoo < unique(i$iao))) {
     s <- unique(eoo[[species]][eoo$eoo < i$iao])
     message(
-      "EOO is less than IAO for species ", paste0(s, collapse = ", "), ".\n",
+          "EOO is less than IAO for species ",
+          paste0(s, collapse = ", "),
+          ".\n",
       "This can occur if there are very few, clustered records.\n",
       "Making EOO equal to IAO.\n(see 'Instructions for preparing COSEWIC ",
-      "status reports' in ?cosewic_ranges)")
+          "status reports' in ?cosewic_ranges)"
+        )
     eoo$eoo[eoo$eoo < i$iao] <- i$iao
+      }
+    }
+
+    # Assemble
+    eoo <- dplyr::rename(eoo, !!paste0("eoo_p", eoo_p * 100) := "eoo")
   }
   
-  if(all(unique(df[[species]]) == "PLACEHOLDER")) {
+  if (all(unique(df[[species]]) == "PLACEHOLDER")) {
+    if ("iao" %in% which) {
     iao <- dplyr::select(iao, -dplyr::all_of(species))
+    }
+    if ("eoo" %in% which) {
     eoo <- dplyr::select(eoo, -dplyr::all_of(species))
+    }
     species <- NULL
   }
   
-  # Assemble
-  eoo <- dplyr::rename(eoo, !!paste0("eoo_p", eoo_p * 100) := "eoo")
-
-  if(spatial) {
-    ranges <- list(iao = sf::st_as_sf(iao), eoo = sf::st_as_sf(eoo))
+  if (spatial) {
+    ranges <- list()
+    if ("iao" %in% which) {
+      ranges <- append(ranges, list(iao = sf::st_as_sf(iao)))
+    }
+    if ("eoo" %in% which) {
+      ranges <- append(ranges, list(eoo = sf::st_as_sf(eoo)))
+    }
   } else {
+    if (all(c("iao", "eoo") %in% which)) {
     ranges <- dplyr::full_join(iao, eoo, by = c(species, "n_records_total"))
+    } else if ("iao" %in% which) {
+      ranges <- iao
+    } else {
+      ranges <- eoo
+    }
   }
 
   ranges
 }
 
 # Faster grids https://github.com/r-spatial/sf/issues/1579
-cosewic_iao <- function(df_sf, cell_size, record, spatial, crs) {
-
+cosewic_iao <- function(df_sf, cell_size, record, spatial, crs, grid = NULL) {
+  if (is.null(grid)) {
   grid_ca <- grid_canada(buffer = 500, crs = crs)
   
   # Check if all points in grid
   missing <- !sf::st_within(df_sf, sf::st_union(grid_ca), sparse = FALSE)
-  if(any(missing)) {
+    if (any(missing)) {
     ids <- df_sf[[record]][which(missing)]
     message(
       "  Some observations not within the limits of Canada and a 500km buffer",
       "\n  Omitting record(s): ", 
-      paste0(ids, collapse = ", "))
+        paste0(ids, collapse = ", ")
+      )
     df_sf <- dplyr::filter(df_sf, !.data[[record]] %in% ids)
   }
   
@@ -287,6 +360,21 @@ cosewic_iao <- function(df_sf, cell_size, record, spatial, crs) {
   grid <- grid_filter(grid_lg, df_sf, cell_size = cell_size) %>%
     dplyr::bind_rows() %>%
     dplyr::mutate(grid_id = 1:dplyr::n())
+  } else {
+    # Prepare custom grid
+    grid <- dplyr::mutate(grid, grid_id = dplyr::row_number())
+
+    # Only use range of grid which is required
+    grid <- sf::st_crop(sf::st_set_agr(grid, "constant"), sf::st_bbox(df_sf))
+
+    units <- paste0(sf::st_crs(grid)$units_gdal, "^2")
+    cell_size <- sf::st_area(grid) |>
+      median() |>
+      units::set_units(units, mode = "standard") |>
+      units::set_units("km2") |>
+      sqrt()
+    message("User-provided grid has cell size of ", format(cell_size))
+  }
   
   iao_full <- grid %>%
     sf::st_join(df_sf) %>%
@@ -365,11 +453,20 @@ prep_spatial <- function(
   df,
                          coords = c("longitude", "latitude"), 
                          extra = "record_id",
-                         crs) {
+  crs,
+  check_projected = TRUE
+) {
+  if (check_projected && sf::st_is_longlat(sf::st_crs(crs))) {
+    stop(
+      "CRS is unprojected, area calculations should use a projected CRS.",
+      call. = FALSE
+    )
+  }
   df %>%
     dplyr::select(dplyr::all_of(c(extra, coords))) %>%
     sf::st_as_sf(coords = coords, crs = 4326) %>%
-    sf::st_transform(crs)
+    sf::st_transform(crs) %>%
+    sf::st_set_agr("constant")
 }
 
 
@@ -441,6 +538,12 @@ grid_filter <- function(grid, df_sf, cell_size, verbose = TRUE) {
 }
 
 make_grid <- function(df_sf, cell_size) {
+  if (sf::st_crs(df_sf)$units_gdal == "degree") {
+    stop(
+      "Cannot create IAO grids with unprojected (geographic) Coordinate Reference Systems",
+      call. = FALSE
+    )
+  }
   cell_size <- units::set_units(cell_size, "km")
   cell_size <- units::set_units(cell_size, "m")
   cell_size <- as.numeric(cell_size)
@@ -523,11 +626,17 @@ map_canada <- function(crs = 3347) {
 #' p[[1]]
 #' p[[2]]
 #' 
-cosewic_plot <- function(ranges, points = NULL, grid = NULL, map = NULL, 
-                         scale = FALSE, crs = 3347,
-                         species = "species_id",  title = "",
-                         verbose = TRUE) {
-  
+cosewic_plot <- function(
+  ranges,
+  points = NULL,
+  grid = NULL,
+  map = NULL,
+  scale = FALSE,
+  crs = 4269,
+  species = "species_id",
+  title = "",
+  verbose = TRUE
+) {
   have_pkg_check("sf")
   
   if (!inherits(ranges[["iao"]], "sf")) {
@@ -686,12 +795,13 @@ cosewic_plot_indiv <- function(
       )
     )
   
-  if(!is.null(map)) g <- g + ggplot2::geom_sf(data = map, fill = NA)
-  if(!is.null(points)) {
-    points <- prep_spatial(points, extra = NULL, crs = crs) 
+  if (!is.null(map)) {
+    g <- g + ggplot2::geom_sf(data = map, fill = NA)
+  }
+  if (!is.null(points)) {
+    points <- prep_spatial(points, extra = NULL, crs = sf::st_crs(a))
     g <- g + ggplot2::geom_sf(data = points)
   }
   
   g
 }
-
