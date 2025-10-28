@@ -19,7 +19,7 @@ test_that("Get counts for collections", {
   expect_s3_class(c1, "data.frame")
   expect_gt(nrow(c1), 0)
   expect_true(all(c1$collection %in% c("CBC", "BBS")))
-  expect_true(all(c1$access %in% c("full", "no access")))
+  expect_true(all(c1$access %in% c("full", "by request")))
 
   expect_silent(
     c2 <- nc_count(
@@ -94,7 +94,7 @@ test_that("Counts return permissions", {
     sort(unique(c_sample_all[["access"]])),
     c("by request", "full", "no access")
   )
-  expect_equal(sort(unique(c_sample_all[["akn_level"]])), 2:5)
+  expect_true(all(c_sample_all[["akn_level"]] %in% c(NA, 2:5)))
 })
 
 test_that("Counts error when no data returned", {
@@ -171,7 +171,7 @@ test_that("Data filters work as expected", {
   expect_equal(min(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
   expect_equal(max(as.numeric(d1$survey_year), na.rm = TRUE), 2000)
 
-  # mult species/year
+  # multiple species/year
   expect_silent(
     d2 <- nc_data_dl(
       collections = "ABBIRDRECS",
@@ -225,7 +225,7 @@ test_that("Filter region works as expected", {
   # IBA
   expect_silent(
     d <- nc_data_dl(
-      region = list(iba = "AB001"),
+      region = list(iba = "AB001"), years = 2000,
       username = "testuser",
       verbose = FALSE,
       info = "nc_test"

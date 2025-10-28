@@ -15,6 +15,14 @@ test_that("prep_spatial() diff cols", {
   expect_equal(format(sf::st_crs(s)), "NAD83 / Statistics Canada Lambert")
 })
 
+test_that("prep_spatial() projected", {
+  b <- dplyr::rename(bcch, sp = species_id, rec = record_id)
+  expect_error(
+    prep_spatial(b, crs = 4326),
+    "CRS is unprojected, area calculations should use a projected CRS"
+  )
+})
+
 test_that("cosewic_eoo()", {
   # Lambert
   df <- prep_spatial(bcch, crs = 3347)
@@ -249,6 +257,27 @@ test_that("cosewic_iao() no cols", {
   expect_snapshot_value(a, style = "json2")
 })
 
+test_that("cosewic_iao() custom IAO grid", {
+  grid <- sf::st_read(
+    system.file(
+      "extdata",
+      "iao_bcch_grid.gpkg",
+      package = "naturecounts"
+    ),
+    quiet = TRUE
+  )
+  df <- prep_spatial(bcch, crs = "ESRI:102001")
+  expect_message(
+    a <- cosewic_iao(
+      df,
+      record = "record_id",
+      spatial = FALSE,
+      crs = "ESRI:102001",
+      grid = grid
+    ),
+    "User\\-provided grid has cell size of 2 \\[km\\]"
+  )
+})
 
 test_that("cosewic_ranges()", {
   # Lambert
@@ -514,6 +543,46 @@ test_that("cosewic_ranges() eoo clip", {
   expect_silent(r0 <- cosewic_ranges(mult, crs = 3347))
   expect_silent(r1 <- cosewic_ranges(mult, eoo_clip = ON, crs = 3347))
   expect_true(all(r0$eoo$eoo_p95 > r1$eoo$eoo_p95))
+})
+
+test_that("cosewic_ranges() either", {
+  expect_silent(s0 <- cosewic_ranges(bcch))
+  expect_silent(s1 <- cosewic_ranges(bcch, which = "eoo"))
+  expect_silent(s2 <- cosewic_ranges(bcch, which = "iao"))
+  expect_equal(s0$eoo, s1$eoo)
+  expect_equal(s0$iao, s2$iao)
+})
+
+test_that("cosewic_ranges() errors/warnings if using unprojected CRS", {
+  expect_error(
+    cosewic_ranges(bcch, crs = 4326),
+    "CRS is unprojected, area calculations should use a projected CRS"
+  )
+})
+
+
+test_that("cosewic_ranges() custom IAO grid", {
+  grid <- sf::st_read(
+    system.file(
+      "extdata",
+      "iao_bcch_grid.gpkg",
+      package = "naturecounts"
+    ),
+    quiet = TRUE
+  )
+  expect_message(
+    a <- cosewic_ranges(bcch, iao_grid = grid),
+    "User\\-provided grid has cell size of 2 \\[km\\]"
+  )
+  expect_type(a, "list")
+  expect_named(a, c("iao", "eoo"))
+  expect_s3_class(a$iao, "sf")
+
+  # Error when grid is wrong CRS
+  expect_error(
+    cosewic_ranges(bcch, crs = 3347, iao_grid = grid),
+    "`crs` must match the CRS of `iao\\_grid`"
+  )
 })
 
 
