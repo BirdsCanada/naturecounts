@@ -78,14 +78,24 @@
 #'
 #' @export
 
-nc_data_dl <- function(collections = NULL, project_ids = NULL,
-                       species = NULL, years = NULL,
-                       doy = NULL, region = NULL, site_type = NULL,
-                       fields_set = "extended", fields = NULL,
-                       username, info = NULL, request_id = NULL,
-                       sql_db = NULL, warn = TRUE, timeout = 120,
-                       verbose = TRUE) {
-
+nc_data_dl <- function(
+  collections = NULL,
+  project_ids = NULL,
+  species = NULL,
+  years = NULL,
+  doy = NULL,
+  region = NULL,
+  site_type = NULL,
+  fields_set = "extended",
+  fields = NULL,
+  username,
+  info = NULL,
+  request_id = NULL,
+  sql_db = NULL,
+  warn = TRUE,
+  timeout = 120,
+  verbose = TRUE
+) {
   # Username check and Authorization
   token <- srv_auth(username)
 
@@ -94,30 +104,43 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   collections <- collections_check(collections, token)
 
   # If request_id provided, check, and ignore other filter values
-  if(!is.null(request_id)) {
-
+  if (!is.null(request_id)) {
     info <- NULL # No info if using a previous id
 
-    if(any(!is.null(c(species, years, doy, region, site_type)))) {
-      message("Donwloading previously logged request_id ",
+    if (any(!is.null(c(species, years, doy, region, site_type)))) {
+      message(
+        "Donwloading previously logged request_id ",
               "(ignoring filters 'species', 'years', 'doy', ",
-              "'region', and 'site_type')")
+        "'region', and 'site_type')"
+      )
       species <- years <- doy <- region <- site_type <- NULL
     }
 
     requests0 <- nc_requests_internal(request_id, token)
-    if(is.null(requests0)) stop("No valid requests for this id and this user", call. = FALSE)
+    if (is.null(requests0)) {
+      stop("No valid requests for this id and this user", call. = FALSE)
+    }
     requests <- dplyr::filter(requests0, status == "approved")
-    if(nrow(requests) == 0) stop("No approved requests for this id and this user", call. = FALSE)
-    if(nrow(requests0) != nrow(requests) & verbose) {
-      message("Not all collections were approved, downloading ", nrow(requests),
-              "/", nrow(requests0), " requested collections")
+    if (nrow(requests) == 0) {
+      stop("No approved requests for this id and this user", call. = FALSE)
+    }
+    if (nrow(requests0) != nrow(requests) & verbose) {
+      message(
+        "Not all collections were approved, downloading ",
+        nrow(requests),
+        "/",
+        nrow(requests0),
+        " requested collections"
+      )
     }
 
-    if(!is.null(collections)) {
-      if(any(!collections %in% requests$collection)) {
-        stop("Some 'collections' were not included in the original request and ",
-             "cannot be downloaded with this 'request_id'", call. = FALSE)
+    if (!is.null(collections)) {
+      if (any(!collections %in% requests$collection)) {
+        stop(
+          "Some 'collections' were not included in the original request and ",
+          "cannot be downloaded with this 'request_id'",
+          call. = FALSE
+        )
       }
       requests <- dplyr::filter(requests, .data$collection %in% collections)
     } else {
@@ -129,75 +152,110 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   }
 
   # Assemble and check filter parameters
-  filter <- filter_create(verbose = verbose,
-                          collections = collections, species = species,
-                          years = years, doy = doy, region = region,
+  filter <- filter_create(
+    verbose = verbose,
+    collections = collections,
+    species = species,
+    years = years,
+    doy = doy,
+    region = region,
                           site_type = site_type,
-                          fields_set = fields_set, fields = fields)
+    fields_set = fields_set,
+    fields = fields
+  )
 
   # For sample user
-  if(username == "sample" && is.null(collections)) {
+  if (username == "sample" && is.null(collections)) {
     filter$collections <- c("SAMPLE1", "SAMPLE2")
   }
 
   # Get available records
-  if(verbose) message("Collecting available records...")
+  if (verbose) {
+    message("Collecting available records...")
+  }
 
-  if(!is.null(request_id)) {
+  if (!is.null(request_id)) {
     records <- dplyr::select(requests, "collection", "nrecords")
   } else {
-    records <- nc_count_internal(filter = filter, timeout = timeout,
-                                 token = token, info = info)
+    records <- nc_count_internal(
+      filter = filter,
+      timeout = timeout,
+      token = token,
+      info = info
+    )
     request_id <- records$requestId
     # Filter records to collections available
     records <- records$results %>%
-      dplyr::filter(.data$collection %in% nc_permissions_internal(token)$collection)
+      dplyr::filter(
+        .data$collection %in% nc_permissions_internal(token)$collection
+      )
   }
 
   # If there are no records to download, see why not and report that to the user
-  if(nrow(records) == 0) {
-
+  if (nrow(records) == 0) {
     # Is it because they don't have permission?
-    if(!is.null(collections)) {
-      no_access <- collections[!collections %in%
-                                 nc_permissions_internal(token)$collection]
-    } else no_access <- c()
+    if (!is.null(collections)) {
+      no_access <- collections[
+        !collections %in%
+          nc_permissions_internal(token)$collection
+      ]
+    } else {
+      no_access <- c()
+    }
 
-    if(length(no_access) == 0) {
-      warning("These collections have no data that match these filters",
-              call. = FALSE)
+    if (length(no_access) == 0) {
+      warning(
+        "These collections have no data that match these filters",
+        call. = FALSE
+      )
       return(invisible())
     } else {
-      stop("You do not have permission to access these collections (",
-           paste0(no_access, collapse = ", "), ")", call. = FALSE)
+      stop(
+        "You do not have permission to access these collections (",
+        paste0(no_access, collapse = ", "),
+        ")",
+        call. = FALSE
+      )
     }
-  } else if(!is.null(collections) && nrow(records) != length(collections)){
+  } else if (!is.null(collections) && nrow(records) != length(collections)) {
     # What about if not all the collections they want are available?
     missing <- collections[!collections %in% records$collection]
-    message("Not all collections have data that match these filters (",
-            paste0(missing, collapse = ", "), ")")
+    message(
+      "Not all collections have data that match these filters (",
+      paste0(missing, collapse = ", "),
+      ")"
+    )
   }
 
-  if(verbose) message(capture_df(records),
+  if (verbose) {
+    message(
+      capture_df(records),
                       "\nTotal records: ",
-                      format(sum(records$nrecords), scientific = FALSE,
-                             big.mark = ","))
+      format(sum(records$nrecords), scientific = FALSE, big.mark = ",")
+    )
+  }
 
-  if(warn == TRUE && sum(records$nrecords) > 1000000) {
+  if (warn == TRUE && sum(records$nrecords) > 1000000) {
     msg <- "This is a large download (> 1,000,000 records). "
-    if(is.null(sql_db)) msg <- paste0(msg,
+    if (is.null(sql_db)) {
+      msg <- paste0(
+        msg,
                                       "Consider using a SQLite data ",
-                                      "base with 'sql_db'. ")
-    msg <- paste0(msg,
+        "base with 'sql_db'. "
+      )
+    }
+    msg <- paste0(
+      msg,
                   "\nAre you sure you wish to proceed? ",
-                  "(To always proceed use 'warn = FALSE')")
+      "(To always proceed use 'warn = FALSE')"
+    )
 
     choice <- utils::menu(choices = c("Yes", "No"), title = msg)
-    if(choice == 2) return(message(""))
+    if (choice == 2) return(message(""))
   }
 
   # Get/Create database or dataframe
-  if(!is.null(sql_db)) {
+  if (!is.null(sql_db)) {
     df_db <- db_connect(sql_db, verbose = verbose)
   } else {
     df_db <- data.frame()
@@ -206,23 +264,38 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
   # Query Information
   query <- list(lastRecord = 0, numRecords = 5000, requestId = request_id)
 
-  if(verbose) message("\nDownloading records for each collection:")
-  for(c in 1:nrow(records)) {
-
+  if (verbose) {
+    message("\nDownloading records for each collection:")
+  }
+  for (c in 1:nrow(records)) {
     # Get data for whole collection
-    df_db <- nc_coll_dl(coll = records[c, ], query, filter,
-                        timeout, token, df_db, verbose)
+    df_db <- nc_coll_dl(
+      coll = records[c, ],
+      query,
+      filter,
+      timeout,
+      token,
+      df_db,
+      verbose
+    )
   }
 
   # Arrange field order
-  if(is.null(sql_db)) {
-    o <- c(field_order, meta_bmde_fields(version = filter$bmdeVersion)$local_name)
+  if (is.null(sql_db)) {
+    o <- c(
+      field_order,
+      meta_bmde_fields(version = filter$bmdeVersion)$local_name
+    )
     df_db <- dplyr::select(df_db, dplyr::any_of(o), dplyr::everything())
   }
 
   # Clear the web request id
-  srv_query(api$release_request_id, query = query['requestId'],
-            timeout = timeout, token = token)
+  srv_query(
+    api$release_request_id,
+    query = query['requestId'],
+    timeout = timeout,
+    token = token
+  )
 
   df_db
 }
@@ -246,9 +319,12 @@ nc_data_dl <- function(collections = NULL, project_ids = NULL,
 #' @keywords internal
 
 nc_coll_dl <- function(coll, query, filter, timeout, token, df_db, verbose) {
-
-  if(verbose) message("  ", coll$collection)
-  if(verbose) progress_query(0, coll$nrecords, query$numRecords)
+  if (verbose) {
+    message("  ", coll$collection)
+  }
+  if (verbose) {
+    progress_query(0, coll$nrecords, query$numRecords)
+  }
 
   # Update filter
   filter$collection <- coll$collection
@@ -264,13 +340,17 @@ nc_coll_dl <- function(coll, query, filter, timeout, token, df_db, verbose) {
 
   repeat {
     # Are we done? (return less than asked)
-    if(nrow(r$results) < query$numRecords) break
+    if (nrow(r$results) < query$numRecords) {
+      break
+    }
 
     # Update our position
     query$lastRecord <- max(r$results$record_id)
 
     # Track download progress
-    if(verbose) progress_query(coll$progress, coll$nrecords, query$numRecords)
+    if (verbose) {
+      progress_query(coll$progress, coll$nrecords, query$numRecords)
+    }
 
     # Request
     r <- nc_single_dl(query, filter, timeout, token)
@@ -295,13 +375,14 @@ nc_coll_dl <- function(coll, query, filter, timeout, token, df_db, verbose) {
 #'
 #' @keywords internal
 
-nc_single_dl <- function(query, filter, timeout, token){
-
-  request <- srv_query(api$data,
+nc_single_dl <- function(query, filter, timeout, token) {
+  request <- srv_query(
+    api$data,
                        query = query,
                        filter = filter,
                        token = token,
-                       timeout = timeout)
+    timeout = timeout
+  )
 
   # Parse the data
   request$results <- parse_results(request, results = TRUE)
@@ -309,8 +390,9 @@ nc_single_dl <- function(query, filter, timeout, token){
   # Make sure all have equal row counts
   rows <- unique(vapply(request$results, FUN = length, FUN.VALUE = c(11)))
 
-  if(length(rows) > 1) stop("Requested data has unequal row counts",
-                            call. = FALSE)
+  if (length(rows) > 1) {
+    stop("Requested data has unequal row counts", call. = FALSE)
+  }
 
   request
 }
@@ -331,16 +413,13 @@ nc_single_dl <- function(query, filter, timeout, token){
 #' @keywords internal
 
 nc_data_save <- function(data, df_db, table = "naturecounts") {
-  if(!is.data.frame(df_db)) {
+  if (!is.data.frame(df_db)) {
     db_insert(df_db, "naturecounts", data)
   } else {
     df_db <- dplyr::bind_rows(df_db, data)
   }
   df_db
 }
-
-
-
 
 
 #' Download information about NatureCounts collections
@@ -400,16 +479,24 @@ nc_data_save <- function(data, df_db, table = "naturecounts") {
 #'
 #' @export
 
-nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
-                     years = NULL, doy = NULL, region = NULL, site_type = NULL,
-                     show = "available", username = NULL, timeout = 120,
-                     verbose = TRUE) {
-
-  if(!show %in% c("available", "all")) {
+nc_count <- function(
+  collections = NULL,
+  project_ids = NULL,
+  species = NULL,
+  years = NULL,
+  doy = NULL,
+  region = NULL,
+  site_type = NULL,
+  show = "available",
+  username = NULL,
+  timeout = 120,
+  verbose = TRUE
+) {
+  if (!show %in% c("available", "all")) {
     stop("show must either be 'all' or 'available'", call. = FALSE)
   }
 
-  if(is.null(username) && show == "available") {
+  if (is.null(username) && show == "available") {
     show <- "all"
     message("Without a username, using 'show = \"all\"'")
   }
@@ -419,34 +506,43 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
 
   # Check/convert project_ids to collections
   collections <- projects_check(project_ids, collections)
-  if(!is.null(token) & show == "available") collections <- collections_check(collections, token)
+  if (!is.null(token) & show == "available") {
+    collections <- collections_check(collections, token)
+  }
 
   # Assemble and check filter parameters
-  filter <- filter_create(verbose = verbose,
-                          collections = collections, species = species,
-                          years = years, doy = doy, region = region,
-                          site_type = site_type)
+  filter <- filter_create(
+    verbose = verbose,
+    collections = collections,
+    species = species,
+    years = years,
+    doy = doy,
+    region = region,
+    site_type = site_type
+  )
 
   # For sample user
-  if(!is.null(username) && username == "sample" && is.null(collections)) {
+  if (!is.null(username) && username == "sample" && is.null(collections)) {
     filter$collections <- c("SAMPLE1", "SAMPLE2")
   }
 
   # Get counts
   cnts <- nc_count_internal(filter, timeout, token)[['results']]
 
-  if(length(filter) > 0 && nrow(cnts) == 0) stop("No counts for these filters", call. = FALSE)
+  if (length(filter) > 0 && nrow(cnts) == 0) {
+    stop("No counts for these filters", call. = FALSE)
+  }
 
   p <- nc_permissions_internal(token, timeout) %>%
     dplyr::mutate(access = "full")
 
   # Add access codes and counts for unavailable collections
-  if(show == "all") {
+  if (show == "all") {
     p <- meta_collections() %>%
       dplyr::select("collection", "akn_level") %>%
       dplyr::full_join(p, ., by = c("collection", "akn_level"))
 
-    if(length(filter) > 0){
+    if (length(filter) > 0) {
       p <- dplyr::right_join(p, cnts, by = "collection")
     } else {
       p <- dplyr::full_join(p, cnts, by = "collection")
@@ -454,24 +550,35 @@ nc_count <- function(collections = NULL, project_ids = NULL, species = NULL,
   }
 
   # Add counts for available collections
-  if(show == "available") p <- dplyr::inner_join(p, cnts, by = "collection")
+  if (show == "available") {
+    p <- dplyr::inner_join(p, cnts, by = "collection")
+  }
 
   # Clarify access type
   p %>%
-    dplyr::mutate(access = dplyr::case_when(
+    dplyr::mutate(
+      access = dplyr::case_when(
       .data$access == "full" ~ "full",
       is.na(.data$access) & .data$akn_level >= 3 ~ "by request",
-      is.na(.data$access) & .data$akn_level < 3 ~ "no access"),
-      nrecords = dplyr::if_else(.data$akn_level >= 2 & is.na(.data$nrecords),
-                                0L, .data$nrecords)) %>%
+        is.na(.data$access) & .data$akn_level < 3 ~ "no access"
+      ),
+      nrecords = dplyr::if_else(
+        .data$akn_level >= 2 & is.na(.data$nrecords),
+        0L,
+        .data$nrecords
+      )
+    ) %>%
     dplyr::arrange(.data$collection)
 }
 
 nc_count_internal <- function(filter, timeout, token, info = NULL) {
-
-  cnts <- srv_query(api$collections_count, token = token,
-                    query = list(info = info), filter = filter,
-                    timeout = timeout)
+  cnts <- srv_query(
+    api$collections_count,
+    token = token,
+    query = list(info = info),
+    filter = filter,
+    timeout = timeout
+  )
 
   requestId <- cnts$requestId
 
@@ -512,5 +619,3 @@ nc_permissions_internal <- function(token, timeout = 60) {
 # Cache function results
 # nc_permissions_internal <- memoise::memoise(nc_permissions_internal,
 #                                             ~memoise::timeout(24 * 60 * 60))
-
-

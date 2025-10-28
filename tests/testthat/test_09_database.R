@@ -1,17 +1,19 @@
-
 # db_check_version ------------------------------------------------------------
 test_that("db_check_version() works as expected", {
-
   con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 
   # No version
-  expect_error(db_check_version(con),
-               "There is no version information for this database.")
+  expect_error(
+    db_check_version(con),
+    "There is no version information for this database."
+  )
 
   # Old version
   DBI::dbWriteTable(con, "versions", data.frame(Rpackage = "0.0.5"))
-  expect_warning(db_check_version(con),
-               "Your NatureCounts database is out of date")
+  expect_warning(
+    db_check_version(con),
+    "Your NatureCounts database is out of date"
+  )
 
   # Current version
   v <- data.frame(Rpackage = as.character(packageVersion("naturecounts")))
@@ -24,8 +26,7 @@ test_that("db_check_version() works as expected", {
 
 # db_create ------------------------------------------------------------
 test_that("db_create creates tables in the database", {
-
-  con <- DBI::dbConnect(RSQLite::SQLite(), dbname =  ":memory:")
+  con <- DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
 
   expect_silent(db_create(con))
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
@@ -53,14 +54,18 @@ test_that("db_create creates tables in the database", {
     stringr::str_remove("^meta_")
   funs <- funs[!stringr::str_detect(funs, "(bmde)|(utm)")]
 
-  expect_true(all(c(funs, "naturecounts", "versions") %in%
-                    DBI::dbListTables(con)))
+  expect_true(all(
+    c(funs, "naturecounts", "versions") %in%
+      DBI::dbListTables(con)
+  ))
 
-  for(m in funs) {
+  for (m in funs) {
     expect_silent(d <- dplyr::tbl(con, !!m)) %>%
       expect_s3_class("tbl_sql")
-    expect_equal(dplyr::collect(d) %>% dplyr::as_tibble(),
-                 do.call(paste0("meta_", !!m), args = list()))
+    expect_equal(
+      dplyr::collect(d) %>% dplyr::as_tibble(),
+      do.call(paste0("meta_", !!m), args = list())
+    )
   }
 
   # Clean up
@@ -74,8 +79,10 @@ test_that("db_connect creates SQLite database file", {
   unlink(list.files(pattern = "naturecounts_(.)+\\.nc"))
 
   # Check connection and encoding
-  expect_message(con <- db_connect(),
-                 "Database '.\\/naturecounts_[0-9-]{10}.nc' does not exist")
+  expect_message(
+    con <- db_connect(),
+    "Database '.\\/naturecounts_[0-9-]{10}.nc' does not exist"
+  )
   expect_s4_class(con, "SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
@@ -85,8 +92,10 @@ test_that("db_connect creates SQLite database file", {
   # Check that can re-connect to existing database
   DBI::dbDisconnect(con)
 
-  expect_message(con <- db_connect(),
-                 "Database './naturecounts_[0-9-]{10}.nc' already exists")
+  expect_message(
+    con <- db_connect(),
+    "Database './naturecounts_[0-9-]{10}.nc' already exists"
+  )
   expect_s4_class(con, "SQLiteConnection")
   expect_equal(DBI::dbGetQuery(con, "PRAGMA encoding;")$encoding, "UTF-8")
 
@@ -162,7 +171,7 @@ test_that("db_insert overwrites rows as required", {
   expect_silent(nc2 <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
 
   expect_equal(nrow(nc1), nrow(nc2)) # Same rows
-  
+
   expect_false(isTRUE(all.equal(nc1, nc2))) # But data has changed
 
   expect_equal(sort(nc1$record_id), sort(nc2$record_id)) # Not record_ids
@@ -180,12 +189,15 @@ test_that("db_insert adds new cols as required", {
   n <- DBI::dbListFields(con, "naturecounts")
 
   # Add data with fewer cols than db (no new)
-  expect_silent(db_insert(con, "naturecounts",
-                          dplyr::select(bcch, record_id, collection)))
+  expect_silent(db_insert(
+    con,
+    "naturecounts",
+    dplyr::select(bcch, record_id, collection)
+  ))
   expect_equal(length(n), length(DBI::dbListFields(con, "naturecounts")))
 
   # All new cols are NA
-  dplyr::collect(dplyr::tbl(con, "naturecounts")) %>% 
+  dplyr::collect(dplyr::tbl(con, "naturecounts")) %>%
     apply(., 2, function(x) all(is.na(x))) %>%
     sum() %>%
     expect_equal(length(n) - 2)
@@ -198,8 +210,10 @@ test_that("db_insert adds new cols as required", {
   expect_silent(nc <- dplyr::collect(dplyr::tbl(con, "naturecounts")))
   expect_equal(names(nc), names(bcch2))
   expect_equal(nrow(nc), nrow(bcch2))
-  expect_equal(dplyr::select(nc, "new1", "new2", "new3"),
-               dplyr::select(bcch2, "new1", "new2", "new3"))
+  expect_equal(
+    dplyr::select(nc, "new1", "new2", "new3"),
+    dplyr::select(bcch2, "new1", "new2", "new3")
+  )
 
   # Clean up
   DBI::dbDisconnect(con)
@@ -211,10 +225,16 @@ test_that("db_insert adds new cols as required", {
 
 test_that("Data download to sql", {
   unlink("test.nc")
-  expect_message(d <- nc_data_dl(collections = "RCBIOTABASE", years = 2011,
-                                 fields_set = "minimum", 
-                                 username = "testuser", info = "nc_test",
-                                 sql_db = "test")) %>%
+  expect_message(
+    d <- nc_data_dl(
+      collections = "RCBIOTABASE",
+      years = 2011,
+      fields_set = "minimum",
+      username = "testuser",
+      info = "nc_test",
+      sql_db = "test"
+    )
+  ) %>%
     suppressMessages()
 
   expect_true(file.exists("./test.nc"))

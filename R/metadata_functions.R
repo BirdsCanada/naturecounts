@@ -5,7 +5,7 @@
 #'
 #' @details Some of these metadata are stored locally and can be updated with
 #'   the [nc_metadata()] function. Others are downloaded as requested.
-#' 
+#'
 #' **Metadata stored locally** - use `nc_metadata()` to update
 #' - `meta_country_codes()`
 #' - `meta_statprov_codes()`
@@ -16,7 +16,7 @@
 #' - `meta_species_authority()`
 #' - `meta_species_codes()`
 #' - `meta_species_taxonomy()`
-#' 
+#'
 #' **Metadata always fetched from NatureCounts**
 #' - `meta_collections()()`
 #' - `meta_breeding_codes()`
@@ -24,7 +24,7 @@
 #' - `meta_projects()`
 #' - `meta_protocol_types()`
 #' - `meta_bmde_versions()`
-#' 
+#'
 #'
 #' @return Data frame
 #'
@@ -34,39 +34,57 @@ NULL
 
 #' @describeIn meta Country codes
 #' @export
-meta_country_codes <- function() {metadata_read("country_codes")}
+meta_country_codes <- function() {
+  metadata_read("country_codes")
+}
 
 #' @describeIn meta State/Province codes
 #' @export
-meta_statprov_codes <- function() {metadata_read("statprov_codes")}
+meta_statprov_codes <- function() {
+  metadata_read("statprov_codes")
+}
 
 #' @describeIn meta Subnational2 codes
 #' @export
-meta_subnational2_codes <- function() {metadata_read("subnational2_codes")}
+meta_subnational2_codes <- function() {
+  metadata_read("subnational2_codes")
+}
 
 #' @describeIn meta Important Bird Area (IBA) codes
 #' @export
-meta_iba_codes <- function() {metadata_read("iba_codes")}
+meta_iba_codes <- function() {
+  metadata_read("iba_codes")
+}
 
 #' @describeIn meta Bird Conservation Region (BCR) codes
 #' @export
-meta_bcr_codes <- function() {metadata_read("bcr_codes")}
+meta_bcr_codes <- function() {
+  metadata_read("bcr_codes")
+}
 
 #' @describeIn meta UTM Square codes
 #' @export
-meta_utm_squares <- function() {metadata_read("utm_squares")}
+meta_utm_squares <- function() {
+  metadata_read("utm_squares")
+}
 
 #' @describeIn meta Species taxonomic authorities
 #' @export
-meta_species_authority <- function() {metadata_read("species_authority")}
+meta_species_authority <- function() {
+  metadata_read("species_authority")
+}
 
 #' @describeIn meta Alpha-numeric codes for avian species
 #' @export
-meta_species_codes <- function() {metadata_read("species_codes")}
+meta_species_codes <- function() {
+  metadata_read("species_codes")
+}
 
 #' @describeIn meta Codes and taxonomic information for all species
 #' @export
-meta_species_taxonomy <- function() {metadata_read("species_taxonomy")}
+meta_species_taxonomy <- function() {
+  metadata_read("species_taxonomy")
+}
 
 #' @describeIn meta Collections names and descriptions
 #' @export
@@ -96,8 +114,11 @@ meta_projects <- function() {
     parse_results()
   p2 <- srv_query(api$projects_meta, timeout = 30) %>%
     parse_results()
-  dplyr::left_join(p1, p2, by = c("project_id", "project_code",
-                                  "project_name", "project_name_fr"))
+  dplyr::left_join(
+    p1,
+    p2,
+    by = c("project_id", "project_code", "project_name", "project_name_fr")
+  )
 }
 
 #' @describeIn meta Protocol types and descriptions
@@ -139,7 +160,7 @@ meta_bmde_versions <- function() {
 meta_bmde_fields <- function(version = "minimum") {
   # Check version
   f <- metadata_read("bmde_fields")
-  if(!is.null(version)) {
+  if (!is.null(version)) {
     version <- fields_set_check(version)
     f <- dplyr::filter(f, .data$version == !!version)
   }

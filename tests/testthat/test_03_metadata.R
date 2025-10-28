@@ -3,16 +3,22 @@ test_that("Out of date metadata notified", {
   with_mocked_bindings(
     metadata_up2date = function(...) FALSE,
     code = {
-      expect_message(d <- meta_species_codes(),
-                     "Metadata hasn't been updated in >4 weeks") %>%
+      expect_message(
+        d <- meta_species_codes(),
+        "Metadata hasn't been updated in >4 weeks"
+      ) %>%
         suppressMessages()
-    })
+    }
+  )
 })
 
 test_that("Metadata updates", {
   # Get original file dates
-  loc <- list.files(system.file("extdata", package = "naturecounts"),
-                    pattern = "meta_", full.names = TRUE) %>%
+  loc <- list.files(
+    system.file("extdata", package = "naturecounts"),
+    pattern = "meta_",
+    full.names = TRUE
+  ) %>%
     subset(!stringr::str_detect(., "utm")) %>%
     file.info()
 
@@ -20,40 +26,46 @@ test_that("Metadata updates", {
   expect_message(nc_metadata(force = TRUE), "Updating") %>%
     suppressMessages()
 
-  loc2 <- list.files(system.file("extdata", package = "naturecounts"),
-                     pattern = "meta_", full.names = TRUE) %>%
+  loc2 <- list.files(
+    system.file("extdata", package = "naturecounts"),
+    pattern = "meta_",
+    full.names = TRUE
+  ) %>%
     subset(!stringr::str_detect(., "utm")) %>%
     file.info()
 
   # Expect all file dates to be newer now
-  expect_true(all(lubridate::ymd_hms(loc$mtime) <
-                    lubridate::ymd_hms(loc2$mtime)))
+  expect_true(all(
+    lubridate::ymd_hms(loc$mtime) < lubridate::ymd_hms(loc2$mtime)
+  ))
 
   # Expect no update if force = FALSE
   expect_message(nc_metadata(force = FALSE), "already up-to-date with server")
 
-  loc3 <- list.files(system.file("extdata", package = "naturecounts"),
-                     pattern = "meta_", full.names = TRUE) %>%
+  loc3 <- list.files(
+    system.file("extdata", package = "naturecounts"),
+    pattern = "meta_",
+    full.names = TRUE
+  ) %>%
     subset(!stringr::str_detect(., "utm")) %>%
     file.info()
 
   # Expect all file dates to be newer now
-  expect_true(all(lubridate::ymd_hms(loc2$mtime) ==
-                    lubridate::ymd_hms(loc3$mtime)))
-  
-  expect_true(metadata_up2date())
+  expect_true(all(
+    lubridate::ymd_hms(loc2$mtime) == lubridate::ymd_hms(loc3$mtime)
+  ))
 
+  expect_true(metadata_up2date())
 })
 
 
 # Access Metadata ---------------------------------------------------------
 test_that("Metadata functions accessible", {
-
   # Get all the metadata functions
   funs <- ls("package:naturecounts") %>%
     stringr::str_subset("^meta_")
 
-  for(m in funs) {
+  for (m in funs) {
     expect_silent(get(m)()) %>%
       expect_s3_class("data.frame")
   }

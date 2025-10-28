@@ -15,26 +15,32 @@
 #'
 #' @export
 nc_requests <- function(request_id = NULL, type = "web", username) {
-
   # Username check and Authorization
   token <- srv_auth(username)
 
   # Check type
-  if(!type %in% c("web", "api", "all")) {
+  if (!type %in% c("web", "api", "all")) {
     stop("'type' must be one of 'web', 'api', or 'all'", call. = FALSE)
   }
 
   # Get list
   r <- nc_requests_internal(request_id, token)
-  if(type != "all") r <- dplyr::filter(r, .data$request_origin == type)
+  if (type != "all") {
+    r <- dplyr::filter(r, .data$request_origin == type)
+  }
   r
 }
 
 nc_requests_internal <- function(request_id = NULL, token) {
-  req <- srv_query(api$list_requests, query = c(requestId = request_id),
-                   token = token)
-  if(length(req$requests) > 0 ){
+  req <- srv_query(
+    api$list_requests,
+    query = c(requestId = request_id),
+    token = token
+  )
+  if (length(req$requests) > 0) {
     req <- parse_request(req$requests)
-  } else req <- NULL
+  } else {
+    req <- NULL
+  }
   req
 }
