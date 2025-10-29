@@ -1,0 +1,144 @@
+---
+title: "COSEWIC Tools"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{COSEWIC Tools}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, message = FALSE}
+library(naturecounts)
+```
+
+
+Basic plot
+```{r}
+r <- cosewic_ranges(bcch)
+cosewic_plot(r, title = "Black-capped Chickadee")
+```
+
+Adding observation points
+```{r}
+cosewic_plot(r, points = bcch, title = "Black-capped Chickadee")
+```
+
+Only EOO or IAO
+
+```{r}
+cosewic_plot(r, which = "eoo", points = bcch)
+cosewic_plot(r, which = "iao")
+```
+
+Change the CRS
+
+- Only applies if not using map tiles as they *must* be in the CRS of the tile (i.e. EPSG:3857 Web Mercator)
+
+```{r}
+cosewic_plot(r, crs = 3347) # No change
+cosewic_plot(r, map = map_canada(), crs = 3347)
+```
+
+Move the scale/arrow
+
+```{r}
+r <- cosewic_ranges(hofi)
+cosewic_plot(r, arrow_location = "br", scale_location = "br")
+```
+
+Summarize IAO over larger grid for better visibility
+```{r}
+cosewic_plot(
+  r,
+  grid = grid_canada(25),
+  title = "House Finch",
+  arrow_location = "br",
+  scale_location = "br"
+)
+```
+
+Plot multiple species as separate plots
+```{r}
+m <- rbind(bcch, hofi)
+r <- cosewic_ranges(m)
+p <- cosewic_plot(
+  r,
+  title = c("14280" = "Black-capped chickadees", "20350" = "House Finches")
+)
+p[[1]]
+p[[2]]
+```
+
+Use patchwork to combine
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.5
+library(patchwork)
+wrap_plots(p) +
+  plot_layout(guides = "collect")
+```
+
+Use IAO as a proportion for better legends
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.5
+p <- cosewic_plot(
+  r,
+  iao_prop = TRUE,
+  title = c("14280" = "Black-capped chickadees", "20350" = "House Finches")
+)
+
+wrap_plots(p) +
+  plot_layout(guides = "collect")
+```
+
+Consider summarizing over a larger IAO grid (10x10km) for better visibility
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.5
+p <- cosewic_plot(
+  r,
+  iao_prop = TRUE,
+  grid = grid_canada(10),
+  title = c("14280" = "Black-capped chickadees", "20350" = "House Finches")
+)
+
+wrap_plots(p) +
+  plot_layout(guides = "collect")
+```
+
+For more nuanced control, create plots separately and then combine
+
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.5
+b <- cosewic_ranges(bcch)
+h <- cosewic_ranges(hofi)
+p1 <- cosewic_plot(b, title = "Black-capped chickadee", iao_prop = TRUE)
+p2 <- cosewic_plot(
+  h,
+  title = "House Finches",
+  iao_prop = TRUE,
+  arrow_location = "br",
+  scale_location = "br",
+  grid = grid_canada(25)
+)
+
+p1 + p2 + plot_layout(guides = "collect")
+```
+
+```{r}
+#| fig-asp: 1.5
+
+p1 / p2 + plot_layout(guides = "collect")
+```
