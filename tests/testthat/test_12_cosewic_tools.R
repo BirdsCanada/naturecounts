@@ -57,7 +57,7 @@ test_that("cosewic_eoo()", {
 
 test_that("cosewic_eoo() diff cols", {
   # Lambert
-  df <- dplyr::rename(bcch, sp = species_id, rec = record_id) |>
+  df <- dplyr::rename(bcch, sp = species_id, rec = record_id) %>%
     prep_spatial(extra = "rec", crs = 3347)
   expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
@@ -75,8 +75,8 @@ test_that("cosewic_eoo() diff cols", {
 
 test_that("cosewic_eoo() no cols", {
   # Lambert
-  df <- dplyr::select(bcch, -"species_id") |>
-    dplyr::mutate(record_id = dplyr::row_number()) |>
+  df <- dplyr::select(bcch, -"species_id") %>%
+    dplyr::mutate(record_id = dplyr::row_number()) %>%
     prep_spatial(crs = 3347)
   expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
@@ -175,7 +175,7 @@ test_that("cosewic_iao()", {
 
 test_that("cosewic_iao() diff cols", {
   # Lambert
-  df <- dplyr::rename(bcch, sp = species_id, rec = record_id) |>
+  df <- dplyr::rename(bcch, sp = species_id, rec = record_id) %>%
     prep_spatial(extra = "rec", crs = 3347)
   expect_silent(
     a <- cosewic_iao(
@@ -216,8 +216,8 @@ test_that("cosewic_iao() diff cols", {
 })
 
 test_that("cosewic_iao() no cols", {
-  df <- dplyr::select(bcch, -"species_id") |>
-    dplyr::mutate(record_id = dplyr::row_number()) |>
+  df <- dplyr::select(bcch, -"species_id") %>%
+    dplyr::mutate(record_id = dplyr::row_number()) %>%
     prep_spatial(crs = 3347)
   expect_silent(
     a <- cosewic_iao(
@@ -424,7 +424,10 @@ test_that("cosewic_ranges() diff cols", {
 test_that("cosewic_ranges() no cols", {
   b <- dplyr::select(bcch, -"species_id", -"record_id")
 
-  expect_warning(r <- cosewic_ranges(b, crs = 3347), "Column \"species_id\"") |>
+  expect_warning(
+    r <- cosewic_ranges(b, crs = 3347),
+    "Column \"species_id\""
+  ) %>%
     expect_warning("Column \"record_id\"")
   expect_silent(
     r <- cosewic_ranges(b, record = NULL, species = NULL, crs = 3347)
@@ -536,7 +539,7 @@ test_that("cosewic_ranges() filter_unique", {
 
 
 test_that("cosewic_ranges() eoo clip", {
-  ON <- rnaturalearth::ne_states("Canada") |>
+  ON <- rnaturalearth::ne_states("Canada") %>%
     dplyr::filter(postal == "ON")
   mult <- rbind(bcch, hofi)
 
@@ -599,6 +602,7 @@ test_that("cosewic_plot()", {
   expect_silent(
     g5 <- cosewic_plot(
       r1,
+      crs = 3347,
       grid = grid_canada(crs = 3347),
       map = map_canada(),
       title = "Black-capped Chickadees"
