@@ -43,10 +43,13 @@ database. Required unless resuming/re-downloaded with a \code{request_id}.}
 times out.}
 
 \item{crs}{A coordinate reference system (see \code{?sf::st_transform()}).
-Defaults to 3347 (Statistics Canada Lambert) for plots and a customized
-Albers Equal-Area for Canada (ESRI:102001) for area
+Defaults to Albers Equal-Area for Canada (ESRI:102001) for area
 calculations. Note that it must be a projection (i.e. not simply a
-reference system like 4326 used for GPS) for area calculations.}
+reference system like 4326 used for GPS) for area calculations. If \code{NULL}
+for plots, uses the CRS of the base map or of the IAO/EOO data.}
+
+\item{which}{Character vector. Which range types to calculate.
+Any combination of "eoo" and "iao", default is both.}
 
 \item{verbose}{Logical. Show messages?}
 }

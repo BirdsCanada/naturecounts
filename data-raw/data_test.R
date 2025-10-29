@@ -4,12 +4,12 @@ test_rc <- nc_data_dl(
   fields_set = "core",
   username = "sample",
   info = "sample_data"
-) |>
+) %>%
   dplyr::filter(
     CommonName %in% c("Monarch", "Black Swallowtail", "Red Admiral"),
     AllSpeciesReported == "Yes"
-  ) |>
-  dplyr::mutate(presence = as.numeric(ObservationCount > 0)) |>
+  ) %>%
+  dplyr::mutate(presence = as.numeric(ObservationCount > 0)) %>%
   format_dates()
 
 saveRDS(

@@ -3,42 +3,42 @@ ua <- httr::user_agent(agent = "https://github.com/birdscanada/naturecounts")
 
 # API URLs
 meta_info <- dplyr::tribble(
-  ~package_name        , ~api_url                              , ~primary_keys                     ,
-  "api"                , "https://sandbox.naturecounts.ca/api" , NA                                ,
+  ~package_name        , ~api_url                           , ~primary_keys                     ,
+  "api"                , "https://naturecounts.ca/api"      , NA                                ,
 
-  "auth"               , "/data/authenticate"                  , NA                                ,
+  "auth"               , "/data/authenticate"               , NA                                ,
 
-  "version"            , "api_version"                         , NA                                ,
+  "version"            , "api_version"                      , NA                                ,
 
-  "country_codes"      , "metadata/country"                    , "country_code"                    ,
-  "statprov_codes"     , "metadata/statprov"                   , "statprov_code"                   ,
-  "subnational2_codes" , "metadata/subnat2"                    , "subnational2_code"               ,
+  "country_codes"      , "metadata/country"                 , "country_code"                    ,
+  "statprov_codes"     , "metadata/statprov"                , "statprov_code"                   ,
+  "subnational2_codes" , "metadata/subnat2"                 , "subnational2_code"               ,
 
-  "bcr_codes"          , "metadata/bcr"                        , "bcr"                             ,
-  "iba_codes"          , "metadata/iba_sites"                  , "iba_site"                        ,
-  "utm_squares"        , "data/utm_squares"                    , NA                                ,
+  "bcr_codes"          , "metadata/bcr"                     , "bcr"                             ,
+  "iba_codes"          , "metadata/iba_sites"               , "iba_site"                        ,
+  "utm_squares"        , "data/utm_squares"                 , NA                                ,
 
-  "species_authority"  , "metadata/species_codes_authority"    , "authority"                       ,
-  "species_codes"      , "metadata/species_codes"              , list("species_code", "authority") ,
-  "species_taxonomy"   , "metadata/species"                    , "species_id"                      ,
+  "species_authority"  , "metadata/species_codes_authority" , "authority"                       ,
+  "species_codes"      , "metadata/species_codes"           , list("species_code", "authority") ,
+  "species_taxonomy"   , "metadata/species"                 , "species_id"                      ,
 
-  "bmde_versions"      , "metadata/bmde_versions"              , "version"                         ,
-  "bmde_fields"        , "metadata/bmde_fields"                , "field_name"                      ,
-  "projects"           , "metadata/projects"                   , "project_id"                      ,
-  "projects_meta"      , "metadata/projects_metadata"          , "project_id"                      ,
+  "bmde_versions"      , "metadata/bmde_versions"           , "version"                         ,
+  "bmde_fields"        , "metadata/bmde_fields"             , "field_name"                      ,
+  "projects"           , "metadata/projects"                , "project_id"                      ,
+  "projects_meta"      , "metadata/projects_metadata"       , "project_id"                      ,
 
-  "collections"        , "metadata/collections"                , "collection"                      ,
-  "breeding_codes"     , "metadata/breeding_codes"             , "breeding_code"                   ,
-  "project_protocols"  , "metadata/protocols"                  , "protocol_id"                     ,
-  "protocol_types"     , "metadata/protocol_type"              , "protocol_type"                   ,
+  "collections"        , "metadata/collections"             , "collection"                      ,
+  "breeding_codes"     , "metadata/breeding_codes"          , "breeding_code"                   ,
+  "project_protocols"  , "metadata/protocols"               , "protocol_id"                     ,
+  "protocol_types"     , "metadata/protocol_type"           , "protocol_type"                   ,
 
-  "data"               , "data/get_data"                       , "record_id"                       ,
-  "collections_count"  , "data/list_collections"               , "collection"                      ,
-  "permissions"        , "data/list_permissions"               , "collection"                      ,
-  "list_requests"      , "data/list_requests"                  , NA                                ,
-  "release_request_id" , "data/release_request_id"             , NA                                ,
+  "data"               , "data/get_data"                    , "record_id"                       ,
+  "collections_count"  , "data/list_collections"            , "collection"                      ,
+  "permissions"        , "data/list_permissions"            , "collection"                      ,
+  "list_requests"      , "data/list_requests"               , NA                                ,
+  "release_request_id" , "data/release_request_id"          , NA                                ,
 
-  "query"              , "query"                               , NA
+  "query"              , "query"                            , NA
 )
 
 api <- as.list(meta_info$api_url)

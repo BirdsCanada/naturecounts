@@ -6,18 +6,25 @@
 \usage{
 cosewic_plot(
   ranges,
+  which = c("eoo", "iao"),
   points = NULL,
   grid = NULL,
-  map = NULL,
-  scale = FALSE,
-  crs = 4269,
+  map = "osm",
+  iao_prop = FALSE,
+  crs = NULL,
   species = "species_id",
   title = "",
+  zoomin = -1,
+  arrow_location = "tr",
+  scale_location = "tr",
   verbose = TRUE
 )
 }
 \arguments{
 \item{ranges}{List. Output of \code{cosewic_ranges()} with \code{spatial = TRUE}.}
+
+\item{which}{Character vector. Which range types to calculate.
+Any combination of "eoo" and "iao", default is both.}
 
 \item{points}{Data frame. Optional naturecounts data used to compute ranges.
 Raw data points will be added to the plot if provided.}
@@ -25,17 +32,38 @@ Raw data points will be added to the plot if provided.}
 \item{grid}{sf data frame. Optional grid over which to summarize IAO values
 (useful for species with many points over a broad distribution).}
 
-\item{map}{sf data frame. Optional base map over which to plot the values.}
+\item{map}{Character or sf data frame. Underlying base map over which to plot
+the values.. "osm" by default to use OpenStreetMap base maps via
+\code{ggspatial::annotation_map_tile()}. Can be one of \code{rosm::osm.types()}, a sf
+polygon base map, or \code{NULL} for no base map.}
 
-\item{scale}{Logical. Whether to scale the IAO legends to a proportion for
+\item{iao_prop}{Logical. Whether to show IAO as a proportion for
 easier plotting of multiple species (allows collecting legends by
-patchwork).}
+the patchwork package).}
+
+\item{crs}{A coordinate reference system (see \code{?sf::st_transform()}).
+Defaults to Albers Equal-Area for Canada (ESRI:102001) for area
+calculations. Note that it must be a projection (i.e. not simply a
+reference system like 4326 used for GPS) for area calculations. If \code{NULL}
+for plots, uses the CRS of the base map or of the IAO/EOO data.}
 
 \item{species}{Character. Name of the column containing species
 identification.}
 
 \item{title}{Character. Optional title to add to the map. Can be a named by
 species vector to supply different titles for different species.}
+
+\item{zoomin}{Numeric. Zoom adjustment for
+\code{ggspatial::annotation_map_tile()}. Only applies if map defines a map tile
+(e.g., "osm")}
+
+\item{arrow_location}{Character. Location for the North arrow, one of 'tr',
+'tl', 'br', or 'bl', for top right, top left, etc. \code{NULL} omits the arrow.}
+
+\item{scale_location}{Character. Location for the map scale, one of 'tr',
+'tl', 'br', or 'bl', for top right, top left, etc. \code{NULL} omits the scale.}
+
+\item{verbose}{Logical. Show messages?}
 }
 \value{
 ggplot2 map
@@ -46,20 +74,42 @@ Creates a plot of COSEWIC ranges for illustration and checking.
 \examples{
 r <- cosewic_ranges(bcch)
 cosewic_plot(r)
-cosewic_plot(r, scale = TRUE)
 cosewic_plot(r, points = bcch)
-cosewic_plot(r, grid = grid_canada(50), map = map_canada(),
-             title = "Black-capped chickadees")
 
+# Only one or the other
+cosewic_plot(r, which = "eoo", points = bcch)
+cosewic_plot(r, which = "iao")
+
+# Use a different CRS for the map (only applies if not using map tiles)
+cosewic_plot(r, crs = 3347) # No change
+cosewic_plot(r, map = map_canada(), crs = 3347)
+
+# Summarize IAO over larger grid
+cosewic_plot(
+  r,
+  grid = grid_canada(50),
+  map = map_canada(),
+  title = "Black-capped chickadees"
+)
+
+# Plot multiple species - separate plots
 m <- rbind(bcch, hofi)
 r <- cosewic_ranges(m)
-cosewic_plot(r)
-cosewic_plot(r, scale = TRUE)
-cosewic_plot(r, points = m)
-p <- cosewic_plot(r, grid = grid_canada(50), map = map_canada(),
-                 title = c("14280" = "Black-capped chickadees",
-                           "20350" = "House Finches"))
+p <- cosewic_plot(r)
 p[[1]]
 p[[2]]
 
+# Plot multiple species - Use IAO as a proportion for identical legends
+p <- cosewic_plot(
+  r,
+  iao_prop = TRUE,
+  title = c("14280" = "Black-capped chickadees", "20350" = "House Finches")
+)
+
+# Use patchwork to combine into a single figure
+if(requireNamespace("patchwork", quietly = TRUE)) {
+  library(patchwork)
+  wrap_plots(p) +
+    plot_layout(guides = "collect")
+}
 }

@@ -42,13 +42,13 @@ if (FALSE) {
     bcch,
     coords = c("longitude", "latitude"),
     crs = 4326
-  ) |>
-    sf::st_bbox() |>
+  ) %>%
+    sf::st_bbox() %>%
     sf::st_transform("ESRI:102001")
 
-  grid <- sf::st_read("misc/data/IAO Grid/") |>
-    sf::st_crop(ext) |>
-    dplyr::select("geometry") |>
-    dplyr::mutate(grid_id = dplyr::row_number()) |>
+  grid <- sf::st_read("misc/data/IAO Grid/") %>%
+    sf::st_crop(ext) %>%
+    dplyr::select("geometry") %>%
+    dplyr::mutate(grid_id = dplyr::row_number()) %>%
     sf::st_write(path)
 }

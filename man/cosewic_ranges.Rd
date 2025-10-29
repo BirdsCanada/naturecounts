@@ -50,8 +50,6 @@ may not be appropriate. Set to 1 to include all points.}
 be relevant when calculating EOOs for complex regions (i.e. long curved
 areas) to avoid including area which cannot have observations.}
 
-\item{which}{Character vector. Any combination of "eoo" and "iao", which ranges to calculate.}
-
 \item{filter_unique}{Logical. Whether to filter observations to unique
 locations. Use this only if there are too many data points to work with.
 This changes the nature of what an observation is, and also may bias
@@ -139,7 +137,7 @@ r2 <- cosewic_ranges(mult, crs = 3162)
 \dontshow{if (requireNamespace("rnaturalearth", quietly = TRUE) & requireNamespace("rnaturalearthhires", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 library(rnaturalearth)
-ON <- ne_states("Canada") |>
+ON <- ne_states("Canada") \%>\%
   dplyr::filter(postal == "ON")
 
 r <- cosewic_ranges(mult)

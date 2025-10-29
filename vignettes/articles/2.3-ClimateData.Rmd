@@ -131,7 +131,7 @@ cranes_summary
 #> 12        2005          180
 ```
 
-# 3.2 Weathercan (Vector) Data
+# 3.2 weathercan (Vector) Data
 
 `weathercan` is an R package designed to help access historical weather data from ECCC. Steffi LaZerte's [online documentation](https://docs.ropensci.org/weathercan/articles/weathercan.html), provides more details on how to download, filter, and visualize weather data in R.
 
@@ -294,7 +294,7 @@ ggplot(cranes_climate_summary, aes(x = yearly_avg_precip, y = annual_count)) +
 
 Download the bioclimatic data on [this webpage](https://www.worldclim.org/data/worldclim21.html). The data are available at the four spatial resolutions, between 30 seconds (\~1 km2) to 10 minutes (\~340 km2). Each download is a "zip" file containing 19 GeoTiff (.tif) files, one for each month of the variables. For this tutorial, we recommend you download the 10 minute resolution.
 
-After dowloading the WorldClim data to your working directory, list all the files in the raster stack by specifying the path to your folder (use `list.files` function) and read them into R using the `rast` function.
+After downloading the WorldClim data to your working directory, list all the files in the raster stack by specifying the path to your folder (use `list.files` function) and read them into R using the `rast` function.
 
 This code will get the path to your working directory.
 
@@ -379,7 +379,7 @@ summary(worldclim_stack)
 #>  NA's   :65591    NA's   :65591    NA's   :65591   NA's   :65591    NA's   :65591
 ```
 
-Convert the **species_occurences_summary**, which summarizes species occurrence by SiteCode, into a spatial object using the `st_as_sf` function:
+Convert the **species_occurrences_summary**, which summarizes species occurrence by SiteCode, into a spatial object using the `st_as_sf` function:
 
 
 ``` r

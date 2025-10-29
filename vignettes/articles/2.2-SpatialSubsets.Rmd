@@ -10,7 +10,7 @@ vignette: >
 
 
 
-# Chapter 2: Spatial Subsetting: KBA's and Priority Places
+# Chapter 2: Spatial Subsetting: KBAs and Priority Places
 
 ##### Authors: Dimitrios Markou, Danielle Ethier
 
@@ -142,7 +142,7 @@ Similarly, the package `mapview` (based on leaflet) can be used to make interact
 mapview(ontario_kba, zcol = "PercentProtected")
 ```
 
-In this example, were interested in all the KBA polygons of Ontario. However, if you were working with a larger data set, it is possible to filter your dataframe to retrieve only specific polygons that meet certain criteria relevant to your research. To do so, we can apply filters based on a variable condition. For example, say we only wanted KBA's greater than 100km\^2 in size:
+In this example, were interested in all the KBA polygons of Ontario. However, if you were working with a larger data set, it is possible to filter your dataframe to retrieve only specific polygons that meet certain criteria relevant to your research. To do so, we can apply filters based on a variable condition. For example, say we only wanted KBAs greater than 100km\^2 in size:
 
 > To execute this code chunk, remove the \#
 
@@ -296,7 +296,7 @@ It can also be used to ensure that the CRS of our spatial objects match.
 atlas_on_sf <- st_transform(atlas_on_sf, crs = st_crs(ontario_kba))
 ```
 
-To identify Wood Ducks observed across Ontario KBA's, we can apply the `st_intersection()` function.
+To identify Wood Ducks observed across Ontario KBAs, we can apply the `st_intersection()` function.
 
 
 ``` r
@@ -491,4 +491,4 @@ After geoprocessing our data, we can write out any sf objects to Shapefiles on a
 # st_write(wood_ducks_longpoint,"wood_ducks_longpoint.shp", driver = "ESRI Shapefile", delete_layer = TRUE)
 ```
 
-**Congratulations**! You completed **Chapter 2 - Spatial Subsetting: KBA's and Priority Places**. Here, you spatially filtered and visualized NatureCounts data. In [Chapter 3](2.3-ClimateData.html), you can explore more spatial data visualization while linking climate data to NatureCounts observations.
+**Congratulations**! You completed **Chapter 2 - Spatial Subsetting: KBAs and Priority Places**. Here, you spatially filtered and visualized NatureCounts data. In [Chapter 3](2.3-ClimateData.html), you can explore more spatial data visualization while linking climate data to NatureCounts observations.

@@ -11,7 +11,7 @@ Description: Access and download data on plant and animal populations from
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Depends:
+Depends: 
     R (>= 3.5)
 Imports: 
     askpass (>= 1.1),
@@ -34,19 +34,21 @@ Imports:
     tidyselect (>= 1.0.0),
     units (>= 0.8.1),
     wk (>= 0.7.1)
-Suggests: 
-    ggspatial,
+Suggests:
+    ggspatial (>= 1.1.10), 
     here,
     knitr,
     mapview,
-    rnaturalearth,
-    roxygen2,
+    prettymapr (>= 0.2.5),
     rmarkdown,
+    rnaturalearth,
+    rnaturalearthhires,
+    rosm,
+    roxygen2,
     sf (>= 1.0-9),
     spelling,
     testthat,
-    vdiffr,
-    rnaturalearthhires
+    vdiffr
 Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
