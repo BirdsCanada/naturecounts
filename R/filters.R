@@ -182,7 +182,7 @@ filter_redundancy <- function(f) {
       f[['fields_set']] == "custom" &&
       is.null(f[['fields']])
   ) {
-    #stop("Must specify 'fields' if using a custom 'field_set'", call. = FALSE)
+    stop("Must specify 'fields' if using a custom 'field_set'", call. = FALSE)
   }
   f
 }
