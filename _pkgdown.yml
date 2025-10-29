@@ -29,6 +29,7 @@ reference:
   - nc_count
   - nc_data_dl
   - nc_metadata
+  - nc_metadata_version
   - nc_requests
   - nc_query_table
   - nc_remove_cache
