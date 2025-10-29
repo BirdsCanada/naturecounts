@@ -333,22 +333,24 @@ codes_convert <- function(desc, type) {
   dplyr::pull(c, paste0(type, "_code"))
 }
 
-have_pkg_check <- function(pkg) {
+have_pkg_check <- function(pkgs) {
   # TODO: remove suppression when rnaturalearth resolved
-  if (!suppressPackageStartupMessages(requireNamespace(pkg, quietly = TRUE))) {
+
+  failed <- purrr::map_lgl(pkgs, ~ !requireNamespace(.x, quietly = TRUE)) %>%
+    suppressPackageStartupMessages()
+
+  if (any(failed)) {
+    if ("sf" %in% pkgs[!failed] && utils::packageVersion("sf") < "1.0-9") {
+      pkgs[pkgs == "sf"] <- "sf (>v1.0-9)"
+    }
+
     stop(
-      "This function requires the '",
-      pkg,
-      "' package.",
-      "Please install with `install.packages(\"",
-      pkg,
-      "\")` first",
-      call. = FALSE
-    )
-  } else if (pkg == "sf" && utils::packageVersion("sf") < "1.0-9") {
-    stop(
-      "This function requires 'sf' version 1.0-9 or higher.",
-      "Please update with `install.packages(\"sf\")` first",
+      "This function requires packages: '",
+      paste0(pkgs[failed], collapse = "', '"),
+      "'",
+      "\nPlease install with `install.packages(\"",
+      paste0(pkgs[failed], collapse = "\", \""),
+      "\")` then try again",
       call. = FALSE
     )
   }
@@ -388,4 +390,22 @@ df_db_check <- function(df_db, collect = TRUE, verbose = TRUE) {
   }
 
   df_db
+}
+
+which_check <- function(which) {
+  if (!all(which %in% c("iao", "eoo"))) {
+    stop("`which` must be one or both of 'iao' and 'eoo'", call. = FALSE)
+  }
+}
+
+sf_check <- function(df_sf, name) {
+  if (!inherits(df_sf, "sf")) {
+    stop(
+      "`",
+      name,
+      "` must be spatial (i.e. use `spatial = TRUE` in ",
+      "`cosewic_ranges()`)",
+      call. = FALSE
+    )
+  }
 }

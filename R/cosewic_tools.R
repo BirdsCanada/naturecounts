@@ -50,7 +50,6 @@
 #'   areas) to avoid including area which cannot have observations.
 #' @param iao_grid sf Polygon. Supply your own IAO grid rather than creating
 #'   one. The CRS of this grid must be the same as `crs`.
-#' @param which Character vector. Any combination of "eoo" and "iao", which ranges to calculate.
 #' @param filter_unique Logical. Whether to filter observations to unique 
 #'   locations. Use this only if there are too many data points to work with. 
 #'   This changes the nature of what an observation is, and also may bias 
@@ -140,6 +139,7 @@ cosewic_ranges <- function(
   # Checks
   have_pkg_check("sf")
   df <- df_db_check(df_db)
+  which_check(which)
   
   # Coords
   if (!all(c(coord_lat, coord_lon) %in% names(df))) {
@@ -596,14 +596,26 @@ map_canada <- function(crs = 3347) {
 #'   Raw data points will be added to the plot if provided.
 #' @param grid sf data frame. Optional grid over which to summarize IAO values
 #'   (useful for species with many points over a broad distribution).
-#' @param map sf data frame. Optional base map over which to plot the values.
-#' @param scale Logical. Whether to scale the IAO legends to a proportion for
+#' @param map Character or sf data frame. Underlying base map over which to plot
+#'   the values.. "osm" by default to use OpenStreetMap base maps via
+#'   `ggspatial::annotation_map_tile()`. Can be one of `rosm::osm.types()`, a sf
+#'   polygon base map, or `NULL` for no base map.
+#' @param iao_prop Logical. Whether to show IAO as a proportion for
 #'   easier plotting of multiple species (allows collecting legends by
-#'   patchwork).
+#'   the patchwork package).
 #' @param species Character. Name of the column containing species
 #'   identification.
 #' @param title Character. Optional title to add to the map. Can be a named by
 #'  species vector to supply different titles for different species.
+#' @param zoomin Numeric. Zoom adjustment for
+#'   `ggspatial::annotation_map_tile()`. Only applies if map defines a map tile
+#'   (e.g., "osm")
+#' @param arrow_location Character. Location for the North arrow, one of 'tr',
+#' 'tl', 'br', or 'bl', for top right, top left, etc. `NULL` omits the arrow.
+#' @param scale_location Character. Location for the map scale, one of 'tr',
+#' 'tl', 'br', or 'bl', for top right, top left, etc. `NULL` omits the scale.
+#'
+#' @inheritParams args
 #'
 #' @return ggplot2 map
 #' @export
@@ -611,51 +623,79 @@ map_canada <- function(crs = 3347) {
 #' @examples
 #' r <- cosewic_ranges(bcch)
 #' cosewic_plot(r)
-#' cosewic_plot(r, scale = TRUE)
 #' cosewic_plot(r, points = bcch)
-#' cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
-#'              title = "Black-capped chickadees")
+#'
+#' # Only one or the other
+#' cosewic_plot(r, which = "eoo", points = bcch)
+#' cosewic_plot(r, which = "iao")
+#'
+#' # Use a different CRS for the map (only applies if not using map tiles)
+#' cosewic_plot(r, crs = 3347) # No change
+#' cosewic_plot(r, map = map_canada(), crs = 3347)
+#'
+#' # Summarize IAO over larger grid
+#' cosewic_plot(
+#'   r,
+#'   grid = grid_canada(50),
+#'   map = map_canada(),
+#'   title = "Black-capped chickadees"
+#' )
 #'              
+#' # Plot multiple species - separate plots
 #' m <- rbind(bcch, hofi)
 #' r <- cosewic_ranges(m)
-#' cosewic_plot(r)
-#' cosewic_plot(r, scale = TRUE)
-#' cosewic_plot(r, points = m)
-#' p <- cosewic_plot(r, grid = grid_canada(50), map = map_canada(), 
-#'                  title = c("14280" = "Black-capped chickadees", 
-#'                            "20350" = "House Finches"))
+#' p <- cosewic_plot(r)
 #' p[[1]]
 #' p[[2]]
 #' 
+#' # Plot multiple species - Use IAO as a proportion for identical legends
+#' p <- cosewic_plot(
+#'   r,
+#'   iao_prop = TRUE,
+#'   title = c("14280" = "Black-capped chickadees", "20350" = "House Finches")
+#' )
+#'
+#' # Use patchwork to combine into a single figure
+#' if(requireNamespace("patchwork", quietly = TRUE)) {
+#'   library(patchwork)
+#'   wrap_plots(p) +
+#'     plot_layout(guides = "collect")
+#' }
+
 cosewic_plot <- function(
   ranges,
+  which = c("eoo", "iao"),
   points = NULL,
   grid = NULL,
-  map = NULL,
-  scale = FALSE,
-  crs = 4269,
+  map = "osm",
+  iao_prop = FALSE,
+  crs = NULL,
   species = "species_id",
   title = "",
+  zoomin = -1,
+  arrow_location = "tr",
+  scale_location = "tr",
   verbose = TRUE
 ) {
-  have_pkg_check("sf")
+  have_pkg_check(c("sf", "ggplot2", "ggspatial", "prettymapr"))
+  which_check(which)
   
-  if (!inherits(ranges[["iao"]], "sf")) {
-    stop(
-      "`ranges` must be spatial (i.e. use `spatial = TRUE` in ",
-      "`cosewic_ranges()`)",
-      call. = FALSE
-    )
+  for (x in which) {
+    sf_check(ranges[[x]], name = "ranges")
   }
   
   # Extract ranges
-  iao <- ranges[["iao"]] %>%
-    dplyr::filter(.data$n_records > 0)
-  
-  eoo <- ranges[["eoo"]]
+  if ("iao" %in% which) {
+    ranges[["iao"]] <- dplyr::filter(ranges[["iao"]], .data$n_records > 0)
+  }
   
   # Check Species Columns
-  if (!is.null(species) && !species %in% names(iao)) {
+  cols <- purrr::map(ranges, names) %>% purrr::list_c()
+  if (is.null(species)) {
+    species <- "species_id"
+    ranges$eoo[[species]] <- "PLACEHOLDER"
+    ranges$iao[[species]] <- "PLACEHOLDER"
+  } else if (!species %in% cols) {
     warning(
       "Column \"",
       species,
@@ -665,33 +705,40 @@ cosewic_plot <- function(
       "`species = \"COLUMN_NAME\"` to specify the species id column.",
       call. = FALSE
     )
-    iao[[species]] <- "PLACEHOLDER"
-    eoo[[species]] <- "PLACEHOLDER"
-  } else if (is.null(species)) {
-    species <- "species_id"
-    iao[[species]] <- "PLACEHOLDER"
-    eoo[[species]] <- "PLACEHOLDER"
+    ranges$eoo[[species]] <- "PLACEHOLDER"
+    ranges$iao[[species]] <- "PLACEHOLDER"
   }
+
+  sp <- purrr::map(ranges, species) %>%
+    purrr::list_c() %>%
+    unique()
   
   # Check/set titles
-  if (
-    length(title) > 1 &&
-      !all(names(title) %in% unique(iao[[species]]))
-  ) {
+  if (length(title) > 1 && !all(names(title) %in% sp)) {
     stop(
-      "`title` must be named by species if providing more than one",
+      "`title` must be a named vector matching 'species' if providing more than one",
       call. = FALSE
     )
   }
   
   g <- list()
-  if (all(title == "") & iao[[species]][1] != "PLACEHOLDER") {
-    title <- stats::setNames(nm = unique(iao[[species]]))
+  if (all(title == "") & sp[1] != "PLACEHOLDER") {
+    title <- stats::setNames(nm = sp)
   }
   
   # Split by species (if applicable)
-  e <- split(eoo, eoo[[species]])
-  i <- split(iao, iao[[species]])
+  if ("eoo" %in% which) {
+    e <- split(ranges[["eoo"]], ranges[["eoo"]][[species]])
+  } else {
+    e <- NA
+  }
+
+  if ("iao" %in% which) {
+    i <- split(ranges[["iao"]], ranges[["iao"]][[species]])
+  } else {
+    i <- NA
+  }
+
   if (!is.null(points)) {
     points <- split(points, points[[species]])
   } else {
@@ -701,7 +748,21 @@ cosewic_plot <- function(
   g <- purrr::pmap(
     list(e, i, points, title), 
     \(e, i, points, title) {
-      cosewic_plot_indiv(e, i, points, grid, map, scale, title, crs, verbose)
+      cosewic_plot_indiv(
+        e,
+        i,
+        which,
+        points,
+        grid,
+        map,
+        iao_prop,
+        title,
+        crs,
+        zoomin,
+        arrow_location,
+        scale_location,
+        verbose
+      )
     }
   )
   
@@ -715,28 +776,28 @@ cosewic_plot <- function(
 cosewic_plot_indiv <- function(
   e,
   a,
+  which,
   points,
   grid,
   map,
-  scale,
+  iao_prop,
   title,
   crs,
+  zoomin,
+  arrow_location,
+  scale_location,
   verbose
 ) {
+  if ("iao" %in% which) {
   size_a <- unique(a$grid_size_km)
-  
-  eoo_lab <- stringr::str_subset(names(e), "eoo") %>%
-    stringr::str_replace("_", " ") %>%
-    stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
-    toupper()
   
   records <- paste0(
     a$n_records_total[1],
-    " records\n(",
+      " records (",
     a$min_record[1],
     "-",
     a$max_record[1],
-    " per ",
+      " records per ",
     size_a,
     "x",
     size_a,
@@ -759,49 +820,103 @@ cosewic_plot_indiv <- function(
     size_p <- size_a
   }
   
-  if (scale) {
+    if (iao_prop) {
     a <- dplyr::mutate(
       a,
       n_records = .data$n_records / max(.data$n_records, na.rm = TRUE)
     )
     leg_title <- "IAO\nProp. records"
+      caption <- paste0(
+        records,
+        "\nSummarized to display as ",
+        size_p,
+        "x",
+        size_p,
+        "km grids"
+      )
   } else {
     leg_title <- "IAO\nNo. records"
+      caption <- records
+    }
   }
+
+  #TODO: Add map CRS option
 
   g <- ggplot2::ggplot() +
     ggplot2::theme_minimal() +
-    ggplot2::geom_sf(data = e, ggplot2::aes(colour = !!eoo_lab)) +
+    ggplot2::ggtitle(title)
+
+  if (!is.null(map)) {
+    if (is.character(map) && map %in% rosm::osm.types()) {
+      g <- g + ggspatial::annotation_map_tile(type = map, zoomin = zoomin)
+    } else if (inherits(map, "sf")) {
+      g <- g + ggplot2::geom_sf(data = map, fill = NA)
+    } else {
+      stop(
+        "`map` must either be a polygon shape file or one of ",
+        paste0(rosm::osm.types(), collapse = ","),
+        call. = FALSE
+      )
+    }
+  }
+
+  if (!is.null(arrow_location)) {
+    g <- g +
+      ggspatial::annotation_north_arrow(
+        style = ggspatial::north_arrow_fancy_orienteering,
+        location = arrow_location
+      )
+  }
+  if (!is.null(scale_location)) {
+    g <- g +
+      ggspatial::annotation_scale(style = "ticks", location = scale_location)
+  }
+
+  if ("eoo" %in% which) {
+    eoo_lab <- stringr::str_subset(names(e), "eoo") %>%
+      stringr::str_replace("_", " ") %>%
+      stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
+      toupper()
+
+    g <- g +
+      ggplot2::geom_sf(
+        data = e,
+        ggplot2::aes(colour = !!eoo_lab),
+        fill = NA,
+        size = 1.5
+      ) +
+      ggplot2::scale_colour_manual(name = "", values = "grey20")
+  }
+
+  if ("iao" %in% which) {
+    g <- g +
     ggplot2::geom_sf(
       data = a,
       ggplot2::aes(fill = .data$n_records),
       colour = NA
     ) +
-    ggplot2::scale_fill_viridis_c() +
-    ggplot2::scale_colour_manual(name = "", values = "grey20") +
-    ggplot2::labs(
-      fill = leg_title, 
-      title = title,
-      subtitle = records,
-      caption = paste0(
-        "Showing ",
-        size_p,
-        "x",
-        size_p,
-               "km grids\nAnalysis used ",
-        size_a,
-        "x",
-        size_a,
-        " km"
-      )
-    )
-  
-  if (!is.null(map)) {
-    g <- g + ggplot2::geom_sf(data = map, fill = NA)
+      ggplot2::scale_fill_viridis_c(name = leg_title) +
+      ggplot2::labs(caption = caption)
   }
+
   if (!is.null(points)) {
-    points <- prep_spatial(points, extra = NULL, crs = sf::st_crs(a))
+    points <- prep_spatial(
+      points,
+      extra = NULL,
+      crs = if (is.null(crs)) sf::st_crs("EPSG:4326") else sf::st_crs(crs),
+      check_projected = FALSE
+    )
     g <- g + ggplot2::geom_sf(data = points)
+  }
+
+  if (!is.null(crs)) {
+    if (is.character(map) && sf::st_crs(crs) != sf::st_crs("EPSG:3857")) {
+      message(
+        "'crs' is only applicable when not using map tiles. ",
+        "Map tiles always use CRS of EPSG:3857."
+      )
+    }
+    g <- suppressMessages(g + ggplot2::coord_sf(crs = crs))
   }
   
   g
