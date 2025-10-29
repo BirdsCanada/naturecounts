@@ -113,7 +113,6 @@ bcr_check <- function(b) {
     )
   }
 
-  b <- sprintf("%02d", b) # Convert to dual digit
   paste0("BCR.", b) # To match API expectations
 }
 
