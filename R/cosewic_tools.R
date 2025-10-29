@@ -675,7 +675,7 @@ cosewic_plot <- function(
   scale_location = "tr",
   verbose = TRUE
 ) {
-  have_pkg_check(c("sf", "ggplot2", "ggspatial", "prettymapr"))
+  have_pkg_check(c("sf", "ggplot2", "ggspatial", "prettymapr", "rosm"))
   which_check(which)
 
   for (x in which) {
