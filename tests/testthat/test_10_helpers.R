@@ -271,13 +271,17 @@ test_that("format_zero_fill() different 'fill' columns", {
     .data$CommonName %in% c("Monarch", "Black Swallowtail", "Red Admiral"),
     .data$AllSpeciesReported == "Yes"
   ) %>%
-    dplyr::mutate(presence = as.numeric(.data$ObservationCount > 0))
+    dplyr::mutate(presence = .data$ObservationCount > 0)
 
   # Different fill column
   expect_silent(rc1_filled <- format_zero_fill(rc1, fill = "presence")) %>%
     expect_named(c("SamplingEventIdentifier", "species_id", "presence"))
-  expect_equal(unique(rc1_filled$presence), c(1, 0))
+  expect_equal(unique(rc1_filled$presence), c(TRUE, FALSE))
   expect_gt(nrow(rc1_filled), nrow(rc1))
+  expect_equal(
+    rc1_filled$SamplingEventIdentifier[rc1_filled$presence],
+    sort(rc1$SamplingEventIdentifier)
+  )
 })
 
 test_that("format_zero_fill() extra species columns", {

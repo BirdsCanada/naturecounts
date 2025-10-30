@@ -306,34 +306,40 @@ format_zero_fill <- function(
     )
   }
 
-  # Convert fill column to numeric
-  if (!is.numeric(df[[fill]]) && !is.na(fill)) {
-    if (any(df[[fill]] == "X")) {
-      stop(
-        "There are 'X' values in the 'fill' column ('",
-        fill,
-        "'). ",
-        "Please remove or replace these values before continuing",
-        call. = FALSE
-      )
-    }
+  if (is.logical(df[[fill]])) {
+    fill_value <- FALSE
+  } else {
+    fill_value <- 0
 
-    orig <- class(df[[fill]])
-    df[[fill]] <- as_numeric(df[[fill]])
-    if (!is.numeric(df[[fill]])) {
-      stop(
-        "'fill' column cannot be converted to numeric (non-numeric entries)",
-        call. = FALSE
-      )
-    }
-    if (verbose) {
-      message(
-        " - Converted 'fill' column ('",
-        fill,
-        "') from ",
-        orig,
-        " to numeric"
-      )
+    # Convert fill column to numeric if not logical
+    if (!is.numeric(df[[fill]]) && !is.na(fill)) {
+      if (any(df[[fill]] == "X")) {
+        stop(
+          "There are 'X' values in the 'fill' column ('",
+          fill,
+          "'). ",
+          "Please remove or replace these values before continuing",
+          call. = FALSE
+        )
+      }
+
+      orig <- class(df[[fill]])
+      df[[fill]] <- as_numeric(df[[fill]])
+      if (!is.numeric(df[[fill]])) {
+        stop(
+          "'fill' column cannot be converted to numeric (non-numeric entries)",
+          call. = FALSE
+        )
+      }
+      if (verbose) {
+        message(
+          " - Converted 'fill' column ('",
+          fill,
+          "') from ",
+          orig,
+          " to numeric"
+        )
+      }
     }
   }
 
@@ -378,7 +384,9 @@ format_zero_fill <- function(
       ) %>%
       dplyr::filter(.data$species_id %in% species) %>%
       dplyr::left_join(df_by, ., by = c(by, "species_id"), multiple = "all") %>%
-      dplyr::mutate(!!fill := tidyr::replace_na(!!rlang::sym(fill), 0))
+      dplyr::mutate(
+        !!fill := tidyr::replace_na(!!rlang::sym(fill), .env$fill_value)
+      )
   } else {
     df_filled <- dplyr::select(df, tidyselect::all_of(by)) %>%
       dplyr::distinct()
