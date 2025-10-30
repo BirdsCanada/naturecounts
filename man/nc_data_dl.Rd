@@ -223,10 +223,6 @@ bittern <- nc_data_dl(species = 2490, fields_set = "custom",
                       fields = c("Locality", "AllSpeciesReported"),
                       username = "sample", info = "nc_example")
 
-bittern <- nc_data_dl(species = 2490, fields_set = "custom",
-                      fields = NULL,
-                      username = "sample", info = "nc_example")
-
 \dontrun{
 # All collections by request id
 
