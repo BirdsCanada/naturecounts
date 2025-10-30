@@ -49,7 +49,7 @@ All contributing members of NatureCounts have complete authority over the use of
 You can view the Data Access Level for each collection on the [NatureCounts Datasets](https://naturecounts.ca/nc/default/datasets.jsp) page or using the [metadata](#Data3.5) function (see `akn_level`):
 
 ```{r access, eval = FALSE}
-collections<-meta_collections()
+collections <- meta_collections()
 View(collections)
 ```
 
@@ -133,8 +133,8 @@ There are [metadata](https://birdstudiescanada.github.io/naturecounts/reference/
 Any of these functions can be used to browse the code lists relevant to your search. For example, you can view the metadata for Birds Canada projects, including project ids using:
 
 ```{r meta, eval = FALSE}
-project_ids <- meta_projects() # retrieve the project_ids represented in the repository 
-View(project_ids) # explore the dataframe 
+project_ids <- meta_projects() # retrieve the project_ids represented in the repository
+View(project_ids) # explore the dataframe
 ```
 
 Using the above functions to search by country, state/province, subnational2, BCR etc. is especially useful for regional filtering in this next section.
@@ -176,7 +176,7 @@ When using the `nc_count()` view function, you have the helpful option of filter
 First, let's limit our data search to Quebec:
 
 ```{r nc_count example, eval=FALSE}
-nc_count(region = list(statprov="QC")) # filter nc_count by statprov
+nc_count(region = list(statprov = "QC")) # filter nc_count by statprov
 ```
 
 Next, let's say we want to narrow down our search to the subnational level (Montreal and Toronto) but don't know the corresponding codes for these regions.
@@ -191,19 +191,21 @@ Or, more efficiently, search by region:
 
 ```{r}
 search_region("Montreal", type = "subnational2")
+search_region("Toronto", type = "subnational2")
 ```
 
 Great, we now know the codes we need and can view our metadata using `nc_count()`:
 
 ```{r}
-nc_count(region = list(subnational2 = c("CA-QC-MR", "CA-ON-TO")))
+nc_count(region = list(subnational2 = c("CA.QC.MR", "CA.ON.TO")))
 ```
 
 Similarly, this function can be used to view metadata for a bounding box using latitude and longitude coordinates:
 
 ```{r}
-nc_count(region = list(bbox = c(left = -125, bottom = 45, 
-                                right = -100, top = 50)))
+nc_count(
+  region = list(bbox = c(left = -125, bottom = 45, right = -100, top = 50))
+)
 ```
 
 Another commonly used filter is specific to `species`. In order to filter by `species` you need to get the species id codes. These are numeric codes that reflect species identity.
@@ -285,7 +287,7 @@ The following code will retrieve all available collections and number of records
 search_species("Red-headed Woodpecker")
 search_species_code("RHWO")
 
-RHWO<-nc_count(species = 10060)
+RHWO <- nc_count(species = 10060)
 View(RHWO)
 ```
 
@@ -298,7 +300,11 @@ View(RHWO_11)
 RHWO_year <- nc_count(species = 10060, year = c(2015, 2019))
 View(RHWO_year)
 
-RHWO_11_year <- nc_count(species = 10060, region = list(bcr = "11"), year = c(2015, 2019))
+RHWO_11_year <- nc_count(
+  species = 10060,
+  region = list(bcr = "11"),
+  year = c(2015, 2019)
+)
 View(RHWO_11_year)
 ```
 
