@@ -124,7 +124,7 @@ nc_data_dl <- function(
     if (is.null(requests0)) {
       stop("No valid requests for this id and this user", call. = FALSE)
     }
-    requests <- dplyr::filter(requests0, status == "approved")
+    requests <- dplyr::filter(requests0, .data$status == "approved")
     if (nrow(requests) == 0) {
       stop("No approved requests for this id and this user", call. = FALSE)
     }

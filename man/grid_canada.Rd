@@ -13,6 +13,8 @@ COSEWIC grid size of 2.}
 
 \item{buffer}{Numeric. Extra buffer (km) to add around the outline of Canada
 before calculating grid.}
+
+\item{crs}{Character. CRS for the grid to create.}
 }
 \value{
 sf data frame with polygon grid

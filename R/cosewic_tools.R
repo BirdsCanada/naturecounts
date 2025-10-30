@@ -59,6 +59,8 @@
 #'   and EOO values. If `TRUE` returns a list of objects with both the
 #'   values and the spatial grid/polygons.
 #'
+#' @inheritParams args
+#'
 #' @return Summarized data frame (ranges) or list containing `ranges`, a
 #'   summarized data frame, and `spatial`, a list of two spatial data frames.
 #'
@@ -370,7 +372,7 @@ cosewic_iao <- function(df_sf, cell_size, record, spatial, crs, grid = NULL) {
 
     units <- paste0(sf::st_crs(grid)$units_gdal, "^2")
     cell_size <- sf::st_area(grid) %>%
-      median() %>%
+      stats::median() %>%
       units::set_units(units, mode = "standard") %>%
       units::set_units("km2") %>%
       sqrt()
@@ -478,6 +480,7 @@ prep_spatial <- function(
 #'   COSEWIC grid size of 2.
 #' @param buffer Numeric. Extra buffer (km) to add around the outline of Canada
 #'   before calculating grid.
+#' @param crs Character. CRS for the grid to create.
 #'
 #' @return sf data frame with polygon grid
 #' @export

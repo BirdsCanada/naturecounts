@@ -35,10 +35,11 @@ Imports:
     units (>= 0.8.1),
     wk (>= 0.7.1)
 Suggests:
-    ggspatial (>= 1.1.10), 
+    ggspatial (>= 1.1.10),
     here,
     knitr,
     mapview,
+    patchwork,
     prettymapr (>= 0.2.5),
     rmarkdown,
     rnaturalearth,
