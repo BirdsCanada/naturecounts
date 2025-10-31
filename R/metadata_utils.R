@@ -55,6 +55,14 @@ metadata_read <- function(name) {
   if (!file.exists(f)) {
     stop("Could not find metadata file '", name, "'", call. = FALSE)
   }
+
+  if (name == "utm_squares" && !requireNamespace("sf", quietly = TRUE)) {
+    stop(
+      "The sf package is required to use and process utm_squares. ",
+      "It can be installed with \"install.packages('sf')\"",
+      call. = FALSE
+    )
+  }
   load(f)
 
   if (name != "version" && !metadata_up2date()) {
