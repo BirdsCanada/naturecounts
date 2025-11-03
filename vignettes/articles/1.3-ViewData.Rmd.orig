@@ -1,6 +1,6 @@
 ---
 title: "Chapter 3 - Understanding and Viewing Data"
-date: "2025-11-03"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Chapter 3 - Understanding and Viewing Data}
@@ -8,14 +8,21 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  # For pre-compiling and pkgdown (relative to pkg home)
+  fig.path = "vignettes/articles/figures/nc_intro3_",
+  dpi = 150
+)
+```
 
 # Understanding and Viewing Data {#Data3}
 
 This chapter begins with a brief introduction to the structure of the NatureCounts database, followed by a description of access levels and how to create a user account. We then provide instructions on how to view data from various collections and apply filters.
 
-
-``` r
+```{r}
 library(naturecounts)
 ```
 
@@ -51,8 +58,7 @@ All contributing members of NatureCounts have complete authority over the use of
 
 You can view the Data Access Level for each collection on the [NatureCounts Datasets](https://naturecounts.ca/nc/default/datasets.jsp) page or using the [metadata](#Data3.5) function (see `akn_level`):
 
-
-``` r
+```{r access, eval = FALSE}
 collections <- meta_collections()
 View(collections)
 ```
@@ -61,8 +67,7 @@ View(collections)
 
 To retrieve the metadata for a specific set of collections based on its project_id, you can index the 'collections' dataframe.
 
-
-``` r
+```{r project id, eval=FALSE}
 # Specify the project_id you want to retrieve
 projectID <- "insert_project_id_number"
 
@@ -89,16 +94,14 @@ First, lets use the naturecounts R package to view the number of records availab
 
 If a username is provided, the collections are filtered to only those available to the user. Otherwise all counts from all data sources are returned (default: `show = "all"`).
 
-
-``` r
+```{r view all, eval=FALSE}
 nc_count <- nc_count()
 View(nc_count)
 ```
 
 Or you can view the collections for which you have access using your username/password.
 
-
-``` r
+```{r view username, eval=FALSE}
 nc_count <- nc_count(username = "testuser")
 View(nc_count)
 ```
@@ -139,8 +142,7 @@ There are [metadata](https://birdstudiescanada.github.io/naturecounts/reference/
 
 Any of these functions can be used to browse the code lists relevant to your search. For example, you can view the metadata for Birds Canada projects, including project ids using:
 
-
-``` r
+```{r meta, eval = FALSE}
 project_ids <- meta_projects() # retrieve the project_ids represented in the repository
 View(project_ids) # explore the dataframe
 ```
@@ -169,34 +171,21 @@ The search_region function may be used to search a region by name (English or Fr
 
 For example, by country;
 
-
-``` r
+```{r}
 search_region("États-Unis", type = "country")
-#> # A tibble: 3 × 3
-#>   country_code country_name                         country_name_fr                       
-#>   <chr>        <chr>                                <chr>                                 
-#> 1 UM           United States Minor Outlying Islands Îles mineures éloignées des États-Unis
-#> 2 US           United States                        États-Unis                            
-#> 3 VI           Virgin Uslands, U.S.                 Îles Vierges des États-Unis
 ```
 
 Or by Bird Conservation Region:
 
-
-``` r
+```{r}
 search_region("rainforest", type = "bcr")
-#> # A tibble: 1 × 4
-#>     bcr bcr_name                    bcr_name_es                        bcr_name_fr                                     
-#>   <int> <chr>                       <chr>                              <chr>                                           
-#> 1     5 Northern Pacific Rainforest Bosque Lluvioso del Pacífico Norte Forêts pluviales du nord de la côte du Pacifique
 ```
 
 When using the `nc_count()` view function, you have the helpful option of filtering data by region. Let's demonstrate how to use this function and the `region` argument with a few examples.
 
 First, let's limit our data search to Quebec:
 
-
-``` r
+```{r nc_count example, eval=FALSE}
 nc_count(region = list(statprov = "QC")) # filter nc_count by statprov
 ```
 
@@ -204,71 +193,36 @@ Next, let's say we want to narrow down our search to the subnational level (Mont
 
 Browse the code list:
 
-
-``` r
+```{r eval = FALSE}
 View(meta_subnational2_codes())
 ```
 
 Or, more efficiently, search by region:
 
-
-``` r
+```{r}
 search_region("Montreal", type = "subnational2")
-#> # A tibble: 1 × 5
-#>   country_code statprov_code subnational2_code subnational2_name              ebird_code
-#>   <chr>        <chr>         <chr>             <chr>                          <chr>     
-#> 1 CA           QC            CA.QC.MR          Communauté-Urbaine-de-Montréal CA-QC-MR
 search_region("Toronto", type = "subnational2")
-#> # A tibble: 1 × 5
-#>   country_code statprov_code subnational2_code subnational2_name                 ebird_code
-#>   <chr>        <chr>         <chr>             <chr>                             <chr>     
-#> 1 CA           ON            CA.ON.TO          Toronto Metropolitan Municipality CA-ON-TO
 ```
 
 Great, we now know the codes we need and can view our metadata using `nc_count()`:
 
-
-``` r
+```{r}
 nc_count(region = list(subnational2 = c("CA.QC.MR", "CA.ON.TO")))
-#> Without a username, using 'show = "all"'
-#> Using filters: subnational2 (CA.QC.MR, CA.ON.TO)
-#> The server did not respond within 120s. Trying again...
-#> Error: The server has not respond within the 'timeout' specified.
-#> Either try again later or increase the 'timeout' period.
 ```
 
 Similarly, this function can be used to view metadata for a bounding box using latitude and longitude coordinates:
 
-
-``` r
+```{r}
 nc_count(
   region = list(bbox = c(left = -125, bottom = 45, right = -100, top = 50))
 )
-#> Without a username, using 'show = "all"'
-#> Using filters: bbox_left (-125); bbox_bottom (45); bbox_right (-100); bbox_top (50)
-#> The server did not respond within 120s. Trying again...
-#> # A tibble: 172 × 4
-#>    collection    akn_level access     nrecords
-#>    <chr>             <int> <chr>         <int>
-#>  1 ABATLAS1              5 full           9685
-#>  2 ABATLAS2              5 full          25648
-#>  3 ABBIRDRECS            5 full          39546
-#>  4 ABOWLS                3 by request      306
-#>  5 BBL-1960-1969         5 full         582462
-#>  6 BBL-1970-1979         5 full         462934
-#>  7 BBL-1980-1989         5 full         441245
-#>  8 BBL-1990-1999         5 full         711943
-#>  9 BBL-2000-2009         5 full         772696
-#> 10 BBL-2010-2019         5 full         661377
-#> # ℹ 162 more rows
 ```
 
 Another commonly used filter is specific to `species`. In order to filter by `species` you need to get the species id codes. These are numeric codes that reflect species identity.
 
 For all species, you can search the NatureCounts repository by scientific, English or French name with the search_species() function.
 
-
-``` r
+```{r species example, eval=FALSE}
 search_species("chickadee") # returns all chickadee species ids
 ```
 
@@ -276,8 +230,7 @@ The corresponding species id can then be used to download the data either direct
 
 For birds, you can also search by alphanumeric species code with the search_species_code() function.
 
-
-``` r
+```{r}
 species_codes <- search_species_code() # returns all species codes represented in the database.
 ```
 
@@ -285,75 +238,40 @@ This function, by default, uses the BSCDATA taxonomic authority and returns all 
 
 If you're interested in a particular species, and any recognized subspecies, you can filter your search:
 
-
-``` r
+```{r species code search example, eval=FALSE}
 search_species_code("BCCH") # Filters by species code
 ```
 
 The search function is case insensitive:
 
-
-``` r
+```{r}
 search_species_code("bcch") # Also filters by species code
-#> # A tibble: 1 × 5
-#>   species_id BSCDATA scientific_name      english_name           french_name         
-#>        <int> <chr>   <chr>                <chr>                  <chr>               
-#> 1      14280 BCCH    Poecile atricapillus Black-capped Chickadee Mésange à tête noire
 ```
 
 It is important to note that species subdivisions (subspecies, subpopulations, hybrids, etc.) can also be recognized with different codes across taxonomic authority (BSCDATA, CBC).
 
 For example, BSCDATA recognizes 3 sub groups of the Dark-eyed junco:
 
-
-``` r
+```{r}
 search_species_code("DEJU") # Returns species ids for Junco hyemali and 3 related subgroups
-#> # A tibble: 4 × 5
-#>   species_id BSCDATA scientific_name                                  english_name                                french_name
-#>        <int> <chr>   <chr>                                            <chr>                                       <chr>      
-#> 1      19090 SCJU    Junco hyemalis hyemalis/carolinensis/cismontanus Dark-eyed Junco (Slate-colored/cismontanus) Junco ardo…
-#> 2      19110 PSJU    Junco hyemalis mearnsi                           Dark-eyed Junco (Pink-sided)                Junco ardo…
-#> 3      42218 DEJU    Junco hyemalis                                   Dark-eyed Junco                             Junco ardo…
-#> 4      47928 ORJU    Junco hyemalis [oreganus Group]                  Dark-eyed Junco (Oregon)                    Junco ardo…
 ```
 
 We have to modify our search when filtering by the CBC code system. This taxonomic authority recognizes 9 sub group hybrids of the Dark-eyed junco, as well as the Guadalupe junco:
 
-
-``` r
+```{r}
 search_species_code("12385", authority = "CBC") # Returns the species ids and CBC codes for Junco hyemali, 9 subgroups, and the Guadelupe junco
-#> # A tibble: 11 × 5
-#>    species_id CBC   scientific_name                                  english_name                                french_name 
-#>         <int> <chr> <chr>                                            <chr>                                       <chr>       
-#>  1      42218 12385 Junco hyemalis                                   Dark-eyed Junco                             Junco ardoi…
-#>  2      19090 12386 Junco hyemalis hyemalis/carolinensis/cismontanus Dark-eyed Junco (Slate-colored/cismontanus) Junco ardoi…
-#>  3      41434 12388 Junco hyemalis cismontanus                       Dark-eyed Junco (cismontanus)               Junco ardoi…
-#>  4      19100 12389 Junco hyemalis [oreganus Group]                  Dark-eyed Junco (Oregon)                    Junco ardoi…
-#>  5      19110 12390 Junco hyemalis mearnsi                           Dark-eyed Junco (Pink-sided)                Junco ardoi…
-#>  6      42219 12391 Junco hyemalis [oreganus Group] x mearnsi        Dark-eyed Junco (Oregon x Pink-sided)       Junco ardoi…
-#>  7      19112 12392 Junco hyemalis aikeni                            Dark-eyed Junco (White-winged)              Junco ardoi…
-#>  8      19111 12394 Junco hyemalis caniceps                          Dark-eyed Junco (Gray-headed)               Junco ardoi…
-#>  9      42220 12395 Junco hyemalis mearnsi x caniceps                Dark-eyed Junco (Pink-sided x Gray-headed)  Junco ardoi…
-#> 10      40859 12396 Junco hyemalis dorsalis                          Dark-eyed Junco (Red-backed)                Junco ardoi…
-#> 11      39768 12398 Junco insularis                                  Guadalupe Junco                             Junco de Gu…
 ```
 
 You can search by more than one authority at the same time. Note that your search term only needs to match one authority (not both), and that the information returned reflects both authorities combined.
 
-
-``` r
+```{r eval = FALSE}
 View(search_species_code("DEJU", authority = c("BSCDATA", "CBC")))
 ```
 
 If you do not want all subgroups, you can use the results = "exact" argument to return only an exact match.
 
-
-``` r
+```{r}
 search_species_code("DEJU", results = "exact")
-#> # A tibble: 1 × 5
-#>   species_id BSCDATA scientific_name english_name    french_name  
-#>        <int> <chr>   <chr>           <chr>           <chr>        
-#> 1      42218 DEJU    Junco hyemalis  Dark-eyed Junco Junco ardoisé
 ```
 
 For additional examples and more advanced options are available online for retrieving [Region](https://birdstudiescanada.github.io/naturecounts/articles/region-codes.html) and [Species](https://birdscanada.github.io/naturecounts/articles/species-codes.html#advanced-searches) codes.
@@ -366,8 +284,7 @@ Here are a few examples for you to work through to become familiar with the `nc_
 
 The following code will retrieve all available collections and number of records for British Columbia
 
-
-``` r
+```{r nc_region, warning = FALSE, eval=FALSE}
 search_region("British Columbia", type = "statprov")
 nc_count(region = list(statprov = "BC"))
 ```
@@ -376,8 +293,7 @@ nc_count(region = list(statprov = "BC"))
 
 The following code will retrieve all available collections and number of records for Red-headed Woodpecker
 
-
-``` r
+```{r nc_species1, eval=FALSE}
 search_species("Red-headed Woodpecker")
 search_species_code("RHWO")
 
@@ -387,8 +303,7 @@ View(RHWO)
 
 *Example 3*: We can further refine the Red-headed Woodpecker example (above) by filtering the species-specific data by region (e.g., [Bird Conservation Region](http://nabci-us.org/assets/images/bcr_map2.jpg) 11), time period (e.g., 2015-2019), or a combination of both.
 
-
-``` r
+```{r nc_species2, eval=FALSE}
 RHWO_11 <- nc_count(species = 10060, region = list(bcr = "11"))
 View(RHWO_11)
 

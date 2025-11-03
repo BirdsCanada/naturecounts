@@ -1,6 +1,6 @@
 ---
 title: "Chapter 5 - Data Manipulation"
-date: "2025-11-03"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Chapter 5 - Data Manipulation}
@@ -8,12 +8,19 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  # For pre-compiling and pkgdown (relative to pkg home)
+  fig.path = "vignettes/articles/figures/nc_intro5_",
+  dpi = 150
+)
+```
 
 # Data Manipulation {#Manip5}
 
-
-``` r
+```{r, message = FALSE}
 library(dplyr) 
 library(naturecounts)
 ```
@@ -35,8 +42,7 @@ We are going to apply three key dplyr functions which will give you some of the 
 
 Let's continue using the full [Ontario Whip-poor-will](https://naturecounts.ca/nc/default/datasets.jsp?code=WPWI) collection for this chapter.   
 
-
-``` r
+```{r OpenAccess, eval=FALSE}
 WPWI <- nc_data_dl(collections = "WPWI", username = "testuser", info = "tutorial example")
 ```
 
@@ -46,8 +52,7 @@ You will notice that NatureCounts datasets have many fields (i.e., columns) avai
 
 For example, we are going to `select()` a subset of variables from the WPWI dataset that we need for our summary: 
 
-
-``` r
+```{r select, eval=FALSE}
 
 WPWI_select <- select(WPWI, "SurveyAreaIdentifier", 
                       "RouteIdentifier", "species_id", "latitude", 
@@ -71,15 +76,13 @@ There are worked examples provided in the naturecounts article [Filtering data a
 
 Here we provide a few additional examples for you to work with. First, lets apply a simple `filter()` that subsets the data based on a single survey month: 
 
-
-``` r
+```{r WPWIJune, eval=FALSE}
 WPWI_June <- filter(WPWI_select, survey_month == 6)
 
 ```
 
 Now lets try multiple survey months by adding a logical operator:
-
-``` r
+```{r WPWIJuneJuly, eval=FALSE}
 WPWI_JJ <- filter(WPWI_select, survey_month == 6 | survey_month == 7)
 
 #Alternatively this can be written as:
@@ -88,8 +91,7 @@ WPWI_JJ <- filter(WPWI_select, survey_month %in% c(6,7))
 ```
 
 We can continue to add to the complexity of our filter:
-
-``` r
+```{r WPWIBCR, eval=FALSE}
 WPWI_multi <- filter(WPWI_select, 
                      survey_month %in% c(6,7) & bcr == 12 & 
                        survey_year >= 2010 & survey_year <= 2012)
@@ -101,16 +103,14 @@ Now that we have selected the columns we need for our analysis we will demonstra
 
 For example, say we want to determine how many point count stops were on each WPWI Route. We will want to group observations by `RouteIdentifier` and summarise the number of distinct `SurveyAreaIdentifier` entries using the `n_distinct()` function and creating a new column named `Nstops`.  
 
-
-``` r
+```{r, eval = FALSE,  eval=FALSE}
 WPWI_Route <- group_by(WPWI_select, RouteIdentifier)
 WPWI_Route <- summarise(WPWI_Route, Nstops = n_distinct(SurveyAreaIdentifier))
 ```
 
 However, now that we're getting on to more complex operations, we'll introduce the use of the pipe `%>%`. Piping can be used to chain a sequence of functions, in order to avoid creating multiple intermediate objects which can clutter our Environment! This allows you to pass (pipe) the output of one line as input to the next line. Therefore, the previous code can be re-written as:
 
-
-``` r
+```{r WPWIRoute, eval=FALSE}
 WPWI_Route <- WPWI_select %>% 
   group_by(RouteIdentifier) %>% 
   summarise(Nstops = n_distinct(SurveyAreaIdentifier))
@@ -123,8 +123,7 @@ Note that there is a pipe (`%>%`) between each set of lines and that the data (`
 
 Back to our example, we might also want to know how many routes were run in each year. 
 
-
-``` r
+```{r WPWIYear, eval=FALSE}
 WPWI_Year <- WPWI_select %>% 
   group_by(survey_year) %>% 
   summarise(Nroute = n_distinct(RouteIdentifier))
@@ -135,8 +134,7 @@ View(WPWI_Year)
 
 Finally, lets look to see how many Observations of WPWI were made in each year. Since each row of data represents a survey point, we want to count the number of rows containing species_id = "7871" within each unique year. We can do this by first removing the 'NA' using the `filter` function, and then use the `group_by` and `summarise` to determine the 'length' of the dataset (i.e., the number of rows with WPWI sightings). 
 
-
-``` r
+```{r WPWIObs, eval=FALSE}
 
 WPWI_Obs <- WPWI_select %>% filter (species_id != "NA") %>% 
   group_by(survey_year) %>% 
@@ -154,8 +152,7 @@ Here we provide an example using metadata available to you in naturecounts.
 
 When you pull `collections` with the  "minimum" `fields_set` (default) you will notice you get the species_id column, but not alpha species code. For example, let's pull a small amount of data from the second Alberta Breeding Bird Atlas (ABATLAS2) from Beaverhill Lake Important Bird Area (AB001) in 2005.
 
-
-``` r
+```{r spexample, eval=FALSE}
 
 AB_Atlas<-nc_data_dl(collections="ABATLAS2", region=list(iba = "AB001"), years=2005, username = "testuser", info = "tutorial example")
 
@@ -166,8 +163,7 @@ To rectify this, there are two options:
 
 1. Set the `fields_set` argument to *extended*. 
 
-
-``` r
+```{r spexample1, eval=FALSE}
 
 AB_Atlas2<-nc_data_dl(collections="ABATLAS2", region=list(iba = "AB001"), years=2005, fields_set="extended", username = "testuser", info = "tutorial example")
 
@@ -178,8 +174,7 @@ Notice you are now pulling 285 variables, including the CommonName. However, for
 
 First, identify the appropriate taxonomic authority using the metadata. 
 
-
-``` r
+```{r spauthority, eval = FALSE}
  
 authority<-meta_species_authority()
 View(authority)
@@ -188,8 +183,7 @@ View(authority)
 
 Second, pull the species code table, and filter for the "ABATLAS2" authority. 
 
-
-``` r
+```{r spexample2, eval=FALSE}
 
 species<-meta_species_codes()
 View(species)
@@ -198,8 +192,7 @@ species<-species %>% filter(authority=="ABATLAS2")
 ```
 
 Third, join your tables so that it includes the desired species information. 
-
-``` r
+```{r mergeexample, eval=FALSE}
 
 AB_Atlas_sp<-left_join(AB_Atlas, species, by="species_id")
 
