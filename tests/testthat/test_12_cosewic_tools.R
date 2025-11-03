@@ -131,7 +131,6 @@ test_that("cosewic_iao()", {
   expect_equal(sum(a$n_records), nrow(bcch))
   expect_equal(nrow(a), 450)
   expect_equal(unique(as.character(sf::st_geometry_type(a))), "POLYGON")
-  skip_on_ci()
   expect_snapshot_value(a, style = "json2")
 
   # Albers
@@ -171,7 +170,6 @@ test_that("cosewic_iao()", {
   expect_equal(sum(a$n_records), nrow(bcch))
   expect_equal(nrow(a), 475)
   expect_equal(unique(as.character(sf::st_geometry_type(a))), "POLYGON")
-  skip_on_ci()
   expect_snapshot_value(a, style = "json2")
 })
 
@@ -214,7 +212,6 @@ test_that("cosewic_iao() diff cols", {
   expect_equal(sum(a$n_records), nrow(bcch))
   expect_equal(nrow(a), 450)
   expect_equal(unique(as.character(sf::st_geometry_type(a))), "POLYGON")
-  skip_on_ci()
   expect_snapshot_value(a, style = "json2")
 })
 
@@ -257,7 +254,6 @@ test_that("cosewic_iao() no cols", {
   expect_equal(sum(a$n_records), nrow(bcch))
   expect_equal(nrow(a), 450)
   expect_equal(unique(as.character(sf::st_geometry_type(a))), "POLYGON")
-  skip_on_ci()
   expect_snapshot_value(a, style = "json2")
 })
 
@@ -622,6 +618,7 @@ test_that("cosewic_plot()", {
   expect_s3_class(g6[[2]], "ggplot")
 
   skip_on_os(c("windows", "mac"))
+  skip_on_ci()
   vdiffr::expect_doppelganger("p_basic", g1)
   vdiffr::expect_doppelganger("p_points", g3)
   vdiffr::expect_doppelganger("p_map", g5)
@@ -673,6 +670,7 @@ test_that("cosewic_plot() no cols", {
   expect_s3_class(g6, "ggplot")
 
   skip_on_os(c("windows", "mac"))
+  skip_on_ci()
   vdiffr::expect_doppelganger("p_no_cols_basic", g1)
   vdiffr::expect_doppelganger("p_no_cols_points", g3)
   vdiffr::expect_doppelganger("p_no_cols_map", g5)
