@@ -43,6 +43,9 @@ srv_query <- function(
   }
 
   # Send request (try twice if first fails, unless it was a forced failure)
+  if (is_testing()) {
+    timeout <- 120
+  }
   resp <- try(
     httr::POST(url, body = query, encode = "form", ua, httr::timeout(timeout)),
     silent = TRUE

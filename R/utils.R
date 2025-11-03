@@ -159,3 +159,8 @@ have_auth <- function() {
 nc_remove_cache <- function() {
   memoise::forget(srv_query)
 }
+
+
+is_testing <- function() {
+  identical(Sys.getenv("TESTTHAT"), "true")
+}
