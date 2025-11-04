@@ -65,6 +65,7 @@ meta_bcr_codes <- function() {
 #' @describeIn meta UTM Square codes
 #' @export
 meta_utm_squares <- function() {
+  have_pkg_check("sf")
   metadata_read("utm_squares")
 }
 
