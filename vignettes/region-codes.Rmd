@@ -50,8 +50,8 @@ nc_count(region = list(statprov = "NB"))
 
 You can only use **one** type of region, but you can filter to multiple regions of that type:
 
-```{r}
-nc_count(region = list(statprov = c("PE", "NB"))
+```{r count_eg}
+nc_count(region = list(statprov = c("PE", "NB")))
 ```
 
 ## In Detail - Codes
@@ -67,13 +67,13 @@ meta_country_codes()
 ```
 
 **Search by name** (English or French)
-```{r country}
+```{r}
 search_region("États-Unis", type = "country")
 ```
 
 **Use the resulting code(s)**
-```{r}
-nc_count(species = 133990, region = list(country = "US"))
+```{r count_country}
+nc_count(species = 13210, region = list(country = "US"))
 ```
 
 
@@ -86,12 +86,12 @@ meta_statprov_codes()
 ```
 
 **Search by name** (English, French, or Spanish)
-```{r statprov}
+```{r}
 search_region("Distrito de Colombia", type = "statprov")
 ```
 
 **Use the resulting code(s)**
-```{r}
+```{r count_statprov}
 nc_count(region = list(statprov = "DC"))
 ```
 
@@ -110,13 +110,13 @@ Language depends on location:
 - Quebec = French
 - Rest of Canada = English
 
-```{r subnational}
+```{r}
 search_region("Montreal", type = "subnational2")
 ```
 
 
 **Use the resulting code(s)**
-```{r}
+```{r count_subnational}
 nc_count(species = 7450, region = list(subnational2 = "CA.QC.MR"))
 ```
 
@@ -139,7 +139,7 @@ search_region("oak hammock", type = "iba")
 
 
 **Use the resulting code(s)**
-```{r}
+```{r count_iba}
 nc_count(region = list(iba = "MB010"))
 ```
 
@@ -156,8 +156,8 @@ search_region("rainforest", type = "bcr")
 ```
 
 **Use the resulting code(s)**
-```{r}
-nc_count(region = list(bcr = 5))
+```{r count_bcr}
+nc_count(species = 7450, region = list(bcr = 5))
 ```
 
 ### UTM Squares
@@ -168,8 +168,8 @@ meta_utm_squares()
 ```
 
 **Use the resulting code(s)**
-```{r}
-nc_count(region = list(utm_squares = "18TUR35"))
+```{r count_utm}
+nc_count(species = 7450, region = list(utm_squares = "18TUR35"))
 ```
 
 ### Bounding Box
@@ -177,8 +177,9 @@ nc_count(region = list(utm_squares = "18TUR35"))
 Bounding box reflects latitude and longitude limits.
 
 **Use a bounding box**
-```{r}
+```{r count_bbox}
 nc_count(
+  species = 7450,
   region = list(bbox = c(left = -125, bottom = 45, right = -100, top = 50))
 )
 ```
