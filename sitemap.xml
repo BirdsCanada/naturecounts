@@ -18,6 +18,7 @@
 <url><loc>https://birdscanada.github.io/naturecounts/articles/2.7-SummaryTools.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/articles/3.1-ZeroFilling.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/articles/3.2-AuxiliaryTables.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/articles/cosewic-tools.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/articles/data-access.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/articles/filtering-data.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/articles/format-zero-fill.html</loc></url>
@@ -47,13 +48,13 @@
 <url><loc>https://birdscanada.github.io/naturecounts/reference/index.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/map_canada.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/meta.html</loc></url>
-<url><loc>https://birdscanada.github.io/naturecounts/reference/metadata_v_remote.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/naturecounts-package.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/nc_coll_dl.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/nc_count.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/nc_data_dl.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/nc_data_save.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/nc_metadata.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/reference/nc_metadata_version.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/nc_permissions.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/nc_query_table.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/reference/nc_remove_cache.html</loc></url>
