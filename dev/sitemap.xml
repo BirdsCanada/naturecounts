@@ -17,6 +17,7 @@
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/2.7-SummaryTools.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/3.1-ZeroFilling.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/3.2-AuxiliaryTables.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/cosewic-tools.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/data-access.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/filtering-data.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/format-zero-fill.html</loc></url>
@@ -46,13 +47,13 @@
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/index.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/map_canada.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/meta.html</loc></url>
-<url><loc>https://birdscanada.github.io/naturecounts/dev/reference/metadata_v_remote.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/naturecounts-package.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/nc_coll_dl.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/nc_count.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/nc_data_dl.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/nc_data_save.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/nc_metadata.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/reference/nc_metadata_version.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/nc_permissions.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/nc_query_table.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/nc_remove_cache.html</loc></url>
