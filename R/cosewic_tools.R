@@ -84,10 +84,11 @@
 #'
 #' # Using the included, test data on black-capped chickadees
 #'
-#' bcch # look at the data
-#'
 #' r <- cosewic_ranges(bcch)
+#' r
+#'
 #' r <- cosewic_ranges(bcch, spatial = FALSE)
+#' r
 #'
 #' # Calculate for multiple species
 #' mult <- rbind(bcch, hofi)
@@ -113,11 +114,16 @@
 #' # Use a custom IAO grid
 #'
 #' # Load the demo grid for the bcch data set
-#' grid <- sf::st_read(system.file("extdata", "iao_bcch_grid.gpkg", package = "naturecounts"))
+#' grid <- sf::st_read(system.file(
+#'   "extdata",
+#'   "iao_bcch_grid.gpkg",
+#'   package = "naturecounts"
+#' ))
 #' r <- cosewic_ranges(bcch, iao_grid = grid)
 #' cosewic_plot(r)
 #'
-#' # Slight differences when compared to internally created grid, just due to where the observations line up
+#' # Slight differences when compared to internally created grid,
+#' # just due to where the observations line up
 #' r <- cosewic_ranges(bcch)
 #' cosewic_plot(r)
 #'
