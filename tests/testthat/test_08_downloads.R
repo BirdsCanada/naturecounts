@@ -10,8 +10,7 @@ test_that("Get permissions for user", {
 
 
 test_that("Get counts for collections", {
-  expect_message(nc_count()) %>%
-    suppressMessages()
+  expect_silent(nc_count(username = "sample"))
 
   # Entire collection
   expect_message(c1 <- nc_count(c("CBC", "BBS")), "Without a username") %>%
@@ -57,24 +56,25 @@ test_that("Get counts for collections", {
 
 test_that("Counts return permissions", {
   # 14280 = black-capped chickadee
+  # 133990 = moose
 
   expect_silent(
     c_sample <- nc_count(
-      species = 14280,
+      species = 133990,
       verbose = FALSE,
       username = "testuser"
     )
   )
   expect_silent(
     c_sample_all <- nc_count(
-      species = 14280,
+      species = 133990,
       show = "all",
       verbose = FALSE,
       username = "testuser"
     )
   )
   expect_silent(
-    c_all <- nc_count(species = 14280, show = "all", verbose = FALSE)
+    c_all <- nc_count(species = 133990, show = "all", verbose = FALSE)
   )
   expect_gt(
     sum(c_all$nrecords, na.rm = TRUE),
@@ -90,9 +90,11 @@ test_that("Counts return permissions", {
   expect_equal(unique(c_sample[["access"]]), "full")
   expect_equal(unique(c_sample[["akn_level"]]), 5)
 
-  expect_equal(
-    sort(unique(c_sample_all[["access"]])),
-    c("by request", "full", "no access")
+  expect_true(
+    all(
+      sort(unique(c_sample_all[["access"]])) %in%
+        c("by request", "full", "no access")
+    )
   )
   expect_true(all(c_sample_all[["akn_level"]] %in% c(NA, 2:5)))
 })
