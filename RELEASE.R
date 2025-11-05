@@ -20,9 +20,6 @@ nc_metadata_internal(force = TRUE, utm = FALSE)
 
 # - Update NEWS
 # - Check spelling
-dict <- hunspell::dictionary('en_CA')
-devtools::spell_check()
-spelling::update_wordlist()
 
 # - Update README.Rmd
 devtools::build_readme()
@@ -74,14 +71,14 @@ pkgdown::build_articles(lazy = TRUE)
 
 # Build a specific article
 pkgdown::build_article("cosewic-tools")
-pkgdown::build_article("articles/test")
-pkgdown::build_article("species-codes")
-pkgdown::build_article("format-zero-fill")
-pkgdown::build_article("selecting-fields")
-pkgdown::build_article("filtering-data")
 pkgdown::build_article("data-access")
-pkgdown::build_article("region-codes")
+pkgdown::build_article("filtering-data")
+pkgdown::build_article("format-zero-fill")
 pkgdown::build_article("region-areas")
+pkgdown::build_article("region-codes")
+pkgdown::build_article("selecting-fields")
+pkgdown::build_article("species-codes")
+
 pkgdown::build_article("articles/region-spatial")
 pkgdown::build_article("articles/2.0-TableOfContents")
 pkgdown::build_article("articles/2.1-SpatialDataExploration")
@@ -93,6 +90,9 @@ pkgdown::build_article("articles/2.6-SatelliteImagery")
 pkgdown::build_article("articles/2.7-SummaryTools")
 pkgdown::build_article("articles/3.1-ZeroFilling")
 pkgdown::build_article("articles/3.2-AuxiliaryTables")
+pkgdown::build_article("articles/mapping-observations")
+
+pkgdown::build_article("articles/test")
 
 # Don't push resources
 unlink("vignettes/articles/BCR_Terrestrial/", recursive = TRUE)

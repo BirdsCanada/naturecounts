@@ -40,7 +40,7 @@ reference:
   desc: Functions for searching through metadata
   contents: starts_with("search_")
 - title: Helper functions
-  desc: Functions for formating, cleaning or transforming downloaded data, as well as for working with spatial data
+  desc: Functions for formatting, cleaning or transforming downloaded data, as well as for working with spatial data
   contents:
   - format_dates
   - format_zero_fill
@@ -99,7 +99,7 @@ articles:
   contents:
   - '`region-codes`'
   - '`species-codes`'
-- title: Formating
+- title: Formatting
   desc: How to format downloaded data
   contents: '`format-zero-fill`'
 - title: internal

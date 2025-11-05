@@ -4,13 +4,14 @@ library(readr)
 library(stringr)
 
 # Remove the figures folder (start clean)
-unlink("vignettes/articles/figures", recursive = TRUE)
+#unlink("vignettes/articles/figures", recursive = TRUE)
 
 # Make sure to put figures in local dir in knitr chunk options
 v <- list.files("vignettes", ".orig$", full.names = TRUE, recursive = TRUE)
 
 # Selectively precompile a set
 v <- str_subset(v, "1\\.\\d{1}")
+v <- str_subset(v, "region\\-spatial")
 
 for (i in v) {
   new <- stringr::str_remove(i, ".orig$")
