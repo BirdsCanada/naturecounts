@@ -280,12 +280,22 @@ test_that("cosewic_iao() custom IAO grid", {
 })
 
 test_that("cosewic_ranges()", {
+  # Expect message about change in defaults
+  expect_message(cosewic_ranges(bcch), "now uses a default of `eoo_p = 1`")
+
   # Lambert
   expect_silent(r <- cosewic_ranges(bcch, crs = 3347))
   expect_type(r, "list")
   expect_named(r, c("iao", "eoo"))
 
-  expect_silent(r <- cosewic_ranges(bcch, spatial = FALSE, crs = 3347))
+  expect_silent(
+    r <- cosewic_ranges(
+      bcch,
+      eoo_p = 0.95,
+      spatial = FALSE,
+      crs = 3347
+    )
+  )
   expect_s3_class(r, "data.frame")
   expect_equal(
     r,
@@ -316,14 +326,21 @@ test_that("cosewic_ranges()", {
     r <- cosewic_ranges(bcch[1, ], spatial = FALSE),
     "EOO is less than IAO"
   )
-  expect_equal(r$iao, r$eoo_p95)
+  expect_equal(r$iao, r$eoo_p100)
 
   # Albers
   expect_silent(r <- cosewic_ranges(bcch, crs = "ESRI:102001"))
   expect_type(r, "list")
   expect_named(r, c("iao", "eoo"))
 
-  expect_silent(r <- cosewic_ranges(bcch, spatial = FALSE, crs = "ESRI:102001"))
+  expect_silent(
+    r <- cosewic_ranges(
+      bcch,
+      eoo_p = 0.95,
+      spatial = FALSE,
+      crs = "ESRI:102001"
+    )
+  )
   expect_s3_class(r, "data.frame")
   expect_equal(
     r,
@@ -354,7 +371,7 @@ test_that("cosewic_ranges()", {
     r <- cosewic_ranges(bcch[1, ], spatial = FALSE),
     "EOO is less than IAO"
   )
-  expect_equal(r$iao, r$eoo_p95)
+  expect_equal(r$iao, r$eoo_p100)
 })
 
 test_that("cosewic_ranges() diff cols", {
@@ -369,6 +386,7 @@ test_that("cosewic_ranges() diff cols", {
   expect_silent(
     r <- cosewic_ranges(
       b,
+      eoo_p = 0.95,
       record = "rec",
       species = "sp",
       spatial = FALSE,
@@ -418,7 +436,7 @@ test_that("cosewic_ranges() diff cols", {
     ),
     "EOO is less than IAO"
   )
-  expect_equal(r$iao, r$eoo_p95)
+  expect_equal(r$iao, r$eoo_p100)
 })
 
 test_that("cosewic_ranges() no cols", {
@@ -438,6 +456,7 @@ test_that("cosewic_ranges() no cols", {
   expect_silent(
     r <- cosewic_ranges(
       b,
+      eoo_p = 0.95,
       record = NULL,
       species = NULL,
       spatial = FALSE,
@@ -481,15 +500,23 @@ test_that("cosewic_ranges() no cols", {
     r <- cosewic_ranges(b[1, ], spatial = FALSE, record = NULL, species = NULL),
     "EOO is less than IAO"
   )
-  expect_equal(r$iao, r$eoo_p95)
+  expect_equal(r$iao, r$eoo_p100)
 })
 
 test_that("cosewic_ranges() filter_unique", {
   # 95% EOO
-  expect_silent(r1 <- cosewic_ranges(bcch, spatial = FALSE, crs = 3347))
+  expect_silent(
+    r1 <- cosewic_ranges(
+      bcch,
+      eoo_p = 0.95,
+      spatial = FALSE,
+      crs = 3347
+    )
+  )
   expect_warning(
     r2 <- cosewic_ranges(
       bcch,
+      eoo_p = 0.95,
       spatial = FALSE,
       filter_unique = TRUE,
       crs = 3347
@@ -504,10 +531,18 @@ test_that("cosewic_ranges() filter_unique", {
   )
   expect_false(r1$eoo_p95 == r2$eoo_p95)
 
-  expect_silent(r1 <- cosewic_ranges(bcch, spatial = FALSE, crs = 3347))
+  expect_silent(
+    r1 <- cosewic_ranges(
+      bcch,
+      eoo_p = 0.95,
+      spatial = FALSE,
+      crs = 3347
+    )
+  )
   expect_warning(
     r2 <- cosewic_ranges(
       bcch,
+      eoo_p = 0.95,
       filter_unique = TRUE,
       spatial = FALSE,
       crs = 3347
@@ -517,13 +552,12 @@ test_that("cosewic_ranges() filter_unique", {
 
   # Full EOO
   expect_silent(
-    r1 <- cosewic_ranges(bcch, eoo_p = 1, spatial = FALSE, crs = 3347)
+    r1 <- cosewic_ranges(bcch, spatial = FALSE, crs = 3347)
   )
   expect_warning(
     r2 <- cosewic_ranges(
       bcch,
       filter_unique = TRUE,
-      eoo_p = 1,
       spatial = FALSE,
       crs = 3347
     ),
@@ -574,7 +608,7 @@ test_that("cosewic_ranges() custom IAO grid", {
     quiet = TRUE
   )
   expect_message(
-    a <- cosewic_ranges(bcch, iao_grid = grid),
+    a <- cosewic_ranges(bcch, eoo_p = 0.95, iao_grid = grid),
     "User\\-provided grid has cell size of 2 \\[km\\]"
   )
   expect_type(a, "list")
@@ -583,14 +617,14 @@ test_that("cosewic_ranges() custom IAO grid", {
 
   # Error when grid is wrong CRS
   expect_error(
-    cosewic_ranges(bcch, crs = 3347, iao_grid = grid),
+    cosewic_ranges(bcch, eoo_p = 0.95, crs = 3347, iao_grid = grid),
     "`crs` must match the CRS of `iao\\_grid`"
   )
 })
 
 
 test_that("cosewic_plot()", {
-  expect_silent(r1 <- cosewic_ranges(bcch, crs = 3347))
+  expect_silent(r1 <- cosewic_ranges(bcch, eoo_p = 0.95, crs = 3347))
   expect_silent(g1 <- cosewic_plot(r1))
   expect_s3_class(g1, "ggplot")
 
@@ -609,7 +643,9 @@ test_that("cosewic_plot()", {
     )
   )
 
-  expect_silent(r2 <- cosewic_ranges(rbind(bcch, hofi), crs = 3347))
+  expect_silent(
+    r2 <- cosewic_ranges(rbind(bcch, hofi), eoo_p = 0.95, crs = 3347)
+  )
   expect_silent(g6 <- cosewic_plot(r2))
   expect_false(inherits(g6, "ggplot"))
   expect_length(g6, 2)
@@ -628,7 +664,13 @@ test_that("cosewic_plot() no cols", {
   b <- dplyr::select(bcch, -"species_id", -"record_id")
 
   expect_silent(
-    r1 <- cosewic_ranges(b, species = NULL, record = NULL, crs = 3347)
+    r1 <- cosewic_ranges(
+      b,
+      eoo_p = 0.95,
+      species = NULL,
+      record = NULL,
+      crs = 3347
+    )
   )
   expect_warning(g0 <- cosewic_plot(r1), "Column \"species_id\" not found")
   expect_silent(g1 <- cosewic_plot(r1, species = NULL))
@@ -661,6 +703,7 @@ test_that("cosewic_plot() no cols", {
   expect_silent(
     r2 <- cosewic_ranges(
       rbind(bcch, hofi),
+      eoo_p = 0.95,
       species = NULL,
       record = NULL,
       crs = 3347

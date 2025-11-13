@@ -4,6 +4,7 @@
     * Add option to clip EOO in `cosewic_ranges()` to a particular shapefile before calculating area
     * Add option to change the CRS
     * Update default CRS for `cosewic_ranges()` to an Albers Equal Area Projection for Canada (ESRI:102001)
+    * Use a default of `eoo_p = 1` rather than `eoo_p = 0.95`
 * Make `cosewic_plot()`s report-ready (fixes [#41](https://github.com/BirdsCanada/naturecounts/issues/41))
     * Add option to scale records in `cosewic_plot()`
     * Add option to change the CRS

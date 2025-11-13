@@ -12,7 +12,7 @@ cosewic_ranges(
   species = "species_id",
   iao_grid_size_km = 2,
   iao_grid = NULL,
-  eoo_p = 0.95,
+  eoo_p = 1,
   eoo_clip = NULL,
   crs = "ESRI:102001",
   which = c("eoo", "iao"),
@@ -42,9 +42,9 @@ Use caution if changing.}
 one. The CRS of this grid must be the same as \code{crs}.}
 
 \item{eoo_p}{Numeric. The percentile to calculate the convex hull over.
-Defaults to 0.95 for a 95\% convex hull to ensure outlier points do not
-artificially inflate the EOO. Note that for a final COSEWIC report, this
-may not be appropriate. Set to 1 to include all points.}
+Defaults to 1 for a 100\% convex hull to match COSEWIC requirements
+(includes all points). Note that you may wish to use 0.95 for a 95\% convex
+hull to  ensure outlier points do not artificially inflate the EOO.}
 
 \item{eoo_clip}{sf (Multi)Polygon. A spatial object to clip the EOO to. May
 be relevant when calculating EOOs for complex regions (i.e. long curved
@@ -83,7 +83,7 @@ summarized data frame, and \code{spatial}, a list of two spatial data frames.
 \item \code{n_occupied} - Number of IAO cells with at least one record
 \item \code{iao} - IAO value (\code{grid_size_km}^2 * \code{n_occupied})
 \item \code{eoo_pXX} - EOO area calculated with a convex hull at percentile \code{eoo_p}
-(e.g., 95\%)
+(e.g., 100\% or 95\%)
 }
 
 \code{spatial} contains spatial data frames
@@ -104,12 +104,13 @@ a different measure, the \emph{biological} area of occupancy. See the
 section in 'Instructions for preparing COSEWIC status reports'
 for more details.
 
-By default the EOO is calculated only using the inner 95\% of points (based on
-distance to the centroid). This is to ensure that a first-pass of the EOO
-does not reject a species from consideration if there are any outlier
-observations. However, for a final COSEWIC assessment report, it is likely
+By default the EOO is calculated using all points (\code{eoo_p = 1} for 100\% of
+However, if you're working on rough data or want to do a rough first pass,
+you may wish to use \code{eoo_p = 0.95} or 95\% of points (based on distance to the
+centroid). This will ensure outlier observations will not artificially
+inflate the EOO. However, for a final COSEWIC assessment report, it is likely
 better to carefully explore the data to ensure there are no outliers and then
-use the full data set (i.e. set \code{eoo_p = 1}).
+use the full data set (i.e. use the default of \code{eoo_p = 1}).
 
 The IAO is calculated by first assessing large grids (10x large than the
 specified size). Only then are smaller grids created within large grid cells
@@ -126,7 +127,6 @@ Details on how IAO and EOO are calculated and used
 }
 }
 \examples{
-
 # Using the included, test data on black-capped chickadees
 
 r <- cosewic_ranges(bcch)
