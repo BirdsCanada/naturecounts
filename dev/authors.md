@@ -1,0 +1,24 @@
+# Authors and Citation
+
+## Authors
+
+- **Steffi LaZerte**. Author.
+
+- **Denis Lepage**. Author, maintainer.
+
+## Citation
+
+Source:
+[`DESCRIPTION`](https://github.com/BirdsCanada/naturecounts/blob/dev/DESCRIPTION)
+
+LaZerte S, Lepage D (2025). *naturecounts: Access and download data on
+plant and animal populations from NatureCounts*. R package version
+0.4.1.9000, <https://github.com/BirdsCanada/naturecounts>.
+
+    @Manual{,
+      title = {naturecounts: Access and download data on plant and animal populations from NatureCounts},
+      author = {Steffi LaZerte and Denis Lepage},
+      year = {2025},
+      note = {R package version 0.4.1.9000},
+      url = {https://github.com/BirdsCanada/naturecounts},
+    }
