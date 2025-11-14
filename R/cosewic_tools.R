@@ -691,7 +691,7 @@ cosewic_plot <- function(
   title = "",
   zoomin = -1,
   arrow_location = "tr",
-  scale_location = "tr",
+  scale_location = "br",
   verbose = TRUE
 ) {
   have_pkg_check(c("sf", "ggplot2", "ggspatial", "prettymapr", "rosm"))
@@ -806,8 +806,8 @@ cosewic_plot_indiv <- function(
   verbose
 ) {
   if ("iao" %in% which) {
+    iao_val <- a$iao[1]
     size_a <- unique(a$grid_size_km)
-
     records <- paste0(
       a$n_records_total[1],
       " records (",
@@ -820,7 +820,6 @@ cosewic_plot_indiv <- function(
       size_a,
       " km grid)"
     )
-
     if (!is.null(grid)) {
       if (sf::st_crs(a) != sf::st_crs(grid)) {
         a <- sf::st_transform(a, sf::st_crs(grid))
@@ -833,16 +832,6 @@ cosewic_plot_indiv <- function(
         dplyr::group_by(.data$grid_ca_id) %>%
         dplyr::summarize(n_records = sum(.data$n_records))
       size_p <- grid$grid_size[1]
-    } else {
-      size_p <- size_a
-    }
-
-    if (iao_prop) {
-      a <- dplyr::mutate(
-        a,
-        n_records = .data$n_records / max(.data$n_records, na.rm = TRUE)
-      )
-      leg_title <- "IAO\nProp. records"
       caption <- paste0(
         records,
         "\nSummarized to display as ",
@@ -852,14 +841,41 @@ cosewic_plot_indiv <- function(
         "km grids"
       )
     } else {
-      leg_title <- "IAO\nNo. records"
       caption <- records
     }
+
+    if (iao_prop) {
+      a <- dplyr::mutate(
+        a,
+        n_records = .data$n_records / max(.data$n_records, na.rm = TRUE)
+      )
+      leg_title <- "IAO\nProp. records"
+    } else {
+      leg_title <- "IAO\nNo. records"
+    }
+  } else {
+    caption <- paste0(e$n_records_total[1], " records")
   }
+
+  if ("iao" %in% which) {
+    caption <- paste0(caption, "\n", paste("IAO:", format(iao_val)))
+  }
+  if ("eoo" %in% which) {
+    eoo <- stringr::str_which(names(e), "eoo")
+    caption <- paste0(
+      caption,
+      "\n",
+      paste("EOO:", format(round(e[[eoo]][1], 2)))
+    )
+  }
+
+  caption <- stringr::str_remove_all(caption, "\\[|\\]|\\^")
 
   g <- ggplot2::ggplot() +
     ggplot2::theme_minimal() +
-    ggplot2::ggtitle(title)
+    ggplot2::theme(plot.caption = ggplot2::element_text(lineheight = 1.25)) +
+    ggplot2::ggtitle(title) +
+    ggplot2::labs(caption = caption)
 
   if (!is.null(map)) {
     if (is.character(map) && map %in% rosm::osm.types()) {
@@ -888,7 +904,7 @@ cosewic_plot_indiv <- function(
   }
 
   if ("eoo" %in% which) {
-    eoo_lab <- stringr::str_subset(names(e), "eoo") %>%
+    eoo_legend <- stringr::str_subset(names(e), "eoo") %>%
       stringr::str_replace("_", " ") %>%
       stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
       toupper()
@@ -896,7 +912,7 @@ cosewic_plot_indiv <- function(
     g <- g +
       ggplot2::geom_sf(
         data = e,
-        ggplot2::aes(colour = !!eoo_lab),
+        ggplot2::aes(colour = !!eoo_legend),
         fill = NA,
         size = 1.5
       ) +
@@ -910,8 +926,7 @@ cosewic_plot_indiv <- function(
         ggplot2::aes(fill = .data$n_records),
         colour = NA
       ) +
-      ggplot2::scale_fill_viridis_c(name = leg_title) +
-      ggplot2::labs(caption = caption)
+      ggplot2::scale_fill_viridis_c(name = leg_title)
   }
 
   if (!is.null(points)) {

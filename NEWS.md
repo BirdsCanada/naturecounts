@@ -7,7 +7,9 @@
     * Use a default of `eoo_p = 1` rather than `eoo_p = 0.95`
 * Make `cosewic_plot()`s report-ready (fixes [#41](https://github.com/BirdsCanada/naturecounts/issues/41))
     * Add option to scale records in `cosewic_plot()`
+    * Add North arrow and scale to `cosweic_plot()`
     * Add option to change the CRS
+    * Add more details to `cosewic_plot()` caption
 * Change API to naturecounts.ca ([#29](https://github.com/BirdsCanada/naturecounts/issues/29))
 * Fix bug with request ids where tried to download unapproved collections  ([#32](https://github.com/BirdsCanada/naturecounts/issues/32))
 * Clarify metadata (fixes [#30](https://github.com/BirdsCanada/naturecounts/issues/30)
