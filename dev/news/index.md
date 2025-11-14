@@ -21,7 +21,11 @@
   [\#41](https://github.com/BirdsCanada/naturecounts/issues/41))
   - Add option to scale records in
     [`cosewic_plot()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_plot.md)
+  - Add North arrow and scale to `cosweic_plot()`
   - Add option to change the CRS
+  - Add more details to
+    [`cosewic_plot()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_plot.md)
+    caption
 - Change API to naturecounts.ca
   ([\#29](https://github.com/BirdsCanada/naturecounts/issues/29))
 - Fix bug with request ids where tried to download unapproved
