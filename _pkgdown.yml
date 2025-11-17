@@ -95,6 +95,7 @@ articles:
   - '`articles/region-spatial`'
   - '`region-areas`'
   - '`articles/mapping-observations`'
+  - '`cosewic-tools`'
 - title: Reference
   desc: Reference articles for metadata codes and descriptions.
   contents:
@@ -107,4 +108,3 @@ articles:
   desc: Internal articles for reference
   contents:
   - '`articles/test`'
-  - '`cosewic-tools`'
