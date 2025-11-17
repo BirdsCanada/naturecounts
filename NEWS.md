@@ -1,5 +1,6 @@
 # naturecounts 0.5.0
 * Generalize `cosewic_ranges()` (fixes [#40](https://github.com/BirdsCanada/naturecounts/issues/40))
+    * argument *species* now deprecated in favour of *group*
     * Add option to supply custom IAO grid to `cosewic_ranges()`
     * Add option to clip EOO in `cosewic_ranges()` to a particular shapefile before calculating area
     * Add option to change the CRS

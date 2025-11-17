@@ -378,7 +378,7 @@ test_that("cosewic_ranges() diff cols", {
   # Lambert
   b <- dplyr::rename(bcch, sp = species_id, rec = record_id)
   expect_silent(
-    r <- cosewic_ranges(b, record = "rec", species = "sp", crs = 3347)
+    r <- cosewic_ranges(b, record = "rec", group = "sp", crs = 3347)
   )
   expect_type(r, "list")
   expect_named(r, c("iao", "eoo"))
@@ -388,7 +388,7 @@ test_that("cosewic_ranges() diff cols", {
       b,
       eoo_p = 0.95,
       record = "rec",
-      species = "sp",
+      group = "sp",
       spatial = FALSE,
       crs = 3347
     )
@@ -414,7 +414,7 @@ test_that("cosewic_ranges() diff cols", {
     cosewic_ranges(
       dplyr::select(b, -"latitude"),
       record = "rec",
-      species = "sp"
+      group = "sp"
     ),
     "`coord_lat` and `coord_lon` must be columns in `df_db`"
   )
@@ -422,7 +422,7 @@ test_that("cosewic_ranges() diff cols", {
     cosewic_ranges(
       dplyr::mutate(b, latitude = collection),
       record = "rec",
-      species = "sp"
+      group = "sp"
     ),
     "`coord_lat` and `coord_lon` must be numeric"
   )
@@ -432,7 +432,7 @@ test_that("cosewic_ranges() diff cols", {
       b[1, ],
       spatial = FALSE,
       record = "rec",
-      species = "sp"
+      group = "sp"
     ),
     "EOO is less than IAO"
   )
@@ -448,7 +448,7 @@ test_that("cosewic_ranges() no cols", {
   ) %>%
     expect_warning("Column \"record_id\"")
   expect_silent(
-    r <- cosewic_ranges(b, record = NULL, species = NULL, crs = 3347)
+    r <- cosewic_ranges(b, record = NULL, group = NULL, crs = 3347)
   )
   expect_type(r, "list")
   expect_named(r, c("iao", "eoo"))
@@ -458,7 +458,7 @@ test_that("cosewic_ranges() no cols", {
       b,
       eoo_p = 0.95,
       record = NULL,
-      species = NULL,
+      group = NULL,
       spatial = FALSE,
       crs = 3347
     )
@@ -483,7 +483,7 @@ test_that("cosewic_ranges() no cols", {
     cosewic_ranges(
       dplyr::select(b, -"latitude"),
       record = NULL,
-      species = NULL
+      group = NULL
     ),
     "`coord_lat` and `coord_lon` must be columns in `df_db`"
   )
@@ -491,13 +491,13 @@ test_that("cosewic_ranges() no cols", {
     cosewic_ranges(
       dplyr::mutate(b, latitude = collection),
       record = NULL,
-      species = NULL
+      group = NULL
     ),
     "`coord_lat` and `coord_lon` must be numeric"
   )
 
   expect_message(
-    r <- cosewic_ranges(b[1, ], spatial = FALSE, record = NULL, species = NULL),
+    r <- cosewic_ranges(b[1, ], spatial = FALSE, record = NULL, group = NULL),
     "EOO is less than IAO"
   )
   expect_equal(r$iao, r$eoo_p100)
@@ -670,26 +670,26 @@ test_that("cosewic_plot() no cols", {
     r1 <- cosewic_ranges(
       b,
       eoo_p = 0.95,
-      species = NULL,
+      group = NULL,
       record = NULL,
       crs = 3347
     )
   )
   expect_warning(g0 <- cosewic_plot(r1), "Column \"species_id\" not found")
-  expect_silent(g1 <- cosewic_plot(r1, species = NULL))
+  expect_silent(g1 <- cosewic_plot(r1, group = NULL))
   expect_s3_class(g1, "ggplot")
   expect_equal(g0, g1)
 
   expect_silent(
-    g2 <- cosewic_plot(r1, grid = grid_canada(crs = 3347), species = NULL)
+    g2 <- cosewic_plot(r1, grid = grid_canada(crs = 3347), group = NULL)
   )
-  expect_silent(g3 <- cosewic_plot(r1, points = bcch, species = NULL))
+  expect_silent(g3 <- cosewic_plot(r1, points = bcch, group = NULL))
   expect_silent(
     g4 <- cosewic_plot(
       r1,
       grid = grid_canada(crs = 3347),
       map = map_canada(),
-      species = NULL
+      group = NULL
     )
   )
   expect_silent(
@@ -697,22 +697,22 @@ test_that("cosewic_plot() no cols", {
       r1,
       grid = grid_canada(crs = 3347),
       map = map_canada(),
-      species = NULL,
+      group = NULL,
       title = "Black-capped Chickadees"
     )
   )
 
-  # Multiple species as one
+  # Multiple groups as one
   expect_silent(
     r2 <- cosewic_ranges(
       rbind(bcch, hofi),
       eoo_p = 0.95,
-      species = NULL,
+      group = NULL,
       record = NULL,
       crs = 3347
     )
   )
-  expect_silent(g6 <- cosewic_plot(r2, species = NULL))
+  expect_silent(g6 <- cosewic_plot(r2, group = NULL))
   expect_s3_class(g6, "ggplot")
 
   skip_on_os(c("windows", "mac"))

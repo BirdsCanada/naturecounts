@@ -9,7 +9,7 @@ cosewic_ranges(
   record = "record_id",
   coord_lon = "longitude",
   coord_lat = "latitude",
-  species = "species_id",
+  group = "species_id",
   iao_grid_size_km = 2,
   iao_grid = NULL,
   eoo_p = 1,
@@ -17,7 +17,8 @@ cosewic_ranges(
   crs = "ESRI:102001",
   which = c("eoo", "iao"),
   filter_unique = FALSE,
-  spatial = TRUE
+  spatial = TRUE,
+  species
 )
 }
 \arguments{
@@ -31,8 +32,8 @@ identification.}
 
 \item{coord_lat}{Character. Name of the column containing latitude.}
 
-\item{species}{Character. Name of the column containing species
-identification.}
+\item{group}{Character. Name of the column containing group identification.
+By default this is \code{species_id} in NatureCounts data.}
 
 \item{iao_grid_size_km}{Numeric. Size of grid (km) to use when calculating
 IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2).
@@ -68,6 +69,8 @@ EOO calculations if using less than 100\% of points (see \code{eoo_p}).}
 calculations. If \code{FALSE} (the default) returns a data frame with the IAO
 and EOO values. If \code{TRUE} returns a list of objects with both the
 values and the spatial grid/polygons.}
+
+\item{species}{Deprecated. Use \code{groups}.}
 }
 \value{
 Summarized data frame (ranges) or list containing \code{ranges}, a
@@ -135,7 +138,7 @@ r
 r <- cosewic_ranges(bcch, spatial = FALSE)
 r
 
-# Calculate for multiple species
+# Calculate for multiple groups
 mult <- rbind(bcch, hofi)
 r <- cosewic_ranges(mult)
 r <- cosewic_ranges(mult, spatial = FALSE)

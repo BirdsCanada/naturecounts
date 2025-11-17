@@ -37,8 +37,8 @@
 #'   identification.
 #' @param coord_lon Character. Name of the column containing longitude.
 #' @param coord_lat Character. Name of the column containing latitude.
-#' @param species Character. Name of the column containing species
-#'   identification.
+#' @param group Character. Name of the column containing group identification.
+#'   By default this is `species_id` in NatureCounts data.
 #' @param iao_grid_size_km Numeric. Size of grid (km) to use when calculating
 #'   IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2).
 #'   Use caution if changing.
@@ -59,6 +59,7 @@
 #'   calculations. If `FALSE` (the default) returns a data frame with the IAO
 #'   and EOO values. If `TRUE` returns a list of objects with both the
 #'   values and the spatial grid/polygons.
+#' @param species Deprecated. Use `groups`.
 #'
 #' @inheritParams args
 #'
@@ -90,7 +91,7 @@
 #' r <- cosewic_ranges(bcch, spatial = FALSE)
 #' r
 #'
-#' # Calculate for multiple species
+#' # Calculate for multiple groups
 #' mult <- rbind(bcch, hofi)
 #' r <- cosewic_ranges(mult)
 #' r <- cosewic_ranges(mult, spatial = FALSE)
@@ -134,7 +135,7 @@ cosewic_ranges <- function(
   record = "record_id",
   coord_lon = "longitude",
   coord_lat = "latitude",
-  species = "species_id",
+  group = "species_id",
   iao_grid_size_km = 2,
   iao_grid = NULL,
   eoo_p = 1,
@@ -142,8 +143,17 @@ cosewic_ranges <- function(
   crs = "ESRI:102001",
   which = c("eoo", "iao"),
   filter_unique = FALSE,
-  spatial = TRUE
+  spatial = TRUE,
+  species
 ) {
+  if (!missing(species)) {
+    warning(
+      "`species` is deprecated. Please use `group` instead",
+      call. = FALSE
+    )
+    group <- species
+  }
+
   # Checks
   have_pkg_check("sf")
   df <- df_db_check(df_db)
@@ -192,21 +202,21 @@ cosewic_ranges <- function(
   }
 
   # Columns
-  if (!is.null(species) && !species %in% names(df)) {
+  if (!is.null(group) && !group %in% names(df)) {
     warning(
       "Column \"",
-      species,
+      group,
       "\" not found in `df_db`. ",
-      "Treating data as single species.\n",
-      "Use `species = NULL` to remove this warning or ",
-      "`species = \"COLUMN_NAME\"` to specify the species id column.",
+      "Treating data as single group.\n",
+      "Use `group = NULL` to remove this warning or ",
+      "`group = \"COLUMN_NAME\"` to specify the group id column.",
       call. = FALSE
     )
-    df[[species]] <- "PLACEHOLDER"
+    df[[group]] <- "PLACEHOLDER"
   }
-  if (is.null(species)) {
-    species <- "species_id"
-    df[[species]] <- "PLACEHOLDER"
+  if (is.null(group)) {
+    group <- "species_id"
+    df[[group]] <- "PLACEHOLDER"
   }
 
   if (!is.null(record) && !record %in% names(df)) {
@@ -242,7 +252,7 @@ cosewic_ranges <- function(
 
     df <- df %>%
       dplyr::select(
-        dplyr::all_of(c(species, coord_lon, coord_lat))
+        dplyr::all_of(c(group, coord_lon, coord_lat))
       ) %>%
       dplyr::distinct() %>%
       dplyr::mutate(!!record := 1:dplyr::n())
@@ -254,19 +264,19 @@ cosewic_ranges <- function(
   df_sf <- prep_spatial(
     df,
     coords = c(coord_lon, coord_lat),
-    extra = c(record, species),
+    extra = c(record, group),
     crs = crs,
     check_projected = TRUE
   )
 
-  n <- dplyr::count(df, .data[[species]], name = "n_records_total")
+  n <- dplyr::count(df, .data[[group]], name = "n_records_total")
 
   # Calculate
   # Use split to maintain lists which keep the spatial aspect, nested not so much
 
-  ranges <- tidyr::nest(df_sf, .by = dplyr::all_of(species)) %>%
-    dplyr::left_join(n, by = species) %>%
-    dplyr::relocate(dplyr::all_of(species), "n_records_total")
+  ranges <- tidyr::nest(df_sf, .by = dplyr::all_of(group)) %>%
+    dplyr::left_join(n, by = group) %>%
+    dplyr::relocate(dplyr::all_of(group), "n_records_total")
 
   if ("iao" %in% which) {
     iao <- dplyr::mutate(
@@ -304,13 +314,13 @@ cosewic_ranges <- function(
       # Check eoo size
       i <- iao %>%
         sf::st_drop_geometry() %>%
-        dplyr::select(dplyr::all_of(c(species, "iao"))) %>%
+        dplyr::select(dplyr::all_of(c(group, "iao"))) %>%
         dplyr::distinct()
 
       if (any(eoo$eoo < unique(i$iao))) {
-        s <- unique(eoo[[species]][eoo$eoo < i$iao])
+        s <- unique(eoo[[group]][eoo$eoo < i$iao])
         message(
-          "EOO is less than IAO for species ",
+          "EOO is less than IAO for group ",
           paste0(s, collapse = ", "),
           ".\n",
           "This can occur if there are very few, clustered records.\n",
@@ -325,14 +335,14 @@ cosewic_ranges <- function(
     eoo <- dplyr::rename(eoo, !!paste0("eoo_p", eoo_p * 100) := "eoo")
   }
 
-  if (all(unique(df[[species]]) == "PLACEHOLDER")) {
+  if (all(unique(df[[group]]) == "PLACEHOLDER")) {
     if ("iao" %in% which) {
-      iao <- dplyr::select(iao, -dplyr::all_of(species))
+      iao <- dplyr::select(iao, -dplyr::all_of(group))
     }
     if ("eoo" %in% which) {
-      eoo <- dplyr::select(eoo, -dplyr::all_of(species))
+      eoo <- dplyr::select(eoo, -dplyr::all_of(group))
     }
-    species <- NULL
+    group <- NULL
   }
 
   if (spatial) {
@@ -345,7 +355,7 @@ cosewic_ranges <- function(
     }
   } else {
     if (all(c("iao", "eoo") %in% which)) {
-      ranges <- dplyr::full_join(iao, eoo, by = c(species, "n_records_total"))
+      ranges <- dplyr::full_join(iao, eoo, by = c(group, "n_records_total"))
     } else if ("iao" %in% which) {
       ranges <- iao
     } else {
@@ -606,7 +616,10 @@ map_canada <- function(crs = 3347) {
 
 #' Plot COSEWIC IAO and EOO
 #'
-#' Creates a plot of COSEWIC ranges for illustration and checking.
+#' Creates a plot of COSEWIC ranges for illustration and checking. **Note**: If
+#' using maptiles from OpenStreetMap ("osm", the default) in a public
+#' document/website/etc., you must [attribute
+#' OpenStreetMap](https://osmfoundation.org/wiki/Licence/Attribution_Guidelines).
 #'
 #' @param ranges List. Output of `cosewic_ranges()` with `spatial = TRUE`.
 #' @param points Data frame. Optional naturecounts data used to compute ranges.
@@ -618,12 +631,12 @@ map_canada <- function(crs = 3347) {
 #'   `ggspatial::annotation_map_tile()`. Can be one of `rosm::osm.types()`, a sf
 #'   polygon base map, or `NULL` for no base map.
 #' @param iao_prop Logical. Whether to show IAO as a proportion for
-#'   easier plotting of multiple species (allows collecting legends by
+#'   easier plotting of multiple groups (allows collecting legends by
 #'   the patchwork package).
-#' @param species Character. Name of the column containing species
-#'   identification.
+#' @param group Character. Name of the column containing group identification.
+#'   By default this is `species_id` in NatureCounts data.
 #' @param title Character. Optional title to add to the map. Can be a named by
-#'  species vector to supply different titles for different species.
+#'  group vector to supply different titles for different groups.
 #' @param zoomin Numeric. Zoom adjustment for
 #'   `ggspatial::annotation_map_tile()`. Only applies if map defines a map tile
 #'   (e.g., "osm")
@@ -631,6 +644,7 @@ map_canada <- function(crs = 3347) {
 #' 'tl', 'br', or 'bl', for top right, top left, etc. `NULL` omits the arrow.
 #' @param scale_location Character. Location for the map scale, one of 'tr',
 #' 'tl', 'br', or 'bl', for top right, top left, etc. `NULL` omits the scale.
+#' @param species Deprecated. Use `groups`.
 #'
 #' @inheritParams args
 #'
@@ -658,14 +672,14 @@ map_canada <- function(crs = 3347) {
 #'   title = "Black-capped chickadees"
 #' )
 #'
-#' # Plot multiple species - separate plots
+#' # Plot multiple groups - separate plots
 #' m <- rbind(bcch, hofi)
 #' r <- cosewic_ranges(m)
 #' p <- cosewic_plot(r)
 #' p[[1]]
 #' p[[2]]
 #'
-#' # Plot multiple species - Use IAO as a proportion for identical legends
+#' # Plot multiple groups - Use IAO as a proportion for identical legends
 #' p <- cosewic_plot(
 #'   r,
 #'   iao_prop = TRUE,
@@ -687,13 +701,22 @@ cosewic_plot <- function(
   map = "osm",
   iao_prop = FALSE,
   crs = NULL,
-  species = "species_id",
+  group = "species_id",
   title = "",
   zoomin = -1,
   arrow_location = "tr",
   scale_location = "br",
-  verbose = TRUE
+  verbose = TRUE,
+  species
 ) {
+  if (!missing(species)) {
+    warning(
+      "`species` is deprecated. Please use `group` instead",
+      call. = FALSE
+    )
+    group <- species
+  }
+
   have_pkg_check(c("sf", "ggplot2", "ggspatial", "prettymapr", "rosm"))
   which_check(which)
 
@@ -706,34 +729,34 @@ cosewic_plot <- function(
     ranges[["iao"]] <- dplyr::filter(ranges[["iao"]], .data$n_records > 0)
   }
 
-  # Check Species Columns
+  # Check Group Columns
   cols <- purrr::map(ranges, names) %>% purrr::list_c()
-  if (is.null(species)) {
-    species <- "species_id"
-    ranges$eoo[[species]] <- "PLACEHOLDER"
-    ranges$iao[[species]] <- "PLACEHOLDER"
-  } else if (!species %in% cols) {
+  if (is.null(group)) {
+    group <- "species_id"
+    ranges$eoo[[group]] <- "PLACEHOLDER"
+    ranges$iao[[group]] <- "PLACEHOLDER"
+  } else if (!group %in% cols) {
     warning(
       "Column \"",
-      species,
+      group,
       "\" not found in spatial data in `ranges`. ",
-      "Treating data as single species.\n",
-      "Use `species = NULL` to remove this warning or ",
-      "`species = \"COLUMN_NAME\"` to specify the species id column.",
+      "Treating data as single group.\n",
+      "Use `group = NULL` to remove this warning or ",
+      "`group = \"COLUMN_NAME\"` to specify the group id column.",
       call. = FALSE
     )
-    ranges$eoo[[species]] <- "PLACEHOLDER"
-    ranges$iao[[species]] <- "PLACEHOLDER"
+    ranges$eoo[[group]] <- "PLACEHOLDER"
+    ranges$iao[[group]] <- "PLACEHOLDER"
   }
 
-  sp <- purrr::map(ranges, species) %>%
+  sp <- purrr::map(ranges, group) %>%
     purrr::list_c() %>%
     unique()
 
   # Check/set titles
   if (length(title) > 1 && !all(names(title) %in% sp)) {
     stop(
-      "`title` must be a named vector matching 'species' if providing more than one",
+      "`title` must be a named vector matching 'group' ids if providing more than one",
       call. = FALSE
     )
   }
@@ -743,21 +766,21 @@ cosewic_plot <- function(
     title <- stats::setNames(nm = sp)
   }
 
-  # Split by species (if applicable)
+  # Split by group (if applicable)
   if ("eoo" %in% which) {
-    e <- split(ranges[["eoo"]], ranges[["eoo"]][[species]])
+    e <- split(ranges[["eoo"]], ranges[["eoo"]][[group]])
   } else {
     e <- NA
   }
 
   if ("iao" %in% which) {
-    i <- split(ranges[["iao"]], ranges[["iao"]][[species]])
+    i <- split(ranges[["iao"]], ranges[["iao"]][[group]])
   } else {
     i <- NA
   }
 
   if (!is.null(points)) {
-    points <- split(points, points[[species]])
+    points <- split(points, points[[group]])
   } else {
     points <- list(points)
   }
@@ -914,9 +937,9 @@ cosewic_plot_indiv <- function(
         data = e,
         ggplot2::aes(colour = !!eoo_legend),
         fill = NA,
-        size = 1.5
+        size = 1
       ) +
-      ggplot2::scale_colour_manual(name = "", values = "grey20")
+      ggplot2::scale_colour_manual(name = "", values = "grey60")
   }
 
   if ("iao" %in% which) {

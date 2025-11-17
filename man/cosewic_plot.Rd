@@ -12,12 +12,13 @@ cosewic_plot(
   map = "osm",
   iao_prop = FALSE,
   crs = NULL,
-  species = "species_id",
+  group = "species_id",
   title = "",
   zoomin = -1,
   arrow_location = "tr",
-  scale_location = "tr",
-  verbose = TRUE
+  scale_location = "br",
+  verbose = TRUE,
+  species
 )
 }
 \arguments{
@@ -38,7 +39,7 @@ the values.. "osm" by default to use OpenStreetMap base maps via
 polygon base map, or \code{NULL} for no base map.}
 
 \item{iao_prop}{Logical. Whether to show IAO as a proportion for
-easier plotting of multiple species (allows collecting legends by
+easier plotting of multiple groups (allows collecting legends by
 the patchwork package).}
 
 \item{crs}{A coordinate reference system (see \code{?sf::st_transform()}).
@@ -47,11 +48,11 @@ calculations. Note that it must be a projection (i.e. not simply a
 reference system like 4326 used for GPS) for area calculations. If \code{NULL}
 for plots, uses the CRS of the base map or of the IAO/EOO data.}
 
-\item{species}{Character. Name of the column containing species
-identification.}
+\item{group}{Character. Name of the column containing group identification.
+By default this is \code{species_id} in NatureCounts data.}
 
 \item{title}{Character. Optional title to add to the map. Can be a named by
-species vector to supply different titles for different species.}
+group vector to supply different titles for different groups.}
 
 \item{zoomin}{Numeric. Zoom adjustment for
 \code{ggspatial::annotation_map_tile()}. Only applies if map defines a map tile
@@ -64,6 +65,8 @@ species vector to supply different titles for different species.}
 'tl', 'br', or 'bl', for top right, top left, etc. \code{NULL} omits the scale.}
 
 \item{verbose}{Logical. Show messages?}
+
+\item{species}{Deprecated. Use \code{groups}.}
 }
 \value{
 ggplot2 map
@@ -92,14 +95,14 @@ cosewic_plot(
   title = "Black-capped chickadees"
 )
 
-# Plot multiple species - separate plots
+# Plot multiple groups - separate plots
 m <- rbind(bcch, hofi)
 r <- cosewic_ranges(m)
 p <- cosewic_plot(r)
 p[[1]]
 p[[2]]
 
-# Plot multiple species - Use IAO as a proportion for identical legends
+# Plot multiple groups - Use IAO as a proportion for identical legends
 p <- cosewic_plot(
   r,
   iao_prop = TRUE,
