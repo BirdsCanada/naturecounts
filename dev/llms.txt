@@ -260,6 +260,8 @@ Included example data sets
   : Example black-capped chickadee data
 - [`hofi`](https://birdscanada.github.io/naturecounts/dev/reference/hofi.md)
   : Example house finch data
+- [`pops`](https://birdscanada.github.io/naturecounts/dev/reference/pops.md)
+  : Example multipopulation data
 
 # Articles
 

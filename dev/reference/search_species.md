@@ -38,7 +38,7 @@ Data frame of species ids and taxonomic information
 ``` r
 # Show all ids
 search_species()
-#> # A tibble: 40,998 × 5
+#> # A tibble: 41,523 × 5
 #>    species_id scientific_name          english_name      french_name taxon_group
 #>         <int> <chr>                    <chr>             <chr>       <chr>      
 #>  1          0 N/A                      No observations   Aucune obs… BIRDS      
@@ -51,7 +51,7 @@ search_species()
 #>  8         70 Dendrocygna viduata      White-faced Whis… Dendrocygn… BIRDS      
 #>  9         80 Dendrocygna autumnalis   Black-bellied Wh… Dendrocygn… BIRDS      
 #> 10         90 Dendrocygna arborea      West Indian Whis… Dendrocygn… BIRDS      
-#> # ℹ 40,988 more rows
+#> # ℹ 41,513 more rows
 
 search_species("chickadee")
 #> # A tibble: 23 × 5

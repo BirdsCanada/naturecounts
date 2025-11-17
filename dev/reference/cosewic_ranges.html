@@ -62,7 +62,7 @@ used to support status assessments for potentially endangered species.</p>
 <span>  record <span class="op">=</span> <span class="st">"record_id"</span>,</span>
 <span>  coord_lon <span class="op">=</span> <span class="st">"longitude"</span>,</span>
 <span>  coord_lat <span class="op">=</span> <span class="st">"latitude"</span>,</span>
-<span>  species <span class="op">=</span> <span class="st">"species_id"</span>,</span>
+<span>  group <span class="op">=</span> <span class="st">"species_id"</span>,</span>
 <span>  iao_grid_size_km <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  iao_grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  eoo_p <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -70,7 +70,8 @@ used to support status assessments for potentially endangered species.</p>
 <span>  crs <span class="op">=</span> <span class="st">"ESRI:102001"</span>,</span>
 <span>  which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"eoo"</span>, <span class="st">"iao"</span><span class="op">)</span>,</span>
 <span>  filter_unique <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  spatial <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  spatial <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">species</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,9 +97,9 @@ identification.</p></dd>
 <dd><p>Character. Name of the column containing latitude.</p></dd>
 
 
-<dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
-<dd><p>Character. Name of the column containing species
-identification.</p></dd>
+<dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
+<dd><p>Character. Name of the column containing group identification.
+By default this is <code>species_id</code> in NatureCounts data.</p></dd>
 
 
 <dt id="arg-iao-grid-size-km">iao_grid_size_km<a class="anchor" aria-label="anchor" href="#arg-iao-grid-size-km"></a></dt>
@@ -150,6 +151,10 @@ EOO calculations if using less than 100% of points (see <code>eoo_p</code>).</p>
 calculations. If <code>FALSE</code> (the default) returns a data frame with the IAO
 and EOO values. If <code>TRUE</code> returns a list of objects with both the
 values and the spatial grid/polygons.</p></dd>
+
+
+<dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
+<dd><p>Deprecated. Use <code>groups</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -242,7 +247,7 @@ See examples.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280             160          1         35             1            2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: n_occupied &lt;int&gt;, iao [km^2], eoo_p100 [km^2]</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Calculate for multiple species</span></span></span>
+<span class="r-in"><span><span class="co"># Calculate for multiple groups</span></span></span>
 <span class="r-in"><span><span class="va">mult</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">bcch</span>, <span class="va">hofi</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">cosewic_ranges</span><span class="op">(</span><span class="va">mult</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">cosewic_ranges</span><span class="op">(</span><span class="va">mult</span>, spatial <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>

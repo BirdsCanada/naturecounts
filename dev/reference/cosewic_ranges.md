@@ -13,7 +13,7 @@ cosewic_ranges(
   record = "record_id",
   coord_lon = "longitude",
   coord_lat = "latitude",
-  species = "species_id",
+  group = "species_id",
   iao_grid_size_km = 2,
   iao_grid = NULL,
   eoo_p = 1,
@@ -21,7 +21,8 @@ cosewic_ranges(
   crs = "ESRI:102001",
   which = c("eoo", "iao"),
   filter_unique = FALSE,
-  spatial = TRUE
+  spatial = TRUE,
+  species
 )
 ```
 
@@ -44,9 +45,10 @@ cosewic_ranges(
 
   Character. Name of the column containing latitude.
 
-- species:
+- group:
 
-  Character. Name of the column containing species identification.
+  Character. Name of the column containing group identification. By
+  default this is `species_id` in NatureCounts data.
 
 - iao_grid_size_km:
 
@@ -98,6 +100,10 @@ cosewic_ranges(
   `FALSE` (the default) returns a data frame with the IAO and EOO
   values. If `TRUE` returns a list of objects with both the values and
   the spatial grid/polygons.
+
+- species:
+
+  Deprecated. Use `groups`.
 
 ## Value
 
@@ -217,7 +223,7 @@ r
 #> 1      14280             160          1         35             1            2
 #> # ℹ 3 more variables: n_occupied <int>, iao [km^2], eoo_p100 [km^2]
 
-# Calculate for multiple species
+# Calculate for multiple groups
 mult <- rbind(bcch, hofi)
 r <- cosewic_ranges(mult)
 r <- cosewic_ranges(mult, spatial = FALSE)

@@ -294,7 +294,7 @@ argument.
 ``` r
 all <- search_species(show = "all")
 all
-#> # A tibble: 40,998 × 17
+#> # A tibble: 41,523 × 17
 #>    species_id concept_id    scientific_name species_status added_dt english_name
 #>         <int> <chr>         <chr>                    <int> <chr>    <chr>       
 #>  1          0 avibase-74B5… N/A                          9 NA       No observat…
@@ -307,7 +307,7 @@ all
 #>  8         70 avibase-A534… Dendrocygna vi…              1 NA       White-faced…
 #>  9         80 avibase-C01A… Dendrocygna au…              1 NA       Black-belli…
 #> 10         90 avibase-DC65… Dendrocygna ar…              1 NA       West Indian…
-#> # ℹ 40,988 more rows
+#> # ℹ 41,513 more rows
 #> # ℹ 11 more variables: french_name <chr>, phylum <chr>,
 #> #   family_french_name <chr>, group_id <dbl>, order_taxon <chr>,
 #> #   taxon_group <chr>, sort_order <int>, class <chr>, family_name <chr>,

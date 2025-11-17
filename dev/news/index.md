@@ -5,6 +5,7 @@
 - Generalize
   [`cosewic_ranges()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_ranges.md)
   (fixes [\#40](https://github.com/BirdsCanada/naturecounts/issues/40))
+  - argument *species* now deprecated in favour of *group*
   - Add option to supply custom IAO grid to
     [`cosewic_ranges()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_ranges.md)
   - Add option to clip EOO in

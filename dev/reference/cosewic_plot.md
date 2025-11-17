@@ -1,6 +1,9 @@
 # Plot COSEWIC IAO and EOO
 
 Creates a plot of COSEWIC ranges for illustration and checking.
+**Note**: If using maptiles from OpenStreetMap ("osm", the default) in a
+public document/website/etc., you must [attribute
+OpenStreetMap](https://osmfoundation.org/wiki/Licence/Attribution_Guidelines).
 
 ## Usage
 
@@ -13,12 +16,13 @@ cosewic_plot(
   map = "osm",
   iao_prop = FALSE,
   crs = NULL,
-  species = "species_id",
+  group = "species_id",
   title = "",
   zoomin = -1,
   arrow_location = "tr",
-  scale_location = "tr",
-  verbose = TRUE
+  scale_location = "br",
+  verbose = TRUE,
+  species
 )
 ```
 
@@ -57,7 +61,7 @@ cosewic_plot(
 - iao_prop:
 
   Logical. Whether to show IAO as a proportion for easier plotting of
-  multiple species (allows collecting legends by the patchwork package).
+  multiple groups (allows collecting legends by the patchwork package).
 
 - crs:
 
@@ -67,14 +71,15 @@ cosewic_plot(
   4326 used for GPS) for area calculations. If `NULL` for plots, uses
   the CRS of the base map or of the IAO/EOO data.
 
-- species:
+- group:
 
-  Character. Name of the column containing species identification.
+  Character. Name of the column containing group identification. By
+  default this is `species_id` in NatureCounts data.
 
 - title:
 
-  Character. Optional title to add to the map. Can be a named by species
-  vector to supply different titles for different species.
+  Character. Optional title to add to the map. Can be a named by group
+  vector to supply different titles for different groups.
 
 - zoomin:
 
@@ -95,6 +100,10 @@ cosewic_plot(
 - verbose:
 
   Logical. Show messages?
+
+- species:
+
+  Deprecated. Use `groups`.
 
 ## Value
 
@@ -142,7 +151,7 @@ cosewic_plot(
 )
 
 
-# Plot multiple species - separate plots
+# Plot multiple groups - separate plots
 m <- rbind(bcch, hofi)
 r <- cosewic_ranges(m)
 p <- cosewic_plot(r)
@@ -156,7 +165,7 @@ p[[2]]
 #> ...complete!
 
 
-# Plot multiple species - Use IAO as a proportion for identical legends
+# Plot multiple groups - Use IAO as a proportion for identical legends
 p <- cosewic_plot(
   r,
   iao_prop = TRUE,

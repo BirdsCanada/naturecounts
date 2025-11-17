@@ -44,7 +44,7 @@ Species ids returned reflect both species and sub-species levels.
 ``` r
 # Show all ids
 search_species_code()
-#> # A tibble: 1,370 × 5
+#> # A tibble: 1,396 × 5
 #>    species_id BSCDATA scientific_name            english_name        french_name
 #>         <int> <chr>   <chr>                      <chr>               <chr>      
 #>  1         80 BBWD    Dendrocygna autumnalis     Black-bellied Whis… Dendrocygn…
@@ -57,7 +57,7 @@ search_species_code()
 #>  8        130 GWFG    Anser albifrons            Greater White-fron… Oie rieuse 
 #>  9        140 LWFG    Anser erythropus           Lesser White-front… Oie naine  
 #> 10        141 GRGO    Anser anser                Graylag Goose       Oie cendrée
-#> # ℹ 1,360 more rows
+#> # ℹ 1,386 more rows
 
 # Get all species ids for house finches
 search_species_code("HOFI")
