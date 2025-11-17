@@ -72,7 +72,9 @@ group vector to supply different titles for different groups.}
 ggplot2 map
 }
 \description{
-Creates a plot of COSEWIC ranges for illustration and checking.
+Creates a plot of COSEWIC ranges for illustration and checking. \strong{Note}: If
+using maptiles from OpenStreetMap ("osm", the default) in a public
+document/website/etc., you must \href{https://osmfoundation.org/wiki/Licence/Attribution_Guidelines}{attribute OpenStreetMap}.
 }
 \examples{
 r <- cosewic_ranges(bcch)
