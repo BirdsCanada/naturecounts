@@ -11,3 +11,9 @@
 #'
 #' @format A data frame with 19 rows and 57 variables:
 "hofi"
+
+#' Example multipopulation data
+#'
+#'
+#' @format A data frame with 179 rows and 4 variables:
+"pops"
