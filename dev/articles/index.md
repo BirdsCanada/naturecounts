@@ -68,6 +68,8 @@ How-to articles describing common tasks
   BCRs](https://birdscanada.github.io/naturecounts/dev/articles/region-areas.md):
 - [Mapping
   Observations](https://birdscanada.github.io/naturecounts/dev/articles/mapping-observations.md):
+- [COSEWIC
+  Tools](https://birdscanada.github.io/naturecounts/dev/articles/cosewic-tools.md):
 
 ### Reference
 
