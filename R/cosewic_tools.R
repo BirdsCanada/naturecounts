@@ -6,9 +6,9 @@
 #'
 #' Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is
 #' actually a different measure, the *biological* area of occupancy. See the
-#' [Distribution](https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html#Distribution)
-#' section in 'Instructions for preparing COSEWIC status reports' for more
-#' details.
+#' "Distribution" section in '[Instructions for preparing COSEWIC status
+#' reports](https://cosewic.ca/index.php/en/instructions-preparing-status-reports.html)'
+#' for more details.
 #'
 #' By default ranges are calculated using all points (`prop_include = 1`)
 #' However, if you're working on rough data or want to do a rough first pass,
@@ -32,12 +32,12 @@
 #' Details on how IAO and EOO are calculated and used
 #'
 #' - COSEWIC - [Guidelines for use of the Index of Area of Occupancy in COSEWIC
-#'   Assessments](https://www.cosewic.ca/index.php/en-ca/reports/preparing-status-reports/guidelines-index-area-occupancy.html)
+#'   Assessments](https://cosewic.ca/index.php/en/reports/preparing-status-reports/guidelines-index-area-occupancy.html)
 #' - COSEWIC - [Instructions for preparing COSEWIC status
-#'   reports](https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html)
+#' reports](https://cosewic.ca/index.php/en/instructions-preparing-status-reports.html)
 #' - COSEWIC - [Table 2 COSEWIC quantitative criteria and guidelines for the
 #'   status assessment of Wildlife
-#'   Species](https://www.cosewic.ca/index.php/en-ca/assessment-process/wildlife-species-assessment-process-categories-guidelines/quantitative-criteria.html)
+#'   Species](https://cosewic.ca/index.php/en/assessment-process/cosewic-assessment-process-categories-and-guidelines/quantitative-criteria.html)
 #'
 #' @param df_db Either data frame or a connection to database with
 #'   `naturecounts` table.

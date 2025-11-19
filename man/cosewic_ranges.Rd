@@ -112,9 +112,8 @@ used to support status assessments for potentially endangered species.
 \details{
 Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is
 actually a different measure, the \emph{biological} area of occupancy. See the
-\href{https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html#Distribution}{Distribution}
-section in 'Instructions for preparing COSEWIC status reports' for more
-details.
+"Distribution" section in '\href{https://cosewic.ca/index.php/en/instructions-preparing-status-reports.html}{Instructions for preparing COSEWIC status reports}'
+for more details.
 
 By default ranges are calculated using all points (\code{prop_include = 1})
 However, if you're working on rough data or want to do a rough first pass,
@@ -137,9 +136,9 @@ See examples.
 
 Details on how IAO and EOO are calculated and used
 \itemize{
-\item COSEWIC - \href{https://www.cosewic.ca/index.php/en-ca/reports/preparing-status-reports/guidelines-index-area-occupancy.html}{Guidelines for use of the Index of Area of Occupancy in COSEWIC Assessments}
-\item COSEWIC - \href{https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html}{Instructions for preparing COSEWIC status reports}
-\item COSEWIC - \href{https://www.cosewic.ca/index.php/en-ca/assessment-process/wildlife-species-assessment-process-categories-guidelines/quantitative-criteria.html}{Table 2 COSEWIC quantitative criteria and guidelines for the status assessment of Wildlife Species}
+\item COSEWIC - \href{https://cosewic.ca/index.php/en/reports/preparing-status-reports/guidelines-index-area-occupancy.html}{Guidelines for use of the Index of Area of Occupancy in COSEWIC Assessments}
+\item COSEWIC - \href{https://cosewic.ca/index.php/en/instructions-preparing-status-reports.html}{Instructions for preparing COSEWIC status reports}
+\item COSEWIC - \href{https://cosewic.ca/index.php/en/assessment-process/cosewic-assessment-process-categories-and-guidelines/quantitative-criteria.html}{Table 2 COSEWIC quantitative criteria and guidelines for the status assessment of Wildlife Species}
 }
 }
 \examples{
