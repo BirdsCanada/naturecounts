@@ -4,19 +4,23 @@
 #' AOO by the IUCN) and Extent of Occurrence (EOO; IUCN as well) are metrics
 #' used to support status assessments for potentially endangered species.
 #'
-#' Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is actually
-#' a different measure, the *biological* area of occupancy. See the
+#' Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is
+#' actually a different measure, the *biological* area of occupancy. See the
 #' [Distribution](https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html#Distribution)
-#' section in 'Instructions for preparing COSEWIC status reports'
-#' for more details.
+#' section in 'Instructions for preparing COSEWIC status reports' for more
+#' details.
 #'
-#' By default the EOO is calculated using all points (`eoo_p = 1` for 100% of
+#' By default ranges are calculated using all points (`prop_include = 1`)
 #' However, if you're working on rough data or want to do a rough first pass,
-#' you may wish to use `eoo_p = 0.95` or 95% of points (based on distance to the
-#' centroid). This will ensure outlier observations will not artificially
-#' inflate the EOO. However, for a final COSEWIC assessment report, it is likely
-#' better to carefully explore the data to ensure there are no outliers and then
-#' use the full data set (i.e. use the default of `eoo_p = 1`).
+#' you may wish to use `prop_include = 0.95` to include only 95% of points
+#' (based on distance to the centroid). This will ensure outlier observations
+#' will not artificially inflate the EOO. Although the IAO is less sensitive to
+#' outliers, to maintain consistency in the data the same observations are used
+#' in both range calculations.
+#'
+#' For a final COSEWIC assessment report, however, it is likely better to
+#' carefully explore the data to ensure there are no outliers and then use the
+#' full data set (i.e. use the default of `prop_include = 1`).
 #'
 #' The IAO is calculated by first assessing large grids (10x large than the
 #' specified size). Only then are smaller grids created within large grid cells
@@ -27,25 +31,29 @@
 #'
 #' Details on how IAO and EOO are calculated and used
 #'
-#' - COSEWIC - [Guidelines for use of the Index of Area of Occupancy in COSEWIC Assessments](https://www.cosewic.ca/index.php/en-ca/reports/preparing-status-reports/guidelines-index-area-occupancy.html)
-#' - COSEWIC - [Instructions for preparing COSEWIC status reports](https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html)
-#' - COSEWIC - [Table 2 COSEWIC quantitative criteria and guidelines for the status assessment of Wildlife Species](https://www.cosewic.ca/index.php/en-ca/assessment-process/wildlife-species-assessment-process-categories-guidelines/quantitative-criteria.html)
+#' - COSEWIC - [Guidelines for use of the Index of Area of Occupancy in COSEWIC
+#'   Assessments](https://www.cosewic.ca/index.php/en-ca/reports/preparing-status-reports/guidelines-index-area-occupancy.html)
+#' - COSEWIC - [Instructions for preparing COSEWIC status
+#'   reports](https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html)
+#' - COSEWIC - [Table 2 COSEWIC quantitative criteria and guidelines for the
+#'   status assessment of Wildlife
+#'   Species](https://www.cosewic.ca/index.php/en-ca/assessment-process/wildlife-species-assessment-process-categories-guidelines/quantitative-criteria.html)
 #'
 #' @param df_db Either data frame or a connection to database with
 #'   `naturecounts` table.
-#' @param record Character. Name of the column containing record
-#'   identification.
+#' @param record Character. Name of the column containing record identification.
 #' @param coord_lon Character. Name of the column containing longitude.
 #' @param coord_lat Character. Name of the column containing latitude.
 #' @param group Character. Name of the column containing group identification.
 #'   By default this is `species_id` in NatureCounts data.
+#' @param prop_include Numeric. The proportion of points to include in the range
+#'   calculations (applies to both IAO and EOO calculations). This proportion of
+#'   points closest to the centroid of the data are retained. Defaults to 1 for
+#'   100% of points. Note that you may wish to use 0.95 to omit potential
+#'   outlier points.
 #' @param iao_grid_size_km Numeric. Size of grid (km) to use when calculating
-#'   IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2).
-#'   Use caution if changing.
-#' @param eoo_p Numeric. The percentile to calculate the convex hull over.
-#'   Defaults to 1 for a 100% convex hull to match COSEWIC requirements
-#'   (includes all points). Note that you may wish to use 0.95 for a 95% convex
-#'   hull to  ensure outlier points do not artificially inflate the EOO.
+#'   IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2). Use
+#'   caution if changing.
 #' @param eoo_clip sf (Multi)Polygon. A spatial object to clip the EOO to. May
 #'   be relevant when calculating EOOs for complex regions (i.e. long curved
 #'   areas) to avoid including area which cannot have observations.
@@ -53,34 +61,38 @@
 #'   one. The CRS of this grid must be the same as `crs`.
 #' @param filter_unique Logical. Whether to filter observations to unique
 #'   locations. Use this only if there are too many data points to work with.
-#'   This changes the nature of what an observation is, and also may bias
-#'   EOO calculations if using less than 100% of points (see `eoo_p`).
+#'   This changes the nature of what an observation is, and may also affect
+#'   which observations are omitted if using `prop_include < 1`.
 #' @param spatial Logical. Whether to return sf spatial objects showing
-#'   calculations. If `FALSE` (the default) returns a data frame with the IAO
-#'   and EOO values. If `TRUE` returns a list of objects with both the
-#'   values and the spatial grid/polygons.
+#'   calculations. If `TRUE` (default) returns a list spatial data frames, `iao`
+#'   and `eoo`. If `FALSE` returns a data frame with IAO and EOO values.
 #' @param species Deprecated. Use `groups`.
+#' @param eoo_p Deprectated. User `prop_include`.
 #'
 #' @inheritParams args
 #'
-#' @return Summarized data frame (ranges) or list containing `ranges`, a
-#'   summarized data frame, and `spatial`, a list of two spatial data frames.
+#' @return If `spatial = TRUE`, a list with two spatial data frames, `iao` and
+#'   `eoo`. Otherwise a data frame.
 #'
-#' `ranges` contains columns
-#'   - `n_records_total` - Total number of records used to create ranges
-#'   - `min_record` - Minimum number of records within IAO cells
-#'   - `max_record` - Maximum number of records within IAO cells
-#'   - `median_record` - Median number of records within IAO cells
-#'   - `grid_size_km` - IAO cell size (area is this squared)
-#'   - `n_occupied` - Number of IAO cells with at least one record
+#'  (Spatial) data frames contain the following columns
+#'   - Group column (defined by `group`, defaults to `species_id`)
+#'   - `n_records_total` - Total number of records used to create ranges (after
+#'     filtering if `prop_include < 1`)
+#'   - `prop_include` - The proportion of original points included in these
+#'     calculations
+#'
+#'  Additionally the `iao` data frame contains
+#'   - `grid_id` - ID number for grid cells
+#'   - `n_records` - Number of records in that grid cell
+#'   - `min_record` - Minimum number of records across all cells
+#'   - `max_record` - Maximum number of records across all cells
+#'   - `median_record` - Median number of records across all cells
+#'   - `grid_size_km` - IAO cell size in km (i.e. width)
+#'   - `n_occupied` - Across all cells, number of IAO cells with at least one record
 #'   - `iao` - IAO value (`grid_size_km`^2 * `n_occupied`)
-#'   - `eoo_pXX` - EOO area calculated with a convex hull at percentile `eoo_p`
-#'     (e.g., 100% or 95%)
 #'
-#' `spatial` contains spatial data frames
-#' - `iao_sf` - Polygons of the IAO grids with the `n_records` per cell
-#' - `eoo_sf` - Polygon of the Convex Hull at percentile `eoo_p`
-#'
+#'  Additionally the `eoo` data frame contains
+#'   - `eoo` - EOO area calculated from the Convex Hull
 #'
 #' @examples
 #' # Using the included, test data on black-capped chickadees
@@ -136,15 +148,16 @@ cosewic_ranges <- function(
   coord_lon = "longitude",
   coord_lat = "latitude",
   group = "species_id",
+  prop_include = 1,
   iao_grid_size_km = 2,
   iao_grid = NULL,
-  eoo_p = 1,
   eoo_clip = NULL,
   crs = "ESRI:102001",
   which = c("eoo", "iao"),
   filter_unique = FALSE,
   spatial = TRUE,
-  species
+  species,
+  eoo_p
 ) {
   if (!missing(species)) {
     warning(
@@ -154,16 +167,34 @@ cosewic_ranges <- function(
     group <- species
   }
 
+  if (!missing(eoo_p)) {
+    #fmt: skip
+    warning(
+      "`eoo_p` is deprecated.\n",
+      "`prop_include` now defines the proportion ",
+      "of observations included in both IAO and EOO calculations.\n",
+      "Setting `prop_include = ", eoo_p, "`",
+      call. = FALSE
+    )
+    prop_include <- eoo_p
+  }
+
   # Checks
   have_pkg_check("sf")
   df <- df_db_check(df_db)
   which_check(which)
+  if (prop_include > 1 || prop_include < 0) {
+    stop("`prop_include` must be a proportion between 0 and 1", call. = FALSE)
+  }
 
   # Alerts
   rlang::inform(
     paste0(
-      "As of naturecounts v0.5.0 `cosewic_ranges()` now uses a default of ",
-      "`eoo_p = 1` instead of `eoo_p = 0.95`."
+      "(This message is shown once per session)\n",
+      "As of naturecounts v0.5.0 `cosewic_ranges()` now uses `prop_include = 1` ",
+      "instead of `eoo_p = 0.95`. \nThis defines the proportion of ",
+      "observations used in both IAO and EOO calculations.\n",
+      "The default is `prop_include = 1` (include all observations)."
     ),
     .frequency = "once",
     .frequency_id = "eoo_p"
@@ -242,8 +273,12 @@ cosewic_ranges <- function(
     warning(
       "Filtering to unique lat/lon locations (records now equal locations).\n",
       dplyr::if_else(
-        eoo_p != 1,
-        "This may bias non-100% EOO calculations\n",
+        prop_include != 1,
+        paste0(
+          "This may bias which observations are filtered out with `prop_include = ",
+          prop_include,
+          "`\n"
+        ),
         ""
       ),
       "Only do this if the number of observations is too high to process",
@@ -266,10 +301,15 @@ cosewic_ranges <- function(
     coords = c(coord_lon, coord_lat),
     extra = c(record, group),
     crs = crs,
+    p = prop_include,
     check_projected = TRUE
   )
 
-  n <- dplyr::count(df, .data[[group]], name = "n_records_total")
+  n <- dplyr::count(
+    sf::st_drop_geometry(df_sf),
+    .data[[group]],
+    name = "n_records_total"
+  )
 
   # Calculate
   # Use split to maintain lists which keep the spatial aspect, nested not so much
@@ -304,7 +344,7 @@ cosewic_ranges <- function(
       ranges,
       eoo = purrr::map(
         .data[["data"]],
-        \(x) cosewic_eoo(x, p = eoo_p, clip = eoo_clip, spatial)
+        \(x) cosewic_eoo(x, clip = eoo_clip, spatial)
       )
     ) %>%
       dplyr::select(-"data") %>%
@@ -331,8 +371,7 @@ cosewic_ranges <- function(
       }
     }
 
-    # Assemble
-    eoo <- dplyr::rename(eoo, !!paste0("eoo_p", eoo_p * 100) := "eoo")
+    eoo
   }
 
   if (all(unique(df[[group]]) == "PLACEHOLDER")) {
@@ -355,7 +394,12 @@ cosewic_ranges <- function(
     }
   } else {
     if (all(c("iao", "eoo") %in% which)) {
-      ranges <- dplyr::full_join(iao, eoo, by = c(group, "n_records_total"))
+      ranges <- dplyr::full_join(
+        iao,
+        eoo,
+        by = c(group, "n_records_total", "prop_include")
+      ) %>%
+        dplyr::relocate("prop_include", .after = dplyr::last_col())
     } else if ("iao" %in% which) {
       ranges <- iao
     } else {
@@ -424,7 +468,8 @@ cosewic_iao <- function(df_sf, cell_size, record, spatial, crs, grid = NULL) {
       grid_size_km = .env$cell_size,
       n_occupied = dplyr::n(),
       iao = .data$n_occupied * .env$cell_size^2
-    )
+    ) |>
+    dplyr::mutate(prop_include = .env$df_sf$prop_include[1])
 
   if (spatial) {
     iao <- dplyr::right_join(grid, iao_full, by = "grid_id") %>%
@@ -434,15 +479,8 @@ cosewic_iao <- function(df_sf, cell_size, record, spatial, crs, grid = NULL) {
   iao
 }
 
-cosewic_eoo <- function(df_sf, p, clip, spatial) {
-  center <- df_sf %>%
-    sf::st_union() %>%
-    sf::st_convex_hull() %>%
-    sf::st_centroid()
-
+cosewic_eoo <- function(df_sf, clip, spatial) {
   eoo <- df_sf %>%
-    dplyr::mutate(dist = sf::st_distance(.data$geometry, .env$center)[, 1]) %>%
-    dplyr::filter(.data$dist <= stats::quantile(.data$dist, .env$p)) %>%
     sf::st_cast(to = "POINT") %>%
     sf::st_union() %>%
     sf::st_convex_hull() %>%
@@ -467,7 +505,8 @@ cosewic_eoo <- function(df_sf, p, clip, spatial) {
   eoo <- eoo %>%
     dplyr::mutate(
       eoo = sf::st_area(eoo),
-      eoo = units::set_units(.data$eoo, "km^2")
+      eoo = units::set_units(.data$eoo, "km^2"),
+      prop_include = .env$df_sf$prop_include[1]
     )
 
   if (!spatial) {
@@ -483,6 +522,7 @@ prep_spatial <- function(
   coords = c("longitude", "latitude"),
   extra = "record_id",
   crs,
+  p,
   check_projected = TRUE
 ) {
   if (check_projected && sf::st_is_longlat(sf::st_crs(crs))) {
@@ -491,13 +531,37 @@ prep_spatial <- function(
       call. = FALSE
     )
   }
-  df %>%
+
+  df_sf <- df %>%
     dplyr::select(dplyr::all_of(c(extra, coords))) %>%
     sf::st_as_sf(coords = coords, crs = 4326) %>%
     sf::st_transform(crs) %>%
     sf::st_set_agr("constant")
+
+  df_sf <- filter_spatial(df_sf, p)
+
+  df_sf
 }
 
+filter_spatial <- function(df_sf, p) {
+  if (p != 1) {
+    center <- df_sf %>%
+      sf::st_union() %>%
+      sf::st_convex_hull() %>%
+      sf::st_centroid()
+
+    df_sf <- df_sf %>%
+      dplyr::mutate(
+        dist = sf::st_distance(.data$geometry, .env$center)[, 1]
+      ) %>%
+      dplyr::filter(.data$dist <= stats::quantile(.data$dist, .env$p)) %>%
+      dplyr::select(-"dist")
+  }
+
+  df_sf <- dplyr::mutate(df_sf, prop_include = .env$p)
+
+  df_sf
+}
 
 #' Create grid across Canada
 #'
@@ -622,8 +686,9 @@ map_canada <- function(crs = 3347) {
 #' OpenStreetMap](https://osmfoundation.org/wiki/Licence/Attribution_Guidelines).
 #'
 #' @param ranges List. Output of `cosewic_ranges()` with `spatial = TRUE`.
-#' @param points Data frame. Optional naturecounts data used to compute ranges.
-#'   Raw data points will be added to the plot if provided.
+#' @param points Data frame. Optional raw data points to add to the plot (are
+#'   not filtered, regardless if a `prop_include < 1` was used in
+#'   `cosewic_ranges()`.
 #' @param grid sf data frame. Optional grid over which to summarize IAO values
 #'   (useful for species with many points over a broad distribution).
 #' @param map Character or sf data frame. Underlying base map over which to plot
@@ -841,7 +906,9 @@ cosewic_plot_indiv <- function(
       size_a,
       "x",
       size_a,
-      " km grid)"
+      " km grid); ",
+      a$prop_include[1] * 100,
+      "% of total records"
     )
     if (!is.null(grid)) {
       if (sf::st_crs(a) != sf::st_crs(grid)) {
@@ -877,18 +944,22 @@ cosewic_plot_indiv <- function(
       leg_title <- "IAO\nNo. records"
     }
   } else {
-    caption <- paste0(e$n_records_total[1], " records")
+    caption <- paste0(
+      e$n_records_total[1],
+      " records; ",
+      e$prop_include[1] * 100,
+      "% of total records"
+    )
   }
 
   if ("iao" %in% which) {
     caption <- paste0(caption, "\n", paste("IAO:", format(iao_val)))
   }
   if ("eoo" %in% which) {
-    eoo <- stringr::str_which(names(e), "eoo")
     caption <- paste0(
       caption,
       "\n",
-      paste("EOO:", format(round(e[[eoo]][1], 2)))
+      paste("EOO:", format(round(e$eoo[1], 2)))
     )
   }
 
@@ -927,15 +998,10 @@ cosewic_plot_indiv <- function(
   }
 
   if ("eoo" %in% which) {
-    eoo_legend <- stringr::str_subset(names(e), "eoo") %>%
-      stringr::str_replace("_", " ") %>%
-      stringr::str_replace("p(\\d{1,3})", "\\1%") %>%
-      toupper()
-
     g <- g +
       ggplot2::geom_sf(
         data = e,
-        ggplot2::aes(colour = !!eoo_legend),
+        ggplot2::aes(colour = "EOO"),
         fill = NA,
         size = 1
       ) +
@@ -955,6 +1021,7 @@ cosewic_plot_indiv <- function(
   if (!is.null(points)) {
     points <- prep_spatial(
       points,
+      p = 1,
       extra = NULL,
       crs = if (is.null(crs)) sf::st_crs("EPSG:4326") else sf::st_crs(crs),
       check_projected = FALSE

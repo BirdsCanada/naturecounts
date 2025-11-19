@@ -1,16 +1,16 @@
 test_that("prep_spatial()", {
-  expect_silent(s <- prep_spatial(bcch, crs = "ESRI:102001"))
+  expect_silent(s <- prep_spatial(bcch, p = 1, crs = "ESRI:102001"))
   expect_s3_class(s, "sf")
-  expect_named(s, c("record_id", "geometry"))
+  expect_named(s, c("record_id", "geometry", "prop_include"))
   expect_equal(nrow(s), nrow(bcch))
   expect_equal(format(sf::st_crs(s)), "Canada_Albers_Equal_Area_Conic")
 })
 
 test_that("prep_spatial() diff cols", {
   b <- dplyr::rename(bcch, sp = species_id, rec = record_id)
-  expect_silent(s <- prep_spatial(b, extra = "rec", crs = 3347))
+  expect_silent(s <- prep_spatial(b, p = 1, extra = "rec", crs = 3347))
   expect_s3_class(s, "sf")
-  expect_named(s, c("rec", "geometry"))
+  expect_named(s, c("rec", "geometry", "prop_include"))
   expect_equal(nrow(s), nrow(b))
   expect_equal(format(sf::st_crs(s)), "NAD83 / Statistics Canada Lambert")
 })
@@ -18,58 +18,74 @@ test_that("prep_spatial() diff cols", {
 test_that("prep_spatial() projected", {
   b <- dplyr::rename(bcch, sp = species_id, rec = record_id)
   expect_error(
-    prep_spatial(b, crs = 4326),
+    prep_spatial(b, p = 1, crs = 4326),
     "CRS is unprojected, area calculations should use a projected CRS"
   )
 })
 
+test_that("filter_spatial() filters", {
+  b <- prep_spatial(bcch, p = 1, crs = "ESRI:102001")
+
+  expect_silent(b1 <- filter_spatial(b, p = 1))
+  expect_equal(b, b1)
+  expect_equal(b1$prop_include[1], 1)
+
+  expect_silent(b2 <- filter_spatial(b, p = 0.95))
+  expect_gt(nrow(b), nrow(b2))
+  expect_equal(b2$prop_include[1], 0.95)
+})
+
 test_that("cosewic_eoo()", {
   # Lambert
-  df <- prep_spatial(bcch, crs = 3347)
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
+  df <- prep_spatial(bcch, p = 0.95, crs = 3347)
+  expect_silent(e <- cosewic_eoo(df, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
-  expect_named(e, "eoo")
+  expect_named(e, c("eoo", "prop_include"))
   expect_equal(e[["eoo"]], units::set_units(1243.421, "km2"), tolerance = 0.001)
 
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE, clip = NULL))
+  expect_silent(e <- cosewic_eoo(df, spatial = TRUE, clip = NULL))
   expect_s3_class(e, "sf")
   expect_equal(nrow(e), 1)
   expect_equal(as.character(sf::st_geometry_type(e)), "POLYGON")
 
-  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE, clip = NULL))
+  df <- prep_spatial(bcch, p = 1, crs = 3347)
+  expect_silent(e <- cosewic_eoo(df, spatial = FALSE, clip = NULL))
   expect_equal(e[["eoo"]], units::set_units(4861.251, "km2"), tolerance = 0.001)
 
   # Albers
-  df <- prep_spatial(bcch, crs = "ESRI:102001")
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
+  df <- prep_spatial(bcch, p = 0.95, crs = "ESRI:102001")
+  expect_silent(e <- cosewic_eoo(df, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
-  expect_named(e, "eoo")
+  expect_named(e, c("eoo", "prop_include"))
   expect_equal(e[["eoo"]], units::set_units(1209.179, "km2"), tolerance = 0.001)
 
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE, clip = NULL))
+  expect_silent(e <- cosewic_eoo(df, spatial = TRUE, clip = NULL))
   expect_s3_class(e, "sf")
   expect_equal(nrow(e), 1)
   expect_equal(as.character(sf::st_geometry_type(e)), "POLYGON")
 
-  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE, clip = NULL))
+  df <- prep_spatial(bcch, p = 1, crs = "ESRI:102001")
+  expect_silent(e <- cosewic_eoo(df, spatial = FALSE, clip = NULL))
   expect_equal(e[["eoo"]], units::set_units(4728.589, "km2"), tolerance = 0.001)
 })
 
 test_that("cosewic_eoo() diff cols", {
   # Lambert
   df <- dplyr::rename(bcch, sp = species_id, rec = record_id) %>%
-    prep_spatial(extra = "rec", crs = 3347)
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
+    prep_spatial(p = 0.95, extra = "rec", crs = 3347)
+  expect_silent(e <- cosewic_eoo(df, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
-  expect_named(e, "eoo")
+  expect_named(e, c("eoo", "prop_include"))
   expect_equal(e[["eoo"]], units::set_units(1243.421, "km2"), tolerance = 0.001)
 
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE, clip = NULL))
+  expect_silent(e <- cosewic_eoo(df, spatial = TRUE, clip = NULL))
   expect_s3_class(e, "sf")
   expect_equal(nrow(e), 1)
   expect_equal(as.character(sf::st_geometry_type(e)), "POLYGON")
 
-  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE, clip = NULL))
+  df <- dplyr::rename(bcch, sp = species_id, rec = record_id) %>%
+    prep_spatial(p = 1, extra = "rec", crs = 3347)
+  expect_silent(e <- cosewic_eoo(df, spatial = FALSE, clip = NULL))
   expect_equal(e[["eoo"]], units::set_units(4861.251, "km2"), tolerance = 0.001)
 })
 
@@ -77,25 +93,28 @@ test_that("cosewic_eoo() no cols", {
   # Lambert
   df <- dplyr::select(bcch, -"species_id") %>%
     dplyr::mutate(record_id = dplyr::row_number()) %>%
-    prep_spatial(crs = 3347)
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = FALSE, clip = NULL))
+    prep_spatial(p = 0.95, crs = 3347)
+  expect_silent(e <- cosewic_eoo(df, spatial = FALSE, clip = NULL))
   expect_s3_class(e, "data.frame")
-  expect_named(e, "eoo")
+  expect_named(e, c("eoo", "prop_include"))
   expect_equal(e[["eoo"]], units::set_units(1243.421, "km2"), tolerance = 0.001)
 
-  expect_silent(e <- cosewic_eoo(df, p = 0.95, spatial = TRUE, clip = NULL))
+  expect_silent(e <- cosewic_eoo(df, spatial = TRUE, clip = NULL))
   expect_s3_class(e, "sf")
   expect_equal(nrow(e), 1)
   expect_equal(as.character(sf::st_geometry_type(e)), "POLYGON")
 
-  expect_silent(e <- cosewic_eoo(df, p = 1, spatial = FALSE, clip = NULL))
+  df <- dplyr::select(bcch, -"species_id") %>%
+    dplyr::mutate(record_id = dplyr::row_number()) %>%
+    prep_spatial(p = 1, crs = 3347)
+  expect_silent(e <- cosewic_eoo(df, spatial = FALSE, clip = NULL))
   expect_equal(e[["eoo"]], units::set_units(4861.251, "km2"), tolerance = 0.001)
 })
 
 
 test_that("cosewic_iao()", {
   # Lambert
-  df <- prep_spatial(bcch, crs = 3347)
+  df <- prep_spatial(bcch, p = 1, crs = 3347)
   expect_silent(
     a <- cosewic_iao(
       df,
@@ -114,7 +133,8 @@ test_that("cosewic_iao()", {
       median_record = 1,
       grid_size_km = units::set_units(2, "km"),
       n_occupied = 31,
-      iao = units::set_units(124, "km2")
+      iao = units::set_units(124, "km2"),
+      prop_include = 1
     )
   )
 
@@ -134,7 +154,7 @@ test_that("cosewic_iao()", {
   expect_snapshot_value(a, style = "json2")
 
   # Albers
-  df <- prep_spatial(bcch, crs = "ESRI:102001")
+  df <- prep_spatial(bcch, p = 1, crs = "ESRI:102001")
   expect_silent(
     a <- cosewic_iao(
       df,
@@ -153,7 +173,8 @@ test_that("cosewic_iao()", {
       median_record = 1,
       grid_size_km = units::set_units(2, "km"),
       n_occupied = 33,
-      iao = units::set_units(132, "km2")
+      iao = units::set_units(132, "km2"),
+      prop_include = 1
     )
   )
 
@@ -176,7 +197,7 @@ test_that("cosewic_iao()", {
 test_that("cosewic_iao() diff cols", {
   # Lambert
   df <- dplyr::rename(bcch, sp = species_id, rec = record_id) %>%
-    prep_spatial(extra = "rec", crs = 3347)
+    prep_spatial(p = 1, extra = "rec", crs = 3347)
   expect_silent(
     a <- cosewic_iao(
       df,
@@ -195,7 +216,8 @@ test_that("cosewic_iao() diff cols", {
       median_record = 1,
       grid_size_km = units::set_units(2, "km"),
       n_occupied = 31,
-      iao = units::set_units(124, "km2")
+      iao = units::set_units(124, "km2"),
+      prop_include = 1
     )
   )
 
@@ -218,7 +240,7 @@ test_that("cosewic_iao() diff cols", {
 test_that("cosewic_iao() no cols", {
   df <- dplyr::select(bcch, -"species_id") %>%
     dplyr::mutate(record_id = dplyr::row_number()) %>%
-    prep_spatial(crs = 3347)
+    prep_spatial(p = 1, crs = 3347)
   expect_silent(
     a <- cosewic_iao(
       df,
@@ -237,7 +259,8 @@ test_that("cosewic_iao() no cols", {
       median_record = 1,
       grid_size_km = units::set_units(2, "km"),
       n_occupied = 31,
-      iao = units::set_units(124, "km2")
+      iao = units::set_units(124, "km2"),
+      prop_include = 1
     )
   )
 
@@ -266,7 +289,7 @@ test_that("cosewic_iao() custom IAO grid", {
     ),
     quiet = TRUE
   )
-  df <- prep_spatial(bcch, crs = "ESRI:102001")
+  df <- prep_spatial(bcch, p = 1, crs = "ESRI:102001")
   expect_message(
     a <- cosewic_iao(
       df,
@@ -281,7 +304,7 @@ test_that("cosewic_iao() custom IAO grid", {
 
 test_that("cosewic_ranges()", {
   # Expect message about change in defaults
-  expect_message(cosewic_ranges(bcch), "now uses a default of `eoo_p = 1`")
+  expect_message(cosewic_ranges(bcch), "now uses `prop_include = 1`")
 
   # Lambert
   expect_silent(r <- cosewic_ranges(bcch, crs = 3347))
@@ -291,7 +314,7 @@ test_that("cosewic_ranges()", {
   expect_silent(
     r <- cosewic_ranges(
       bcch,
-      eoo_p = 0.95,
+      prop_include = 0.95,
       spatial = FALSE,
       crs = 3347
     )
@@ -301,14 +324,15 @@ test_that("cosewic_ranges()", {
     r,
     dplyr::tibble(
       species_id = 14280L,
-      n_records_total = nrow(bcch),
+      n_records_total = 152,
       min_record = 1,
       max_record = 36,
       median_record = 1,
       grid_size_km = units::set_units(2, "km"),
-      n_occupied = 31,
-      iao = units::set_units(124, "km2"),
-      eoo_p95 = units::set_units(1243.421, "km2")
+      n_occupied = 24,
+      iao = units::set_units(96, "km2"),
+      eoo = units::set_units(1243.421, "km2"),
+      prop_include = 0.95
     ),
     tolerance = 0.001
   )
@@ -326,7 +350,7 @@ test_that("cosewic_ranges()", {
     r <- cosewic_ranges(bcch[1, ], spatial = FALSE),
     "EOO is less than IAO"
   )
-  expect_equal(r$iao, r$eoo_p100)
+  expect_equal(r$iao, r$eoo)
 
   # Albers
   expect_silent(r <- cosewic_ranges(bcch, crs = "ESRI:102001"))
@@ -336,7 +360,7 @@ test_that("cosewic_ranges()", {
   expect_silent(
     r <- cosewic_ranges(
       bcch,
-      eoo_p = 0.95,
+      prop_include = 0.95,
       spatial = FALSE,
       crs = "ESRI:102001"
     )
@@ -346,14 +370,15 @@ test_that("cosewic_ranges()", {
     r,
     dplyr::tibble(
       species_id = 14280L,
-      n_records_total = nrow(bcch),
+      n_records_total = 152,
       min_record = 1,
       max_record = 35,
       median_record = 1,
       grid_size_km = units::set_units(2, "km"),
-      n_occupied = 33,
-      iao = units::set_units(132, "km2"),
-      eoo_p95 = units::set_units(1209.179, "km2")
+      n_occupied = 26,
+      iao = units::set_units(104, "km2"),
+      eoo = units::set_units(1209.179, "km2"),
+      prop_include = 0.95
     ),
     tolerance = 0.001
   )
@@ -371,7 +396,7 @@ test_that("cosewic_ranges()", {
     r <- cosewic_ranges(bcch[1, ], spatial = FALSE),
     "EOO is less than IAO"
   )
-  expect_equal(r$iao, r$eoo_p100)
+  expect_equal(r$iao, r$eoo)
 })
 
 test_that("cosewic_ranges() diff cols", {
@@ -386,7 +411,7 @@ test_that("cosewic_ranges() diff cols", {
   expect_silent(
     r <- cosewic_ranges(
       b,
-      eoo_p = 0.95,
+      prop_include = 0.95,
       record = "rec",
       group = "sp",
       spatial = FALSE,
@@ -398,14 +423,15 @@ test_that("cosewic_ranges() diff cols", {
     r,
     dplyr::tibble(
       sp = 14280L,
-      n_records_total = nrow(bcch),
+      n_records_total = 152,
       min_record = 1,
       max_record = 36,
       median_record = 1,
       grid_size_km = units::set_units(2, "km"),
-      n_occupied = 31,
-      iao = units::set_units(124, "km2"),
-      eoo_p95 = units::set_units(1243.421, "km2")
+      n_occupied = 24,
+      iao = units::set_units(96, "km2"),
+      eoo = units::set_units(1243.421, "km2"),
+      prop_include = 0.95
     ),
     tolerance = 0.001
   )
@@ -436,7 +462,7 @@ test_that("cosewic_ranges() diff cols", {
     ),
     "EOO is less than IAO"
   )
-  expect_equal(r$iao, r$eoo_p100)
+  expect_equal(r$iao, r$eoo)
 })
 
 test_that("cosewic_ranges() no cols", {
@@ -456,7 +482,7 @@ test_that("cosewic_ranges() no cols", {
   expect_silent(
     r <- cosewic_ranges(
       b,
-      eoo_p = 0.95,
+      prop_include = 0.95,
       record = NULL,
       group = NULL,
       spatial = FALSE,
@@ -467,14 +493,15 @@ test_that("cosewic_ranges() no cols", {
   expect_equal(
     r,
     dplyr::tibble(
-      n_records_total = nrow(bcch),
+      n_records_total = 152,
       min_record = 1,
       max_record = 36,
       median_record = 1,
       grid_size_km = units::set_units(2, "km"),
-      n_occupied = 31,
-      iao = units::set_units(124, "km2"),
-      eoo_p95 = units::set_units(1243.421, "km2")
+      n_occupied = 24,
+      iao = units::set_units(96, "km2"),
+      eoo = units::set_units(1243.421, "km2"),
+      prop_include = 0.95
     ),
     tolerance = 0.001
   )
@@ -500,7 +527,7 @@ test_that("cosewic_ranges() no cols", {
     r <- cosewic_ranges(b[1, ], spatial = FALSE, record = NULL, group = NULL),
     "EOO is less than IAO"
   )
-  expect_equal(r$iao, r$eoo_p100)
+  expect_equal(r$iao, r$eoo)
 })
 
 test_that("cosewic_ranges() filter_unique", {
@@ -508,7 +535,7 @@ test_that("cosewic_ranges() filter_unique", {
   expect_silent(
     r1 <- cosewic_ranges(
       bcch,
-      eoo_p = 0.95,
+      prop_include = 0.95,
       spatial = FALSE,
       crs = 3347
     )
@@ -516,25 +543,26 @@ test_that("cosewic_ranges() filter_unique", {
   expect_warning(
     r2 <- cosewic_ranges(
       bcch,
-      eoo_p = 0.95,
+      prop_include = 0.95,
       spatial = FALSE,
       filter_unique = TRUE,
       crs = 3347
     ),
-    "This may bias non-100% EOO calculations"
+    "This may bias which observations are filtered"
   )
 
   expect_gt(r1$max_record, r2$max_record)
   expect_equal(
-    r1[, c("grid_size_km", "n_occupied", "iao")],
-    r2[, c("grid_size_km", "n_occupied", "iao")]
+    r1[, c("grid_size_km", "prop_include")],
+    r2[, c("grid_size_km", "prop_include")]
   )
-  expect_false(r1$eoo_p95 == r2$eoo_p95)
+  expect_false(r1$eoo == r2$eoo)
+  expect_false(r1$iao == r2$iao)
 
   expect_silent(
     r1 <- cosewic_ranges(
       bcch,
-      eoo_p = 0.95,
+      prop_include = 0.95,
       spatial = FALSE,
       crs = 3347
     )
@@ -542,12 +570,12 @@ test_that("cosewic_ranges() filter_unique", {
   expect_warning(
     r2 <- cosewic_ranges(
       bcch,
-      eoo_p = 0.95,
+      prop_include = 0.95,
       filter_unique = TRUE,
       spatial = FALSE,
       crs = 3347
     ),
-    "This may bias non-100% EOO calculations"
+    "This may bias which observations"
   )
 
   # Full EOO
@@ -565,10 +593,11 @@ test_that("cosewic_ranges() filter_unique", {
   )
   expect_gt(r1$max_record, r2$max_record)
   expect_equal(
-    r1[, c("grid_size_km", "n_occupied", "iao")],
-    r2[, c("grid_size_km", "n_occupied", "iao")]
+    r1[, c("grid_size_km", "prop_include")],
+    r2[, c("grid_size_km", "prop_include")]
   )
-  expect_true(r1$eoo_p100 == r2$eoo_p100)
+  expect_true(r1$eoo == r2$eoo)
+  expect_true(r1$iao == r2$iao)
 })
 
 
@@ -579,7 +608,7 @@ test_that("cosewic_ranges() eoo clip", {
 
   expect_silent(r0 <- cosewic_ranges(mult, crs = 3347))
   expect_silent(r1 <- cosewic_ranges(mult, eoo_clip = ON, crs = 3347))
-  expect_true(all(r0$eoo$eoo_p95 > r1$eoo$eoo_p95))
+  expect_true(all(r0$eoo$eoo > r1$eoo$eoo))
 })
 
 test_that("cosewic_ranges() either", {
@@ -608,7 +637,7 @@ test_that("cosewic_ranges() custom IAO grid", {
     quiet = TRUE
   )
   expect_message(
-    a <- cosewic_ranges(bcch, eoo_p = 0.95, iao_grid = grid),
+    a <- cosewic_ranges(bcch, prop_include = 0.95, iao_grid = grid),
     "User\\-provided grid has cell size of 2 \\[km\\]"
   )
   expect_type(a, "list")
@@ -617,14 +646,14 @@ test_that("cosewic_ranges() custom IAO grid", {
 
   # Error when grid is wrong CRS
   expect_error(
-    cosewic_ranges(bcch, eoo_p = 0.95, crs = 3347, iao_grid = grid),
+    cosewic_ranges(bcch, prop_include = 0.95, crs = 3347, iao_grid = grid),
     "`crs` must match the CRS of `iao\\_grid`"
   )
 })
 
 
 test_that("cosewic_plot()", {
-  expect_silent(r1 <- cosewic_ranges(bcch, eoo_p = 0.95, crs = 3347))
+  expect_silent(r1 <- cosewic_ranges(bcch, prop_include = 0.95, crs = 3347))
   expect_silent(g1 <- cosewic_plot(r1))
   expect_s3_class(g1, "ggplot")
 
@@ -644,7 +673,7 @@ test_that("cosewic_plot()", {
   )
 
   expect_silent(
-    r2 <- cosewic_ranges(rbind(bcch, hofi), eoo_p = 0.95, crs = 3347)
+    r2 <- cosewic_ranges(rbind(bcch, hofi), prop_include = 0.95, crs = 3347)
   )
   expect_silent(g6 <- cosewic_plot(r2))
   expect_false(inherits(g6, "ggplot"))
@@ -669,7 +698,7 @@ test_that("cosewic_plot() no cols", {
   expect_silent(
     r1 <- cosewic_ranges(
       b,
-      eoo_p = 0.95,
+      prop_include = 0.95,
       group = NULL,
       record = NULL,
       crs = 3347
@@ -706,7 +735,7 @@ test_that("cosewic_plot() no cols", {
   expect_silent(
     r2 <- cosewic_ranges(
       rbind(bcch, hofi),
-      eoo_p = 0.95,
+      prop_include = 0.95,
       group = NULL,
       record = NULL,
       crs = 3347

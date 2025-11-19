@@ -10,23 +10,23 @@ cosewic_ranges(
   coord_lon = "longitude",
   coord_lat = "latitude",
   group = "species_id",
+  prop_include = 1,
   iao_grid_size_km = 2,
   iao_grid = NULL,
-  eoo_p = 1,
   eoo_clip = NULL,
   crs = "ESRI:102001",
   which = c("eoo", "iao"),
   filter_unique = FALSE,
   spatial = TRUE,
-  species
+  species,
+  eoo_p
 )
 }
 \arguments{
 \item{df_db}{Either data frame or a connection to database with
 \code{naturecounts} table.}
 
-\item{record}{Character. Name of the column containing record
-identification.}
+\item{record}{Character. Name of the column containing record identification.}
 
 \item{coord_lon}{Character. Name of the column containing longitude.}
 
@@ -35,17 +35,18 @@ identification.}
 \item{group}{Character. Name of the column containing group identification.
 By default this is \code{species_id} in NatureCounts data.}
 
+\item{prop_include}{Numeric. The proportion of points to include in the range
+calculations (applies to both IAO and EOO calculations). This proportion of
+points closest to the centroid of the data are retained. Defaults to 1 for
+100\% of points. Note that you may wish to use 0.95 to omit potential
+outlier points.}
+
 \item{iao_grid_size_km}{Numeric. Size of grid (km) to use when calculating
-IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2).
-Use caution if changing.}
+IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2). Use
+caution if changing.}
 
 \item{iao_grid}{sf Polygon. Supply your own IAO grid rather than creating
 one. The CRS of this grid must be the same as \code{crs}.}
-
-\item{eoo_p}{Numeric. The percentile to calculate the convex hull over.
-Defaults to 1 for a 100\% convex hull to match COSEWIC requirements
-(includes all points). Note that you may wish to use 0.95 for a 95\% convex
-hull to  ensure outlier points do not artificially inflate the EOO.}
 
 \item{eoo_clip}{sf (Multi)Polygon. A spatial object to clip the EOO to. May
 be relevant when calculating EOOs for complex regions (i.e. long curved
@@ -62,37 +63,45 @@ Any combination of "eoo" and "iao", default is both.}
 
 \item{filter_unique}{Logical. Whether to filter observations to unique
 locations. Use this only if there are too many data points to work with.
-This changes the nature of what an observation is, and also may bias
-EOO calculations if using less than 100\% of points (see \code{eoo_p}).}
+This changes the nature of what an observation is, and may also affect
+which observations are omitted if using \code{prop_include < 1}.}
 
 \item{spatial}{Logical. Whether to return sf spatial objects showing
-calculations. If \code{FALSE} (the default) returns a data frame with the IAO
-and EOO values. If \code{TRUE} returns a list of objects with both the
-values and the spatial grid/polygons.}
+calculations. If \code{TRUE} (default) returns a list spatial data frames, \code{iao}
+and \code{eoo}. If \code{FALSE} returns a data frame with IAO and EOO values.}
 
 \item{species}{Deprecated. Use \code{groups}.}
+
+\item{eoo_p}{Deprectated. User \code{prop_include}.}
 }
 \value{
-Summarized data frame (ranges) or list containing \code{ranges}, a
-summarized data frame, and \code{spatial}, a list of two spatial data frames.
+If \code{spatial = TRUE}, a list with two spatial data frames, \code{iao} and
+\code{eoo}. Otherwise a data frame.
 
-\code{ranges} contains columns
+(Spatial) data frames contain the following columns
 \itemize{
-\item \code{n_records_total} - Total number of records used to create ranges
-\item \code{min_record} - Minimum number of records within IAO cells
-\item \code{max_record} - Maximum number of records within IAO cells
-\item \code{median_record} - Median number of records within IAO cells
-\item \code{grid_size_km} - IAO cell size (area is this squared)
-\item \code{n_occupied} - Number of IAO cells with at least one record
-\item \code{iao} - IAO value (\code{grid_size_km}^2 * \code{n_occupied})
-\item \code{eoo_pXX} - EOO area calculated with a convex hull at percentile \code{eoo_p}
-(e.g., 100\% or 95\%)
+\item Group column (defined by \code{group}, defaults to \code{species_id})
+\item \code{n_records_total} - Total number of records used to create ranges (after
+filtering if \code{prop_include < 1})
+\item \code{prop_include} - The proportion of original points included in these
+calculations
 }
 
-\code{spatial} contains spatial data frames
+Additionally the \code{iao} data frame contains
 \itemize{
-\item \code{iao_sf} - Polygons of the IAO grids with the \code{n_records} per cell
-\item \code{eoo_sf} - Polygon of the Convex Hull at percentile \code{eoo_p}
+\item \code{grid_id} - ID number for grid cells
+\item \code{n_records} - Number of records in that grid cell
+\item \code{min_record} - Minimum number of records across all cells
+\item \code{max_record} - Maximum number of records across all cells
+\item \code{median_record} - Median number of records across all cells
+\item \code{grid_size_km} - IAO cell size in km (i.e. width)
+\item \code{n_occupied} - Across all cells, number of IAO cells with at least one record
+\item \code{iao} - IAO value (\code{grid_size_km}^2 * \code{n_occupied})
+}
+
+Additionally the \code{eoo} data frame contains
+\itemize{
+\item \code{eoo} - EOO area calculated from the Convex Hull
 }
 }
 \description{
@@ -101,19 +110,23 @@ AOO by the IUCN) and Extent of Occurrence (EOO; IUCN as well) are metrics
 used to support status assessments for potentially endangered species.
 }
 \details{
-Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is actually
-a different measure, the \emph{biological} area of occupancy. See the
+Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is
+actually a different measure, the \emph{biological} area of occupancy. See the
 \href{https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html#Distribution}{Distribution}
-section in 'Instructions for preparing COSEWIC status reports'
-for more details.
+section in 'Instructions for preparing COSEWIC status reports' for more
+details.
 
-By default the EOO is calculated using all points (\code{eoo_p = 1} for 100\% of
+By default ranges are calculated using all points (\code{prop_include = 1})
 However, if you're working on rough data or want to do a rough first pass,
-you may wish to use \code{eoo_p = 0.95} or 95\% of points (based on distance to the
-centroid). This will ensure outlier observations will not artificially
-inflate the EOO. However, for a final COSEWIC assessment report, it is likely
-better to carefully explore the data to ensure there are no outliers and then
-use the full data set (i.e. use the default of \code{eoo_p = 1}).
+you may wish to use \code{prop_include = 0.95} to include only 95\% of points
+(based on distance to the centroid). This will ensure outlier observations
+will not artificially inflate the EOO. Although the IAO is less sensitive to
+outliers, to maintain consistency in the data the same observations are used
+in both range calculations.
+
+For a final COSEWIC assessment report, however, it is likely better to
+carefully explore the data to ensure there are no outliers and then use the
+full data set (i.e. use the default of \code{prop_include = 1}).
 
 The IAO is calculated by first assessing large grids (10x large than the
 specified size). Only then are smaller grids created within large grid cells

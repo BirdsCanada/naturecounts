@@ -59,15 +59,16 @@ You can access either of these items with the `$` to pull out just what you're i
 r$eoo
 ```
 
-The values you are likely to be especially interested in are the `iao` and the `eoo_p100` columns within these spatial dataframes
+The values you are likely to be especially interested in are the `iao` and the `eoo` columns within these spatial dataframes
 
 ```{r}
 r$iao$iao[1]
-r$eoo$eoo_p100[1]
+r$eoo$eoo[1]
 ```
 
-The EOO is called `eoo_p100` to remind you that in this analysis, we used all the points (i.e. 100% or `eoo_p = 1`).
-You can change the proportion of points included in the EOO to omit outliers if you like by modifiying the `eoo_p` argument in `cosewic_ranges()`, and in that case, you'd use `r$eoo$eoo_pXX` where XX is the percentage you used (i.e. `r$eoo$eoo_p95` if you used `eoo_p = 0.95`).
+Also of interest is the `prop_include` column in each set of data. 
+This remindes you of the proportion of original data points retained in the calculations (i.e. `prop_include = 1` is 100%).
+You can change the proportion of points included to omit outliers if you like by modifiying the `prop_include` argument in `cosewic_ranges()`.
 
 By default all points are included, so make sure you're confident that those points are accurate!
 
@@ -221,6 +222,7 @@ r <- cosewic_ranges(bcch)
 ```
 
 #### Adding observation points
+Note that this adds *all* observation points (regardless of whether some were omitted from the analyses).
 ```{r}
 cosewic_plot(r, points = bcch)
 ```

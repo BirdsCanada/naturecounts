@@ -27,8 +27,9 @@ cosewic_plot(
 \item{which}{Character vector. Which range types to calculate.
 Any combination of "eoo" and "iao", default is both.}
 
-\item{points}{Data frame. Optional naturecounts data used to compute ranges.
-Raw data points will be added to the plot if provided.}
+\item{points}{Data frame. Optional raw data points to add to the plot (are
+not filtered, regardless if a \code{prop_include < 1} was used in
+\code{cosewic_ranges()}.}
 
 \item{grid}{sf data frame. Optional grid over which to summarize IAO values
 (useful for species with many points over a broad distribution).}
