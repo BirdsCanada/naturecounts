@@ -187,7 +187,6 @@ the "Full access?" box in Step 2 of the form.
 # \donttest{
 nc_count()
 #> Without a username, using 'show = "all"'
-#> The server did not respond within 120s. Trying again...
 #> # A tibble: 511 × 4
 #>    collection    akn_level access     nrecords
 #>    <chr>             <int> <chr>         <int>
