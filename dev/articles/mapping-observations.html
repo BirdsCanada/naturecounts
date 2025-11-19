@@ -68,7 +68,7 @@
 
       <h1>Mapping Observations</h1>
             
-            <h4 data-toc-skip class="date">2025-11-17</h4>
+            <h4 data-toc-skip class="date">2025-11-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/vignettes/articles/mapping-observations.Rmd" class="external-link"><code>vignettes/articles/mapping-observations.Rmd</code></a></small>
       <div class="d-none name"><code>mapping-observations.Rmd</code></div>
@@ -831,7 +831,7 @@ Alberta’s Bird Conservation Regions (BCRs).</p>
 Canada</a><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Bird Studies Canada and NABCI. 2014. Bird Conservation
 Regions. Published by Bird Studies Canada on behalf of the North
 American Bird Conservation Initiative. &lt;a href="https://birdscanada.org/bird-science/nabci-bird-conservation-regions" class="external-link uri"&gt;https://birdscanada.org/bird-science/nabci-bird-conservation-regions&lt;/a&gt;
-Accessed: 2025-11-17&lt;/p&gt;'><sup>1</sup></a>.</p>
+Accessed: 2025-11-19&lt;/p&gt;'><sup>1</sup></a>.</p>
 <p>We’ll download the zip file and extracted to a folder easier to work
 with. Note that these spatial data are in the GDB format, so we’re
 working with a folder named <code>XXX.gdb</code>.</p>
@@ -956,14 +956,14 @@ where cardinals (<code>species_id</code> 19360) were not detected
 <pre><code><span><span class="co">## Using filters: collections (RCBIOTABASE); fields_set (BMDE2.00-ext)</span></span></code></pre>
 <pre><code><span><span class="co">## Collecting available records...</span></span></code></pre>
 <pre><code><span><span class="co">##    collection nrecords</span></span>
-<span><span class="co">## 1 RCBIOTABASE    13055</span></span>
-<span><span class="co">## Total records: 13,055</span></span></code></pre>
+<span><span class="co">## 1 RCBIOTABASE    13115</span></span>
+<span><span class="co">## Total records: 13,115</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Downloading records for each collection:</span></span></code></pre>
 <pre><code><span><span class="co">##   RCBIOTABASE</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 1 to 5000 / 13055</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 5001 to 10000 / 13055</span></span></code></pre>
-<pre><code><span><span class="co">##     Records 10001 to 13055 / 13055</span></span></code></pre>
+<pre><code><span><span class="co">##     Records 1 to 5000 / 13115</span></span></code></pre>
+<pre><code><span><span class="co">##     Records 5001 to 10000 / 13115</span></span></code></pre>
+<pre><code><span><span class="co">##     Records 10001 to 13115 / 13115</span></span></code></pre>
 <div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cardinals_zf</span> <span class="op">&lt;-</span> <span class="va">cardinals</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">AllSpeciesReported</span> <span class="op">==</span> <span class="st">"Yes"</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">latitude</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">longitude</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>

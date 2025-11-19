@@ -63,15 +63,16 @@ used to support status assessments for potentially endangered species.</p>
 <span>  coord_lon <span class="op">=</span> <span class="st">"longitude"</span>,</span>
 <span>  coord_lat <span class="op">=</span> <span class="st">"latitude"</span>,</span>
 <span>  group <span class="op">=</span> <span class="st">"species_id"</span>,</span>
+<span>  prop_include <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  iao_grid_size_km <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  iao_grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  eoo_p <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  eoo_clip <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  crs <span class="op">=</span> <span class="st">"ESRI:102001"</span>,</span>
 <span>  which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"eoo"</span>, <span class="st">"iao"</span><span class="op">)</span>,</span>
 <span>  filter_unique <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  spatial <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">species</span></span>
+<span>  <span class="va">species</span>,</span>
+<span>  <span class="va">eoo_p</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,8 +86,7 @@ used to support status assessments for potentially endangered species.</p>
 
 
 <dt id="arg-record">record<a class="anchor" aria-label="anchor" href="#arg-record"></a></dt>
-<dd><p>Character. Name of the column containing record
-identification.</p></dd>
+<dd><p>Character. Name of the column containing record identification.</p></dd>
 
 
 <dt id="arg-coord-lon">coord_lon<a class="anchor" aria-label="anchor" href="#arg-coord-lon"></a></dt>
@@ -102,22 +102,23 @@ identification.</p></dd>
 By default this is <code>species_id</code> in NatureCounts data.</p></dd>
 
 
+<dt id="arg-prop-include">prop_include<a class="anchor" aria-label="anchor" href="#arg-prop-include"></a></dt>
+<dd><p>Numeric. The proportion of points to include in the range
+calculations (applies to both IAO and EOO calculations). This proportion of
+points closest to the centroid of the data are retained. Defaults to 1 for
+100% of points. Note that you may wish to use 0.95 to omit potential
+outlier points.</p></dd>
+
+
 <dt id="arg-iao-grid-size-km">iao_grid_size_km<a class="anchor" aria-label="anchor" href="#arg-iao-grid-size-km"></a></dt>
 <dd><p>Numeric. Size of grid (km) to use when calculating
-IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2).
-Use caution if changing.</p></dd>
+IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2). Use
+caution if changing.</p></dd>
 
 
 <dt id="arg-iao-grid">iao_grid<a class="anchor" aria-label="anchor" href="#arg-iao-grid"></a></dt>
 <dd><p>sf Polygon. Supply your own IAO grid rather than creating
 one. The CRS of this grid must be the same as <code>crs</code>.</p></dd>
-
-
-<dt id="arg-eoo-p">eoo_p<a class="anchor" aria-label="anchor" href="#arg-eoo-p"></a></dt>
-<dd><p>Numeric. The percentile to calculate the convex hull over.
-Defaults to 1 for a 100% convex hull to match COSEWIC requirements
-(includes all points). Note that you may wish to use 0.95 for a 95% convex
-hull to  ensure outlier points do not artificially inflate the EOO.</p></dd>
 
 
 <dt id="arg-eoo-clip">eoo_clip<a class="anchor" aria-label="anchor" href="#arg-eoo-clip"></a></dt>
@@ -142,51 +143,60 @@ Any combination of "eoo" and "iao", default is both.</p></dd>
 <dt id="arg-filter-unique">filter_unique<a class="anchor" aria-label="anchor" href="#arg-filter-unique"></a></dt>
 <dd><p>Logical. Whether to filter observations to unique
 locations. Use this only if there are too many data points to work with.
-This changes the nature of what an observation is, and also may bias
-EOO calculations if using less than 100% of points (see <code>eoo_p</code>).</p></dd>
+This changes the nature of what an observation is, and may also affect
+which observations are omitted if using <code>prop_include &lt; 1</code>.</p></dd>
 
 
 <dt id="arg-spatial">spatial<a class="anchor" aria-label="anchor" href="#arg-spatial"></a></dt>
 <dd><p>Logical. Whether to return sf spatial objects showing
-calculations. If <code>FALSE</code> (the default) returns a data frame with the IAO
-and EOO values. If <code>TRUE</code> returns a list of objects with both the
-values and the spatial grid/polygons.</p></dd>
+calculations. If <code>TRUE</code> (default) returns a list spatial data frames, <code>iao</code>
+and <code>eoo</code>. If <code>FALSE</code> returns a data frame with IAO and EOO values.</p></dd>
 
 
 <dt id="arg-species">species<a class="anchor" aria-label="anchor" href="#arg-species"></a></dt>
 <dd><p>Deprecated. Use <code>groups</code>.</p></dd>
 
+
+<dt id="arg-eoo-p">eoo_p<a class="anchor" aria-label="anchor" href="#arg-eoo-p"></a></dt>
+<dd><p>Deprectated. User <code>prop_include</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Summarized data frame (ranges) or list containing <code>ranges</code>, a
-summarized data frame, and <code>spatial</code>, a list of two spatial data frames.</p>
-<p><code>ranges</code> contains columns</p><ul><li><p><code>n_records_total</code> - Total number of records used to create ranges</p></li>
-<li><p><code>min_record</code> - Minimum number of records within IAO cells</p></li>
-<li><p><code>max_record</code> - Maximum number of records within IAO cells</p></li>
-<li><p><code>median_record</code> - Median number of records within IAO cells</p></li>
-<li><p><code>grid_size_km</code> - IAO cell size (area is this squared)</p></li>
-<li><p><code>n_occupied</code> - Number of IAO cells with at least one record</p></li>
+    <p>If <code>spatial = TRUE</code>, a list with two spatial data frames, <code>iao</code> and
+<code>eoo</code>. Otherwise a data frame.</p>
+<p>(Spatial) data frames contain the following columns</p><ul><li><p>Group column (defined by <code>group</code>, defaults to <code>species_id</code>)</p></li>
+<li><p><code>n_records_total</code> - Total number of records used to create ranges (after
+filtering if <code>prop_include &lt; 1</code>)</p></li>
+<li><p><code>prop_include</code> - The proportion of original points included in these
+calculations</p></li>
+</ul><p>Additionally the <code>iao</code> data frame contains</p><ul><li><p><code>grid_id</code> - ID number for grid cells</p></li>
+<li><p><code>n_records</code> - Number of records in that grid cell</p></li>
+<li><p><code>min_record</code> - Minimum number of records across all cells</p></li>
+<li><p><code>max_record</code> - Maximum number of records across all cells</p></li>
+<li><p><code>median_record</code> - Median number of records across all cells</p></li>
+<li><p><code>grid_size_km</code> - IAO cell size in km (i.e. width)</p></li>
+<li><p><code>n_occupied</code> - Across all cells, number of IAO cells with at least one record</p></li>
 <li><p><code>iao</code> - IAO value (<code>grid_size_km</code>^2 * <code>n_occupied</code>)</p></li>
-<li><p><code>eoo_pXX</code> - EOO area calculated with a convex hull at percentile <code>eoo_p</code>
-(e.g., 100% or 95%)</p></li>
-</ul><p><code>spatial</code> contains spatial data frames</p><ul><li><p><code>iao_sf</code> - Polygons of the IAO grids with the <code>n_records</code> per cell</p></li>
-<li><p><code>eoo_sf</code> - Polygon of the Convex Hull at percentile <code>eoo_p</code></p></li>
+</ul><p>Additionally the <code>eoo</code> data frame contains</p><ul><li><p><code>eoo</code> - EOO area calculated from the Convex Hull</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is actually
-a different measure, the <em>biological</em> area of occupancy. See the
+    <p>Note that the while the IUCN calls this metric AOO, in COSEWIC, AOO is
+actually a different measure, the <em>biological</em> area of occupancy. See the
 <a href="https://cosewic.ca/index.php/en-ca/reports/preparing-status-reports/instructions-preparing-status-reports.html#Distribution" class="external-link">Distribution</a>
-section in 'Instructions for preparing COSEWIC status reports'
-for more details.</p>
-<p>By default the EOO is calculated using all points (<code>eoo_p = 1</code> for 100% of
+section in 'Instructions for preparing COSEWIC status reports' for more
+details.</p>
+<p>By default ranges are calculated using all points (<code>prop_include = 1</code>)
 However, if you're working on rough data or want to do a rough first pass,
-you may wish to use <code>eoo_p = 0.95</code> or 95% of points (based on distance to the
-centroid). This will ensure outlier observations will not artificially
-inflate the EOO. However, for a final COSEWIC assessment report, it is likely
-better to carefully explore the data to ensure there are no outliers and then
-use the full data set (i.e. use the default of <code>eoo_p = 1</code>).</p>
+you may wish to use <code>prop_include = 0.95</code> to include only 95% of points
+(based on distance to the centroid). This will ensure outlier observations
+will not artificially inflate the EOO. Although the IAO is less sensitive to
+outliers, to maintain consistency in the data the same observations are used
+in both range calculations.</p>
+<p>For a final COSEWIC assessment report, however, it is likely better to
+carefully explore the data to ensure there are no outliers and then use the
+full data set (i.e. use the default of <code>prop_include = 1</code>).</p>
 <p>The IAO is calculated by first assessing large grids (10x large than the
 specified size). Only then are smaller grids created within large grid cells
 containing observations. This speeds up the process by avoiding the creation
@@ -205,12 +215,12 @@ See examples.</p>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">cosewic_ranges</span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">r</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $iao</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 475 features and 10 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 475 features and 11 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 1407460 ymin: 785222 xmax: 1537823 ymax: 867036.6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: Canada_Albers_Equal_Area_Conic</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 475 × 11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 475 × 12</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    species_id n_records_total grid_id n_records min_record max_record</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>      <span style="text-decoration: underline;">14</span>280             160       1         0          1         35</span>
@@ -224,28 +234,29 @@ See examples.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>      <span style="text-decoration: underline;">14</span>280             160       9         0          1         35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>      <span style="text-decoration: underline;">14</span>280             160      10         0          1         35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 465 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more variables: median_record &lt;int&gt;, grid_size_km [km], n_occupied &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   iao [km^2], geometry &lt;POLYGON [m]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 6 more variables: median_record &lt;int&gt;, grid_size_km [km], n_occupied &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   iao [km^2], prop_include &lt;dbl&gt;, geometry &lt;POLYGON [m]&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $eoo</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 4 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: Canada_Albers_Equal_Area_Conic</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   species_id n_records_total                                          x eoo_p100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;POLYGON [m]&gt;</span>   <span style="color: #949494;">[km^2]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280             160 ((1426543 792053.4, 1415235 866555.2, 149…    <span style="text-decoration: underline;">4</span>729.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   species_id n_records_total                                x   eoo prop_include</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;POLYGON [m]&gt;</span> <span style="color: #949494;">[km^</span>…        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280             160 ((1426543 792053.4, 1415235 866… <span style="text-decoration: underline;">4</span>729.            1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">cosewic_ranges</span><span class="op">(</span><span class="va">bcch</span>, spatial <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">r</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   species_id n_records_total min_record max_record median_record grid_size_km</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494;">[km]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280             160          1         35             1            2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: n_occupied &lt;int&gt;, iao [km^2], eoo_p100 [km^2]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: n_occupied &lt;int&gt;, iao [km^2], eoo [km^2],</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   prop_include &lt;dbl&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Calculate for multiple groups</span></span></span>
 <span class="r-in"><span><span class="va">mult</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">bcch</span>, <span class="va">hofi</span><span class="op">)</span></span></span>

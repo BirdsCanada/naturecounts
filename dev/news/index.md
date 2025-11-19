@@ -15,7 +15,8 @@
   - Update default CRS for
     [`cosewic_ranges()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_ranges.md)
     to an Albers Equal Area Projection for Canada (ESRI:102001)
-  - Use a default of `eoo_p = 1` rather than `eoo_p = 0.95`
+  - Use a general `prop_include = 1` rather than `eoo_p = 1` and default
+    to 1 rather than 0.95.
 - Make
   [`cosewic_plot()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_plot.md)s
   report-ready (fixes

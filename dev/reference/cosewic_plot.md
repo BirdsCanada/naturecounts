@@ -41,8 +41,9 @@ cosewic_plot(
 
 - points:
 
-  Data frame. Optional naturecounts data used to compute ranges. Raw
-  data points will be added to the plot if provided.
+  Data frame. Optional raw data points to add to the plot (are not
+  filtered, regardless if a `prop_include < 1` was used in
+  [`cosewic_ranges()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_ranges.md).
 
 - grid:
 
@@ -113,7 +114,10 @@ ggplot2 map
 
 ``` r
 r <- cosewic_ranges(bcch)
-#> As of naturecounts v0.5.0 `cosewic_ranges()` now uses a default of `eoo_p = 1` instead of `eoo_p = 0.95`.
+#> (This message is shown once per session)
+#> As of naturecounts v0.5.0 `cosewic_ranges()` now uses `prop_include = 1` instead of `eoo_p = 0.95`. 
+#> This defines the proportion of observations used in both IAO and EOO calculations.
+#> The default is `prop_include = 1` (include all observations).
 #> This message is displayed once per session.
 cosewic_plot(r)
 #> Zoom: 9

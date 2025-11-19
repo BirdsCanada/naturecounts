@@ -89,8 +89,9 @@ Any combination of "eoo" and "iao", default is both.</p></dd>
 
 
 <dt id="arg-points">points<a class="anchor" aria-label="anchor" href="#arg-points"></a></dt>
-<dd><p>Data frame. Optional naturecounts data used to compute ranges.
-Raw data points will be added to the plot if provided.</p></dd>
+<dd><p>Data frame. Optional raw data points to add to the plot (are
+not filtered, regardless if a <code>prop_include &lt; 1</code> was used in
+<code><a href="cosewic_ranges.html">cosewic_ranges()</a></code>.</p></dd>
 
 
 <dt id="arg-grid">grid<a class="anchor" aria-label="anchor" href="#arg-grid"></a></dt>
@@ -161,7 +162,10 @@ group vector to supply different titles for different groups.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> As of naturecounts v0.5.0 `cosewic_ranges()` now uses a default of `eoo_p = 1` instead of `eoo_p = 0.95`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (This message is shown once per session)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> As of naturecounts v0.5.0 `cosewic_ranges()` now uses `prop_include = 1` instead of `eoo_p = 0.95`. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> This defines the proportion of observations used in both IAO and EOO calculations.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The default is `prop_include = 1` (include all observations).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This message is displayed once per session.</span></span>
 <span class="r-in"><span><span class="fu">cosewic_plot</span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Zoom: 9</span>

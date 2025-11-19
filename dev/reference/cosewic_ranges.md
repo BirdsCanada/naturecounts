@@ -14,15 +14,16 @@ cosewic_ranges(
   coord_lon = "longitude",
   coord_lat = "latitude",
   group = "species_id",
+  prop_include = 1,
   iao_grid_size_km = 2,
   iao_grid = NULL,
-  eoo_p = 1,
   eoo_clip = NULL,
   crs = "ESRI:102001",
   which = c("eoo", "iao"),
   filter_unique = FALSE,
   spatial = TRUE,
-  species
+  species,
+  eoo_p
 )
 ```
 
@@ -50,6 +51,14 @@ cosewic_ranges(
   Character. Name of the column containing group identification. By
   default this is `species_id` in NatureCounts data.
 
+- prop_include:
+
+  Numeric. The proportion of points to include in the range calculations
+  (applies to both IAO and EOO calculations). This proportion of points
+  closest to the centroid of the data are retained. Defaults to 1 for
+  100% of points. Note that you may wish to use 0.95 to omit potential
+  outlier points.
+
 - iao_grid_size_km:
 
   Numeric. Size of grid (km) to use when calculating IAO. Default is
@@ -60,13 +69,6 @@ cosewic_ranges(
 
   sf Polygon. Supply your own IAO grid rather than creating one. The CRS
   of this grid must be the same as `crs`.
-
-- eoo_p:
-
-  Numeric. The percentile to calculate the convex hull over. Defaults to
-  1 for a 100% convex hull to match COSEWIC requirements (includes all
-  points). Note that you may wish to use 0.95 for a 95% convex hull to
-  ensure outlier points do not artificially inflate the EOO.
 
 - eoo_clip:
 
@@ -91,49 +93,60 @@ cosewic_ranges(
 
   Logical. Whether to filter observations to unique locations. Use this
   only if there are too many data points to work with. This changes the
-  nature of what an observation is, and also may bias EOO calculations
-  if using less than 100% of points (see `eoo_p`).
+  nature of what an observation is, and may also affect which
+  observations are omitted if using `prop_include < 1`.
 
 - spatial:
 
   Logical. Whether to return sf spatial objects showing calculations. If
-  `FALSE` (the default) returns a data frame with the IAO and EOO
-  values. If `TRUE` returns a list of objects with both the values and
-  the spatial grid/polygons.
+  `TRUE` (default) returns a list spatial data frames, `iao` and `eoo`.
+  If `FALSE` returns a data frame with IAO and EOO values.
 
 - species:
 
   Deprecated. Use `groups`.
 
+- eoo_p:
+
+  Deprectated. User `prop_include`.
+
 ## Value
 
-Summarized data frame (ranges) or list containing `ranges`, a summarized
-data frame, and `spatial`, a list of two spatial data frames.
+If `spatial = TRUE`, a list with two spatial data frames, `iao` and
+`eoo`. Otherwise a data frame.
 
-`ranges` contains columns
+(Spatial) data frames contain the following columns
+
+- Group column (defined by `group`, defaults to `species_id`)
 
 - `n_records_total` - Total number of records used to create ranges
+  (after filtering if `prop_include < 1`)
 
-- `min_record` - Minimum number of records within IAO cells
+- `prop_include` - The proportion of original points included in these
+  calculations
 
-- `max_record` - Maximum number of records within IAO cells
+Additionally the `iao` data frame contains
 
-- `median_record` - Median number of records within IAO cells
+- `grid_id` - ID number for grid cells
 
-- `grid_size_km` - IAO cell size (area is this squared)
+- `n_records` - Number of records in that grid cell
 
-- `n_occupied` - Number of IAO cells with at least one record
+- `min_record` - Minimum number of records across all cells
+
+- `max_record` - Maximum number of records across all cells
+
+- `median_record` - Median number of records across all cells
+
+- `grid_size_km` - IAO cell size in km (i.e. width)
+
+- `n_occupied` - Across all cells, number of IAO cells with at least one
+  record
 
 - `iao` - IAO value (`grid_size_km`^2 \* `n_occupied`)
 
-- `eoo_pXX` - EOO area calculated with a convex hull at percentile
-  `eoo_p` (e.g., 100% or 95%)
+Additionally the `eoo` data frame contains
 
-`spatial` contains spatial data frames
-
-- `iao_sf` - Polygons of the IAO grids with the `n_records` per cell
-
-- `eoo_sf` - Polygon of the Convex Hull at percentile `eoo_p`
+- `eoo` - EOO area calculated from the Convex Hull
 
 ## Details
 
@@ -144,14 +157,17 @@ the
 section in 'Instructions for preparing COSEWIC status reports' for more
 details.
 
-By default the EOO is calculated using all points (`eoo_p = 1` for 100%
-of However, if you're working on rough data or want to do a rough first
-pass, you may wish to use `eoo_p = 0.95` or 95% of points (based on
-distance to the centroid). This will ensure outlier observations will
-not artificially inflate the EOO. However, for a final COSEWIC
-assessment report, it is likely better to carefully explore the data to
-ensure there are no outliers and then use the full data set (i.e. use
-the default of `eoo_p = 1`).
+By default ranges are calculated using all points (`prop_include = 1`)
+However, if you're working on rough data or want to do a rough first
+pass, you may wish to use `prop_include = 0.95` to include only 95% of
+points (based on distance to the centroid). This will ensure outlier
+observations will not artificially inflate the EOO. Although the IAO is
+less sensitive to outliers, to maintain consistency in the data the same
+observations are used in both range calculations.
+
+For a final COSEWIC assessment report, however, it is likely better to
+carefully explore the data to ensure there are no outliers and then use
+the full data set (i.e. use the default of `prop_include = 1`).
 
 The IAO is calculated by first assessing large grids (10x large than the
 specified size). Only then are smaller grids created within large grid
@@ -181,12 +197,12 @@ Details on how IAO and EOO are calculated and used
 r <- cosewic_ranges(bcch)
 r
 #> $iao
-#> Simple feature collection with 475 features and 10 fields
+#> Simple feature collection with 475 features and 11 fields
 #> Geometry type: POLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: 1407460 ymin: 785222 xmax: 1537823 ymax: 867036.6
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
-#> # A tibble: 475 × 11
+#> # A tibble: 475 × 12
 #>    species_id n_records_total grid_id n_records min_record max_record
 #>         <int>           <int>   <int>     <int>      <int>      <int>
 #>  1      14280             160       1         0          1         35
@@ -200,28 +216,29 @@ r
 #>  9      14280             160       9         0          1         35
 #> 10      14280             160      10         0          1         35
 #> # ℹ 465 more rows
-#> # ℹ 5 more variables: median_record <int>, grid_size_km [km], n_occupied <int>,
-#> #   iao [km^2], geometry <POLYGON [m]>
+#> # ℹ 6 more variables: median_record <int>, grid_size_km [km], n_occupied <int>,
+#> #   iao [km^2], prop_include <dbl>, geometry <POLYGON [m]>
 #> 
 #> $eoo
-#> Simple feature collection with 1 feature and 3 fields
+#> Simple feature collection with 1 feature and 4 fields
 #> Geometry type: POLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
-#> # A tibble: 1 × 4
-#>   species_id n_records_total                                          x eoo_p100
-#>        <int>           <int>                              <POLYGON [m]>   [km^2]
-#> 1      14280             160 ((1426543 792053.4, 1415235 866555.2, 149…    4729.
+#> # A tibble: 1 × 5
+#>   species_id n_records_total                                x   eoo prop_include
+#>        <int>           <int>                    <POLYGON [m]> [km^…        <dbl>
+#> 1      14280             160 ((1426543 792053.4, 1415235 866… 4729.            1
 #> 
 
 r <- cosewic_ranges(bcch, spatial = FALSE)
 r
-#> # A tibble: 1 × 9
+#> # A tibble: 1 × 10
 #>   species_id n_records_total min_record max_record median_record grid_size_km
 #>        <int>           <int>      <int>      <int>         <int>         [km]
 #> 1      14280             160          1         35             1            2
-#> # ℹ 3 more variables: n_occupied <int>, iao [km^2], eoo_p100 [km^2]
+#> # ℹ 4 more variables: n_occupied <int>, iao [km^2], eoo [km^2],
+#> #   prop_include <dbl>
 
 # Calculate for multiple groups
 mult <- rbind(bcch, hofi)

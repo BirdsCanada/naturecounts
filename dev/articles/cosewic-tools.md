@@ -46,12 +46,12 @@ object is a list with two items:
 ``` r
 r
 #> $iao
-#> Simple feature collection with 475 features and 10 fields
+#> Simple feature collection with 475 features and 11 fields
 #> Geometry type: POLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: 1407460 ymin: 785222 xmax: 1537823 ymax: 867036.6
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
-#> # A tibble: 475 × 11
+#> # A tibble: 475 × 12
 #>    species_id n_records_total grid_id n_records min_record max_record
 #>         <int>           <int>   <int>     <int>      <int>      <int>
 #>  1      14280             160       1         0          1         35
@@ -64,33 +64,34 @@ r
 #>  8      14280             160       8         0          1         35
 #>  9      14280             160       9         0          1         35
 #> 10      14280             160      10         0          1         35
-#>    median_record grid_size_km n_occupied    iao                         geometry
-#>            <int>         [km]      <int> [km^2]                    <POLYGON [m]>
-#>  1             1            2         33    132 ((1407460 864991.3, 1409466 864…
-#>  2             1            2         33    132 ((1407460 862945.9, 1409466 862…
-#>  3             1            2         33    132 ((1407460 860900.5, 1409466 860…
-#>  4             1            2         33    132 ((1407460 858855.2, 1409466 858…
-#>  5             1            2         33    132 ((1407460 856809.8, 1409466 856…
-#>  6             1            2         33    132 ((1409466 864991.3, 1411472 864…
-#>  7             1            2         33    132 ((1409466 862945.9, 1411472 862…
-#>  8             1            2         33    132 ((1409466 860900.5, 1411472 860…
-#>  9             1            2         33    132 ((1409466 858855.2, 1411472 858…
-#> 10             1            2         33    132 ((1409466 856809.8, 1411472 856…
+#>    median_record grid_size_km n_occupied    iao prop_include
+#>            <int>         [km]      <int> [km^2]        <dbl>
+#>  1             1            2         33    132            1
+#>  2             1            2         33    132            1
+#>  3             1            2         33    132            1
+#>  4             1            2         33    132            1
+#>  5             1            2         33    132            1
+#>  6             1            2         33    132            1
+#>  7             1            2         33    132            1
+#>  8             1            2         33    132            1
+#>  9             1            2         33    132            1
+#> 10             1            2         33    132            1
 #> # ℹ 465 more rows
+#> # ℹ 1 more variable: geometry <POLYGON [m]>
 #> 
 #> $eoo
-#> Simple feature collection with 1 feature and 3 fields
+#> Simple feature collection with 1 feature and 4 fields
 #> Geometry type: POLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
-#> # A tibble: 1 × 4
+#> # A tibble: 1 × 5
 #>   species_id n_records_total
 #>        <int>           <int>
 #> 1      14280             160
-#>                                                                       x eoo_p100
-#>                                                           <POLYGON [m]>   [km^2]
-#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 1535250 8179…    4729.
+#>                                                             x   eoo prop_include
+#>                                                 <POLYGON [m]> [km^…        <dbl>
+#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 15… 4729.            1
 ```
 
 You can access either of these items with the `$` to pull out just what
@@ -98,37 +99,36 @@ you’re interested in.
 
 ``` r
 r$eoo
-#> Simple feature collection with 1 feature and 3 fields
+#> Simple feature collection with 1 feature and 4 fields
 #> Geometry type: POLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
-#> # A tibble: 1 × 4
+#> # A tibble: 1 × 5
 #>   species_id n_records_total
 #>        <int>           <int>
 #> 1      14280             160
-#>                                                                       x eoo_p100
-#>                                                           <POLYGON [m]>   [km^2]
-#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 1535250 8179…    4729.
+#>                                                             x   eoo prop_include
+#>                                                 <POLYGON [m]> [km^…        <dbl>
+#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 15… 4729.            1
 ```
 
 The values you are likely to be especially interested in are the `iao`
-and the `eoo_p100` columns within these spatial dataframes
+and the `eoo` columns within these spatial dataframes
 
 ``` r
 r$iao$iao[1]
 #> 132 [km^2]
-r$eoo$eoo_p100[1]
+r$eoo$eoo[1]
 #> 4728.589 [km^2]
 ```
 
-The EOO is called `eoo_p100` to remind you that in this analysis, we
-used all the points (i.e. 100% or `eoo_p = 1`). You can change the
-proportion of points included in the EOO to omit outliers if you like by
-modifiying the `eoo_p` argument in
-[`cosewic_ranges()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_ranges.md),
-and in that case, you’d use `r$eoo$eoo_pXX` where XX is the percentage
-you used (i.e. `r$eoo$eoo_p95` if you used `eoo_p = 0.95`).
+Also of interest is the `prop_include` column in each set of data. This
+remindes you of the proportion of original data points retained in the
+calculations (i.e. `prop_include = 1` is 100%). You can change the
+proportion of points included to omit outliers if you like by modifiying
+the `prop_include` argument in
+[`cosewic_ranges()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_ranges.md).
 
 By default all points are included, so make sure you’re confident that
 those points are accurate!
@@ -138,13 +138,13 @@ calculations.
 
 ``` r
 cosewic_ranges(bcch, spatial = FALSE)
-#> # A tibble: 1 × 9
+#> # A tibble: 1 × 10
 #>   species_id n_records_total min_record max_record median_record grid_size_km
 #>        <int>           <int>      <int>      <int>         <int>         [km]
 #> 1      14280             160          1         35             1            2
-#>   n_occupied    iao eoo_p100
-#>        <int> [km^2]   [km^2]
-#> 1         33    132    4729.
+#>   n_occupied    iao    eoo prop_include
+#>        <int> [km^2] [km^2]        <dbl>
+#> 1         33    132  4729.            1
 ```
 
 ### Plotting IAO and EOO
@@ -267,20 +267,20 @@ calculations are performed separately for each group.
 ``` r
 r <- cosewic_ranges(pops, group = "population")
 r$eoo
-#> Simple feature collection with 2 features and 3 fields
+#> Simple feature collection with 2 features and 4 fields
 #> Geometry type: POLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: 1081628 ymin: 336781.2 xmax: 1578702 ymax: 866555.2
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
-#> # A tibble: 2 × 4
+#> # A tibble: 2 × 5
 #>   population   n_records_total
 #>   <chr>                  <int>
 #> 1 Population 1             160
 #> 2 Population 2              19
-#>                                                                       x eoo_p100
-#>                                                           <POLYGON [m]>   [km^2]
-#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 1535250 8179…    4729.
-#> 2 ((1093717 336781.2, 1081628 348770.3, 1124206 429489, 1578702 823548…   58194.
+#>                                                            x    eoo prop_include
+#>                                                <POLYGON [m]> [km^2]        <dbl>
+#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 1…  4729.            1
+#> 2 ((1093717 336781.2, 1081628 348770.3, 1124206 429489, 157… 58194.            1
 ```
 
 And we get a list of plots, one for each group.
@@ -397,6 +397,9 @@ r <- cosewic_ranges(bcch)
 ```
 
 #### Adding observation points
+
+Note that this adds *all* observation points (regardless of whether some
+were omitted from the analyses).
 
 ``` r
 cosewic_plot(r, points = bcch)

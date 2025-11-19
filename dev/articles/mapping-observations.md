@@ -989,19 +989,19 @@ cardinals <- nc_data_dl(
     ## Collecting available records...
 
     ##    collection nrecords
-    ## 1 RCBIOTABASE    13055
-    ## Total records: 13,055
+    ## 1 RCBIOTABASE    13115
+    ## Total records: 13,115
 
     ## 
     ## Downloading records for each collection:
 
     ##   RCBIOTABASE
 
-    ##     Records 1 to 5000 / 13055
+    ##     Records 1 to 5000 / 13115
 
-    ##     Records 5001 to 10000 / 13055
+    ##     Records 5001 to 10000 / 13115
 
-    ##     Records 10001 to 13055 / 13055
+    ##     Records 10001 to 13115 / 13115
 
 ``` r
 cardinals_zf <- cardinals |>
@@ -1100,4 +1100,4 @@ unlink("alberta_parks/", recursive = TRUE)
     Published by Bird Studies Canada on behalf of the North American
     Bird Conservation Initiative.
     <https://birdscanada.org/bird-science/nabci-bird-conservation-regions>
-    Accessed: 2025-11-17
+    Accessed: 2025-11-19
