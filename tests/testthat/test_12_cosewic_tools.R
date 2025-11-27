@@ -651,6 +651,14 @@ test_that("cosewic_ranges() custom IAO grid", {
   )
 })
 
+test_that("cosewic_ranges() warns and removes missing coordinages", {
+  # Expect message about change in defaults
+  b <- bcch
+  b$latitude[1] <- NA
+  b$longitude[1] <- NA
+  expect_warning(r <- cosewic_ranges(b), "Removing missing coordinates in rows")
+  expect_equal(r$eoo$n_records_total, nrow(b) - 1)
+})
 
 test_that("cosewic_plot()", {
   expect_silent(r1 <- cosewic_ranges(bcch, prop_include = 0.95, crs = 3347))

@@ -531,8 +531,18 @@ prep_spatial <- function(
       call. = FALSE
     )
   }
+  if (any(is.na(df[coords]))) {
+    n <- which(is.na(df[[coords[1]]]) | is.na(df[[coords[2]]]))
+    if (length(n) > 10) {
+      n <- paste0(paste0(n[1:10], collapse = ", "), "...")
+    } else {
+      n <- paste0(n, collapse = ", ")
+    }
+    warning("Removing missing coordinates in rows: ", n, call. = FALSE)
+  }
 
   df_sf <- df %>%
+    tidyr::drop_na(dplyr::all_of(coords)) %>%
     dplyr::select(dplyr::all_of(c(extra, coords))) %>%
     sf::st_as_sf(coords = coords, crs = 4326) %>%
     sf::st_transform(crs) %>%
