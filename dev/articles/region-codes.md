@@ -52,7 +52,7 @@ nc_count(region = list(statprov = "NB"))
     ## # A tibble: 93 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS                3 by request    16516
+    ##  1 ATOWLS               NA NA            16516
     ##  2 BBL-1960-1969         5 full          56578
     ##  3 BBL-1970-1979         5 full          68636
     ##  4 BBL-1980-1989         5 full          82650
@@ -78,7 +78,7 @@ nc_count(region = list(statprov = c("PE", "NB")))
     ## # A tibble: 95 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS                3 by request    22295
+    ##  1 ATOWLS               NA NA            22295
     ##  2 BBL-1960-1969         5 full          63292
     ##  3 BBL-1970-1979         5 full          85997
     ##  4 BBL-1980-1989         5 full          92092
@@ -335,7 +335,7 @@ nc_count(region = list(iba = "MB010"))
     ##  1 BBL-2000-2009           5 full           1453
     ##  2 BBL-2010-2019           5 full          16698
     ##  3 BBL-2020-2029           5 full          12094
-    ##  4 CMMN-DET-OHM            3 by request    20017
+    ##  4 CMMN-DET-OHM            3 by request    21828
     ##  5 EBIRD-CA-PR             3 by request   255680
     ##  6 EBIRD-CA-SENS           3 by request       76
     ##  7 EBUTTERFLY              5 full              3

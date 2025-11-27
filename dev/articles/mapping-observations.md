@@ -1100,4 +1100,4 @@ unlink("alberta_parks/", recursive = TRUE)
     Published by Bird Studies Canada on behalf of the North American
     Bird Conservation Initiative.
     <https://birdscanada.org/bird-science/nabci-bird-conservation-regions>
-    Accessed: 2025-11-19
+    Accessed: 2025-11-27

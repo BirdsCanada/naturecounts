@@ -196,7 +196,7 @@ nc_count()
 #>  4 ABOWLS                3 by request    20956
 #>  5 ACCWS                 3 by request    22889
 #>  6 ATBANS                3 by request      267
-#>  7 ATOWLS                3 by request    35260
+#>  7 ATOWLS               NA NA            35260
 #>  8 AWSGS                 3 by request    17968
 #>  9 BBL-1960-1969         5 full       15045208
 #> 10 BBL-1970-1979         5 full       12837516
