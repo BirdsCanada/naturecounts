@@ -837,6 +837,7 @@ cosewic_plot <- function(
   }
 
   g <- list()
+
   if (all(title == "") & sp[1] != "PLACEHOLDER") {
     title <- stats::setNames(nm = sp)
   }
@@ -858,6 +859,15 @@ cosewic_plot <- function(
     points <- split(points, points[[group]])
   } else {
     points <- list(points)
+  }
+
+  # Get correct order of titles for the next section.
+  if (!is.null(names(title))) {
+    if ("eoo" %in% which) {
+      title <- title[names(e)]
+    } else {
+      title <- title[names(i)]
+    }
   }
 
   g <- purrr::pmap(
