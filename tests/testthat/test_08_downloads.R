@@ -404,12 +404,12 @@ test_that("Data download returns informative errors/messages", {
   # No permission
   expect_error(
     nc_data_dl(
-      collections = "ATOWLS",
+      collections = "ABOWLS",
       username = "testuser",
       verbose = TRUE,
       info = "nc_test"
     ),
-    "No access to collection\\(s\\): ATOWLS"
+    "No access to collection\\(s\\): ABOWLS"
   )
 
   # No data
