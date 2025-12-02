@@ -1,0 +1,72 @@
+# naturecounts design principles
+
+## Non-cloud data
+
+- Put data required to precompile vignettes in the `misc` folder
+- This isn’t uploaded to GitHub
+
+## Locations
+
+- API urls
+  - are stored in `meta_info`, a tibble created in
+    `data-raw/data_creation.R`
+  - This is where you can change from main to sandbox versions
+  - <https://naturecounts.ca/api>
+    vs. <https://sandbox.naturecounts.ca/api>
+  - To apply this you must **re-run** `data-raw/data_creation.R` and
+    then **re-load** the functions/package
+
+## Fields returned by the API
+
+#### Desired behaviour
+
+Required and extra fields returned by the API are expected and treated,
+respectively, as follows:
+
+| Function                                                                                     | API Entry Point           | Required fields           | Extra fields |
+|----------------------------------------------------------------------------------------------|---------------------------|---------------------------|--------------|
+| [`nc_count()`](https://birdscanada.github.io/naturecounts/reference/nc_count.md)             | `data/list_collections`   | `collection`, `nrecords`  | Ignored      |
+| [`nc_count()`](https://birdscanada.github.io/naturecounts/reference/nc_count.md)             | `data/list_permissions`   | `collection`, `akn_level` | Ignored      |
+| [`nc_count()`](https://birdscanada.github.io/naturecounts/reference/nc_count.md)             | `metadata/collections`    | `collection`, `akn_level` | Ignored      |
+| [`nc_permissions()`](https://birdscanada.github.io/naturecounts/reference/nc_permissions.md) | `data/list_permissions`   | `collection`, `akn_level` | Ignored      |
+| [`srv_auth()`](https://birdscanada.github.io/naturecounts/reference/srv_auth.md)             | `data/authenticate`       | `token`                   | Ignored      |
+| [`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.md)         | `data/release_request_id` | None (close request only) | Ignored      |
+| [`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.md)         | `data/get_data`           | Any                       | Added        |
+| `meta_XXX()`                                                                                 | `metadata/XXX`            | Any                       | Added        |
+
+#### What will break the package
+
+- Missing “Required fields”
+
+- Missing/renamed “container”  
+  Some API entry points return data in a container, for example,
+
+  - `data/get_data` -\> `results` (holds main data)
+  - `data/list_collections` -\> `results` (holds counts); `request_id`
+    (holds request id)
+  - `data/list_requests` -\> `requests` (holds details on individual
+    requests)
+
+  If these “containers” change names, the package will break.
+
+#### Coding Principles
+
+- In package, after accessing the API, explictly `select()` the
+  fields/columns expected. This way extra fields won’t break existing
+  code
+  - Missing fields **will** break the code, but at least they will break
+    the code early!
+  - Do **not** do this for data downloads
+    (i.e. [`nc_single_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_single_dl.md)
+    under
+    [`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.md))
+    or metadata downloads (i.e. `meta_XXX()`)
+  - **Unless**, using a `meta_XXX()` download internally. Then always
+    `select()` the fields required
+
+## Testing
+
+- Tests are run using the user “testuser”
+  - Locally password can be stored in .Renviron as naturecounts_testuser
+    = PASSWORD
+  - For remote testing, password is supplied as encrypted values

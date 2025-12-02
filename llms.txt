@@ -1,0 +1,353 @@
+# naturecounts
+
+Access and download data on plant and animal populations from various
+databases through NatureCounts, a service managed by Birds Canada.
+
+See tutorials, documentation and articles on the [naturecounts package
+Website](https://birdscanada.github.io/naturecounts)
+
+## Installation
+
+You can install the main version of `naturecounts` from our R-Universe
+
+``` r
+install.packages("naturecounts", 
+                 repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
+                           CRAN = 'https://cloud.r-project.org'))
+```
+
+## Usage
+
+``` r
+library(naturecounts)
+```
+
+### Fetching counts
+
+Use the
+[`nc_count()`](https://birdscanada.github.io/naturecounts/reference/nc_count.md)
+function to return collections and the number of observations in each
+for which you have access (here returns all collections associated with
+username **sample**).
+
+``` r
+nc_count(username = "sample")
+#> # A tibble: 2 × 4
+#>   collection akn_level access nrecords
+#>   <chr>          <int> <chr>     <int>
+#> 1 SAMPLE1            0 full        991
+#> 2 SAMPLE2            0 full        995
+```
+
+Use the `show = "all"` argument to show counts for all collections
+available (public or otherwise).
+
+``` r
+nc_count(show = "all") %>%
+  head()
+#> # A tibble: 6 × 4
+#>   collection akn_level access     nrecords
+#>   <chr>          <int> <chr>         <int>
+#> 1 ABATLAS1           5 full         122258
+#> 2 ABATLAS2           5 full         201357
+#> 3 ABBIRDRECS         5 full         357264
+#> 4 ABOWLS             3 by request    20956
+#> 5 ACCWS              3 by request    22889
+#> 6 ATBANS             3 by request      267
+```
+
+### Fetching data
+
+Fetch all observations of bittern which are available to user **sample**
+into a local data frame.
+
+First find the species id
+
+``` r
+search_species("American Bittern")
+#> # A tibble: 1 × 5
+#>   species_id scientific_name       english_name     french_name      taxon_group
+#>        <int> <chr>                 <chr>            <chr>            <chr>      
+#> 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique BIRDS
+```
+
+Use this id with
+[`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.md).
+The `info` parameter is a short description of what the data is being
+downloaded for.
+
+``` r
+bittern <- nc_data_dl(species = 2490, username = "sample", 
+                    info = "readme_example")
+#> Using filters: species (2490); fields_set (BMDE2.00-ext)
+#> Collecting available records...
+#>   collection nrecords
+#> 1    SAMPLE1        1
+#> Total records: 1
+#> 
+#> Downloading records for each collection:
+#>   SAMPLE1
+#>     Records 1 to 1 / 1
+```
+
+Alternatively, save the downloaded data as a SQLite database
+(`bittern`).
+
+``` r
+bittern <- nc_data_dl(species = 2490, sql_db = "bittern", username = "sample", 
+                    info = "readme_example")
+#> Using filters: species (2490); fields_set (BMDE2.00-ext)
+#> Collecting available records...
+#>   collection nrecords
+#> 1    SAMPLE1        1
+#> Total records: 1
+#> 
+#> Database 'bittern.nc' does not exist, creating it...
+#> 
+#> Downloading records for each collection:
+#>   SAMPLE1
+#>     Records 1 to 1 / 1
+```
+
+### Authorizations
+
+To access private/semi-public projects/collections you must [sign
+up](https://www.birdscanada.org/birdmon/default/profile.jsp) for a free
+NatureCounts account and
+[register](https://www.birdscanada.org/birdmon/default/projects.jsp) for
+the projects you’d like to access. Once registered, you can use the
+`username` argument (you will be prompted for a password) for both
+[`nc_count()`](https://birdscanada.github.io/naturecounts/reference/nc_count.md)
+and
+[`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.md),
+which will then return a different set of records.
+
+``` r
+nc_count(username = "my_user_name")
+bittern <- nc_data_dl(species = 2490, username = "my_user_name", info = "readme_example")
+```
+
+### More advanced options
+
+[`nc_count()`](https://birdscanada.github.io/naturecounts/reference/nc_count.md)
+and
+[`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.md)
+have a variety of arguments that allow you to filter the counts/data
+prior to downloading. These options include `collections`, `species`,
+`years`, `doy` (day-of-year), `region`, and `site_type` (users can
+specify up to 3 of these). For
+[`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.md)
+you have the additional arguments `fields_set` and `fields` with which
+you can customize which fields/columns to include in your download.
+
+See the function examples
+([`nc_count()`](https://birdscanada.github.io/naturecounts/reference/nc_count.html),
+[`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.html))
+the following articles for more information on these filters:
+
+- Collections
+- [Species
+  Codes](https://birdscanada.github.io/naturecounts/articles/species-codes.html)
+- [Regional
+  Codes](https://birdscanada.github.io/naturecounts/articles/region-codes.html)
+- [IBAs and BCRs
+  (regions)](https://birdscanada.github.io/naturecounts/articles/region-areas.html)
+- [Using spatial data to filter
+  observations](https://birdscanada.github.io/naturecounts/articles/region-spatial.html)
+
+We also have an [article on post-filtering your
+data](https://birdscanada.github.io/naturecounts/articles/filtering-data.html)
+
+### Metadata
+
+NatureCounts includes a great deal of metadata which can be accessed
+through the functions with the `meta_` prefix. See the [Meta
+Documentation](https://birdscanada.github.io/naturecounts/reference/meta.html)
+for specifics.
+
+# Package index
+
+## Learning about this package
+
+- [`naturecounts`](https://birdscanada.github.io/naturecounts/reference/naturecounts-package.md)
+  [`naturecounts-package`](https://birdscanada.github.io/naturecounts/reference/naturecounts-package.md)
+  : Access and download data on plant and animal populations from
+  NatureCounts
+
+## Accessing Data
+
+Main functions of `naturecounts` for accessing data or counts or
+updating local metadata from the NatureCounts server
+
+- [`nc_permissions()`](https://birdscanada.github.io/naturecounts/reference/nc_permissions.md)
+  : Download list of accessible collections
+- [`nc_count()`](https://birdscanada.github.io/naturecounts/reference/nc_count.md)
+  : Download information about NatureCounts collections
+- [`nc_data_dl()`](https://birdscanada.github.io/naturecounts/reference/nc_data_dl.md)
+  : Download NatureCounts data records
+- [`nc_metadata()`](https://birdscanada.github.io/naturecounts/reference/nc_metadata.md)
+  : Update NatureCounts metadata files
+- [`nc_metadata_version()`](https://birdscanada.github.io/naturecounts/reference/nc_metadata_version.md)
+  : Check the last time metadata was updated
+- [`nc_requests()`](https://birdscanada.github.io/naturecounts/reference/nc_requests.md)
+  : Check on status of data requests
+- [`nc_query_table()`](https://birdscanada.github.io/naturecounts/reference/nc_query_table.md)
+  : Custom table queries
+- [`nc_remove_cache()`](https://birdscanada.github.io/naturecounts/reference/nc_remove_cache.md)
+  : Remove in-memory cache
+
+## Metadata
+
+Functions for returning metadata
+
+- [`meta_country_codes()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_statprov_codes()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_subnational2_codes()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_iba_codes()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_bcr_codes()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_utm_squares()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_species_authority()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_species_codes()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_species_taxonomy()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_collections()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_breeding_codes()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_project_protocols()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_projects()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_protocol_types()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_bmde_versions()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  [`meta_bmde_fields()`](https://birdscanada.github.io/naturecounts/reference/meta.md)
+  : Metadata
+
+## Searching through Metadata
+
+Functions for searching through metadata
+
+- [`search_region()`](https://birdscanada.github.io/naturecounts/reference/search_region.md)
+  : Find country, state/province, subnational2, IBA, or BCR codes
+- [`search_species()`](https://birdscanada.github.io/naturecounts/reference/search_species.md)
+  : Find species codes
+- [`search_species_code()`](https://birdscanada.github.io/naturecounts/reference/search_species_code.md)
+  : Search for bird species id codes by alphanumeric codes
+
+## Helper functions
+
+Functions for formatting, cleaning or transforming downloaded data, as
+well as for working with spatial data
+
+- [`format_dates()`](https://birdscanada.github.io/naturecounts/reference/format_dates.md)
+  : Add date and day-of-year field/columns to data
+- [`format_zero_fill()`](https://birdscanada.github.io/naturecounts/reference/format_zero_fill.md)
+  : Zero-fill data
+- [`map_canada()`](https://birdscanada.github.io/naturecounts/reference/map_canada.md)
+  : Map of Canada
+- [`grid_canada()`](https://birdscanada.github.io/naturecounts/reference/grid_canada.md)
+  : Create grid across Canada
+
+## COSEWIC functions
+
+Functions for helping with COSEWIC assessments
+
+- [`cosewic_ranges()`](https://birdscanada.github.io/naturecounts/reference/cosewic_ranges.md)
+  : Calculate COSEWIC IAO and EOO
+- [`cosewic_plot()`](https://birdscanada.github.io/naturecounts/reference/cosewic_plot.md)
+  : Plot COSEWIC IAO and EOO
+
+## Data
+
+Included example data sets
+
+- [`bcch`](https://birdscanada.github.io/naturecounts/reference/bcch.md)
+  : Example black-capped chickadee data
+- [`hofi`](https://birdscanada.github.io/naturecounts/reference/hofi.md)
+  : Example house finch data
+- [`pops`](https://birdscanada.github.io/naturecounts/reference/pops.md)
+  : Example multipopulation data
+
+# Articles
+
+### The NatureCounts Intro Tutorial
+
+An R walkthrough on how to import, explore, and visualize NatureCounts
+data.
+
+- [Chapter 1 -
+  Introduction](https://birdscanada.github.io/naturecounts/articles/1.1-Introduction.md):
+- [Chapter 2 - Loading R
+  Packages](https://birdscanada.github.io/naturecounts/articles/1.2-LoadPackage.md):
+- [Chapter 3 - Understanding and Viewing
+  Data](https://birdscanada.github.io/naturecounts/articles/1.3-ViewData.md):
+- [Chapter 4 - Downloading and Filtering
+  Data](https://birdscanada.github.io/naturecounts/articles/1.4-DownloadData.md):
+- [Chapter 5 - Data
+  Manipulation](https://birdscanada.github.io/naturecounts/articles/1.5-ManipData.md):
+- [Chapter 6 - Data
+  Visualization](https://birdscanada.github.io/naturecounts/articles/1.6-VisualData.md):
+- [Chapter 7 -
+  Answers](https://birdscanada.github.io/naturecounts/articles/1.7-Answers.md):
+
+### The NatureCounts Spatial Data Tutorial
+
+An R guide to help download, process, and visualize spatial data,
+including NatureCounts surveys, conservation areas, and environmental
+layers.
+
+- [Table of
+  Contents](https://birdscanada.github.io/naturecounts/articles/2.0-TableOfContents.md):
+- [Chapter 1 - Spatial Data
+  Exploration](https://birdscanada.github.io/naturecounts/articles/2.1-SpatialDataExploration.md):
+- [Chapter 2 - Spatial
+  Subsetting](https://birdscanada.github.io/naturecounts/articles/2.2-SpatialSubsets.md):
+- [Chapter 3 - Climate
+  Data](https://birdscanada.github.io/naturecounts/articles/2.3-ClimateData.md):
+- [Chapter 4 - Elevation
+  Data](https://birdscanada.github.io/naturecounts/articles/2.4-ElevationData.md):
+- [Chapter 5 - Land Cover
+  Data](https://birdscanada.github.io/naturecounts/articles/2.5-LandcoverData.md):
+- [Chapter 6 - Satellite
+  Imagery](https://birdscanada.github.io/naturecounts/articles/2.6-SatelliteImagery.md):
+- [Chapter 7 - Spatial Summary
+  Tools](https://birdscanada.github.io/naturecounts/articles/2.7-SummaryTools.md):
+
+### The NatureCounts Analysis Tools Tutorial
+
+An R guide to help analyze data hosted on NatureCounts.
+
+- [Chapter 1 -
+  Zero-filling](https://birdscanada.github.io/naturecounts/articles/3.1-ZeroFilling.md):
+- [Chapter 2 - Auxiliary
+  Tables](https://birdscanada.github.io/naturecounts/articles/3.2-AuxiliaryTables.md):
+
+### Additional Tutorials
+
+How-to articles describing common tasks
+
+- [Data
+  Access](https://birdscanada.github.io/naturecounts/articles/data-access.md):
+- [Selecting columns and fields to
+  download](https://birdscanada.github.io/naturecounts/articles/selecting-fields.md):
+- [Filtering data after
+  download](https://birdscanada.github.io/naturecounts/articles/filtering-data.md):
+- [Using spatial data to filter
+  observations](https://birdscanada.github.io/naturecounts/articles/region-spatial.md):
+- [Exploring IBAs and
+  BCRs](https://birdscanada.github.io/naturecounts/articles/region-areas.md):
+- [Mapping
+  Observations](https://birdscanada.github.io/naturecounts/articles/mapping-observations.md):
+- [COSEWIC
+  Tools](https://birdscanada.github.io/naturecounts/articles/cosewic-tools.md):
+
+### Reference
+
+Reference articles for metadata codes and descriptions.
+
+- [Region
+  Codes](https://birdscanada.github.io/naturecounts/articles/region-codes.md):
+- [Species
+  codes](https://birdscanada.github.io/naturecounts/articles/species-codes.md):
+
+### Formatting
+
+How to format downloaded data
+
+- [Zero-filling
+  data](https://birdscanada.github.io/naturecounts/articles/format-zero-fill.md):

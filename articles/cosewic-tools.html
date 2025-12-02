@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">naturecounts</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
 
       <h1>COSEWIC Tools</h1>
             
-            <h4 data-toc-skip class="date">2025-11-05</h4>
+            <h4 data-toc-skip class="date">2025-12-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/vignettes/cosewic-tools.Rmd" class="external-link"><code>vignettes/cosewic-tools.Rmd</code></a></small>
       <div class="d-none name"><code>cosewic-tools.Rmd</code></div>
@@ -76,55 +76,380 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span></code></pre></div>
-<p>Basic plot</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BirdsCanada/naturecounts" class="external-link">naturecounts</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> <span class="co"># For manipulating data frames</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span> <span class="co"># For combining plots</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span> <span class="co"># For plotting the grid</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
+</h2>
+<p>These tools, <code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code> and
+<code><a href="../reference/cosewic_plot.html">cosewic_plot()</a></code>, are designed to help with spatial
+calculations for COSEWIC assessments, namely calculations of the EOO and
+IAO (see<code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code> for more details on these
+calculations).</p>
+<p>You can calculate both IAO and EOO with the
+<code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code> function and you can use the
+<code><a href="../reference/cosewic_plot.html">cosewic_plot()</a></code> function to create figures of these
+values.</p>
+<p>In the next few examples, we’ll use a built in dataset
+<code>bcch</code>. In your own workflows, you would replace this with
+your own data (see <a href="#using-your-own-data">Using your own
+data</a>).</p>
+<div class="section level3">
+<h3 id="calculating-iao-and-eoo">Calculating IAO and EOO<a class="anchor" aria-label="anchor" href="#calculating-iao-and-eoo"></a>
+</h3>
+<p>First we’ll calculate the ranges using default arguments and call
+<code>r</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span></code></pre></div>
+<p>Look at this data by printing the <code>r</code> object. This shows
+us that the <code>r</code> object is a list with two items:</p>
+<ul>
+<li>
+<code>iao</code> which is a simple features collection (sf or
+spatial dataframe), and</li>
+<li>
+<code>eoo</code> which is also an sf or spatial data frame.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span></span>
+<span><span class="co">#&gt; $iao</span></span>
+<span><span class="co">#&gt; Simple feature collection with 475 features and 11 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1407460 ymin: 785222 xmax: 1537823 ymax: 867036.6</span></span>
+<span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 475 × 12</span></span></span>
+<span><span class="co">#&gt;    species_id n_records_total grid_id n_records min_record max_record</span></span>
+<span><span class="co">#&gt;         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>      <span style="text-decoration: underline;">14</span>280             160       1         0          1         35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>      <span style="text-decoration: underline;">14</span>280             160       2         0          1         35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>      <span style="text-decoration: underline;">14</span>280             160       3         0          1         35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>      <span style="text-decoration: underline;">14</span>280             160       4         0          1         35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>      <span style="text-decoration: underline;">14</span>280             160       5         0          1         35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>      <span style="text-decoration: underline;">14</span>280             160       6         0          1         35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>      <span style="text-decoration: underline;">14</span>280             160       7         0          1         35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>      <span style="text-decoration: underline;">14</span>280             160       8         0          1         35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>      <span style="text-decoration: underline;">14</span>280             160       9         0          1         35</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      <span style="text-decoration: underline;">14</span>280             160      10         0          1         35</span></span>
+<span><span class="co">#&gt;    median_record grid_size_km n_occupied    iao prop_include</span></span>
+<span><span class="co">#&gt;            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494;">[km]</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494;">[km^2]</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>             1            2         33    132            1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 465 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: geometry &lt;POLYGON [m]&gt;</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $eoo</span></span>
+<span><span class="co">#&gt; Simple feature collection with 1 feature and 4 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2</span></span>
+<span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
+<span><span class="co">#&gt;   species_id n_records_total</span></span>
+<span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280             160</span></span>
+<span><span class="co">#&gt;                                                             x   eoo prop_include</span></span>
+<span><span class="co">#&gt;                                                 <span style="color: #949494; font-style: italic;">&lt;POLYGON [m]&gt;</span> <span style="color: #949494;">[km^</span>…        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 15… <span style="text-decoration: underline;">4</span>729.            1</span></span></code></pre></div>
+<p>You can access either of these items with the <code>$</code> to pull
+out just what you’re interested in.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span><span class="op">$</span><span class="va">eoo</span></span>
+<span><span class="co">#&gt; Simple feature collection with 1 feature and 4 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2</span></span>
+<span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
+<span><span class="co">#&gt;   species_id n_records_total</span></span>
+<span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280             160</span></span>
+<span><span class="co">#&gt;                                                             x   eoo prop_include</span></span>
+<span><span class="co">#&gt;                                                 <span style="color: #949494; font-style: italic;">&lt;POLYGON [m]&gt;</span> <span style="color: #949494;">[km^</span>…        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 15… <span style="text-decoration: underline;">4</span>729.            1</span></span></code></pre></div>
+<p>The values you are likely to be especially interested in are the
+<code>iao</code> and the <code>eoo</code> columns within these spatial
+dataframes</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span><span class="op">$</span><span class="va">iao</span><span class="op">$</span><span class="va">iao</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="co">#&gt; 132 [km^2]</span></span>
+<span><span class="va">r</span><span class="op">$</span><span class="va">eoo</span><span class="op">$</span><span class="va">eoo</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="co">#&gt; 4728.589 [km^2]</span></span></code></pre></div>
+<p>Also of interest is the <code>prop_include</code> column in each set
+of data. This remindes you of the proportion of original data points
+retained in the calculations (i.e. <code>prop_include = 1</code> is
+100%). You can change the proportion of points included to omit outliers
+if you like by modifiying the <code>prop_include</code> argument in
+<code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code>.</p>
+<p>By default all points are included, so make sure you’re confident
+that those points are accurate!</p>
+<p>If this is too much information, omit the spatial data from the range
+calculations.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">bcch</span>, spatial <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 10</span></span></span>
+<span><span class="co">#&gt;   species_id n_records_total min_record max_record median_record grid_size_km</span></span>
+<span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494;">[km]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280             160          1         35             1            2</span></span>
+<span><span class="co">#&gt;   n_occupied    iao    eoo prop_include</span></span>
+<span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494;">[km^2]</span> <span style="color: #949494;">[km^2]</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         33    132  <span style="text-decoration: underline;">4</span>729.            1</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="plotting-iao-and-eoo">Plotting IAO and EOO<a class="anchor" aria-label="anchor" href="#plotting-iao-and-eoo"></a>
+</h3>
+<p>By default, <code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code> includes the spatial data
+so we can easily create figures of these ranges.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, title <span class="op">=</span> <span class="st">"Black-capped Chickadee"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Zoom: 9</span></span>
 <span><span class="co">#&gt; Fetching 9 missing tiles</span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |========                                                              |  11%  |                                                                              |================                                                      |  22%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================                                       |  44%  |                                                                              |=======================================                               |  56%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================                |  78%  |                                                                              |==============================================================        |  89%  |                                                                              |======================================================================| 100%</span></span>
 <span><span class="co">#&gt; ...complete!</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-<p>Adding observation points</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, points <span class="op">=</span> <span class="va">bcch</span>, title <span class="op">=</span> <span class="st">"Black-capped Chickadee"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
-<p>Only EOO or IAO</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, which <span class="op">=</span> <span class="st">"eoo"</span>, points <span class="op">=</span> <span class="va">bcch</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, which <span class="op">=</span> <span class="st">"iao"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
-<p>Change the CRS</p>
-<ul>
-<li>Only applies if not using map tiles as they <em>must</em> be in the
-CRS of the tile (i.e. EPSG:3857 Web Mercator)</li>
-</ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, crs <span class="op">=</span> <span class="fl">3347</span><span class="op">)</span> <span class="co"># No change</span></span>
-<span><span class="co">#&gt; 'crs' is only applicable when not using map tiles. Map tiles always use CRS of EPSG:3857.</span></span>
-<span><span class="co">#&gt; Loading required namespace: raster</span></span>
-<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, map <span class="op">=</span> <span class="fu"><a href="../reference/map_canada.html">map_canada</a></span><span class="op">(</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">3347</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
-<p>Move the scale/arrow</p>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
+<blockquote>
+<p><strong>Remember</strong>: By default we use map tiles from
+OpenStreetMap (<code>map = "osm"</code>). If you are using these figures
+in a public document/website/etc., you must <a href="https://osmfoundation.org/wiki/Licence/Attribution_Guidelines" class="external-link">attribute
+OpenStreetMap</a>.</p>
+</blockquote>
+<p>You can try any map tile listed in <code><a href="https://rdrr.io/pkg/rosm/man/deprecated.html" class="external-link">rosm::osm.types()</a></code>,
+but note that not all may work for your region and many require an API
+key.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">hofi</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, arrow_location <span class="op">=</span> <span class="st">"br"</span>, scale_location <span class="op">=</span> <span class="st">"br"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, map <span class="op">=</span> <span class="st">"cartolight"</span>, title <span class="op">=</span> <span class="st">"Black-capped Chickadee"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Zoom: 9</span></span>
+<span><span class="co">#&gt; Fetching 9 missing tiles</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |========                                                              |  11%  |                                                                              |================                                                      |  22%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================                                       |  44%  |                                                                              |=======================================                               |  56%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================                |  78%  |                                                                              |==============================================================        |  89%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; ...complete!</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="700"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="using-your-own-data">Using your own data<a class="anchor" aria-label="anchor" href="#using-your-own-data"></a>
+</h2>
+<p>To use your own data in the <code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code> function,
+you must load a data set of observations into R. This dataset must have
+an ID column and columns defining latitude and longitude, and
+optionally, a grouping column.</p>
+<p>Let’s load the example black-capped chickadee file included in
+naturecounts. We’ll use the <code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file()</a></code> function to find
+the path to the csv file.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Assign the path or location</span></span>
+<span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"bcch.csv"</span>, package <span class="op">=</span> <span class="st">"naturecounts"</span><span class="op">)</span></span>
+<span><span class="va">path</span></span>
+<span><span class="co">#&gt; [1] "/home/runner/work/_temp/Library/naturecounts/extdata/bcch.csv"</span></span></code></pre></div>
+<p>For your data, you’ll a path something like
+<code>path &lt;- "location/of/my/data.csv"</code> depending where your
+data is stored. See the <a href="https://r4ds.hadley.nz/data-import.html#reading-data-from-a-file" class="external-link">R
+for Data Science chapter on Data import</a> for more details.</p>
+<p>Now we’ll read the data and take a quick look.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bc</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          id      lat       lon n</span></span>
+<span><span class="co">#&gt; 1 968039498 45.51110 -77.50533 1</span></span>
+<span><span class="co">#&gt; 2 968039557 45.63436 -77.07484 1</span></span>
+<span><span class="co">#&gt; 3 968039593 45.82732 -77.12012 1</span></span>
+<span><span class="co">#&gt; 4 968039612 45.48730 -77.74651 2</span></span>
+<span><span class="co">#&gt; 5 968039703 45.61956 -77.23577 2</span></span>
+<span><span class="co">#&gt; 6 968039959 45.82851 -77.11430 3</span></span></code></pre></div>
+<p>To use this in <code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code> we’ll tell the function
+how to interpret these columns. By default the function expects these
+columns to be <code>record_id</code>, <code>latitude</code> and
+<code>longitude</code>, so if they are different we need to specify what
+they are. In our example we also specify <code>group = NULL</code> to
+tell the function that we’re not using a grouping column.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span></span>
+<span>  <span class="va">bc</span>,</span>
+<span>  record <span class="op">=</span> <span class="st">"id"</span>,</span>
+<span>  coord_lat <span class="op">=</span> <span class="st">"lat"</span>,</span>
+<span>  coord_lon <span class="op">=</span> <span class="st">"lon"</span>,</span>
+<span>  group <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="working-with-multiple-dus-designatable-units">Working with multiple DUs (Designatable Units)<a class="anchor" aria-label="anchor" href="#working-with-multiple-dus-designatable-units"></a>
+</h2>
+<p>Let’s assume we have two populations or Designatable Units which we
+would like to work with. We’ll use the built in <code>pops</code> data
+set for this.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pops</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   record_id latitude longitude   population</span></span>
+<span><span class="co">#&gt; 1 968039498 45.51110 -77.50533 Population 1</span></span>
+<span><span class="co">#&gt; 2 968039557 45.63436 -77.07484 Population 1</span></span>
+<span><span class="co">#&gt; 3 968039593 45.82732 -77.12012 Population 1</span></span>
+<span><span class="co">#&gt; 4 968039612 45.48730 -77.74651 Population 1</span></span>
+<span><span class="co">#&gt; 5 968039703 45.61956 -77.23577 Population 1</span></span>
+<span><span class="co">#&gt; 6 968039959 45.82851 -77.11430 Population 1</span></span></code></pre></div>
+<p>Because we have multiple groups, we’ll use the
+<code>group = "population"</code> option to tell the function which
+column contains the groups. Then calculations are performed separately
+for each group.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">pops</span>, group <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<span><span class="va">r</span><span class="op">$</span><span class="va">eoo</span></span>
+<span><span class="co">#&gt; Simple feature collection with 2 features and 4 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1081628 ymin: 336781.2 xmax: 1578702 ymax: 866555.2</span></span>
+<span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span></span>
+<span><span class="co">#&gt;   population   n_records_total</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Population 1             160</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Population 2              19</span></span>
+<span><span class="co">#&gt;                                                            x    eoo prop_include</span></span>
+<span><span class="co">#&gt;                                                <span style="color: #949494; font-style: italic;">&lt;POLYGON [m]&gt;</span> <span style="color: #949494;">[km^2]</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 1…  <span style="text-decoration: underline;">4</span>729.            1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ((1093717 336781.2, 1081628 348770.3, 1124206 429489, 157… <span style="text-decoration: underline;">58</span>194.            1</span></span></code></pre></div>
+<p>And we get a list of plots, one for each group.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, group <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<span><span class="va">p</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="700"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt; Zoom: 6</span></span>
 <span><span class="co">#&gt; Fetching 4 missing tiles</span></span>
 <span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</span></span>
 <span><span class="co">#&gt; ...complete!</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<p>Summarize IAO over larger grid for better visibility</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-14-2.png" class="r-plt" width="700"></p>
+<p>For a combined plot, we can use the <code><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots()</a></code>
+function from the patchwork package to combine these figures.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Zoom: 9</span></span>
+<span><span class="co">#&gt; Zoom: 6</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="960"></p>
+</div>
+<div class="section level2">
+<h2 id="using-the-cosewics-iao-grid">Using the COSEWIC’s IAO grid<a class="anchor" aria-label="anchor" href="#using-the-cosewics-iao-grid"></a>
+</h2>
+<p>By default, <code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code> constructs an IAO grid for
+each analysis. This means that there might be small discrepancies in IAO
+values calculated by naturecounts and those calculated with a different
+grid. Even if the grids are the same size and with the same projection,
+exactly where the bounds of the grid are may not be the same.</p>
+<p>If this is of concern, you can supply your own IAO grid for these
+calculations, to ensure that there are no discrepancies.</p>
+<p>First, use the sf package to read in your IAO grid. Here we’ll use a
+mini example IAO grid stored in the package</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"iao_bcch_grid.gpkg"</span>, package <span class="op">=</span> <span class="st">"naturecounts"</span><span class="op">)</span></span>
+<span><span class="va">path</span></span>
+<span><span class="co">#&gt; [1] "/home/runner/work/_temp/Library/naturecounts/extdata/iao_bcch_grid.gpkg"</span></span>
+<span></span>
+<span><span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Reading layer `iao_bcch_grid' from data source </span></span>
+<span><span class="co">#&gt;   `/home/runner/work/_temp/Library/naturecounts/extdata/iao_bcch_grid.gpkg' </span></span>
+<span><span class="co">#&gt;   using driver `GPKG'</span></span>
+<span><span class="co">#&gt; Simple feature collection with 3575 features and 1 field</span></span>
+<span><span class="co">#&gt; Geometry type: POLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1406468 ymin: 786875.6 xmax: 1535250 ymax: 894738.5</span></span>
+<span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span></code></pre></div>
+<p>This is what our example grid looks like</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">grid</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" width="700"></p>
+<p>Next we’ll pass this as an argument to our
+<code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code> function.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">bcch</span>, iao_grid <span class="op">=</span> <span class="va">grid</span><span class="op">)</span></span>
+<span><span class="co">#&gt; User-provided grid has cell size of 2 [km]</span></span></code></pre></div>
+<p>And take a look at the figure of these calculations.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" width="700"></p>
+<p>For comparison, note how the calculations are very slightly different
+when using <code><a href="../reference/cosewic_ranges.html">cosewic_ranges()</a></code>’s default grid.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r0</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
+</h2>
+<div class="section level3">
+<h3 id="customizing-plots">Customizing Plots<a class="anchor" aria-label="anchor" href="#customizing-plots"></a>
+</h3>
+<p>These examples all use the <code>bcch</code> dataset.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="adding-observation-points">Adding observation points<a class="anchor" aria-label="anchor" href="#adding-observation-points"></a>
+</h4>
+<p>Note that this adds <em>all</em> observation points (regardless of
+whether some were omitted from the analyses).</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, points <span class="op">=</span> <span class="va">bcch</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="plot-only-either-eoo-or-iao">Plot only either EOO or IAO<a class="anchor" aria-label="anchor" href="#plot-only-either-eoo-or-iao"></a>
+</h4>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, which <span class="op">=</span> <span class="st">"eoo"</span>, points <span class="op">=</span> <span class="va">bcch</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" width="700"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, which <span class="op">=</span> <span class="st">"iao"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-23-2.png" class="r-plt" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="change-the-crs">Change the CRS<a class="anchor" aria-label="anchor" href="#change-the-crs"></a>
+</h4>
+<p>Only applies if not using map tiles as map tile projections cannot be
+changed.</p>
+<p>No change</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, crs <span class="op">=</span> <span class="fl">3347</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'crs' is only applicable when not using map tiles. Map tiles always use CRS of EPSG:3857.</span></span>
+<span><span class="co">#&gt; Loading required namespace: raster</span></span>
+<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" width="700"></p>
+<p>Using a custom polygon, we can change the CRS.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, map <span class="op">=</span> <span class="fu"><a href="../reference/map_canada.html">map_canada</a></span><span class="op">(</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">3347</span><span class="op">)</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-25-1.png" class="r-plt" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="move-the-scalearrow">Move the scale/arrow<a class="anchor" aria-label="anchor" href="#move-the-scalearrow"></a>
+</h4>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">hofi</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, arrow_location <span class="op">=</span> <span class="st">"br"</span>, scale_location <span class="op">=</span> <span class="st">"br"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Zoom: 6</span></span></code></pre></div>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="summarize-iao-over-larger-grid">Summarize IAO over larger grid<a class="anchor" aria-label="anchor" href="#summarize-iao-over-larger-grid"></a>
+</h4>
+<p>When the cells are really small, it can be helpful to summarize over
+a larger grid for better visibility of the patterns.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">r</span>,</span>
 <span>  grid <span class="op">=</span> <span class="fu"><a href="../reference/grid_canada.html">grid_canada</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span>,</span>
@@ -133,83 +458,102 @@ CRS of the tile (i.e. EPSG:3857 Web Mercator)</li>
 <span>  scale_location <span class="op">=</span> <span class="st">"br"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Zoom: 6</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<p>Plot multiple species as separate plots</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">bcch</span>, <span class="va">hofi</span><span class="op">)</span></span>
-<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span></span>
-<span>  <span class="va">r</span>,</span>
-<span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"14280"</span> <span class="op">=</span> <span class="st">"Black-capped chickadees"</span>, <span class="st">"20350"</span> <span class="op">=</span> <span class="st">"House Finches"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">p</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; Zoom: 9</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; Zoom: 6</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-8-2.png" width="700"></p>
-<p>Use patchwork to combine</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-27-1.png" class="r-plt" width="700"></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="customizing-multiple-plots">Customizing Multiple Plots<a class="anchor" aria-label="anchor" href="#customizing-multiple-plots"></a>
+</h3>
+<p>These examples all use the <code>pops</code> dataset.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">pops</span>, group <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="using-iao-proportions">Using IAO proportions<a class="anchor" aria-label="anchor" href="#using-iao-proportions"></a>
+</h4>
+<p>When plotting multiple DUs the IAO scales may be different enough
+that it would be better use IAO proportions rather than absolute
+values.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span>, group <span class="op">=</span> <span class="st">"population"</span>, iao_prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Zoom: 9</span></span>
 <span><span class="co">#&gt; Zoom: 6</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-9-1.png" width="960"></p>
-<p>Use IAO as a proportion for better legends</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" width="960"></p>
+</div>
+<div class="section level4">
+<h4 id="summarize-iao-over-larger-grid-1">Summarize IAO over larger grid<a class="anchor" aria-label="anchor" href="#summarize-iao-over-larger-grid-1"></a>
+</h4>
+<p>As for single plots, when the cells are really small, it can be
+helpful to summarize over a larger grid for better visibility of the
+patterns.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">r</span>,</span>
+<span>  group <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  iao_prop <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"14280"</span> <span class="op">=</span> <span class="st">"Black-capped chickadees"</span>, <span class="st">"20350"</span> <span class="op">=</span> <span class="st">"House Finches"</span><span class="op">)</span></span>
+<span>  grid <span class="op">=</span> <span class="fu"><a href="../reference/grid_canada.html">grid_canada</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Zoom: 9</span></span>
 <span><span class="co">#&gt; Zoom: 6</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-10-1.png" width="960"></p>
-<p>Consider summarizing over a larger IAO grid (10x10km) for better
-visibility</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span></span>
-<span>  <span class="va">r</span>,</span>
-<span>  iao_prop <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  grid <span class="op">=</span> <span class="fu"><a href="../reference/grid_canada.html">grid_canada</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>,</span>
-<span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"14280"</span> <span class="op">=</span> <span class="st">"Black-capped chickadees"</span>, <span class="st">"20350"</span> <span class="op">=</span> <span class="st">"House Finches"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" width="960"></p>
+</div>
+<div class="section level4">
+<h4 id="combining-separate-plots">Combining separate plots<a class="anchor" aria-label="anchor" href="#combining-separate-plots"></a>
+</h4>
+<p>But for the ultimate control, create plots separately and then
+combine.</p>
+<p>We’ll first split the two populations, but you could also load them
+separately if they are already split on your computer (see “Working with
+your own data”).</p>
+<p>We’ll use <code>group = "population</code> to ensure correct
+titles.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Split the two populations</span></span>
+<span><span class="va">pops1</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pops</span>, <span class="va">population</span> <span class="op">==</span> <span class="st">"Population 1"</span><span class="op">)</span></span>
+<span><span class="va">pops2</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pops</span>, <span class="va">population</span> <span class="op">==</span> <span class="st">"Population 2"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Zoom: 9</span></span>
-<span><span class="co">#&gt; Zoom: 6</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-11-1.png" width="960"></p>
-<p>For more nuanced control, create plots separately and then
-combine</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span>
-<span><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">hofi</span><span class="op">)</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">b</span>, title <span class="op">=</span> <span class="st">"Black-capped chickadee"</span>, iao_prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># Calculate the ranges separately</span></span>
+<span><span class="va">r1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">pops1</span>, group <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_ranges.html">cosewic_ranges</a></span><span class="op">(</span><span class="va">pops2</span>, group <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create separate plots</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r1</span>, group <span class="op">=</span> <span class="st">"population"</span>, iao_prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span></span>
-<span>  <span class="va">h</span>,</span>
-<span>  title <span class="op">=</span> <span class="st">"House Finches"</span>,</span>
+<span>  <span class="va">r2</span>,</span>
+<span>  group <span class="op">=</span> <span class="st">"population"</span>,</span>
 <span>  iao_prop <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  arrow_location <span class="op">=</span> <span class="st">"br"</span>,</span>
-<span>  scale_location <span class="op">=</span> <span class="st">"br"</span>,</span>
-<span>  grid <span class="op">=</span> <span class="fu"><a href="../reference/grid_canada.html">grid_canada</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span>
+<span>  grid <span class="op">=</span> <span class="fu"><a href="../reference/grid_canada.html">grid_canada</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Now arrange your plots how you like.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">+</span></span>
+<span>  <span class="va">p2</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"EOO and IAO for all Designatable Units"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Zoom: 9</span></span>
 <span><span class="co">#&gt; Zoom: 6</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-12-1.png" width="960"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span></span>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-32-1.png" class="r-plt" width="700"></p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">/</span></span>
+<span>  <span class="va">p2</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"EOO and IAO for all Designatable Units"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"2025 Assessment performed with naturecounts R package"</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; Zoom: 9</span></span>
 <span><span class="co">#&gt; Zoom: 6</span></span></code></pre></div>
-<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
-  </main>
+<p><img src="cosewic-tools_files/figure-html/unnamed-chunk-33-1.png" class="r-plt" width="700"></p>
+</div>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
@@ -219,7 +563,7 @@ combine</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
