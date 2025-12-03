@@ -28,6 +28,13 @@
 #' @param request_id Numeric. Specific request id to check or download.
 #' @param timeout Numeric. Number of seconds before connecting to the server
 #'   times out.
+#' @param crs A coordinate reference system (see `?sf::st_transform()`).
+#'   Defaults to Albers Equal-Area for Canada (ESRI:102001) for area
+#'   calculations. Note that it must be a projection (i.e. not simply a
+#'   reference system like 4326 used for GPS) for area calculations. If `NULL`
+#'   for plots, uses the CRS of the base map or of the IAO/EOO data.
+#' @param which Character vector. Which range types to calculate.
+#'   Any combination of "eoo" and "iao", default is both.
 #' @param verbose Logical. Show messages?
 #'
 #' @section NatureCounts account:
@@ -61,7 +68,7 @@
 #'   for more information.
 #'
 #' @section Data Fields/Columns (`fields_set` and `fields`):
-#'   By default data is downloaded with the `minimum` set of fields/columns.
+#'   By default data is downloaded with the `extended` set of fields/columns.
 #'   However, for more advanced applications, users may wish to specify which
 #'   fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
 #'   keeps track of variables used to augment observation data. There are
@@ -69,8 +76,8 @@
 #'   be specified for download in one of four ways:
 #'
 #'   1. `fields_set` can be a specific shorthand reflecting a BMDE version:
-#'   `core`, `extended` or `minimum` (default). See [meta_bmde_versions()] to see
-#'   which BMDE version the shorthand refers to.
+#'   `core`, `extended` (default) or `minimum`. See [meta_bmde_versions()] to
+#'   see which BMDE version the shorthand refers to.
 #'   2. `fields_set` can be `default` which uses the default BMDE version for a
 #'   particular collection (note that if you download more than one collection,
 #'   the field sets will expand to cover all fields/columns in the combined
@@ -90,7 +97,7 @@
 #' Use `nc_count(username = "USER", show = "all")`, to see the accessibility of
 #' collections.
 #'
-#' "Full" access means that data can be immediately requested directly through
+#' "Full" access means that data can be immediately downloaded directly through
 #' the `naturecounts` R package. "By request" means that a request must be
 #' [submitted
 #' online](https://naturecounts.ca/nc/default/searchquery.jsp) and

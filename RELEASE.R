@@ -7,7 +7,9 @@
 devtools::test()
 
 # - Update internal data files
-source("data-raw/data_creation.R")
+source("data-raw/data_internal.R")
+source("data-raw/data_example.R")
+source("data-raw/data_test.R")
 
 # - Update metadata stored in inst/extdata (Check URLS in data-raw/data_creation.R)
 # - Utm codes take time to update
@@ -18,9 +20,6 @@ nc_metadata_internal(force = TRUE, utm = FALSE)
 
 # - Update NEWS
 # - Check spelling
-dict <- hunspell::dictionary('en_CA')
-devtools::spell_check()
-spelling::update_wordlist()
 
 # - Update README.Rmd
 devtools::build_readme()
@@ -37,14 +36,13 @@ source("vignettes/_PRECOMPILE.R")
 # Final checks --------------------------------------------------
 
 # - Checks
-devtools::check(run_dont_test = TRUE)   # Local, run long-running examples
+devtools::check(run_dont_test = TRUE) # Local, run long-running examples
 
 # - Run in console
 system("cd ..; R CMD build naturecounts")
 system("cd ..; R CMD check naturecounts_0.1.0.tar.gz --as-cran")
 
 # - Check GH Actions on GitHub
-
 
 # Release! ------------------------------------------------------
 
@@ -59,7 +57,6 @@ usethis::use_github_release()
 # - Change API in data-raw/data_creation.R to sandbox
 # - Add dev components to version in DESCRIPTION and NEWS.md
 
-
 # Testing ----------------------
 
 # Test the pkgdown site locally as needed
@@ -73,14 +70,15 @@ pkgdown::build_news()
 pkgdown::build_articles(lazy = TRUE)
 
 # Build a specific article
-pkgdown::build_article("articles/test")
-pkgdown::build_article("species-codes")
-pkgdown::build_article("format-zero-fill")
-pkgdown::build_article("selecting-fields")
-pkgdown::build_article("filtering-data")
+pkgdown::build_article("cosewic-tools")
 pkgdown::build_article("data-access")
-pkgdown::build_article("region-codes")
+pkgdown::build_article("filtering-data")
+pkgdown::build_article("format-zero-fill")
 pkgdown::build_article("region-areas")
+pkgdown::build_article("region-codes")
+pkgdown::build_article("selecting-fields")
+pkgdown::build_article("species-codes")
+
 pkgdown::build_article("articles/region-spatial")
 pkgdown::build_article("articles/2.0-TableOfContents")
 pkgdown::build_article("articles/2.1-SpatialDataExploration")
@@ -92,6 +90,9 @@ pkgdown::build_article("articles/2.6-SatelliteImagery")
 pkgdown::build_article("articles/2.7-SummaryTools")
 pkgdown::build_article("articles/3.1-ZeroFilling")
 pkgdown::build_article("articles/3.2-AuxiliaryTables")
+pkgdown::build_article("articles/mapping-observations")
+
+pkgdown::build_article("articles/test")
 
 # Don't push resources
 unlink("vignettes/articles/BCR_Terrestrial/", recursive = TRUE)

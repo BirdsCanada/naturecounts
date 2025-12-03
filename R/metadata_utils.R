@@ -13,50 +13,96 @@
 #' @export
 
 nc_metadata <- function(force = FALSE, utm = FALSE, verbose = TRUE) {
-  nc_metadata_internal(system.file("extdata", package = "naturecounts"),
-                       force = force, utm = utm, verbose = verbose)
+  nc_metadata_internal(
+    system.file("extdata", package = "naturecounts"),
+    force = force,
+    utm = utm,
+    verbose = verbose
+  )
 }
 
 
-#' Fetch API metadata version
+#' Fetch API version
 #'
-#' Returns the current version of the metadata on the API
+#' Returns the current version of the API
 #'
-#' @keywords internal
-metadata_v_remote <- function() {
- srv_query(api$version) %>%
+#' @noRd
+api_version <- function() {
+  srv_query(api$version) %>%
     unlist()
 }
 
-metadata_save <- function(data, path, name = deparse(substitute(data)),
-                          compress = TRUE) {
-  save(data, file = file.path(path, paste0(name, ".rds")), compress = compress)
+metadata_save <- function(
+  data,
+  path,
+  name = deparse(substitute(data)),
+  compress = TRUE
+) {
+  save(
+    data,
+    file = file.path(path, paste0("meta_", name, ".rds")),
+    compress = compress
+  )
 }
 
 metadata_read <- function(name) {
   data <- NULL # load(f) reads data into envir as 'data', use this to avoid NOTE
-  f <- system.file("extdata", paste0(name, ".rds"), package = "naturecounts")
-  if(!file.exists(f)) stop("Could not find metadata file '", name, "'",
-                           call. = FALSE)
+  f <- system.file(
+    "extdata",
+    paste0("meta_", name, ".rds"),
+    package = "naturecounts"
+  )
+  if (!file.exists(f)) {
+    stop("Could not find metadata file '", name, "'", call. = FALSE)
+  }
+
+  if (name == "utm_squares" && !requireNamespace("sf", quietly = TRUE)) {
+    stop(
+      "The sf package is required to use and process utm_squares. ",
+      "It can be installed with \"install.packages('sf')\"",
+      call. = FALSE
+    )
+  }
   load(f)
+
+  if (name != "version" && !metadata_up2date()) {
+    message(
+      "Metadata hasn't been updated in >4 weeks, consider using ",
+      "`nc_metadata()` to update local copies."
+    )
+  }
+
   data
 }
 
 
-nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
-                                 utm = FALSE, verbose = TRUE) {
+#' Check date of last download
+#'
+#' @returns TRUE/FALSE (Up-to-date or Out-of-date)
+#'
+#' @noRd
+#' @examples
+#' metadata_up2date()
+metadata_up2date <- function() {
+  as.Date(metadata_read("version")[[1]]) >= (Sys.Date() - lubridate::weeks(4))
+}
 
+nc_metadata_internal <- function(
+  path = "./inst/extdata",
+  force = TRUE,
+  utm = FALSE,
+  verbose = TRUE
+) {
   # Check if update necessary
   # (either no version file, force = TRUE, or out of date)
 
-  if(all(class(try(metadata_v_local(), silent = TRUE)) != "try-error") &&
-    !force &&
-    metadata_v_local() == metadata_v_remote()) {
-
+  if (
+    all(!inherits(try(nc_metadata_version(), silent = TRUE), "try-error")) &&
+      !force &&
+      metadata_up2date()
+  ) {
     message("Local metadata already up-to-date with server")
-
   } else {
-
     # Species authorities
     message("Updating species authority...")
     species_authority <- srv_query(api$species_authority) %>%
@@ -68,9 +114,13 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
     message("Updating species codes...")
     species_codes <- srv_query(api$species_codes) %>%
       parse_results(results = FALSE) %>%
-      dplyr::mutate(species_id2 = dplyr::if_else(is.na(.data$species_id2),
-                                                 .data$species_id,
-                                                 .data$species_id2))
+      dplyr::mutate(
+        species_id2 = dplyr::if_else(
+          is.na(.data$species_id2),
+          .data$species_id,
+          .data$species_id2
+        )
+      )
     metadata_save(species_codes, path = path)
 
     message("Updating species taxonomy...")
@@ -97,11 +147,18 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
     message("Updating subnational codes...")
     subnational2_codes <- srv_query(api$subnational2_codes) %>%
       parse_results(results = FALSE) %>%
-      dplyr::select("country_code", "statprov_code",
-                    subnational2_code = "subnat2_code",
-                    subnational2_name = "subnat2_name", dplyr::everything()) %>%
-      dplyr::arrange(.data$country_code, .data$statprov_code,
-                     .data$subnational2_code)
+      dplyr::select(
+        "country_code",
+        "statprov_code",
+        subnational2_code = "subnat2_code",
+        subnational2_name = "subnat2_name",
+        dplyr::everything()
+      ) %>%
+      dplyr::arrange(
+        .data$country_code,
+        .data$statprov_code,
+        .data$subnational2_code
+      )
     metadata_save(subnational2_codes, path)
 
     # Get IBA codes
@@ -119,11 +176,13 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
       dplyr::rename_all(tolower)
     metadata_save(bcr_codes, path)
 
-    if(utm) {
-      if(!requireNamespace("sf", quietly = TRUE)) {
-        stop("The sf package is required to use and process utm_squares. ",
-             "It can be installed with \"install.packages('sf')\"",
-             call. = FALSE)
+    if (utm) {
+      if (!requireNamespace("sf", quietly = TRUE)) {
+        stop(
+          "The sf package is required to use and process utm_squares. ",
+          "It can be installed with \"install.packages('sf')\"",
+          call. = FALSE
+        )
       }
 
       # Get UTM square codes
@@ -134,7 +193,7 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
           srv_query(api$utm_squares, query = list('statprov' = x))
         }) %>%
         purrr::map(parse_results) %>%
-        purrr::map(function(x) if(nrow(x) == 0) NULL else x) %>%
+        purrr::map(function(x) if (nrow(x) == 0) NULL else x) %>%
         purrr::list_rbind() %>%
         dplyr::rename("geometry" = "square_wkt") %>%
         sf::st_as_sf(wkt = "geometry", crs = 4326) %>%
@@ -155,9 +214,37 @@ nc_metadata_internal <- function(path = "./inst/extdata", force = TRUE,
     metadata_save(bmde_fields, path)
 
     # Update metadata version
-    message("Metadata version updated to ", metadata_v_remote())
-    metadata_save(metadata_v_remote(), name = "metadata_v_local", path = path)
+    message("Metadata version updated to ", Sys.Date())
+    metadata_save(
+      c("metadata_updated" = Sys.Date()),
+      name = "version",
+      path = path
+    )
   }
 }
 
-metadata_v_local <- function() {metadata_read("metadata_v_local")}
+#' Check the last time metadata was updated
+#'
+#' Some metadata is stored locally and can be updated with `nc_metadata()`.
+#' Use `nc_metadata_version()` to see when these files were last updated.
+#'
+#' **Metadata stored locally** - use `nc_metadata()` to update
+#' - `meta_country_codes()`
+#' - `meta_statprov_codes()`
+#' - `meta_subnational2_codes()`
+#' - `meta_iba_codes()`
+#' - `meta_bcr_codes()`
+#' - `meta_utm_squares()` - use `nc_metadata(utm = TRUE)` to update (big update)
+#' - `meta_species_authority()`
+#' - `meta_species_codes()`
+#' - `meta_species_taxonomy()`
+#'
+#' @returns Date of the last update
+#' @export
+#'
+#' @examples
+#' nc_metadata_version()
+
+nc_metadata_version <- function() {
+  metadata_read("version")
+}

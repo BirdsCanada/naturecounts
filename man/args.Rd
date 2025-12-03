@@ -42,6 +42,15 @@ database. Required unless resuming/re-downloaded with a \code{request_id}.}
 \item{timeout}{Numeric. Number of seconds before connecting to the server
 times out.}
 
+\item{crs}{A coordinate reference system (see \code{?sf::st_transform()}).
+Defaults to Albers Equal-Area for Canada (ESRI:102001) for area
+calculations. Note that it must be a projection (i.e. not simply a
+reference system like 4326 used for GPS) for area calculations. If \code{NULL}
+for plots, uses the CRS of the base map or of the IAO/EOO data.}
+
+\item{which}{Character vector. Which range types to calculate.
+Any combination of "eoo" and "iao", default is both.}
+
 \item{verbose}{Logical. Show messages?}
 }
 \description{
@@ -87,7 +96,7 @@ for more information.
 
 \section{Data Fields/Columns (\code{fields_set} and \code{fields})}{
 
-By default data is downloaded with the \code{minimum} set of fields/columns.
+By default data is downloaded with the \code{extended} set of fields/columns.
 However, for more advanced applications, users may wish to specify which
 fields/columns to return. The Bird Monitoring Data Exchange (BMDE) schema
 keeps track of variables used to augment observation data. There are
@@ -95,8 +104,8 @@ different versions reflecting different collections of variables which can
 be specified for download in one of four ways:
 \enumerate{
 \item \code{fields_set} can be a specific shorthand reflecting a BMDE version:
-\code{core}, \code{extended} or \code{minimum} (default). See \code{\link[=meta_bmde_versions]{meta_bmde_versions()}} to see
-which BMDE version the shorthand refers to.
+\code{core}, \code{extended} (default) or \code{minimum}. See \code{\link[=meta_bmde_versions]{meta_bmde_versions()}} to
+see which BMDE version the shorthand refers to.
 \item \code{fields_set} can be \code{default} which uses the default BMDE version for a
 particular collection (note that if you download more than one collection,
 the field sets will expand to cover all fields/columns in the combined
@@ -119,7 +128,7 @@ Access to a data collection is either available as "full" or "by request".
 Use \code{nc_count(username = "USER", show = "all")}, to see the accessibility of
 collections.
 
-"Full" access means that data can be immediately requested directly through
+"Full" access means that data can be immediately downloaded directly through
 the \code{naturecounts} R package. "By request" means that a request must be
 \href{https://naturecounts.ca/nc/default/searchquery.jsp}{submitted online} and
 approved before the data can be downloaded through \code{naturecounts}.

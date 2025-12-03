@@ -9,48 +9,74 @@
 #'
 #' @noRd
 
-srv_query <- function(path, query = NULL, filter = NULL,
-                      token = NULL, api_url = NULL, timeout = 120,
-                      verbose = FALSE) {
-
+srv_query <- function(
+  path,
+  query = NULL,
+  filter = NULL,
+  token = NULL,
+  api_url = NULL,
+  timeout = 120,
+  verbose = FALSE
+) {
   # Set Curl configuration
   httr::set_config(httr::content_type_json())
   httr::set_config(httr::accept_json())
-  if(verbose) httr::set_config(httr::verbose())
+  if (verbose) {
+    httr::set_config(httr::verbose())
+  }
 
   # Build API path
-  if(is.null(api_url)) api_url <- api$api
+  if (is.null(api_url)) {
+    api_url <- api$api
+  }
   url <- file.path(api_url, path)
 
   # Add token to query
-  if(!is.null(token)) query <- append(query, list(token = pass_token(token)))
+  if (!is.null(token)) {
+    query <- append(query, list(token = pass_token(token)))
+  }
 
   # Add filter to query
-  if(!is.null(filter)) {
+  if (!is.null(filter)) {
     filter <- to_json(filter)
     query <- append(query, list(filter = filter))
   }
 
   # Send request (try twice if first fails, unless it was a forced failure)
-  resp <- try(httr::POST(url, body = query, encode = "form",
-                         ua, httr::timeout(timeout)),
-            silent = TRUE)
-  
-  if(inherits(resp, "try-error")) {
-    
-    if(stringr::str_detect(resp, "aborted by an application callback")){
+  if (is_testing()) {
+    timeout <- 120
+  }
+  resp <- try(
+    httr::POST(url, body = query, encode = "form", ua, httr::timeout(timeout)),
+    silent = TRUE
+  )
+
+  if (inherits(resp, "try-error")) {
+    if (stringr::str_detect(resp, "aborted by an application callback")) {
       stop(resp, call. = FALSE)
     } else if (stringr::str_detect(resp, "Timeout was reached")) {
-      
-      message("The server did not respond within ", timeout, "s. Trying again...")
-      resp <- try(httr::POST(url, body = query, encode = "form",
-                             ua, httr::timeout(timeout)),
-                  silent = TRUE)
-      if(inherits(resp, "try-error")) {
-        if(stringr::str_detect(resp, "Timeout was reached")) {
-          stop("The server has not respond within the 'timeout' specified.\n",
-               "Either try again later or increase the 'timeout' period.",
-               call. = FALSE)
+      message(
+        "The server did not respond within ",
+        timeout,
+        "s. Trying again..."
+      )
+      resp <- try(
+        httr::POST(
+          url,
+          body = query,
+          encode = "form",
+          ua,
+          httr::timeout(timeout)
+        ),
+        silent = TRUE
+      )
+      if (inherits(resp, "try-error")) {
+        if (stringr::str_detect(resp, "Timeout was reached")) {
+          stop(
+            "The server has not respond within the 'timeout' specified.\n",
+            "Either try again later or increase the 'timeout' period.",
+            call. = FALSE
+          )
         } else {
           stop("Unknown error", call. = FALSE)
         }
@@ -75,26 +101,32 @@ srv_query <- function(path, query = NULL, filter = NULL,
   parsed
 }
 
-srv_query <- memoise::memoise(srv_query, ~memoise::timeout(4 * 60 * 60))
+srv_query <- memoise::memoise(srv_query, ~ memoise::timeout(4 * 60 * 60))
 
 srv_error <- function(parsed, url, filter) {
-
-  if(any(stringr::str_detect(names(parsed), "errorMsgs"))) {
-    if(!is.null(filter)) {
+  if (any(stringr::str_detect(names(parsed), "errorMsgs"))) {
+    if (!is.null(filter)) {
       f <- jsonlite::fromJSON(filter, simplifyVector = TRUE)
-      f <- paste0("\n Query: ",
-                  paste0(paste0("'", names(f), ": ",
-                                f, "'"),
-                         collapse = "; "))
-    } else f <- ""
+      f <- paste0(
+        "\n Query: ",
+        paste0(paste0("'", names(f), ": ", f, "'"), collapse = "; ")
+      )
+    } else {
+      f <- ""
+    }
 
     e <- paste0(parsed$errorMsgs, collapse = "; ")
 
-    stop("NatureCounts API request returned an error ",
-         "\n Message: '", e, "'",
-         "\n API: ", url,
-         f,
-         call. = FALSE)
+    stop(
+      "NatureCounts API request returned an error ",
+      "\n Message: '",
+      e,
+      "'",
+      "\n API: ",
+      url,
+      f,
+      call. = FALSE
+    )
   }
 }
 
@@ -113,42 +145,50 @@ srv_error <- function(parsed, url, filter) {
 #' @keywords internal
 
 srv_auth <- function(username) {
-
   username_check(username)
 
   # Get credentials saved in .Renviron file
   creds <- Sys.getenv(paste0("naturecounts_", username))
 
-  if(!exists("nc_usernames", envir = srv_auth_env)) {
+  if (!exists("nc_usernames", envir = srv_auth_env)) {
     nc_usernames <- list()
-  } else nc_usernames <- get("nc_usernames", envir = srv_auth_env)
+  } else {
+    nc_usernames <- get("nc_usernames", envir = srv_auth_env)
+  }
 
-  if(is.null(username)) {
+  if (is.null(username)) {
     token <- NULL
-  } else if(username %in% names(nc_usernames)) {
+  } else if (username %in% names(nc_usernames)) {
     # See if username associated with token in storage
     token <- get("nc_usernames", envir = srv_auth_env)[[username]]
   } else {
-    if(username == "sample") {
+    if (username == "sample") {
       password <- "sample"
-    } else if(creds != "") {
+    } else if (creds != "") {
       # See if username in saved credentials
       password <- creds
     } else {
       # Otherwise prompt for password
       password <- askpass::askpass(
-        prompt = paste0("Please enter password for ",
-                        "NatureCounts user '", username, "'"))
+        prompt = paste0(
+          "Please enter password for ",
+          "NatureCounts user '",
+          username,
+          "'"
+        )
+      )
     }
 
-    if(is.null(password)) stop("Password required for user ", username,
-                               call. = FALSE)
+    if (is.null(password)) {
+      stop("Password required for user ", username, call. = FALSE)
+    }
 
     # Fetch token from server
     token <- srv_query(
       path = api$auth,
       query = list(username = username, password = password),
-      timeout = 30)$token
+      timeout = 30
+    )$token
 
     # Save token to storage
     nc_usernames[[username]] <- token
@@ -181,18 +221,19 @@ to_json <- function(f) {
 
 # Password Storage --------------------------------------------------------
 
-
 # Environment for password storage
 srv_auth_env <- new.env()
 
 # list usernames
 nc_users <- function() {
-  if(!exists("nc_usernames", envir = srv_auth_env)) {
+  if (!exists("nc_usernames", envir = srv_auth_env)) {
     nc_usernames <- list()
-  } else nc_usernames <- get("nc_usernames", envir = srv_auth_env)
+  } else {
+    nc_usernames <- get("nc_usernames", envir = srv_auth_env)
+  }
   names(nc_usernames)
 }
 
 pass_token <- function(token) {
-  if(is.null(token)) return(token) else return(I(token))
+  if (is.null(token)) return(token) else return(I(token))
 }

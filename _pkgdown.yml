@@ -29,6 +29,7 @@ reference:
   - nc_count
   - nc_data_dl
   - nc_metadata
+  - nc_metadata_version
   - nc_requests
   - nc_query_table
   - nc_remove_cache
@@ -39,7 +40,7 @@ reference:
   desc: Functions for searching through metadata
   contents: starts_with("search_")
 - title: Helper functions
-  desc: Functions for formating, cleaning or transforming downloaded data
+  desc: Functions for formatting, cleaning or transforming downloaded data, as well as for working with spatial data
   contents:
   - format_dates
   - format_zero_fill
@@ -55,6 +56,7 @@ reference:
   contents:
   - bcch
   - hofi
+  - pops
   
 articles:
 - title: The NatureCounts Intro Tutorial
@@ -93,15 +95,17 @@ articles:
   - '`articles/region-spatial`'
   - '`region-areas`'
   - '`articles/mapping-observations`'
+  - '`cosewic-tools`'
 - title: Reference
   desc: Reference articles for metadata codes and descriptions.
   contents:
   - '`region-codes`'
   - '`species-codes`'
-- title: Formating
+- title: Formatting
   desc: How to format downloaded data
   contents: '`format-zero-fill`'
 - title: internal
   desc: Internal articles for reference
   contents:
   - '`articles/test`'
+  

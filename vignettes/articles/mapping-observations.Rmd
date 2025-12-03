@@ -33,8 +33,12 @@ library(mapview)
 First we'll use download some data:
 
 ```{r}
-house_finches <- nc_data_dl(species = 20350, region = list(statprov = "AB"), 
-                            username = "testuser", info = "nc_tutorial")
+house_finches <- nc_data_dl(
+  species = 20350,
+  region = list(statprov = "AB"),
+  username = "testuser",
+  info = "nc_tutorial"
+)
 head(house_finches)
 ```
 
@@ -58,8 +62,11 @@ Note that we're using CRS EPSG code of 4326 because that's reflects unprojected,
 First we omit `NA`s because `sf` data frames cannot have missing locations.
 ```{r}
 house_finches <- drop_na(house_finches, "longitude", "latitude")
-house_finches_sf <- st_as_sf(house_finches, 
-                             coords = c("longitude", "latitude"), crs = 4326)
+house_finches_sf <- st_as_sf(
+  house_finches,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+)
 ```
 
 Now we're ready to make a map of the distribution of observations. 
@@ -86,8 +93,12 @@ ggplot() +
 ## Interactive Maps
 If we want to get fancy we can also create interactive maps using the `mapview` packages (see also the [`leaflet` for R package](https://rstudio.github.io/leaflet/)).
 ```{r, eval = FALSE}
-mapview(house_finches_sf, zcol = "survey_year", at = seq(1965, 2005, by = 10),
-        map.types = "Esri.WorldImagery")
+mapview(
+  house_finches_sf,
+  zcol = "survey_year",
+  at = seq(1965, 2005, by = 10),
+  map.types = "Esri.WorldImagery"
+)
 ```
 
 ## More Complex Maps
@@ -135,9 +146,16 @@ First we'll grab the BCR shape file from [Birds Canada](https://www.birdscanada.
 We'll download the zip file and extracted to a folder easier to work with. 
 Note that these spatial data are in the GDB format, so we're working with a
 folder named `XXX.gdb`.
-```{r}
-download.file("https://services1.arcgis.com/d5M16PKlQTMEVyua/arcgis/rest/services/BCR_terrestrial_master/FeatureServer/replicafilescache/BCR_terrestrial_master_-8688020410858769740.zip", "BCR_terrestrial_master.zip")
-unzip("BCR_terrestrial_master.zip", junkpaths = TRUE, exdir = "BCR_terrestrial_master.gdb")
+```{r download}
+download.file(
+  "https://services1.arcgis.com/d5M16PKlQTMEVyua/arcgis/rest/services/BCR_terrestrial_master/FeatureServer/replicafilescache/BCR_terrestrial_master_-8688020410858769740.zip",
+  "BCR_terrestrial_master.zip"
+)
+unzip(
+  "BCR_terrestrial_master.zip",
+  junkpaths = TRUE,
+  exdir = "BCR_terrestrial_master.gdb"
+)
 ```
 
 
@@ -176,7 +194,12 @@ Those border cases are now resolved.
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
-  geom_sf(data = bcr, aes(fill = factor(bcr_label)), alpha = 0.25, colour = NA) +
+  geom_sf(
+    data = bcr,
+    aes(fill = factor(bcr_label)),
+    alpha = 0.25,
+    colour = NA
+  ) +
   geom_sf(data = house_finches_sf, aes(fill = factor(bcr_label)), shape = 21) +
   scale_fill_viridis_d(name = "BCR")
 ```
@@ -185,10 +208,15 @@ We might also be interested in observations over time.
 
 First we'll bin our yearly observations
 ```{r}
-house_finches_sf <- mutate(house_finches_sf, 
-                           years = cut(survey_year, 
-                                       breaks = seq(1960, 2010, 10), 
-                                       labels = seq(1960, 2000, 10), right = FALSE))
+house_finches_sf <- mutate(
+  house_finches_sf,
+  years = cut(
+    survey_year,
+    breaks = seq(1960, 2010, 10),
+    labels = seq(1960, 2000, 10),
+    right = FALSE
+  )
+)
 ```
 
 We'll also want to see how many sample years there are per decade.
@@ -208,8 +236,14 @@ ggplot() +
   geom_sf(data = bcr, aes(fill = factor(bcr_label)), alpha = 0.5, colour = NA) +
   geom_sf(data = house_finches_sf, size = 0.5) +
   scale_fill_viridis_d(name = "BCR") +
-  geom_sf_text(data = years, x = 4427134, y = 2965275, hjust = 0, vjust = 1, 
-               aes(label = paste0("n = ", n))) +
+  geom_sf_text(
+    data = years,
+    x = 4427134,
+    y = 2965275,
+    hjust = 0,
+    vjust = 1,
+    aes(label = paste0("n = ", n))
+  ) +
   facet_wrap(~years)
 ```
 
@@ -220,15 +254,24 @@ We can also use some of the `naturecounts` helper functions to create presence/a
 Here we download data from the `RCBIOTABASE` collection, make sure to keep only observations where all species and the location were reported, create a new `presence` column which is either TRUE, FALSE, or NA for each sampling event. Finally we use the `format_zero_fill()` function to fill in sampling events where cardinals (`species_id` 19360) were not detected (presence would then be 0).
 
 ```{r}
-cardinals <- nc_data_dl(collection = "RCBIOTABASE", username = "testuser", 
-                        info = "nc_tutorial")
+cardinals <- nc_data_dl(
+  collection = "RCBIOTABASE",
+  username = "testuser",
+  info = "nc_tutorial"
+)
 
 cardinals_zf <- cardinals |>
   filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) |>
   group_by(species_id, AllSpeciesReported, SamplingEventIdentifier) |>
-  summarize(presence = sum(as.numeric(ObservationCount)) > 0, .groups = "drop") |>
-  format_zero_fill(species = 19360, by = "SamplingEventIdentifier",
-                   fill = "presence")
+  summarize(
+    presence = sum(as.numeric(ObservationCount)) > 0,
+    .groups = "drop"
+  ) |>
+  format_zero_fill(
+    species = 19360,
+    by = "SamplingEventIdentifier",
+    fill = "presence"
+  )
 ```
 
 
@@ -240,7 +283,7 @@ more than one lat/lon combo for each sampling event.
 coords <- cardinals |>
   select("SamplingEventIdentifier", "latitude", "longitude") |>
   group_by(SamplingEventIdentifier, latitude, longitude) |>
-  mutate(n = n()) |>  # Count number of unique coordinates
+  mutate(n = n()) |> # Count number of unique coordinates
   group_by(SamplingEventIdentifier) |>
   slice_max(n, with_ties = FALSE) |> # Grab the most common coordinates for each event
   select(-"n")
@@ -252,18 +295,27 @@ head(cardinals_zf)
 
 Now that we have our presence/absence data for cardinals, we can create a map.
 ```{r}
-cnt <- st_as_sf(cardinals_zf, coords = c("longitude", "latitude"), crs = 4326) |>
+cnt <- st_as_sf(
+  cardinals_zf,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+) |>
   group_by(presence) |>
   count(geometry)
 
 ggplot() +
   annotation_map_tile(type = "osm", zoomin = 0) +
   geom_sf(data = cnt, aes(size = n, colour = factor(presence)), alpha = 0.5) +
-  scale_colour_manual(name = "Presence/Absence", values = c("#31688E", "#440154"), 
-                      labels = c("1" = "Present", "0" = "Absent")) +
+  scale_colour_manual(
+    name = "Presence/Absence",
+    values = c("#31688E", "#440154"),
+    labels = c("1" = "Present", "0" = "Absent")
+  ) +
   scale_size_continuous(name = "Number of Sampling Events", range = c(1, 20)) +
-  labs(caption = "Copyright OpenStreetMap contributors",
-       title = "Presence/Absence of Cardinals in the RCBIOTABASE collection")
+  labs(
+    caption = "Copyright OpenStreetMap contributors",
+    title = "Presence/Absence of Cardinals in the RCBIOTABASE collection"
+  )
 ```
 
 ## Clean up the mapping files if you no longer need them

@@ -56,12 +56,12 @@ nc_count(show = "all") %>%
 #> # A tibble: 6 × 4
 #>   collection akn_level access     nrecords
 #>   <chr>          <int> <chr>         <int>
-#> 1 ABATLAS1           5 full         123364
+#> 1 ABATLAS1           5 full         122258
 #> 2 ABATLAS2           5 full         201357
 #> 3 ABBIRDRECS         5 full         357264
-#> 4 ATBANS             3 by request      267
-#> 5 ATOWLS             4 by request    33964
-#> 6 BBS                5 full        5735895
+#> 4 ABOWLS             3 by request    20956
+#> 5 ACCWS              3 by request    22889
+#> 6 ATBANS             3 by request      267
 ```
 
 ### Fetching data
@@ -85,7 +85,7 @@ description of what the data is being downloaded for.
 ``` r
 bittern <- nc_data_dl(species = 2490, username = "sample", 
                     info = "readme_example")
-#> Using filters: species (2490); fields_set (BMDE2.00-min)
+#> Using filters: species (2490); fields_set (BMDE2.00-ext)
 #> Collecting available records...
 #>   collection nrecords
 #> 1    SAMPLE1        1
@@ -102,7 +102,7 @@ Alternatively, save the downloaded data as a SQLite database
 ``` r
 bittern <- nc_data_dl(species = 2490, sql_db = "bittern", username = "sample", 
                     info = "readme_example")
-#> Using filters: species (2490); fields_set (BMDE2.00-min)
+#> Using filters: species (2490); fields_set (BMDE2.00-ext)
 #> Collecting available records...
 #>   collection nrecords
 #> 1    SAMPLE1        1

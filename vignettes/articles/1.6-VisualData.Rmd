@@ -1,6 +1,6 @@
 ---
 title: "Chapter 6 - Data Visualization"
-date: "`r Sys.Date()`"
+date: "2025-11-03"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Chapter 6 - Data Visualization}
@@ -8,10 +8,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
+
 # Data Visualization {#Visual6}
 
-```{r, message = FALSE, warning = FALSE}
-library(dplyr) 
+
+``` r
+library(dplyr)
 library(ggplot2)
 library(naturecounts)
 library(tidyverse)
@@ -29,19 +32,42 @@ At the end of [Chapter 5](#Manip5) you were exploring fall migration monitoring 
 
 First, lets apply our previously acquired skills to download the filtered dataset and zero-fill for GRCA, while also keep some extra variables.
 
-```{r VLBO, eval = TRUE}
-VLBO <- nc_data_dl(collections = "CMMN-DET-VLBO", years = c(2015, NA), 
-                   username = "testuser", info = "tutorial example")
 
-GRCA <- format_zero_fill(VLBO, species = 15900, 
-                         by = "SamplingEventIdentifier", 
-                         extra_event= c("survey_year", "survey_month", "survey_day"))
+``` r
+VLBO <- nc_data_dl(
+  collections = "CMMN-DET-VLBO",
+  years = c(2015, NA),
+  username = "testuser",
+  info = "tutorial example"
+)
+#> Using filters: collections (CMMN-DET-VLBO); fields_set (BMDE2.00-ext); start_year (2015)
+#> Collecting available records...
+#>      collection nrecords
+#> 1 CMMN-DET-VLBO    24373
+#> Total records: 24,373
+#> 
+#> Downloading records for each collection:
+#>   CMMN-DET-VLBO
+#>     Records 1 to 5000 / 24373
+#>     Records 5001 to 10000 / 24373
+#>     Records 10001 to 15000 / 24373
+#>     Records 15001 to 20000 / 24373
+#>     Records 20001 to 24373 / 24373
 
+GRCA <- format_zero_fill(
+  VLBO,
+  species = 15900,
+  by = "SamplingEventIdentifier",
+  extra_event = c("survey_year", "survey_month", "survey_day")
+)
+#>  - Consider summarizing multiple observations per set of 'by' before zero-filling to increase speed
+#>  - Converted 'fill' column ('ObservationCount') from character to numeric
 ```
 
 First, we are interested if there are any noticeable patterns in migration timing. For this, we will use the [add date and day-of-year helper function](https://birdstudiescanada.github.io/naturecounts/reference/format_dates.html), introduced at the end of [Chapter 5](#Manip5.3), to add two new columns to the dataframe.
 
-```{r doy, eval = TRUE}
+
+``` r
 
 GRCA_dates <- format_dates(GRCA)
 
@@ -49,37 +75,41 @@ GRCA_dates <- format_dates(GRCA)
 
 Now we can plot raw counts (y-axis) for each day-of-year (x-axis).
 
-```{r plot1VLBO, eval = TRUE}
 
-ggplot(data = GRCA_dates) + 
+``` r
+
+ggplot(data = GRCA_dates) +
   geom_point(aes(x = doy, y = ObservationCount))
-
 ```
+
+![plot of chunk plot1VLBO](vignettes/articles/figures/nc_intro6_plot1VLBO-1.png)
 
 What you will notice is that migration for this species is highest early in the year and diminishes with time.
 
 Next, we are interested in visually examining the mean number of migrant GRCA each year, to see if there are any noticeable changes over time. First, we need to summarise the data. Here, we create a function that calculates standard error (se) and deploy the `mutate()` function which helps create new variables from existing ones:
 
-```{r VLBOsum, eval = TRUE, warning = FALSE}
+
+``` r
 
 #use this shortcut function to calculate the standard error
 se <- function(x) sd(x) / sqrt(length(x))
 
-GRCA_year <- GRCA %>% 
-  group_by(survey_year) %>% 
-  summarise(MeanObs = mean(ObservationCount), 
-            SEObs = se(ObservationCount)) %>%   
+GRCA_year <- GRCA %>%
+  group_by(survey_year) %>%
+  summarise(MeanObs = mean(ObservationCount), SEObs = se(ObservationCount)) %>%
   mutate(yrmin = MeanObs + SEObs, yrmax = MeanObs - SEObs)
 
 ```
 
 Now we can create the plot:
 
-```{r plot2VLBO, eval = TRUE}
-ggplot(data = GRCA_year) +  
-  geom_pointrange(aes(x = survey_year, y = MeanObs, ymin = yrmin, ymax = yrmax))
 
+``` r
+ggplot(data = GRCA_year) +
+  geom_pointrange(aes(x = survey_year, y = MeanObs, ymin = yrmin, ymax = yrmax))
 ```
+
+![plot of chunk plot2VLBO](vignettes/articles/figures/nc_intro6_plot2VLBO-1.png)
 
 You will notice there was an increase in the mean number of GRCA observed in the last three years, compared to 2015. You might now be wondering why.
 

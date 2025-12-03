@@ -88,7 +88,7 @@ rnest_query <- filter(rnest, speciesID %in% c(15770, 47674)) # filter for the Am
 
 # 2.3 rNest: Initiation and Fledging Dates {#2.3rNest_dates}
 
-`rNest` is an R package that enables the backcalculation of nest chronologies from nest observations. It helps describe nesting phenology based on nest records held in the BirdsCanada database. The development of this package aims to produce a robust description of bird nesting phenology for 311 bird species across Canada. See the report [here](https://publications.gc.ca/site/eng/9.843360/publication.html).
+`rNest` is an R package that enables the back calculation of nest chronologies from nest observations. It helps describe nesting phenology based on nest records held in the Birds Canada database. The development of this package aims to produce a robust description of bird nesting phenology for 311 bird species across Canada. See the report [here](https://publications.gc.ca/site/eng/9.843360/publication.html).
 
 > **Initiation** date - estimated date when the first egg was laid for each nest attempt.
 >

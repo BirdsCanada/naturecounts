@@ -10,7 +10,12 @@ vignette: >
 
 ```{r setup, include = FALSE}
 options(width = 100)
-knitr::opts_chunk$set(out.width = "60%", fig.width = 6, fig.asp = 1, fig.align = "center")
+knitr::opts_chunk$set(
+  out.width = "60%",
+  fig.width = 6,
+  fig.asp = 1,
+  fig.align = "center"
+)
 ```
 
 ```{r}
@@ -43,46 +48,60 @@ To use the `region` argument:
 nc_count(region = list(statprov = "NB"))
 ```
 
+You can only use **one** type of region, but you can filter to multiple regions of that type:
+
+```{r count_eg}
+nc_count(region = list(statprov = c("PE", "NB")))
+```
 
 ## In Detail - Codes
 
+Here we'll go through in detail how to use the various codes. Note that in some
+examples we also filter by species just so things don't take so long to download.
+
 ### Country
 
-**Search by name** (English or French)
-```{r country}
-search_region("États-Unis", type = "country")
-```
-
 **Browse the code list**
-```{r, eval = FALSE}
+```{r}
 meta_country_codes()
 ```
 
+**Search by name** (English or French)
+```{r}
+search_region("États-Unis", type = "country")
+```
+
 **Use the resulting code(s)**
-```{r, eval = FALSE}
-nc_count(region = list(country = c("US", "CA")))
+```{r count_country}
+nc_count(species = 13210, region = list(country = "US"))
 ```
 
 
 ### State/Province
 
-**Search by name** (English, French, or Spanish)
-```{r statprov}
-search_region("Distrito de Colombia", type = "statprov")
-```
 
 **Browse the code list**
-```{r, eval = FALSE}
+```{r}
 meta_statprov_codes()
 ```
 
-**Use the resulting code(s)**
+**Search by name** (English, French, or Spanish)
 ```{r}
-nc_count(region = list(statprov = c("DC", "MB")))
+search_region("Distrito de Colombia", type = "statprov")
+```
+
+**Use the resulting code(s)**
+```{r count_statprov}
+nc_count(region = list(statprov = "DC"))
 ```
 
 
 ### Subnational regions (type 2)
+
+**Browse the code list**
+```{r}
+meta_subnational2_codes()
+```
 
 **Search by name**  
 Language depends on location: 
@@ -91,18 +110,14 @@ Language depends on location:
 - Quebec = French
 - Rest of Canada = English
 
-```{r subnational}
+```{r}
 search_region("Montreal", type = "subnational2")
 ```
 
-**Browse the code list**
-```{r, eval = FALSE}
-meta_subnational2_codes()
-```
 
 **Use the resulting code(s)**
-```{r}
-nc_count(region = list(subnational2 = c("CA-QC-MR", "CA-ON-TO")))
+```{r count_subnational}
+nc_count(species = 7450, region = list(subnational2 = "CA.QC.MR"))
 ```
 
 
@@ -110,58 +125,61 @@ nc_count(region = list(subnational2 = c("CA-QC-MR", "CA-ON-TO")))
 
 - These are Canadian designations
 
+
+**Browse the code list**
+```{r}
+meta_iba_codes()
+```
+
 **Search by name** (English or French)
 
 ```{r iba}
 search_region("oak hammock", type = "iba")
 ```
 
-**Browse the code list**
-```{r, eval = FALSE}
-meta_iba_codes()
-```
 
 **Use the resulting code(s)**
-```{r}
-nc_count(region = list(iba = c("MB010", "AB011")))
+```{r count_iba}
+nc_count(region = list(iba = "MB010"))
 ```
 
 ### Bird Conservation Regions (BCR)
 
-**Search by name** (English, French, or Spanish)
+**Browse the code list**
+```{r}
+meta_bcr_codes()
+```
 
+**Search by name** (English, French, or Spanish)
 ```{r bcr}
 search_region("rainforest", type = "bcr")
 ```
 
-**Browse the code list**
-```{r, eval = FALSE}
-meta_bcr_codes()
-```
-
 **Use the resulting code(s)**
-```{r}
-nc_count(region = list(bcr = c(5, 2)))
+```{r count_bcr}
+nc_count(species = 7450, region = list(bcr = 5))
 ```
 
 ### UTM Squares
 
 **Browse the code list**
-```{r, eval = FALSE}
+```{r}
 meta_utm_squares()
 ```
 
 **Use the resulting code(s)**
-```{r}
-nc_count(region = list(utm_squares = "18TUR35"))
+```{r count_utm}
+nc_count(species = 7450, region = list(utm_squares = "18TUR35"))
 ```
 
 ### Bounding Box
 
 Bounding box reflects latitude and longitude limits.
 
-**Use the resulting code(s)**
-```{r}
-nc_count(region = list(bbox = c(left = -125, bottom = 45, 
-                                right = -100, top = 50)))
+**Use a bounding box**
+```{r count_bbox}
+nc_count(
+  species = 7450,
+  region = list(bbox = c(left = -125, bottom = 45, right = -100, top = 50))
+)
 ```

@@ -4,7 +4,7 @@
 \alias{grid_canada}
 \title{Create grid across Canada}
 \usage{
-grid_canada(cell_size = 200, buffer = 500)
+grid_canada(cell_size = 200, buffer = 500, crs = "ESRI:102001")
 }
 \arguments{
 \item{cell_size}{Numeric. Size of grid (km) to use when creating grid.
@@ -13,6 +13,8 @@ COSEWIC grid size of 2.}
 
 \item{buffer}{Numeric. Extra buffer (km) to add around the outline of Canada
 before calculating grid.}
+
+\item{crs}{Character. CRS for the grid to create.}
 }
 \value{
 sf data frame with polygon grid
@@ -22,18 +24,18 @@ Create grid across Canada
 }
 \examples{
 
-gc <- grid_canada(200) 
+gc <- grid_canada(200)
 gc_buff <- grid_canada(200, buffer = 0)
 
 # Plot to illustrate
 library(ggplot2)
 ggplot() +
-  geom_sf(data = map_canada()) +
-  geom_sf(data = gc, fill = NA) +
+  geom_sf(data = gc) +
+  geom_sf(data = map_canada(), fill = NA) +
   labs(caption = "200km buffer")
-  
+
 ggplot() +
-  geom_sf(data = map_canada()) +
-  geom_sf(data = gc_buff, fill = NA) +
+  geom_sf(data = gc_buff) +
+  geom_sf(data = map_canada(), fill = NA) +
   labs(caption = "No buffer")
 }

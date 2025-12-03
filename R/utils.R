@@ -1,10 +1,11 @@
 parse_results <- function(r, results = FALSE) {
-  if(results) r <- r$results
+  if (results) {
+    r <- r$results
+  }
   dplyr::as_tibble(r)
 }
 
 parse_request <- function(request) {
-  
   s <- tibblify::tspec_df(
     .names_to = "request_id",
     "request_origin" = tibblify::tib_chr("requestOrigin"),
@@ -17,7 +18,7 @@ parse_request <- function(request) {
     ),
     tibblify::tib_variant("filters")
   )
-  
+
   tibblify::tibblify(request, spec = s) %>%
     dplyr::mutate(filter = purrr::map_chr(.data$filters, filter_to_str)) %>%
     dplyr::select(-"filters") %>%
@@ -30,9 +31,11 @@ parse_request <- function(request) {
 
 list_to_df <- function(l, type) {
   df <- data.frame()
-  for(i in 1:length(l)) {
-    df <- dplyr::bind_rows(df, dplyr::mutate(dplyr::as_tibble(l[[i]]),
-                                             !!type := names(l)[i]))
+  for (i in 1:length(l)) {
+    df <- dplyr::bind_rows(
+      df,
+      dplyr::mutate(dplyr::as_tibble(l[[i]]), !!type := names(l)[i])
+    )
   }
   df
 }
@@ -56,16 +59,19 @@ progress_query <- function(current, max, by) {
 
 as_numeric <- function(x) {
   x1 <- suppressWarnings(as.numeric(as.character(x)))
-  if(any(!is.na(x[is.na(x1)]))) x1[is.na(x1)] <- x[is.na(x1)]
+  if (any(!is.na(x[is.na(x1)]))) {
+    x1[is.na(x1)] <- x[is.na(x1)]
+  }
   x1
 }
 
 capture_df <- function(x) {
   o <- utils::capture.output(utils::head(as.data.frame(x)))
-  if(nrow(x) > 6) o <- c(o, "...")
+  if (nrow(x) > 6) {
+    o <- c(o, "...")
+  }
   paste0(o, collapse = "\n")
 }
-
 
 
 # Pipe operator -------------------------------
@@ -121,20 +127,25 @@ NULL
 NULL
 
 
-nc_deprecate <- function(new){
-  .Deprecated(msg = paste0(as.character(sys.call(sys.parent()))[1L],
-                           " is deprecated, use ", new, " instead"))
+nc_deprecate <- function(new) {
+  .Deprecated(
+    msg = paste0(
+      as.character(sys.call(sys.parent()))[1L],
+      " is deprecated, use ",
+      new,
+      " instead"
+    )
+  )
 }
 
-have_auth <- function(){
+have_auth <- function() {
   Sys.getenv("naturecounts_steffilazerte2") != ""
 }
 
 
-
 #' Remove in-memory cache
-#' 
-#' All server queries are cached for four hours to reduce server load. You can 
+#'
+#' All server queries are cached for four hours to reduce server load. You can
 #' reset the cache at any time by either restarting your R session or running
 #' `nc_remove_cache()`.
 #'
@@ -142,9 +153,14 @@ have_auth <- function(){
 #' @export
 #'
 #' @examples
-#' 
+#'
 #' nc_remove_cache()
-#' 
+#'
 nc_remove_cache <- function() {
   memoise::forget(srv_query)
+}
+
+
+is_testing <- function() {
+  identical(Sys.getenv("TESTTHAT"), "true")
 }

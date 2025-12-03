@@ -42,22 +42,27 @@
 #' @aliases region_search
 #' @export
 
-search_region <- function(name = NULL, type = "country"){
-  if(!type %in% c("country", "statprov", "subnational2", "iba", "bcr")) {
-    stop("'type' must be one of 'country', 'statprov', 'subnational2', ",
-         "'iba', or 'bcr'", call. = FALSE)
+search_region <- function(name = NULL, type = "country") {
+  if (!type %in% c("country", "statprov", "subnational2", "iba", "bcr")) {
+    stop(
+      "'type' must be one of 'country', 'statprov', 'subnational2', ",
+      "'iba', or 'bcr'",
+      call. = FALSE
+    )
   }
-
 
   df <- eval(parse(text = paste0("meta_", type, "_codes()")))
   columns <- stringr::str_subset(names(df), "name")
 
-  if(!is.null(name)) {
-    df <- search_codes(name, df = df,
-                       code_column = keys[[paste0(type, "_codes")]],
-                       columns = columns)
+  if (!is.null(name)) {
+    df <- search_codes(
+      name,
+      df = df,
+      code_column = keys[[paste0(type, "_codes")]],
+      columns = columns
+    )
   }
-    df
+  df
 }
 
 
@@ -97,41 +102,56 @@ search_region <- function(name = NULL, type = "country"){
 #'
 #' @export
 search_species <- function(name = NULL, show = "names", authority = NULL) {
-
   # Argument checks
-  if(!show %in% c("all", "names")) {
-    stop("'show' must be either 'all' or 'names'", call.= FALSE)
+  if (!show %in% c("all", "names")) {
+    stop("'show' must be either 'all' or 'names'", call. = FALSE)
   }
 
   ids <- meta_species_taxonomy()
 
-  if(!is.null(name)){
+  if (!is.null(name)) {
     search_columns <- c("scientific_name", "english_name", "french_name")
-    ids <- search_codes(name, df = ids,
-                        code_column = "species_id",
-                        columns = search_columns)
+    ids <- search_codes(
+      name,
+      df = ids,
+      code_column = "species_id",
+      columns = search_columns
+    )
   }
 
   # No rows?
-  if(nrow(ids) == 0) {
-    stop("No species matched your description. Either try again, or consider ",
-         "searching through the species_taxonomy data frame by hand",
-         call. = FALSE)
+  if (nrow(ids) == 0) {
+    stop(
+      "No species matched your description. Either try again, or consider ",
+      "searching through the species_taxonomy data frame by hand",
+      call. = FALSE
+    )
   }
 
-  if(show == "names") {
-    ids <- dplyr::select(ids, "species_id",
-                         tidyselect::any_of(c("scientific_name", "english_name",
-                                              "french_name", "taxon_group")))
+  if (show == "names") {
+    ids <- dplyr::select(
+      ids,
+      "species_id",
+      tidyselect::any_of(c(
+        "scientific_name",
+        "english_name",
+        "french_name",
+        "taxon_group"
+      ))
+    )
   }
 
-  if(!is.null(authority)) {
+  if (!is.null(authority)) {
     authority_check(authority)
     auth <- meta_species_codes() %>%
       dplyr::filter(.data$authority == .env$authority) %>%
       dplyr::select("species_id2", !!authority := "species_code")
-    ids <- dplyr::left_join(ids, auth, by = c("species_id" = "species_id2"),
-                            multiple = "all")
+    ids <- dplyr::left_join(
+      ids,
+      auth,
+      by = c("species_id" = "species_id2"),
+      multiple = "all"
+    )
   }
 
   ids
@@ -185,13 +205,15 @@ search_species <- function(name = NULL, show = "names", authority = NULL) {
 #'
 #' @export
 
-search_species_code <- function(code = NULL, authority = "BSCDATA",
-                                results = "all") {
-
+search_species_code <- function(
+  code = NULL,
+  authority = "BSCDATA",
+  results = "all"
+) {
   # Argument checks
   authority_check(authority)
 
-  if(!results %in% c("all", "exact")) {
+  if (!results %in% c("all", "exact")) {
     stop("'results' must be 'all' or 'exact'", call. = FALSE)
   }
 
@@ -200,37 +222,54 @@ search_species_code <- function(code = NULL, authority = "BSCDATA",
 
   # Return matching rows
   ids <- meta_species_codes() %>%
-    dplyr::select("species_id", "species_code",
-                  "authority", "species_id2", "rank") %>%
+    dplyr::select(
+      "species_id",
+      "species_code",
+      "authority",
+      "species_id2",
+      "rank"
+    ) %>%
     dplyr::filter(.data$authority %in% !!authority) %>%
     tidyr::spread("authority", "species_code") %>%
     dplyr::select(-"rank") %>%
     dplyr::distinct()
 
-  if(!is.null(code)) ids <- search_codes(code, df = ids,
-                                         code_column = code_column,
-                                         columns = authority)
+  if (!is.null(code)) {
+    ids <- search_codes(
+      code,
+      df = ids,
+      code_column = code_column,
+      columns = authority
+    )
+  }
 
   # No rows?
-  if(nrow(ids) == 0) {
-    stop("No species matched your description. Either try again, or consider ",
-         "searching through the species_codes data frame by hand",
-         call. = FALSE)
+  if (nrow(ids) == 0) {
+    stop(
+      "No species matched your description. Either try again, or consider ",
+      "searching through the species_codes data frame by hand",
+      call. = FALSE
+    )
   }
 
   # We're interested in all/exact species_id2s
-  ids <- dplyr::select(ids, species_id = "species_id2",
-                       tidyselect::all_of(authority)) %>%
+  ids <- dplyr::select(
+    ids,
+    species_id = "species_id2",
+    tidyselect::all_of(authority)
+  ) %>%
     dplyr::distinct()
 
   # Add in common/scientific names for reference
-  dplyr::left_join(ids,
-                   dplyr::select(meta_species_taxonomy(),
-                                 "species_id",
-                                 tidyselect::any_of(c("scientific_name",
-                                                      "english_name",
-                                                      "french_name"))),
-                   by = "species_id")
+  dplyr::left_join(
+    ids,
+    dplyr::select(
+      meta_species_taxonomy(),
+      "species_id",
+      tidyselect::any_of(c("scientific_name", "english_name", "french_name"))
+    ),
+    by = "species_id"
+  )
 }
 
 
@@ -250,18 +289,19 @@ search_species_code <- function(code = NULL, authority = "BSCDATA",
 #' @keywords internal
 
 search_codes <- function(desc, df, code_column, columns) {
-
   desc <- stringi::stri_trans_general(desc, "Latin-ASCII") %>%
     stringr::str_replace("-|_", " ")
   desc <- paste0("(", paste0(desc, collapse = ")|("), ")")
 
   codes <- df %>%
     tidyr::gather("cols", "name", dplyr::one_of(columns)) %>%
-    dplyr::mutate(name = stringi::stri_trans_general(.data$name, "Latin-ASCII"),
-                  name = stringr::str_replace(.data$name, "-|_", " ")) %>%
+    dplyr::mutate(
+      name = stringi::stri_trans_general(.data$name, "Latin-ASCII"),
+      name = stringr::str_replace(.data$name, "-|_", " ")
+    ) %>%
     dplyr::filter(
-      stringr::str_detect(.data$name,
-                          stringr::regex(desc, ignore_case = TRUE))) %>%
+      stringr::str_detect(.data$name, stringr::regex(desc, ignore_case = TRUE))
+    ) %>%
     dplyr::pull(!!code_column) %>%
     unique()
 
@@ -269,7 +309,7 @@ search_codes <- function(desc, df, code_column, columns) {
 }
 
 #' @export
-region_search <- function(name = NULL, type = "country"){
+region_search <- function(name = NULL, type = "country") {
   nc_deprecate("search_region")
   search_region(name, type)
 }
@@ -281,9 +321,11 @@ species_search <- function(name = NULL, show = "names", authority = NULL) {
 }
 
 #' @export
-species_code_search <- function(code = NULL, authority = "BSCDATA",
-                                results = "all") {
+species_code_search <- function(
+  code = NULL,
+  authority = "BSCDATA",
+  results = "all"
+) {
   nc_deprecate("search_species_code")
   search_species_code(code, authority, results)
 }
-

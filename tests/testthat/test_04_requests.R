@@ -1,9 +1,8 @@
 test_that("nc_requests() shows 'web' requests", {
-
   expect_silent(r <- nc_requests(username = "testuser")) %>%
     expect_s3_class("data.frame")
-  
-  if(nrow(r) > 1) {
+
+  if (nrow(r) > 1) {
     expect_equal(unique(r$request_origin), "web")
     expect_true(any(r$status == "approved"))
   }

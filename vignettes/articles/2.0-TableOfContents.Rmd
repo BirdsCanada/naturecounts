@@ -39,10 +39,10 @@ Learn how to download, process, and visualize spatial vector data from NatureCou
 -   **2.2.** Priority Places for Species at Risk
 
 ### [**Chapter 3: Climate Data**](2.3-ClimateData.html)
-Learn how to download, process, and visualize NatureCounts data with vector and raster climate data sources: Weathercan and WorldClim. 
+Learn how to download, process, and visualize NatureCounts data with vector and raster climate data sources: weathercan and WorldClim. 
 
 -   **3.1.** Data Setup
--   **3.2.** Weathercan (Vector) Data
+-   **3.2.** weathercan (Vector) Data
 -   **3.3.** WorldClim (Raster) Data
 
 ### [**Chapter 4: Elevation Data**](2.4-ElevationData.html)

@@ -14,7 +14,7 @@ In this vignette we will go over several different types of filtering using the 
 
 For each example, we will show case how to filter your data either directly downloaded as a data frame, or obtained from a SQLite database.
 
-First let's get a collection of chickadee data to use. We'll collect all public data on Carolina, black-capped and mountain chickadees (see the [vignette on species codes](species-codes.html)) for more information on how to find species codes).
+First let's get a set of Boreal Chickadee data to use (see the [vignette on species codes](species-codes.html)) for more information on how to find species codes).
 
 > The following examples use the "testuser" user which is not available to you. 
 > You can quickly [sign up for a free account](https://naturecounts.ca/nc/default/register.jsp)
@@ -31,27 +31,40 @@ library(dplyr)
 library(lubridate)
 ```
 
-**Downloading data directly to a Data Frame**
+**Get the species code**
 ```{r}
-boreal_chickadee_df <- nc_data_dl(species = 14320, collection = "BBS", verbose = FALSE,
-                                  username = "testuser", info = "nc_vignette")
+search_species("boreal chickadee")
 ```
 
-**Downloading data to a SQLite DataBase (`chickadee.nc`)**
+
+**Downloading data directly to a Data Frame**
+```{r}
+boreal_chickadee_df <- nc_data_dl(
+  species = 14320, collection = c("BBS", "ABATLAS1", "ABATLAS2"),
+  verbose = FALSE,
+  username = "testuser", info = "nc_vignette")
+```
+
+**Downloading data to a SQLite DataBase (`boreal_chickadee.nc`)**
 ```{r, echo = -1}
 unlink("boreal_chickadee.nc")
-con <- nc_data_dl(species = 14320, collection = "BBS", sql_db = "boreal_chickadee", 
-                  verbose = FALSE, username = "testuser", info = "nc_vignette")
-boreal_chickadee_db <- tbl(con, "naturecounts")
+con <- nc_data_dl(
+  species = 14320, collection = c("BBS", "ABATLAS1", "ABATLAS2"),
+  sql_db = "boreal_chickadee", verbose = FALSE, 
+  username = "testuser", info = "nc_vignette")
 ```
 
 ```{r, include = FALSE}
 DBI::dbDisconnect(con)
 ```
 
-Or, if starting a new session with an existing SQLite database, first create the connection to the database
+Or, if starting a new session and you want to reconnect to *an existing SQLite database*, first create the connection to the database
 ```{r}
 con <- DBI::dbConnect(RSQLite::SQLite(), dbname = "boreal_chickadee.nc")
+```
+
+Select the naturecounts table
+```{r}
 boreal_chickadee_db <- tbl(con, "naturecounts")
 ```
 
@@ -70,7 +83,7 @@ boreal_chickadee_df <- format_dates(boreal_chickadee_df, overwrite = TRUE)
 
 For databases, you'll modify the connection, then update your table reference.
 
-**Note:** This results in on-disk additions to the SQLite database. If you do not wish to make add fields to your SQLite database, you will have to `collect()` the data into a data frame first.
+**Note:** This results in on-disk additions to the SQLite database. If you do not wish to add fields to your SQLite database, you will have to `collect()` the data into a data frame first.
 
 ```{r}
 con <- format_dates(con)
@@ -89,7 +102,9 @@ Unless stated otherwise, in the following examples, we demonstrate code that wor
 
 ## Categorical filters
 
-The simplest way to filter your data is to pick out categories to include or exclude. In each case there are three steps.
+The simplest way to filter your data is to pick out categories to include or exclude.
+These functions can apply to dataframes or database. 
+In each case there are three steps.
 
 1. What are the categories available?
 2. Filter the categories you a) wish to keep, or b) wish to exclude
@@ -98,31 +113,30 @@ The simplest way to filter your data is to pick out categories to include or exc
 These steps work for categories such as `collection`, `species`, `survey_year`, `iba_site`, `bcr` or any variable that can be expressed as a category.
 
 1. What categories are available?
-- `pull()` grabs the column of interest, `unique()` returns only unique values.
+
+`count()` will count the unique values in the column of interest
 
 ```{r}
-boreal_chickadee_db |>
-  select(collection) |>
-  distinct()
+count(boreal_chickadee_db, collection)
 ```
 
-2a) Filter the categories you wish to keep
+2. Filter the categories you wish to...
+
+...keep
 ```{r}
 alberta_atlas <- filter(boreal_chickadee_db, 
                         collection %in% c("ABATLAS1", "ABATLAS2"))
 ```
 
-2b) Filter the categories you wish to exclude with `!`
+...exclude (with `!`)
 ```{r}
 alberta_atlas <- filter(boreal_chickadee_db, 
-                        !collection %in% c("ABBIRDRECS", "RCBIOTABASE"))
+                        !collection %in% c("BBS"))
 ```
 
 3. Confirm
 ```{r}
-alberta_atlas |>
-  select(collection) |>
-  distinct()
+count(alberta_atlas, collection)
 ```
 
 ## Numerical filters
@@ -130,69 +144,81 @@ alberta_atlas |>
 Another way to filter your data is to specify numerical ranges include or exclude. In each case there are the same three steps as above.
 
 1. What is the numerical range available?
-2. Filter the variable to the range you a) wish to keep, or b) wish to exclude
+2. Filter the variable to the range you wish to keep either implicitly or explicitly
 3. Confirm the results
 
 These steps work for categories such as `survey_year`, `survey_month`, `survey_day`, `doy` or any variable that can be expressed as a number.
 
-1. What categories are available?
-- `pull()` grabs the column of interest, `summary()` returns a numerical summary of the values.
+1. What values are available?
+
+`summary()` returns the numerical summary you define. You can also 'pull' out the survey years from the count.
 
 ```{r}
-boreal_chickadee_db |>
-  select(survey_year) |>
-  summarize(min = min(survey_year, na.rm = TRUE), 
-            max = max(survey_year, na.rm = TRUE))
+summarize(
+  boreal_chickadee_db,
+  min = min(survey_year, na.rm = TRUE), 
+  max = max(survey_year, na.rm = TRUE))
+
+count(boreal_chickadee_db, survey_year) |>
+  pull(survey_year)
 ```
 
-2a) Filter the variable to the range you wish to keep (note that the `,` is an implied `&`)
+2. Filter the variable to the range you wish to...
+
+...keep (note that the `,` is an implied `&`)
 ```{r}
-recent <- filter(boreal_chickadee_db, survey_year >= 2005)
+recent <- filter(boreal_chickadee_db, survey_year >= 2005, survey_year <= 2007)
 ```
 
-2b) Filter the variable to the range you wish to exclude with `!` (note that here we need to use the `&` explicitly)
+...keep (explicitly)
 ```{r}
-recent <- filter(boreal_chickadee_db, !(survey_year >= 1960 & survey_year < 2000))
+recent <- filter(boreal_chickadee_db, survey_year %in% c(2005:2007))
 ```
 
 3. Confirm
 ```{r}
-recent |>
-  select(survey_year) |>
-  summarize(min = min(survey_year, na.rm = TRUE), 
-            max = max(survey_year, na.rm = TRUE))
+summarize(
+  recent,
+  min = min(survey_year, na.rm = TRUE), 
+  max = max(survey_year, na.rm = TRUE))
+
+count(recent, survey_year) |>
+  pull(survey_year)
 ```
 
 ## Date filters
 
 Filtering by dates is usually slightly more complex, but fortunately, the `filter()` function automatically detects dates which means it's pretty much the same as a numerical filter.
 
-1. What categories are available?
-- `pull()` grabs the column of interest, `summary()` returns a summary of the values.
+1. What values are available?
+
+`summary()` returns the numerical summary you define
 
 ```{r}
-boreal_chickadee_db |>
-  select(date) |>
-  summarize(min = min(date, na.rm = TRUE), 
-            max = max(date, na.rm = TRUE))
+summarize(boreal_chickadee_db, 
+          min = min(date, na.rm = TRUE), 
+          max = max(date, na.rm = TRUE))
 ```
 
-2a) Filter the variable to the range you wish to keep (note that the `,` is an implied `&`)
+2. Filter the variable to the range you wish to...
+
+...keep (note that the `,` is an implied `&`)
 ```{r}
-field_season <- filter(boreal_chickadee_db, date >= "2010-05-10", date <= "2010-09-21")
+field_season <- filter(boreal_chickadee_db, 
+                       date >= "2010-05-10", date <= "2010-07-01")
 ```
 
-2b) Filter the variable to the range you wish to exclude with `!` (note that here we need to use the `&` explicitly)
+...exclude (with `!`; note that here we need to use the `&` explicitly)
 ```{r}
-omit_field_season <- filter(boreal_chickadee_db, !(date >= "2010-05-10" & date <= "2010-09-21"))
+omit_field_season <- filter(boreal_chickadee_db, 
+                            !(date >= "2010-05-10" & date <= "2010-07-01"))
 ```
 
 3. Confirm
 ```{r}
-field_season |>
-  select(date) |>
-  summarize(min = min(date, na.rm = TRUE), 
-            max = max(date, na.rm = TRUE))
+summarize(field_season, 
+          min = min(date, na.rm = TRUE), 
+          max = max(date, na.rm = TRUE))
 ```
 
 ```{r, include = FALSE}

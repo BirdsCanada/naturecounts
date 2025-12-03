@@ -54,7 +54,7 @@ d
 # Filter our query
 d <- nc_query_table(table = "bmde_filter_bad_dates",
                     species_id = 15770, username = "sample")
-                    
+
 # Want more than one species? Either filter after, or combine two queries
 
 # Filter after

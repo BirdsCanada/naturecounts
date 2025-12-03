@@ -10,3 +10,5 @@
 ^\.github$
 ^vignettes/articles$
 ^misc$
+^\.vscode$
+^[.]?air[.]toml$

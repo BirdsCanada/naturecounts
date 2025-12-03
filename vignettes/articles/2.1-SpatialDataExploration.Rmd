@@ -65,7 +65,7 @@ Geoprocessing functions allow us to manipulate or compute spatial objects based 
 | `st_difference(x, y)` - creates geometry from x that does not intersect with y
 | `st_area`, `st_length`, and `st_distance` can also be used to compute geometric measurements
 
-More resources, including an `sf` package **cheatsheat** can be found [here](https://github.com/r-spatial/sf).
+More resources, including an `sf` package **cheatsheet** can be found [here](https://github.com/r-spatial/sf).
 
 # 1.3 Spatio-temporal Mapping
 

@@ -244,7 +244,7 @@ Set the path to your TIF file subdirectory.
 
 Create a mosaic of the adjacent DTM rasters.
 
-**Reminder: You should store the DTM's in their own folder after download. The code below will produce an error if there are other .tif files in your subdirectory (like the ones you downloaded in Chapter 3).**
+**Reminder: You should store the DTMs in their own folder after download. The code below will produce an error if there are other .tif files in your subdirectory (like the ones you downloaded in Chapter 3).**
 
 Here we use the `stars` package which allows us to create 'proxy' objects, 
 meaning that the files aren't loaded into memory until the absolutely must be.
