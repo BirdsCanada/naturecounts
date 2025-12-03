@@ -9,7 +9,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/BirdsCanada/naturecounts/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/BirdsCanada/naturecounts/blob/v0.5.0/DESCRIPTION)
 
 LaZerte S, Lepage D (2025). *naturecounts: Access and download data on
 plant and animal populations from NatureCounts*. R package version
