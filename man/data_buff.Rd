@@ -4,35 +4,36 @@
 \alias{data_buff}
 \title{Buffer Data for Covariate Download and Extraction}
 \usage{
-data_buff(data, buffer = FALSE, buffer_distance = 500, buffer_units = "m")
+data_buff(data, buffer = TRUE, buffer_distance = 500, buffer_units = "m")
 }
 \arguments{
 \item{data}{An \code{sf} 'POINT' or 'POLYGON' object, or \code{terra} 'points' or
 'polygons' object.}
 
-\item{buffer}{Logical. Should the provided data be buffered?}
+\item{buffer}{Logical. Should the provided data be buffered? \code{TRUE} by
+default.}
 
-\item{buffer_units}{Character. Units of provided distance. Options are 'm'
-(metres), 'km' (kilometers), 'ft' (feet), 'yd' (yards), 'mi' (miles), or
-'naut_mi' (nautical miles).}
+\item{buffer_distance}{Numeric. Distance that the provided points or
+polygons should be buffered by. 500 by default.}
 
-\item{buffer_distance.}{Numeric. Distance that the provided points or
-polygons should be buffered by.}
+\item{buffer_units}{Character. Units of provided distance. Options are "m"
+(metres), "km" (kilometers), "ft" (feet), "yd" (yards), "mi" (miles), or
+"naut_mi" (nautical miles). Metres ("m") by default.}
 }
 \value{
 Either \code{sf} 'POLYGON' or \code{terra} 'polygons' (depending on format of
-input data) with original columns preserved, and all geometries buffered by
-requested distance.
+input data) with original coordinate reference system and columns
+preserved, and all geometries buffered by requested distance.
 }
 \description{
-Buffers input data by a specifiable radius.
+Buffers input data by a specifiable distance.
 }
 \details{
-If input data is an \code{sf} 'POINT' object or a \code{terra} 'points' object,
-points are buffered to a circle with the radius specified in \code{buffer_distance}
-(500 m by default). If input is an \code{sf} 'POLYGON' object or a \code{terra}
-'polygons' object, the polygon is buffered on all sides by the
-distance specified in \code{buffer_distance} (500 m by default).
+If input data is an \code{sf} 'POINT' object or a \code{terra} 'points' object, points
+are buffered to a circle with the radius specified in \code{buffer_distance} (500
+m by default). If input is an \code{sf} 'POLYGON' object or a \code{terra} 'polygons'
+object, the polygon is buffered on all sides by the distance specified in
+\code{buffer_distance} (500 m by default).
 }
 \examples{
 # Using the included, test data on black-capped chickadees
@@ -44,4 +45,10 @@ bcch <- sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326)
 # Buffer by 1 km
 output <- data_buff(bcch, buffer = TRUE, buffer_distance = 1, buffer_units = "km")
 
+}
+\seealso{
+\code{\link[=data_fmt]{data_fmt()}} for a convenient way to convert \code{data.frame} data to a
+compatible \code{sf} or \code{terra} object.
+
+\code{\link[sf:geos_unary]{sf::st_buffer()}} which this function wraps.
 }

@@ -18,9 +18,9 @@ data_fmt(
 )
 }
 \arguments{
-\item{data}{Data frame, \code{sf} 'POINT' or 'POLYGON' object, or \code{terra} 'points' or
-'polygons' object containing observations associated with
-coordinate and date data.}
+\item{data}{Data frame, \code{sf} 'POINT' or 'POLYGON' object, or \code{terra} 'points'
+or 'polygons' object containing observations associated with coordinate and
+date data.}
 
 \item{site_name}{Character. Optional argument to provide the name of the
 column containing site names if not contained within the BMDE column
@@ -43,8 +43,8 @@ column containing month data if not contained within the BMDE column
 \code{survey_month}.}
 
 \item{date_day}{Character. Optional argument to provide the name of the
-column containing day of month data if not contained within the BMDE
-column \code{survey_day}.}
+column containing day of month data if not contained within the BMDE column
+\code{survey_day}.}
 
 \item{date_lubridate}{Character. Optional argument to provide the name of a
 column containing date data in \code{lubridate} formats.}
@@ -54,13 +54,17 @@ column containing date data in ordinal format.}
 
 \item{crs}{Character. Optional argument to provide the coordinate reference
 system of the provided data. Only required when providing a data frame
-containing data not in \code{EPSG:4326} coordinate reference systems, or \code{sf}/
-\code{terra} objects without coordinate reference systems embedded.}
+containing data not using the typical GPS latitude/longitude
+\href{https://epsg.io/4326}{WGS84} (\code{EPSG:4326}) coordinate reference system, or
+\code{sf}/ \code{terra} objects without coordinate reference systems embedded.}
 }
 \value{
-\code{sf} object containing a row for each unique site-date combination
-in the provided data, in the NAD 1983 Albers Canada (\code{EPSG:102001})
-coordinate reference system containing the following columns.
+If \code{data.frame}, \code{sf} "POINT", or \code{terra} "points" data provided,
+\code{sf} "POINT" object. If \code{sf} "POLYGON" or \code{terra} "polygons" data provided,
+\code{sf} "POLYGON" object. Returned object contains a row for each unique
+site-date combination in the provided data, and is provided in the \link[=NAD 1983
+  Albers Canada]{NAD 1983 Albers Canada} (https://epsg.io/102001) (\code{EPSG:102001}) coordinate reference system with the
+following columns.
 \itemize{
 \item SurveyAreaIdentifier - character. Site names, or if missing in original
 data, filled site names for use in later functions.
@@ -77,16 +81,22 @@ data, filled site names for use in later functions.
 \description{
 This function accepts a variety of input data and conforms it to a
 standardized format for use in the various covariate download and extraction
-functions available in the naturecounts R package. Users are not
-required to use this function before using covariate download and extraction
-functions, but may avoid some finnicky work by doing so.
+functions available in the naturecounts R package. Users are not required to
+use this function before using covariate download and extraction functions,
+but may avoid some finnicky work by doing so.
 }
 \examples{
- 
+
 # Using the included, test data on black-capped chickadees
 bcch # look at the data
- 
+
 # Format
 output <- data_fmt(bcch)
- 
+
+}
+\seealso{
+\code{\link[sf:st_as_sf]{sf::st_as_sf()}} and \code{\link[terra:vect]{terra::vect()}} which this function wraps.
+
+\code{\link[=data_buff]{data_buff()}} to buffer data points by a specified distance to measure
+covariates at desired spatial scales.
 }

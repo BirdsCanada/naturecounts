@@ -1,63 +1,72 @@
 #' Format Data for Covariate Download and Extraction
-#' 
+#'
 #' This function accepts a variety of input data and conforms it to a
 #' standardized format for use in the various covariate download and extraction
-#' functions available in the naturecounts R package. Users are not
-#' required to use this function before using covariate download and extraction
-#' functions, but may avoid some finnicky work by doing so.
-#' 
-#' @param data Data frame, `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or 
-#'    'polygons' object containing observations associated with
-#'    coordinate and date data.
-#' @param site_name Character. Optional argument to provide the name of the 
-#'    column containing site names if not contained within the BMDE column
-#'    `SurveyAreaIdentifier`.
-#' @param coord_lon Character. Optional argument to provide the name of the 
-#'    column containing year data if not contained within the BMDE column 
-#'    `longitude`.
-#' @param coord_lat Character. Optional argument to provide the name of the 
-#'    column containing year data if not contained within the BMDE column 
-#'    `latitude`.
-#' @param date_year Character. Optional argument to provide the name of the 
-#'    column containing year data if not contained within the BMDE column 
-#'    `survey_year`.
-#' @param date_month Character. Optional argument to provide the name of the 
-#'    column containing month data if not contained within the BMDE column 
-#'    `survey_month`.
-#' @param date_day Character. Optional argument to provide the name of the 
-#'    column containing day of month data if not contained within the BMDE 
-#'    column `survey_day`.
-#' @param date_lubridate Character. Optional argument to provide the name of a 
-#'    column containing date data in `lubridate` formats.
+#' functions available in the naturecounts R package. Users are not required to
+#' use this function before using covariate download and extraction functions,
+#' but may avoid some finnicky work by doing so.
+#'
+#' @param data Data frame, `sf` 'POINT' or 'POLYGON' object, or `terra` 'points'
+#'   or 'polygons' object containing observations associated with coordinate and
+#'   date data.
+#' @param site_name Character. Optional argument to provide the name of the
+#'   column containing site names if not contained within the BMDE column
+#'   `SurveyAreaIdentifier`.
+#' @param coord_lon Character. Optional argument to provide the name of the
+#'   column containing year data if not contained within the BMDE column
+#'   `longitude`.
+#' @param coord_lat Character. Optional argument to provide the name of the
+#'   column containing year data if not contained within the BMDE column
+#'   `latitude`.
+#' @param date_year Character. Optional argument to provide the name of the
+#'   column containing year data if not contained within the BMDE column
+#'   `survey_year`.
+#' @param date_month Character. Optional argument to provide the name of the
+#'   column containing month data if not contained within the BMDE column
+#'   `survey_month`.
+#' @param date_day Character. Optional argument to provide the name of the
+#'   column containing day of month data if not contained within the BMDE column
+#'   `survey_day`.
+#' @param date_lubridate Character. Optional argument to provide the name of a
+#'   column containing date data in `lubridate` formats.
 #' @param date_ordinal Character. Optional argument to provide the name of a
-#'    column containing date data in ordinal format.
+#'   column containing date data in ordinal format.
 #' @param crs Character. Optional argument to provide the coordinate reference
-#'    system of the provided data. Only required when providing a data frame
-#'    containing data not in `EPSG:4326` coordinate reference systems, or `sf`/
-#'    `terra` objects without coordinate reference systems embedded.
-#'    
-#' @returns `sf` object containing a row for each unique site-date combination
-#'    in the provided data, in the NAD 1983 Albers Canada (`EPSG:102001`)
-#'    coordinate reference system containing the following columns.
-#'    - SurveyAreaIdentifier - character. Site names, or if missing in original 
-#'        data, filled site names for use in later functions.
-#'    - latitude - numeric. Y-coordinate in NAD 1983 Albers Canada 
-#'        (`EPSG:102001`) coordinate reference system.
-#'    - longitude - numeric. X-coordinate in NAD 1983 Albers Canada 
-#'        (`EPSG:102001`) coordinate reference system.
+#'   system of the provided data. Only required when providing a data frame
+#'   containing data not using the typical GPS latitude/longitude
+#'   [WGS84](https://epsg.io/4326) (`EPSG:4326`) coordinate reference system, or
+#'   `sf`/ `terra` objects without coordinate reference systems embedded.
+#'
+#' @returns If `data.frame`, `sf` "POINT", or `terra` "points" data provided,
+#'   `sf` "POINT" object. If `sf` "POLYGON" or `terra` "polygons" data provided,
+#'   `sf` "POLYGON" object. Returned object contains a row for each unique
+#'   site-date combination in the provided data, and is provided in the [NAD 1983
+#'   Albers Canada] (https://epsg.io/102001) (`EPSG:102001`) coordinate reference system with the
+#'   following columns.
+#'    - SurveyAreaIdentifier - character. Site names, or if missing in original
+#'   data, filled site names for use in later functions.
+#'    - latitude - numeric. Y-coordinate in NAD 1983 Albers Canada
+#'   (`EPSG:102001`) coordinate reference system.
+#'    - longitude - numeric. X-coordinate in NAD 1983 Albers Canada
+#'   (`EPSG:102001`) coordinate reference system.
 #'    - survey_year - numeric. Observation year.
 #'    - survey_month - numeric. Observation month.
 #'    - survey_day - numeric. Observation day (of month).
 #'    - geometry - `sf` geometry column.
-#' 
+#'
 #' @examples
-#'  
+#'
 #' # Using the included, test data on black-capped chickadees
 #' bcch # look at the data
-#'  
+#'
 #' # Format
 #' output <- data_fmt(bcch)
-#'  
+#'
+#' @seealso [sf::st_as_sf()] and [terra::vect()] which this function wraps.
+#'
+#'   [data_buff()] to buffer data points by a specified distance to measure
+#'   covariates at desired spatial scales.
+#'
 #' @export
 
 data_fmt <- function(

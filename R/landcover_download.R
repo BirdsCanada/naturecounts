@@ -6,45 +6,47 @@
 #' EarthData Archive, requiring an EarthData account to be made. This can be
 #' done at the following link: [register for an EarthData
 #' account](https://urs.earthdata.nasa.gov/users/new).
-#' 
-#' All five classification schemes available through naturecounts::landcover_extract
-#' are downloaded by this function without need for extra specification.
-#' 
-#' Downloads are facilitated by a call to luna::getNASA.
 #'
-#' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or 
-#'    'polygons' object.
+#' All five classification schemes available through [landcover_extract()] are
+#' downloaded by this function without need for extra specification.
+#'
+#' Downloads are facilitated by a call to [luna::getNASA()].
+#'
+#' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or
+#'   'polygons' object.
 #' @param ed_email Character. The email address associated with your EarthData
-#'    account.
-#' @param site_name Optional argument to provide name of THE column
-#'    containing site names if not contained within the BMDE column
-#'    `SurveyAreaIdentifier`. Can be left NULL and still function properly if 
-#'    originally specified in a call to `naturecounts::data_fmt`.
-#' @param date_year Character. Optional argument to provide the name of the 
-#'    column containing year data if not contained within the BMDE column 
-#'    `survey_year`. Can be left NULL and still function properly if originally 
-#'    specified in a call to `naturecounts::data_fmt`.
-#' @param dl_path Character. Optional argument to provide path to download data 
-#'    to. By default, data is downloaded to a subfolder `modis/` in the working
-#'    directory.
-#'    
-#' @returns Character vector containing filepaths to downloaded MODIS landcover
-#'    files.
-#'    
+#'   account.
+#' @param site_name Character. Optional argument to provide the name of the
+#'   column containing site names if not contained within the BMDE column
+#'   `SurveyAreaIdentifier`. Can be left NULL and still function properly if
+#'   originally specified in a call to [data_fmt()].
+#' @param date_year Character. Optional argument to provide the name of the
+#'   column containing year data if not contained within the BMDE column
+#'   `survey_year`. Can be left NULL and still function properly if originally
+#'   specified in a call to [data_fmt()].
+#' @param dl_path Character. Optional argument to provide path to download data
+#'   to. By default, data is downloaded to a subfolder `modis/` in the working
+#'   directory.
+#'
+#' @returns Character vector containing file-paths to downloaded MODIS landcover
+#'   files.
+#'
 #' @examples
-#' 
+#'
 #' # Using the included, test data on black-capped chickadees
 #' bcch # look at the data
-#' 
+#'
 #' # Convert to sf POINT object
 #' bcch <- sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326)
-#' 
+#'
 #' # Enter EarthData email
 #' ed_email <- readline(prompt = "Enter EarthData email: ")
-#' 
+#'
 #' # Download MODIS data
 #' output <- landcover_download(bcch, ed_email = ed_email)
-#' 
+#'
+#' @seealso [luna::getNASA()] which this function wraps.
+#'
 #' @export
 
 # Function for downloading MODIS MCD12Q1 data from NASA EarthData. Wrapper for

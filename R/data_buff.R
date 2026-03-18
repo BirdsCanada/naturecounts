@@ -1,41 +1,47 @@
 #' Buffer Data for Covariate Download and Extraction
-#' 
-#' Buffers input data by a specifiable radius. 
-#' 
-#' If input data is an `sf` 'POINT' object or a `terra` 'points' object, 
-#' points are buffered to a circle with the radius specified in `buffer_distance` 
-#' (500 m by default). If input is an `sf` 'POLYGON' object or a `terra` 
-#' 'polygons' object, the polygon is buffered on all sides by the
-#' distance specified in `buffer_distance` (500 m by default).
-#' 
-#' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or 
-#'    'polygons' object.
-#' @param buffer Logical. Should the provided data be buffered?
-#' @param buffer_distance. Numeric. Distance that the provided points or
-#'    polygons should be buffered by.
-#' @param buffer_units Character. Units of provided distance. Options are "m" 
-#'    (metres), "km" (kilometers), "ft" (feet), "yd" (yards), "mi" (miles), or 
-#'    "naut_mi" (nautical miles).
-#'    
+#'
+#' Buffers input data by a specifiable distance.
+#'
+#' If input data is an `sf` 'POINT' object or a `terra` 'points' object, points
+#' are buffered to a circle with the radius specified in `buffer_distance` (500
+#' m by default). If input is an `sf` 'POLYGON' object or a `terra` 'polygons'
+#' object, the polygon is buffered on all sides by the distance specified in
+#' `buffer_distance` (500 m by default).
+#'
+#' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or
+#'   'polygons' object.
+#' @param buffer Logical. Should the provided data be buffered? `TRUE` by
+#'   default.
+#' @param buffer_distance Numeric. Distance that the provided points or
+#'   polygons should be buffered by. 500 by default.
+#' @param buffer_units Character. Units of provided distance. Options are "m"
+#'   (metres), "km" (kilometers), "ft" (feet), "yd" (yards), "mi" (miles), or
+#'   "naut_mi" (nautical miles). Metres ("m") by default.
+#'
 #' @returns Either `sf` 'POLYGON' or `terra` 'polygons' (depending on format of
-#'    input data) with original coordinate reference system and columns
-#'    preserved, and all geometries buffered by requested distance.
-#' 
+#'   input data) with original coordinate reference system and columns
+#'   preserved, and all geometries buffered by requested distance.
+#'
 #' @examples
 #' # Using the included, test data on black-capped chickadees
 #' bcch # look at the data
-#' 
+#'
 #' # Convert to sf POINT object
 #' bcch <- sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326)
-#' 
+#'
 #' # Buffer by 1 km
 #' output <- data_buff(bcch, buffer = TRUE, buffer_distance = 1, buffer_units = "km")
-#' 
+#'
+#' @seealso [data_fmt()] for a convenient way to convert `data.frame` data to a
+#'   compatible `sf` or `terra` object.
+#'   
+#'   [sf::st_buffer()] which this function wraps.
+#'
 #' @export
 
 data_buff <- function(
     data,
-    buffer = FALSE, # Should the data be buffered?
+    buffer = TRUE, # Should the data be buffered?
     buffer_distance = 500, # Distance to buffer by.
     buffer_units = "m" # Units of provided distance.
 ) {

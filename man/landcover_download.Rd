@@ -19,22 +19,22 @@ landcover_download(
 \item{ed_email}{Character. The email address associated with your EarthData
 account.}
 
-\item{site_name}{Optional argument to provide name of THE column
-containing site names if not contained within the BMDE column
+\item{site_name}{Character. Optional argument to provide the name of the
+column containing site names if not contained within the BMDE column
 \code{SurveyAreaIdentifier}. Can be left NULL and still function properly if
-originally specified in a call to \code{naturecounts::data_fmt}.}
+originally specified in a call to \code{\link[=data_fmt]{data_fmt()}}.}
 
 \item{date_year}{Character. Optional argument to provide the name of the
 column containing year data if not contained within the BMDE column
 \code{survey_year}. Can be left NULL and still function properly if originally
-specified in a call to \code{naturecounts::data_fmt}.}
+specified in a call to \code{\link[=data_fmt]{data_fmt()}}.}
 
 \item{dl_path}{Character. Optional argument to provide path to download data
 to. By default, data is downloaded to a subfolder \verb{modis/} in the working
 directory.}
 }
 \value{
-Character vector containing filepaths to downloaded MODIS landcover
+Character vector containing file-paths to downloaded MODIS landcover
 files.
 }
 \description{
@@ -45,10 +45,10 @@ EarthData Archive, requiring an EarthData account to be made. This can be
 done at the following link: \href{https://urs.earthdata.nasa.gov/users/new}{register for an EarthData account}.
 }
 \details{
-All five classification schemes available through naturecounts::landcover_extract
-are downloaded by this function without need for extra specification.
+All five classification schemes available through \code{\link[=landcover_extract]{landcover_extract()}} are
+downloaded by this function without need for extra specification.
 
-Downloads are facilitated by a call to luna::getNASA.
+Downloads are facilitated by a call to \code{\link[luna:getNASA]{luna::getNASA()}}.
 }
 \examples{
 
@@ -64,4 +64,7 @@ ed_email <- readline(prompt = "Enter EarthData email: ")
 # Download MODIS data
 output <- landcover_download(bcch, ed_email = ed_email)
 
+}
+\seealso{
+\code{\link[luna:getNASA]{luna::getNASA()}} which this function wraps.
 }
