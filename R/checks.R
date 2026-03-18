@@ -20,6 +20,156 @@ year_check <- function(y) {
   y
 }
 
+month_check <- function(m) {
+  stp <- FALSE
+  
+  # Convert factor months to characters
+  if (class(m) == "factor") {
+    m <- as.character(m)
+  }
+  # Check if numeric values have been given as characters
+  if (stringr::str_detect(m, "^[:digit:]+$")) {
+    m <- as.numeric(m)
+  }
+  # Check numerics are between 1 and 12.
+  if (is.numeric(m)) {
+    if (m < 1 | m > 12) {
+      stp <- TRUE
+    }
+    # Check numerics are whole numbers
+    if (round(m) != m) stp <- TRUE
+  } else {
+    # If month name provided in either English or French, convert it to numeric.
+    months <- data.frame(
+      labels = c(
+        "January",
+        "Janvier",
+        "Jan",
+        "Janv",
+        "Jan.",
+        "Janv.",
+        "February",
+        "Février",
+        "Fevrier",
+        "Feb",
+        "Févr",
+        "Fevr",
+        "Feb.",
+        "Févr.",
+        "Fevr.",
+        "March",
+        "Mars",
+        "Mar",
+        "Mar.",
+        "April",
+        "Avril",
+        "Apr",
+        "Avr",
+        "Apr.",
+        "Avr.",
+        "May",
+        "Mai",
+        "May.",
+        "Mai.",
+        "June",
+        "Juin",
+        "Jun",
+        "Jun.",
+        "Juin.",
+        "July",
+        "Juillet",
+        "Jul",
+        "Juill",
+        "Jul.",
+        "Juill.",
+        "August",
+        "Août",
+        "Aout",
+        "Aug",
+        "Aug.",
+        "Août.",
+        "Aout.",
+        "September",
+        "Septembre",
+        "Sept",
+        "Sept.",
+        "October",
+        "Octobre",
+        "Oct",
+        "Oct.",
+        "November",
+        "Novembre",
+        "Nov",
+        "Nov.",
+        "December",
+        "Décembre",
+        "Decembre",
+        "Dec",
+        "Déc",
+        "Dec.",
+        "Déc."
+      ),
+      numerics = c(
+        rep(1, times = 6),
+        rep(2, times = 9),
+        rep(3, times = 4),
+        rep(4, times = 6),
+        rep(5, times = 4),
+        rep(6, times = 5),
+        rep(7, times = 6),
+        rep(8, times = 7),
+        rep(c(9, 10, 11), each = 4),
+        rep(12, times = 7)
+      )
+    )
+    if (tolower(m) %in% tolower(months$labels)) {
+      m <- months$numeric[tolower(months$labels) == tolower(m)]
+    } else {
+      # Stop if a non-month label character has been provided.
+      stp <- TRUE
+    }
+    # Stop if missing values are present.
+    if (is.na(m)) stp <- TRUE
+  }
+  if (stp) {
+    stop(
+      "Month must be either a number (1 = January, ..., 12 = December), ",
+      "or a month name ('January'/'Jan'/'Jan.').",
+      call. = FALSE
+    )
+  }
+  return(m)
+}
+
+# Function to check days of month.
+
+dom_check <- function(d) {
+  stp <- FALSE
+  
+  if (stringr::str_detect(d, "^[:digit:]+$")) {
+    d <- as.numeric(d)
+  }
+  if (is.numeric(d)) {
+    if (d < 1 | d > 31) {
+      stp <- TRUE
+    }
+    if (round(d) != d) stp <- TRUE
+  } else {
+    d <- suppressWarnings(lubridate::ymd_hms(d, truncated = 4)) %>%
+      lubridate::day()
+    if (is.na(d)) stp <- TRUE
+  }
+  if (stp) {
+    stop(
+      "Day of month must be a number between 1 and 31. ",
+      "If referring to an ordinal date (day of year), reformat with data_fmt()",
+      " and the 'date_ordinal' argument.",
+      call. = FALSE
+    )
+  }
+  d
+}
+
 doy_check <- function(s) {
   stp <- FALSE
 
@@ -404,6 +554,81 @@ sf_check <- function(df_sf, name) {
       name,
       "` must be spatial (i.e. use `spatial = TRUE` in ",
       "`cosewic_ranges()`)",
+      call. = FALSE
+    )
+  }
+}
+
+covariate_fmt_check <- function(data) {
+  # Check packages
+  have_pkg_check(c("sf", "terra"))
+  
+  # Check if input is a simple features object.
+  if (inherits(data, "sf")) {
+    # Store data type.
+    data_type <- "sf"
+    
+    # Store data geometry.
+    data_geometry <- as.character(sf::st_geometry_type(
+      data,
+      by_geometry = FALSE
+    ))
+    
+    # Handle objects containing mixtures of multiple geometry types.
+    if (data_geometry == "GEOMETRY") {
+      stop(
+        "[Data Formatting] mixed sf geometries detected. Please provide a set of",
+        " only POINT geometries or only POLYGON geometries.",
+        call. = FALSE
+      )
+    }
+    
+    # Reject objects that are not point or polygon objects.
+    if (!(data_geometry %in% c("POINT", "POLYGON"))) {
+      stop(
+        "[Data Formatting] sf object provided, but not a set of POINT or",
+        " POLYGON geometries.",
+        call. = FALSE
+      )
+    }
+    
+    # Return stored information.
+    return(list(type = data_type, geometry = data_geometry))
+    
+    # Check if input is a terra SpatVector.
+  } else if (inherits(data, "SpatVector")) {
+    # Store data type.
+    data_type <- "terra"
+    
+    # Store data geometry.
+    data_geometry <- terra::geomtype(data)
+    
+    # Reject objects that are not point or polygon objects.
+    if (!(data_geometry %in% c("points", "polygons"))) {
+      stop(
+        "[Data Formatting] terra object provided, but not a set of points or",
+        " polygons.",
+        call. = FALSE
+      )
+    }
+    
+    # Return stored information.
+    return(list(type = data_type, geometry = data_geometry))
+    
+    # Check if data is a dataframe.
+  } else if (is.data.frame(data)) {
+    # Store data type.
+    data_type <- "data.frame"
+    
+    # Return stored information.
+    return(list(type = data_type))
+    
+    # Reject all other data types.
+  } else {
+    stop(
+      "[Data Formatting] invalid data format. Please provide data as either a",
+      " dataframe, sf object with either `POINT` or `POLYGON` geometry, or",
+      " terra SpatVector object with `points` or `polygons` geometry.",
       call. = FALSE
     )
   }
