@@ -165,7 +165,7 @@ test_that("data_fmt() accepts alternate column names in all data input formats",
   expect_equal(c(attr(f_terra_poly, "site_name"), attr(f_terra_poly, "coord_lon"), attr(f_terra_poly, "coord_lat"), attr(f_terra_poly, "date_year"), attr(f_terra_poly, "date_month"), attr(f_terra_poly, "date_day")), c("sites", "yr", "mth", "dy"))
 })
 
-test_that("Date conversion from lubridate works in all input formats", {
+test_that("data_fmt() date conversion from lubridate works in all input formats", {
   expect_warning(f_df <- suppressMessages(data_fmt(dplyr::mutate(bcch, 
                                                                  date = as.Date(paste0(survey_year,
                                                                                        "-",
@@ -179,25 +179,367 @@ test_that("Date conversion from lubridate works in all input formats", {
   expect_equal(nrow(f_df), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
   expect_equal(format(sf::st_crs(f_df)), "Canada_Albers_Equal_Area_Conic")
   expect_equal(unname(apply(X = apply(FUN = is.na, X = f_df, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
-  expect_equal(dplyr::all(f_df$date %in% dplyr::mutate(bcch, 
-                                                       date = as.Date(paste0(survey_year,
-                                                                             "-",
-                                                                             survey_month,
-                                                                             "-",
-                                                                             survey_day)))$date), TRUE)
+  expect_equal(all(f_df$date %in% dplyr::mutate(bcch, 
+                                                date = as.Date(paste0(survey_year,
+                                                                      "-",
+                                                                      survey_month,
+                                                                      "-",
+                                                                      survey_day)))$date), TRUE)
   expect_equal(f_df$survey_year, lubridate::year(f_df$date))
   expect_equal(f_df$survey_month, lubridate::month(f_df$date))
   expect_equal(f_df$survey_day, lubridate::day(f_df$date))
   expect_equal(attr(f_df, "date_lubridate"), "date")
   
+  expect_silent(f_sf_pt <- suppressMessages(data_fmt(sf::st_as_sf(dplyr::mutate(bcch, 
+                                                                                date = as.Date(paste0(survey_year,
+                                                                                                      "-",
+                                                                                                      survey_month,
+                                                                                                      "-",
+                                                                                                      survey_day))),
+                                                                  coords = c("longitude", "latitude"),
+                                                                  crs = 4326),
+                                                     date_lubridate = "date")))
+  expect_s3_class(f_sf_pt, "sf")
+  expect_equal(as.character(sf::st_geometry_type(f_sf_pt, by_geometry = FALSE)), "POINT")
+  expect_named(f_sf_pt, c("SurveyAreaIdentifier", "latitude", "longitude", "date", "survey_year", "survey_month", "survey_day", "geometry"))
+  expect_equal(nrow(f_sf_pt), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
+  expect_equal(format(sf::st_crs(f_sf_pt)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = f_sf_pt, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  expect_equal(all(f_sf_pt$date %in% dplyr::mutate(bcch, 
+                                                   date = as.Date(paste0(survey_year,
+                                                                         "-",
+                                                                         survey_month,
+                                                                         "-",
+                                                                         survey_day)))$date), TRUE)
+  expect_equal(f_sf_pt$survey_year, lubridate::year(f_sf_pt$date))
+  expect_equal(f_sf_pt$survey_month, lubridate::month(f_sf_pt$date))
+  expect_equal(f_sf_pt$survey_day, lubridate::day(f_sf_pt$date))
+  expect_equal(attr(f_sf_pt, "date_lubridate"), "date")
+  
+  expect_silent(f_terra_pt <- suppressMessages(data_fmt(terra::vect(dplyr::mutate(bcch, 
+                                                                                  date = as.Date(paste0(survey_year,
+                                                                                                        "-",
+                                                                                                        survey_month,
+                                                                                                        "-",
+                                                                                                        survey_day))),
+                                                                    crs = "epsg:4326"),
+                                                        date_lubridate = "date")))
+  expect_s4_class(f_terra_pt, "SpatVector")
+  expect_equal(terra::geomtype(f_terra_pt), "points")
+  expect_named(f_terra_pt, c("SurveyAreaIdentifier", "latitude", "longitude", "date", "survey_year", "survey_month", "survey_day"))
+  expect_equal(nrow(f_terra_pt), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
+  expect_equal(terra::crs(f_terra_pt) == terra::crs("epsg:102001"), TRUE)
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = terra::values(f_terra_pt), MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 7))
+  expect_equal(all(f_terra_pt$date %in% dplyr::mutate(bcch, 
+                                                   date = as.Date(paste0(survey_year,
+                                                                         "-",
+                                                                         survey_month,
+                                                                         "-",
+                                                                         survey_day)))$date), TRUE)
+  expect_equal(f_terra_pt$survey_year, lubridate::year(f_terra_pt$date))
+  expect_equal(f_terra_pt$survey_month, lubridate::month(f_terra_pt$date))
+  expect_equal(f_terra_pt$survey_day, lubridate::day(f_terra_pt$date))
+  expect_equal(attr(f_terra_pt, "date_lubridate"), "date")
+  
+  expect_silent(f_sf_poly <- suppressMessages(data_fmt(sf::st_buffer(sf::st_as_sf(dplyr::mutate(bcch, 
+                                                                                                date = as.Date(paste0(survey_year,
+                                                                                                                      "-",
+                                                                                                                      survey_month,
+                                                                                                                      "-",
+                                                                                                                      survey_day))),
+                                                                                  coords = c("longitude", "latitude"),
+                                                                                  crs = 4326),
+                                                                     500),
+                                                       date_lubridate = "date")))
+  expect_s3_class(f_sf_poly, "sf")
+  expect_equal(as.character(sf::st_geometry_type(f_sf_poly, by_geometry = FALSE)), "POLYGON")
+  expect_named(f_sf_poly, c("SurveyAreaIdentifier", "latitude", "longitude", "date", "survey_year", "survey_month", "survey_day", "geometry"))
+  expect_equal(nrow(f_sf_poly), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
+  expect_equal(format(sf::st_crs(f_sf_poly)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = f_sf_poly, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  expect_equal(all(f_sf_poly$date %in% dplyr::mutate(bcch, 
+                                                     date = as.Date(paste0(survey_year,
+                                                                           "-",
+                                                                           survey_month,
+                                                                           "-",
+                                                                           survey_day)))$date), TRUE)
+  expect_equal(f_sf_poly$survey_year, lubridate::year(f_sf_poly$date))
+  expect_equal(f_sf_poly$survey_month, lubridate::month(f_sf_poly$date))
+  expect_equal(f_sf_poly$survey_day, lubridate::day(f_sf_poly$date))
+  expect_equal(attr(f_sf_poly, "date_lubridate"), "date")
+  
+  expect_silent(f_terra_poly <- suppressMessages(data_fmt(terra::buffer(terra::vect(dplyr::mutate(bcch, 
+                                                                                                  date = as.Date(paste0(survey_year,
+                                                                                                                        "-",
+                                                                                                                        survey_month,
+                                                                                                                        "-",
+                                                                                                                        survey_day))),
+                                                                                    crs = "epsg:4326"),
+                                                                        500),
+                                                          date_lubridate = "date")))
+  expect_s4_class(f_terra_poly, "SpatVector")
+  expect_equal(terra::geomtype(f_terra_poly), "polygons")
+  expect_named(f_terra_poly, c("SurveyAreaIdentifier", "latitude", "longitude", "date", "survey_year", "survey_month", "survey_day"))
+  expect_equal(nrow(f_terra_poly), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
+  expect_equal(terra::crs(f_terra_poly) == terra::crs("epsg:102001"), TRUE)
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = terra::values(f_terra_poly), MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 7))
+  expect_equal(all(f_terra_poly$date %in% dplyr::mutate(bcch, 
+                                                        date = as.Date(paste0(survey_year,
+                                                                              "-",
+                                                                              survey_month,
+                                                                              "-",
+                                                                              survey_day)))$date), TRUE)
+  expect_equal(f_terra_poly$survey_year, lubridate::year(f_terra_poly$date))
+  expect_equal(f_terra_poly$survey_month, lubridate::month(f_terra_poly$date))
+  expect_equal(f_terra_poly$survey_day, lubridate::day(f_terra_poly$date))
+  expect_equal(attr(f_terra_poly, "date_lubridate"), "date")
 })
 
-test_that("Date conversion from ordinal works in all input formats", {})
+test_that("data_fmt() date conversion from ordinal works in all input formats", {
+  expect_warning(f_df <- suppressMessages(data_fmt(dplyr::mutate(bcch, 
+                                                                 doy = as.numeric(as.Date(paste0(survey_year,
+                                                                                                 "-",
+                                                                                                 survey_month,
+                                                                                                 "-",
+                                                                                                 survey_day)) -
+                                                                                    as.Date(paste0(survey_year, "-01-01")) + 1)),
+                                                   date_ordinal = "doy")), "[Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.")
+  expect_s3_class(f_df, "sf")
+  expect_equal(as.character(sf::st_geometry_type(f_df, by_geometry = FALSE)), "POINT")
+  expect_named(f_df, c("SurveyAreaIdentifier", "latitude", "longitude", "doy", "survey_year", "survey_month", "survey_day", "geometry"))
+  expect_equal(nrow(f_df), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
+  expect_equal(format(sf::st_crs(f_df)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = f_df, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  expect_equal(all(as.Date(paste0(f_df$survey_year, 
+                                  "-", 
+                                  f_df$survey_month, 
+                                  "-", 
+                                  f_df$survey_day)) %in% 
+                     dplyr::mutate(bcch, 
+                                   date = as.Date(paste0(survey_year,
+                                                         "-",
+                                                         survey_month,
+                                                         "-",
+                                                         survey_day)))$date), TRUE)
+  expect_equal(f_df$survey_year, lubridate::year(as.Date(paste0(f_df$survey_year, 
+                                                                "-", 
+                                                                f_df$survey_month, 
+                                                                "-", 
+                                                                f_df$survey_day))))
+  expect_equal(f_df$survey_month, lubridate::month(as.Date(paste0(f_df$survey_year, 
+                                                                  "-", 
+                                                                  f_df$survey_month, 
+                                                                  "-", 
+                                                                  f_df$survey_day))))
+  expect_equal(f_df$survey_day, lubridate::day(as.Date(paste0(f_df$survey_year, 
+                                                              "-", 
+                                                              f_df$survey_month, 
+                                                              "-", 
+                                                              f_df$survey_day))))
+  expect_equal(attr(f_df, "date_ordinal"), "doy")
+  
+  expect_silent(f_sf_pt <- suppressMessages(data_fmt(sf::st_as_sf(dplyr::mutate(bcch, 
+                                                                                doy = as.numeric(as.Date(paste0(survey_year,
+                                                                                                                "-",
+                                                                                                                survey_month,
+                                                                                                                "-",
+                                                                                                                survey_day)) -
+                                                                                                   as.Date(paste0(survey_year, "-01-01")) + 1)),
+                                                                  coords = c("longitude", "latitude"),
+                                                                  crs = 4326),
+                                                     date_ordinal = "doy")))
+  expect_s3_class(f_sf_pt, "sf")
+  expect_equal(as.character(sf::st_geometry_type(f_sf_pt, by_geometry = FALSE)), "POINT")
+  expect_named(f_sf_pt, c("SurveyAreaIdentifier", "latitude", "longitude", "doy", "survey_year", "survey_month", "survey_day", "geometry"))
+  expect_equal(nrow(f_sf_pt), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
+  expect_equal(format(sf::st_crs(f_sf_pt)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = f_sf_pt, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  expect_equal(all(as.Date(paste0(f_sf_pt$survey_year, 
+                                  "-", 
+                                  f_sf_pt$survey_month, 
+                                  "-", 
+                                  f_sf_pt$survey_day)) %in% 
+                     dplyr::mutate(bcch, 
+                                   date = as.Date(paste0(survey_year,
+                                                         "-",
+                                                         survey_month,
+                                                         "-",
+                                                         survey_day)))$date), TRUE)
+  expect_equal(f_sf_pt$survey_year, lubridate::year(as.Date(paste0(f_sf_pt$survey_year, 
+                                                                   "-", 
+                                                                   f_sf_pt$survey_month, 
+                                                                   "-", 
+                                                                   f_sf_pt$survey_day))))
+  expect_equal(f_sf_pt$survey_month, lubridate::month(as.Date(paste0(f_sf_pt$survey_year, 
+                                                                     "-", 
+                                                                     f_sf_pt$survey_month, 
+                                                                     "-", 
+                                                                     f_sf_pt$survey_day))))
+  expect_equal(f_sf_pt$survey_day, lubridate::day(as.Date(paste0(f_sf_pt$survey_year, 
+                                                                 "-", 
+                                                                 f_sf_pt$survey_month, 
+                                                                 "-", 
+                                                                 f_sf_pt$survey_day))))
+  expect_equal(attr(f_sf_pt, "date_ordinal"), "doy")
+  
+  expect_silent(f_terra_pt <- suppressMessages(data_fmt(terra::vect(dplyr::mutate(bcch, 
+                                                                                  doy = as.numeric(as.Date(paste0(survey_year,
+                                                                                                                  "-",
+                                                                                                                  survey_month,
+                                                                                                                  "-",
+                                                                                                                  survey_day)) -
+                                                                                                     as.Date(paste0(survey_year, "-01-01")) + 1)),
+                                                                    crs = "epsg:4326"),
+                                                        date_ordinal = "doy")))
+  expect_s4_class(f_terra_pt, "SpatVector")
+  expect_equal(terra::geomtype(f_terra_pt), "points")
+  expect_named(f_terra_pt, c("SurveyAreaIdentifier", "latitude", "longitude", "doy", "survey_year", "survey_month", "survey_day"))
+  expect_equal(nrow(f_terra_pt), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
+  expect_equal(terra::crs(f_terra_pt) == terra::crs("epsg:102001"), TRUE)
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = terra::values(f_terra_pt), MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 7))
+  expect_equal(all(as.Date(paste0(f_terra_pt$survey_year, 
+                                  "-", 
+                                  f_terra_pt$survey_month, 
+                                  "-", 
+                                  f_terra_pt$survey_day)) %in% 
+                     dplyr::mutate(bcch, 
+                                   date = as.Date(paste0(survey_year,
+                                                         "-",
+                                                         survey_month,
+                                                         "-",
+                                                         survey_day)))$date), TRUE)
+  expect_equal(f_terra_pt$survey_year, lubridate::year(as.Date(paste0(f_terra_pt$survey_year, 
+                                                                      "-", 
+                                                                      f_terra_pt$survey_month, 
+                                                                      "-", 
+                                                                      f_terra_pt$survey_day))))
+  expect_equal(f_terra_pt$survey_month, lubridate::month(as.Date(paste0(f_terra_pt$survey_year, 
+                                                                        "-", 
+                                                                        f_terra_pt$survey_month, 
+                                                                        "-", 
+                                                                        f_terra_pt$survey_day))))
+  expect_equal(f_terra_pt$survey_day, lubridate::day(as.Date(paste0(f_terra_pt$survey_year, 
+                                                                    "-", 
+                                                                    f_terra_pt$survey_month, 
+                                                                    "-", 
+                                                                    f_terra_pt$survey_day))))
+  expect_equal(attr(f_terra_pt, "date_ordinal"), "doy")
+  
+  expect_silent(f_sf_poly <- suppressMessages(data_fmt(sf::st_buffer(sf::st_as_sf(dplyr::mutate(bcch, 
+                                                                                                doy = as.numeric(as.Date(paste0(survey_year,
+                                                                                                                                "-",
+                                                                                                                                survey_month,
+                                                                                                                                "-",
+                                                                                                                                survey_day)) -
+                                                                                                                   as.Date(paste0(survey_year, "-01-01")) + 1)),
+                                                                                  coords = c("longitude", "latitude"),
+                                                                                  crs = 4326),
+                                                                     500),
+                                                       date_ordinal = "doy")))
+  expect_s3_class(f_sf_poly, "sf")
+  expect_equal(as.character(sf::st_geometry_type(f_sf_poly, by_geometry = FALSE)), "POLYGON")
+  expect_named(f_sf_poly, c("SurveyAreaIdentifier", "latitude", "longitude", "doy", "survey_year", "survey_month", "survey_day", "geometry"))
+  expect_equal(nrow(f_sf_poly), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
+  expect_equal(format(sf::st_crs(f_sf_poly)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = f_sf_poly, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  expect_equal(all(as.Date(paste0(f_sf_poly$survey_year, 
+                                  "-", 
+                                  f_sf_poly$survey_month, 
+                                  "-", 
+                                  f_sf_poly$survey_day)) %in% 
+                     dplyr::mutate(bcch, 
+                                   date = as.Date(paste0(survey_year,
+                                                         "-",
+                                                         survey_month,
+                                                         "-",
+                                                         survey_day)))$date), TRUE)
+  expect_equal(f_sf_poly$survey_year, lubridate::year(as.Date(paste0(f_sf_poly$survey_year, 
+                                                                     "-", 
+                                                                     f_sf_poly$survey_month, 
+                                                                     "-", 
+                                                                     f_sf_poly$survey_day))))
+  expect_equal(f_sf_poly$survey_month, lubridate::month(as.Date(paste0(f_sf_poly$survey_year, 
+                                                                       "-", 
+                                                                       f_sf_poly$survey_month, 
+                                                                       "-", 
+                                                                       f_sf_poly$survey_day))))
+  expect_equal(f_sf_poly$survey_day, lubridate::day(as.Date(paste0(f_sf_poly$survey_year, 
+                                                                   "-", 
+                                                                   f_sf_poly$survey_month, 
+                                                                   "-", 
+                                                                   f_sf_poly$survey_day))))
+  expect_equal(attr(f_sf_poly, "date_ordinal"), "doy")
+  
+  expect_silent(f_terra_poly <- suppressMessages(data_fmt(terra::buffer(terra::vect(dplyr::mutate(bcch, 
+                                                                                                  doy = as.numeric(as.Date(paste0(survey_year,
+                                                                                                                                  "-",
+                                                                                                                                  survey_month,
+                                                                                                                                  "-",
+                                                                                                                                  survey_day)) -
+                                                                                                                     as.Date(paste0(survey_year, "-01-01")) + 1)),
+                                                                                    crs = "epsg:4326"),
+                                                                        500),
+                                                          date_ordinal = "doy")))
+  expect_s4_class(f_terra_poly, "SpatVector")
+  expect_equal(terra::geomtype(f_terra_poly), "polygons")
+  expect_named(f_terra_poly, c("SurveyAreaIdentifier", "latitude", "longitude", "doy", "survey_year", "survey_month", "survey_day"))
+  expect_equal(nrow(f_terra_poly), nrow(dplyr::distinct(dplyr::select(bcch, latitude, longitude, survey_year, survey_month, survey_day))))
+  expect_equal(terra::crs(f_terra_poly) == terra::crs("epsg:102001"), TRUE)
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = terra::values(f_terra_poly), MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 7))
+  expect_equal(all(as.Date(paste0(f_terra_poly$survey_year, 
+                                  "-", 
+                                  f_terra_poly$survey_month, 
+                                  "-", 
+                                  f_terra_poly$survey_day)) %in% 
+                     dplyr::mutate(bcch, 
+                                   date = as.Date(paste0(survey_year,
+                                                         "-",
+                                                         survey_month,
+                                                         "-",
+                                                         survey_day)))$date), TRUE)
+  expect_equal(f_terra_poly$survey_year, lubridate::year(as.Date(paste0(f_terra_poly$survey_year, 
+                                                                        "-", 
+                                                                        f_terra_poly$survey_month, 
+                                                                        "-", 
+                                                                        f_terra_poly$survey_day))))
+  expect_equal(f_terra_poly$survey_month, lubridate::month(as.Date(paste0(f_terra_poly$survey_year, 
+                                                                          "-", 
+                                                                          f_terra_poly$survey_month, 
+                                                                          "-", 
+                                                                          f_terra_poly$survey_day))))
+  expect_equal(f_terra_poly$survey_day, lubridate::day(as.Date(paste0(f_terra_poly$survey_year, 
+                                                                      "-", 
+                                                                      f_terra_poly$survey_month, 
+                                                                      "-", 
+                                                                      f_terra_poly$survey_day))))
+  expect_equal(attr(f_terra_poly, "date_ordinal"), "doy")
+  })
 
-test_that("Invalid input data formats return appropriate error", {})
+test_that("data_fmt() drops sites with missing coordinate data (only data.frame input will bring this on)", {
+  expect_warning(f_df <- data_fmt(dplyr::mutate(bcch,latitude = c(bcch$latitude[1:nrow(bcch)-1], NA)),
+                                  coord_lon = "longitude",
+                                  coord_lat = "latitude",
+                                  crs = 4326), "[Data Formatting] some rows missing coordinate data will be dropped.")
+  })
 
-test_that("Invalid alternate column names return appropriate error", {})
+test_that("data_fmt() invalid input data formats return appropriate error", {
+  expect_error(f_char <- suppressMessages(data_fmt("invalid")), "[Data Formatting] invalid data format. Please provide data as either a dataframe, sf object with either `POINT` or `POLYGON` geometry, or terra SpatVector object with `points` or `polygons` geometry.")
+  
+  expect_error(f_numeric <- suppressMessages(data_fmt(1)), "[Data Formatting] invalid data format. Please provide data as either a dataframe, sf object with either `POINT` or `POLYGON` geometry, or terra SpatVector object with `points` or `polygons` geometry.")
+  
+  expect_error(f_vector <- suppressMessages(data_fmt(c("invalid", 2, NA))), "[Data Formatting] invalid data format. Please provide data as either a dataframe, sf object with either `POINT` or `POLYGON` geometry, or terra SpatVector object with `points` or `polygons` geometry.")
+  
+  expect_error(f_SpatRaster <- suppressMessages(data_fmt(terra::rast(nrows=108, ncols=21, xmin=0, xmax=10))), "[Data Formatting] invalid data format. Please provide data as either a dataframe, sf object with either `POINT` or `POLYGON` geometry, or terra SpatVector object with `points` or `polygons` geometry.")
+  
+  expect_error(f_lines <- suppressMessages(data_fmt(terra::as.lines(terra::vect(data.frame(longitude = c(100, 110), latitude = c(45, 46)), crs = "epsg:4326")))), "[Data Formatting] terra object provided, but not a set of points or polygons.")
+  
+  expect_error(f_LINESTRING <- suppressMessages(data_fmt(sf::st_cast(sf::st_as_sf(data.frame(longitude = c(100, 110), latitude = c(45, 46)), coords = c("longitude", "latitude"), crs = 4326), "LINESTRING")), "[Data Formatting] sf object provided, but not a set of POINT or POLYGON geometries."))
+  
+  expect_error(f_mixedgeoms <- suppressMessages(data_fmt(rbind(sf::st_as_sf(data.frame(x = 100, y = 45), coords = c("x", "y"), crs = 4326), sf::st_buffer(sf::st_as_sf(data.frame(x = 100, y = 45), coords = c("x", "y"), crs = 4326), 500)))), "[Data Formatting] mixed sf geometries detected. Please provide a set of only POINT geometries or only POLYGON geometries.")
+})
 
-test_that("Invalid date data return appropriate errors", {})
+test_that("data_fmt() invalid alternate column names return appropriate error", {})
 
-test_that("Invalid CRSs return error", {})
+test_that("data_fmt() invalid date data return appropriate errors", {})
+
+test_that("data_fmt() invalid CRSs return error", {})
