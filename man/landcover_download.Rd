@@ -6,7 +6,8 @@
 \usage{
 landcover_download(
   data,
-  ed_email,
+  ed_email = NULL,
+  ed_transfer = TRUE,
   site_name = NULL,
   date_year = NULL,
   dl_path = NULL
@@ -18,6 +19,10 @@ landcover_download(
 
 \item{ed_email}{Character. The email address associated with your EarthData
 account.}
+
+\item{ed_transfer}{Logical. Should data be downloaded from EarthData?
+If FALSE, a vector containing the names of the files that would be
+downloaded is returned.}
 
 \item{site_name}{Character. Optional argument to provide the name of the
 column containing site names if not contained within the BMDE column
@@ -34,8 +39,9 @@ to. By default, data is downloaded to a subfolder \verb{modis/} in the working
 directory.}
 }
 \value{
-Character vector containing file-paths to downloaded MODIS landcover
-files.
+If \code{ed_transfer = TRUE}, character vector containing
+file-paths to downloaded MODIS landcover files. If \code{ed_transfer = FALSE}, character vector containing filenames of MODIS landcover files that
+would be downloaded.
 }
 \description{
 Downloads \href{https://doi.org/10.5067/MODIS/MCD12Q1.061}{annual landcover data}
@@ -56,13 +62,26 @@ Downloads are facilitated by a call to \code{\link[luna:getNASA]{luna::getNASA()
 bcch # look at the data
 
 # Convert to sf POINT object
-bcch <- sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326)
+bcch <- sf::st_as_sf(
+  bcch,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+)
+
+# Get file names that would be downloaded.
+output <- landcover_download(
+  data = bcch,
+  ed_transfer = FALSE
+)
 
 # Enter EarthData email
-ed_email <- readline(prompt = "Enter EarthData email: ")
+ed_email <- "your EarthData email"
 
 # Download MODIS data
-output <- landcover_download(bcch, ed_email = ed_email)
+#output <- landcover_download(
+#  data = bcch,
+#  ed_email = ed_email
+)
 
 }
 \seealso{

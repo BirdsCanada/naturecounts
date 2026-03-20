@@ -62,8 +62,7 @@ containing data not using the typical GPS latitude/longitude
 If \code{data.frame}, \code{sf} "POINT", or \code{terra} "points" data provided,
 \code{sf} "POINT" object. If \code{sf} "POLYGON" or \code{terra} "polygons" data provided,
 \code{sf} "POLYGON" object. Returned object contains a row for each unique
-site-date combination in the provided data, and is provided in the \link[=NAD 1983
-  Albers Canada]{NAD 1983 Albers Canada} (https://epsg.io/102001) (\code{EPSG:102001}) coordinate reference system with the
+site-date combination in the provided data, and is provided in the \href{https://epsg.io/102001}{NAD 1983 Albers Canada} (\code{EPSG:102001}) coordinate reference system with the
 following columns.
 \itemize{
 \item SurveyAreaIdentifier - character. Site names, or if missing in original

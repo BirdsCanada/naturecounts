@@ -41,7 +41,7 @@
 #'   `sf` "POINT" object. If `sf` "POLYGON" or `terra` "polygons" data provided,
 #'   `sf` "POLYGON" object. Returned object contains a row for each unique
 #'   site-date combination in the provided data, and is provided in the [NAD 1983
-#'   Albers Canada] (https://epsg.io/102001) (`EPSG:102001`) coordinate reference system with the
+#'   Albers Canada](https://epsg.io/102001) (`EPSG:102001`) coordinate reference system with the
 #'   following columns.
 #'    - SurveyAreaIdentifier - character. Site names, or if missing in original
 #'   data, filled site names for use in later functions.
@@ -336,7 +336,7 @@ data_fmt <- function(
       # Edge case: there is a col called longitude that isn't coord_lon.
       # Remove.
       if ("longitude" %in% names(data) & !(coord_lon == "longitude")) {
-        data <- dplyr::select(data, -longitude)
+        data <- dplyr::select(data, -"longitude")
       }
       
       if (input_fmt$type == "sf") {
@@ -351,7 +351,7 @@ data_fmt <- function(
     if (!is.null(coord_lat)) {
       # Edge case: there is a col called latitude that isn't coord_lat. Remove.
       if ("latitude" %in% names(data) & !(coord_lat == "latitude")) {
-        data <- dplyr::select(data, -latitude)
+        data <- dplyr::select(data, -"latitude")
       }
       
       if (input_fmt$type == "sf") {
@@ -559,7 +559,7 @@ data_fmt <- function(
         call. = FALSE
       )
       
-      data <- dplyr::filter(data, !(is.na(latitude) | is.na(longitude)))
+      data <- dplyr::filter(data, !(is.na(.data$latitude) | is.na(.data$longitude)))
     }
   }
   
@@ -570,8 +570,8 @@ data_fmt <- function(
     # that do not have an associated SurveyAreaIdentifier.
     if (input_fmt$type == "data.frame") {
       missing_sitecode <- data %>%
-        dplyr::select(SurveyAreaIdentifier, latitude, longitude) %>%
-        dplyr::filter(is.na(SurveyAreaIdentifier)) %>%
+        dplyr::select("SurveyAreaIdentifier", "latitude", "longitude") %>%
+        dplyr::filter(is.na(.data$SurveyAreaIdentifier)) %>%
         dplyr::distinct()
     }
     
@@ -580,7 +580,7 @@ data_fmt <- function(
     # Also append coordinates to original data object for later joining.
     if (input_fmt$type == "sf") {
       missing_sitecode <- data %>%
-        dplyr::select(SurveyAreaIdentifier, geometry)
+        dplyr::select("SurveyAreaIdentifier", "geometry")
       
       # For polygons, use the centroid as the X/Y coordinates.
       if (input_fmt$geometry == "POLYGON") {
@@ -593,35 +593,35 @@ data_fmt <- function(
         missing_sitecode,
         sf::st_coordinates(missing_sitecode)
       ) %>%
-        dplyr::rename(longitude = X, latitude = Y) %>%
+        dplyr::rename("longitude" = "X", "latitude" = "Y") %>%
         sf::st_drop_geometry() %>%
-        dplyr::filter(is.na(SurveyAreaIdentifier)) %>%
+        dplyr::filter(is.na(.data$SurveyAreaIdentifier)) %>%
         dplyr::distinct()
       
       # Edge case: there is a col called X. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("X" %in% names(data)) {
-        data <- dplyr::select(data, -X)
+        data <- dplyr::select(data, -"X")
       }
       
       # Edge case: there is a col called Y. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("Y" %in% names(data)) {
-        data <- dplyr::select(data, -Y)
+        data <- dplyr::select(data, -"Y")
       }
       
       # Edge case: there is a col called longitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("longitude" %in% names(data)) {
-        data <- dplyr::select(data, -longitude)
+        data <- dplyr::select(data, -"longitude")
       }
       
       # Edge case: there is a col called latitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("latitude" %in% names(data)) {
-        data <- dplyr::select(data, -latitude)
+        data <- dplyr::select(data, -"latitude")
       }
       
       # Append coordinates (from centroids if polygons) to provided data object.
@@ -630,10 +630,10 @@ data_fmt <- function(
           data,
           sf::st_coordinates(suppressWarnings(sf::st_centroid(data)))
         ) %>%
-          dplyr::rename(longitude = X, latitude = Y)
+          dplyr::rename("longitude" = "X", "latitude" = "Y")
       } else {
         data <- cbind(data, sf::st_coordinates(data)) %>%
-          dplyr::rename(longitude = X, latitude = Y)
+          dplyr::rename("longitude" = "X", "latitude" = "Y")
       }
     }
     
@@ -643,7 +643,7 @@ data_fmt <- function(
     # later joining.
     if (input_fmt$type == "terra") {
       missing_sitecode <- data %>%
-        tidyterra::select(SurveyAreaIdentifier)
+        tidyterra::select("SurveyAreaIdentifier")
       
       # For polygons, use the centroid as the X/Y coordinates.
       if (input_fmt$geometry == "polygons") {
@@ -656,44 +656,44 @@ data_fmt <- function(
         missing_sitecode,
         terra::crds(missing_sitecode)
       ) %>%
-        tidyterra::rename(longitude = x, latitude = y) %>%
+        tidyterra::rename("longitude" = "x", "latitude" = "y") %>%
         terra::as.data.frame() %>%
-        dplyr::filter(is.na(SurveyAreaIdentifier)) %>%
+        dplyr::filter(is.na(.data$SurveyAreaIdentifier)) %>%
         dplyr::distinct()
       
       # Edge case: there is a col called x. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("x" %in% names(data)) {
-        data <- tidyterra::select(data, -x)
+        data <- tidyterra::select(data, -"x")
       }
       
       # Edge case: there is a col called y. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("y" %in% names(data)) {
-        data <- tidyterra::select(data, -y)
+        data <- tidyterra::select(data, -"y")
       }
       
       # Edge case: there is a col called longitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("longitude" %in% names(data)) {
-        data <- dplyr::select(data, -longitude)
+        data <- dplyr::select(data, -"longitude")
       }
       
       # Edge case: there is a col called latitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("latitude" %in% names(data)) {
-        data <- dplyr::select(data, -latitude)
+        data <- dplyr::select(data, -"latitude")
       }
       
       # Append coordinates (from centroids if polygons) to provided data object.
       if (input_fmt$geometry == "polygons") {
         data <- cbind(data, terra::crds(terra::centroids(data))) %>%
-          dplyr::rename(longitude = x, latitude = y)
+          dplyr::rename("longitude" = "x", "latitude" = "y")
       } else {
         data <- cbind(data, terra::crds(data)) %>%
-          dplyr::rename(longitude = x, latitude = y)
+          dplyr::rename("longitude" = "x", "latitude" = "y")
       }
     }
     
@@ -720,27 +720,27 @@ data_fmt <- function(
       # Edge case: there is a col called X. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("X" %in% names(data)) {
-        data <- dplyr::select(data, -X)
+        data <- dplyr::select(data, -"X")
       }
       
       # Edge case: there is a col called Y. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("Y" %in% names(data)) {
-        data <- dplyr::select(data, -Y)
+        data <- dplyr::select(data, -"Y")
       }
       
       # Edge case: there is a col called longitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("longitude" %in% names(data)) {
-        data <- dplyr::select(data, -longitude)
+        data <- dplyr::select(data, -"longitude")
       }
       
       # Edge case: there is a col called latitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("latitude" %in% names(data)) {
-        data <- dplyr::select(data, -latitude)
+        data <- dplyr::select(data, -"latitude")
       }
       
       # Append coordinates (from centroids if polygons) to provided data object.
@@ -749,10 +749,10 @@ data_fmt <- function(
           data,
           sf::st_coordinates(suppressWarnings(sf::st_centroid(data)))
         ) %>%
-          dplyr::rename(longitude = X, latitude = Y)
+          dplyr::rename("longitude" = "X", "latitude" = "Y")
       } else {
         data <- cbind(data, sf::st_coordinates(data)) %>%
-          dplyr::rename(longitude = X, latitude = Y)
+          dplyr::rename("longitude" = "X", "latitude" = "Y")
       }
     }
     
@@ -760,36 +760,36 @@ data_fmt <- function(
       # Edge case: there is a col called x. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("x" %in% names(data)) {
-        data <- tidyterra::select(data, -x)
+        data <- tidyterra::select(data, -"x")
       }
       
       # Edge case: there is a col called y. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("y" %in% names(data)) {
-        data <- tidyterra::select(data, -y)
+        data <- tidyterra::select(data, -"y")
       }
       
       # Edge case: there is a col called longitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("longitude" %in% names(data)) {
-        data <- tidyterra::select(data, -longitude)
+        data <- tidyterra::select(data, -"longitude")
       }
       
       # Edge case: there is a col called latitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("latitude" %in% names(data)) {
-        data <- tidyterra::select(data, -latitude)
+        data <- tidyterra::select(data, -"latitude")
       }
       
       # Append coordinates (from centroids if polygons) to provided data object.
       if (input_fmt$geometry == "polygons") {
         data <- cbind(data, terra::crds(terra::centroids(data))) %>%
-          dplyr::rename(longitude = x, latitude = y)
+          dplyr::rename("longitude" = "x", "latitude" = "y")
       } else {
         data <- cbind(data, terra::crds(data)) %>%
-          dplyr::rename(longitude = x, latitude = y)
+          dplyr::rename("longitude" = "x", "latitude" = "y")
       }
     }
   }

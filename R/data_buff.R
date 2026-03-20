@@ -27,10 +27,18 @@
 #' bcch # look at the data
 #'
 #' # Convert to sf POINT object
-#' bcch <- sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326)
+#' bcch <- sf::st_as_sf(
+#'   bcch,
+#'   coords = c("longitude", "latitude"),
+#'   crs = 4326
+#' )
 #'
 #' # Buffer by 1 km
-#' output <- data_buff(bcch, buffer = TRUE, buffer_distance = 1, buffer_units = "km")
+#' output <- data_buff(bcch,
+#'   buffer = TRUE,
+#'   buffer_distance = 1,
+#'   buffer_units = "km"
+#' )
 #'
 #' @seealso [data_fmt()] for a convenient way to convert `data.frame` data to a
 #'   compatible `sf` or `terra` object.

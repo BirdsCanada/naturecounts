@@ -80,16 +80,28 @@ choose their desired classification scheme appropriately.
 bcch # look at the data
 
 # Convert to sf POINT object
-bcch <- sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326)
+bcch <- sf::st_as_sf(
+  bcch,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+)
 
 # Enter EarthData email
 ed_email <- readline(prompt = "Enter EarthData email: ")
 
 # Download MODIS data
-modis_files <- landcover_download(bcch, ed_email = ed_email)
+modis_files <- landcover_download(
+  bcch,
+  ed_email = ed_email
+)
 
 # Extract landcover data
-output <- landcover_extract(data = bcch, covariates = "modis_lctype1", landcover_files = modis_files, retain = FALSE)
+output <- landcover_extract(
+  data = bcch,
+  covariates = "modis_lctype1",
+  landcover_files = modis_files,
+  retain = FALSE
+)
 
 }
 \seealso{

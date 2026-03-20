@@ -24,7 +24,6 @@
 #'
 #' @inheritParams landcover_download
 #'
-#' @param data
 #' @param covariates Character, vector if multiple landcover types desired. By
 #'   default, extracts the IGBP global vegetation classification scheme
 #'   (`modis_lctype1`).
@@ -58,16 +57,28 @@
 #' bcch # look at the data
 #'
 #' # Convert to sf POINT object
-#' bcch <- sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326)
+#' bcch <- sf::st_as_sf(
+#'   bcch,
+#'   coords = c("longitude", "latitude"),
+#'   crs = 4326
+#' )
 #'
 #' # Enter EarthData email
 #' ed_email <- readline(prompt = "Enter EarthData email: ")
 #'
 #' # Download MODIS data
-#' modis_files <- landcover_download(bcch, ed_email = ed_email)
+#' modis_files <- landcover_download(
+#'   bcch,
+#'   ed_email = ed_email
+#' )
 #'
 #' # Extract landcover data
-#' output <- landcover_extract(data = bcch, covariates = "modis_lctype1", landcover_files = modis_files, retain = FALSE)
+#' output <- landcover_extract(
+#'   data = bcch,
+#'   covariates = "modis_lctype1",
+#'   landcover_files = modis_files,
+#'   retain = FALSE
+#' )
 #'
 #' @seealso [terra::extract()] which is used to extract values from MODIS data
 #'   for `sf` 'POINT' and `terra` 'points' input data.
@@ -245,7 +256,7 @@ landcover_extract <- function(
   
   # Build object to use in matching sites to their respective MODIS data file.
   modis_match <- data %>%
-    dplyr::select(SurveyAreaIdentifier, survey_year, geometry) %>%
+    dplyr::select("SurveyAreaIdentifier", "survey_year", "geometry") %>%
     sf::st_transform(terra::crs(terra::rast(modis_files$filename[1])))
   
   # If buffered, extract coordinates from centroids. Append coordinates.
@@ -294,8 +305,8 @@ landcover_extract <- function(
       # Create temporary spatial object containing only the buffer for site i.
       tmp <- dplyr::filter(
         modis_match,
-        SurveyAreaIdentifier == i,
-        survey_year == j
+        .data$SurveyAreaIdentifier == i,
+        .data$survey_year == j
       ) %>%
         dplyr::distinct()
       
@@ -491,8 +502,8 @@ landcover_extract <- function(
         if (buffered == TRUE) {
           # Create temporary object containing only the buffer for site k.
           tmp <- data %>%
-            dplyr::filter(SurveyAreaIdentifier == k) %>%
-            dplyr::select(SurveyAreaIdentifier, geometry) %>%
+            dplyr::filter(.data$SurveyAreaIdentifier == k) %>%
+            dplyr::select("SurveyAreaIdentifier", "geometry") %>%
             dplyr::distinct() %>%
             sf::st_transform(terra::crs(modis)) %>%
             terra::vect()
