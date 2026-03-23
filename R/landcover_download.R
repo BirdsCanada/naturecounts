@@ -103,27 +103,36 @@ landcover_download <- function(
       call. = FALSE
     )
   }
-  
+
   # Check that ed_transfer is logical.
   if (!is.logical(ed_transfer)) {
-    stop("[MODIS Landcover Download] ed_transfer must be TRUE or FALSE.",
-         call. = FALSE)
+    stop(
+      "[MODIS Landcover Download] ed_transfer must be TRUE or FALSE.",
+      call. = FALSE
+    )
   }
 
-  # Check whether an EarthData password exists in the environment (is specified
-  # earlier in the nc_covariates() workflow), and if not, request using
-  # askpass::askpass().
-  if (is.null(parent.frame()$ed_password) & ed_transfer == TRUE) {
-    ed_password <- askpass::askpass(
-      prompt = paste0(
-        "Please enter password for ",
-        "EarthData user '",
-        ed_email,
-        "'."
-      )
-    )
-  } else if (ed_transfer == TRUE) {
-    ed_password <- parent.frame()$ed_password
+  # Check whether user password is stored in .Renviron
+  if (ed_transfer == TRUE) {
+    ed_password <- Sys.getenv(paste0("EarthData_", ed_email))
+    
+    # If not available in .Renviron, check whether an EarthData password exists 
+    # in the environment (is specified earlier in the nc_covariates() workflow),
+    # and if not, request using askpass::askpass().
+    if (ed_password == "") {
+      if (is.null(parent.frame()$ed_password)) {
+        ed_password <- askpass::askpass(
+          prompt = paste0(
+            "Please enter password for ",
+            "EarthData user '",
+            ed_email,
+            "'."
+          )
+        )
+      } else {
+        ed_password <- parent.frame()$ed_password
+      }
+    }
   }
 
   # Check data is in the desired format.
@@ -252,11 +261,15 @@ landcover_download <- function(
   }
 
   # Create download path if it doesn't already exist.
-  if (is.null(dl_path) & !dir.exists("./modis/MCD12Q1")) {
+  if (is.null(dl_path) & !dir.exists("./modis/MCD12Q1") & ed_transfer == TRUE) {
     dir.create("./modis/MCD12Q1", recursive = TRUE)
   }
 
-  if (!is.null(dl_path) & !dir.exists(paste0(dl_path, "/modis/MCD12Q1"))) {
+  if (
+    !is.null(dl_path) &
+      !dir.exists(paste0(dl_path, "/modis/MCD12Q1")) &
+      ed_transfer == TRUE
+  ) {
     dir.create(paste0(dl_path, "/modis/MCD12Q1"), recursive = TRUE)
   }
 

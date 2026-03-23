@@ -577,15 +577,73 @@ test_that("data_fmt() invalid CRSs return error", {
 test_that("data_buff() basic functionality with BMDE sf POINT", {
   expect_warning(buffed <- suppressMessages(data_buff(data_fmt(bcch))),
                  "\\[Data Formatting\\] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.")
-  expect_equal(buffed, suppressWarnings(sf::st_buffer(suppressMessages(data_fmt(bcch)), 500)))
+  expect_equal(suppressWarnings(sf::st_centroid(buffed)), suppressWarnings(sf::st_centroid(suppressWarnings(sf::st_buffer(suppressMessages(data_fmt(bcch)), 500)))))
+  expect_equal(sf::st_area(buffed), sf::st_area(suppressWarnings(sf::st_buffer(suppressMessages(data_fmt(bcch)), 500))))
   expect_s3_class(buffed, "sf")
   expect_equal(as.character(sf::st_geometry_type(buffed, by_geometry = FALSE)), "POLYGON")
 })
 
 test_that("data_buff() basic functionality with BMDE terra points", {
-  expect_warning(buffed <- suppressMessages(data_buff(terra::vect(data_fmt(bcch)))),
-                 "\\[Data Formatting\\] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.")
-  expect_equal(buffed, suppressWarnings(terra::buffer(terra::vect(suppressMessages(data_fmt(bcch))), 500)))
+  expect_silent(buffed <- suppressMessages(data_buff(data_fmt(terra::vect(bcch, crs = "epsg:4326")))))
+  expect_equal(suppressWarnings(terra::crds(terra::centroids(buffed))), terra::crds(suppressWarnings(terra::centroids(suppressWarnings(terra::buffer(suppressMessages(data_fmt(terra::vect(bcch, crs = "epsg:4326"))), 500))))))
+  expect_equal(terra::expanse(buffed), terra::expanse(terra::buffer(suppressMessages(data_fmt(terra::vect(bcch, crs = "epsg:4326"))), 500)))
   expect_s4_class(buffed, "SpatVector")
   expect_equal(terra::geomtype(buffed), "polygons")
+})
+
+test_that("data_buff() basic functionality with BMDE sf POLYGON", {
+  expect_warning(buffed <- suppressMessages(data_buff(data_fmt(sf::st_buffer(sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326), 500)))),
+                 "\\[Data Buffering\\] sf POLYGON geometry provided. Existing polygons will be buffered by an additional 500m.")
+  expect_equal(suppressWarnings(sf::st_centroid(buffed)), suppressWarnings(sf::st_centroid(suppressWarnings(sf::st_buffer(suppressMessages(data_fmt(sf::st_buffer(sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326), 500))), 500)))))
+  expect_equal(sf::st_area(buffed), sf::st_area(suppressWarnings(sf::st_buffer(suppressMessages(data_fmt(sf::st_buffer(sf::st_as_sf(bcch, coords = c("longitude", "latitude"), crs = 4326), 500))), 500))))
+  expect_s3_class(buffed, "sf")
+  expect_equal(as.character(sf::st_geometry_type(buffed, by_geometry = FALSE)), "POLYGON")
+})
+
+test_that("data_buff() basic functionality with BMDE terra polygons", {
+  expect_warning(buffed <- suppressMessages(data_buff(data_fmt(terra::buffer(terra::vect(bcch, crs = "epsg:4326"), 500)))),
+                 "\\[Data Buffering\\] terra polygons provided. Existing polygons will be buffered by an additional 500m.")
+  expect_equal(suppressWarnings(terra::crds(terra::centroids(buffed))), terra::crds(terra::centroids(terra::buffer(suppressMessages(data_fmt(terra::buffer(terra::vect(bcch, crs = "epsg:4326"), 500))), 500))))
+  expect_equal(terra::expanse(buffed), terra::expanse(terra::buffer(suppressMessages(data_fmt(terra::buffer(terra::vect(bcch, crs = "epsg:4326"), 500))), 500)))
+  expect_s4_class(buffed, "SpatVector")
+  expect_equal(terra::geomtype(buffed), "polygons")
+})
+
+test_that("data_buff() rejects invalid data inputs with appropriate errors NOTE: this is different from the test at line 525 as error message is adjusted with a tryCatch to remove the suggestion that data.frame inputs are valid.", {
+  expect_error(buff_char <- data_buff("invalid"), "\\[Data Formatting\\] invalid data format. Please provide data as a sf object with `POINT` or `POLYGON` geometry, or terra SpatVector object with `points` or `polygons` geometry.")
+  
+  expect_error(buff_numeric <- data_buff(1), "\\[Data Formatting\\] invalid data format. Please provide data as a sf object with `POINT` or `POLYGON` geometry, or terra SpatVector object with `points` or `polygons` geometry.")
+  
+  expect_error(buff_vector <- data_buff(c("invalid", 2, NA)), "\\[Data Formatting\\] invalid data format. Please provide data as a sf object with `POINT` or `POLYGON` geometry, or terra SpatVector object with `points` or `polygons` geometry.")
+  
+  expect_error(buff_SpatRaster <- data_buff(terra::rast(nrows=108, ncols=21, xmin=0, xmax=10)), "\\[Data Formatting\\] invalid data format. Please provide data as a sf object with `POINT` or `POLYGON` geometry, or terra SpatVector object with `points` or `polygons` geometry.")
+  
+  expect_error(buff_lines <- data_buff(terra::as.lines(terra::vect(data.frame(longitude = c(100, 110), latitude = c(45, 46)), crs = "epsg:4326"))), "\\[Data Formatting\\] terra object provided, but not a set of points or polygons.")
+  
+  expect_error(buff_LINESTRING <- data_buff(sf::st_cast(sf::st_as_sf(data.frame(longitude = c(100, 110), latitude = c(45, 46)), coords = c("longitude", "latitude"), crs = 4326), "LINESTRING")), "\\[Data Formatting\\] sf object provided, but not a set of POINT or POLYGON geometries.")
+  
+  expect_error(buff_mixedgeoms <- data_buff(rbind(sf::st_as_sf(data.frame(x = 100, y = 45), coords = c("x", "y"), crs = 4326), sf::st_buffer(sf::st_as_sf(data.frame(x = 100, y = 45), coords = c("x", "y"), crs = 4326), 500))), "\\[Data Formatting\\] mixed sf geometries detected. Please provide a set of only POINT geometries or only POLYGON geometries.")
+})
+
+test_that("data_buff() rejects invalid distance or units inputs.", {
+  expect_error(data_buff(suppressMessages(data_fmt(bcch,
+                                                   coord_lon = "longitude",
+                                                   coord_lat = "latitude",
+                                                   crs = 4326)),
+                         buffer_distance = "I'm not a number!", 
+                         buffer_units = "m"),
+               "\\[Data Buffering\\] 'buffer_distance' could not be converted to numeric. Please provide desired buffer distance as a numeric input.")
+  expect_error(data_buff(suppressMessages(data_fmt(bcch,
+                                                   coord_lon = "longitude",
+                                                   coord_lat = "latitude",
+                                                   crs = 4326)),
+                         buffer = "Not Logical!"),
+               "\\[Data Buffering\\] argument 'buffer' should be a boolean \\(i.e. TRUE or FALSE\\).")
+  expect_error(data_buff(suppressMessages(data_fmt(bcch,
+                                                   coord_lon = "longitude",
+                                                   coord_lat = "latitude",
+                                                   crs = 4326)),
+                         buffer_distance = 500, 
+                         buffer_units = "Lego Pieces"),
+               "\\[Data Buffering\\] buffer units not recognized: please set buffer_units to one of 'm' \\[metres\\], 'km' \\[kilometers\\], 'ft' \\[feet\\], 'yd' \\[yards\\], 'mi' \\[miles\\], or 'naut_mi' \\[nautical miles\\].")
 })
