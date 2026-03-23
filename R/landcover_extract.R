@@ -566,9 +566,9 @@ landcover_extract <- function(
         } else {
           # Create temporary object containing only the point for site k.
           tmp <- data %>%
-            filter(SurveyAreaIdentifier == k) %>%
-            select(SurveyAreaIdentifier, geometry) %>%
-            distinct() %>%
+            dplyr::filter(SurveyAreaIdentifier == k) %>%
+            dplyr::select(SurveyAreaIdentifier, geometry) %>%
+            dplyr::distinct() %>%
             sf::st_transform(terra::crs(modis))
           
           # Extract point value from MODIS raster. It appears to be possible

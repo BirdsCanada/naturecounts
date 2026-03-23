@@ -126,11 +126,22 @@ test_that("landcover_download() succeeds with alternate column names, either
 })
 
 test_that("landcover_extract() basic functionality with all expected data inputs.", {
-  input <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch))))
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch)))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch))))
+  terra_pt <- terra::vect(sf_pt)
+  terra_poly <- terra::vect(sf_poly)
+  
   expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
-    input,
+    sf_pt,
     landcover_files = list.files("./testdir/modis/MCD12Q1", 
                                  full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", "survey_year", "survey_month", "survey_day", "geometry", "LC_Type1_Class"))
+  expect_equal(dplyr::select(extracted, -"LC_Type1_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes as dplyr drops the crs attribute
+  expect_equal(nrow(extracted), nrow(sf_pt))
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))  
 })
 
-unlink("./testdir", recursive = T)
+#unlink("./testdir", recursive = T)
