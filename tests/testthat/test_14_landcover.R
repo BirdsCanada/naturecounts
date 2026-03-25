@@ -138,10 +138,298 @@ test_that("landcover_extract() basic functionality with all expected data inputs
   expect_s3_class(extracted, "sf")
   expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
   expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", "survey_year", "survey_month", "survey_day", "geometry", "LC_Type1_Class"))
-  expect_equal(dplyr::select(extracted, -"LC_Type1_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes as dplyr drops the crs attribute
-  expect_equal(nrow(extracted), nrow(sf_pt))
+  expect_equal(dplyr::select(extracted, -"LC_Type1_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
   expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
-  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))  
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    sf_poly,
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POLYGON")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude",
+                            "survey_year", "survey_month", "survey_day",
+                            "geometry", "LC_Type1_evergreen_needleleaf_forests",
+                            "LC_Type1_evergreen_broadleaf_forests", 
+                            "LC_Type1_decidious_needleleaf_forests", 
+                            "LC_Type1_deciduous_broadleaf_forests", 
+                            "LC_Type1_mixed_forests", 
+                            "LC_Type1_closed_shrublands", 
+                            "LC_Type1_open_shrublands", 
+                            "LC_Type1_woody_savannas", 
+                            "LC_Type1_savannas", 
+                            "LC_Type1_grasslands", 
+                            "LC_Type1_permanent_wetlands", 
+                            "LC_Type1_croplands", 
+                            "LC_Type1_urban_builtup_lands", 
+                            "LC_Type1_cropland_natural_vegetation_mosaic", 
+                            "LC_Type1_permanent_snow_ice", "LC_Type1_barren", 
+                            "LC_Type1_water_bodies", "LC_Type1_unclassified"))
+  expect_equal(dplyr::select(extracted, -tidyselect::starts_with("LC_Type1")), sf_poly, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 25))
+  expect_equal(unique(round(rowSums(sf::st_drop_geometry(dplyr::select(extracted, tidyselect::starts_with("LC_Type1")))),0)), 100) # Check that all rows sum to 100%
+  
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    terra_pt,
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", "survey_year", "survey_month", "survey_day", "geometry", "LC_Type1_Class"))
+  expect_equal(dplyr::select(extracted, -"LC_Type1_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    terra_poly,
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POLYGON")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude",
+                            "survey_year", "survey_month", "survey_day",
+                            "geometry", "LC_Type1_evergreen_needleleaf_forests",
+                            "LC_Type1_evergreen_broadleaf_forests", 
+                            "LC_Type1_decidious_needleleaf_forests", 
+                            "LC_Type1_deciduous_broadleaf_forests", 
+                            "LC_Type1_mixed_forests", 
+                            "LC_Type1_closed_shrublands", 
+                            "LC_Type1_open_shrublands", 
+                            "LC_Type1_woody_savannas", 
+                            "LC_Type1_savannas", 
+                            "LC_Type1_grasslands", 
+                            "LC_Type1_permanent_wetlands", 
+                            "LC_Type1_croplands", 
+                            "LC_Type1_urban_builtup_lands", 
+                            "LC_Type1_cropland_natural_vegetation_mosaic", 
+                            "LC_Type1_permanent_snow_ice", "LC_Type1_barren", 
+                            "LC_Type1_water_bodies", "LC_Type1_unclassified"))
+  expect_equal(dplyr::select(extracted, -tidyselect::starts_with("LC_Type1")), sf_poly, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 25))
+  expect_equal(unique(round(rowSums(sf::st_drop_geometry(dplyr::select(extracted, tidyselect::starts_with("LC_Type1")))),0)), 100) # Check that all rows sum to 100%
 })
 
-#unlink("./testdir", recursive = T)
+test_that("landcover_extract() succeeds with all landcover classification schema.", {
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch)))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch))))
+  
+  # Type 2
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    sf_pt,
+    covariates = "modis_lctype2",
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", "survey_year", "survey_month", "survey_day", "geometry", "LC_Type2_Class"))
+  expect_equal(dplyr::select(extracted, -"LC_Type2_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    sf_poly,
+    covariates = "modis_lctype2",
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POLYGON")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude",
+                            "survey_year", "survey_month", "survey_day", 
+                            "geometry", "LC_Type2_water_bodies", 
+                            "LC_Type2_evergreen_needleleaf_forests", 
+                            "LC_Type2_evergreen_broadleaf_forests", 
+                            "LC_Type2_deciduous_needleleaf_forests", 
+                            "LC_Type2_deciduous_broadleaf_forests", 
+                            "LC_Type2_mixed_forests", 
+                            "LC_Type2_closed_shrublands", 
+                            "LC_Type2_open_shrublands", 
+                            "LC_Type2_woody_savannas", "LC_Type2_savannas", 
+                            "LC_Type2_grasslands", "LC_Type2_permanent_wetlands", 
+                            "LC_Type2_croplands", "LC_Type2_urban_builtup_lands",
+                            "LC_Type2_cropland_natural_vegetation_mosaic", 
+                            "LC_Type2_nonvegetated_lands", "LC_Type2_unclassified"))
+  expect_equal(dplyr::select(extracted, -tidyselect::starts_with("LC_Type2")), sf_poly, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 24))
+  expect_equal(unique(round(rowSums(sf::st_drop_geometry(dplyr::select(extracted, tidyselect::starts_with("LC_Type2")))),0)), 100) # Check that all rows sum to 100%
+  
+  # Type 3
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    sf_pt,
+    covariates = "modis_lctype3",
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", "survey_year", "survey_month", "survey_day", "geometry", "LC_Type3_Class"))
+  expect_equal(dplyr::select(extracted, -"LC_Type3_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    sf_poly,
+    covariates = "modis_lctype3",
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POLYGON")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", 
+                            "survey_year", "survey_month", "survey_day", 
+                            "geometry", "LC_Type3_water_bodies", 
+                            "LC_Type3_grasslands", "LC_Type3_shrublands", 
+                            "LC_Type3_broadleaf_croplands", "LC_Type3_savannas",
+                            "LC_Type3_evergreen_broadleaf_forests", 
+                            "LC_Type3_deciduous_broadleaf_forests", 
+                            "LC_Type3_evergreen_needleleaf_forests", 
+                            "LC_Type3_deciduous_needleleaf_forests", 
+                            "LC_Type3_nonvegetated_lands", 
+                            "LC_Type3_urban_builtup_lands", 
+                            "LC_Type3_unclassified"))
+  expect_equal(dplyr::select(extracted, -tidyselect::starts_with("LC_Type3")), sf_poly, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 19))
+  expect_equal(unique(round(rowSums(sf::st_drop_geometry(dplyr::select(extracted, tidyselect::starts_with("LC_Type3")))),0)), 100) # Check that all rows sum to 100%
+  
+  # Type 4
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    sf_pt,
+    covariates = "modis_lctype4",
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", "survey_year", "survey_month", "survey_day", "geometry", "LC_Type4_Class"))
+  expect_equal(dplyr::select(extracted, -"LC_Type4_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    sf_poly,
+    covariates = "modis_lctype4",
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POLYGON")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", 
+                            "survey_year", "survey_month", "survey_day", 
+                            "geometry", "LC_Type4_water_bodies", 
+                            "LC_Type4_evergreen_needleleaf_vegetation", 
+                            "LC_Type4_evergreen_broadleaf_vegetation", 
+                            "LC_Type4_deciduous_needleleaf_vegetation", 
+                            "LC_Type4_deciduous_broadleaf_vegetation", 
+                            "LC_Type4_annual_broadleaf_vegetation", 
+                            "LC_Type4_annual_grass_vegetation", 
+                            "LC_Type4_nonvegetated_lands", 
+                            "LC_Type4_urban_builtup_lands", 
+                            "LC_Type4_unclassified"))
+  expect_equal(dplyr::select(extracted, -tidyselect::starts_with("LC_Type4")), sf_poly, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 17))
+  expect_equal(unique(round(rowSums(sf::st_drop_geometry(dplyr::select(extracted, tidyselect::starts_with("LC_Type4")))),0)), 100) # Check that all rows sum to 100%
+  
+  # Type 5
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    sf_pt,
+    covariates = "modis_lctype5",
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", "survey_year", "survey_month", "survey_day", "geometry", "LC_Type5_Class"))
+  expect_equal(dplyr::select(extracted, -"LC_Type5_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(
+    sf_poly,
+    covariates = "modis_lctype5",
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POLYGON")
+  expect_named(extracted, c("SurveyAreaIdentifier", "latitude", "longitude", 
+                            "survey_year", "survey_month", "survey_day", 
+                            "geometry", "LC_Type5_water_bodies", 
+                            "LC_Type5_evergreen_needleleaf_trees", 
+                            "LC_Type5_evergreen_broadleaf_trees", 
+                            "LC_Type5_deciduous_needleleaf_trees", 
+                            "LC_Type5_deciduous_broadleaf_trees", 
+                            "LC_Type5_shrub", "LC_Type5_grass", 
+                            "LC_Type5_cereal_croplands", 
+                            "LC_Type5_broadleaf_croplands", 
+                            "LC_Type5_urban_builtup_lands", 
+                            "LC_Type5_permanent_snow_ice", "LC_Type5_barren", 
+                            "LC_Type5_unclassified"))
+  expect_equal(dplyr::select(extracted, -tidyselect::starts_with("LC_Type5")), sf_poly, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 20))
+  expect_equal(unique(round(rowSums(sf::st_drop_geometry(dplyr::select(extracted, tidyselect::starts_with("LC_Type5")))),0)), 100) # Check that all rows sum to 100%
+  })
+
+test_that("landcover_extract() returns appropriate warnings for out of coverage points.", {
+  bcch_mod <- bcch
+  bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
+  bcch_mod$latitude[1] <- 80
+  
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_mod)))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod))))
+  
+  expect_warning(extracted <- suppressMessages(landcover_extract(
+    sf_pt,
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE))),
+    "\\[MODIS Landcover Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the MODIS files provided. No value will be assigned.")
+  expect_true(is.na(extracted$LC_Type1_Class[1]))
+  
+  expect_warning(extracted <- suppressMessages(landcover_extract(
+    sf_poly,
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE))),
+    "\\[MODIS Landcover Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the MODIS files provided. No value will be assigned.")
+  expect_true(all(c(unname(is.na(sf::st_drop_geometry(dplyr::select(extracted, starts_with("LC_Type1")))[1,])))))
+  })
+
+test_that("landcover_extract() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
+  sf_pt <- suppressMessages(data_fmt(dplyr::rename(bcch,
+                                  "sites" = "SurveyAreaIdentifier",
+                                  "yr" = "survey_year"),
+                    coord_lon = "longitude",
+                    coord_lat = "latitude",
+                    site_name = "sites",
+                    date_year = "yr",
+                    crs = 4326))
+  
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(sf_pt,
+                                                                                 landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                                                                                              full.names = TRUE)))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("sites", "latitude", "longitude", "yr", "survey_month", "survey_day", "geometry", "LC_Type1_Class"))
+  expect_equal(dplyr::select(extracted, -"LC_Type1_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  
+  sf_pt <- dplyr::rename(suppressMessages(data_fmt(bcch,
+                                  coord_lon = "longitude",
+                                  coord_lat = "latitude",
+                                  crs = 4326)),
+                         "sites" = "SurveyAreaIdentifier",
+                         "yr" = "survey_year")
+  
+  expect_silent(extracted <- suppressWarnings(suppressMessages(landcover_extract(sf_pt,
+                                                                                 landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                                                                                              full.names = TRUE),
+                                                                                 site_name = "sites",
+                                                                                 date_year = "yr"))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("sites", "latitude", "longitude", "yr", "survey_month", "survey_day", "geometry", "LC_Type1_Class"))
+  expect_equal(dplyr::select(extracted, -"LC_Type1_Class"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  })
+
+unlink("./testdir", recursive = T)

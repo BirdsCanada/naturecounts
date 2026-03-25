@@ -91,18 +91,18 @@
 
 # Function to extract land cover data from provided MODIS MCD12Q1 data files.
 landcover_extract <- function(
-    data,
-    covariates = "modis_lctype1", # Other options listed in nc_covariate_table().
-    landcover_files, # Character vector of filepaths to downloaded files.
-    site_name = NULL, # optional argument to provide column name containing site
-    # names. Default is assumed to be the BMDE column 'SurveyAreaIdentifier'. Can
-    # be left NULL and still function properly if originally specified in a call
-    # to data_fmt().
-    date_year = NULL, # optional argument to provide column name containing year
-    # data. Default is assumed to be the BMDE column 'survey_year'. Can
-    # be left NULL and still function properly if originally specified in a call
-    # to data_fmt().
-    retain = TRUE # Should data files be kept after extraction?
+  data,
+  covariates = "modis_lctype1", # Other options listed in nc_covariate_table().
+  landcover_files, # Character vector of filepaths to downloaded files.
+  site_name = NULL, # optional argument to provide column name containing site
+  # names. Default is assumed to be the BMDE column 'SurveyAreaIdentifier'. Can
+  # be left NULL and still function properly if originally specified in a call
+  # to data_fmt().
+  date_year = NULL, # optional argument to provide column name containing year
+  # data. Default is assumed to be the BMDE column 'survey_year'. Can
+  # be left NULL and still function properly if originally specified in a call
+  # to data_fmt().
+  retain = TRUE # Should data files be kept after extraction?
 ) {
   # Check packages
   have_pkg_check(c(
@@ -111,7 +111,7 @@ landcover_extract <- function(
     "terra",
     "stats"
   ))
-  
+
   # Catch misspecified covariates. Return error if any exist.
   if (FALSE %in% (covariates %in% nc_covariate_table()$covariate_name)) {
     stop(
@@ -121,7 +121,7 @@ landcover_extract <- function(
       call. = FALSE
     )
   }
-  
+
   # If no landcover files are provided, return error.
   if (missing(landcover_files)) {
     stop(
@@ -129,10 +129,10 @@ landcover_extract <- function(
       call. = FALSE
     )
   }
-  
+
   # Check data is in the desired format.
   input_fmt <- covariate_fmt_check(data)
-  
+
   # If not an sf or terra object, return error and point towards data_fmt().
   if (input_fmt$type == "data.frame") {
     stop(
@@ -140,9 +140,9 @@ landcover_extract <- function(
       call. = FALSE
     )
   }
-  
+
   # Store attributes so they don't get lost.
-  
+
   # List potential attributes.
   attr_names <- c(
     "site_name",
@@ -155,7 +155,7 @@ landcover_extract <- function(
     "date_lubridate",
     "crs"
   )
-  
+
   # If any potential attribute names are present in the data attributes,
   # store.
   if (length(attr_names[attr_names %in% names(attributes(data))]) > 0) {
@@ -163,36 +163,36 @@ landcover_extract <- function(
       attr_names %in% names(attributes(data))
     ]]
   }
-  
+
   # Check whether information on alternate column names has been stored
   # in the attributes by data_fmt(). However, prioritize alternate column names
   # specified in the current call.
   if (is.null(site_name) & !is.null(attr(data, "site_name"))) {
     site_name <- attr(data, "site_name")
   }
-  
+
   if (is.null(date_year) & !is.null(attr(data, "date_year"))) {
     date_year <- attr(data, "date_year")
   }
-  
+
   # Check that all specified column names are present in the data.
-  
+
   # Gather all potentially specified columns.
   specified_cols <- c(site_name, date_year)
-  
+
   # Remove any that haven't been specified.
   specified_cols <- specified_cols[!is.null(specified_cols)]
-  
+
   data_cols <- names(data)
-  
+
   # Compare to columns present in data. Return error if any specified columns
   # are not present. 'if' wrapper needed for when alternate column names exist
   # in the attributes of the data, but conversion of those columns to
   # standardized names has already taken place in data_fmt().
   if (
     !(all(specified_cols %in% data_cols)) &
-    (!("SurveyAreaIdentifier" %in% data_cols) |
-     !("survey_year" %in% data_cols))
+      (!("SurveyAreaIdentifier" %in% data_cols) |
+        !("survey_year" %in% data_cols))
   ) {
     stop(
       "[MODIS Landcover Extraction] some specified columns missing from the data: ",
@@ -203,47 +203,47 @@ landcover_extract <- function(
       call. = FALSE
     )
   }
-  
+
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
   if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
-    
+
     data <- dplyr::rename(data, "SurveyAreaIdentifier" = !!site_name)
   }
-  
+
   data$SurveyAreaIdentifier <- as.character(data$SurveyAreaIdentifier)
-  
+
   if (!is.null(date_year) & !("survey_year" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
-    
+
     data <- dplyr::rename(data, "survey_year" = !!date_year)
   }
-  
+
   data$survey_year <- as.numeric(data$survey_year)
-  
+
   # Check whether object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "sf") {
     buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
   }
-  
+
   if (input_fmt$type == "terra") {
     buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
-    
+
     # Convert to sf object for use in workflow.
     data <- sf::st_as_sf(data) # Maybe down the line write full process out in terra for terra data.
   }
-  
+
   # If buffered, check for packages necessary in buffered workflow.
   if (buffered == TRUE) {
     have_pkg_check("landscapemetrics")
   }
-  
+
   # Parse dates stored in filenames of MODIS data files and append column to
   # filenames.
   modis_files <- luna::modisDate(landcover_files)
@@ -251,14 +251,14 @@ landcover_extract <- function(
     modis_files,
     as.data.frame(luna::modisExtent(modis_files$filename))
   )
-  
+
   modis_files$year <- as.numeric(modis_files$year)
-  
+
   # Build object to use in matching sites to their respective MODIS data file.
   modis_match <- data %>%
     dplyr::select("SurveyAreaIdentifier", "survey_year", "geometry") %>%
     sf::st_transform(terra::crs(terra::rast(modis_files$filename[1])))
-  
+
   # If buffered, extract coordinates from centroids. Append coordinates.
   if (buffered == TRUE) {
     suppressWarnings(
@@ -270,7 +270,7 @@ landcover_extract <- function(
   } else {
     modis_match <- cbind(modis_match, sf::st_coordinates(modis_match))
   }
-  
+
   # Loop through years to check that all are represented in the MODIS data.
   # When requests are placed for data containing years not covered by MODIS,
   # nothing in the downloading process alerts the user to this. Warn here, and
@@ -292,11 +292,11 @@ landcover_extract <- function(
       )
     }
   }
-  
+
   # Open vector to store names of out of range sites. NOTE: this might not be
   # that informative for datasets without dedicated site names.
   out_of_range <- c()
-  
+
   # Loop through each site-year combination and match to appropriate file.
   for (i in unique(modis_match$SurveyAreaIdentifier)) {
     for (j in unique(modis_match$survey_year[
@@ -309,15 +309,15 @@ landcover_extract <- function(
         .data$survey_year == j
       ) %>%
         dplyr::distinct()
-      
+
       # Check if the coordinates of that site fall within the coverage of the
       # provided MODIS files. If not, warn and note site name. If not, proceed
       # with file-matching.
       if (
         all(tmp$X > modis_files$xmax) |
-        all(tmp$X < modis_files$xmin) |
-        all(tmp$Y > modis_files$ymax) |
-        all(tmp$Y < modis_files$ymin)
+          all(tmp$X < modis_files$xmin) |
+          all(tmp$Y > modis_files$ymax) |
+          all(tmp$Y < modis_files$ymin)
       ) {
         warning(
           "[MODIS Landcover Extraction] site ",
@@ -326,7 +326,7 @@ landcover_extract <- function(
           " No value will be assigned.",
           call. = FALSE
         )
-        
+
         out_of_range <- c(out_of_range, i)
       } else {
         # Match to appropriate file, using either the nearest year covered by
@@ -365,10 +365,10 @@ landcover_extract <- function(
         )
       }
     }
-    
+
     rm(tmp)
   }
-  
+
   # Create object with parseable names for MODIS classes. Transcribed from
   # documentation at
   # https://lpdaac.usgs.gov/documents/101/MCD12_User_Guide_V6.pdf where
@@ -471,19 +471,19 @@ landcover_extract <- function(
       )
     )
   )
-  
+
   # Open loop going through each requested land cover classification and
   # extracting.
   for (i in grep("modis_lc", covariates, value = TRUE)) {
     # Parse covariate name for layer name used by MODIS data files.
     index <- gsub("modis_lct", "LC_T", i)
-    
+
     message(paste0(
       "[MODIS Landcover Extraction] calculating MODIS ",
       gsub("_", " ", index),
       "."
     ))
-    
+
     # Loop through each matched MODIS data file.
     for (j in stats::na.omit(unique(modis_match$filename))) {
       # Create object with all sites that matched to file j.
@@ -491,10 +491,10 @@ landcover_extract <- function(
         data$SurveyAreaIdentifier %in%
           modis_match$SurveyAreaIdentifier[modis_match$filename == j],
       ]
-      
+
       # Open the requested layer in file j.
       modis <- terra::rast(j)[index]
-      
+
       # Loop through each site matched to file j and extract.
       for (k in unique(pts_to_fill$SurveyAreaIdentifier)) {
         # If buffered, extract using landscapemetrics::calculate_lsm(). If not,
@@ -507,17 +507,17 @@ landcover_extract <- function(
             dplyr::distinct() %>%
             sf::st_transform(terra::crs(modis)) %>%
             terra::vect()
-          
+
           # Crop MODIS data file to site k's buffer.
           modis_clip <- terra::crop(modis, tmp)
-          
+
           # Use landscapemetrics::calculate_lsm() to calculate the proportion
           # of each land cover type present in the cropped raster ("pland").
           modis_pland <- landscapemetrics::calculate_lsm(
             modis_clip,
             metric = "pland"
           )
-          
+
           # Loop through each land cover type present in the cropped raster
           # and append proportion at site k in the appropriate year to input
           # data. Create parseable column names using names for each
@@ -526,7 +526,7 @@ landcover_extract <- function(
             data[
               data$SurveyAreaIdentifier == k &
                 data$survey_year %in%
-                modis_match$survey_year[modis_match$filename == j],
+                  modis_match$survey_year[modis_match$filename == j],
               paste0(
                 index,
                 "_",
@@ -534,18 +534,18 @@ landcover_extract <- function(
               )
             ] <- modis_pland$value[modis_pland$class == l]
           }
-          
+
           # Check whether any land cover classes were never in the cropped
           # raster. These are true zeros, but would be left out otherwise.
           # Add these columns in with 0 values.
           missing_cols <- paste0(index, "_", modis_classes[[i]]$name)[
             !(paste0(index, "_", modis_classes[[i]]$name) %in% names(data))
           ]
-          
+
           for (l in missing_cols) {
             data[, l] <- 0
           }
-          
+
           # Replace NAs present in columns for land cover classes that were
           # found at some sites but not others with the true zeros they
           # represent.
@@ -556,7 +556,7 @@ landcover_extract <- function(
               l
             ] <- 0
           }
-          
+
           # Reorder columns to match class order provided in MODIS
           # documentation.
           data <- data[, c(
@@ -570,20 +570,20 @@ landcover_extract <- function(
             dplyr::select(SurveyAreaIdentifier, geometry) %>%
             dplyr::distinct() %>%
             sf::st_transform(terra::crs(modis))
-          
+
           # Extract point value from MODIS raster. It appears to be possible
           # that a point falls such that it extracts from two raster tiles,
           # so handle that possibility below.
           extr_table <- terra::extract(modis, tmp, fun = unique)[, index]
-          
+
           # Whether only a single value was extracted (class == "integer") or
           # multiple values (else) prepare to pass to input data.
           if (class(extr_table) == "integer") {
             extr_table <- extr_table %>%
               as.data.frame()
-            
+
             names(extr_table) <- "class"
-            
+
             extr_table <- dplyr::left_join(
               extr_table,
               modis_classes[[i]],
@@ -593,16 +593,16 @@ landcover_extract <- function(
             extr_table <- extr_table %>%
               as.data.frame() %>%
               dplyr::select(dplyr::all_of(index))
-            
+
             names(extr_table) <- "class"
-            
+
             extr_table <- dplyr::left_join(
               extr_table,
               modis_classes[[i]],
               by = "class"
             )
           }
-          
+
           # Join extracted value to input data. If multiple values were
           # extracted, join the first value in extr_table and warn the user
           # about potential values so they can adjust manually.
@@ -610,7 +610,7 @@ landcover_extract <- function(
             data[
               data$SurveyAreaIdentifier == k &
                 data$survey_year %in%
-                modis_match$survey_year[modis_match$filename == j],
+                  modis_match$survey_year[modis_match$filename == j],
               paste0(index, "_Class")
             ] <- modis_classes[[i]]$name[
               modis_classes[[i]]$class ==
@@ -619,10 +619,10 @@ landcover_extract <- function(
             warning = function(w) {
               if (
                 conditionMessage(w) ==
-                paste0(
-                  "longer object length is not a multiple of shorter",
-                  "object length"
-                )
+                  paste0(
+                    "longer object length is not a multiple of shorter",
+                    "object length"
+                  )
               ) {
                 warning(
                   paste0(
@@ -654,33 +654,40 @@ landcover_extract <- function(
         }
       }
     }
+
+    # Remove false zeroes for any sites that fall outside of data coverage.
+    if (buffered == TRUE) {
+      for (j in paste0(index, "_", modis_classes[[i]]$name)) {
+        data[data$SurveyAreaIdentifier %in% out_of_range, j] <- NA
+      }
+    }
   }
-  
+
   # Check if attributes were found and stored from input data. If they were
   # found reattach.
   if (exists("attrs")) {
     # Reattach attributes
     attributes(data)[names(attrs)] <- attrs
   }
-  
+
   # Reinstate user's specified column names.
   if (!is.null(site_name)) {
     names(data)[names(data) == "SurveyAreaIdentifier"] <- site_name
   }
-  
+
   if (!is.null(date_year)) {
     names(data)[names(data) == "survey_year"] <- date_year
   }
-  
+
   # If requested, remove MODIS data files.
   if (retain == FALSE) {
     message(paste0(
       "[MODIS Landcover Extraction] extraction complete. Removing files."
     ))
-    
+
     file.remove(modis_files$filename)
   }
-  
+
   # Return input data with appended land cover columns.
   return(data)
 }
