@@ -40,7 +40,8 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      naturecounts_testuser: ${{secrets.naturecounts_testuser}}
+      naturecounts_testuser: ${{ secrets.naturecounts_testuser }}
+      EarthData_password: ${{ secrets.EarthData_password }}
       R_KEEP_PKG_SOURCE: yes
 
     steps:
