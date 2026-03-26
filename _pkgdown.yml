@@ -51,6 +51,13 @@ reference:
   contents:
   - cosewic_ranges
   - cosewic_plot
+- title: Covariate Download and Extraction
+  desc: Functions for formatting data for use in covariate download and extraction, as well as for downloading and extracting covariate data
+  contents:
+  - data_fmt
+  - data_buff
+  - landcover_download
+  - landcover_extract
 - title: Data
   desc: Included example data sets
   contents:
@@ -86,6 +93,10 @@ articles:
   contents:
   - '`articles/3.1-ZeroFilling`'
   - '`articles/3.2-AuxiliaryTables`'
+- title: The NatureCounts Covariate Download and Extraction Tutorial
+  desc: An R guide to help download and extract covariate data using naturecounts functions.
+  contents:
+  - '`articles/4.1-CovariateFormatting'
 - title: Additional Tutorials
   desc: How-to articles describing common tasks
   contents:

@@ -61,7 +61,7 @@
 #' #output <- landcover_download(
 #' #  data = bcch,
 #' #  ed_email = ed_email
-#' )
+#' #)
 #'
 #' @seealso [luna::getNASA()] which this function wraps.
 #'

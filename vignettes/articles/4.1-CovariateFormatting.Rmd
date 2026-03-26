@@ -1,0 +1,230 @@
+---
+title: "Chapter 1 - Formatting Data for Covariate Download and Extraction"
+author: "Rory Macklin"
+date: "2026-03-25"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chapter 1 - Formatting Data for Covariate Download and Extraction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Chapter 1: Formatting Data for Covariate Download and Extraction
+
+##### Author: Rory Macklin
+
+> Satellite Earth Observation (SEO) data are an increasingly critical tool in ecological analysis, but can be difficult for end-users to access. With the functions we describe in this chapter, we aim to make several commonly used data types easy to download and attach to bird data downloaded from NatureCounts. The first step in this process is often formatting your bird data to prepare it for use in extracting data from covariate data sets.
+
+This tutorial assumes you have a basic understanding of working with spatial data in R. For a good introduction to these kinds of operations, the [NatureCounts Spatial Data Tutorial](https://github.com/BirdsCanada/NatureCounts_SpatialData_Tutorial) can serve as a useful starting point. It explains how to download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers.
+
+# 1.0 Learning Objectives
+
+By the end of **Chapter 1 - Formatting Data for Covariate Download and Extraction**, users will know how to:
+
+-   Use `data_fmt()` to conform their data (whether it is from NatureCounts or not) to a standard format for covariate extraction: [Formatting with `data_fmt()`](#1.1formatting).
+-   Use `data_buff()` to create spatial buffers around their survey points to summarize environmental variables at larger scales: [Buffering with `data_buff()`](#1.2buffering).
+
+This R tutorial requires the following packages:
+
+``` r
+library(naturecounts)
+library(tidyverse)
+library(sf)
+library(terra)
+```
+
+# 1.1 Formatting with `data_fmt()`{#1.1formatting}
+
+Extracting environmental data usually requires a few data features, all of which are commonly collected during ecological surveys. These usually include:
+
+-   The location where observations were made (usually a latitude/longitude coordinate).
+-   The date on which observations were made.
+
+However, these can often be collected and encoded in inconsistent formats. Here, we provide a function to standardize common data storage formats in R for spatial coordinates and date data. This function will return the input data in a spatial format necessary for extracting data from raster datasets, and with standardized sets of columns.
+
+This function accepts data in five formats:
+
+-   A `data.frame` with columns containing the spatial X-coordinate (usually longitude), the spatial Y-coordinate (usually latitude), and date data.
+-   An `sf` object, in either `POINT` or `POLYGON` format with coordinate information stored in the `geometry` column inherent to all `sf` objects and column(s) containing date data.
+-   A `terra` object, in either `points` or `polygons` format with coordinate information stored in the object structure inherent to `terra` and column(s) containing date data.
+
+Date data can be supplied in a variety of formats also. These include:
+
+-   Three columns: one for year, one for month (either month name or a number 1-12), and one for day of the month (1-31).
+-   In one column in the native R `Date` format often manipulated using the `lubridate` package.
+-   In two columns, one containing year data, and the other containing the day of the year (1-365), often referred to as Julian or Ordinal date.
+
+This function is designed to work most directly with data downloaded from NatureCounts in the BMDE format, but options have been included to allow great flexibility in input data. Let's run through an example using some data from NatureCounts, and demonstrate how other data inputs can be included.
+
+``` r
+# Examine a sample dataset from NatureCounts
+head(bcch)
+
+# This dataset is in a data.frame format, and contains the columns we need!
+bcch %>%
+  select(latitude, longitude, survey_year, survey_month, survey_day) %>%
+  head()
+  
+# We can make a call to data_fmt() to automatically convert this to an sf object
+# ready to work with naturecounts' covariate download and extraction functions.
+formatted <- data_fmt(bcch)
+#> Warning Message:
+#> [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326. 
+
+view(formatted)
+```
+
+Running this call to `data_fmt()` has returned our processed data object with a warning! This warning is simply telling us that as we did not explicitly specify the coordinate reference system (CRS), the function has assumed it is in the [World Geodetic System 1984](https://epsg.io/4326) CRS, the standard latitude/longitude system used in many mapping operations. This is fine for us as this CRS is appropriate for our data!
+
+The outputted object `formatted` has been transformed into an `sf` object in a `POINT` geometry (as previously mentioned, in the WGS84 CRS). All of our original input columns (latitude, longitude, date data) have been left as they were as they are all columns we need down the road for the covariate download and extraction process, and were already in the standardized format we use therein.
+
+You will also notice that a column with site names has been added! In `bcch`, no site names are provided, and so for convenience, the function has created site names for each unique location in the dataset. In many BMDE datasets, site names will be provided in the `SurveyAreaIdentifier` column, or in columns under other names in non-BMDE data. These are often a more human-readable way of identifying the different locations in a dataset, but are not strictly necessary for our operations here.
+
+So, what if your data is a little less standard than this?
+
+``` r
+# Let's modify the bcch object to make a more "non-standard" dataset.
+bcch_modified <- bcch %>%
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
+  st_transform("ESRI:102001") %>% # Change the CRS to Canada Albers Equal Area
+                                  # Conic
+  
+# Extract the coordinates in this new CRS format.
+coordinates <- st_coordinates(bcch_modified)
+
+# Convert our object back to a data.frame
+bcch_modified <- st_drop_geometry(bcch_modified)
+
+# Join the new coordinate data to our original data
+bcch_modified <- cbind(bcch_modified, coordinates)
+
+# Take a look! No more latitude/longitude column, only an X/Y column in a totally
+# different coordinate format!
+head(bcch_modified)
+
+# Now, if we supply this to data_fmt(), it's assumption that the data is in WGS84
+# would be wrong, and it wouldn't know where to look to find the coordinate data!
+# We can use special arguments to get around this!
+formatted <- data_fmt(bcch_modified,
+                      coord_lon = "X", # Here's the name of the column that
+                                       # contains our X-coordinate,
+                      coord_lat = "Y", # Here's the name of the column that
+                                       # contains our Y-coordinate,
+                      crs = "ESRI:102001") # Here's the alternate CRS code we used!
+                      
+```
+
+Phew, no errors! By telling the function where important information is stored, we can supply data in different formats and still prepare our data for use in covariate download and extraction. Let's see some other customization features we can use.
+
+``` r
+# What if we use non-BMDE column names with our data? We'll also add some more
+# human-readable site names and ask data_fmt() to look in a non-BMDE column name
+# for them.
+bcch_renamed <- bcch %>%
+  rename(year = survey_year, 
+         monthofyear = survey_month, 
+         dayofmonth = survey_day,
+         lat = latitude,
+         lon = longitude) %>%
+  select(-SurveyAreaIdentifier) # Remove the standard site name column 
+  
+# Fetch all unique latitude/longitude combinations and give each one a name!
+sitenames <- bcch_renamed %>%
+  select(lat, lon) %>%
+  distinct()
+
+sitenames$sitename <- paste0("Site", 1:nrow(sitenames))
+
+# Reattach these to our renamed data
+bcch_renamed <- left_join(bcch_renamed, sitenames, by = c("lat", "lon"))
+  
+# Let's give our data to data_fmt() and customize the column names as needed
+formatted <- data_fmt(bcch_renamed,
+                      site_name = "sitename",
+                      coord_lon = "lon",
+                      coord_lat = "lat",
+                      date_year = "year",
+                      date_month = "monthofyear",
+                      date_day = "dayofmonth")
+                      
+view(formatted)
+                      
+```
+
+As we can see, the function has happily accepted our alternate columns and has used them appropriately! This flexibility allows even those working with data outside of standard BMDE formats present in NatureCounts make use of these functions and those down the line to download and extract covariate data.
+
+Finally, what if we are using an alternate date format? So far, all examples have used the three column approach - one for year, one for month, and one for day. Below, we demonstrate how other date formats can be accomodated in `data_fmt()`.
+
+``` r
+
+# First, lets experiment with a column in date format. We'll make one below.
+bcch_date <- bcch %>%
+  mutate(date = as.Date(paste0(survey_day, "-", survey_month, "-", survey_year),
+                        format = "%d-%m-%Y"))
+  
+head(bcch_date$date)
+
+# Feed into data_fmt() with the argument date_lubridate pointing the function to where date
+# data is stored.
+
+formatted <- data_fmt(bcch_date,
+                      date_lubridate = "date")
+                      
+view(formatted)
+
+# Now, lets try using ordinal date!
+bcch_ordinal <- bcch_date %>%
+  mutate(dayofyear = yday(date))
+  
+# For ordinal date data, we need to provide the year and day-of-year column names. We'll let
+# data_fmt() look for year data in the default BMDE column 'survey_year'.
+formatted <- data_fmt(bcch_ordinal,
+                      date_ordinal = "dayofyear")
+                      
+view(formatted)
+```
+
+As we can see, in both cases date data is extracted from the supplied `Date` formatted column or ordinal date data, and is provided alongside the original input format in the output of `data_fmt()`.
+
+Finally, spatial data is commonly encoded using `sf` or `terra` objects in R. This function is adaptable to those formats, so long as `sf` objects are `POINTS` or `POLYGONS` geometries, or `terra` objects are `points` or `polygons` geometries. In these cases, `data_fmt()` will return the data in the spatial format it was provided in (i.e., if a `terra` object is provided, the final output data will also be a `terra` object).
+
+With these options all laid out, you should be able to use `data_fmt()` to standardize your data, whether it is from NatureCounts or not, and use it in later functions for covariate download and extraction.
+
+# 1.2 Buffering with `data_buff()`{#1.2buffering}
+
+When extracting covariate data, it is often desirable to summarize environmental covariates at different spatial scales. This can lead to interesting ecological insight into how birds respond to environmental conditions at different scales (Tozer et al. 2010). This is achieved by creating a spatial buffer of a given distance around an observation point, and examining all environmental variable values that fall within the buffered area.
+
+`data_buff()` accepts data in four formats:
+
+-   An `sf` object with `POINT` or `POLYGON` geometry.
+-   A `terra` object with `point` or `polygons` geometry.
+
+Users with `data.frame` data may consider using `data_fmt()` to convert their data to the appropriate format for use in `data_buff()`.
+
+Buffers of a 500 meter radius are commonly applied to represent the breeding territory size of most small- to medium-sized birds (Lee et al. 2021), so we will demonstrate the application of one to our `bcch` data here.
+
+``` r
+# Examine a sample dataset from NatureCounts
+head(bcch)
+
+# We will convert it to the appropriate data format using data_fmt() and will disregard the warning as EPSG:4326 is the appropriate CRS for these data.
+formatted <- data_fmt(bcch)
+
+# Now, we use data_buff() to apply a 500 m radius buffer around each point.
+
+buffered <- data_buff(formatted,
+                      buffer_distance = 500,
+                      buffer_units = "m")
+                      
+view(buffered)
+
+# We can also specify different units to achieve the same outcome.
+
+buffered <- data_buff(formatted,
+                      buffer_distance = 0.5,
+                      buffer_units = "km")
+                      
+view(buffered)
+```
+
+**Congratulations!** You have now learned how to use `data_fmt()` to standardize the format of your data for covariate download and extraction, and how to use `data_buff()` to buffer your data points to extract covariate data at different spatial scales. You can apply these concepts to download and extract landcover data in [**Chapter 2: Landcover Download and Extraction**](4.1-LandCover.html).

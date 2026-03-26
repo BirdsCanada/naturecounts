@@ -794,6 +794,14 @@ data_fmt <- function(
     }
   }
   
+  if (!is.null(date_ordinal)) {
+    names(data)[names(data) == "doy"] <- date_ordinal
+  }
+  
+  if (!is.null(date_lubridate)) {
+    names(data)[names(data) == "date"] <- date_lubridate
+  }
+  
   # Create base list of columns to preserve.
   keep_cols <- c(
     "SurveyAreaIdentifier",

@@ -24,7 +24,7 @@ month_check <- function(m) {
   stp <- FALSE
   
   # Convert factor months to characters
-  if (class(m) == "factor") {
+  if (inherits(m, "factor")) {
     m <- as.character(m)
   }
   # Check if numeric values have been given as characters
@@ -49,13 +49,10 @@ month_check <- function(m) {
         "Jan.",
         "Janv.",
         "February",
-        "Février",
         "Fevrier",
         "Feb",
-        "Févr",
         "Fevr",
         "Feb.",
-        "Févr.",
         "Fevr.",
         "March",
         "Mars",
@@ -83,11 +80,9 @@ month_check <- function(m) {
         "Jul.",
         "Juill.",
         "August",
-        "Août",
         "Aout",
         "Aug",
         "Aug.",
-        "Août.",
         "Aout.",
         "September",
         "Septembre",
@@ -102,12 +97,9 @@ month_check <- function(m) {
         "Nov",
         "Nov.",
         "December",
-        "Décembre",
         "Decembre",
         "Dec",
-        "Déc",
         "Dec.",
-        "Déc."
       ),
       numerics = c(
         rep(1, times = 6),

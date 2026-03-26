@@ -566,8 +566,8 @@ landcover_extract <- function(
         } else {
           # Create temporary object containing only the point for site k.
           tmp <- data %>%
-            dplyr::filter(SurveyAreaIdentifier == k) %>%
-            dplyr::select(SurveyAreaIdentifier, geometry) %>%
+            dplyr::filter(.data$SurveyAreaIdentifier == k) %>%
+            dplyr::select("SurveyAreaIdentifier", "geometry") %>%
             dplyr::distinct() %>%
             sf::st_transform(terra::crs(modis))
 
@@ -578,7 +578,7 @@ landcover_extract <- function(
 
           # Whether only a single value was extracted (class == "integer") or
           # multiple values (else) prepare to pass to input data.
-          if (class(extr_table) == "integer") {
+          if (inherits(extr_table, "integer")) {
             extr_table <- extr_table %>%
               as.data.frame()
 
