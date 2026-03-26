@@ -114,7 +114,7 @@ landcover_download <- function(
 
   # Check whether user password is stored in .Renviron
   if (ed_transfer == TRUE) {
-    ed_password <- Sys.getenv(paste0("EarthData_", ed_email))
+    ed_password <- Sys.getenv("EarthData_password")
     
     # If not available in .Renviron, check whether an EarthData password exists 
     # in the environment (is specified earlier in the nc_covariates() workflow),
