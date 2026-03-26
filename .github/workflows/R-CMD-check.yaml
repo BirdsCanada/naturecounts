@@ -7,8 +7,7 @@ on:
       - dev
       - sandbox
   pull_request:
-    branches: 
-      - main
+  
   schedule:
     - cron: '0 0 1 * *'  # Run once a month on the 1st at midnight
 
