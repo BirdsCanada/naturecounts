@@ -67,9 +67,9 @@
 
       <h1>Species codes</h1>
             
-            <h4 data-toc-skip class="date">2025-12-03</h4>
+            <h4 data-toc-skip class="date">2026-03-31</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/v0.5.0/vignettes/species-codes.Rmd" class="external-link"><code>vignettes/species-codes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/main/vignettes/species-codes.Rmd" class="external-link"><code>vignettes/species-codes.Rmd</code></a></small>
       <div class="d-none name"><code>species-codes.Rmd</code></div>
     </div>
 
@@ -328,7 +328,7 @@ also return all taxonomic information available with the
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_species.html">search_species</a></span><span class="op">(</span>show <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="va">all</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 41,523 × 17</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 41,479 × 17</span></span></span>
 <span><span class="co">#&gt;    species_id concept_id    scientific_name species_status added_dt english_name</span></span>
 <span><span class="co">#&gt;         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>          0 avibase-74B5… N/A                          9 <span style="color: #BB0000;">NA</span>       No observat…</span></span>
@@ -341,7 +341,7 @@ also return all taxonomic information available with the
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>         70 avibase-A534… Dendrocygna vi…              1 <span style="color: #BB0000;">NA</span>       White-faced…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>         80 avibase-C01A… Dendrocygna au…              1 <span style="color: #BB0000;">NA</span>       Black-belli…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>         90 avibase-DC65… Dendrocygna ar…              1 <span style="color: #BB0000;">NA</span>       West Indian…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 41,513 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 41,469 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 11 more variables: french_name &lt;chr&gt;, phylum &lt;chr&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   family_french_name &lt;chr&gt;, group_id &lt;dbl&gt;, order_taxon &lt;chr&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   taxon_group &lt;chr&gt;, sort_order &lt;int&gt;, class &lt;chr&gt;, family_name &lt;chr&gt;,</span></span></span>
@@ -391,7 +391,7 @@ species, by passing the <code>species_id</code>s to the
 <span><span class="co">#&gt; 5 WILDTRAX1651        4</span></span>
 <span><span class="co">#&gt; 6 WILDTRAX1652        3</span></span>
 <span><span class="co">#&gt; ...</span></span>
-<span><span class="co">#&gt; Total records: 1,838</span></span>
+<span><span class="co">#&gt; Total records: 1,894</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Downloading records for each collection:</span></span>
 <span><span class="co">#&gt;   OBFS</span></span>
@@ -414,12 +414,18 @@ species, by passing the <code>species_id</code>s to the
 <span><span class="co">#&gt;     Records 1 to 12 / 12</span></span>
 <span><span class="co">#&gt;   WILDTRAX3139</span></span>
 <span><span class="co">#&gt;     Records 1 to 47 / 47</span></span>
+<span><span class="co">#&gt;   WILDTRAX3351</span></span>
+<span><span class="co">#&gt;     Records 1 to 19 / 19</span></span>
+<span><span class="co">#&gt;   WILDTRAX3775</span></span>
+<span><span class="co">#&gt;     Records 1 to 2 / 2</span></span>
+<span><span class="co">#&gt;   WILDTRAX3933</span></span>
+<span><span class="co">#&gt;     Records 1 to 35 / 35</span></span>
 <span><span class="co">#&gt;   WILDTRAX659</span></span>
 <span><span class="co">#&gt;     Records 1 to 1 / 1</span></span>
 <span><span class="co">#&gt;   WILDTRAX963</span></span>
 <span><span class="co">#&gt;     Records 1 to 2 / 2</span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="va">chipmunks</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,838 × 285</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,894 × 285</span></span></span>
 <span><span class="co">#&gt;    record_id collection project_id protocol_id protocol_type species_id</span></span>
 <span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>  34<span style="text-decoration: underline;">694</span>257 OBFS             <span style="text-decoration: underline;">1</span>020          <span style="color: #BB0000;">NA</span>            21     <span style="text-decoration: underline;">137</span>820</span></span>
@@ -432,7 +438,7 @@ species, by passing the <code>species_id</code>s to the
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  34<span style="text-decoration: underline;">695</span>073 OBFS             <span style="text-decoration: underline;">1</span>020          <span style="color: #BB0000;">NA</span>            21     <span style="text-decoration: underline;">137</span>820</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  34<span style="text-decoration: underline;">695</span>137 OBFS             <span style="text-decoration: underline;">1</span>020          <span style="color: #BB0000;">NA</span>            21     <span style="text-decoration: underline;">137</span>820</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  34<span style="text-decoration: underline;">695</span>221 OBFS             <span style="text-decoration: underline;">1</span>020          <span style="color: #BB0000;">NA</span>            21     <span style="text-decoration: underline;">137</span>820</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,828 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,884 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 279 more variables: statprov_code &lt;chr&gt;, country_code &lt;chr&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   SiteCode &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, bcr &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   subnational2_code &lt;chr&gt;, iba_site &lt;chr&gt;, utm_square &lt;chr&gt;,</span></span></span>

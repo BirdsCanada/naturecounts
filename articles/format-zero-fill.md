@@ -256,7 +256,8 @@ valid.
 rc_filled <- format_zero_fill(rc)
 ```
 
-    ## Error: Column 'AllSpeciesReported' must be present and 'Yes'
+    ## Error:
+    ## ! Column 'AllSpeciesReported' must be present and 'Yes'
 
 Therefore, the first thing we need to do is limit our data to only
 `SamplingEventIdentifiers` where all species were recorded.

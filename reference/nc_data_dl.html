@@ -51,7 +51,7 @@ vignette("filtering_data", package = "naturecounts").'></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Download NatureCounts data records</h1>
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/v0.5.0/R/download.R" class="external-link"><code>R/download.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/main/R/download.R" class="external-link"><code>R/download.R</code></a></small>
       <div class="d-none name"><code>nc_data_dl.Rd</code></div>
     </div>
 
@@ -289,6 +289,7 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 991 / 991</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   SAMPLE2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 995 / 995</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># All observations part of project_id 1042 accessible by "testuser"</span></span></span>
 <span class="r-in"><span><span class="va">p1042</span> <span class="op">&lt;-</span> <span class="fu">nc_data_dl</span><span class="op">(</span>project_ids <span class="op">=</span> <span class="fl">1042</span>, username <span class="op">=</span> <span class="st">"testuser"</span>,</span></span>
@@ -443,9 +444,11 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 345001 to 350000 / 357264</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 350001 to 355000 / 357264</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 355001 to 357264 / 357264</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Black-capped Chickadees (BCCH) in SAMPLE2 collection in 2013</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="search_species.html">search_species</a></span><span class="op">(</span><span class="st">"black-capped chickadee"</span><span class="op">)</span> <span class="co"># Find the species_id</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   species_id scientific_name                english_name french_name taxon_group</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
@@ -455,6 +458,7 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>      <span style="text-decoration: underline;">44</span>466 Poecile atricapillus x Baeolo… Black-cappe… Hybride Mé… BIRDS      </span>
 <span class="r-in"><span><span class="va">bcch</span> <span class="op">&lt;-</span> <span class="fu">nc_data_dl</span><span class="op">(</span>collection <span class="op">=</span> <span class="st">"SAMPLE2"</span>, species <span class="op">=</span> <span class="fl">14280</span>, year <span class="op">=</span> <span class="fl">2013</span>,</span></span>
 <span class="r-in"><span>                   username <span class="op">=</span> <span class="st">"sample"</span>, info <span class="op">=</span> <span class="st">"nc_example"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: collections (SAMPLE2); species (14280); fields_set (BMDE2.00-ext); start_year (2013); end_year (2013)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Collecting available records...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   collection nrecords</span>
@@ -464,10 +468,12 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading records for each collection:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   SAMPLE2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 14 / 14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># All BCCH observations since 2015 accessible to user "sample"</span></span></span>
 <span class="r-in"><span><span class="va">bcch</span> <span class="op">&lt;-</span> <span class="fu">nc_data_dl</span><span class="op">(</span>species <span class="op">=</span> <span class="fl">14280</span>, years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>, <span class="cn">NA</span><span class="op">)</span>, username <span class="op">=</span> <span class="st">"sample"</span>,</span></span>
 <span class="r-in"><span>                    info <span class="op">=</span> <span class="st">"nc_example"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: species (14280); fields_set (BMDE2.00-ext); start_year (2015)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Collecting available records...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   collection nrecords</span>
@@ -480,10 +486,12 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 20 / 20</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   SAMPLE2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 20 / 20</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># All BCCH observations from mid-July to late October in all years for user "sample"</span></span></span>
 <span class="r-in"><span><span class="va">bcch</span> <span class="op">&lt;-</span> <span class="fu">nc_data_dl</span><span class="op">(</span>species <span class="op">=</span> <span class="fl">14280</span>, doy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">300</span><span class="op">)</span>, username <span class="op">=</span> <span class="st">"sample"</span>,</span></span>
 <span class="r-in"><span>                    info <span class="op">=</span> <span class="st">"nc_example"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: species (14280); fields_set (BMDE2.00-ext); start_doy (200); end_doy (300)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Collecting available records...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   collection nrecords</span>
@@ -496,12 +504,14 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 7 / 7</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   SAMPLE2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 7 / 7</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># All BCCH observations from a specific bounding box for user "sample"</span></span></span>
 <span class="r-in"><span><span class="va">bcch</span> <span class="op">&lt;-</span> <span class="fu">nc_data_dl</span><span class="op">(</span>species <span class="op">=</span> <span class="fl">14280</span>, username <span class="op">=</span> <span class="st">"sample"</span>,</span></span>
 <span class="r-in"><span>                   region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>left <span class="op">=</span> <span class="op">-</span><span class="fl">100</span>, bottom <span class="op">=</span> <span class="fl">45</span>,</span></span>
 <span class="r-in"><span>                                          right <span class="op">=</span> <span class="op">-</span><span class="fl">80</span>, top <span class="op">=</span> <span class="fl">60</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                    info <span class="op">=</span> <span class="st">"nc_example"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: species (14280); fields_set (BMDE2.00-ext); bbox_left (-100); bbox_bottom (45); bbox_right (-80); bbox_top (60)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Collecting available records...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   collection nrecords</span>
@@ -514,14 +524,17 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 3 / 3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   SAMPLE2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 2 / 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># All American Bittern observations from user "sample"</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="search_species.html">search_species</a></span><span class="op">(</span><span class="st">"american bittern"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   species_id scientific_name       english_name     french_name      taxon_group</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>       <span style="text-decoration: underline;">2</span>490 Botaurus lentiginosus American Bittern Butor d'Amérique BIRDS      </span>
 <span class="r-in"><span><span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu">nc_data_dl</span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, username <span class="op">=</span> <span class="st">"sample"</span>, info <span class="op">=</span> <span class="st">"nc_example"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: species (2490); fields_set (BMDE2.00-ext)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Collecting available records...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   collection nrecords</span>
@@ -531,10 +544,12 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading records for each collection:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   SAMPLE1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 1 / 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Different fields/columns</span></span></span>
 <span class="r-in"><span><span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu">nc_data_dl</span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, fields_set <span class="op">=</span> <span class="st">"core"</span>,</span></span>
 <span class="r-in"><span>                      username <span class="op">=</span> <span class="st">"sample"</span>, info <span class="op">=</span> <span class="st">"nc_example"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: species (2490); fields_set (BMDE2.00)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Collecting available records...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   collection nrecords</span>
@@ -544,10 +559,13 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading records for each collection:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   SAMPLE1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 1 / 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">bittern</span> <span class="op">&lt;-</span> <span class="fu">nc_data_dl</span><span class="op">(</span>species <span class="op">=</span> <span class="fl">2490</span>, fields_set <span class="op">=</span> <span class="st">"custom"</span>,</span></span>
 <span class="r-in"><span>                      fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Locality"</span>, <span class="st">"AllSpeciesReported"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      username <span class="op">=</span> <span class="st">"sample"</span>, info <span class="op">=</span> <span class="st">"nc_example"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: species (2490); fields_set (custom); fields (Locality, AllSpeciesReported)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Collecting available records...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   collection nrecords</span>
@@ -557,6 +575,7 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading records for each collection:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   SAMPLE1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 1 / 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># All collections by request id</span></span></span>

@@ -86,12 +86,12 @@ r
 #> Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
 #> # A tibble: 1 × 5
-#>   species_id n_records_total
-#>        <int>           <int>
-#> 1      14280             160
-#>                                                             x   eoo prop_include
-#>                                                 <POLYGON [m]> [km^…        <dbl>
-#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 15… 4729.            1
+#>   species_id n_records_total    eoo prop_include
+#>        <int>           <int> [km^2]        <dbl>
+#> 1      14280             160  4729.            1
+#>                                                                                x
+#>                                                                    <POLYGON [m]>
+#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 1535250 817978.3, 142…
 ```
 
 You can access either of these items with the `$` to pull out just what
@@ -105,12 +105,12 @@ r$eoo
 #> Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
 #> # A tibble: 1 × 5
-#>   species_id n_records_total
-#>        <int>           <int>
-#> 1      14280             160
-#>                                                             x   eoo prop_include
-#>                                                 <POLYGON [m]> [km^…        <dbl>
-#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 15… 4729.            1
+#>   species_id n_records_total    eoo prop_include
+#>        <int>           <int> [km^2]        <dbl>
+#> 1      14280             160  4729.            1
+#>                                                                                x
+#>                                                                    <POLYGON [m]>
+#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 1535250 817978.3, 142…
 ```
 
 The values you are likely to be especially interested in are the `iao`
@@ -273,14 +273,14 @@ r$eoo
 #> Bounding box:  xmin: 1081628 ymin: 336781.2 xmax: 1578702 ymax: 866555.2
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
 #> # A tibble: 2 × 5
-#>   population   n_records_total
-#>   <chr>                  <int>
-#> 1 Population 1             160
-#> 2 Population 2              19
-#>                                                            x    eoo prop_include
-#>                                                <POLYGON [m]> [km^2]        <dbl>
-#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 1…  4729.            1
-#> 2 ((1093717 336781.2, 1081628 348770.3, 1124206 429489, 157… 58194.            1
+#>   population   n_records_total    eoo prop_include
+#>   <chr>                  <int> [km^2]        <dbl>
+#> 1 Population 1             160  4729.            1
+#> 2 Population 2              19 58194.            1
+#>                                                                                x
+#>                                                                    <POLYGON [m]>
+#> 1 ((1426543 792053.4, 1415235 866555.2, 1490367 845020.1, 1535250 817978.3, 142…
+#> 2 ((1093717 336781.2, 1081628 348770.3, 1124206 429489, 1578702 823548.1, 15739…
 ```
 
 And we get a list of plots, one for each group.

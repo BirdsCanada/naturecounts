@@ -36,6 +36,8 @@ house_finches <- nc_data_dl(
 )
 ```
 
+    ## The server did not respond within 30s. Trying again...
+
     ## Using filters: species (20350); fields_set (BMDE2.00-ext); statprov (AB)
 
     ## Collecting available records...
@@ -48,7 +50,7 @@ house_finches <- nc_data_dl(
     ## 5 BBL-2000-2009      978
     ## 6 BBL-2010-2019     1299
     ## ...
-    ## Total records: 9,506
+    ## Total records: 11,061
 
     ## 
     ## Downloading records for each collection:
@@ -103,9 +105,9 @@ house_finches <- nc_data_dl(
 
     ##   PFW
 
-    ##     Records 1 to 5000 / 6110
+    ##     Records 1 to 5000 / 7665
 
-    ##     Records 5001 to 6110 / 6110
+    ##     Records 5001 to 7665 / 7665
 
     ##   WILDTRAX1
 
@@ -236,12 +238,12 @@ head(house_finches)
     ## 5                                     <NA>                        NA
     ## 6 'Townsend''s Solitaire - smaller and sle                        NA
     ##   LatLongComments GeoreferenceMethod GeoreferenceReferences
-    ## 1            <NA>                 NA                     NA
-    ## 2            <NA>                 NA                     NA
-    ## 3            <NA>                 NA                     NA
-    ## 4            <NA>                 NA                     NA
-    ## 5            <NA>                 NA                     NA
-    ## 6            <NA>                 NA                     NA
+    ## 1            <NA>               <NA>                     NA
+    ## 2            <NA>               <NA>                     NA
+    ## 3            <NA>               <NA>                     NA
+    ## 4            <NA>               <NA>                     NA
+    ## 5            <NA>               <NA>                     NA
+    ## 6            <NA>               <NA>                     NA
     ##   GeoreferenceVerificationStatus Remarks FootprintWKT FootprintSRS ProjectCode
     ## 1                             NA    <NA>           NA           NA    ABATLAS1
     ## 2                             NA    <NA>           NA           NA    ABATLAS1
@@ -257,12 +259,12 @@ head(house_finches)
     ## 5     Breeding Bird Atlas         <NA>          Breeding birds
     ## 6 AT: Breeding Bird Atlas         <NA>               All birds
     ##   ProtocolReference ProtocolURL SurveyAreaIdentifier SurveyAreaSize
-    ## 1                NA        <NA>                 4156             NA
-    ## 2                NA        <NA>                 5307             NA
-    ## 3                NA        <NA>                 1112             NA
-    ## 4                NA        <NA>                 1112             NA
-    ## 5                NA        <NA>                 1112             NA
-    ## 6                NA        <NA>                11268             NA
+    ## 1                NA        <NA>                 4156           <NA>
+    ## 2                NA        <NA>                 5307           <NA>
+    ## 3                NA        <NA>                 1112           <NA>
+    ## 4                NA        <NA>                 1112           <NA>
+    ## 5                NA        <NA>                 1112           <NA>
+    ## 6                NA        <NA>                11268           <NA>
     ##   SurveyAreaPercentageCovered SurveyAreaShape SurveyAreaLongAxisLength
     ## 1                          NA            <NA>                       NA
     ## 2                          NA            <NA>                       NA
@@ -320,19 +322,19 @@ head(house_finches)
     ## 5               <NA>         <NA>               <NA>         <NA>
     ## 6               <NA>         <NA>               <NA>         <NA>
     ##   EffortMeasurement7 EffortUnits7 EffortMeasurement8 EffortUnits8
-    ## 1                 NA           NA                 NA           NA
-    ## 2                 NA           NA                 NA           NA
-    ## 3                 NA           NA                 NA           NA
-    ## 4                 NA           NA                 NA           NA
-    ## 5                 NA           NA                 NA           NA
-    ## 6                 NA           NA                 NA           NA
+    ## 1               <NA>         <NA>               <NA>         <NA>
+    ## 2               <NA>         <NA>               <NA>         <NA>
+    ## 3               <NA>         <NA>               <NA>         <NA>
+    ## 4               <NA>         <NA>               <NA>         <NA>
+    ## 5               <NA>         <NA>               <NA>         <NA>
+    ## 6               <NA>         <NA>               <NA>         <NA>
     ##   EffortMeasurement9 EffortUnits9 EffortMeasurement10 EffortUnits10
-    ## 1                 NA           NA                  NA            NA
-    ## 2                 NA           NA                  NA            NA
-    ## 3                 NA           NA                  NA            NA
-    ## 4                 NA           NA                  NA            NA
-    ## 5                 NA           NA                  NA            NA
-    ## 6                 NA           NA                  NA            NA
+    ## 1               <NA>         <NA>                  NA            NA
+    ## 2               <NA>         <NA>                  NA            NA
+    ## 3               <NA>         <NA>                  NA            NA
+    ## 4               <NA>         <NA>                  NA            NA
+    ## 5               <NA>         <NA>                  NA            NA
+    ## 6               <NA>         <NA>                  NA            NA
     ##   EffortMeasurement11 EffortUnits11 EffortMeasurement12 EffortUnits12
     ## 1                  NA            NA                  NA            NA
     ## 2                  NA            NA                  NA            NA
@@ -703,7 +705,7 @@ multiple observations are recorded for the same location).
 nrow(house_finches)
 ```
 
-    ## [1] 9506
+    ## [1] 11061
 
 ``` r
 select(house_finches, longitude, latitude) |>
@@ -711,9 +713,9 @@ select(house_finches, longitude, latitude) |>
   nrow()
 ```
 
-    ## [1] 1256
+    ## [1] 1290
 
-So we have 1256 sites for 9506 observations.
+So we have 1290 sites for 11061 observations.
 
 Next let’s convert our data to spatial data so we can plot it spatially
 (i.e. make a map!). Note that we’re using CRS EPSG code of 4326 because
@@ -1100,4 +1102,4 @@ unlink("alberta_parks/", recursive = TRUE)
     Published by Bird Studies Canada on behalf of the North American
     Bird Conservation Initiative.
     <https://birdscanada.org/bird-science/nabci-bird-conservation-regions>
-    Accessed: 2025-12-03
+    Accessed: 2026-03-31

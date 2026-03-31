@@ -245,6 +245,7 @@ sample <- nc_data_dl(collections = c("SAMPLE1", "SAMPLE2"),
 #>     Records 1 to 991 / 991
 #>   SAMPLE2
 #>     Records 1 to 995 / 995
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All observations part of project_id 1042 accessible by "testuser"
 p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
@@ -399,9 +400,11 @@ p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
 #>     Records 345001 to 350000 / 357264
 #>     Records 350001 to 355000 / 357264
 #>     Records 355001 to 357264 / 357264
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # Black-capped Chickadees (BCCH) in SAMPLE2 collection in 2013
 search_species("black-capped chickadee") # Find the species_id
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> # A tibble: 4 × 5
 #>   species_id scientific_name                english_name french_name taxon_group
 #>        <int> <chr>                          <chr>        <chr>       <chr>      
@@ -411,6 +414,7 @@ search_species("black-capped chickadee") # Find the species_id
 #> 4      44466 Poecile atricapillus x Baeolo… Black-cappe… Hybride Mé… BIRDS      
 bcch <- nc_data_dl(collection = "SAMPLE2", species = 14280, year = 2013,
                    username = "sample", info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: collections (SAMPLE2); species (14280); fields_set (BMDE2.00-ext); start_year (2013); end_year (2013)
 #> Collecting available records...
 #>   collection nrecords
@@ -420,10 +424,12 @@ bcch <- nc_data_dl(collection = "SAMPLE2", species = 14280, year = 2013,
 #> Downloading records for each collection:
 #>   SAMPLE2
 #>     Records 1 to 14 / 14
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All BCCH observations since 2015 accessible to user "sample"
 bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
                     info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (14280); fields_set (BMDE2.00-ext); start_year (2015)
 #> Collecting available records...
 #>   collection nrecords
@@ -436,10 +442,12 @@ bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
 #>     Records 1 to 20 / 20
 #>   SAMPLE2
 #>     Records 1 to 20 / 20
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All BCCH observations from mid-July to late October in all years for user "sample"
 bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample",
                     info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (14280); fields_set (BMDE2.00-ext); start_doy (200); end_doy (300)
 #> Collecting available records...
 #>   collection nrecords
@@ -452,12 +460,14 @@ bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample",
 #>     Records 1 to 7 / 7
 #>   SAMPLE2
 #>     Records 1 to 7 / 7
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All BCCH observations from a specific bounding box for user "sample"
 bcch <- nc_data_dl(species = 14280, username = "sample",
                    region = list(bbox = c(left = -100, bottom = 45,
                                           right = -80, top = 60)),
                     info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (14280); fields_set (BMDE2.00-ext); bbox_left (-100); bbox_bottom (45); bbox_right (-80); bbox_top (60)
 #> Collecting available records...
 #>   collection nrecords
@@ -470,14 +480,17 @@ bcch <- nc_data_dl(species = 14280, username = "sample",
 #>     Records 1 to 3 / 3
 #>   SAMPLE2
 #>     Records 1 to 2 / 2
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All American Bittern observations from user "sample"
 search_species("american bittern")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> # A tibble: 1 × 5
 #>   species_id scientific_name       english_name     french_name      taxon_group
 #>        <int> <chr>                 <chr>            <chr>            <chr>      
 #> 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique BIRDS      
 bittern <- nc_data_dl(species = 2490, username = "sample", info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (2490); fields_set (BMDE2.00-ext)
 #> Collecting available records...
 #>   collection nrecords
@@ -487,10 +500,12 @@ bittern <- nc_data_dl(species = 2490, username = "sample", info = "nc_example")
 #> Downloading records for each collection:
 #>   SAMPLE1
 #>     Records 1 to 1 / 1
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # Different fields/columns
 bittern <- nc_data_dl(species = 2490, fields_set = "core",
                       username = "sample", info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (2490); fields_set (BMDE2.00)
 #> Collecting available records...
 #>   collection nrecords
@@ -500,10 +515,13 @@ bittern <- nc_data_dl(species = 2490, fields_set = "core",
 #> Downloading records for each collection:
 #>   SAMPLE1
 #>     Records 1 to 1 / 1
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 bittern <- nc_data_dl(species = 2490, fields_set = "custom",
                       fields = c("Locality", "AllSpeciesReported"),
                       username = "sample", info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (2490); fields_set (custom); fields (Locality, AllSpeciesReported)
 #> Collecting available records...
 #>   collection nrecords
@@ -513,6 +531,7 @@ bittern <- nc_data_dl(species = 2490, fields_set = "custom",
 #> Downloading records for each collection:
 #>   SAMPLE1
 #>     Records 1 to 1 / 1
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 if (FALSE) { # \dontrun{
 # All collections by request id

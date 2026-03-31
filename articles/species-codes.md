@@ -294,7 +294,7 @@ argument.
 ``` r
 all <- search_species(show = "all")
 all
-#> # A tibble: 41,523 × 17
+#> # A tibble: 41,479 × 17
 #>    species_id concept_id    scientific_name species_status added_dt english_name
 #>         <int> <chr>         <chr>                    <int> <chr>    <chr>       
 #>  1          0 avibase-74B5… N/A                          9 NA       No observat…
@@ -307,7 +307,7 @@ all
 #>  8         70 avibase-A534… Dendrocygna vi…              1 NA       White-faced…
 #>  9         80 avibase-C01A… Dendrocygna au…              1 NA       Black-belli…
 #> 10         90 avibase-DC65… Dendrocygna ar…              1 NA       West Indian…
-#> # ℹ 41,513 more rows
+#> # ℹ 41,469 more rows
 #> # ℹ 11 more variables: french_name <chr>, phylum <chr>,
 #> #   family_french_name <chr>, group_id <dbl>, order_taxon <chr>,
 #> #   taxon_group <chr>, sort_order <int>, class <chr>, family_name <chr>,
@@ -364,7 +364,7 @@ chipmunks <- nc_data_dl(
 #> 5 WILDTRAX1651        4
 #> 6 WILDTRAX1652        3
 #> ...
-#> Total records: 1,838
+#> Total records: 1,894
 #> 
 #> Downloading records for each collection:
 #>   OBFS
@@ -387,12 +387,18 @@ chipmunks <- nc_data_dl(
 #>     Records 1 to 12 / 12
 #>   WILDTRAX3139
 #>     Records 1 to 47 / 47
+#>   WILDTRAX3351
+#>     Records 1 to 19 / 19
+#>   WILDTRAX3775
+#>     Records 1 to 2 / 2
+#>   WILDTRAX3933
+#>     Records 1 to 35 / 35
 #>   WILDTRAX659
 #>     Records 1 to 1 / 1
 #>   WILDTRAX963
 #>     Records 1 to 2 / 2
 tibble(chipmunks)
-#> # A tibble: 1,838 × 285
+#> # A tibble: 1,894 × 285
 #>    record_id collection project_id protocol_id protocol_type species_id
 #>        <int> <chr>           <int>       <int>         <int>      <int>
 #>  1  34694257 OBFS             1020          NA            21     137820
@@ -405,7 +411,7 @@ tibble(chipmunks)
 #>  8  34695073 OBFS             1020          NA            21     137820
 #>  9  34695137 OBFS             1020          NA            21     137820
 #> 10  34695221 OBFS             1020          NA            21     137820
-#> # ℹ 1,828 more rows
+#> # ℹ 1,884 more rows
 #> # ℹ 279 more variables: statprov_code <chr>, country_code <chr>,
 #> #   SiteCode <chr>, latitude <dbl>, longitude <dbl>, bcr <int>,
 #> #   subnational2_code <chr>, iba_site <chr>, utm_square <chr>,

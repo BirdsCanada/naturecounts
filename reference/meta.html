@@ -43,7 +43,7 @@ associated with the data downloaded from NatureCounts."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Metadata</h1>
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/v0.5.0/R/metadata_functions.R" class="external-link"><code>R/metadata_functions.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/main/R/metadata_functions.R" class="external-link"><code>R/metadata_functions.R</code></a></small>
       <div class="d-none name"><code>meta.Rd</code></div>
     </div>
 
@@ -152,6 +152,7 @@ data with a given set of fields/columns.</p></li>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Return fields/columns in the 'minimum' version</span></span></span>
 <span class="r-in"><span><span class="fu">meta_bmde_fields</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 37 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    field_order version      local_name            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span>
@@ -169,6 +170,7 @@ data with a given set of fields/columns.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Retrun fields/columns in the 'core' version</span></span></span>
 <span class="r-in"><span><span class="fu">meta_bmde_fields</span><span class="op">(</span>version <span class="op">=</span> <span class="st">"core"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 169 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    field_order version  local_name            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span>
@@ -186,6 +188,7 @@ data with a given set of fields/columns.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Return all possible fields</span></span></span>
 <span class="r-in"><span><span class="fu">meta_bmde_fields</span><span class="op">(</span>version <span class="op">=</span> <span class="st">"extended"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 265 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    field_order version      local_name            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span>

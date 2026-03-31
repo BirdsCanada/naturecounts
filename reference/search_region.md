@@ -184,6 +184,6 @@ nc_count(region = list(statprov = "AB"), years = 2010)
 #> 17 GBIF_D99823CA          5 full              1
 #> 18 NESTWATCH              3 by request        3
 #> 19 OISEAUXQC              2 no access         2
-#> 20 PFW                    5 full           7033
+#> 20 PFW                    5 full           7872
 # }
 ```

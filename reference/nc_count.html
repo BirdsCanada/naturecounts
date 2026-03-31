@@ -47,7 +47,7 @@ Without authorization all collections are returned.'></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Download information about NatureCounts collections</h1>
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/v0.5.0/R/download.R" class="external-link"><code>R/download.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/main/R/download.R" class="external-link"><code>R/download.R</code></a></small>
       <div class="d-none name"><code>nc_count.Rd</code></div>
     </div>
 
@@ -232,26 +232,28 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">nc_count</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Without a username, using 'show = "all"'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 511 × 4</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The server did not respond within 120s. Trying again...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 544 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    collection    akn_level access     nrecords</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ABATLAS1              5 full         <span style="text-decoration: underline;">122</span>258</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> ABATLAS2              5 full         <span style="text-decoration: underline;">201</span>357</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ABBIRDRECS            5 full         <span style="text-decoration: underline;">357</span>264</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> ABOWLS                3 by request    <span style="text-decoration: underline;">20</span>956</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> ACCWS                 3 by request    <span style="text-decoration: underline;">22</span>889</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> ATBANS                3 by request      267</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> ATOWLS               <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>            <span style="text-decoration: underline;">35</span>260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> AWSGS                 3 by request    <span style="text-decoration: underline;">17</span>968</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> BBL-1960-1969         5 full       15<span style="text-decoration: underline;">045</span>208</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> BBL-1970-1979         5 full       12<span style="text-decoration: underline;">837</span>516</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 501 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> ACCWS                 3 by request    <span style="text-decoration: underline;">27</span>801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> ACCWS_HIST            5 full          <span style="text-decoration: underline;">20</span>461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> ATBANS                3 by request      268</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> ATOWLS                3 by request    <span style="text-decoration: underline;">35</span>458</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> AWSGS                 3 by request    <span style="text-decoration: underline;">17</span>968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> BBL-1960-1969         5 full       15<span style="text-decoration: underline;">045</span>208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 534 more rows</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Count publicly available records for Manitoba, Canada</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">nc_count</span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="st">"MB"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Without a username, using 'show = "all"'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: statprov (MB)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 113 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    collection    akn_level access     nrecords</span>
@@ -276,6 +278,7 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Count records with house finches in Ontario</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="search_species.html">search_species</a></span><span class="op">(</span><span class="st">"house finch"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   species_id scientific_name                english_name french_name taxon_group</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
@@ -283,6 +286,8 @@ checking the "Full access?" box in Step 2 of the form.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>      <span style="text-decoration: underline;">42</span>255 Haemorhous mexicanus [mexican… House Finch… Roselin fa… BIRDS      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>      <span style="text-decoration: underline;">42</span>256 Haemorhous mexicanus mcgregori House Finch… Roselin fa… BIRDS      </span>
 <span class="r-in"><span><span class="fu">nc_count</span><span class="op">(</span>species <span class="op">=</span> <span class="fl">20350</span>, region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>statprov <span class="op">=</span> <span class="st">"ON"</span><span class="op">)</span>, username <span class="op">=</span> <span class="st">"sample"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: species (20350); statprov (ON)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   collection akn_level access nrecords</span>

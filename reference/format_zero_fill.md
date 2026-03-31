@@ -85,6 +85,7 @@ individual species.
 # Download data
 sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"),
                      username = "sample", info = "nc_example")
+#> The server did not respond within 30s. Trying again...
 #> Using filters: collections (SAMPLE1, SAMPLE2); fields_set (BMDE2.00-ext)
 #> Collecting available records...
 #>   collection nrecords
@@ -97,6 +98,7 @@ sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"),
 #>     Records 1 to 991 / 991
 #>   SAMPLE2
 #>     Records 1 to 995 / 995
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # Remove casual observations (i.e. 'AllSpeciesReported' = "No")
 library(dplyr) # For filter function
@@ -119,10 +121,12 @@ sample_all_zeros <- format_zero_fill(sample)
 
 # Zero fill only for Canada Goose
 goose <- format_zero_fill(sample, species = "230")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #>  - Converted 'fill' column ('ObservationCount') from character to numeric
 
 # Keep species-specific variables
 goose <- format_zero_fill(sample, species = "230", extra_species = "CommonName")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #>  - Converted 'fill' column ('ObservationCount') from character to numeric
 
 # Keep sampling-event-specific variables
@@ -133,6 +137,7 @@ coords <- format_zero_fill(sample, extra_event = c("latitude", "longitude"))
 goose_coords <- format_zero_fill(sample, species = "230",
                                  extra_species = "CommonName",
                                  extra_event = c("latitude", "longitude"))
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #>  - Converted 'fill' column ('ObservationCount') from character to numeric
 
 # Only return event information
