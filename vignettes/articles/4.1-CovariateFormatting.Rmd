@@ -227,4 +227,4 @@ buffered <- data_buff(formatted,
 view(buffered)
 ```
 
-**Congratulations!** You have now learned how to use `data_fmt()` to standardize the format of your data for covariate download and extraction, and how to use `data_buff()` to buffer your data points to extract covariate data at different spatial scales. You can apply these concepts to download and extract landcover data in [**Chapter 2: Landcover Download and Extraction**](4.1-LandCover.html).
+**Congratulations!** You have now learned how to use `data_fmt()` to standardize the format of your data for covariate download and extraction, and how to use `data_buff()` to buffer your data points to extract covariate data at different spatial scales. You can apply these concepts to download and extract landcover data in [**Chapter 2: Landcover Download and Extraction**](4.2-LandCover.html).
