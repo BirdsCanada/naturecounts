@@ -85,6 +85,23 @@ Functions for helping with COSEWIC assessments
 - [`cosewic_plot()`](https://birdscanada.github.io/naturecounts/dev/reference/cosewic_plot.md)
   : Plot COSEWIC IAO and EOO
 
+## Covariate Download and Extraction
+
+Functions for formatting data for use in covariate download and
+extraction, as well as for downloading and extracting covariate data
+
+- [`nc_covariate_table()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_covariate_table.md)
+  : Metadata for data sources for the covariate download and extraction
+  functions.
+- [`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md)
+  : Format Data for Covariate Download and Extraction
+- [`data_buff()`](https://birdscanada.github.io/naturecounts/dev/reference/data_buff.md)
+  : Buffer Data for Covariate Download and Extraction
+- [`landcover_download()`](https://birdscanada.github.io/naturecounts/dev/reference/landcover_download.md)
+  : Download MODIS Landcover Data
+- [`landcover_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/landcover_extract.md)
+  : Extract MODIS Landcover Data
+
 ## Data
 
 Included example data sets

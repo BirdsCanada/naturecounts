@@ -9,7 +9,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">naturecounts</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Zero-fill data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/R/helper.R" class="external-link"><code>R/helper.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/rory-landcover/R/helper.R" class="external-link"><code>R/helper.R</code></a></small>
       <div class="d-none name"><code>format_zero_fill.Rd</code></div>
     </div>
 
@@ -147,6 +147,7 @@ species.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 991 / 991</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   SAMPLE2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     Records 1 to 995 / 995</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Remove casual observations (i.e. 'AllSpeciesReported' = "No")</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> <span class="co"># For filter function</span></span></span>
@@ -169,10 +170,12 @@ species.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Zero fill only for Canada Goose</span></span></span>
 <span class="r-in"><span><span class="va">goose</span> <span class="op">&lt;-</span> <span class="fu">format_zero_fill</span><span class="op">(</span><span class="va">sample</span>, species <span class="op">=</span> <span class="st">"230"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  - Converted 'fill' column ('ObservationCount') from character to numeric</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Keep species-specific variables</span></span></span>
 <span class="r-in"><span><span class="va">goose</span> <span class="op">&lt;-</span> <span class="fu">format_zero_fill</span><span class="op">(</span><span class="va">sample</span>, species <span class="op">=</span> <span class="st">"230"</span>, extra_species <span class="op">=</span> <span class="st">"CommonName"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  - Converted 'fill' column ('ObservationCount') from character to numeric</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Keep sampling-event-specific variables</span></span></span>
@@ -183,6 +186,7 @@ species.</p>
 <span class="r-in"><span><span class="va">goose_coords</span> <span class="op">&lt;-</span> <span class="fu">format_zero_fill</span><span class="op">(</span><span class="va">sample</span>, species <span class="op">=</span> <span class="st">"230"</span>,</span></span>
 <span class="r-in"><span>                                 extra_species <span class="op">=</span> <span class="st">"CommonName"</span>,</span></span>
 <span class="r-in"><span>                                 extra_event <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"latitude"</span>, <span class="st">"longitude"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Metadata hasn't been updated in &gt;4 weeks, consider using `nc_metadata()` to update local copies.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  - Converted 'fill' column ('ObservationCount') from character to numeric</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Only return event information</span></span></span>

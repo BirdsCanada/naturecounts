@@ -163,7 +163,7 @@ count(boreal_chickadee_db, collection)
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   collection     n
     ##   <chr>      <int>
     ## 1 ABATLAS1     489
@@ -193,7 +193,7 @@ count(alberta_atlas, collection)
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   collection     n
     ##   <chr>      <int>
     ## 1 ABATLAS1     489
@@ -226,7 +226,7 @@ summarize(
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##     min   max
     ##   <int> <int>
     ## 1  1966  2010
@@ -264,7 +264,7 @@ summarize(
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##     min   max
     ##   <int> <int>
     ## 1  2005  2007
@@ -295,7 +295,7 @@ summarize(boreal_chickadee_db,
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   min        max       
     ##   <chr>      <chr>     
     ## 1 1966-06-02 2010-07-07
@@ -325,7 +325,7 @@ summarize(field_season,
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   min        max       
     ##   <chr>      <chr>     
     ## 1 2010-05-30 2010-06-30

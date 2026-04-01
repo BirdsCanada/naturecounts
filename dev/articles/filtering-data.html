@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">naturecounts</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,9 +68,9 @@
 
       <h1>Filtering data after download</h1>
             
-            <h4 data-toc-skip class="date">2025-11-28</h4>
+            <h4 data-toc-skip class="date">2026-04-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/vignettes/filtering-data.Rmd" class="external-link"><code>vignettes/filtering-data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/rory-landcover/vignettes/filtering-data.Rmd" class="external-link"><code>vignettes/filtering-data.Rmd</code></a></small>
       <div class="d-none name"><code>filtering-data.Rmd</code></div>
     </div>
 
@@ -203,7 +203,7 @@ interest</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">boreal_chickadee_db</span>, <span class="va">collection</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##   collection     n</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> ABATLAS1     489</span></span>
@@ -226,7 +226,7 @@ interest</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">alberta_atlas</span>, <span class="va">collection</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##   collection     n</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> ABATLAS1     489</span></span>
@@ -258,7 +258,7 @@ can also ‘pull’ out the survey years from the count.</p>
 <span>  min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>  max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##     min   max</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">1</span>966  <span style="text-decoration: underline;">2</span>010</span></span></code></pre>
@@ -287,7 +287,7 @@ can also ‘pull’ out the survey years from the count.</p>
 <span>  min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>  max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">survey_year</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##     min   max</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">2</span>005  <span style="text-decoration: underline;">2</span>007</span></span></code></pre>
@@ -311,7 +311,7 @@ means it’s pretty much the same as a numerical filter.</p>
 <span>          min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>          max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##   min        max       </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> 1966-06-02 2010-07-07</span></span></code></pre>
@@ -336,7 +336,7 @@ means it’s pretty much the same as a numerical filter.</p>
 <span>          min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>          max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">date</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># Source:   SQL [?? x 2]</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.0 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]</span></span></span>
 <span><span class="co">##   min        max       </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> 2010-05-30 2010-06-30</span></span></code></pre>

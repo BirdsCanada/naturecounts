@@ -52,6 +52,14 @@ An R guide to help analyze data hosted on NatureCounts.
 - [Chapter 2 - Auxiliary
   Tables](https://birdscanada.github.io/naturecounts/dev/articles/3.2-AuxiliaryTables.md):
 
+### The NatureCounts Covariate Download and Extraction Tutorial
+
+An R guide to help download and extract covariate data using
+naturecounts functions.
+
+- [Chapter 1 - Formatting Data for Covariate Download and
+  Extraction](https://birdscanada.github.io/naturecounts/dev/articles/4.1-CovariateFormatting.md):
+
 ### Additional Tutorials
 
 How-to articles describing common tasks

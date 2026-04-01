@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">naturecounts</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,9 +68,9 @@
 
       <h1>Region Codes</h1>
             
-            <h4 data-toc-skip class="date">2025-11-28</h4>
+            <h4 data-toc-skip class="date">2026-04-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/vignettes/region-codes.Rmd" class="external-link"><code>vignettes/region-codes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/rory-landcover/vignettes/region-codes.Rmd" class="external-link"><code>vignettes/region-codes.Rmd</code></a></small>
       <div class="d-none name"><code>region-codes.Rmd</code></div>
     </div>
 
@@ -128,7 +128,7 @@ for a box containing Riding Mountain National Park in Manitoba)</li>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 93 × 4</span></span></span>
 <span><span class="co">##    collection    akn_level access     nrecords</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> ATOWLS               <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>            <span style="text-decoration: underline;">16</span>516</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> ATOWLS                3 by request    <span style="text-decoration: underline;">16</span>518</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 2</span> BBL-1960-1969         5 full          <span style="text-decoration: underline;">56</span>578</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 3</span> BBL-1970-1979         5 full          <span style="text-decoration: underline;">68</span>636</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 4</span> BBL-1980-1989         5 full          <span style="text-decoration: underline;">82</span>650</span></span>
@@ -148,7 +148,7 @@ filter to multiple regions of that type:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 95 × 4</span></span></span>
 <span><span class="co">##    collection    akn_level access     nrecords</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> ATOWLS               <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>            <span style="text-decoration: underline;">22</span>295</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> ATOWLS                3 by request    <span style="text-decoration: underline;">22</span>483</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 2</span> BBL-1960-1969         5 full          <span style="text-decoration: underline;">63</span>292</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 3</span> BBL-1970-1979         5 full          <span style="text-decoration: underline;">85</span>997</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 4</span> BBL-1980-1989         5 full          <span style="text-decoration: underline;">92</span>092</span></span>
@@ -200,7 +200,7 @@ take so long to download.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nc_count.html">nc_count</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">13210</span>, region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"US"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Without a username, using 'show = "all"'</span></span></code></pre>
 <pre><code><span><span class="co">## Using filters: species (13210); country (US)</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 18 × 4</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 17 × 4</span></span></span>
 <span><span class="co">##    collection    akn_level access     nrecords</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span> ABBIRDRECS            5 full              1</span></span>
@@ -218,9 +218,8 @@ take so long to download.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">13</span> CBC                   3 by request    <span style="text-decoration: underline;">30</span>348</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">14</span> GBIF_50C9509D         5 full              1</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">15</span> NESTWATCH             3 by request        2</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">16</span> NIGHTJAR              3 by request        1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">17</span> PFW-US-EAST           2 no access       687</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">18</span> PFW-US-WEST           2 no access       298</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">16</span> PFW-US-EAST           2 no access       497</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">17</span> PFW-US-WEST           2 no access       760</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="stateprovince">State/Province<a class="anchor" aria-label="anchor" href="#stateprovince"></a>
@@ -267,7 +266,7 @@ take so long to download.</p>
 <span><span class="co">## <span style="color: #BCBCBC;"> 8</span> CBC                   3 by request     <span style="text-decoration: underline;">8</span>600</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 9</span> EBUTTERFLY            5 full             23</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> MONARCHWATCH          5 full             30</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">11</span> PFW-US-EAST           2 no access      <span style="text-decoration: underline;">9</span>133</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> PFW-US-EAST           2 no access     <span style="text-decoration: underline;">23</span>323</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="subnational-regions-type-2">Subnational regions (type 2)<a class="anchor" aria-label="anchor" href="#subnational-regions-type-2"></a>
@@ -383,8 +382,8 @@ Quebec = French - Rest of Canada = English</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 67 × 4</span></span></span>
 <span><span class="co">##      bcr bcr_name                       bcr_name_es                          bcr_name_fr            </span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>     1 Aleutian/Bering Sea Islands    Aleutianas/Islas del Mar de Bering   Aleutian/Bering Sea Is…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>     2 Western Alaska                 Alaska Occidental                    Western Alaska         </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>     1 Aleutian/Bering Sea Islands    Aleutianas/Islas del Mar de Bering   Îles Aléoutiennes/mer …</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>     2 Western Alaska                 Alaska Occidental                    Alaska occidental      </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 3</span>     3 Arctic Plains And Mountains    Planicies Árticas y Montañas         Plaines et montagnes d…</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 4</span>     4 Northwestern Interior Forest   Bosque Interior del Noroeste         Forêts intérieures du …</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 5</span>     5 Northern Pacific Rainforest    Bosque Lluvioso del Pacífico Norte   Forêts pluviales du no…</span></span>
@@ -456,7 +455,7 @@ Quebec = French - Rest of Canada = English</p>
 <span><span class="co">##   collection    akn_level access     nrecords</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> EBIRD-CA-ON           3 by request        7</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> ONATLAS3BE_DO         3 by request        1</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> ONATLAS3BE_DO         3 by request        2</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="bounding-box">Bounding Box<a class="anchor" aria-label="anchor" href="#bounding-box"></a>
@@ -470,7 +469,7 @@ Quebec = French - Rest of Canada = English</p>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Without a username, using 'show = "all"'</span></span></code></pre>
 <pre><code><span><span class="co">## Using filters: species (7450); bbox_left (-125); bbox_bottom (45); bbox_right (-100); bbox_top (50)</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 31 × 4</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 30 × 4</span></span></span>
 <span><span class="co">##    collection    akn_level access nrecords</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span> ABATLAS1              5 full          6</span></span>
@@ -483,7 +482,7 @@ Quebec = French - Rest of Canada = English</p>
 <span><span class="co">## <span style="color: #BCBCBC;"> 8</span> BBL-2000-2009         5 full         12</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 9</span> BBL-2010-2019         5 full         19</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> BBL-2020-2029         5 full          7</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 21 more rows</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;"># ℹ 20 more rows</span></span></span></code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

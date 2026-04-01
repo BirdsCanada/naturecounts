@@ -9,7 +9,7 @@ names."><meta name="robots" content="noindex"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">naturecounts</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@ names."><meta name="robots" content="noindex"></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Find species codes</h1>
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/R/search.R" class="external-link"><code>R/search.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/rory-landcover/R/search.R" class="external-link"><code>R/search.R</code></a></small>
       <div class="d-none name"><code>search_species.Rd</code></div>
     </div>
 
@@ -89,7 +89,7 @@ code associated with avian species for this taxonomic authority.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Show all ids</span></span></span>
 <span class="r-in"><span><span class="fu">search_species</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 41,523 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 41,479 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    species_id scientific_name          english_name      french_name taxon_group</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>          0 N/A                      No observations   Aucune obs… BIRDS      </span>
@@ -102,7 +102,7 @@ code associated with avian species for this taxonomic authority.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>         70 Dendrocygna viduata      White-faced Whis… Dendrocygn… BIRDS      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>         80 Dendrocygna autumnalis   Black-bellied Wh… Dendrocygn… BIRDS      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>         90 Dendrocygna arborea      West Indian Whis… Dendrocygn… BIRDS      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 41,513 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 41,469 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">search_species</span><span class="op">(</span><span class="st">"chickadee"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 23 × 5</span></span>
@@ -156,20 +156,20 @@ code associated with avian species for this taxonomic authority.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="nc_count.html">nc_count</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fl">14280</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Without a username, using 'show = "all"'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using filters: species (14280)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 299 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    collection    akn_level access nrecords</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ABATLAS1              5 full       <span style="text-decoration: underline;">1</span>314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> ABATLAS2              5 full       <span style="text-decoration: underline;">3</span>772</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ABBIRDRECS            5 full       <span style="text-decoration: underline;">2</span>931</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> BBL-1960-1969         5 full     <span style="text-decoration: underline;">108</span>205</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> BBL-1970-1979         5 full     <span style="text-decoration: underline;">114</span>970</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> BBL-1980-1989         5 full     <span style="text-decoration: underline;">158</span>692</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> BBL-1990-1999         5 full     <span style="text-decoration: underline;">149</span>381</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> BBL-2000-2009         5 full     <span style="text-decoration: underline;">156</span>289</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> BBL-2010-2019         5 full     <span style="text-decoration: underline;">138</span>297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> BBL-2020-2029         5 full      <span style="text-decoration: underline;">52</span>968</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 289 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 325 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    collection    akn_level access     nrecords</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ABATLAS1              5 full           <span style="text-decoration: underline;">1</span>314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> ABATLAS2              5 full           <span style="text-decoration: underline;">3</span>772</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ABBIRDRECS            5 full           <span style="text-decoration: underline;">2</span>931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> ACCWS                 3 by request       17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> BBL-1960-1969         5 full         <span style="text-decoration: underline;">108</span>205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> BBL-1970-1979         5 full         <span style="text-decoration: underline;">114</span>970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> BBL-1980-1989         5 full         <span style="text-decoration: underline;">158</span>692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> BBL-1990-1999         5 full         <span style="text-decoration: underline;">149</span>381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> BBL-2000-2009         5 full         <span style="text-decoration: underline;">156</span>289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> BBL-2010-2019         5 full         <span style="text-decoration: underline;">138</span>297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 315 more rows</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -78,8 +78,8 @@ meta_collections() |>
     ## 2 ABATLAS2   BMDE2.00           1042        5359 Atlas des oiseaux n… ABATLAS2  
     ## 3 ABBIRDRECS BMDE2.00           1042       21962 Observations d'oise… ABBIRDRECS
     ## 4 ABOWLS     BMDE2.00           1012         213 Inventaire des hibo… ABOWLS    
-    ## 5 ACCWS      BMDE2.00           1062          16 NA                   ACCWS     
-    ## 6 ATBANS     BMDE2.00           1074         124 NA                   ATBANS    
+    ## 5 ACCWS      BMDE2.00           1062          99 NA                   ACCWS     
+    ## 6 ACCWS_HIST BMDE2.00           1062          25 NA                   ACCWS_HIST
     ## # ℹ 5 more variables: min_year <int>, max_year <int>, collection_name <chr>,
     ## #   akn_level <int>, n_records <int>
 

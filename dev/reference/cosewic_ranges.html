@@ -11,7 +11,7 @@ used to support status assessments for potentially endangered species."><meta na
 
     <a class="navbar-brand me-2" href="../index.html">naturecounts</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ used to support status assessments for potentially endangered species."><meta na
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Calculate COSEWIC IAO and EOO</h1>
-      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/dev/R/cosewic_tools.R" class="external-link"><code>R/cosewic_tools.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BirdsCanada/naturecounts/blob/rory-landcover/R/cosewic_tools.R" class="external-link"><code>R/cosewic_tools.R</code></a></small>
       <div class="d-none name"><code>cosewic_ranges.Rd</code></div>
     </div>
 
@@ -243,9 +243,9 @@ See examples.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: Canada_Albers_Equal_Area_Conic</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   species_id n_records_total                                x   eoo prop_include</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;POLYGON [m]&gt;</span> <span style="color: #949494;">[km^</span>…        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280             160 ((1426543 792053.4, 1415235 866… <span style="text-decoration: underline;">4</span>729.            1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   species_id n_records_total    eoo prop_include                               x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494;">[km^2]</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;POLYGON [m]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      <span style="text-decoration: underline;">14</span>280             160  <span style="text-decoration: underline;">4</span>729.            1 ((1426543 792053.4, 1415235 86…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">cosewic_ranges</span><span class="op">(</span><span class="va">bcch</span>, spatial <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>

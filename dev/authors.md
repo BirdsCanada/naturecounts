@@ -9,16 +9,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/BirdsCanada/naturecounts/blob/dev/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/BirdsCanada/naturecounts/blob/rory-landcover/DESCRIPTION)
 
-LaZerte S, Lepage D (2025). *naturecounts: Access and download data on
+LaZerte S, Lepage D (2026). *naturecounts: Access and download data on
 plant and animal populations from NatureCounts*. R package version
-0.4.1.9000, <https://github.com/BirdsCanada/naturecounts>.
+0.5.0.9000, <https://github.com/BirdsCanada/naturecounts>.
 
     @Manual{,
       title = {naturecounts: Access and download data on plant and animal populations from NatureCounts},
       author = {Steffi LaZerte and Denis Lepage},
-      year = {2025},
-      note = {R package version 0.4.1.9000},
+      year = {2026},
+      note = {R package version 0.5.0.9000},
       url = {https://github.com/BirdsCanada/naturecounts},
     }

@@ -187,26 +187,27 @@ the "Full access?" box in Step 2 of the form.
 # \donttest{
 nc_count()
 #> Without a username, using 'show = "all"'
-#> # A tibble: 511 × 4
+#> # A tibble: 544 × 4
 #>    collection    akn_level access     nrecords
 #>    <chr>             <int> <chr>         <int>
 #>  1 ABATLAS1              5 full         122258
 #>  2 ABATLAS2              5 full         201357
 #>  3 ABBIRDRECS            5 full         357264
 #>  4 ABOWLS                3 by request    20956
-#>  5 ACCWS                 3 by request    22889
-#>  6 ATBANS                3 by request      267
-#>  7 ATOWLS               NA NA            35260
-#>  8 AWSGS                 3 by request    17968
-#>  9 BBL-1960-1969         5 full       15045208
-#> 10 BBL-1970-1979         5 full       12837516
-#> # ℹ 501 more rows
+#>  5 ACCWS                 3 by request    27801
+#>  6 ACCWS_HIST            5 full          20461
+#>  7 ATBANS                3 by request      268
+#>  8 ATOWLS                3 by request    35458
+#>  9 AWSGS                 3 by request    17968
+#> 10 BBL-1960-1969         5 full       15045208
+#> # ℹ 534 more rows
 # }
 
 # Count publicly available records for Manitoba, Canada
 # \donttest{
 nc_count(region = list(statprov = "MB"))
 #> Without a username, using 'show = "all"'
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: statprov (MB)
 #> # A tibble: 113 × 4
 #>    collection    akn_level access     nrecords
@@ -231,6 +232,7 @@ nc_count(username = "sample")
 
 # Count records with house finches in Ontario
 search_species("house finch")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> # A tibble: 3 × 5
 #>   species_id scientific_name                english_name french_name taxon_group
 #>        <int> <chr>                          <chr>        <chr>       <chr>      
@@ -238,6 +240,8 @@ search_species("house finch")
 #> 2      42255 Haemorhous mexicanus [mexican… House Finch… Roselin fa… BIRDS      
 #> 3      42256 Haemorhous mexicanus mcgregori House Finch… Roselin fa… BIRDS      
 nc_count(species = 20350, region = list(statprov = "ON"), username = "sample")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (20350); statprov (ON)
 #> # A tibble: 2 × 4
 #>   collection akn_level access nrecords

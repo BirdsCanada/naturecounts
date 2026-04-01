@@ -52,7 +52,7 @@ nc_count(region = list(statprov = "NB"))
     ## # A tibble: 93 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS               NA NA            16516
+    ##  1 ATOWLS                3 by request    16518
     ##  2 BBL-1960-1969         5 full          56578
     ##  3 BBL-1970-1979         5 full          68636
     ##  4 BBL-1980-1989         5 full          82650
@@ -78,7 +78,7 @@ nc_count(region = list(statprov = c("PE", "NB")))
     ## # A tibble: 95 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS               NA NA            22295
+    ##  1 ATOWLS                3 by request    22483
     ##  2 BBL-1960-1969         5 full          63292
     ##  3 BBL-1970-1979         5 full          85997
     ##  4 BBL-1980-1989         5 full          92092
@@ -142,7 +142,7 @@ nc_count(species = 13210, region = list(country = "US"))
 
     ## Using filters: species (13210); country (US)
 
-    ## # A tibble: 18 × 4
+    ## # A tibble: 17 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
     ##  1 ABBIRDRECS            5 full              1
@@ -160,9 +160,8 @@ nc_count(species = 13210, region = list(country = "US"))
     ## 13 CBC                   3 by request    30348
     ## 14 GBIF_50C9509D         5 full              1
     ## 15 NESTWATCH             3 by request        2
-    ## 16 NIGHTJAR              3 by request        1
-    ## 17 PFW-US-EAST           2 no access       687
-    ## 18 PFW-US-WEST           2 no access       298
+    ## 16 PFW-US-EAST           2 no access       497
+    ## 17 PFW-US-WEST           2 no access       760
 
 ### State/Province
 
@@ -221,7 +220,7 @@ nc_count(region = list(statprov = "DC"))
     ##  8 CBC                   3 by request     8600
     ##  9 EBUTTERFLY            5 full             23
     ## 10 MONARCHWATCH          5 full             30
-    ## 11 PFW-US-EAST           2 no access      9133
+    ## 11 PFW-US-EAST           2 no access     23323
 
 ### Subnational regions (type 2)
 
@@ -362,8 +361,8 @@ meta_bcr_codes()
     ## # A tibble: 67 × 4
     ##      bcr bcr_name                       bcr_name_es                          bcr_name_fr            
     ##    <int> <chr>                          <chr>                                <chr>                  
-    ##  1     1 Aleutian/Bering Sea Islands    Aleutianas/Islas del Mar de Bering   Aleutian/Bering Sea Is…
-    ##  2     2 Western Alaska                 Alaska Occidental                    Western Alaska         
+    ##  1     1 Aleutian/Bering Sea Islands    Aleutianas/Islas del Mar de Bering   Îles Aléoutiennes/mer …
+    ##  2     2 Western Alaska                 Alaska Occidental                    Alaska occidental      
     ##  3     3 Arctic Plains And Mountains    Planicies Árticas y Montañas         Plaines et montagnes d…
     ##  4     4 Northwestern Interior Forest   Bosque Interior del Noroeste         Forêts intérieures du …
     ##  5     5 Northern Pacific Rainforest    Bosque Lluvioso del Pacífico Norte   Forêts pluviales du no…
@@ -453,7 +452,7 @@ nc_count(species = 7450, region = list(utm_squares = "18TUR35"))
     ##   collection    akn_level access     nrecords
     ##   <chr>             <int> <chr>         <int>
     ## 1 EBIRD-CA-ON           3 by request        7
-    ## 2 ONATLAS3BE_DO         3 by request        1
+    ## 2 ONATLAS3BE_DO         3 by request        2
 
 ### Bounding Box
 
@@ -472,7 +471,7 @@ nc_count(
 
     ## Using filters: species (7450); bbox_left (-125); bbox_bottom (45); bbox_right (-100); bbox_top (50)
 
-    ## # A tibble: 31 × 4
+    ## # A tibble: 30 × 4
     ##    collection    akn_level access nrecords
     ##    <chr>             <int> <chr>     <int>
     ##  1 ABATLAS1              5 full          6
@@ -485,4 +484,4 @@ nc_count(
     ##  8 BBL-2000-2009         5 full         12
     ##  9 BBL-2010-2019         5 full         19
     ## 10 BBL-2020-2029         5 full          7
-    ## # ℹ 21 more rows
+    ## # ℹ 20 more rows

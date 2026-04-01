@@ -144,6 +144,7 @@ to update
 ``` r
 # Return fields/columns in the 'minimum' version
 meta_bmde_fields()
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> # A tibble: 37 × 3
 #>    field_order version      local_name            
 #>          <int> <chr>        <chr>                 
@@ -161,6 +162,7 @@ meta_bmde_fields()
 
 # Retrun fields/columns in the 'core' version
 meta_bmde_fields(version = "core")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> # A tibble: 169 × 3
 #>    field_order version  local_name            
 #>          <int> <chr>    <chr>                 
@@ -178,6 +180,7 @@ meta_bmde_fields(version = "core")
 
 # Return all possible fields
 meta_bmde_fields(version = "extended")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> # A tibble: 265 × 3
 #>    field_order version      local_name            
 #>          <int> <chr>        <chr>                 

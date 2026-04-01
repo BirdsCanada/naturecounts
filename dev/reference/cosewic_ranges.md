@@ -226,9 +226,9 @@ r
 #> Bounding box:  xmin: 1415235 ymin: 792053.4 xmax: 1535250 ymax: 866555.2
 #> Projected CRS: Canada_Albers_Equal_Area_Conic
 #> # A tibble: 1 × 5
-#>   species_id n_records_total                                x   eoo prop_include
-#>        <int>           <int>                    <POLYGON [m]> [km^…        <dbl>
-#> 1      14280             160 ((1426543 792053.4, 1415235 866… 4729.            1
+#>   species_id n_records_total    eoo prop_include                               x
+#>        <int>           <int> [km^2]        <dbl>                   <POLYGON [m]>
+#> 1      14280             160  4729.            1 ((1426543 792053.4, 1415235 86…
 #> 
 
 r <- cosewic_ranges(bcch, spatial = FALSE)

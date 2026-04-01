@@ -245,6 +245,7 @@ sample <- nc_data_dl(collections = c("SAMPLE1", "SAMPLE2"),
 #>     Records 1 to 991 / 991
 #>   SAMPLE2
 #>     Records 1 to 995 / 995
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All observations part of project_id 1042 accessible by "testuser"
 p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
@@ -296,112 +297,13 @@ p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
 #>     Records 40001 to 45000 / 201357
 #>     Records 45001 to 50000 / 201357
 #>     Records 50001 to 55000 / 201357
-#>     Records 55001 to 60000 / 201357
-#>     Records 60001 to 65000 / 201357
-#>     Records 65001 to 70000 / 201357
-#>     Records 70001 to 75000 / 201357
-#>     Records 75001 to 80000 / 201357
-#>     Records 80001 to 85000 / 201357
-#>     Records 85001 to 90000 / 201357
-#>     Records 90001 to 95000 / 201357
-#>     Records 95001 to 1e+05 / 201357
-#>     Records 100001 to 105000 / 201357
-#>     Records 105001 to 110000 / 201357
-#>     Records 110001 to 115000 / 201357
-#>     Records 115001 to 120000 / 201357
-#>     Records 120001 to 125000 / 201357
-#>     Records 125001 to 130000 / 201357
-#>     Records 130001 to 135000 / 201357
-#>     Records 135001 to 140000 / 201357
-#>     Records 140001 to 145000 / 201357
-#>     Records 145001 to 150000 / 201357
-#>     Records 150001 to 155000 / 201357
-#>     Records 155001 to 160000 / 201357
-#>     Records 160001 to 165000 / 201357
-#>     Records 165001 to 170000 / 201357
-#>     Records 170001 to 175000 / 201357
-#>     Records 175001 to 180000 / 201357
-#>     Records 180001 to 185000 / 201357
-#>     Records 185001 to 190000 / 201357
-#>     Records 190001 to 195000 / 201357
-#>     Records 195001 to 2e+05 / 201357
-#>     Records 200001 to 201357 / 201357
-#>   ABBIRDRECS
-#>     Records 1 to 5000 / 357264
-#>     Records 5001 to 10000 / 357264
-#>     Records 10001 to 15000 / 357264
-#>     Records 15001 to 20000 / 357264
-#>     Records 20001 to 25000 / 357264
-#>     Records 25001 to 30000 / 357264
-#>     Records 30001 to 35000 / 357264
-#>     Records 35001 to 40000 / 357264
-#>     Records 40001 to 45000 / 357264
-#>     Records 45001 to 50000 / 357264
-#>     Records 50001 to 55000 / 357264
-#>     Records 55001 to 60000 / 357264
-#>     Records 60001 to 65000 / 357264
-#>     Records 65001 to 70000 / 357264
-#>     Records 70001 to 75000 / 357264
-#>     Records 75001 to 80000 / 357264
-#>     Records 80001 to 85000 / 357264
-#>     Records 85001 to 90000 / 357264
-#>     Records 90001 to 95000 / 357264
-#>     Records 95001 to 1e+05 / 357264
-#>     Records 100001 to 105000 / 357264
-#>     Records 105001 to 110000 / 357264
-#>     Records 110001 to 115000 / 357264
-#>     Records 115001 to 120000 / 357264
-#>     Records 120001 to 125000 / 357264
-#>     Records 125001 to 130000 / 357264
-#>     Records 130001 to 135000 / 357264
-#>     Records 135001 to 140000 / 357264
-#>     Records 140001 to 145000 / 357264
-#>     Records 145001 to 150000 / 357264
-#>     Records 150001 to 155000 / 357264
-#>     Records 155001 to 160000 / 357264
-#>     Records 160001 to 165000 / 357264
-#>     Records 165001 to 170000 / 357264
-#>     Records 170001 to 175000 / 357264
-#>     Records 175001 to 180000 / 357264
-#>     Records 180001 to 185000 / 357264
-#>     Records 185001 to 190000 / 357264
-#>     Records 190001 to 195000 / 357264
-#>     Records 195001 to 2e+05 / 357264
-#>     Records 200001 to 205000 / 357264
-#>     Records 205001 to 210000 / 357264
-#>     Records 210001 to 215000 / 357264
-#>     Records 215001 to 220000 / 357264
-#>     Records 220001 to 225000 / 357264
-#>     Records 225001 to 230000 / 357264
-#>     Records 230001 to 235000 / 357264
-#>     Records 235001 to 240000 / 357264
-#>     Records 240001 to 245000 / 357264
-#>     Records 245001 to 250000 / 357264
-#>     Records 250001 to 255000 / 357264
-#>     Records 255001 to 260000 / 357264
-#>     Records 260001 to 265000 / 357264
-#>     Records 265001 to 270000 / 357264
-#>     Records 270001 to 275000 / 357264
-#>     Records 275001 to 280000 / 357264
-#>     Records 280001 to 285000 / 357264
-#>     Records 285001 to 290000 / 357264
-#>     Records 290001 to 295000 / 357264
-#>     Records 295001 to 3e+05 / 357264
-#>     Records 300001 to 305000 / 357264
-#>     Records 305001 to 310000 / 357264
-#>     Records 310001 to 315000 / 357264
-#>     Records 315001 to 320000 / 357264
-#>     Records 320001 to 325000 / 357264
-#>     Records 325001 to 330000 / 357264
-#>     Records 330001 to 335000 / 357264
-#>     Records 335001 to 340000 / 357264
-#>     Records 340001 to 345000 / 357264
-#>     Records 345001 to 350000 / 357264
-#>     Records 350001 to 355000 / 357264
-#>     Records 355001 to 357264 / 357264
+#> The server did not respond within 120s. Trying again...
+#> Error: The server has not respond within the 'timeout' specified.
+#> Either try again later or increase the 'timeout' period.
 
 # Black-capped Chickadees (BCCH) in SAMPLE2 collection in 2013
 search_species("black-capped chickadee") # Find the species_id
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> # A tibble: 4 × 5
 #>   species_id scientific_name                english_name french_name taxon_group
 #>        <int> <chr>                          <chr>        <chr>       <chr>      
@@ -411,6 +313,7 @@ search_species("black-capped chickadee") # Find the species_id
 #> 4      44466 Poecile atricapillus x Baeolo… Black-cappe… Hybride Mé… BIRDS      
 bcch <- nc_data_dl(collection = "SAMPLE2", species = 14280, year = 2013,
                    username = "sample", info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: collections (SAMPLE2); species (14280); fields_set (BMDE2.00-ext); start_year (2013); end_year (2013)
 #> Collecting available records...
 #>   collection nrecords
@@ -420,10 +323,12 @@ bcch <- nc_data_dl(collection = "SAMPLE2", species = 14280, year = 2013,
 #> Downloading records for each collection:
 #>   SAMPLE2
 #>     Records 1 to 14 / 14
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All BCCH observations since 2015 accessible to user "sample"
 bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
                     info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (14280); fields_set (BMDE2.00-ext); start_year (2015)
 #> Collecting available records...
 #>   collection nrecords
@@ -436,10 +341,12 @@ bcch <- nc_data_dl(species = 14280, years = c(2015, NA), username = "sample",
 #>     Records 1 to 20 / 20
 #>   SAMPLE2
 #>     Records 1 to 20 / 20
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All BCCH observations from mid-July to late October in all years for user "sample"
 bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample",
                     info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (14280); fields_set (BMDE2.00-ext); start_doy (200); end_doy (300)
 #> Collecting available records...
 #>   collection nrecords
@@ -452,12 +359,14 @@ bcch <- nc_data_dl(species = 14280, doy = c(200, 300), username = "sample",
 #>     Records 1 to 7 / 7
 #>   SAMPLE2
 #>     Records 1 to 7 / 7
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All BCCH observations from a specific bounding box for user "sample"
 bcch <- nc_data_dl(species = 14280, username = "sample",
                    region = list(bbox = c(left = -100, bottom = 45,
                                           right = -80, top = 60)),
                     info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (14280); fields_set (BMDE2.00-ext); bbox_left (-100); bbox_bottom (45); bbox_right (-80); bbox_top (60)
 #> Collecting available records...
 #>   collection nrecords
@@ -470,14 +379,17 @@ bcch <- nc_data_dl(species = 14280, username = "sample",
 #>     Records 1 to 3 / 3
 #>   SAMPLE2
 #>     Records 1 to 2 / 2
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # All American Bittern observations from user "sample"
 search_species("american bittern")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> # A tibble: 1 × 5
 #>   species_id scientific_name       english_name     french_name      taxon_group
 #>        <int> <chr>                 <chr>            <chr>            <chr>      
 #> 1       2490 Botaurus lentiginosus American Bittern Butor d'Amérique BIRDS      
 bittern <- nc_data_dl(species = 2490, username = "sample", info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (2490); fields_set (BMDE2.00-ext)
 #> Collecting available records...
 #>   collection nrecords
@@ -487,10 +399,12 @@ bittern <- nc_data_dl(species = 2490, username = "sample", info = "nc_example")
 #> Downloading records for each collection:
 #>   SAMPLE1
 #>     Records 1 to 1 / 1
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 # Different fields/columns
 bittern <- nc_data_dl(species = 2490, fields_set = "core",
                       username = "sample", info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (2490); fields_set (BMDE2.00)
 #> Collecting available records...
 #>   collection nrecords
@@ -500,10 +414,13 @@ bittern <- nc_data_dl(species = 2490, fields_set = "core",
 #> Downloading records for each collection:
 #>   SAMPLE1
 #>     Records 1 to 1 / 1
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 bittern <- nc_data_dl(species = 2490, fields_set = "custom",
                       fields = c("Locality", "AllSpeciesReported"),
                       username = "sample", info = "nc_example")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (2490); fields_set (custom); fields (Locality, AllSpeciesReported)
 #> Collecting available records...
 #>   collection nrecords
@@ -513,6 +430,7 @@ bittern <- nc_data_dl(species = 2490, fields_set = "custom",
 #> Downloading records for each collection:
 #>   SAMPLE1
 #>     Records 1 to 1 / 1
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 
 if (FALSE) { # \dontrun{
 # All collections by request id
