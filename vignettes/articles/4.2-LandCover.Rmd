@@ -1,0 +1,113 @@
+---
+title: "Chapter 2 - Downloading and Extracting Landcover Data"
+author: "Rory Macklin"
+date: "2026-04-01"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chapter 2 - Downloading and Extracting Landcover Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Chapter 2: Downloading and Extracting Landcover Data
+
+##### Author: Rory Macklin
+
+> Animal communities are strongly responsive to the landcover composition of an area, as this often determines important factors such as prey availability, available habitat for foraging and breeding, and the presence of certain disturbance types. Landcover data is, however, difficult to summarize from on-the-ground observation, especially at larger spatial scales. Luckily, SEO products are available that summarize land cover composition across the globe.
+
+This tutorial assumes you have a basic understanding of working with spatial data in R. For a good introduction to these kinds of operations, the [NatureCounts Spatial Data Tutorial](https://github.com/BirdsCanada/NatureCounts_SpatialData_Tutorial) can serve as a useful starting point. It explains how to download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers. This tutorial also uses functions demonstrated in [**Chapter 1: Formatting Data for Covariate Download and Extraction**](4.1-CovariateFormatting.html). If you are unfamiliar with these functions, we recommend using the previous tutorial to learn to conform your data to a standardized format used in landcover download and extraction functions.
+
+# 2.0 Learning Objectives
+
+By the end of **Chapter 2 - Downloading and Extracting Landcover Data**, users will know how to:
+
+-   Have a basic understanding of the MODIS Terra/Aqua Landcover product accessed through `landcover_download()` and `landcover_extract()`: [MODIS Terra/Aqua Landcover Data](#2.1modis)
+-   Use `landcover_download()` to download MODIS Landcover data ready to match to observations in your data: [Downloading landcover data with `landcover_download()`](#2.2download).
+-   Use `landcover_extract()` to extract and summarize landcover data for each observation in their data: [Extracting landcover data with `landcover_extract()`](#2.3extract).
+
+This R tutorial requires the following packages:
+
+``` r
+library(naturecounts)
+library(tidyverse)
+library(sf)
+library(terra)
+```
+
+# 2.1 MODIS Terra/Aqua Landcover Data {#2.1modis}
+
+The [MODIS MCD12Q1 Landcover product](https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/MCD12Q1) is a long-running, global dataset of gridded landcover type data. Each grid cell is approximately 500 m x 500 m and the data has an annual resolution. This massive spatial and temporal coverage makes this dataset one of the primary resources for landcover data, being widely incorporated into ecological analyses, including important products such as [eBird Status and Trends estimates](https://science.ebird.org/en/status-and-trends).
+
+The raw spectral data from the MODIS Terra and Aqua satellites are processed to assign each grid cell to a landcover category. There are five available landcover classification schema:
+
+-   International Geosphere-Biosphere Program (IGBP) scheme: a 17-class scheme with 11 natural vegetation classes, three human-altered classes, and three non-vegetated classes.
+-   University of Maryland (UMD) scheme: a 16-class scheme with 11 natural vegetation classes, three human-altered classes, and two non-vegetated classes. Differs from IGBP by combining barren and permanent snow and ice classes into one non-vegetated lands class.
+-   Leaf Area Index (LAI) scheme: a 11-class scheme with eight vegetated classes (which describe natural vegetation as well as cropland), one human-altered class (focusing only on impervious surfaces), and two non-vegetated classes.
+-   BIOME-Biogeochemical Cycles (BGC) scheme: a 9-class scheme with six vegetation classes (which describe natural vegetation as well as cropland), one human-altered class (focusing only on impervious surfaces), and two non-vegetated classes.
+-   Plant Functional Type (PFT) scheme: a 12-class scheme, with six natural vegetation classes, three human-altered classes (with separation between cereal and broadleaf croplands), and three non-vegetated classes.
+
+Users should consider which scheme and level of detail best suits their research question/study system before proceeding to using these data. This may mean considering the level of landcover detail they wish to understand a study species' response to (*"do I care whether my species responds to needleleaf or broadleaf trees differently?"*), ensuring a particular habitat type is described by their selected scheme (*"I am studying the effect of croplands on my species, so I should make sure to choose a scheme with the appropriate cropland category."*), or trying multiple schema and checking whether any categories are poorly represented in their study area (*"Hm, not much representation of barren or snow and ice landcover, maybe I'll choose a scheme that lumps those into a larger, more represented category."*)
+
+# 2.2 Downloading landcover data with `landcover_download()` {#2.2download}
+
+Rather than delivering one file covering the entire globe in a given year, MODIS landcover data is broken up into large tiles that cover a section of the globe, with one file for each tile per year. This means that a user would typically have to identify which tile(s) their study region falls within and manually download the appropriate files for each study year. This can be a complex and error-prone process, ultimately taking the researcher's time away from doing the research they aim to do.
+
+Identifying this issue, R packages such as [`luna`](https://github.com/rspatial/luna/) have emerged to automate this process. In `landcover_download()`, we employ functions from `luna` and add quality of life features to further automate the downloading of MODIS landcover data.
+
+First, lets prep some data from NatureCounts for use in downloading MODIS data using `data_fmt()`. `landcover_download()` requires input data in either `sf` or `terra` spatial format with information on observation year stored in its own column. You can provide your own data in this format, or use the built-in `naturecounts::data_fmt()` function to conform your data to the necessary format.
+
+``` r
+# Examine a sample dataset from NatureCounts
+head(bcch)
+
+# This dataset is in a data.frame format, and contains the columns we need! We'll
+# need to to convert it into an sf objectf or use in landcover_download().
+bcch %>%
+  select(latitude, longitude, survey_year) %>%
+  head()
+  
+# We can make a call to data_fmt() to automatically convert this to an sf object
+# ready to work with naturecounts' covariate download and extraction functions. We
+# can ignore the warning as EPSG:4326 is an appropriate CRS for our data.
+formatted <- data_fmt(bcch)
+#> Warning Message:
+#> [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326. 
+
+view(formatted)
+```
+
+The only other prerequisite here is an [EarthData](https://urs.earthdata.nasa.gov/users/newhttps://urs.earthdata.nasa.gov/users/new) account, which is necessary to access MODIS data stored in the NASA EarthData Archive. Users can register at the link above.
+
+Supplying our formatted data and EarthData account email to `landcover_download()` will begin the download process. If the user wishes to just see which files would be downloaded without executing the download, they can do so by setting `ed_transfer` to `FALSE`. Your EarthData account password can either be stored in your .Renviron file by adding the line `EarthData_password = "yourpassword"` or can be supplied through the resulting pop-up window if no `Earthdata_password` is found in your .Renviron. This is done securely using the `askpass` package used in `naturecounts` commands.
+
+``` r
+# Let's see which files would be downloaded for our data
+
+files <- landcover_download(data = formatted,
+                            ed_transfer = FALSE)
+
+files
+
+# Now, by providing an EarthData login email, we can execute the download. Files will be downloaded into a temporary directory.
+
+ed_email <- readline("Enter EarthData email in the console: ")
+
+files <- landcover_download(data = formatted,
+                            ed_email = ed_email,
+                            ed_transfer = TRUE, # We don't need to specify this as
+                                                # TRUE is the default, but we have
+                                                # done so for clarity.
+                            dl_path = tempdir())# The dl_path argument can be used
+                                                # to specify the directory you'd
+                                                # files to be downloaded to.
+
+files
+```
+
+Examining the `files` object, we can see it is a character vector containing the paths to all downloaded files. All downloaded files can be found at the path specified using the argument `dl_path` and are in .hdf format, each file containing raster data for one MODIS tile for one of each requested year. These files can be brought into R using `terra::rast()` to examine, but we will use `landcover_extract()` to manage the extraction process.
+
+# 2.3 Extracting landcover data with `landcover_extract()` {#2.3extract}
+
+Once we have gathered the appropriate MODIS landcover data files, using `landcover_download()` or otherwise, we will want to extract the appropriate values and match them to our observations. Traditionally this might be accomplished with complicated for-loops running through each observation and matching it to the appropriate tile and year. Again, this would take significant time for the researcher and could be prone to errors for those not experienced with spatial operations in R. In these cases, `landcover_extract()` can help make the process quicker and easier.
+
+This function works slightly differently depending on whether the input site data are in point or polygon format. For point data, the extraction process will return the
