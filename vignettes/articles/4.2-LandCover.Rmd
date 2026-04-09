@@ -88,18 +88,15 @@ files <- landcover_download(data = formatted,
 
 files
 
-# Now, by providing an EarthData login email, we can execute the download. Files will be downloaded into a temporary directory.
+# Now, by providing an EarthData login email, we can execute the download. Files will be downloaded into a 'modis/' subdirectory in your current working directory. 
 
 ed_email <- readline("Enter EarthData email in the console: ")
 
 files <- landcover_download(data = formatted,
                             ed_email = ed_email,
-                            ed_transfer = TRUE, # We don't need to specify this as
+                            ed_transfer = TRUE) # We don't need to specify this as
                                                 # TRUE is the default, but we have
                                                 # done so for clarity.
-                            dl_path = tempdir())# The dl_path argument can be used
-                                                # to specify the directory you'd
-                                                # files to be downloaded to.
 
 files
 ```
@@ -110,4 +107,71 @@ Examining the `files` object, we can see it is a character vector containing the
 
 Once we have gathered the appropriate MODIS landcover data files, using `landcover_download()` or otherwise, we will want to extract the appropriate values and match them to our observations. Traditionally this might be accomplished with complicated for-loops running through each observation and matching it to the appropriate tile and year. Again, this would take significant time for the researcher and could be prone to errors for those not experienced with spatial operations in R. In these cases, `landcover_extract()` can help make the process quicker and easier.
 
-This function works slightly differently depending on whether the input site data are in point or polygon format. For point data, the extraction process will return the
+This function works slightly differently depending on whether the input site data are in point or polygon format (again, either `sf` or `terra` objects are accepted). For point data, the extraction process will return the landcover category that each site point falls within in a column named `LC_Type3_Class`. This is carried out via a call to `terra::extract()`. For polygon data, the extraction process will return the percent of the polygon (for buffered points this means the proportion of the buffered area) that each landcover category takes up with a column for each class named `LC_Type3_[Class Name]`. This is carried out via a call to `landscapemetrics::calculate_lsm()`
+
+To execute these extractions, we need to select which scheme we want to use, and specify it in the `covariates` argument. The appropriate covariate codes can be found in the `covariate_name` column of the table called with `nc_covariate_table()`. We will use the Leaf Area Index scheme, which is called by setting `covariates = "modis_lctype3"`. We will need to point `landcover_extract()` to where our MODIS data files are stored by providing a character vector with the filepaths of all applicable files to the argument `landcover_files`. Conveniently, this is exactly the output of `landcover_download()` that we stored in our `files` object.
+
+``` r
+# We will start by fetching the landcover data for our point dataset created above.
+output <- landcover_extract(data = formatted,
+                            covariates = "modis_lctype3",
+                            landcover_files = files)
+
+warnings()
+# Warning messages:
+# 1: [MODIS Landcover Extraction]: MODIS data not available for 1978 - using data from nearest year (2001).
+# 2: [MODIS Landcover Extraction]: MODIS data not available for 1979 - using data from nearest year (2001).
+# 3: [MODIS Landcover Extraction]: MODIS data not available for 1980 - using data from nearest year (2001).
+# 4: [MODIS Landcover Extraction]: MODIS data not available for 1981 - using data from nearest year (2001).
+# 5: [MODIS Landcover Extraction]: MODIS data not available for 1982 - using data from nearest year (2001).
+# 6: [MODIS Landcover Extraction]: MODIS data not available for 1983 - using data from nearest year (2001).
+# 7: [MODIS Landcover Extraction]: MODIS data not available for 1984 - using data from nearest year (2001).
+# 8: [MODIS Landcover Extraction]: MODIS data not available for 1985 - using data from nearest year (2001).
+# 9: [MODIS Landcover Extraction]: MODIS data not available for 1986 - using data from nearest year (2001).
+# 10: [MODIS Landcover Extraction]: MODIS data not available for 1987 - using data from nearest year (2001).
+# 11: [MODIS Landcover Extraction]: MODIS data not available for 1988 - using data from nearest year (2001).
+# 12: [MODIS Landcover Extraction]: MODIS data not available for 1989 - using data from nearest year (2001).
+# 13: [MODIS Landcover Extraction]: MODIS data not available for 1990 - using data from nearest year (2001).
+# 14: [MODIS Landcover Extraction]: MODIS data not available for 1991 - using data from nearest year (2001).
+# 15: [MODIS Landcover Extraction]: MODIS data not available for 1992 - using data from nearest year (2001).
+# 16: [MODIS Landcover Extraction]: MODIS data not available for 1993 - using data from nearest year (2001).
+# 17: [MODIS Landcover Extraction]: MODIS data not available for 1994 - using data from nearest year (2001).
+# 18: [MODIS Landcover Extraction]: MODIS data not available for 1995 - using data from nearest year (2001).
+# 19: [MODIS Landcover Extraction]: MODIS data not available for 1996 - using data from nearest year (2001).
+# 20: [MODIS Landcover Extraction]: MODIS data not available for 1997 - using data from nearest year (2001).
+# 21: [MODIS Landcover Extraction]: MODIS data not available for 1998 - using data from nearest year (2001).
+# 22: [MODIS Landcover Extraction]: MODIS data not available for 1999 - using data from nearest year (2001).
+# 23: [MODIS Landcover Extraction]: MODIS data not available for 2000 - using data from nearest year (2001).
+```
+
+Woah! That's a lot of warnings. These warnings are ultimately harmless but are important to consider. The MODIS Landcover dataset only extends back to 2001, and our data contains observations from before 2001. So, the function has grabbed the closest data point in time it can to those pre-2001 observations (the landcover category from 2001) and provides that instead. If we don't want this behaviour, we could go into our output data and manually set them to `NA` after running `landcover_extract()` using `output$LC_Type3_Class[output$survey_year < 2001] <- NA` . For this demonstration, we will leave it as is. This could also happen for observations in the current year (at the time of writing, 2026) as the MODIS landcover data available in a given year usually ends at the previous calendar year. In this case, the function would fetch the landcover category from the previous year and warn the user.
+
+Let's take a look at what the function has returned for us!
+
+``` r
+head(output)
+
+table(output$LC_Type3_Class)
+```
+
+Now let's give it a go with polygon input data. We'll buffer our points to summarize landcover within a 500 m radius of each observation. We will expect and ignore the same warnings as in the previous example.
+
+``` r
+buffered <- data_buff(data = formatted)
+
+output <- landcover_extract(data = buffered,
+                            covariates = "modis_lctype3",
+                            landcover_files = files)
+
+head(output)
+```
+
+We can see that we have gained a number of columns, each with the percentage of the buffered area that is taken up by each particular class.
+
+# 2.4 Tips and tricks
+
+For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names and year data can be provided directly to `landcover_download()` and `landcover_extract()` via the `site_name` and `date_year` columns. If you have already provided this information in a call to `data_fmt()` and are providing the output of that function as the `data` argument of either landcover function, you do not need to specify this information again.
+
+By default, the MODIS files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `landcover_extract()`.
+
+**Congratulations!** You have now learned how to quickly download and extract the appropriate landcover data for your observation data using `landcover_download()` and `landcover_extract()`.
