@@ -9,3 +9,4 @@ cache
 rosm.cache
 *.zip
 testdir
+.positai

@@ -372,6 +372,20 @@ data_fmt <- function(
     data <- dplyr::rename(data, "survey_year" = !!date_year)
   }
   
+  # Use year_check() to validate year data. 'if' wrapper needed to handle cases
+  # where no year column was provided, and a lubridate column was provided
+  # instead.
+  if ("survey_year" %in% names(data)) {
+    year_corr <- c()
+    
+    for (i in 1:length(data$survey_year)) {
+      year_corr[i] <- year_check(data$survey_year[i])
+    }
+    
+    data$survey_year <- year_corr
+  }
+  
+  
   if (!is.null(date_month)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)

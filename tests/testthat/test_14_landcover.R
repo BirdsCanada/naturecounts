@@ -18,27 +18,26 @@ test_that("landcover_download() hits API with all expected inputs. May fail if f
                       "MCD12Q1.A2013001.h12v04.061.2022164182417.hdf",
                       "MCD12Q1.A2014001.h12v04.061.2022165083049.hdf",
                       "MCD12Q1.A2015001.h12v04.061.2022165230140.hdf",
-                      "MCD12Q1.A2016001.h12v04.061.2022166171445.hdf",
                       "MCD12Q1.A2017001.h12v04.061.2022168033428.hdf")
-  expect_equal(suppressMessages(landcover_download(data_fmt(bcch,
+  expect_equal(suppressWarnings(suppressMessages(landcover_download(data_fmt(bcch,
                                                             coord_lon = "longitude",
                                                             coord_lat = "latitude",
                                                             crs = 4326),
-                                                   ed_transfer = FALSE)),
+                                                   ed_transfer = FALSE))),
                expected_files)
-  expect_equal(suppressMessages(landcover_download(data_buff(data_fmt(bcch,
+  expect_equal(suppressWarnings(suppressMessages(landcover_download(data_buff(data_fmt(bcch,
                                                                       coord_lon = "longitude",
                                                                       coord_lat = "latitude",
                                                                       crs = 4326)),
-                                                   ed_transfer = FALSE)),
+                                                   ed_transfer = FALSE))),
                expected_files)
-  expect_equal(suppressMessages(landcover_download(data_fmt(terra::vect(bcch,
+  expect_equal(suppressWarnings(suppressMessages(landcover_download(data_fmt(terra::vect(bcch,
                                                                         crs = "epsg:4326")),
-                                                   ed_transfer = FALSE)),
+                                                   ed_transfer = FALSE))),
                expected_files)
-  expect_equal(suppressMessages(landcover_download(data_buff(data_fmt(terra::vect(bcch,
+  expect_equal(suppressWarnings(suppressMessages(landcover_download(data_buff(data_fmt(terra::vect(bcch,
                                                                                   crs = "epsg:4326"))),
-                                                   ed_transfer = FALSE)),
+                                                   ed_transfer = FALSE))),
                expected_files)
 })
 
@@ -59,19 +58,18 @@ test_that("landcover_download() successfully downloads requested files with a te
                       "./testdir/modis/MCD12Q1/MCD12Q1.A2013001.h12v04.061.2022164182417.hdf",
                       "./testdir/modis/MCD12Q1/MCD12Q1.A2014001.h12v04.061.2022165083049.hdf",
                       "./testdir/modis/MCD12Q1/MCD12Q1.A2015001.h12v04.061.2022165230140.hdf",
-                      "./testdir/modis/MCD12Q1/MCD12Q1.A2016001.h12v04.061.2022166171445.hdf",
                       "./testdir/modis/MCD12Q1/MCD12Q1.A2017001.h12v04.061.2022168033428.hdf")
-  expect_equal(suppressMessages(landcover_download(data_fmt(bcch,
+  expect_equal(suppressWarnings(suppressMessages(landcover_download(data_fmt(bcch,
                                                             coord_lon = "longitude",
                                                             coord_lat = "latitude",
                                                             crs = 4326),
                                                    ed_email = "rmacklin@birdscanada.org",
-                                                   dl_path = "./testdir")),
+                                                   dl_path = "./testdir"))),
                expected_files)
   expect_true(dir.exists("./testdir/modis/MCD12Q1")) # Bonus test of custom file path specification
   expect_equal(list.files("./testdir/modis/MCD12Q1", full.names = TRUE), expected_files)
   files_years <- luna::modisDate(list.files("./testdir/modis/MCD12Q1"))
-  expect_true(all(bcch$survey_year[bcch$survey_year %in% 2001:((lubridate::year(Sys.Date()))-1)] %in% files_years$year))
+  expect_true(all(bcch$survey_year[bcch$survey_year %in% 2001:((lubridate::year(Sys.Date()))-2)] %in% files_years$year))
   files_extent <- luna::modisExtent(list.files("./testdir/modis/MCD12Q1"))
   bcch_spatial <- bcch %>%
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
@@ -101,9 +99,8 @@ test_that("landcover_download() succeeds with alternate column names, either
                       "MCD12Q1.A2013001.h12v04.061.2022164182417.hdf",
                       "MCD12Q1.A2014001.h12v04.061.2022165083049.hdf",
                       "MCD12Q1.A2015001.h12v04.061.2022165230140.hdf",
-                      "MCD12Q1.A2016001.h12v04.061.2022166171445.hdf",
                       "MCD12Q1.A2017001.h12v04.061.2022168033428.hdf")
-  expect_equal(suppressMessages(landcover_download(data_fmt(dplyr::rename(bcch,
+  expect_equal(suppressWarnings(suppressMessages(landcover_download(data_fmt(dplyr::rename(bcch,
                                                                           "sites" = "SurveyAreaIdentifier",
                                                                           "yr" = "survey_year"),
                                                             coord_lon = "longitude",
@@ -111,9 +108,9 @@ test_that("landcover_download() succeeds with alternate column names, either
                                                             site_name = "sites",
                                                             date_year = "yr",
                                                             crs = 4326),
-                                                   ed_transfer = FALSE)),
+                                                   ed_transfer = FALSE))),
                expected_files)
-  expect_equal(suppressMessages(landcover_download(dplyr::rename(data_fmt(bcch,
+  expect_equal(suppressWarnings(suppressMessages(landcover_download(dplyr::rename(data_fmt(bcch,
                                                                           coord_lon = "longitude",
                                                                           coord_lat = "latitude",
                                                                           crs = 4326),
@@ -121,7 +118,7 @@ test_that("landcover_download() succeeds with alternate column names, either
                                                                  "yr" = "survey_year"),
                                                    site_name = "sites",
                                                    date_year = "yr",
-                                                   ed_transfer = FALSE)),
+                                                   ed_transfer = FALSE))),
                expected_files)
 })
 
