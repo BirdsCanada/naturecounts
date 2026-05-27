@@ -17,15 +17,15 @@
 #' @param ed_email Character. The email address associated with your EarthData
 #'   account.
 #' @param ed_transfer Logical. Should data be downloaded from EarthData?
-#'   If FALSE, a vector containing the names of the files that would be
+#'   If `FALSE`, a vector containing the names of the files that would be
 #'   downloaded is returned.
 #' @param site_name Character. Optional argument to provide the name of the
 #'   column containing site names if not contained within the BMDE column
-#'   `SurveyAreaIdentifier`. Can be left NULL and still function properly if
+#'   `SurveyAreaIdentifier`. Can be left `NULL` and still function properly if
 #'   originally specified in a call to [data_fmt()].
 #' @param date_year Character. Optional argument to provide the name of the
 #'   column containing year data if not contained within the BMDE column
-#'   `survey_year`. Can be left NULL and still function properly if originally
+#'   `survey_year`. Can be left `NULL` and still function properly if originally
 #'   specified in a call to [data_fmt()].
 #' @param dl_path Character. Optional argument to provide path to download data
 #'   to. By default, data is downloaded to a subfolder `modis/` in the working
@@ -63,7 +63,8 @@
 #' #  ed_email = ed_email
 #' #)
 #'
-#' @seealso [luna::getNASA()] which this function wraps.
+#' @seealso [luna::getNASA()] which this function wraps. [landcover_extract()]
+#' which can be used to extract data from downloaded landcover data files.
 #'
 #' @export
 
@@ -91,6 +92,14 @@ landcover_download <- function(
     "terra",
     "luna"
   ))
+  
+  # Check that ed_transfer is logical.
+  if (!is.logical(ed_transfer)) {
+    stop(
+      "[MODIS Landcover Download] ed_transfer must be TRUE or FALSE.",
+      call. = FALSE
+    )
+  }
 
   # Check that an EarthData account email has been provided. If not, return
   # error.
@@ -100,14 +109,6 @@ landcover_download <- function(
       " system login information not supplied. Please register at",
       " https://urs.earthdata.nasa.gov/users/new and supply using `ed_email`",
       " argument.",
-      call. = FALSE
-    )
-  }
-
-  # Check that ed_transfer is logical.
-  if (!is.logical(ed_transfer)) {
-    stop(
-      "[MODIS Landcover Download] ed_transfer must be TRUE or FALSE.",
       call. = FALSE
     )
   }
