@@ -366,7 +366,7 @@ test_that("landcover_extract() succeeds with all landcover classification schema
   expect_equal(unique(round(rowSums(sf::st_drop_geometry(dplyr::select(extracted, tidyselect::starts_with("LC_Type5")))),0)), 100) # Check that all rows sum to 100%
   })
 
-test_that("landcover_extract() returns appropriate warnings for out of coverage points.", {
+test_that("landcover_extract() returns appropriate warnings for out of coverage points and dates.", {
   bcch_mod <- bcch
   bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
   bcch_mod$latitude[1] <- 80
@@ -387,6 +387,27 @@ test_that("landcover_extract() returns appropriate warnings for out of coverage 
                                  full.names = TRUE))),
     "\\[MODIS Landcover Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the MODIS files provided. No value will be assigned.")
   expect_true(all(c(unname(is.na(sf::st_drop_geometry(dplyr::select(extracted, starts_with("LC_Type1")))[1,])))))
+  
+  bcch_mod <- bcch
+  bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
+  bcch_mod$survey_year[1] <- 1998
+  
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_mod)))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod))))
+  
+  expect_warning(extracted <- suppressMessages(landcover_extract(
+    sf_pt,
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE))),
+    "\\[MODIS Landcover Extraction\\]: MODIS data not available for 1998 - using data from nearest year \\(2001\\).")
+  expect_true(extracted$LC_Type1_Class[1] == "deciduous_broadleaf_forests")
+  
+  expect_warning(extracted <- suppressMessages(landcover_extract(
+    sf_poly,
+    landcover_files = list.files("./testdir/modis/MCD12Q1", 
+                                 full.names = TRUE))),
+    "\\[MODIS Landcover Extraction\\]: MODIS data not available for 1998 - using data from nearest year \\(2001\\).")
+  expect_true(all(unlist(unname(sf::st_drop_geometry(dplyr::select(extracted, starts_with("LC_Type1")))[1,])) == c(0,0,0,50,50,0,0,0,0,0,0,0,0,0,0,0,0,0)))
   })
 
 test_that("landcover_extract() succeeds with alternate column names, either passed through attributes or specified explicitly.", {

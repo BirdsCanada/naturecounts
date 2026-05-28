@@ -577,7 +577,7 @@ vegetation_extract <- function(
   if (length(warning_dates) > 0) {
     warning(
       "[MODIS NDVI/EVI Extraction] observations on ",
-      stringr::str_flatten_comma(unique(warning_dates)),
+      stringr::str_flatten_comma(unique(as.Date(warning_dates))),
       " fall outside of the temporal extent of the files provided. You have",
       " provided data for this year but not this 16-day window. No value will",
       " be returned.",

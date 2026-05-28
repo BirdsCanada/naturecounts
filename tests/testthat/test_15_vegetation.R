@@ -244,3 +244,118 @@ test_that("vegetation_extract() successfully returns reliability information.", 
   expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 9))
   expect_equal(stringr::str_flatten_comma(extracted$vegetation_reliability), "Snow/Ice (100%), Snow/Ice (66.67%), Cloudy (33.33%), Good Data (100%), Good Data (100%)")
 })
+
+test_that("vegetation_extract() returns appropriate warnings for out of coverage points and dates.", {
+  bcch_mod <- bcch
+  bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year == 2007)
+  bcch_mod$latitude[1] <- 80
+  
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_mod)))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod))))
+  
+  expect_warning(extracted <- suppressMessages(vegetation_extract(
+    sf_pt,
+    vegetation_files = list.files("./testdir/modis/MOD13A1", 
+                                  full.names = TRUE))),
+    "\\[MODIS NDVI\\/EVI Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the files provided. No value will be returned.")
+  expect_true(is.na(extracted$ndvi[1]))
+  
+  expect_warning(extracted <- suppressMessages(vegetation_extract(
+    sf_poly,
+    vegetation_files = list.files("./testdir/modis/MOD13A1", 
+                                  full.names = TRUE),
+    reliability = TRUE)), # bonus test of whether reliability is returned as NA.
+    "\\[MODIS NDVI\\/EVI Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the files provided. No value will be returned.")
+  expect_true(is.na(extracted$ndvi[1]))
+  expect_true(is.na(extracted$vegetation_reliability[1]))
+  
+  bcch_mod <- bcch
+  bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year == 2007)
+  bcch_mod$survey_year[1] <- 1999
+  
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_mod)))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod))))
+  
+  expect_warning(extracted <- suppressMessages(vegetation_extract(
+    sf_pt,
+    vegetation_files = list.files("./testdir/modis/MOD13A1", 
+                                  full.names = TRUE))),
+    "\\[MODIS NDVI/EVI Extraction\\] observations from year 1999 fall outside of the temporal extent of the files provided. Is it in a year where data is unavailable from this dataset\\? No value will be returned.")
+  expect_true(is.na(extracted$ndvi[1]))
+  
+  expect_warning(extracted <- suppressMessages(vegetation_extract(
+    sf_poly,
+    vegetation_files = list.files("./testdir/modis/MOD13A1", 
+                                  full.names = TRUE),
+    reliability = TRUE)), # bonus test of whether reliability is returned as NA.
+    "\\[MODIS NDVI/EVI Extraction\\] observations from year 1999 fall outside of the temporal extent of the files provided. Is it in a year where data is unavailable from this dataset\\? No value will be returned.")
+  expect_true(is.na(extracted$ndvi[1]))
+  expect_true(is.na(extracted$vegetation_reliability[1]))
+  
+  bcch_mod <- bcch
+  bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year == 2007)
+  bcch_mod$survey_month[1] <- 1
+  bcch_mod$survey_day[1] <- 10
+  
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_mod)))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod))))
+  
+  expect_warning(extracted <- suppressMessages(vegetation_extract(
+    sf_pt,
+    vegetation_files = list.files("./testdir/modis/MOD13A1", 
+                                  full.names = TRUE))),
+    "\\[MODIS NDVI/EVI Extraction\\] observations on 2007-01-10 fall outside of the temporal extent of the files provided. You have provided data for this year but not this 16-day window. No value will be returned.")
+  expect_true(is.na(extracted$ndvi[1]))
+  
+  expect_warning(extracted <- suppressMessages(vegetation_extract(
+    sf_poly,
+    vegetation_files = list.files("./testdir/modis/MOD13A1", 
+                                  full.names = TRUE),
+    reliability = TRUE)), # bonus test of whether reliability is returned as NA.
+    "\\[MODIS NDVI/EVI Extraction\\] observations on 2007-01-10 fall outside of the temporal extent of the files provided. You have provided data for this year but not this 16-day window. No value will be returned.")
+  expect_true(is.na(extracted$ndvi[1]))
+  expect_true(is.na(extracted$vegetation_reliability[1]))
+})
+
+
+test_that("vegetation_extract() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
+  sf_pt <- suppressMessages(data_fmt(dplyr::rename(bcch[bcch$survey_year == 2007,],
+                                                   "sites" = "SurveyAreaIdentifier",
+                                                   "yr" = "survey_year"),
+                                     coord_lon = "longitude",
+                                     coord_lat = "latitude",
+                                     site_name = "sites",
+                                     date_year = "yr",
+                                     crs = 4326))
+  
+  expect_silent(extracted <- suppressMessages(vegetation_extract(sf_pt,
+                                                                 vegetation_files = list.files("./testdir/modis/MOD13A1", 
+                                                                                               full.names = TRUE))))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("sites", "latitude", "longitude", "yr", "survey_month", "survey_day", "ndvi", "geometry"))
+  expect_equal(dplyr::select(extracted, -"ndvi"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+  
+  sf_pt <- dplyr::rename(suppressMessages(data_fmt(bcch[bcch$survey_year == 2007,],
+                                                   coord_lon = "longitude",
+                                                   coord_lat = "latitude",
+                                                   crs = 4326)),
+                         "sites" = "SurveyAreaIdentifier",
+                         "yr" = "survey_year")
+  
+  expect_silent(extracted <- suppressMessages(vegetation_extract(sf_pt,
+                                                                 vegetation_files = list.files("./testdir/modis/MOD13A1", 
+                                                                                               full.names = TRUE),
+                                                                 site_name = "sites",
+                                                                 date_year = "yr")))
+  expect_s3_class(extracted, "sf")
+  expect_equal(as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)), "POINT")
+  expect_named(extracted, c("sites", "latitude", "longitude", "yr", "survey_month", "survey_day", "ndvi", "geometry"))
+  expect_equal(dplyr::select(extracted, -"ndvi"), sf_pt, ignore_attr = TRUE) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
+})
+
+# unlink("./testdir", recursive = T)
