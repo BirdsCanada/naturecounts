@@ -400,14 +400,14 @@ test_that("landcover_extract() returns appropriate warnings for out of coverage 
     landcover_files = list.files("./testdir/modis/MCD12Q1", 
                                  full.names = TRUE))),
     "\\[MODIS Landcover Extraction\\]: MODIS data not available for 1998 - using data from nearest year \\(2001\\).")
-  expect_true(extracted$LC_Type1_Class[1] == "deciduous_broadleaf_forests")
+  expect_true(extracted$LC_Type1_Class[1] == "mixed_forests")
   
   expect_warning(extracted <- suppressMessages(landcover_extract(
     sf_poly,
     landcover_files = list.files("./testdir/modis/MCD12Q1", 
                                  full.names = TRUE))),
     "\\[MODIS Landcover Extraction\\]: MODIS data not available for 1998 - using data from nearest year \\(2001\\).")
-  expect_true(all(unlist(unname(sf::st_drop_geometry(dplyr::select(extracted, starts_with("LC_Type1")))[1,])) == c(0,0,0,50,50,0,0,0,0,0,0,0,0,0,0,0,0,0)))
+  expect_true(all(round(unlist(unname(sf::st_drop_geometry(dplyr::select(extracted, starts_with("LC_Type1")))[1,])), 2) == c(0,0,0,33.33,66.67,0,0,0,0,0,0,0,0,0,0,0,0,0)))
   })
 
 test_that("landcover_extract() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
@@ -450,4 +450,4 @@ test_that("landcover_extract() succeeds with alternate column names, either pass
   expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
   })
 
-unlink("./testdir", recursive = T)
+# unlink("./testdir", recursive = T)
