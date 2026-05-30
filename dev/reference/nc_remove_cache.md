@@ -17,6 +17,7 @@ nc_remove_cache()
 ## Examples
 
 ``` r
+
 nc_remove_cache()
 #> [1] TRUE
 ```

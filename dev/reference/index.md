@@ -101,6 +101,10 @@ extraction, as well as for downloading and extracting covariate data
   : Download MODIS Landcover Data
 - [`landcover_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/landcover_extract.md)
   : Extract MODIS Landcover Data
+- [`vegetation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/vegetation_download.md)
+  : Download MODIS NDVI/EVI Data
+- [`vegetation_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/vegetation_extract.md)
+  : Extract MODIS NDVI/EVI Data
 
 ## Data
 

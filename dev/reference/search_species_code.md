@@ -42,6 +42,7 @@ Species ids returned reflect both species and sub-species levels.
 ## Examples
 
 ``` r
+
 # Show all ids
 search_species_code()
 #> # A tibble: 1,396 × 5

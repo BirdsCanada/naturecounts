@@ -26,6 +26,7 @@ working with spatial data, and the `rnaturalearth` package to get
 example spatial data.
 
 ``` r
+
 library(naturecounts)
 library(dplyr)
 library(ggplot2)
@@ -45,6 +46,7 @@ transformed from CRS 4326 (unprojected lat/lon) to 3347 (NAD83
 Statistics Canada).
 
 ``` r
+
 na <- ne_countries(continent = "north america", returnclass = "sf") |>
   st_transform(3347)
 
@@ -61,6 +63,7 @@ manitoba <- ne_states(country = "Canada", returnclass = "sf") |>
 ```
 
 ``` r
+
 ggplot() +
   theme_bw() +
   geom_sf(data = canada) + # Map of Canada
@@ -71,6 +74,7 @@ Alternatively specify the groups inside
 [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html)
 
 ``` r
+
 ggplot() +
   theme_bw() +
   geom_sf(data = canada, aes(fill = name == "Ontario"), show.legend = FALSE) +
@@ -83,6 +87,7 @@ For example, if you wanted to collect all public observations in
 Winnipeg, Manitoba…
 
 ``` r
+
 search_region("winnipeg", type = "subnational2")
 obs <- nc_data_dl(
   region = list(subnational2 = "CA.MB.11"),
@@ -96,6 +101,7 @@ Now we’ll get a [polygon representing Winnipeg,
 MB](https://data.winnipeg.ca/City-Planning/city_limit/2nyq-f444).
 
 ``` r
+
 winnipeg <- st_read("https://data.winnipeg.ca/resource/2nyq-f444.geojson") |>
   st_transform(3347)
 
@@ -112,6 +118,7 @@ Looks like our polygon of Winnipeg doesn’t exactly match the
 subnational2 area. That’s okay, we’ll filter to match the polygon:
 
 ``` r
+
 obs_sf <- st_join(obs_sf, distinct(winnipeg), left = FALSE)
 
 ggplot() +
@@ -129,6 +136,7 @@ We’ll download that data with the `rnaturalearth` package and save it to
 the working directory (“.”)
 
 ``` r
+
 ne_download(
   scale = 10,
   type = "urban_areas",
@@ -141,6 +149,7 @@ ne_download(
 Now that we’ve saved it, we can load it for use.
 
 ``` r
+
 urban <- ne_load(
   scale = 10,
   type = "urban_areas",
@@ -155,6 +164,7 @@ we only care about the geometry of Ontario, not any other data
 (`st_geometry(ontario)`).
 
 ``` r
+
 urban_ontario <- urban |>
   st_transform(3347) |>
   st_intersection(st_geometry(ontario))
@@ -173,6 +183,7 @@ and then filtering these to include only those that overlap these urban
 areas.
 
 ``` r
+
 utm_on <- meta_utm_squares() |>
   filter(statprov_code == "ON") |>
   st_transform(3347) |> # Transform to match urban CRS
@@ -194,6 +205,7 @@ want, then transform them in the CRS we’re using and use that to set our
 limits.
 
 ``` r
+
 zoom <- data.frame(lon = c(-81, -78, -81, -78), lat = c(43, 43, 45, 45)) |>
   st_as_sf(coords = c("lon", "lat"), crs = 4326) |>
   st_transform(3347) |>
@@ -205,6 +217,7 @@ For convenience, we’ll use the patchwork package to combine the figures
 side-by-side so we can get a really good look at what we’re doing.
 
 ``` r
+
 g1 <- ggplot() +
   theme_bw() +
   geom_sf(data = ontario) +
@@ -228,6 +241,7 @@ areas. Because it can take time for the server to process so many
 download a couple of utm squares.
 
 ``` r
+
 obs <- nc_data_dl(
   region = list(utm_squares = utm_on$utm_square[1:10]),
   verbose = FALSE,
@@ -240,6 +254,7 @@ obs <- nc_data_dl(
 Finally, we do clip the resulting observations to the exact urban areas:
 
 ``` r
+
 obs_sf <- st_as_sf(obs, coords = c("longitude", "latitude"), crs = 4326) |>
   st_transform(crs = 3347) |>
   st_join(distinct(urban_ontario), left = FALSE)
@@ -263,6 +278,7 @@ First we’ll define the area we want to grab. Jasper is at about 52.8755,
 -118.0833, and we want to get a bout a lat and lon around that.
 
 ``` r
+
 jasper <- st_bbox(
   c(
     xmin = -118.0833 - 0.5,
@@ -277,6 +293,7 @@ jasper <- st_bbox(
 Now we’ll get a background map of Alberta.
 
 ``` r
+
 alberta <- ne_states(country = "Canada", returnclass = "sf") |>
   filter(name == "Alberta")
 ```
@@ -284,6 +301,7 @@ alberta <- ne_states(country = "Canada", returnclass = "sf") |>
 Let’s see what that all looks like.
 
 ``` r
+
 ggplot() +
   theme_bw() +
   geom_sf(data = alberta) +
@@ -295,6 +313,7 @@ Now we can give our coordinates directly to our
 function.
 
 ``` r
+
 obs <- nc_data_dl(
   region = list(bbox = jasper),
   verbose = FALSE,
@@ -306,6 +325,7 @@ obs <- nc_data_dl(
 Let’s take a look…
 
 ``` r
+
 ggplot() +
   theme_bw() +
   geom_sf(data = st_as_sfc(jasper), fill = "orange") +

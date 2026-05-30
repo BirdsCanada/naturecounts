@@ -18,6 +18,8 @@
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/3.1-ZeroFilling.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/3.2-AuxiliaryTables.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/4.1-CovariateFormatting.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/4.2-LandCover.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/articles/4.3-Vegetation.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/cosewic-tools.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/data-access.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/articles/filtering-data.html</loc></url>
@@ -74,5 +76,7 @@
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/srv_auth.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/tidyeval.html</loc></url>
 <url><loc>https://birdscanada.github.io/naturecounts/dev/reference/to_json.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/reference/vegetation_download.html</loc></url>
+<url><loc>https://birdscanada.github.io/naturecounts/dev/reference/vegetation_extract.html</loc></url>
 </urlset>
 

@@ -15,6 +15,7 @@ spatial distribution.
 To do so we’re going to use the following packages:
 
 ``` r
+
 library(naturecounts)
 library(sf)
 library(rnaturalearth)
@@ -28,6 +29,7 @@ library(mapview)
 First we’ll use download some data:
 
 ``` r
+
 house_finches <- nc_data_dl(
   species = 20350,
   region = list(statprov = "AB"),
@@ -48,7 +50,7 @@ house_finches <- nc_data_dl(
     ## 5 BBL-2000-2009      978
     ## 6 BBL-2010-2019     1299
     ## ...
-    ## Total records: 11,061
+    ## Total records: 14,610
 
     ## 
     ## Downloading records for each collection:
@@ -103,9 +105,11 @@ house_finches <- nc_data_dl(
 
     ##   PFW
 
-    ##     Records 1 to 5000 / 7665
+    ##     Records 1 to 5000 / 11214
 
-    ##     Records 5001 to 7665 / 7665
+    ##     Records 5001 to 10000 / 11214
+
+    ##     Records 10001 to 11214 / 11214
 
     ##   WILDTRAX1
 
@@ -120,6 +124,7 @@ house_finches <- nc_data_dl(
     ##     Records 1 to 1 / 1
 
 ``` r
+
 head(house_finches)
 ```
 
@@ -700,20 +705,22 @@ First let’s get an idea of how many distinct points there are (often
 multiple observations are recorded for the same location).
 
 ``` r
+
 nrow(house_finches)
 ```
 
-    ## [1] 11061
+    ## [1] 14610
 
 ``` r
+
 select(house_finches, longitude, latitude) |>
   distinct() |>
   nrow()
 ```
 
-    ## [1] 1290
+    ## [1] 1353
 
-So we have 1290 sites for 11061 observations.
+So we have 1353 sites for 14610 observations.
 
 Next let’s convert our data to spatial data so we can plot it spatially
 (i.e. make a map!). Note that we’re using CRS EPSG code of 4326 because
@@ -721,6 +728,7 @@ that’s reflects unprojected, GPS data in lat/lon. First we omit `NA`s
 because `sf` data frames cannot have missing locations.
 
 ``` r
+
 house_finches <- drop_na(house_finches, "longitude", "latitude")
 house_finches_sf <- st_as_sf(
   house_finches,
@@ -734,6 +742,7 @@ Now we’re ready to make a map of the distribution of observations.
 We’ll use a baselayer from OpenStreetMap and then add our observations.
 
 ``` r
+
 ggplot() +
   annotation_map_tile(type = "osm", zoomin = 0) +
   geom_sf(data = house_finches_sf) +
@@ -753,6 +762,7 @@ ggplot() +
 Let’s count our observations for each site.
 
 ``` r
+
 cnt <- house_finches_sf |>
   count(geometry)
 
@@ -773,6 +783,7 @@ If we want to get fancy we can also create interactive maps using the
 package](https://rstudio.github.io/leaflet/)).
 
 ``` r
+
 mapview(
   house_finches_sf,
   zcol = "survey_year",
@@ -790,6 +801,7 @@ For this we’ll get some outlines of Canada and it’s Provinces and
 Territories from `rnaturalearth`.
 
 ``` r
+
 canada <- ne_states(country = "canada", returnclass = "sf") |>
   st_transform(3347)
 
@@ -804,6 +816,7 @@ Let’s add our observations (note that the data are transformed to match
 the projection of the first layer, here the `canada` data).
 
 ``` r
+
 ggplot() +
   theme_bw() +
   geom_sf(data = canada) +
@@ -815,6 +828,7 @@ ggplot() +
 We can also focus on Alberta
 
 ``` r
+
 ab <- filter(canada, name == "Alberta")
 
 ggplot() +
@@ -829,13 +843,14 @@ Perhaps we should see how these observations are distributed among
 Alberta’s Bird Conservation Regions (BCRs).
 
 First we’ll grab the BCR shape file from [Birds
-Canada](https://www.birdscanada.org/bird-science/nabci-bird-conservation-regions)[¹](#fn1).
+Canada](https://www.birdscanada.org/bird-science/nabci-bird-conservation-regions)[^1].
 
 We’ll download the zip file and extracted to a folder easier to work
 with. Note that these spatial data are in the GDB format, so we’re
 working with a folder named `XXX.gdb`.
 
 ``` r
+
 download.file(
   "https://services1.arcgis.com/d5M16PKlQTMEVyua/arcgis/rest/services/BCR_terrestrial_master/FeatureServer/replicafilescache/BCR_terrestrial_master_-8688020410858769740.zip",
   "BCR_terrestrial_master.zip"
@@ -848,6 +863,7 @@ unzip(
 ```
 
 ``` r
+
 bcr <- st_read("BCR_terrestrial_master.gdb") |>
   st_transform(3347) |>
   st_intersection(ab)
@@ -874,6 +890,7 @@ bcr <- st_read("BCR_terrestrial_master.gdb") |>
 Add this layer to our plot.
 
 ``` r
+
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
@@ -894,6 +911,7 @@ whether the observations overlap a BCR polygon (by default this is a
 left join). Now we have a BCR designation for each observation.
 
 ``` r
+
 house_finches_sf <- house_finches_sf |>
   st_transform(st_crs(bcr)) |>
   st_join(bcr)
@@ -902,6 +920,7 @@ house_finches_sf <- house_finches_sf |>
 Those border cases are now resolved.
 
 ``` r
+
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
@@ -922,6 +941,7 @@ We might also be interested in observations over time.
 First we’ll bin our yearly observations
 
 ``` r
+
 house_finches_sf <- mutate(
   house_finches_sf,
   years = cut(
@@ -936,6 +956,7 @@ house_finches_sf <- mutate(
 We’ll also want to see how many sample years there are per decade.
 
 ``` r
+
 years <- house_finches_sf |>
   group_by(years) |>
   summarize(n = length(unique(survey_year)), .groups = "drop")
@@ -944,6 +965,7 @@ years <- house_finches_sf |>
 Now we can see how House Finch observations change over the years
 
 ``` r
+
 ggplot() +
   theme_bw() +
   geom_sf(data = ab) +
@@ -977,6 +999,7 @@ function to fill in sampling events where cardinals (`species_id` 19360)
 were not detected (presence would then be 0).
 
 ``` r
+
 cardinals <- nc_data_dl(
   collection = "RCBIOTABASE",
   username = "testuser",
@@ -1004,6 +1027,7 @@ cardinals <- nc_data_dl(
     ##     Records 10001 to 13115 / 13115
 
 ``` r
+
 cardinals_zf <- cardinals |>
   filter(AllSpeciesReported == "Yes", !is.na(latitude), !is.na(longitude)) |>
   group_by(species_id, AllSpeciesReported, SamplingEventIdentifier) |>
@@ -1023,6 +1047,7 @@ Event. This is only necessary if there are errors (worth reporting!)
 where there are more than one lat/lon combo for each sampling event.
 
 ``` r
+
 coords <- cardinals |>
   select("SamplingEventIdentifier", "latitude", "longitude") |>
   group_by(SamplingEventIdentifier, latitude, longitude) |>
@@ -1048,6 +1073,7 @@ Now that we have our presence/absence data for cardinals, we can create
 a map.
 
 ``` r
+
 cnt <- st_as_sf(
   cardinals_zf,
   coords = c("longitude", "latitude"),
@@ -1084,6 +1110,7 @@ ggplot() +
 ## Clean up the mapping files if you no longer need them
 
 ``` r
+
 unlink("alberta_parks/", recursive = TRUE)
 ```
 
@@ -1094,10 +1121,8 @@ unlink("alberta_parks/", recursive = TRUE)
 - [Exploring regional
   filters](https://birdscanada.github.io/naturecounts/dev/region-areas.md)
 
-------------------------------------------------------------------------
-
-1.  Bird Studies Canada and NABCI. 2014. Bird Conservation Regions.
+[^1]: Bird Studies Canada and NABCI. 2014. Bird Conservation Regions.
     Published by Bird Studies Canada on behalf of the North American
     Bird Conservation Initiative.
     <https://birdscanada.org/bird-science/nabci-bird-conservation-regions>
-    Accessed: 2026-04-01
+    Accessed: 2026-05-30

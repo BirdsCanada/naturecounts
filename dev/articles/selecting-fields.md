@@ -1,6 +1,7 @@
 # Selecting columns and fields to download
 
 ``` r
+
 library(naturecounts)
 library(dplyr)
 ```
@@ -28,6 +29,7 @@ field/columns sets.
     function.
 
 ``` r
+
 meta_bmde_versions()
 ```
 
@@ -49,6 +51,7 @@ meta_bmde_versions()
     function
 
 ``` r
+
 meta_bmde_fields(version = "BMDE-BAND-2.00") |>
   head()
 ```
@@ -67,6 +70,7 @@ meta_bmde_fields(version = "BMDE-BAND-2.00") |>
     looking at the metadata associated with that collection.
 
 ``` r
+
 meta_collections() |> 
   head()
 ```
@@ -90,6 +94,7 @@ downloading data, but you can specify other versions with either the
 version name, or the shorthand.
 
 ``` r
+
 cardinals <- nc_data_dl(species = 19360, fields_set = "core", 
                         collection = "ABATLAS2", verbose = FALSE,
                         username = "testuser", info = "nc_vignette")
@@ -296,6 +301,7 @@ You can figure out exactly which fields these are, by removing all the
 fields from the `core` BMDE field set.
 
 ``` r
+
 names(cardinals)[!names(cardinals) %in% meta_bmde_fields(version = "core")$local_name]
 ```
 
@@ -315,6 +321,7 @@ these basic fields, by specifying `fields_set = custom`, and listing all
 additional `fields`.
 
 ``` r
+
 cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
                         fields = c("Sex", "SamplingEventIdentifier"), 
                         collection = "ABATLAS2", verbose = FALSE,
@@ -361,6 +368,7 @@ them on as a custom field set.
 For example, first collect the minimum field/column names.
 
 ``` r
+
 my_fields <- meta_bmde_fields(version = "minimum")$local_name
 my_fields
 ```
@@ -388,6 +396,7 @@ my_fields
 Then add in the extra fields.
 
 ``` r
+
 my_fields <- c(my_fields, "Sex", "LifeStage")
 my_fields
 ```
@@ -416,6 +425,7 @@ my_fields
 Now download the data.
 
 ``` r
+
 cardinals <- nc_data_dl(species = 19360, fields_set = "custom", 
                         fields = my_fields, 
                         collection = "ABATLAS2", verbose = FALSE,

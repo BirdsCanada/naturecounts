@@ -126,6 +126,7 @@ desired spatial scales.
 ## Examples
 
 ``` r
+
 # Using the included, test data on black-capped chickadees
 bcch # look at the data
 #>     record_id  collection project_id protocol_id protocol_type species_id

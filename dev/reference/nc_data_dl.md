@@ -272,31 +272,6 @@ p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
 #>     Records 45001 to 50000 / 122258
 #>     Records 50001 to 55000 / 122258
 #>     Records 55001 to 60000 / 122258
-#>     Records 60001 to 65000 / 122258
-#>     Records 65001 to 70000 / 122258
-#>     Records 70001 to 75000 / 122258
-#>     Records 75001 to 80000 / 122258
-#>     Records 80001 to 85000 / 122258
-#>     Records 85001 to 90000 / 122258
-#>     Records 90001 to 95000 / 122258
-#>     Records 95001 to 1e+05 / 122258
-#>     Records 100001 to 105000 / 122258
-#>     Records 105001 to 110000 / 122258
-#>     Records 110001 to 115000 / 122258
-#>     Records 115001 to 120000 / 122258
-#>     Records 120001 to 122258 / 122258
-#>   ABATLAS2
-#>     Records 1 to 5000 / 201357
-#>     Records 5001 to 10000 / 201357
-#>     Records 10001 to 15000 / 201357
-#>     Records 15001 to 20000 / 201357
-#>     Records 20001 to 25000 / 201357
-#>     Records 25001 to 30000 / 201357
-#>     Records 30001 to 35000 / 201357
-#>     Records 35001 to 40000 / 201357
-#>     Records 40001 to 45000 / 201357
-#>     Records 45001 to 50000 / 201357
-#>     Records 50001 to 55000 / 201357
 #> The server did not respond within 120s. Trying again...
 #> Error: The server has not respond within the 'timeout' specified.
 #> Either try again later or increase the 'timeout' period.

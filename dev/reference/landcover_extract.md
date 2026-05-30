@@ -115,6 +115,7 @@ provided `sf` 'POLYGON' or `terra` 'polygons' polygons.
 ## Examples
 
 ``` r
+
 # Using the included, test data on black-capped chickadees
 bcch # look at the data
 #>     record_id  collection project_id protocol_id protocol_type species_id
@@ -2711,7 +2712,22 @@ modis_files <- landcover_download(
   ed_email = ed_email
 )
 #> [MODIS Landcover Download] downloading data.
-#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
+#> Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     Downloading: 27 B     
 
 # Extract landcover data
 output <- landcover_extract(

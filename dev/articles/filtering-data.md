@@ -32,6 +32,7 @@ for more information on how to find species codes).
 **Packages**
 
 ``` r
+
 library(naturecounts)
 library(dplyr)
 library(lubridate)
@@ -40,6 +41,7 @@ library(lubridate)
 **Get the species code**
 
 ``` r
+
 search_species("boreal chickadee")
 ```
 
@@ -53,6 +55,7 @@ search_species("boreal chickadee")
 **Downloading data directly to a Data Frame**
 
 ``` r
+
 boreal_chickadee_df <- nc_data_dl(
   species = 14320, collection = c("BBS", "ABATLAS1", "ABATLAS2"),
   verbose = FALSE,
@@ -62,6 +65,7 @@ boreal_chickadee_df <- nc_data_dl(
 **Downloading data to a SQLite DataBase (`boreal_chickadee.nc`)**
 
 ``` r
+
 con <- nc_data_dl(
   species = 14320, collection = c("BBS", "ABATLAS1", "ABATLAS2"),
   sql_db = "boreal_chickadee", verbose = FALSE, 
@@ -72,12 +76,14 @@ Or, if starting a new session and you want to reconnect to *an existing
 SQLite database*, first create the connection to the database
 
 ``` r
+
 con <- DBI::dbConnect(RSQLite::SQLite(), dbname = "boreal_chickadee.nc")
 ```
 
 Select the naturecounts table
 
 ``` r
+
 boreal_chickadee_db <- tbl(con, "naturecounts")
 ```
 
@@ -88,6 +94,7 @@ data into a data frame (in which case it will be identical to
 leave it as a database as long as possible.
 
 ``` r
+
 boreal_chickadee_df <- collect(boreal_chickadee_db)
 ```
 
@@ -97,6 +104,7 @@ We will also use a helper function to add columns for `date` and `doy`
 For data frames, you directly modify the data frame object.
 
 ``` r
+
 boreal_chickadee_df <- format_dates(boreal_chickadee_df, overwrite = TRUE)
 ```
 
@@ -109,6 +117,7 @@ you do not wish to add fields to your SQLite database, you will have to
 data into a data frame first.
 
 ``` r
+
 con <- format_dates(con)
 boreal_chickadee_db <- tbl(con, "naturecounts")
 ```
@@ -117,6 +126,7 @@ Not all dates can be created if `survey_year`, `survey_month` or
 `survey_day` are missing.
 
 ``` r
+
 filter(boreal_chickadee_df, is.na(date)) |>
   select(survey_year, survey_month, survey_day, date)
 ```
@@ -159,11 +169,12 @@ as a category.
 the unique values in the column of interest
 
 ``` r
+
 count(boreal_chickadee_db, collection)
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   collection     n
     ##   <chr>      <int>
     ## 1 ABATLAS1     489
@@ -175,6 +186,7 @@ count(boreal_chickadee_db, collection)
 …keep
 
 ``` r
+
 alberta_atlas <- filter(boreal_chickadee_db, 
                         collection %in% c("ABATLAS1", "ABATLAS2"))
 ```
@@ -182,6 +194,7 @@ alberta_atlas <- filter(boreal_chickadee_db,
 …exclude (with `!`)
 
 ``` r
+
 alberta_atlas <- filter(boreal_chickadee_db, 
                         !collection %in% c("BBS"))
 ```
@@ -189,11 +202,12 @@ alberta_atlas <- filter(boreal_chickadee_db,
 3.  Confirm
 
 ``` r
+
 count(alberta_atlas, collection)
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   collection     n
     ##   <chr>      <int>
     ## 1 ABATLAS1     489
@@ -219,6 +233,7 @@ returns the numerical summary you define. You can also ‘pull’ out the
 survey years from the count.
 
 ``` r
+
 summarize(
   boreal_chickadee_db,
   min = min(survey_year, na.rm = TRUE), 
@@ -226,12 +241,13 @@ summarize(
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##     min   max
     ##   <int> <int>
     ## 1  1966  2010
 
 ``` r
+
 count(boreal_chickadee_db, survey_year) |>
   pull(survey_year)
 ```
@@ -245,18 +261,21 @@ count(boreal_chickadee_db, survey_year) |>
 …keep (note that the `,` is an implied `&`)
 
 ``` r
+
 recent <- filter(boreal_chickadee_db, survey_year >= 2005, survey_year <= 2007)
 ```
 
 …keep (explicitly)
 
 ``` r
+
 recent <- filter(boreal_chickadee_db, survey_year %in% c(2005:2007))
 ```
 
 3.  Confirm
 
 ``` r
+
 summarize(
   recent,
   min = min(survey_year, na.rm = TRUE), 
@@ -264,12 +283,13 @@ summarize(
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##     min   max
     ##   <int> <int>
     ## 1  2005  2007
 
 ``` r
+
 count(recent, survey_year) |>
   pull(survey_year)
 ```
@@ -289,13 +309,14 @@ same as a numerical filter.
 returns the numerical summary you define
 
 ``` r
+
 summarize(boreal_chickadee_db, 
           min = min(date, na.rm = TRUE), 
           max = max(date, na.rm = TRUE))
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   min        max       
     ##   <chr>      <chr>     
     ## 1 1966-06-02 2010-07-07
@@ -305,6 +326,7 @@ summarize(boreal_chickadee_db,
 …keep (note that the `,` is an implied `&`)
 
 ``` r
+
 field_season <- filter(boreal_chickadee_db, 
                        date >= "2010-05-10", date <= "2010-07-01")
 ```
@@ -312,6 +334,7 @@ field_season <- filter(boreal_chickadee_db,
 …exclude (with `!`; note that here we need to use the `&` explicitly)
 
 ``` r
+
 omit_field_season <- filter(boreal_chickadee_db, 
                             !(date >= "2010-05-10" & date <= "2010-07-01"))
 ```
@@ -319,13 +342,14 @@ omit_field_season <- filter(boreal_chickadee_db,
 3.  Confirm
 
 ``` r
+
 summarize(field_season, 
           min = min(date, na.rm = TRUE), 
           max = max(date, na.rm = TRUE))
 ```
 
     ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.51.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   min        max       
     ##   <chr>      <chr>     
     ## 1 2010-05-30 2010-06-30

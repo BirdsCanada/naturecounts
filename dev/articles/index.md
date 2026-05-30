@@ -59,6 +59,10 @@ naturecounts functions.
 
 - [Chapter 1 - Formatting Data for Covariate Download and
   Extraction](https://birdscanada.github.io/naturecounts/dev/articles/4.1-CovariateFormatting.md):
+- [Chapter 2 - Downloading and Extracting Landcover
+  Data](https://birdscanada.github.io/naturecounts/dev/articles/4.2-LandCover.md):
+- [Chapter 3 - Downloading and Extracting Vegetation
+  Indices](https://birdscanada.github.io/naturecounts/dev/articles/4.3-Vegetation.md):
 
 ### Additional Tutorials
 

@@ -23,6 +23,7 @@ function.
 ### Packages
 
 ``` r
+
 library(naturecounts)
 library(dplyr)
 library(ggplot2)
@@ -34,6 +35,7 @@ We’ll use the ‘core’ version of BMDE fields so that we include
 `CommonName` for convenience.
 
 ``` r
+
 rc <- nc_data_dl(collections = "RCBIOTABASE", fields_set = "core",
                  species = c(252456, 252494, 252491),
                  username = "testuser", info = "nc_vignette")
@@ -59,6 +61,7 @@ rc <- nc_data_dl(collections = "RCBIOTABASE", fields_set = "core",
 Let’s take a look at the butterfly species observations we have
 
 ``` r
+
 count(rc, CommonName)
 ```
 
@@ -70,6 +73,7 @@ count(rc, CommonName)
 How many sampling events?
 
 ``` r
+
 count(rc, SamplingEventIdentifier)
 ```
 
@@ -211,6 +215,7 @@ Lot’s of sampling events too. But some are missing (`NA`).
 Were all species reported?
 
 ``` r
+
 count(rc, AllSpeciesReported)
 ```
 
@@ -224,6 +229,7 @@ Finally, let’s take a peak at the observations recorded for these three
 species
 
 ``` r
+
 ggplot(data = rc, aes(x = CommonName, y = as.numeric(ObservationCount))) +
   geom_boxplot() +
   labs(title = "Number of individuals observed")
@@ -233,6 +239,7 @@ ggplot(data = rc, aes(x = CommonName, y = as.numeric(ObservationCount))) +
 most](format-zero-fill_files/figure-html/unnamed-chunk-6-1.png)
 
 ``` r
+
 ggplot(data = rc, aes(x = CommonName)) +
   geom_bar() +
   labs(title = "Number of sampling events the species was observed")
@@ -253,6 +260,7 @@ know if a species was or was not observed, if it wasn’t reported?),
 valid.
 
 ``` r
+
 rc_filled <- format_zero_fill(rc)
 ```
 
@@ -268,6 +276,7 @@ bird identification events (e.g., Christmas Bird Counts) may report all
 plants, etc. and vice versa.
 
 ``` r
+
 rc_all_species <- filter(rc, AllSpeciesReported == "Yes")
 count(rc_all_species, AllSpeciesReported)
 ```
@@ -278,12 +287,14 @@ count(rc_all_species, AllSpeciesReported)
 Now we can fill in all species missing from other sampling events.
 
 ``` r
+
 rc_filled <- format_zero_fill(rc_all_species)
 ```
 
     ##  - Converted 'fill' column ('ObservationCount') from character to numeric
 
 ``` r
+
 head(rc_filled)
 ```
 
@@ -296,6 +307,7 @@ head(rc_filled)
     ## 6     RCBIOTABASE-10015-1     252494                0
 
 ``` r
+
 ggplot(data = rc_filled, aes(x = factor(species_id), fill = ObservationCount > 0)) +
   geom_bar(position = "dodge") +
   labs(title = "Number of sampling events the species was observed")
@@ -315,6 +327,7 @@ To keep other columns associated with species id, specify them with the
 `extra_species` argument.
 
 ``` r
+
 rc_filled <- format_zero_fill(rc_all_species, 
                               extra_species = c("CommonName", "ScientificName"))
 ```
@@ -322,6 +335,7 @@ rc_filled <- format_zero_fill(rc_all_species,
     ##  - Converted 'fill' column ('ObservationCount') from character to numeric
 
 ``` r
+
 head(rc_filled)
 ```
 
@@ -345,6 +359,7 @@ in addition to the sampling event id, in the `by` argument. By default,
 `SamplingEventIdentifier` is used to identify specific sampling events.
 
 ``` r
+
 rc_filled <- format_zero_fill(rc_all_species, 
                               by = "SamplingEventIdentifier",
                               extra_event = c("latitude", "longitude"),
@@ -354,6 +369,7 @@ rc_filled <- format_zero_fill(rc_all_species,
     ##  - Converted 'fill' column ('ObservationCount') from character to numeric
 
 ``` r
+
 head(rc_filled)
 ```
 
@@ -379,6 +395,7 @@ only interested in whether a species has/has not been observed in a
 particular location.
 
 ``` r
+
 rc_loc_filled <- format_zero_fill(rc_all_species, 
                                   by = "utm_square")
 ```
@@ -388,6 +405,7 @@ rc_loc_filled <- format_zero_fill(rc_all_species,
     ##  - Converted 'fill' column ('ObservationCount') from character to numeric
 
 ``` r
+
 head(rc_loc_filled)
 ```
 
@@ -405,6 +423,7 @@ to be slowed down much, but in larger examples, it can be much faster to
 simplify the dataset first.
 
 ``` r
+
 rc_sum <- rc_all_species |>
   group_by(utm_square, species_id, AllSpeciesReported) |>
   summarize(ObservationCount = sum(as.numeric(ObservationCount), na.rm = TRUE),
@@ -426,6 +445,7 @@ Now if we zero-fill this data set, we get a zero-filled, aggregated
 dataset.
 
 ``` r
+
 rc_sum_filled <- format_zero_fill(rc_sum, by = "utm_square")
 head(rc_sum_filled)
 ```
@@ -445,12 +465,14 @@ in the data, but often you might be only interested in one or two
 species. We can specify which species with the `species` argument.
 
 ``` r
+
 rc_sp_filled <- format_zero_fill(rc_all_species, species = "252456")
 ```
 
     ##  - Converted 'fill' column ('ObservationCount') from character to numeric
 
 ``` r
+
 head(rc_sp_filled)
 ```
 
@@ -473,6 +495,7 @@ For example, if you wanted to deal only with Presence/Absence you could
 create a new `presence` column and zero-fill this column.
 
 ``` r
+
 rc_presence <- rc_all_species |>
   select(species_id, AllSpeciesReported, ObservationCount, SamplingEventIdentifier) |>
   mutate(presence = if_else(as.numeric(ObservationCount) > 0, TRUE, FALSE))
@@ -495,6 +518,7 @@ head(rc_presence)
     ## 6     TRUE
 
 ``` r
+
 rc_presence_filled <- format_zero_fill(rc_presence, fill = "presence")
 head(rc_presence_filled)
 ```

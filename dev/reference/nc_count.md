@@ -183,24 +183,25 @@ the "Full access?" box in Step 2 of the form.
 ## Examples
 
 ``` r
+
 # Count all publicly available records:
 # \donttest{
 nc_count()
 #> Without a username, using 'show = "all"'
-#> # A tibble: 544 × 4
+#> # A tibble: 556 × 4
 #>    collection    akn_level access     nrecords
 #>    <chr>             <int> <chr>         <int>
 #>  1 ABATLAS1              5 full         122258
 #>  2 ABATLAS2              5 full         201357
 #>  3 ABBIRDRECS            5 full         357264
 #>  4 ABOWLS                3 by request    20956
-#>  5 ACCWS                 3 by request    27801
+#>  5 ACCWS                 5 full          27807
 #>  6 ACCWS_HIST            5 full          20461
-#>  7 ATBANS                3 by request      268
-#>  8 ATOWLS                3 by request    35458
-#>  9 AWSGS                 3 by request    17968
-#> 10 BBL-1960-1969         5 full       15045208
-#> # ℹ 534 more rows
+#>  7 ATOWLS               NA NA            36231
+#>  8 AWSGS                 3 by request    17968
+#>  9 BBL-1960-1969         5 full       15045208
+#> 10 BBL-1970-1979         5 full       12837516
+#> # ℹ 546 more rows
 # }
 
 # Count publicly available records for Manitoba, Canada

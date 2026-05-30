@@ -36,6 +36,7 @@ A data frame with the relevant codes and other information
 ## Examples
 
 ``` r
+
 search_region("Mexico", type = "country")   # MX
 #> # A tibble: 1 × 3
 #>   country_code country_name country_name_fr

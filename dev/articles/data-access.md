@@ -1,6 +1,7 @@
 # Data Access
 
 ``` r
+
 library(naturecounts)
 ```
 
@@ -69,6 +70,7 @@ To get a list of collections to which you have access, use the
 function.
 
 ``` r
+
 nc_permissions(username = "sample")
 ```
 
@@ -80,6 +82,7 @@ user the
 function.
 
 ``` r
+
 nc_count(username = "sample")
 ```
 
@@ -93,6 +96,7 @@ To see which data you do not (currently) have access to, use the
 `show = "all"` argument.
 
 ``` r
+
 nc_count(username = "sample", show = "all")
 ```
 
@@ -115,6 +119,7 @@ collections through the online portal) with the
 function.
 
 ``` r
+
 nc_requests(username = "USER")
 ```
 
@@ -151,6 +156,7 @@ Data to which you have full access can be directly downloaded via the
 function.
 
 ``` r
+
 bittern <- nc_data_dl(species = 2490, username = "sample", info = "nc_example")
 ```
 
@@ -171,6 +177,7 @@ For example, the previous download created an `api` `request_id`. To see
 [`nc_requests()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_requests.md).
 
 ``` r
+
 nc_requests(username = "testuser", type = "api")[1,]
 ```
 
@@ -183,6 +190,7 @@ This data can be re-downloaded (more quickly) by using this stored
 `request_id`.
 
 ``` r
+
 old <- nc_data_dl(request_id = 185663, username = "testuser")
 ```
 
@@ -194,6 +202,7 @@ the `request_id` can be used to download data with the
 function.
 
 ``` r
+
 nc_requests(username = "USER")
 ```
 
@@ -207,5 +216,6 @@ nc_requests(username = "USER")
     4 date_type (s); project ('SKATLAS1BE_DO','SKATLAS1BE_SUMM','SKATLAS1PC')
 
 ``` r
+
 sask <- nc_data_dl(request_id = 155886, username = "USER")
 ```

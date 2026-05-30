@@ -23,16 +23,16 @@
 Required and extra fields returned by the API are expected and treated,
 respectively, as follows:
 
-| Function                                                                                         | API Entry Point           | Required fields           | Extra fields |
-|--------------------------------------------------------------------------------------------------|---------------------------|---------------------------|--------------|
-| [`nc_count()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_count.md)             | `data/list_collections`   | `collection`, `nrecords`  | Ignored      |
-| [`nc_count()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_count.md)             | `data/list_permissions`   | `collection`, `akn_level` | Ignored      |
-| [`nc_count()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_count.md)             | `metadata/collections`    | `collection`, `akn_level` | Ignored      |
-| [`nc_permissions()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_permissions.md) | `data/list_permissions`   | `collection`, `akn_level` | Ignored      |
-| [`srv_auth()`](https://birdscanada.github.io/naturecounts/dev/reference/srv_auth.md)             | `data/authenticate`       | `token`                   | Ignored      |
-| [`nc_data_dl()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_data_dl.md)         | `data/release_request_id` | None (close request only) | Ignored      |
-| [`nc_data_dl()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_data_dl.md)         | `data/get_data`           | Any                       | Added        |
-| `meta_XXX()`                                                                                     | `metadata/XXX`            | Any                       | Added        |
+| Function | API Entry Point | Required fields | Extra fields |
+|----|----|----|----|
+| [`nc_count()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_count.md) | `data/list_collections` | `collection`, `nrecords` | Ignored |
+| [`nc_count()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_count.md) | `data/list_permissions` | `collection`, `akn_level` | Ignored |
+| [`nc_count()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_count.md) | `metadata/collections` | `collection`, `akn_level` | Ignored |
+| [`nc_permissions()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_permissions.md) | `data/list_permissions` | `collection`, `akn_level` | Ignored |
+| [`srv_auth()`](https://birdscanada.github.io/naturecounts/dev/reference/srv_auth.md) | `data/authenticate` | `token` | Ignored |
+| [`nc_data_dl()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_data_dl.md) | `data/release_request_id` | None (close request only) | Ignored |
+| [`nc_data_dl()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_data_dl.md) | `data/get_data` | Any | Added |
+| `meta_XXX()` | `metadata/XXX` | Any | Added |
 
 #### What will break the package
 

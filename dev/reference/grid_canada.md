@@ -33,6 +33,7 @@ sf data frame with polygon grid
 ## Examples
 
 ``` r
+
 gc <- grid_canada(200)
 gc_buff <- grid_canada(200, buffer = 0)
 
