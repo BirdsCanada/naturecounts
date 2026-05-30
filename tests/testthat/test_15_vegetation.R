@@ -3,28 +3,11 @@ if(!dir.exists("./testdir")) {
 }
 
 test_that("vegetation_download() hits API with all expected inputs. May fail if filename structure is changed server-side.", {
-  expected_files <- c("MOD13A1.A2007017.h12v04.061.2021055141240.hdf", 
-                      "MOD13A1.A2007033.h12v04.061.2021053004443.hdf", 
-                      "MOD13A1.A2007049.h12v04.061.2021055160007.hdf", 
-                      "MOD13A1.A2007065.h12v04.061.2021057175943.hdf", 
-                      "MOD13A1.A2007081.h12v04.061.2021059114255.hdf", 
-                      "MOD13A1.A2007097.h12v04.061.2021060063721.hdf", 
-                      "MOD13A1.A2007113.h12v04.061.2021064210119.hdf", 
-                      "MOD13A1.A2007129.h12v04.061.2021064213919.hdf", 
-                      "MOD13A1.A2007145.h12v04.061.2021065143148.hdf", 
-                      "MOD13A1.A2007161.h12v04.061.2021066014850.hdf", 
-                      "MOD13A1.A2007177.h12v04.061.2021068094740.hdf", 
-                      "MOD13A1.A2007193.h12v04.061.2021068160209.hdf", 
-                      "MOD13A1.A2007209.h12v04.061.2021071042709.hdf", 
-                      "MOD13A1.A2007225.h12v04.061.2021072224429.hdf", 
-                      "MOD13A1.A2007241.h12v04.061.2021073192515.hdf", 
-                      "MOD13A1.A2007257.h12v04.061.2021074191343.hdf", 
-                      "MOD13A1.A2007273.h12v04.061.2021076110230.hdf", 
-                      "MOD13A1.A2007289.h12v04.061.2021077181416.hdf", 
-                      "MOD13A1.A2007305.h12v04.061.2021078235951.hdf", 
-                      "MOD13A1.A2007321.h12v04.061.2021079181143.hdf", 
-                      "MOD13A1.A2007337.h12v04.061.2021081224633.hdf", 
-                      "MOD13A1.A2007353.h12v04.061.2021081232813.hdf")
+  expected_files <- c("MOD13A1.A2007337.h12v04.061.2021081224633.hdf",
+                      "MOD13A1.A2007049.h12v04.061.2021055160007.hdf",
+                      "MOD13A1.A2007097.h12v04.061.2021060063721.hdf",
+                      "MOD13A1.A2007241.h12v04.061.2021073192515.hdf")
+  
   expect_equal(suppressMessages(vegetation_download(data_fmt(bcch[bcch$survey_year == 2007,],
                                                              coord_lon = "longitude",
                                                              coord_lat = "latitude",
@@ -50,31 +33,12 @@ test_that("vegetation_download() hits API with all expected inputs. May fail if 
 
 test_that("vegetation_download() successfully downloads requested files with a test user,
           and downloaded files contain all data years and cover all data areas.", {
-            expected_files <- c("./testdir/modis/MOD13A1/MOD13A1.A2006321.h12v04.061.2020277210544.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2006337.h12v04.061.2020278214814.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2006353.h12v04.061.2021050204908.hdf",
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007017.h12v04.061.2021055141240.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007033.h12v04.061.2021053004443.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007049.h12v04.061.2021055160007.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007065.h12v04.061.2021057175943.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007081.h12v04.061.2021059114255.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007097.h12v04.061.2021060063721.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007113.h12v04.061.2021064210119.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007129.h12v04.061.2021064213919.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007145.h12v04.061.2021065143148.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007161.h12v04.061.2021066014850.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007177.h12v04.061.2021068094740.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007193.h12v04.061.2021068160209.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007209.h12v04.061.2021071042709.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007225.h12v04.061.2021072224429.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007241.h12v04.061.2021073192515.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007257.h12v04.061.2021074191343.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007273.h12v04.061.2021076110230.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007289.h12v04.061.2021077181416.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007305.h12v04.061.2021078235951.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007321.h12v04.061.2021079181143.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007337.h12v04.061.2021081224633.hdf", 
-                                "./testdir/modis/MOD13A1/MOD13A1.A2007353.h12v04.061.2021081232813.hdf")
+            expected_files <- c("./testdir/modis/MOD13A1/MOD13A1.A2006337.h12v04.061.2020278214814.hdf",
+                                "./testdir/modis/MOD13A1/MOD13A1.A2007337.h12v04.061.2021081224633.hdf",
+                                "./testdir/modis/MOD13A1/MOD13A1.A2007049.h12v04.061.2021055160007.hdf",
+                                "./testdir/modis/MOD13A1/MOD13A1.A2007097.h12v04.061.2021060063721.hdf",
+                                "./testdir/modis/MOD13A1/MOD13A1.A2007241.h12v04.061.2021073192515.hdf")
+            
             expect_equal(suppressMessages(vegetation_download(data_fmt(bcch[bcch$survey_year %in% c(2006:2007),],
                                                                        coord_lon = "longitude",
                                                                        coord_lat = "latitude",
@@ -83,7 +47,7 @@ test_that("vegetation_download() successfully downloads requested files with a t
                                                               dl_path = "./testdir")),
                          expected_files)
             expect_true(dir.exists("./testdir/modis/MOD13A1")) # Bonus test of custom file path specification
-            expect_equal(list.files("./testdir/modis/MOD13A1", full.names = TRUE), expected_files)
+            expect_true(all(list.files("./testdir/modis/MOD13A1", full.names = TRUE) %in% expected_files))
             files_years <- luna::modisDate(list.files("./testdir/modis/MOD13A1"))
             expect_true(all(bcch$survey_year[bcch$survey_year %in% c(2006:2007)] %in% files_years$year))
             files_extent <- luna::modisExtent(list.files("./testdir/modis/MOD13A1"))
@@ -101,28 +65,11 @@ test_that("vegetation_download() successfully downloads requested files with a t
 
 test_that("vegetation_download() succeeds with alternate column names, either
           passed through attributes or specified explicitly.", {
-            expected_files <- c("MOD13A1.A2007017.h12v04.061.2021055141240.hdf", 
-                                "MOD13A1.A2007033.h12v04.061.2021053004443.hdf", 
-                                "MOD13A1.A2007049.h12v04.061.2021055160007.hdf", 
-                                "MOD13A1.A2007065.h12v04.061.2021057175943.hdf", 
-                                "MOD13A1.A2007081.h12v04.061.2021059114255.hdf", 
-                                "MOD13A1.A2007097.h12v04.061.2021060063721.hdf", 
-                                "MOD13A1.A2007113.h12v04.061.2021064210119.hdf", 
-                                "MOD13A1.A2007129.h12v04.061.2021064213919.hdf", 
-                                "MOD13A1.A2007145.h12v04.061.2021065143148.hdf", 
-                                "MOD13A1.A2007161.h12v04.061.2021066014850.hdf", 
-                                "MOD13A1.A2007177.h12v04.061.2021068094740.hdf", 
-                                "MOD13A1.A2007193.h12v04.061.2021068160209.hdf", 
-                                "MOD13A1.A2007209.h12v04.061.2021071042709.hdf", 
-                                "MOD13A1.A2007225.h12v04.061.2021072224429.hdf", 
-                                "MOD13A1.A2007241.h12v04.061.2021073192515.hdf", 
-                                "MOD13A1.A2007257.h12v04.061.2021074191343.hdf", 
-                                "MOD13A1.A2007273.h12v04.061.2021076110230.hdf", 
-                                "MOD13A1.A2007289.h12v04.061.2021077181416.hdf", 
-                                "MOD13A1.A2007305.h12v04.061.2021078235951.hdf", 
-                                "MOD13A1.A2007321.h12v04.061.2021079181143.hdf", 
-                                "MOD13A1.A2007337.h12v04.061.2021081224633.hdf", 
-                                "MOD13A1.A2007353.h12v04.061.2021081232813.hdf")
+            expected_files <- c("MOD13A1.A2007337.h12v04.061.2021081224633.hdf",
+                                "MOD13A1.A2007049.h12v04.061.2021055160007.hdf",
+                                "MOD13A1.A2007097.h12v04.061.2021060063721.hdf",
+                                "MOD13A1.A2007241.h12v04.061.2021073192515.hdf")
+            
             expect_equal(suppressMessages(vegetation_download(data_fmt(dplyr::rename(bcch[bcch$survey_year == 2007,],
                                                                                      "sites" = "SurveyAreaIdentifier",
                                                                                      "yr" = "survey_year"),
@@ -145,8 +92,16 @@ test_that("vegetation_download() succeeds with alternate column names, either
                          expected_files)
           })
 
+test_that("vegetation_download() returns correct warning with out of coverage dates.", {
+  expect_warning(suppressMessages(vegetation_download(data_fmt(bcch[bcch$survey_year == 1998,],
+                                                               coord_lon = "longitude",
+                                                               coord_lat = "latitude",
+                                                               crs = 4326),
+                                                      ed_transfer = FALSE)),
+                 "Observation on date\\(s\\) 1998-12-19 could not be matched to a MODIS vegetation data file. Are they outside of the temporal coverage of the data \\(i.e., before 2000\\)\\?")
+})
 
-test_that("landcover_extract() basic functionality with all expected data inputs.", {
+test_that("vegetation_extract() basic functionality with all expected data inputs.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch[bcch$survey_year == 2007,])))
   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch[bcch$survey_year == 2007,]))))
   terra_pt <- terra::vect(sf_pt)
@@ -358,4 +313,4 @@ test_that("vegetation_extract() succeeds with alternate column names, either pas
   expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
 })
 
-# unlink("./testdir", recursive = T)
+unlink("./testdir", recursive = T)

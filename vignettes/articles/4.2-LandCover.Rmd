@@ -21,9 +21,9 @@ This tutorial assumes you have a basic understanding of working with spatial dat
 
 By the end of **Chapter 2 - Downloading and Extracting Landcover Data**, users will know how to:
 
--   Have a basic understanding of the MODIS Terra/Aqua Landcover product accessed through `landcover_download()` and `landcover_extract()`: [MODIS Terra/Aqua Landcover Data](#2.1modis)
--   Use `landcover_download()` to download MODIS Landcover data ready to match to observations in your data: [Downloading landcover data with `landcover_download()`](#2.2download).
--   Use `landcover_extract()` to extract and summarize landcover data for each observation in their data: [Extracting landcover data with `landcover_extract()`](#2.3extract).
+- Have a basic understanding of the MODIS Terra/Aqua Landcover product accessed through `landcover_download()` and `landcover_extract()`: [MODIS Terra/Aqua Landcover Data](#2.1modis)
+- Use `landcover_download()` to download MODIS Landcover data ready to match to observations in your data: [Downloading landcover data with `landcover_download()`](#2.2download).
+- Use `landcover_extract()` to extract and summarize landcover data for each observation in their data: [Extracting landcover data with `landcover_extract()`](#2.3extract).
 
 This R tutorial requires the following packages:
 
@@ -40,11 +40,11 @@ The [MODIS MCD12Q1 Landcover product](https://ladsweb.modaps.eosdis.nasa.gov/mis
 
 The raw spectral data from the MODIS Terra and Aqua satellites are processed to assign each grid cell to a landcover category. There are five available landcover classification schema:
 
--   International Geosphere-Biosphere Program (IGBP) scheme: a 17-class scheme with 11 natural vegetation classes, three human-altered classes, and three non-vegetated classes.
--   University of Maryland (UMD) scheme: a 16-class scheme with 11 natural vegetation classes, three human-altered classes, and two non-vegetated classes. Differs from IGBP by combining barren and permanent snow and ice classes into one non-vegetated lands class.
--   Leaf Area Index (LAI) scheme: a 11-class scheme with eight vegetated classes (which describe natural vegetation as well as cropland), one human-altered class (focusing only on impervious surfaces), and two non-vegetated classes.
--   BIOME-Biogeochemical Cycles (BGC) scheme: a 9-class scheme with six vegetation classes (which describe natural vegetation as well as cropland), one human-altered class (focusing only on impervious surfaces), and two non-vegetated classes.
--   Plant Functional Type (PFT) scheme: a 12-class scheme, with six natural vegetation classes, three human-altered classes (with separation between cereal and broadleaf croplands), and three non-vegetated classes.
+- International Geosphere-Biosphere Program (IGBP) scheme: a 17-class scheme with 11 natural vegetation classes, three human-altered classes, and three non-vegetated classes.
+- University of Maryland (UMD) scheme: a 16-class scheme with 11 natural vegetation classes, three human-altered classes, and two non-vegetated classes. Differs from IGBP by combining barren and permanent snow and ice classes into one non-vegetated lands class.
+- Leaf Area Index (LAI) scheme: a 11-class scheme with eight vegetated classes (which describe natural vegetation as well as cropland), one human-altered class (focusing only on impervious surfaces), and two non-vegetated classes.
+- BIOME-Biogeochemical Cycles (BGC) scheme: a 9-class scheme with six vegetation classes (which describe natural vegetation as well as cropland), one human-altered class (focusing only on impervious surfaces), and two non-vegetated classes.
+- Plant Functional Type (PFT) scheme: a 12-class scheme, with six natural vegetation classes, three human-altered classes (with separation between cereal and broadleaf croplands), and three non-vegetated classes.
 
 Users should consider which scheme and level of detail best suits their research question/study system before proceeding to using these data. This may mean considering the level of landcover detail they wish to understand a study species' response to (*"do I care whether my species responds to needleleaf or broadleaf trees differently?"*), ensuring a particular habitat type is described by their selected scheme (*"I am studying the effect of croplands on my species, so I should make sure to choose a scheme with the appropriate cropland category."*), or trying multiple schema and checking whether any categories are poorly represented in their study area (*"Hm, not much representation of barren or snow and ice landcover, maybe I'll choose a scheme that lumps those into a larger, more represented category."*)
 
@@ -61,7 +61,7 @@ First, lets prep some data from NatureCounts for use in downloading MODIS data u
 head(bcch)
 
 # This dataset is in a data.frame format, and contains the columns we need! We'll
-# need to to convert it into an sf objectf or use in landcover_download().
+# need to to convert it into an sf object for use in landcover_download().
 bcch %>%
   select(latitude, longitude, survey_year) %>%
   head()
@@ -76,9 +76,9 @@ formatted <- data_fmt(bcch)
 view(formatted)
 ```
 
-The only other prerequisite here is an [EarthData](https://urs.earthdata.nasa.gov/users/newhttps://urs.earthdata.nasa.gov/users/new) account, which is necessary to access MODIS data stored in the NASA EarthData Archive. Users can register at the link above.
+The only other prerequisite here is an [EarthData](https://urs.earthdata.nasa.gov/users/new) account, which is necessary to access MODIS data stored in the NASA EarthData Archive. Users can register at the link above.
 
-Supplying our formatted data and EarthData account email to `landcover_download()` will begin the download process. If the user wishes to just see which files would be downloaded without executing the download, they can do so by setting `ed_transfer` to `FALSE`. Your EarthData account password can either be stored in your .Renviron file by adding the line `EarthData_password = "yourpassword"` or can be supplied through the resulting pop-up window if no `Earthdata_password` is found in your .Renviron. This is done securely using the `askpass` package used in `naturecounts` commands.
+Supplying our formatted data and EarthData account email to `landcover_download()` will begin the download process. If the user wishes to just see which files would be downloaded without executing the download, they can do so by setting `ed_transfer` to `FALSE`. Your EarthData account password can either be stored in your .Renviron file by adding the line `EarthData_password = "yourpassword"` or can be supplied through the resulting pop-up window if no `Earthdata_password` is found in your .Renviron. This is done securely using the `askpass` package used in `naturecounts` functions.
 
 ``` r
 # Let's see which files would be downloaded for our data
@@ -107,7 +107,7 @@ Examining the `files` object, we can see it is a character vector containing the
 
 Once we have gathered the appropriate MODIS landcover data files, using `landcover_download()` or otherwise, we will want to extract the appropriate values and match them to our observations. Traditionally this might be accomplished with complicated for-loops running through each observation and matching it to the appropriate tile and year. Again, this would take significant time for the researcher and could be prone to errors for those not experienced with spatial operations in R. In these cases, `landcover_extract()` can help make the process quicker and easier.
 
-This function works slightly differently depending on whether the input site data are in point or polygon format (again, either `sf` or `terra` objects are accepted). For point data, the extraction process will return the landcover category that each site point falls within in a column named `LC_Type3_Class`. This is carried out via a call to `terra::extract()`. For polygon data, the extraction process will return the percent of the polygon (for buffered points this means the proportion of the buffered area) that each landcover category takes up with a column for each class named `LC_Type3_[Class Name]`. This is carried out via a call to `landscapemetrics::calculate_lsm()`
+This function works slightly differently depending on whether the input site data are in point or polygon format (again, either `sf` or `terra` objects are accepted). For point data, the extraction process will return the landcover category that each site point falls within in a column named `LC_TypeX_Class` (where X is the number associated with the selected landcover classification scheme). This is carried out via a call to `terra::extract()`. For polygon data, the extraction process will return the percent of the polygon (for buffered points this means the proportion of the buffered area) that each landcover category takes up with a column for each class named `LC_TypeX_[Class Name]`. This is carried out via a call to `landscapemetrics::calculate_lsm()`
 
 To execute these extractions, we need to select which scheme we want to use, and specify it in the `covariates` argument. The appropriate covariate codes can be found in the `covariate_name` column of the table called with `nc_covariate_table()`. We will use the Leaf Area Index scheme, which is called by setting `covariates = "modis_lctype3"`. We will need to point `landcover_extract()` to where our MODIS data files are stored by providing a character vector with the filepaths of all applicable files to the argument `landcover_files`. Conveniently, this is exactly the output of `landcover_download()` that we stored in our `files` object.
 

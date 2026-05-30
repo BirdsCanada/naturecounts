@@ -390,7 +390,7 @@ vegetation_extract <- function(
       date = as.Date(paste0(survey_year, "-", survey_month, "-", survey_day))
     ) %>%
     dplyr::mutate(yday = lubridate::yday(date)) %>%
-    dplyr::select(SurveyAreaIdentifier, survey_year, yday, geometry) %>%
+    dplyr::select(SurveyAreaIdentifier, survey_year, date, yday, geometry) %>%
     sf::st_transform(terra::crs(terra::rast(modis_files$filename[1])))
   
   # If buffered, extract coordinates from centroids. Append coordinates.
@@ -416,7 +416,7 @@ vegetation_extract <- function(
     for (j in unique(modis_match$survey_year[
       modis_match$SurveyAreaIdentifier == i
     ])) {
-      for (k in unique(modis_match$yday[
+      for (k in unique(modis_match$date[
         modis_match$SurveyAreaIdentifier == i & modis_match$survey_year == j
       ])) {
         # Create temporary object containing only data for site i on day k
@@ -425,7 +425,7 @@ vegetation_extract <- function(
           modis_match,
           SurveyAreaIdentifier == i,
           survey_year == j,
-          yday == k
+          date == k
         )
         
         # Check to see whether the site-date combination can be matched to a
@@ -437,8 +437,8 @@ vegetation_extract <- function(
             modis_files$xmax > tmp$X &
             modis_files$ymin < tmp$Y &
             modis_files$ymax > tmp$Y &
-            modis_files$yday <= tmp$yday &
-            modis_files$endyday > tmp$yday,
+            modis_files$date <= tmp$date &
+            modis_files$enddate > tmp$date,
           ]) ==
           0
         ) {
@@ -467,7 +467,7 @@ vegetation_extract <- function(
           # data files?
           yday_check <- ifelse(
             nrow(modis_files[
-              modis_files$yday <= tmp$yday & modis_files$endyday > tmp$yday,
+              modis_files$date <= tmp$date & modis_files$enddate > tmp$date,
             ]) >
               0,
             TRUE,
@@ -501,15 +501,15 @@ vegetation_extract <- function(
                   modis_files$xmax > tmp$X &
                   modis_files$ymin < tmp$Y &
                   modis_files$ymax > tmp$Y &
-                  modis_files$yday <= tmp$yday &
-                  modis_files$endyday > tmp$yday,
+                  modis_files$date <= tmp$date &
+                  modis_files$enddate > tmp$date,
               ]
               
               # Pick the most recently produced file.
               modis_match[
                 modis_match$SurveyAreaIdentifier == i &
                   modis_match$survey_year == j &
-                  modis_match$yday == k,
+                  modis_match$date == k,
                 "filename"
               ] <- poss_files$filename[
                 poss_files$productiondate == max(poss_files$productiondate)
@@ -587,6 +587,14 @@ vegetation_extract <- function(
   
   # Remove observations without matches.
   modis_match <- dplyr::filter(modis_match, !is.na(filename))
+  
+  # Edge case: there is a column in the data called yday that we don't want to
+  # overwrite.
+  
+  if("yday" %in% names(data)) {
+    yday_storage <- data$yday
+    yday_before <- names(data)[which(names(data) == "yday")-1]
+  }
   
   # Create an ordinal date column in original data for later joining.
   data$yday <- paste0(
@@ -783,6 +791,15 @@ vegetation_extract <- function(
 
   # Remove ordinal date column from original data.
   data <- dplyr::select(data, -yday)
+  
+  # If a yday column was stored, return it here
+  if(exists("yday_storage")){
+    data$yday <- yday_storage
+    data <- dplyr::relocate(.data = data, "yday", .after = yday_before)
+    
+    rm(yday_storage)
+    rm(yday_before)
+  }
   
   # Check if attributes were found and stored from input data. If they were
   # found reattach.

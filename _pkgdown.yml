@@ -59,6 +59,8 @@ reference:
   - data_buff
   - landcover_download
   - landcover_extract
+  - vegetation_download
+  - vegetation_extract
 - title: Data
   desc: Included example data sets
   contents:
@@ -98,6 +100,8 @@ articles:
   desc: An R guide to help download and extract covariate data using naturecounts functions.
   contents:
   - '`articles/4.1-CovariateFormatting`'
+  - '`articles/4.2-LandCover`'
+  - '`articles/4.3-Vegetation`'
 - title: Additional Tutorials
   desc: How-to articles describing common tasks
   contents:

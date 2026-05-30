@@ -351,158 +351,76 @@ vegetation_download <- function(
   for (i in unique(c(FALSE, ed_transfer))) {
     
     if (i == TRUE) {
-      message("[MODIS NDVI/EVI Download] downloading data.")
+      if(length(modis_files > 0)) {
+        message("[MODIS NDVI/EVI Download] downloading data.")
+      }
     } else if (i == FALSE & ed_transfer == FALSE) {
       message("[MODIS NDVI/EVI Download] fetching data filenames.")
     }
     
-    # Open list to store filenames.
-    modis_files <- list()
 
-    # Make API call using luna::getNASA() fetching all data between the
-    # first day of the first month surveyed in the first survey year to the
-    # last day of the last month surveyed in the first survey year. If data for
-    # that year is not available, skip and warn.
-    tryCatch(
-      modis_files[[as.character(min(data$survey_year))]] <- luna::getNASA(
-        product = "MOD13A1",
-        start = paste0(
-          min(data$survey_year),
-          "-",
-          min(data$survey_month[data$survey_year == min(data$survey_year)]),
-          "-01"
-        ),
-        end = paste0(
-          min(data$survey_year),
-          "-",
-          max(data$survey_month[data$survey_year == min(data$survey_year)]),
-          ifelse(
-            max(data$survey_month[
-              data$survey_year == min(data$survey_year)
-            ]) %in%
-              c(1, 3, 5, 7, 8, 10, 12),
-            "-31",
-            ifelse(
-              max(data$survey_month[
-                data$survey_year == min(data$survey_year)
-              ]) %in%
-                c(4, 6, 9, 11),
-              "-30",
-              ifelse(
-                lubridate::leap_year(min(data$survey_year)),
-                "-29",
-                "-28"
-              )
-            )
-          )
-        ),
-        aoi = terra::project(study_area, "epsg:4326"),
-        download = i,
-        overwrite = FALSE,
-        path = ifelse(
-          is.null(dl_path),
-          "./modis/MOD13A1",
-          paste0(dl_path, "/modis/MOD13A1")
-        ),
-        username = ed_email,
-        password = ed_password
-      ),
-      warning = function(w) {
-        if (conditionMessage(w) == "No results found") {
-          if (!i) {
-            warning(
-              paste0(
-                "[MODIS NDVI/EVI Download] no data found for year ",
-                min(data$survey_year),
-                ". Is it outside of the temporal coverage of this dataset?"
-              ),
-              call. = FALSE
-            )
-          }
-        } else {
-          warning(conditionMessage(w))
-        }
-      }
-    )
+    dates <- sort(paste0(data$survey_year, 
+                                 "-", 
+                                 data$survey_month,
+                                 "-",
+                                 data$survey_day))
     
-    if(length(unique(data$survey_year)) > 1) {
-      # Loop through remaining survey years and repeat process.
-      for (j in sort(unique(data$survey_year))[
-        2:length(unique(data$survey_year))
-      ]) {
-        tryCatch(
-          modis_files[[as.character(j)]] <- luna::getNASA(
-            product = "MOD13A1",
-            start = paste0(
-              j,
-              "-",
-              min(data$survey_month[data$survey_year == j]),
-              "-01"
+    # Open vector to store filenames.
+    modis_files <- c()
+    warning_dates <- c()
+    
+    for(j in dates) {
+      tryCatch(
+        tmp <- luna::getNASA(
+          product = "MOD13A1",
+          start = j,
+          end = j,
+          aoi = terra::project(study_area, "epsg:4326"),
+          download = i,
+          overwrite = FALSE,
+          path = ifelse(
+            is.null(dl_path),
+            "./modis/MOD13A1",
+            paste0(dl_path, "/modis/MOD13A1")
             ),
-            end = paste0(
-              j,
-              "-",
-              max(data$survey_month[data$survey_year == j]),
-              ifelse(
-                max(data$survey_month[data$survey_year == j]) %in%
-                  c(1, 3, 5, 7, 8, 10, 12),
-                "-31",
-                ifelse(
-                  max(data$survey_month[data$survey_year == j]) %in%
-                    c(4, 6, 9, 11),
-                  "-30",
-                  ifelse(
-                    lubridate::leap_year(j) &
-                      max(data$survey_month[data$survey_year == j]) == 2,
-                    "-29",
-                    "-28"
-                  )
-                )
-              )
-            ),
-            aoi = terra::project(study_area, "epsg:4326"),
-            download = i,
-            overwrite = FALSE,
-            path = ifelse(
-              is.null(dl_path),
-              "./modis/MOD13A1",
-              paste0(dl_path, "/modis/MOD13A1")
-            ),
-            username = ed_email,
-            password = ed_password
+          username = ed_email,
+          password = ed_password
           ),
-          warning = function(w) {
-            if (conditionMessage(w) == "No results found") {
-              if (!i) {
-                warning(
-                  paste0(
-                    "[MODIS NDVI/EVI Download] no data found for year ",
-                    j,
-                    ". Is it outside of the temporal coverage of this dataset?"
-                  ),
-                  call. = FALSE
-                )
-              }
-            } else {
-              warning(conditionMessage(w))
-            }
+        warning = function(w) {
+          if (conditionMessage(w) == "No results found") {
+            warning_dates <<- unique(c(warning_dates, j))
+          } else {
+            warning(conditionMessage(w))
           }
-        )
+        }
+      )
+      
+      if(!(j %in% warning_dates)) {
+        modis_files <- unique(c(modis_files, tmp))
       }
     }
-
-    # Convert list to a flat vector.
-    modis_files <- unlist(modis_files, use.names = FALSE)
-
+    
+    # Warn of any out of range dates on first iteration only.
+    if(i == FALSE & length(warning_dates > 0)) {
+      warning("Observation on date(s) ", 
+              stringr::str_flatten_comma(warning_dates),
+              " could not be matched to a MODIS vegetation data file. Are they",
+              " outside of the temporal coverage of the data (i.e., before 2000)?",
+               call. = FALSE)
+    }
+    
     # On first iteration (if downloading files) send message about expected
     # number of files to download.
-    if (i == FALSE & ed_transfer == TRUE) {
+    if (i == FALSE & ed_transfer == TRUE & length(modis_files > 0)) {
       message(paste0(
         "[MODIS NDVI/EVI Download] data products are at a 16 day resolution, resulting in ",
         length(modis_files),
         " files to download for your data. This may take some time."
       ))
     }
+    
+
+    
   }
 
   # Return character vector of filepaths to downloaded files (if ed_transfer = TRUE)
