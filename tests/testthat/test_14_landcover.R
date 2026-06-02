@@ -450,4 +450,4 @@ test_that("landcover_extract() succeeds with alternate column names, either pass
   expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
   })
 
-unlink("./testdir", recursive = T)
+unlink("./testdir", recursive = TRUE)

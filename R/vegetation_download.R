@@ -45,7 +45,7 @@
 #'   FALSE`, character vector containing filenames of MODIS landcover files that
 #'   would be downloaded.
 #'
-#' @examples
+#' @examplesIf interactive()
 #'
 #' # Using the included, test data on black-capped chickadees
 #' bcch # look at the data
@@ -146,11 +146,19 @@ vegetation_download <- function(
             "'."
           )
         )
+        
+        if(is.null(ed_password)) {
+          stop("[MODIS NDVI/EVI Download] EarthData password could not be found",
+               ". Please add line 'EarthData_password = yourpassword' to your",
+               " .Renviron file. This can be accessed using usethis::edit_r_environ().",
+               call. = FALSE)
+        }
       } else {
         ed_password <- parent.frame()$ed_password
       }
     }
   }
+
 
   # Check data is in the desired format.
   input_fmt <- covariate_fmt_check(data)
@@ -330,9 +338,9 @@ vegetation_download <- function(
 
     data <- data %>%
       dplyr::filter(
-        !is.na(survey_year),
-        !is.na(survey_month),
-        !is.na(survey_day)
+        !is.na(.data$survey_year),
+        !is.na(.data$survey_month),
+        !is.na(.data$survey_day)
       )
   }
 

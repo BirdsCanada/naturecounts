@@ -98,6 +98,7 @@ as in the \href{https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf}{
 and is supplied to the user in the \code{vegetation_reliability} column if requested.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # Using the included, test data on black-capped chickadees
 bcch # look at the data
@@ -128,7 +129,7 @@ output <- vegetation_extract(
   vegetation_files = modis_files,
   retain = FALSE
 )
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[terra:extract]{terra::extract()}} which is used to extract values from MODIS data

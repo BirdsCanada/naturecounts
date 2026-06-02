@@ -67,7 +67,7 @@
 #'   pixels overlapped by each polygon in each reliability assessment as defined in table 4 of the 
 #'   [product's user manual](https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf).
 #'
-#' @examples
+#' @examplesIf interactive()
 #'
 #' # Using the included, test data on black-capped chickadees
 #' bcch # look at the data
@@ -148,7 +148,7 @@ vegetation_extract <- function(
   }
   
   # If no vegetation files are provided, return error.
-  if (missing(vegetation_files)) {
+  if (missing(vegetation_files) | length(vegetation_files) == 0) {
     stop(
       "[MODIS NDVI/EVI Extraction] no vegetation files provided to extract from. Please provide a vector containing filepaths of all necessary MODIS files for your data. Data can be downloaded using landcover_download.",
       call. = FALSE
@@ -332,9 +332,9 @@ vegetation_extract <- function(
     
     data <- data %>%
       dplyr::filter(
-        !is.na(survey_year),
-        !is.na(survey_month),
-        !is.na(survey_day)
+        !is.na(.data$survey_year),
+        !is.na(.data$survey_month),
+        !is.na(.data$survey_day)
       )
   }
   
@@ -387,10 +387,10 @@ vegetation_extract <- function(
   # Build object to use in matching sites to their respective MODIS data file.
   modis_match <- data %>%
     dplyr::mutate(
-      date = as.Date(paste0(survey_year, "-", survey_month, "-", survey_day))
+      date = as.Date(paste0(.data$survey_year, "-", .data$survey_month, "-", .data$survey_day))
     ) %>%
-    dplyr::mutate(yday = lubridate::yday(date)) %>%
-    dplyr::select(SurveyAreaIdentifier, survey_year, date, yday, geometry) %>%
+    dplyr::mutate(yday = lubridate::yday(.data$date)) %>%
+    dplyr::select("SurveyAreaIdentifier", "survey_year", "date", "yday", "geometry") %>%
     sf::st_transform(terra::crs(terra::rast(modis_files$filename[1])))
   
   # If buffered, extract coordinates from centroids. Append coordinates.
@@ -423,9 +423,9 @@ vegetation_extract <- function(
         # of year j.
         tmp <- dplyr::filter(
           modis_match,
-          SurveyAreaIdentifier == i,
-          survey_year == j,
-          date == k
+          .data$SurveyAreaIdentifier == i,
+          .data$survey_year == j,
+          .data$date == k
         )
         
         # Check to see whether the site-date combination can be matched to a
@@ -486,7 +486,7 @@ vegetation_extract <- function(
           # Only warn about date if the data is within the spatial extent of
           # the provided MODIS data and is in a year covered by the data.
           if (spatial_check & year_check & !(yday_check)) {
-            warning_dates <- c(warning_dates, yearyearday(j, k))
+            warning_dates <- c(warning_dates, k)
           }
         } else {
           # If no issues with coverage, match site-date combinations to
@@ -586,7 +586,7 @@ vegetation_extract <- function(
   }
   
   # Remove observations without matches.
-  modis_match <- dplyr::filter(modis_match, !is.na(filename))
+  modis_match <- dplyr::filter(modis_match, !is.na(.data$filename))
   
   # Edge case: there is a column in the data called yday that we don't want to
   # overwrite.
@@ -661,11 +661,11 @@ vegetation_extract <- function(
           # Create temporary object containing only the buffer for site k.
           tmp <- data %>%
             dplyr::filter(
-              SurveyAreaIdentifier == k,
-              survey_year %in%
+              .data$SurveyAreaIdentifier == k,
+              .data$survey_year %in%
                 modis_match$survey_year[modis_match$filename == j]
             ) %>%
-            dplyr::select(SurveyAreaIdentifier, geometry) %>%
+            dplyr::select("SurveyAreaIdentifier", "geometry") %>%
             dplyr::distinct() %>%
             sf::st_transform(terra::crs(modis))
           
@@ -726,11 +726,11 @@ vegetation_extract <- function(
           # Create temporary object containing only the point for site k.
           tmp <- data %>%
             dplyr::filter(
-              SurveyAreaIdentifier == k,
-              survey_year %in%
+              .data$SurveyAreaIdentifier == k,
+              .data$survey_year %in%
                 modis_match$survey_year[modis_match$filename == j]
             ) %>%
-            dplyr::select(SurveyAreaIdentifier, geometry) %>%
+            dplyr::select("SurveyAreaIdentifier", "geometry") %>%
             dplyr::distinct() %>%
             sf::st_transform(terra::crs(modis)) %>%
             terra::vect()
@@ -790,7 +790,7 @@ vegetation_extract <- function(
   }
 
   # Remove ordinal date column from original data.
-  data <- dplyr::select(data, -yday)
+  data <- dplyr::select(data, -"yday")
   
   # If a yday column was stored, return it here
   if(exists("yday_storage")){

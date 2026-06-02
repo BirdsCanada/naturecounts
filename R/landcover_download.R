@@ -36,7 +36,7 @@
 #'   FALSE`, character vector containing filenames of MODIS landcover files that
 #'   would be downloaded.
 #'
-#' @examples
+#' @examplesIf interactive()
 #'
 #' # Using the included, test data on black-capped chickadees
 #' bcch # look at the data
@@ -130,6 +130,13 @@ landcover_download <- function(
             "'."
           )
         )
+        
+        if(is.null(ed_password)) {
+          stop("[MODIS NDVI/EVI Download] EarthData password could not be found",
+               ". Please add line 'EarthData_password = yourpassword' to your",
+               " .Renviron file. This can be accessed using usethis::edit_r_environ().",
+               call. = FALSE)
+        }
       } else {
         ed_password <- parent.frame()$ed_password
       }

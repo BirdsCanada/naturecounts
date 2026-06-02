@@ -51,7 +51,7 @@
 #'   numeric columns containing the proportion of each polygon that is covered
 #'   by each landcover type.
 #'
-#' @examples
+#' @examplesIf interactive()
 #'
 #' # Using the included, test data on black-capped chickadees
 #' bcch # look at the data
@@ -123,7 +123,7 @@ landcover_extract <- function(
   }
 
   # If no landcover files are provided, return error.
-  if (missing(landcover_files)) {
+  if (missing(landcover_files) | length(landcover_files == 0)) {
     stop(
       "[MODIS Landcover Extraction] no landcover files provided to extract from. Please provide a vector containing filepaths of all necessary MODIS files for your data. Data can be downloaded using landcover_download().",
       call. = FALSE

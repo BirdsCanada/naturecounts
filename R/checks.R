@@ -99,7 +99,7 @@ month_check <- function(m) {
         "December",
         "Decembre",
         "Dec",
-        "Dec.",
+        "Dec."
       ),
       numerics = c(
         rep(1, times = 6),

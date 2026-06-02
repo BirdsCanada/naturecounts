@@ -75,6 +75,7 @@ weaknesses of each classification scheme in the context of their analysis and
 choose their desired classification scheme appropriately.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # Using the included, test data on black-capped chickadees
 bcch # look at the data
@@ -102,7 +103,7 @@ output <- landcover_extract(
   landcover_files = modis_files,
   retain = FALSE
 )
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[terra:extract]{terra::extract()}} which is used to extract values from MODIS data

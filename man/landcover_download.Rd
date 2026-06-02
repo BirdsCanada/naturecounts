@@ -57,6 +57,7 @@ downloaded by this function without need for extra specification.
 Downloads are facilitated by a call to \code{\link[luna:getNASA]{luna::getNASA()}}.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # Using the included, test data on black-capped chickadees
 bcch # look at the data
@@ -82,7 +83,7 @@ ed_email <- "your EarthData email"
 #  data = bcch,
 #  ed_email = ed_email
 #)
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[luna:getNASA]{luna::getNASA()}} which this function wraps. \code{\link[=landcover_extract]{landcover_extract()}}
