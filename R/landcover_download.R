@@ -414,11 +414,12 @@ landcover_download <- function(
       
       # Quick check for misspelled password, which causes luna::getNASA to
       # download empty files.
-      if(file.size(modis_files) < 30) {
+      if(file.size(modis_files) < 100) {
         file.remove(modis_files)
         
-        stop("[MODIS Landcover Download] EarthData password incorrect. Please
-             verify that provided password is correct.")
+        stop("[MODIS Landcover Download] EarthData password incorrect. Please ",
+        "verify that provided password is correct.",
+        call. = FALSE)
       }
     }
     
@@ -505,11 +506,12 @@ landcover_download <- function(
       # download empty files. Only runs on first year. If there are years before
       # 2001, get's caught by same check implemented above.
       if(which(sort(unique(data$survey_year[data$survey_year >= 2001])) == i) == 1) {
-        if(file.size(modis_files[1]) < 30) {
+        if(file.size(modis_files[1]) < 100) {
           file.remove(modis_files[1])
           
-          stop("[MODIS Landcover Download] EarthData password incorrect. Please
-             verify that provided password is correct.")
+          stop("[MODIS Landcover Download] EarthData password incorrect. Please ",
+               "verify that provided password is correct.",
+               call. = FALSE)
         }
       }
       

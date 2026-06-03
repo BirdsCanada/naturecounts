@@ -406,6 +406,19 @@ vegetation_download <- function(
       if(!(j %in% warning_dates)) {
         modis_files <- unique(c(modis_files, tmp))
       }
+      
+      # Quick check for misspelled password, which causes luna::getNASA to
+      # download empty files. Should only run on first downloaded file.
+      if(i == TRUE & which(dates[!(dates %in% warning_dates)] == j) == 1) {
+        if(file.size(modis_files) < 100) {
+          file.remove(modis_files)
+          
+          stop("[MODIS NDVI/EVI Download] EarthData password incorrect. Please ",
+               "verify that provided password is correct.",
+               call. = FALSE)
+        }
+        
+      }
     }
     
     # Warn of any out of range dates on first iteration only.

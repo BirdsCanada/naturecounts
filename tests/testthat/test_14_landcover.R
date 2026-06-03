@@ -401,14 +401,14 @@ test_that("landcover_extract() returns appropriate warnings for out of coverage 
     sf_pt,
     landcover_files = list.files("./testdir/modis/MCD12Q1", 
                                  full.names = TRUE))),
-    "\\[MODIS Landcover Extraction\\]: MODIS data not available for 1998 - using data from nearest year \\(2001\\).")
+    "\\[MODIS Landcover Extraction\\]: MODIS data not available for 1998 - using data from nearest year\\(s\\) \\(2001\\).")
   expect_true(extracted$LC_Type1_Class[1] == "mixed_forests")
   
   expect_warning(extracted <- suppressMessages(landcover_extract(
     sf_poly,
     landcover_files = list.files("./testdir/modis/MCD12Q1", 
                                  full.names = TRUE))),
-    "\\[MODIS Landcover Extraction\\]: MODIS data not available for 1998 - using data from nearest year \\(2001\\).")
+    "\\[MODIS Landcover Extraction\\]: MODIS data not available for 1998 - using data from nearest year\\(s\\) \\(2001\\).")
   expect_true(all(round(unlist(unname(sf::st_drop_geometry(dplyr::select(extracted, starts_with("LC_Type1")))[1,])), 2) == c(0,0,0,33.33,66.67,0,0,0,0,0,0,0,0,0,0,0,0,0)))
   })
 
