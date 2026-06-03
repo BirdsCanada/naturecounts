@@ -271,27 +271,36 @@ landcover_extract <- function(
     modis_match <- cbind(modis_match, sf::st_coordinates(modis_match))
   }
 
+  warning_years <- c()
+  nearest_years <- c()
   # Loop through years to check that all are represented in the MODIS data.
   # When requests are placed for data containing years not covered by MODIS,
   # nothing in the downloading process alerts the user to this. Warn here, and
   # use nearest year.
   for (i in sort(unique(modis_match$survey_year))) {
     if (!(i %in% modis_files$year)) {
-      warning(
-        paste0(
-          "[MODIS Landcover Extraction]: MODIS data not available for ",
-          i,
-          " - using data from nearest year (",
-          unique(modis_files$year)[which(
-            abs(i - unique(modis_files$year)) ==
-              min(abs(i - unique(modis_files$year)))
-          )],
-          ")."
-        ),
-        call. = FALSE
-      )
+      warning_years <- c(warning_years, i)
+      nearest_years <- unique(c(nearest_years, unique(modis_files$year)[which(
+        abs(i - unique(modis_files$year)) ==
+          min(abs(i - unique(modis_files$year)))
+      )]))
     }
   }
+  
+  if(length(warning_years) > 0) {
+    warning(
+      paste0(
+        "[MODIS Landcover Extraction]: MODIS data not available for ",
+        stringr::str_flatten_comma(warning_years),
+        " - using data from nearest year(s) (",
+        stringr::str_flatten_comma(nearest_years),
+        ")."
+      ),
+      call. = FALSE
+    )
+  }
+  
+  
 
   # Open vector to store names of out of range sites. NOTE: this might not be
   # that informative for datasets without dedicated site names.
@@ -304,7 +313,7 @@ landcover_extract <- function(
     ])) {
       # Create temporary spatial object containing only the buffer for site i.
       tmp <- dplyr::filter(
-        modis_match,
+        modis_match, 
         .data$SurveyAreaIdentifier == i,
         .data$survey_year == j
       ) %>%

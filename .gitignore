@@ -10,3 +10,4 @@ rosm.cache
 *.zip
 testdir
 .positai
+vignettes/articles/modis

@@ -9,6 +9,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 # Chapter 3: Downloading and Extracting Vegetation Indicies
 
 ##### Author: Rory Macklin
@@ -27,7 +34,7 @@ By the end of **Chapter 3 - Downloading and Extracting Vegetation Data**, users 
 
 This R tutorial requires the following packages:
 
-``` r
+``` {r}
 library(naturecounts)
 library(tidyverse)
 library(sf)
@@ -50,7 +57,7 @@ Identifying this issue, R packages such as [`luna`](https://github.com/rspatial/
 
 First, lets prep some data from NatureCounts for use in downloading MODIS data using `data_fmt()`. `vegetation_download()` requires input data in either `sf` or `terra` spatial format with information on observation year, month, and day each stpred in their own column. You can provide your own data in this format, or use the built-in `naturecounts::data_fmt()` function to conform your data to the necessary format.
 
-``` r
+``` {r}
 # This dataset containing Black-capped Chickadee observations included in
 # the naturecounts R package is in a data.frame format, and contains the columns
 # we need!
@@ -58,13 +65,6 @@ First, lets prep some data from NatureCounts for use in downloading MODIS data u
 bcch %>%
   select(latitude, longitude, survey_year, survey_month, survey_day) %>%
   head()
-#>   latitude longitude survey_year survey_month survey_day
-#> 1 45.81553 -77.14251        1999           11         18
-#> 2 45.81553 -77.14251        2000           12         16
-#> 3 45.55757 -77.41739        1999           12         19
-#> 4 45.55757 -77.41739        2000           12         19
-#> 5 45.79170 -76.90276        2000            4         15
-#> 6 45.79170 -76.90276        1999            4         17
 
 # As 16-day resolution vegetation can result in the downloading of a lot of data, we will restrict our data to the years 1999-2000.
 
@@ -74,59 +74,32 @@ bcch <- filter(bcch, survey_year %in% c(1999, 2000))
 # ready to work with naturecounts' covariate download and extraction functions. We
 # can ignore the warning as EPSG:4326 is an appropriate CRS for our data.
 formatted <- data_fmt(bcch)
-#> [Data Formatting] beginning formatting.
-#> Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.
 
 head(formatted)
-#> Simple feature collection with 6 features and 6 fields
-#> Geometry type: POINT
-#> Dimension:     XY
-#> Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9
-#> Projected CRS: Canada_Albers_Equal_Area_Conic
-#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 geometry
-#> 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18 POINT (1462530 839736.7)
-#> 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16 POINT (1462530 839736.7)
-#> 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19 POINT (1449503 806527.6)
-#> 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19 POINT (1449503 806527.6)
-#> 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15 POINT (1481359 842474.9)
-#> 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17 POINT (1481359 842474.9)
 ```
 
 The only other prerequisite here is an [EarthData](https://urs.earthdata.nasa.gov/users/new) account, which is necessary to access MODIS data stored in the NASA EarthData Archive. Users can register at the link above.
 
 Supplying our formatted data and EarthData account email to `vegetation_download()` will begin the download process. If the user wishes to just see which files would be downloaded without executing the download, they can do so by setting `ed_transfer` to `FALSE`. Your EarthData account password can either be stored in your .Renviron file by adding the line `EarthData_password = "yourpassword"` or can be supplied through the resulting pop-up window if no `Earthdata_password` is found in your .Renviron. This is done securely using the `askpass` package used in `naturecounts` functions.
 
-``` r
+``` {r}
 # Let's see which files would be downloaded for our data
 
 files <- vegetation_download(data = formatted,
                              ed_transfer = FALSE)
-#> [MODIS NDVI/EVI Download] fetching data filenames.
-#> Warning: Observation on date(s) 1999-11-18, 1999-12-19, 1999-4-17, 1999-5-16 could not be matched to a
-#> MODIS vegetation data file. Are they outside of the temporal coverage of the data (i.e., before 2000)?
 
 files
-#> [1] "MOD13A1.A2000337.h12v04.061.2020057055433.hdf" "MOD13A1.A2000353.h12v04.061.2020058160551.hdf"
-#> [3] "MOD13A1.A2000097.h12v04.061.2020041112856.hdf"
 
 # Now, by providing an EarthData login email, we can execute the download. Files will be downloaded into a 'modis/' subdirectory in your current working directory. 
 
-ed_email <- "your EarthData email here"
+ed_email <- "rmacklin@birdscanada.org"
 
 files <- vegetation_download(data = formatted,
                              ed_email = ed_email,
                              ed_transfer = TRUE) # We don't need to specify this                                                   # as TRUE is the default, but we 
                                                  # have done so for clarity.
-#> Warning: Observation on date(s) 1999-11-18, 1999-12-19, 1999-4-17, 1999-5-16 could not be matched to a
-#> MODIS vegetation data file. Are they outside of the temporal coverage of the data (i.e., before 2000)?
-#> [MODIS NDVI/EVI Download] data products are at a 16 day resolution, resulting in 3 files to download for your data. This may take some time.
-#> [MODIS NDVI/EVI Download] downloading data.
-                                                 
 
 files
-#> [1] "./modis/MOD13A1/MOD13A1.A2000337.h12v04.061.2020057055433.hdf"
-#> [2] "./modis/MOD13A1/MOD13A1.A2000353.h12v04.061.2020058160551.hdf"
-#> [3] "./modis/MOD13A1/MOD13A1.A2000097.h12v04.061.2020041112856.hdf"
 ```
 
 Examining the `files` object, we can see it is a character vector containing the paths to all downloaded files. All downloaded files can be found by default in the created `./modis` subdirectory or at a custom path specified using the argument `dl_path`. Files are in .hdf format, with each file containing raster data for one MODIS tile for one of each requested 16-day period. These files can be brought into R using `terra::rast()` to examine, but we will use `vegetation_extract()` to manage the extraction process.
@@ -141,113 +114,42 @@ This function works slightly differently depending on whether the input site dat
 
 To execute these extractions, we need to select which index we want to use, and specify it in the `covariates` argument. The appropriate covariate codes can be found in the `covariate_name` column of the table called with `nc_covariate_table()`. We will extract NDVI, which is called by setting `covariates = "modis_ndvi"`. We will need to point `vegetation_extract()` to where our MODIS data files are stored by providing a character vector with the filepaths of all applicable files to the argument `vegetation_files`. Conveniently, this is exactly the output of `vegetation_download()` that we stored in our `files` object.
 
-``` r
+``` {r}
 # We will start by fetching the vegetation data for our point dataset created above.
 output <- vegetation_extract(data = formatted,
                              covariates = "modis_ndvi",
                              vegetation_files = files)
-#> Warning: [MODIS NDVI/EVI Extraction] observations from year 1999 fall outside of the temporal extent of
-#> the files provided. Is it in a year where data is unavailable from this dataset? No value will be
-#> returned.
-#> [MODIS NDVI/EVI Extraction] calculating MODIS NDVI.
 
 head(output)
-#> Simple feature collection with 6 features and 7 fields
-#> Geometry type: POINT
-#> Dimension:     XY
-#> Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9
-#> Projected CRS: Canada_Albers_Equal_Area_Conic
-#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day   ndvi
-#> 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18     NA
-#> 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16 0.4056
-#> 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19     NA
-#> 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19 0.1020
-#> 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15 0.5078
-#> 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17     NA
-#>                   geometry
-#> 1 POINT (1462530 839736.7)
-#> 2 POINT (1462530 839736.7)
-#> 3 POINT (1449503 806527.6)
-#> 4 POINT (1449503 806527.6)
-#> 5 POINT (1481359 842474.9)
-#> 6 POINT (1481359 842474.9)
 ```
 
 We have again been warned that some of the observations in our data are from years that are covered by the MODIS vegetation data. Other than that, there are no errors or warnings, so we can take a look at what the function has returned for us! NDVI values have been added for the observations in the year 2000 in the `ndvi` column, while the values for observations in 1999 have been left as NAs.
 
 We can gain additional information about the reliability of the NDVI observations that `vegetation_extract()` returns by setting the argument `reliability = TRUE`. This will extract the reliability value for each site, derived from the grid cell it falls within, giving us a quick-look at whether low NDVI values are driven by confounding factors such as snow, ice, or cloud, or are simply areas of little vegetation. These values will be added in a new column called `vegetation_reliability` and apply to both the NDVI and EVI measurements for that grid cell.
 
-``` r
+``` {r}
 # Lets try our call again with reliability = TRUE.
 output <- vegetation_extract(data = formatted,
                              covariates = "modis_ndvi",
                              vegetation_files = files,
                              reliability = TRUE)
-#> Warning: [MODIS NDVI/EVI Extraction] observations from year 1999 fall outside of the temporal extent of
-#> the files provided. Is it in a year where data is unavailable from this dataset? No value will be
-#> returned.
-#> [MODIS NDVI/EVI Extraction] calculating MODIS NDVI.
 
 head(output)
-#> Simple feature collection with 6 features and 8 fields
-#> Geometry type: POINT
-#> Dimension:     XY
-#> Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9
-#> Projected CRS: Canada_Albers_Equal_Area_Conic
-#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day   ndvi
-#> 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18     NA
-#> 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16 0.4056
-#> 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19     NA
-#> 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19 0.1020
-#> 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15 0.5078
-#> 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17     NA
-#>   vegetation_reliability                 geometry
-#> 1                   <NA> POINT (1462530 839736.7)
-#> 2              Good Data POINT (1462530 839736.7)
-#> 3                   <NA> POINT (1449503 806527.6)
-#> 4               Snow/Ice POINT (1449503 806527.6)
-#> 5              Good Data POINT (1481359 842474.9)
-#> 6                   <NA> POINT (1481359 842474.9)
 ```
 
 For the observations in the year 2000, we can see that two observations NDVI values are from grid cells with good data, while one is from an area where snow/ice has interfered with NDVI measurement. More information on these quality assessments is available in the [MOD13A1 User Guide](https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf).
 
 Now let's give it a go with polygon input data. We'll buffer our points to fetch the mean of our selected vegetation index (we'll calculate both NDVI and EVI this time) within a 500 m radius of each observation, as well as reliability information. We will expect and ignore the same warnings as in the previous example.
 
-``` r
+``` {r}
 buffered <- data_buff(data = formatted)
-#> [Data Buffering] buffering sites by 500m radius (default).
 
 output <- vegetation_extract(data = buffered,
                              covariates = c("modis_ndvi", "modis_evi"),
                              vegetation_files = files,
                              reliability = TRUE)
-#> Warning: [MODIS NDVI/EVI Extraction] observations from year 1999 fall outside of the temporal extent of
-#> the files provided. Is it in a year where data is unavailable from this dataset? No value will be
-#> returned.
-#> [MODIS NDVI/EVI Extraction] calculating MODIS NDVI.
-#> [MODIS NDVI/EVI Extraction] calculating MODIS EVI.
 
 head(output)
-#> Simple feature collection with 6 features and 9 fields
-#> Geometry type: POLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: 1449003 ymin: 806027.6 xmax: 1481859 ymax: 842974.9
-#> Projected CRS: Canada_Albers_Equal_Area_Conic
-#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day      ndvi
-#> 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18        NA
-#> 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16 0.3645081
-#> 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19        NA
-#> 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19 0.0888040
-#> 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15 0.3923654
-#> 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17        NA
-#>               vegetation_reliability        evi                       geometry
-#> 1                               <NA>         NA POLYGON ((1463030 839736.7,...
-#> 2                   Good Data (100%) 0.21148738 POLYGON ((1463030 839736.7,...
-#> 3                               <NA>         NA POLYGON ((1450003 806527.6,...
-#> 4 Snow/Ice (66.67%), Cloudy (33.33%) 0.07843998 POLYGON ((1450003 806527.6,...
-#> 5                   Good Data (100%) 0.13573586 POLYGON ((1481859 842474.9,...
-#> 6                               <NA>         NA POLYGON ((1481859 842474.9,...
 ```
 
 We can see that the mean NDVI and EVI values have been added in the `ndvi` and `evi` columns respectively. This time, the `vegetation_reliability` column contains a string containing the percentage of all cells overlapped by each observation polygon in each reliability category. Here, we can see that not only has snow interfered with our NDVI and EVI measurements for one of our observations, but clouds have also interfered as well. This information provides users with important decision-making tools to assure the quality of NDVI/EVI data is considered in their analyses.

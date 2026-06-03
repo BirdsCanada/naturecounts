@@ -367,7 +367,7 @@ landcover_download <- function(
     
     if(length(missing_year) > 0) {
       if(TRUE %in% (missing_year < 2001)) {
-        if(FALSE %in% missing_year < 2001) {
+        if(FALSE %in% (missing_year < 2001)) {
           warning("[MODIS Landcover Download] MODIS landcover data ",
                   "unavailable for all years before 2001 as well as ",
                   stringr::str_flatten_comma(sort(missing_year[missing_year >= 2001])),

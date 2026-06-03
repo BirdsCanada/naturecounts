@@ -9,6 +9,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 # Chapter 2: Downloading and Extracting Landcover Data
 
 ##### Author: Rory Macklin
@@ -27,7 +34,7 @@ By the end of **Chapter 2 - Downloading and Extracting Landcover Data**, users w
 
 This R tutorial requires the following packages:
 
-``` r
+``` {r, message = FALSE}
 library(naturecounts)
 library(tidyverse)
 library(sf)
@@ -56,79 +63,45 @@ Identifying this issue, R packages such as [`luna`](https://github.com/rspatial/
 
 First, lets prep some data from NatureCounts for use in downloading MODIS data using `data_fmt()`. `landcover_download()` requires input data in either `sf` or `terra` spatial format with information on observation year stored in its own column. You can provide your own data in this format, or use the built-in `naturecounts::data_fmt()` function to conform your data to the necessary format.
 
-``` r
+``` {r}
 # This dataset containing Black-capped Chickadee observations included in
 # the naturecounts R package is in a data.frame format, and contains the columns
 # we need! We'll need to to convert it into an sf object for use in landcover_download().
 bcch %>%
   select(latitude, longitude, survey_year) %>%
   head()
-#>   latitude longitude survey_year
-#> 1 45.51110 -77.50533        2011
-#> 2 45.63436 -77.07484        2010
-#> 3 45.82732 -77.12012        2010
-#> 4 45.48730 -77.74651        2011
-#> 5 45.61956 -77.23577        2010
-#> 6 45.82851 -77.11430        2011
   
 # We can make a call to data_fmt() to automatically convert this to an sf object
 # ready to work with naturecounts' covariate download and extraction functions. We
 # can ignore the warning as EPSG:4326 is an appropriate CRS for our data.
 formatted <- data_fmt(bcch)
-#> [Data Formatting] beginning formatting.
-#> Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.
 
 head(formatted)
-#> Simple feature collection with 6 features and 6 fields
-#> Geometry type: POINT
-#> Dimension:     XY
-#> Bounding box:  xmin: 1426543 ymin: 792053.4 xmax: 1473174 ymax: 841722.6
-#> Projected CRS: Canada_Albers_Equal_Area_Conic
-#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 geometry
-#> 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12 POINT (1444206 799722.4)
-#> 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3 POINT (1473174 822088.3)
-#> 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19 POINT (1463861 841469.8)
-#> 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5 POINT (1426543 792053.4)
-#> 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16 POINT (1461424 817010.6)
-#> 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2 POINT (1464264 841722.6)
 ```
 
 The only other prerequisite here is an [EarthData](https://urs.earthdata.nasa.gov/users/new) account, which is necessary to access MODIS data stored in the NASA EarthData Archive. Users can register at the link above.
 
 Supplying our formatted data and EarthData account email to `landcover_download()` will begin the download process. If the user wishes to just see which files would be downloaded without executing the download, they can do so by setting `ed_transfer` to `FALSE`. Your EarthData account password can either be stored in your .Renviron file by adding the line `EarthData_password = "yourpassword"` or can be supplied through the resulting pop-up window if no `Earthdata_password` is found in your .Renviron. This is done securely using the `askpass` package used in `naturecounts` functions.
 
-``` r
+``` {r}
 # Let's see which files would be downloaded for our data
 
 files <- landcover_download(data = formatted,
                             ed_transfer = FALSE)
-#> [MODIS Landcover Download] fetching data filenames.
-#> Warning: [MODIS Landcover Download] MODIS landcover data unavailable for all years before 2001.
-#> landcover_extract() will extract landcover data from 2001 for these observations.
 
 head(files)
-#> [1] "MCD12Q1.A2001001.h12v04.061.2022146050354.hdf" "MCD12Q1.A2002001.h12v04.061.2022147215712.hdf"
-#> [3] "MCD12Q1.A2003001.h12v04.061.2022151161906.hdf" "MCD12Q1.A2004001.h12v04.061.2022152043252.hdf"
-#> [5] "MCD12Q1.A2005001.h12v04.061.2022152140219.hdf" "MCD12Q1.A2006001.h12v04.061.2022202151028.hdf"
 
 # Now, by providing an EarthData login email, we can execute the download. Files will be downloaded into a 'modis/' subdirectory in your current working directory. 
 
-ed_email <- "your Earthdata email here"
+ed_email <- "rmacklin@birdscanada.org"
 
 files <- landcover_download(data = formatted,
                             ed_email = ed_email,
                             ed_transfer = TRUE) # We don't need to specify this as
-#> [MODIS Landcover Download] downloading data.
                                                 # TRUE is the default, but we have
                                                 # done so for clarity.
 
 head(files)
-#> [1] "./modis/MCD12Q1/MCD12Q1.A2001001.h12v04.061.2022146050354.hdf"
-#> [2] "./modis/MCD12Q1/MCD12Q1.A2002001.h12v04.061.2022147215712.hdf"
-#> [3] "./modis/MCD12Q1/MCD12Q1.A2003001.h12v04.061.2022151161906.hdf"
-#> [4] "./modis/MCD12Q1/MCD12Q1.A2004001.h12v04.061.2022152043252.hdf"
-#> [5] "./modis/MCD12Q1/MCD12Q1.A2005001.h12v04.061.2022152140219.hdf"
-#> [6] "./modis/MCD12Q1/MCD12Q1.A2006001.h12v04.061.2022202151028.hdf"
 ```
 
 Examining the `files` object, we can see it is a character vector containing the paths to all downloaded files. All downloaded files can be found at the path specified using the argument `dl_path` and are in .hdf format, each file containing raster data for one MODIS tile for one of each requested year. These files can be brought into R using `terra::rast()` to examine, but we will use `landcover_extract()` to manage the extraction process.
@@ -141,113 +114,34 @@ This function works slightly differently depending on whether the input site dat
 
 To execute these extractions, we need to select which scheme we want to use, and specify it in the `covariates` argument. The appropriate covariate codes can be found in the `covariate_name` column of the table called with `nc_covariate_table()`. We will use the Leaf Area Index scheme, which is called by setting `covariates = "modis_lctype3"`. We will need to point `landcover_extract()` to where our MODIS data files are stored by providing a character vector with the filepaths of all applicable files to the argument `landcover_files`. Conveniently, this is exactly the output of `landcover_download()` that we stored in our `files` object.
 
-``` r
+``` {r}
 # We will start by fetching the landcover data for our point dataset created above.
 output <- landcover_extract(data = formatted,
                             covariates = "modis_lctype3",
                             landcover_files = files)
-#> Warning: [MODIS Landcover Extraction]: MODIS data not available for 1978, 1979, 1980, 1981, 1982, 1983,
-#> 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000 -
-#> using data from nearest year(s) (2001).
-#> [MODIS Landcover Extraction] calculating MODIS LC Type3.
+
 ```
 
 Woah! That's a lot of warnings. These warnings are ultimately harmless but are important to consider. The MODIS Landcover dataset only extends back to 2001, and our data contains observations from before 2001. So, the function has grabbed the closest data point in time it can to those pre-2001 observations (the landcover category from 2001) and provides that instead. If we don't want this behaviour, we could go into our output data and manually set them to `NA` after running `landcover_extract()` using `output$LC_Type3_Class[output$survey_year < 2001] <- NA` . For this demonstration, we will leave it as is. This could also happen for observations in the current year (at the time of writing, 2026) as the MODIS landcover data available in a given year usually ends at the previous calendar year. In this case, the function would fetch the landcover category from the previous year and warn the user.
 
 Let's take a look at what the function has returned for us!
 
-``` r
+``` {r}
 head(output)
-#> Simple feature collection with 6 features and 7 fields
-#> Geometry type: POINT
-#> Dimension:     XY
-#> Bounding box:  xmin: 1426543 ymin: 792053.4 xmax: 1473174 ymax: 841722.6
-#> Projected CRS: Canada_Albers_Equal_Area_Conic
-#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 geometry
-#> 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12 POINT (1444206 799722.4)
-#> 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3 POINT (1473174 822088.3)
-#> 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19 POINT (1463861 841469.8)
-#> 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5 POINT (1426543 792053.4)
-#> 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16 POINT (1461424 817010.6)
-#> 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2 POINT (1464264 841722.6)
-#>                LC_Type3_Class
-#> 1 deciduous_broadleaf_forests
-#> 2                    savannas
-#> 3         urban_builtup_lands
-#> 4 deciduous_broadleaf_forests
-#> 5 deciduous_broadleaf_forests
-#> 6         urban_builtup_lands
 
 table(output$LC_Type3_Class)
-#> 
-#>  deciduous_broadleaf_forests evergreen_needleleaf_forests                   grasslands 
-#>                           43                            2                            5 
-#>                     savannas          urban_builtup_lands                 water_bodies 
-#>                           87                           16                            4
 ```
 
 Now let's give it a go with polygon input data. We'll buffer our points to summarize landcover within a 500 m radius of each observation. We will expect and ignore the same warnings as in the previous example.
 
-``` r
+``` {r}
 buffered <- data_buff(data = formatted)
-#> [Data Buffering] buffering sites by 500m radius (default).
 
 output <- landcover_extract(data = buffered,
                             covariates = "modis_lctype3",
                             landcover_files = files)
-#> Warning: [MODIS Landcover Extraction]: MODIS data not available for 1978, 1979, 1980, 1981, 1982, 1983,
-#> 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000 -
-#> using data from nearest year(s) (2001).
-#> [MODIS Landcover Extraction] calculating MODIS LC Type3.
 
 head(output)
-#> Simple feature collection with 6 features and 18 fields
-#> Geometry type: POLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: 1426043 ymin: 791553.4 xmax: 1473674 ymax: 842222.6
-#> Projected CRS: Canada_Albers_Equal_Area_Conic
-#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day
-#> 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12
-#> 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3
-#> 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19
-#> 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5
-#> 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16
-#> 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2
-#>                         geometry LC_Type3_water_bodies LC_Type3_grasslands LC_Type3_shrublands
-#> 1 POLYGON ((1444706 799722.4,...               0.00000                   0                   0
-#> 2 POLYGON ((1473674 822088.3,...               0.00000                   0                   0
-#> 3 POLYGON ((1464361 841469.8,...              22.22222                   0                   0
-#> 4 POLYGON ((1427043 792053.4,...               0.00000                   0                   0
-#> 5 POLYGON ((1461924 817010.6,...               0.00000                   0                   0
-#> 6 POLYGON ((1464764 841722.6,...              33.33333                   0                   0
-#>   LC_Type3_broadleaf_croplands LC_Type3_savannas LC_Type3_evergreen_broadleaf_forests
-#> 1                            0           0.00000                                    0
-#> 2                            0          50.00000                                    0
-#> 3                            0          11.11111                                    0
-#> 4                            0           0.00000                                    0
-#> 5                            0           0.00000                                    0
-#> 6                            0           0.00000                                    0
-#>   LC_Type3_deciduous_broadleaf_forests LC_Type3_evergreen_needleleaf_forests
-#> 1                            100.00000                               0.00000
-#> 2                             50.00000                               0.00000
-#> 3                              0.00000                               0.00000
-#> 4                             66.66667                              33.33333
-#> 5                            100.00000                               0.00000
-#> 6                              0.00000                               0.00000
-#>   LC_Type3_deciduous_needleleaf_forests LC_Type3_nonvegetated_lands LC_Type3_urban_builtup_lands
-#> 1                                     0                     0.00000                      0.00000
-#> 2                                     0                     0.00000                      0.00000
-#> 3                                     0                     0.00000                     66.66667
-#> 4                                     0                     0.00000                      0.00000
-#> 5                                     0                     0.00000                      0.00000
-#> 6                                     0                    16.66667                     50.00000
-#>   LC_Type3_unclassified
-#> 1                     0
-#> 2                     0
-#> 3                     0
-#> 4                     0
-#> 5                     0
-#> 6                     0
 ```
 
 We can see that we have gained a number of columns, each with the percentage of the buffered area that is taken up by each particular class.
