@@ -1694,7 +1694,7 @@ test_that("data_buff() basic functionality with BMDE terra polygons", {
     suppressWarnings(terra::crds(terra::centroids(buffed))),
     terra::crds(terra::centroids(terra::buffer(
       suppressMessages(data_fmt(terra::buffer(
-        terra::vect(bcch, crs = "epsg:4326"),
+        terra::vect(bcch, crs = "epsg:4326", geom = c("longitude", "latitude")),
         500
       ))),
       500

@@ -21,11 +21,13 @@ test_that("vegetation_download() hits API with all expected inputs. May fail if 
                                                     ed_transfer = FALSE)),
                expected_files)
   expect_equal(suppressMessages(vegetation_download(data_fmt(terra::vect(bcch[bcch$survey_year == 2007,],
-                                                                         crs = "epsg:4326")),
+                                                                         crs = "epsg:4326",
+                                                                         geom = c("longitude", "latitude"))),
                                                     ed_transfer = FALSE)),
                expected_files)
   expect_equal(suppressMessages(vegetation_download(data_buff(data_fmt(terra::vect(bcch[bcch$survey_year == 2007,],
-                                                                                   crs = "epsg:4326"))),
+                                                                                   crs = "epsg:4326",
+                                                                                   geom = c("longitude", "latitude")))),
                                                     ed_transfer = FALSE)),
                expected_files)
 })

@@ -132,7 +132,7 @@ landcover_download <- function(
         )
         
         if(is.null(ed_password)) {
-          stop("[MODIS NDVI/EVI Download] EarthData password could not be found",
+          stop("[MODIS Landcover Download] EarthData password could not be found",
                ". Please add line 'EarthData_password = yourpassword' to your",
                " .Renviron file. This can be accessed using usethis::edit_r_environ().",
                call. = FALSE)
@@ -293,6 +293,8 @@ landcover_download <- function(
     modis_files <- c()
     missing_year <- c()
     
+    # Ensures that the closest year available for years before the start of 
+    # dataset coverage (2001) is listed.
     if(TRUE %in% (data$survey_year < 2001) & !(2001 %in% data$survey_year)) {
       modis_files <- c(modis_files, luna::getNASA(
         product = "MCD12Q1",
@@ -303,6 +305,7 @@ landcover_download <- function(
         ))
     }
     
+    # Now, gather files for all years 2001 and after.
     for(i in sort(unique(data$survey_year))) {
       tmp <- suppressWarnings(luna::getNASA(
           product = "MCD12Q1",
@@ -312,6 +315,7 @@ landcover_download <- function(
           download = FALSE
         ))
         
+      # Record years with no data associated.
       if(is.null(tmp)) {
         missing_year <- c(missing_year, i)
         } else {
@@ -319,6 +323,8 @@ landcover_download <- function(
         }
     }
       
+    # If nothing found for a year after 2001, indicates that year is current 
+    # year or later. Fetch filename for year - 1.
       if(FALSE %in% (missing_year < 2001)) {
         for(i in missing_year[missing_year >= 2001]) {
           if(!((i - 1) %in% data$survey_year)) {
@@ -329,7 +335,7 @@ landcover_download <- function(
               aoi = terra::ext(terra::project(study_area, "epsg:4326")),
               download = FALSE
             ))
-            
+            # If nothing found for year - 1, try year - 2.
             if(is.null(tmp)) {
               if(!((i-2) %in% data$survey_year)){
                 tmp <- suppressWarnings(luna::getNASA(
@@ -340,6 +346,7 @@ landcover_download <- function(
                   download = FALSE
                 ))
                 
+                # Warn if year-2 doesn't return anything.
                 if(is.null(tmp)) {
                   warning("[MODIS Landcover Download] Year ", i, " is more than 2 ",
                           "years away from the next ",
@@ -386,6 +393,8 @@ landcover_download <- function(
   } else {
     modis_files <- c()
     
+    # Ensures that the closest year available for years before the start of 
+    # dataset coverage (2001) is downloaded.
     if(TRUE %in% (data$survey_year < 2001)) {
       modis_files <- c(modis_files, luna::getNASA(
         product = "MCD12Q1",
@@ -402,9 +411,21 @@ landcover_download <- function(
         username = ed_email,
         password = ed_password
       ))
+      
+      # Quick check for misspelled password, which causes luna::getNASA to
+      # download empty files.
+      if(file.size(modis_files) < 30) {
+        file.remove(modis_files)
+        
+        stop("[MODIS Landcover Download] EarthData password incorrect. Please
+             verify that provided password is correct.")
+      }
     }
     
+    # Now, download for years 2001 and after.
     for(i in sort(unique(data$survey_year[data$survey_year >= 2001]))) {
+      # If 2001 data downloaded above, do nothing. Otherwise, download that 
+      # year's data.
       if(!(i == 2001 & length(modis_files > 0))) {
         tmp <- suppressWarnings(luna::getNASA(
           product = "MCD12Q1",
@@ -422,6 +443,9 @@ landcover_download <- function(
           password = ed_password
         ))
         
+        # If nothing found, indicates that year is current year or later. Download
+        # data for year - 1. If already downloaded, overwrite = FALSE will
+        # prevent downloading same file twice.
         if(is.null(tmp)) {
           tmp <- suppressWarnings(luna::getNASA(
             product = "MCD12Q1",
@@ -439,6 +463,8 @@ landcover_download <- function(
             password = ed_password
           ))
           
+          # Just in case, try year - 2 if MODIS data upload is really behind for
+          # some reason.
           if(is.null(tmp)) {
             tmp <- suppressWarnings(luna::getNASA(
               product = "MCD12Q1",
@@ -456,11 +482,12 @@ landcover_download <- function(
               password = ed_password
             ))
             
+            # Warn if year-2 doesn't return anything.
             if(is.null(tmp)) {
               warning("[MODIS Landcover Download] Year ", i, " is more than 2 ",
                       "years away from the next ",
                       "available MODIS data year. This usually indicates an ",
-                      "incorrectly year too far in the future as MODIS data is ",
+                      "incorrectly entered year too far in the future as MODIS data is ",
                       "rarely more than 2 years behind the current year.",
                       call. = FALSE)
             } else {
@@ -473,6 +500,19 @@ landcover_download <- function(
           modis_files <- c(modis_files, tmp)
         }
       }
+      
+      # Quick check for misspelled password, which causes luna::getNASA to
+      # download empty files. Only runs on first year. If there are years before
+      # 2001, get's caught by same check implemented above.
+      if(which(sort(unique(data$survey_year[data$survey_year >= 2001])) == i) == 1) {
+        if(file.size(modis_files[1]) < 30) {
+          file.remove(modis_files[1])
+          
+          stop("[MODIS Landcover Download] EarthData password incorrect. Please
+             verify that provided password is correct.")
+        }
+      }
+      
     }
   }
 
