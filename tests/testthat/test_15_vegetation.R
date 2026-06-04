@@ -2,6 +2,18 @@ if(!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
+test_that("vegetation_download() throws error when credentials are incorrectly supplied.", {
+  expect_error(suppressWarnings(suppressMessages(vegetation_download(data_fmt(bcch,
+                                                                              coord_lon = "longitude",
+                                                                              coord_lat = "latitude",
+                                                                              crs = 4326),
+                                                                     ed_transfer = TRUE,
+                                                                     ed_email = "incorrect@birdscanada.org",
+                                                                     dl_path = "./testdir"))),
+               "\\[MODIS NDVI/EVI Download\\] EarthData password incorrect. Please verify that provided password is correct."
+  )
+})
+
 test_that("vegetation_download() hits API with all expected inputs. May fail if filename structure is changed server-side.", {
   expected_files <- c("MOD13A1.A2007337.h12v04.061.2021081224633.hdf",
                       "MOD13A1.A2007049.h12v04.061.2021055160007.hdf",
@@ -100,7 +112,14 @@ test_that("vegetation_download() returns correct warning with out of coverage da
                                                                coord_lat = "latitude",
                                                                crs = 4326),
                                                       ed_transfer = FALSE)),
-                 "Observation on date\\(s\\) 1998-12-19 could not be matched to a MODIS vegetation data file. Are they outside of the temporal coverage of the data \\(i.e., before 2000\\)\\?")
+                 "Observation on date\\(s\\) 1998-12-19 could not be matched to a MODIS vegetation data file. Are they outside of the temporal coverage of the data \\(i.e., before 2000 or in the current year\\)\\?")
+})
+
+test_that("vegetation_extract() throws appropriate error when empty vector provided to vegetation_files.", {
+  expect_error(vegetation_extract(suppressWarnings(suppressMessages(data_fmt(bcch))),
+                                  vegetation_files = c()),
+               "\\[MODIS NDVI\\/EVI Extraction\\] no vegetation files provided to extract from. Please provide a vector containing filepaths of all necessary MODIS files for your data. Data can be downloaded using vegetation_download\\(\\).")
+  
 })
 
 test_that("vegetation_extract() basic functionality with all expected data inputs.", {

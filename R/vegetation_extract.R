@@ -150,7 +150,7 @@ vegetation_extract <- function(
   # If no vegetation files are provided, return error.
   if (missing(vegetation_files) | length(vegetation_files) == 0) {
     stop(
-      "[MODIS NDVI/EVI Extraction] no vegetation files provided to extract from. Please provide a vector containing filepaths of all necessary MODIS files for your data. Data can be downloaded using landcover_download.",
+      "[MODIS NDVI/EVI Extraction] no vegetation files provided to extract from. Please provide a vector containing filepaths of all necessary MODIS files for your data. Data can be downloaded using vegetation_download().",
       call. = FALSE
     )
   }

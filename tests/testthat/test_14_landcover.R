@@ -2,6 +2,18 @@ if(!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
+test_that("landcover_download() throws error when credentials are incorrectly supplied.", {
+  expect_error(suppressWarnings(suppressMessages(landcover_download(data_fmt(bcch,
+                                                                             coord_lon = "longitude",
+                                                                             coord_lat = "latitude",
+                                                                             crs = 4326),
+                                                                    ed_transfer = TRUE,
+                                                                    ed_email = "incorrect@birdscanada.org",
+                                                                    dl_path = "./testdir"))),
+               "\\[MODIS Landcover Download\\] EarthData password incorrect. Please verify that provided password is correct."
+  )
+})
+
 test_that("landcover_download() hits API with all expected inputs. May fail if filename structure is changed server-side.", {
   expected_files <- c("MCD12Q1.A2001001.h12v04.061.2022146050354.hdf",
                       "MCD12Q1.A2002001.h12v04.061.2022147215712.hdf",
@@ -124,6 +136,120 @@ test_that("landcover_download() succeeds with alternate column names, either
                expected_files)
 })
 
+test_that("landcover_download() fetches necessary nearest years for out of coverage dates.", {
+  
+  outside_dates <- bcch[bcch$survey_year < 2001,]
+  outside_dates$survey_year[1] <- lubridate::year(Sys.Date())
+  
+  expect_true(length(suppressWarnings(suppressMessages(landcover_download(data_fmt(outside_dates,
+                                                                                   coord_lon = "longitude",
+                                                                                   coord_lat = "latitude",
+                                                                                   crs = 4326),
+                                                                          ed_transfer = FALSE)))) == 2)
+  
+  expect_true("MCD12Q1.A2001001.h12v04.061.2022146050354.hdf" %in% suppressWarnings(suppressMessages(landcover_download(data_fmt(outside_dates,
+                                                                                                                                 coord_lon = "longitude",
+                                                                                                                                 coord_lat = "latitude",
+                                                                                                                                 crs = 4326),
+                                                                                                                        ed_transfer = FALSE))))
+  
+  expect_true(substr(suppressWarnings(suppressMessages(landcover_download(data_fmt(outside_dates,
+                                                                                   coord_lon = "longitude",
+                                                                                   coord_lat = "latitude",
+                                                                                   crs = 4326),
+                                                                          ed_transfer = FALSE)))[2], 
+                     start = 1, stop = 13) %in% paste0("MCD12Q1.A", c(lubridate::year(Sys.Date()) - 2, lubridate::year(Sys.Date()) - 1)))
+  
+  expect_true(length(suppressWarnings(suppressMessages(landcover_download(data_fmt(outside_dates,
+                                                                                   coord_lon = "longitude",
+                                                                                   coord_lat = "latitude",
+                                                                                   crs = 4326),
+                                                                          ed_transfer = TRUE,
+                                                                          ed_email = "rmacklin@birdscanada.org",
+                                                                          dl_path = "./testdir")))) == 2)
+  
+  expect_true("./testdir/modis/MCD12Q1/MCD12Q1.A2001001.h12v04.061.2022146050354.hdf" %in% suppressWarnings(suppressMessages(landcover_download(data_fmt(outside_dates,
+                                                                                                                                 coord_lon = "longitude",
+                                                                                                                                 coord_lat = "latitude",
+                                                                                                                                 crs = 4326),
+                                                                                                                        ed_transfer = TRUE,
+                                                                                                                        ed_email = "rmacklin@birdscanada.org",
+                                                                                                                        dl_path = "./testdir"))))
+  
+  expect_true(substr(suppressWarnings(suppressMessages(landcover_download(data_fmt(outside_dates,
+                                                                                   coord_lon = "longitude",
+                                                                                   coord_lat = "latitude",
+                                                                                   crs = 4326),
+                                                                          ed_transfer = TRUE,
+                                                                          ed_email = "rmacklin@birdscanada.org",
+                                                                          dl_path = "./testdir")))[2], 
+                     start = 1, stop = 37) %in% paste0("./testdir/modis/MCD12Q1/MCD12Q1.A", c(lubridate::year(Sys.Date()) - 2, lubridate::year(Sys.Date()) - 1)))
+})
+
+test_that("landcover_download() returns appropriate warnings for out of coverage dates.", {
+  before <- bcch[bcch$survey_year < 2001,]
+  
+  after <- bcch[bcch$survey_year > 2001,]
+  after$survey_year[1] <- lubridate::year(Sys.Date())
+  
+  both <- bcch[bcch$survey_year < 2001,]
+  both$survey_year[1] <- lubridate::year(Sys.Date())
+  
+  expect_warning(suppressMessages(landcover_download(data_fmt(before,
+                                                              coord_lon = "longitude",
+                                                              coord_lat = "latitude",
+                                                              crs = 4326),
+                                                     ed_transfer =  FALSE)),
+                 "\\[MODIS Landcover Download\\] MODIS landcover data unavailable for all years before 2001. landcover_extract\\(\\) will extract landcover data from 2001 for these observations.")
+  
+  expect_warning(suppressMessages(landcover_download(data_fmt(before,
+                                                              coord_lon = "longitude",
+                                                              coord_lat = "latitude",
+                                                              crs = 4326),
+                                                     ed_transfer =  TRUE,
+                                                     ed_email = "rmacklin@birdscanada.org")),
+                 "\\[MODIS Landcover Download\\] MODIS landcover data unavailable for all years before 2001. landcover_extract\\(\\) will extract landcover data from 2001 for these observations.")
+  
+  expect_warning(suppressMessages(landcover_download(data_fmt(after,
+                                                              coord_lon = "longitude",
+                                                              coord_lat = "latitude",
+                                                              crs = 4326),
+                                                     ed_transfer =  FALSE)),
+                 paste0("\\[MODIS Landcover Download\\] MODIS landcover data unavailable for ", lubridate::year(Sys.Date()), ". landcover_extract\\(\\) will extract landcover data from the nearest available year for these observations."))
+  
+  expect_warning(suppressMessages(landcover_download(data_fmt(after,
+                                                              coord_lon = "longitude",
+                                                              coord_lat = "latitude",
+                                                              crs = 4326),
+                                                     ed_transfer = TRUE,
+                                                     ed_email = "rmacklin@birdscanada.org",
+                                                     dl_path = "./testdir")),
+                 paste0("\\[MODIS Landcover Download\\] MODIS landcover data unavailable for ", lubridate::year(Sys.Date()), ". landcover_extract\\(\\) will extract landcover data from the nearest available year for these observations."))
+  
+  expect_warning(suppressMessages(landcover_download(data_fmt(both,
+                                                              coord_lon = "longitude",
+                                                              coord_lat = "latitude",
+                                                              crs = 4326),
+                                                     ed_transfer =  FALSE)),
+                 paste0("\\[MODIS Landcover Download\\] MODIS landcover data unavailable for all years before 2001 as well as ", lubridate::year(Sys.Date()), ". landcover_extract\\(\\) will extract landcover data from 2001 or the nearest year for these observations."))
+  
+  expect_warning(suppressMessages(landcover_download(data_fmt(both,
+                                                              coord_lon = "longitude",
+                                                              coord_lat = "latitude",
+                                                              crs = 4326),
+                                                     ed_transfer = TRUE,
+                                                     ed_email = "rmacklin@birdscanada.org",
+                                                     dl_path = "./testdir")),
+                 paste0("\\[MODIS Landcover Download\\] MODIS landcover data unavailable for all years before 2001 as well as ", lubridate::year(Sys.Date()), ". landcover_extract\\(\\) will extract landcover data from 2001 or the nearest year for these observations."))
+})
+
+test_that("landcover_extract() throws appropriate error when empty vector provided to landcover_files.", {
+  expect_error(landcover_extract(suppressWarnings(suppressMessages(data_fmt(bcch))),
+                                 landcover_files = c()),
+               "\\[MODIS Landcover Extraction\\] no landcover files provided to extract from. Please provide a vector containing filepaths of all necessary MODIS files for your data. Data can be downloaded using landcover_download\\(\\).")
+  
+})
+
 test_that("landcover_extract() basic functionality with all expected data inputs.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch)))
   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch))))
@@ -210,6 +336,7 @@ test_that("landcover_extract() basic functionality with all expected data inputs
   expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 25))
   expect_equal(unique(round(rowSums(sf::st_drop_geometry(dplyr::select(extracted, tidyselect::starts_with("LC_Type1")))),0)), 100) # Check that all rows sum to 100%
 })
+
 
 test_that("landcover_extract() succeeds with all landcover classification schema.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch)))
@@ -368,6 +495,7 @@ test_that("landcover_extract() succeeds with all landcover classification schema
   expect_equal(unique(round(rowSums(sf::st_drop_geometry(dplyr::select(extracted, tidyselect::starts_with("LC_Type5")))),0)), 100) # Check that all rows sum to 100%
   })
 
+
 test_that("landcover_extract() returns appropriate warnings for out of coverage points and dates.", {
   bcch_mod <- bcch
   bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
@@ -409,7 +537,7 @@ test_that("landcover_extract() returns appropriate warnings for out of coverage 
     landcover_files = list.files("./testdir/modis/MCD12Q1", 
                                  full.names = TRUE))),
     "\\[MODIS Landcover Extraction\\]: MODIS data not available for 1998 - using data from nearest year\\(s\\) \\(2001\\).")
-  expect_true(all(round(unlist(unname(sf::st_drop_geometry(dplyr::select(extracted, starts_with("LC_Type1")))[1,])), 2) == c(0,0,0,33.33,66.67,0,0,0,0,0,0,0,0,0,0,0,0,0)))
+  expect_true(all(round(unlist(unname(sf::st_drop_geometry(dplyr::select(extracted, starts_with("LC_Type1")))[1,])), 2) == c(0,0,0,50,50,0,0,0,0,0,0,0,0,0,0,0,0,0)))
   })
 
 test_that("landcover_extract() succeeds with alternate column names, either passed through attributes or specified explicitly.", {

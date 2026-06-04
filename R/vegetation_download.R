@@ -427,7 +427,7 @@ vegetation_download <- function(
       warning("Observation on date(s) ", 
               stringr::str_flatten_comma(warning_dates),
               " could not be matched to a MODIS vegetation data file. Are they",
-              " outside of the temporal coverage of the data (i.e., before 2000)?",
+              " outside of the temporal coverage of the data (i.e., before 2000 or in the current year)?",
                call. = FALSE)
     }
     
