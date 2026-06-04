@@ -12,6 +12,8 @@ test_that("landcover_download() throws error when credentials are incorrectly su
                                                                     dl_path = "./testdir"))),
                "\\[MODIS Landcover Download\\] EarthData password incorrect. Please verify that provided password is correct."
   )
+  
+  httr::reset_config()
 })
 
 test_that("landcover_download() hits API with all expected inputs. May fail if filename structure is changed server-side.", {

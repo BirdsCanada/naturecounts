@@ -61,6 +61,8 @@ reference:
   - landcover_extract
   - vegetation_download
   - vegetation_extract
+  - elevation_download
+  - elevation_extract
 - title: Data
   desc: Included example data sets
   contents:
