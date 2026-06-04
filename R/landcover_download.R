@@ -392,6 +392,7 @@ landcover_download <- function(
     modis_files <- sort(unique(modis_files))
   } else {
     modis_files <- c()
+    missing_year <- c()
     
     # Ensures that the closest year available for years before the start of 
     # dataset coverage (2001) is downloaded.
@@ -411,6 +412,9 @@ landcover_download <- function(
         username = ed_email,
         password = ed_password
       ))
+      
+      # Record years with no data associated.
+      missing_year <- c(missing_year, unique(data$survey_year)[data$survey_year < 2001])
       
       # Quick check for misspelled password, which causes luna::getNASA to
       # download empty files.
@@ -443,6 +447,11 @@ landcover_download <- function(
           username = ed_email,
           password = ed_password
         ))
+        
+        # Record years with no data associated.
+        if(is.null(tmp)) {
+          missing_year <- c(missing_year, i)
+        }
         
         # If nothing found, indicates that year is current year or later. Download
         # data for year - 1. If already downloaded, overwrite = FALSE will
@@ -499,6 +508,31 @@ landcover_download <- function(
           }
         } else {
           modis_files <- c(modis_files, tmp)
+        }
+      }
+      
+      if(length(missing_year) > 0) {
+        if(TRUE %in% (missing_year < 2001)) {
+          if(FALSE %in% (missing_year < 2001)) {
+            warning("[MODIS Landcover Download] MODIS landcover data ",
+                    "unavailable for all years before 2001 as well as ",
+                    stringr::str_flatten_comma(sort(missing_year[missing_year >= 2001])),
+                    ". landcover_extract() will extract landcover data from 2001 ",
+                    "or the nearest year for these observations.",
+                    call. = FALSE)
+          } else {
+            warning("[MODIS Landcover Download] MODIS landcover data ",
+                    "unavailable for all years before 2001. landcover_extract() ",
+                    "will extract landcover data from 2001 for these observations.",
+                    call. = FALSE)
+          }
+        } else {
+          warning("[MODIS Landcover Download] MODIS landcover data ",
+                  "unavailable for ",
+                  stringr::str_flatten_comma(sort(missing_year)),
+                  ". landcover_extract() will extract landcover data from ",
+                  "the nearest available year for these observations.",
+                  call. = FALSE)
         }
       }
       

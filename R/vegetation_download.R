@@ -367,11 +367,11 @@ vegetation_download <- function(
     }
     
 
-    dates <- sort(paste0(data$survey_year, 
-                                 "-", 
-                                 data$survey_month,
-                                 "-",
-                                 data$survey_day))
+    dates <- sort(unique(paste0(data$survey_year, 
+                                "-", 
+                                data$survey_month,
+                                "-",
+                                data$survey_day)))
     
     # Open vector to store filenames.
     modis_files <- c()
@@ -409,13 +409,14 @@ vegetation_download <- function(
       
       # Quick check for misspelled password, which causes luna::getNASA to
       # download empty files. Should only run on first downloaded file.
-      if(i == TRUE & which(dates[!(dates %in% warning_dates)] == j) == 1) {
-        if(file.size(modis_files) < 100) {
-          file.remove(modis_files)
+      if(i == TRUE & !(j %in% warning_dates)) {
+        if(which(dates[!(dates %in% warning_dates)] == j) == 1)
+          if(file.size(modis_files) < 100) {
+            file.remove(modis_files)
           
-          stop("[MODIS NDVI/EVI Download] EarthData password incorrect. Please ",
-               "verify that provided password is correct.",
-               call. = FALSE)
+            stop("[MODIS NDVI/EVI Download] EarthData password incorrect. Please ",
+                 "verify that provided password is correct.",
+                 call. = FALSE)
         }
         
       }
