@@ -280,6 +280,10 @@ extraction, as well as for downloading and extracting covariate data
   : Download MODIS NDVI/EVI Data
 - [`vegetation_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/vegetation_extract.md)
   : Extract MODIS NDVI/EVI Data
+- [`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md)
+  : Load Terrain Tiles Elevation Data
+- [`elevation_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_extract.md)
+  : Extract Terrain Tiles Elevation Data
 
 ## Data
 
