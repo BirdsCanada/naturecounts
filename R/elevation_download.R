@@ -26,10 +26,7 @@
 #' argument, covering the bounding box of the supplied data.
 #'
 #' @examples
-#' # Using the included, test data on black-capped chickadees
-#' bcch # look at the data
-#'
-#' # Convert to sf POINT object
+#' # Convert included, test data on black-capped chickadees to sf POINT object
 #' bcch <- sf::st_as_sf(
 #'   bcch,
 #'   coords = c("longitude", "latitude"),
@@ -128,17 +125,17 @@ elevation_download <- function(
     # Convert to sf object for use in workflow.
     data <- sf::st_as_sf(data)
   }
-  
+
   message("[Elevation Download] downloading data.")
   
   # Call to API using elevatr::get_elev_raster() and store in SpatRaster.
   elev <- elevatr::get_elev_raster(
-    locations = data,
+    locations = sf::st_transform(data, "ESRI:102001"),
     z = z,
-    prj = sf::st_crs(data),
+    prj = sf::st_crs("ESRI:102001"),
     src = "aws",
     neg_to_na = TRUE, # Turn ocean tiles with negative elevation to NAs.
-    expand = 20000, # Arbitrarily high number selected (20km).
+    expand = 10000, # Arbitrarily high number selected (10km).
     # Maybe unnecessary, could reduce download size.
     verbose = FALSE
   ) %>%

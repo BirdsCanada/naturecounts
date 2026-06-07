@@ -378,30 +378,55 @@ vegetation_download <- function(
     warning_dates <- c()
     
     for(j in dates) {
-      tryCatch(
-        tmp <- luna::getNASA(
-          product = "MOD13A1",
-          start = j,
-          end = j,
-          aoi = terra::project(study_area, "epsg:4326"),
-          download = i,
-          overwrite = FALSE,
-          path = ifelse(
-            is.null(dl_path),
-            "./modis/MOD13A1",
-            paste0(dl_path, "/modis/MOD13A1")
-            ),
-          username = ed_email,
-          password = ed_password
+      if(i == FALSE) {
+        tryCatch(
+          tmp <- luna::getNASA(
+            product = "MOD13A1",
+            start = j,
+            end = j,
+            aoi = terra::project(study_area, "epsg:4326"),
+            download = i,
+            overwrite = FALSE,
+            path = ifelse(
+              is.null(dl_path),
+              "./modis/MOD13A1",
+              paste0(dl_path, "/modis/MOD13A1")
+            )
           ),
-        warning = function(w) {
-          if (conditionMessage(w) == "No results found") {
-            warning_dates <<- unique(c(warning_dates, j))
-          } else {
-            warning(conditionMessage(w))
+          warning = function(w) {
+            if (conditionMessage(w) == "No results found") {
+              warning_dates <<- unique(c(warning_dates, j))
+            } else {
+              warning(conditionMessage(w))
+            }
           }
-        }
-      )
+        )
+      } else {
+        tryCatch(
+          tmp <- luna::getNASA(
+            product = "MOD13A1",
+            start = j,
+            end = j,
+            aoi = terra::project(study_area, "epsg:4326"),
+            download = i,
+            overwrite = FALSE,
+            path = ifelse(
+              is.null(dl_path),
+              "./modis/MOD13A1",
+              paste0(dl_path, "/modis/MOD13A1")
+            ),
+            username = ed_email,
+            password = ed_password
+          ),
+          warning = function(w) {
+            if (conditionMessage(w) == "No results found") {
+              warning_dates <<- unique(c(warning_dates, j))
+            } else {
+              warning(conditionMessage(w))
+            }
+          }
+        )
+      }
       
       if(!(j %in% warning_dates)) {
         modis_files <- unique(c(modis_files, tmp))

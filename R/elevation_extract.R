@@ -9,7 +9,7 @@
 #'
 #' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or
 #'   'polygons' object.
-#' @param `terra SpatRaster`. Terrain Tiles elevation data. We reccommend using
+#' @param elevation_data `terra SpatRaster`. Terrain Tiles elevation data. We reccommend using
 #'   [elevation_download()] to ensure that all data necessary to match your
 #'   input data are captured. Direct output of [elevation_download()] can be
 #'   supplied here.
@@ -66,14 +66,6 @@ elevation_extract <- function(
     "sf",
     "terra"
   ))
-  
-  # Catch misspecified covariates. Return error if any exist.
-  if (FALSE %in% (covariates %in% nc_covariate_table()$covariate_name)) {
-    stop(
-      "[Elevation Extraction] covariates either not listed or one or more are invalid. Please provide covariate names as listed under `covariate_name` in nc_covariate_table().",
-      call. = FALSE
-    )
-  }
   
   # If no elevation raster is provided, return error.
   if (missing(elevation_data)) {
@@ -186,8 +178,8 @@ elevation_extract <- function(
   for (i in unique(data$SurveyAreaIdentifier)) {
     # Create temporary object with only point/buffer for site i.
     tmp <- data %>%
-      dplyr::filter(SurveyAreaIdentifier == i) %>%
-      dplyr::select(SurveyAreaIdentifier, geometry) %>%
+      dplyr::filter(.data$SurveyAreaIdentifier == i) %>%
+      dplyr::select("SurveyAreaIdentifier", "geometry") %>%
       dplyr::distinct()
     
     # Check if site i falls within the spatial extent of the provided elevation

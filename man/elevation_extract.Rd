@@ -10,15 +10,15 @@ elevation_extract(data, elevation_data, site_name = NULL)
 \item{data}{An \code{sf} 'POINT' or 'POLYGON' object, or \code{terra} 'points' or
 'polygons' object.}
 
+\item{elevation_data}{\verb{terra SpatRaster}. Terrain Tiles elevation data. We reccommend using
+\code{\link[=elevation_download]{elevation_download()}} to ensure that all data necessary to match your
+input data are captured. Direct output of \code{\link[=elevation_download]{elevation_download()}} can be
+supplied here.}
+
 \item{site_name}{Character. Optional argument to provide the name of the
 column containing site names if not contained within the BMDE column
 \code{SurveyAreaIdentifier}. Can be left \code{NULL} and still function properly if
 originally specified in a call to \code{\link[=data_fmt]{data_fmt()}} or \code{\link[=elevation_download]{elevation_download()}}.}
-
-\item{`terra}{SpatRaster`. Terrain Tiles elevation data. We reccommend using
-\code{\link[=elevation_download]{elevation_download()}} to ensure that all data necessary to match your
-input data are captured. Direct output of \code{\link[=elevation_download]{elevation_download()}} can be
-supplied here.}
 }
 \value{
 For sf 'POINT' or terra 'points' input data, original data with

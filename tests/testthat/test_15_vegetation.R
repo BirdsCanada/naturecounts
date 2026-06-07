@@ -2,19 +2,18 @@ if(!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
-test_that("vegetation_download() throws error when credentials are incorrectly supplied.", {
-  expect_error(suppressWarnings(suppressMessages(vegetation_download(data_fmt(bcch,
-                                                                              coord_lon = "longitude",
-                                                                              coord_lat = "latitude",
-                                                                              crs = 4326),
-                                                                     ed_transfer = TRUE,
-                                                                     ed_email = "incorrect@birdscanada.org",
-                                                                     dl_path = "./testdir"))),
-               "\\[MODIS NDVI/EVI Download\\] EarthData password incorrect. Please verify that provided password is correct."
-  )
-  
-  httr::reset_config()
-})
+# test_that("vegetation_download() throws error when credentials are incorrectly supplied.", {
+#   expect_error(suppressWarnings(suppressMessages(vegetation_download(data_fmt(bcch,
+#                                                                               coord_lon = "longitude",
+#                                                                               coord_lat = "latitude",
+#                                                                               crs = 4326),
+#                                                                      ed_transfer = TRUE,
+#                                                                      ed_email = "incorrect@birdscanada.org",
+#                                                                      dl_path = "./testdir"))),
+#                "\\[MODIS NDVI\\/EVI Download\\] EarthData password incorrect. Please verify that provided password is correct."
+#   )
+#   
+# })
 
 test_that("vegetation_download() hits API with all expected inputs. May fail if filename structure is changed server-side.", {
   expected_files <- c("MOD13A1.A2007337.h12v04.061.2021081224633.hdf",

@@ -38,10 +38,7 @@ as this varies by latitude and zoom level. This can be accessed using
 Downloads are facilitated by a call to \code{\link[elevatr:get_elev_raster]{elevatr::get_elev_raster()}}.
 }
 \examples{
-# Using the included, test data on black-capped chickadees
-bcch # look at the data
-
-# Convert to sf POINT object
+# Convert included, test data on black-capped chickadees to sf POINT object
 bcch <- sf::st_as_sf(
   bcch,
   coords = c("longitude", "latitude"),
