@@ -18,6 +18,15 @@ elevation_extract(data, elevation_data, site_name = NULL)
   An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or 'polygons'
   object.
 
+- elevation_data:
+
+  `terra SpatRaster`. Terrain Tiles elevation data. We reccommend using
+  [`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md)
+  to ensure that all data necessary to match your input data are
+  captured. Direct output of
+  [`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md)
+  can be supplied here.
+
 - site_name:
 
   Character. Optional argument to provide the name of the column
@@ -27,15 +36,6 @@ elevation_extract(data, elevation_data, site_name = NULL)
   [`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md)
   or
   [`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md).
-
-- \`terra:
-
-  SpatRaster\`. Terrain Tiles elevation data. We reccommend using
-  [`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md)
-  to ensure that all data necessary to match your input data are
-  captured. Direct output of
-  [`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md)
-  can be supplied here.
 
 ## Value
 
@@ -2657,9 +2657,11 @@ bcch <- sf::st_as_sf(
 # Load Terrain Tiles data
 elev <- elevation_download(data = bcch)
 #> [Elevation Download] downloading data.
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'rast': The elevatr package requires longitude in a range from -180 to 180.
+#> Mosaicing & Projecting
 
 # Extract Terrain Tiles data
 output <- elevation_extract(data = bcch, elevation_data = elev)
-#> Error in elevation_extract(data = bcch, elevation_data = elev): object 'covariates' not found
+#> [Elevation Extraction] extracting elevation data.
+#> Warning: [SpatVector from sf] empty SpatVector
+#> Warning: [Elevation Extraction] site NA falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
 ```
