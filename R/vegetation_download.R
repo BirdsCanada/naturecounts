@@ -392,7 +392,8 @@ vegetation_download <- function(
             path = ifelse(
               is.null(dl_path),
               "./modis/MOD13A1",
-              paste0(dl_path, "/modis/MOD13A1")
+              paste0(dl_path, "/modis/MOD13A1"),
+              verbose = verbose
             )
           ),
           warning = function(w) {
@@ -418,7 +419,8 @@ vegetation_download <- function(
               paste0(dl_path, "/modis/MOD13A1")
             ),
             username = ed_email,
-            password = ed_password
+            password = ed_password,
+            verbose = verbose
           ),
           warning = function(w) {
             if (conditionMessage(w) == "No downloadable granules found for product='MOD13A1'. Did you mean: MOD13A2, MOD13A3, MOD13A4N, MOD13C1, MOD13C2? Use `getProducts('MOD13')` to list related products.") {

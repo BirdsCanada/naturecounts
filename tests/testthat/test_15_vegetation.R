@@ -46,7 +46,9 @@ test_that("vegetation_download() successfully downloads requested files with a t
                                                                        coord_lat = "latitude",
                                                                        crs = 4326),
                                                               ed_email = "rmacklin@birdscanada.org",
-                                                              dl_path = "./testdir")),
+                                                              ed_transfer = TRUE,
+                                                              dl_path = "./testdir",
+                                                              verbose = FALSE)),
                          expected_files)
             expect_true(dir.exists("./testdir/modis/MOD13A1")) # Bonus test of custom file path specification
             expect_true(all(list.files("./testdir/modis/MOD13A1", full.names = TRUE) %in% expected_files))
