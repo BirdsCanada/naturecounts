@@ -2,19 +2,6 @@ if(!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
-# test_that("landcover_download() throws error when credentials are incorrectly supplied.", {
-#   expect_error(suppressWarnings(suppressMessages(landcover_download(data_fmt(bcch,
-#                                                                              coord_lon = "longitude",
-#                                                                              coord_lat = "latitude",
-#                                                                              crs = 4326),
-#                                                                     ed_transfer = TRUE,
-#                                                                     ed_email = "incorrect@birdscanada.org",
-#                                                                     dl_path = "./testdir"))),
-#                "\\[MODIS Landcover Download\\] EarthData password incorrect. Please verify that provided password is correct."
-#   )
-#   
-# })
-
 test_that("landcover_download() hits API with all expected inputs. May fail if filename structure is changed server-side.", {
   expected_files <- c("MCD12Q1.A2001001.h12v04.061.2022146050354.hdf",
                       "MCD12Q1.A2002001.h12v04.061.2022147215712.hdf",

@@ -30,6 +30,7 @@
 #' @param dl_path Character. Optional argument to provide path to download data
 #'   to. By default, data is downloaded to a subfolder `modis/` in the working
 #'   directory.
+#' @param verbose Logical. Should progress bars for downloads be displayed?
 #'
 #' @returns If `ed_transfer = TRUE`, character vector containing
 #'   file-paths to downloaded MODIS landcover files. If `ed_transfer =
@@ -82,9 +83,10 @@ landcover_download <- function(
   # data. Default is assumed to be the BMDE column 'survey_year'. Can
   # be left NULL and still function properly if originally specified in a call
   # to data_fmt().
-  dl_path = NULL # optional argument to provide path to download data to. By
+  dl_path = NULL, # optional argument to provide path to download data to. By
   # default, data is downloaded to a subfolder 'modis/' in the working
   # directory.
+  verbose = TRUE # should download progress bars be displayed?
 ) {
   # Check packages
   have_pkg_check(c(
@@ -301,7 +303,8 @@ landcover_download <- function(
         start = "2001-01-01", # Starting year
         end = "2001-12-31", # End year
         aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-        download = FALSE
+        download = FALSE,
+        verbose = verbose
         ))
     }
     
@@ -312,7 +315,8 @@ landcover_download <- function(
           start = paste0(i, "-01-01"), # Starting year
           end = paste0(i, "-12-31"), # End year
           aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-          download = FALSE
+          download = FALSE,
+          verbose = verbose
         ))
         
       # Record years with no data associated.
@@ -333,7 +337,8 @@ landcover_download <- function(
               start = paste0(i-1, "-01-01"), # Starting year
               end = paste0(i-1, "-12-31"), # End year
               aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-              download = FALSE
+              download = FALSE,
+              verbose = verbose
             ))
             # If nothing found for year - 1, try year - 2.
             if(is.null(tmp)) {
@@ -343,7 +348,8 @@ landcover_download <- function(
                   start = paste0(i-2, "-01-01"), # Starting year
                   end = paste0(i-2, "-12-31"), # End year
                   aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-                  download = FALSE
+                  download = FALSE,
+                  verbose = verbose
                 ))
                 
                 # Warn if year-2 doesn't return anything.
@@ -410,21 +416,12 @@ landcover_download <- function(
           paste0(dl_path, "/modis/MCD12Q1")
         ),
         username = ed_email,
-        password = ed_password
+        password = ed_password,
+        verbose = verbose
       ))
       
       # Record years with no data associated.
       missing_year <- c(missing_year, unique(data$survey_year[data$survey_year < 2001]))
-      
-      # Quick check for misspelled password, which causes luna::getNASA to
-      # download empty files.
-      if(file.size(modis_files) < 100) {
-        file.remove(modis_files)
-        
-        stop("[MODIS Landcover Download] EarthData password incorrect. Please ",
-        "verify that provided password is correct.",
-        call. = FALSE)
-      }
     }
     
     # Now, download for years 2001 and after.
@@ -446,7 +443,8 @@ landcover_download <- function(
               paste0(dl_path, "/modis/MCD12Q1")
             ),
             username = ed_email,
-            password = ed_password
+            password = ed_password,
+            verbose = verbose
           ))
           
           # Record years with no data associated.
@@ -471,7 +469,8 @@ landcover_download <- function(
                 paste0(dl_path, "/modis/MCD12Q1")
               ),
               username = ed_email,
-              password = ed_password
+              password = ed_password,
+              verbose = verbose
             ))
             
             # Just in case, try year - 2 if MODIS data upload is really behind for
@@ -490,7 +489,8 @@ landcover_download <- function(
                   paste0(dl_path, "/modis/MCD12Q1")
                 ),
                 username = ed_email,
-                password = ed_password
+                password = ed_password,
+                verbose = verbose
               ))
               
               # Warn if year-2 doesn't return anything.
@@ -509,19 +509,6 @@ landcover_download <- function(
             }
           } else {
             modis_files <- c(modis_files, tmp)
-          }
-        }
-        
-        # Quick check for misspelled password, which causes luna::getNASA to
-        # download empty files. Only runs on first year. If there are years before
-        # 2001, get's caught by same check implemented above.
-        if(which(sort(unique(data$survey_year[data$survey_year >= 2001])) == i) == 1) {
-          if(file.size(modis_files[1]) < 100) {
-            file.remove(modis_files[1])
-            
-            stop("[MODIS Landcover Download] EarthData password incorrect. Please ",
-                 "verify that provided password is correct.",
-                 call. = FALSE)
           }
         }
       }

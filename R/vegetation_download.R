@@ -39,6 +39,7 @@
 #' @param dl_path Character. Optional argument to provide path to download data
 #'   to. By default, data is downloaded to a subfolder `modis/` in the working
 #'   directory.
+#' @param verbose Logical. Should progress bars for downloads be displayed?
 #'
 #' @returns If `ed_transfer = TRUE`, character vector containing
 #'   file-paths to downloaded MODIS landcover files. If `ed_transfer =
@@ -98,9 +99,10 @@ vegetation_download <- function(
   # data. Default is assumed to be the BMDE column 'survey_month'
   date_day = NULL, # optional argument to provide column name containing day
   # data. Default is assumed to be the BMDE column 'survey_day'.
-  dl_path = NULL # optional argument to provide path to download data to. By
+  dl_path = NULL, # optional argument to provide path to download data to. By
   # default, data is downloaded to a subfolder 'modis/' in the working
   # directory.
+  verbose = TRUE # Should progress bars for downloads be displayed?
 ) {
   # Check packages
   have_pkg_check(c(
@@ -394,7 +396,7 @@ vegetation_download <- function(
             )
           ),
           warning = function(w) {
-            if (conditionMessage(w) == "No results found") {
+            if (conditionMessage(w) == "No downloadable granules found for product='MOD13A1'. Did you mean: MOD13A2, MOD13A3, MOD13A4N, MOD13C1, MOD13C2? Use `getProducts('MOD13')` to list related products.") {
               warning_dates <<- unique(c(warning_dates, j))
             } else {
               warning(conditionMessage(w))
@@ -419,7 +421,7 @@ vegetation_download <- function(
             password = ed_password
           ),
           warning = function(w) {
-            if (conditionMessage(w) == "No results found") {
+            if (conditionMessage(w) == "No downloadable granules found for product='MOD13A1'. Did you mean: MOD13A2, MOD13A3, MOD13A4N, MOD13C1, MOD13C2? Use `getProducts('MOD13')` to list related products.") {
               warning_dates <<- unique(c(warning_dates, j))
             } else {
               warning(conditionMessage(w))
@@ -430,20 +432,6 @@ vegetation_download <- function(
       
       if(!(j %in% warning_dates)) {
         modis_files <- unique(c(modis_files, tmp))
-      }
-      
-      # Quick check for misspelled password, which causes luna::getNASA to
-      # download empty files. Should only run on first downloaded file.
-      if(i == TRUE & !(j %in% warning_dates)) {
-        if(which(dates[!(dates %in% warning_dates)] == j) == 1)
-          if(file.size(modis_files) < 100) {
-            file.remove(modis_files)
-          
-            stop("[MODIS NDVI/EVI Download] EarthData password incorrect. Please ",
-                 "verify that provided password is correct.",
-                 call. = FALSE)
-        }
-        
       }
     }
     
