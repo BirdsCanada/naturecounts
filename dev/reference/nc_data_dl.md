@@ -285,7 +285,6 @@ p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
 #>     Records 110001 to 115000 / 122258
 #>     Records 115001 to 120000 / 122258
 #>     Records 120001 to 122258 / 122258
-#> The server did not respond within 120s. Trying again...
 #>   ABATLAS2
 #>     Records 1 to 5000 / 201357
 #>     Records 5001 to 10000 / 201357
