@@ -12,7 +12,14 @@ onto the user's operating system.
 ## Usage
 
 ``` r
-elevation_download(data, site_name = NULL, z = 7)
+elevation_download(
+  data,
+  site_name = NULL,
+  negative_to_na = FALSE,
+  z = 7,
+  dl_path = NULL,
+  progress = TRUE
+)
 ```
 
 ## Arguments
@@ -30,11 +37,29 @@ elevation_download(data, site_name = NULL, z = 7)
   if originally specified in a call to
   [`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md).
 
+- negative_to_na:
+
+  Logical. Should negative elevation values be turned into `NA`? If
+  `FALSE`, check the outputted rasters for unrealistically large
+  negative values as these may instead represent missing data. For
+  coastal areas, negative elevation values may represent bathymetry
+  (i.e. sea depth).
+
 - z:
 
   Numeric. Zoom level to fetch, determining the resulting spatial
   resolution of downloaded elevation data. More information can be found
   [here](https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#what-is-the-ground-resolution).
+
+- dl_path:
+
+  Character. Optional argument to provide path to download data to. By
+  default, data is downloaded to a subfolder `TerrainTiles/` in the
+  working directory.
+
+- progress:
+
+  Logical. Should progress bars and download messages be displayed?
 
 ## Value
 
@@ -72,4 +97,5 @@ bcch <- sf::st_as_sf(
 output <- elevation_download(data = bcch)
 #> [Elevation Download] downloading data.
 #> Mosaicing & Projecting
+#> Note: Elevation units are in meters.
 ```

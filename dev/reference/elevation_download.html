@@ -63,7 +63,14 @@ the user's operating system.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">elevation_download</span><span class="op">(</span><span class="va">data</span>, site_name <span class="op">=</span> <span class="cn">NULL</span>, z <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">elevation_download</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  site_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  negative_to_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  z <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  dl_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -82,10 +89,27 @@ column containing site names if not contained within the BMDE column
 originally specified in a call to <code><a href="data_fmt.html">data_fmt()</a></code>.</p></dd>
 
 
+<dt id="arg-negative-to-na">negative_to_na<a class="anchor" aria-label="anchor" href="#arg-negative-to-na"></a></dt>
+<dd><p>Logical. Should negative elevation values be turned into
+<code>NA</code>? If <code>FALSE</code>, check the outputted rasters for unrealistically large negative
+values as these may instead represent missing data. For coastal areas, negative
+elevation values may represent bathymetry (i.e. sea depth).</p></dd>
+
+
 <dt id="arg-z">z<a class="anchor" aria-label="anchor" href="#arg-z"></a></dt>
 <dd><p>Numeric. Zoom level to fetch, determining the resulting spatial
 resolution of downloaded elevation data. More information can be found
 <a href="https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#what-is-the-ground-resolution" class="external-link">here</a>.</p></dd>
+
+
+<dt id="arg-dl-path">dl_path<a class="anchor" aria-label="anchor" href="#arg-dl-path"></a></dt>
+<dd><p>Character. Optional argument to provide path to download data
+to. By default, data is downloaded to a subfolder <code>TerrainTiles/</code> in the working
+directory.</p></dd>
+
+
+<dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
+<dd><p>Logical. Should progress bars and download messages be displayed?</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -119,6 +143,7 @@ which can be used to extract data from loaded elevation data files.</p></div>
 <span class="r-in"><span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu">elevation_download</span><span class="op">(</span>data <span class="op">=</span> <span class="va">bcch</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> [Elevation Download] downloading data.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Mosaicing &amp; Projecting</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: Elevation units are in meters.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

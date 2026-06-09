@@ -71,7 +71,8 @@ done at the following link: <a href="https://urs.earthdata.nasa.gov/users/new" c
 <span>  date_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  date_month <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  date_day <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dl_path <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  dl_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -127,6 +128,10 @@ function properly if originally specified in a call to <code><a href="data_fmt.h
 <dd><p>Character. Optional argument to provide path to download data
 to. By default, data is downloaded to a subfolder <code>modis/</code> in the working
 directory.</p></dd>
+
+
+<dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
+<dd><p>Logical. Should progress bars for downloads be displayed?</p></dd>
 
 </dl></div>
     <div class="section level2">

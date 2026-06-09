@@ -19,7 +19,8 @@ vegetation_download(
   date_year = NULL,
   date_month = NULL,
   date_day = NULL,
-  dl_path = NULL
+  dl_path = NULL,
+  progress = TRUE
 )
 ```
 
@@ -77,6 +78,10 @@ vegetation_download(
   Character. Optional argument to provide path to download data to. By
   default, data is downloaded to a subfolder `modis/` in the working
   directory.
+
+- progress:
+
+  Logical. Should progress bars for downloads be displayed?
 
 ## Value
 

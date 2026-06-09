@@ -2658,6 +2658,7 @@ bcch <- sf::st_as_sf(
 elev <- elevation_download(data = bcch)
 #> [Elevation Download] downloading data.
 #> Mosaicing & Projecting
+#> Note: Elevation units are in meters.
 
 # Extract Terrain Tiles data
 output <- elevation_extract(data = bcch, elevation_data = elev)

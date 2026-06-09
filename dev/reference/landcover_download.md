@@ -17,7 +17,8 @@ landcover_download(
   ed_transfer = TRUE,
   site_name = NULL,
   date_year = NULL,
-  dl_path = NULL
+  dl_path = NULL,
+  progress = TRUE
 )
 ```
 
@@ -59,6 +60,10 @@ landcover_download(
   Character. Optional argument to provide path to download data to. By
   default, data is downloaded to a subfolder `modis/` in the working
   directory.
+
+- progress:
+
+  Logical. Should progress bars for downloads be displayed?
 
 ## Value
 
