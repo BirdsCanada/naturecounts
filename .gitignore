@@ -11,4 +11,5 @@ rosm.cache
 testdir
 .positai
 vignettes/articles/modis
+vignettes/articles/TerrainTiles
 modis
