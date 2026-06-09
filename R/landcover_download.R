@@ -30,7 +30,7 @@
 #' @param dl_path Character. Optional argument to provide path to download data
 #'   to. By default, data is downloaded to a subfolder `modis/` in the working
 #'   directory.
-#' @param verbose Logical. Should progress bars for downloads be displayed?
+#' @param progress Logical. Should progress bars for downloads be displayed?
 #'
 #' @returns If `ed_transfer = TRUE`, character vector containing
 #'   file-paths to downloaded MODIS landcover files. If `ed_transfer =
@@ -86,7 +86,7 @@ landcover_download <- function(
   dl_path = NULL, # optional argument to provide path to download data to. By
   # default, data is downloaded to a subfolder 'modis/' in the working
   # directory.
-  verbose = TRUE # should download progress bars be displayed?
+  progress = TRUE # should download progress bars be displayed?
 ) {
   # Check packages
   have_pkg_check(c(
@@ -304,7 +304,7 @@ landcover_download <- function(
         end = "2001-12-31", # End year
         aoi = terra::ext(terra::project(study_area, "epsg:4326")),
         download = FALSE,
-        verbose = verbose
+        verbose = progress
         ))
     }
     
@@ -316,7 +316,7 @@ landcover_download <- function(
           end = paste0(i, "-12-31"), # End year
           aoi = terra::ext(terra::project(study_area, "epsg:4326")),
           download = FALSE,
-          verbose = verbose
+          verbose = progress
         ))
         
       # Record years with no data associated.
@@ -338,7 +338,7 @@ landcover_download <- function(
               end = paste0(i-1, "-12-31"), # End year
               aoi = terra::ext(terra::project(study_area, "epsg:4326")),
               download = FALSE,
-              verbose = verbose
+              verbose = progress
             ))
             # If nothing found for year - 1, try year - 2.
             if(is.null(tmp)) {
@@ -349,7 +349,7 @@ landcover_download <- function(
                   end = paste0(i-2, "-12-31"), # End year
                   aoi = terra::ext(terra::project(study_area, "epsg:4326")),
                   download = FALSE,
-                  verbose = verbose
+                  verbose = progress
                 ))
                 
                 # Warn if year-2 doesn't return anything.
@@ -417,7 +417,7 @@ landcover_download <- function(
         ),
         username = ed_email,
         password = ed_password,
-        verbose = verbose
+        verbose = progress
       ))
       
       # Record years with no data associated.
@@ -444,7 +444,7 @@ landcover_download <- function(
             ),
             username = ed_email,
             password = ed_password,
-            verbose = verbose
+            verbose = progress
           ))
           
           # Record years with no data associated.
@@ -470,7 +470,7 @@ landcover_download <- function(
               ),
               username = ed_email,
               password = ed_password,
-              verbose = verbose
+              verbose = progress
             ))
             
             # Just in case, try year - 2 if MODIS data upload is really behind for
@@ -490,7 +490,7 @@ landcover_download <- function(
                 ),
                 username = ed_email,
                 password = ed_password,
-                verbose = verbose
+                verbose = progress
               ))
               
               # Warn if year-2 doesn't return anything.

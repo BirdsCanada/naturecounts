@@ -4,7 +4,14 @@
 \alias{elevation_download}
 \title{Load Terrain Tiles Elevation Data}
 \usage{
-elevation_download(data, site_name = NULL, z = 7)
+elevation_download(
+  data,
+  site_name = NULL,
+  negative_to_na = FALSE,
+  z = 7,
+  dl_path = NULL,
+  progress = TRUE
+)
 }
 \arguments{
 \item{data}{An \code{sf} 'POINT' or 'POLYGON' object, or \code{terra} 'points' or
@@ -15,9 +22,20 @@ column containing site names if not contained within the BMDE column
 \code{SurveyAreaIdentifier}. Can be left \code{NULL} and still function properly if
 originally specified in a call to \code{\link[=data_fmt]{data_fmt()}}.}
 
+\item{negative_to_na}{Logical. Should negative elevation values be turned into
+\code{NA}? If \code{FALSE}, check the outputted rasters for unrealistically large negative
+values as these may instead represent missing data. For coastal areas, negative
+elevation values may represent bathymetry (i.e. sea depth).}
+
 \item{z}{Numeric. Zoom level to fetch, determining the resulting spatial
 resolution of downloaded elevation data. More information can be found
 \href{https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#what-is-the-ground-resolution}{here}.}
+
+\item{dl_path}{Character. Optional argument to provide path to download data
+to. By default, data is downloaded to a subfolder \verb{TerrainTiles/} in the working
+directory.}
+
+\item{progress}{Logical. Should progress bars and download messages be displayed?}
 }
 \value{
 A \verb{terra SpatRaster} in the projection of the data supplied to the \code{data}

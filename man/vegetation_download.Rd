@@ -12,7 +12,8 @@ vegetation_download(
   date_year = NULL,
   date_month = NULL,
   date_day = NULL,
-  dl_path = NULL
+  dl_path = NULL,
+  progress = TRUE
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ function properly if originally specified in a call to \code{\link[=data_fmt]{da
 \item{dl_path}{Character. Optional argument to provide path to download data
 to. By default, data is downloaded to a subfolder \verb{modis/} in the working
 directory.}
+
+\item{progress}{Logical. Should progress bars for downloads be displayed?}
 }
 \value{
 If \code{ed_transfer = TRUE}, character vector containing

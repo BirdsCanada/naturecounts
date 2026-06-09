@@ -18,9 +18,17 @@
 #'   column containing site names if not contained within the BMDE column
 #'   `SurveyAreaIdentifier`. Can be left `NULL` and still function properly if
 #'   originally specified in a call to [data_fmt()].
+#' @param negative_to_na Logical. Should negative elevation values be turned into
+#'   `NA`? If `FALSE`, check the outputted rasters for unrealistically large negative
+#'   values as these may instead represent missing data. For coastal areas, negative 
+#'   elevation values may represent bathymetry (i.e. sea depth).
 #' @param z Numeric. Zoom level to fetch, determining the resulting spatial 
 #'   resolution of downloaded elevation data. More information can be found 
 #'   [here](https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#what-is-the-ground-resolution).
+#' @param dl_path Character. Optional argument to provide path to download data
+#'   to. By default, data is downloaded to a subfolder `TerrainTiles/` in the working
+#'   directory.
+#' @param progress Logical. Should progress bars and download messages be displayed?
 #'
 #' @returns A `terra SpatRaster` in the projection of the data supplied to the `data`
 #' argument, covering the bounding box of the supplied data.
@@ -46,7 +54,10 @@
 elevation_download <- function(
     data,
     site_name = NULL,
-    z = 7
+    negative_to_na = FALSE,
+    z = 7,
+    dl_path = NULL,
+    progress = TRUE
 ) {
   # Check packages
   have_pkg_check(c(
@@ -126,20 +137,54 @@ elevation_download <- function(
     data <- sf::st_as_sf(data)
   }
 
+  # Create download path if it doesn't already exist.
+  if (is.null(dl_path) & !dir.exists("./TerrainTiles")) {
+    dir.create("./TerrainTiles", recursive = TRUE)
+  }
+  
+  if (!is.null(dl_path) & !dir.exists(paste0(dl_path, "/TerrainTiles"))) {
+    dir.create(paste0(dl_path, "/TerrainTiles"), recursive = TRUE)
+  }
+  
   message("[Elevation Download] downloading data.")
   
   # Call to API using elevatr::get_elev_raster() and store in SpatRaster.
-  elev <- elevatr::get_elev_raster(
-    locations = sf::st_transform(data, "ESRI:102001"),
-    z = z,
-    prj = sf::st_crs("ESRI:102001"),
-    src = "aws",
-    neg_to_na = TRUE, # Turn ocean tiles with negative elevation to NAs.
-    expand = 10000, # Arbitrarily high number selected (10km).
-    # Maybe unnecessary, could reduce download size.
-    verbose = FALSE
-  ) %>%
-    terra::rast()
+  if(progress == TRUE) {
+    elev <- elevatr::get_elev_raster(
+      locations = sf::st_transform(data, "ESRI:102001"),
+      z = z,
+      prj = sf::st_crs("ESRI:102001"),
+      src = "aws",
+      neg_to_na = negative_to_na, # Turn ocean tiles with negative elevation to NAs.
+      expand = 10000, # Arbitrarily high number selected (10km).
+      # Maybe unnecessary, could reduce download size.
+      verbose = TRUE,
+      tmp_dir = ifelse(
+        is.null(dl_path),
+        "./TerrainTiles",
+        paste0(dl_path, "/TerrainTiles"))
+    ) %>%
+      terra::rast()
+  } else {
+    suppressMessages(
+      elev <- elevatr::get_elev_raster(
+      locations = sf::st_transform(data, "ESRI:102001"),
+      z = z,
+      prj = sf::st_crs("ESRI:102001"),
+      src = "aws",
+      neg_to_na = negative_to_na, # Turn ocean tiles with negative elevation to NAs.
+      expand = 10000, # Arbitrarily high number selected (10km).
+      # Maybe unnecessary, could reduce download size.
+      verbose = FALSE,
+      tmp_dir = ifelse(
+        is.null(dl_path),
+        "./TerrainTiles",
+        paste0(dl_path, "/TerrainTiles"))
+    ) %>%
+      terra::rast()
+    )
+  }
+  
   
   # Return SpatRaster of downloaded elevation data.
   return(elev)

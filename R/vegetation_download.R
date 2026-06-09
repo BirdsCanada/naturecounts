@@ -39,7 +39,7 @@
 #' @param dl_path Character. Optional argument to provide path to download data
 #'   to. By default, data is downloaded to a subfolder `modis/` in the working
 #'   directory.
-#' @param verbose Logical. Should progress bars for downloads be displayed?
+#' @param progress Logical. Should progress bars for downloads be displayed?
 #'
 #' @returns If `ed_transfer = TRUE`, character vector containing
 #'   file-paths to downloaded MODIS landcover files. If `ed_transfer =
@@ -102,7 +102,7 @@ vegetation_download <- function(
   dl_path = NULL, # optional argument to provide path to download data to. By
   # default, data is downloaded to a subfolder 'modis/' in the working
   # directory.
-  verbose = TRUE # Should progress bars for downloads be displayed?
+  progress = TRUE # Should progress bars for downloads be displayed?
 ) {
   # Check packages
   have_pkg_check(c(
@@ -392,9 +392,8 @@ vegetation_download <- function(
             path = ifelse(
               is.null(dl_path),
               "./modis/MOD13A1",
-              paste0(dl_path, "/modis/MOD13A1"),
-              verbose = verbose
-            )
+              paste0(dl_path, "/modis/MOD13A1")),
+              verbose = progress
           ),
           warning = function(w) {
             if (conditionMessage(w) == "No downloadable granules found for product='MOD13A1'. Did you mean: MOD13A2, MOD13A3, MOD13A4N, MOD13C1, MOD13C2? Use `getProducts('MOD13')` to list related products.") {
@@ -420,7 +419,7 @@ vegetation_download <- function(
             ),
             username = ed_email,
             password = ed_password,
-            verbose = verbose
+            verbose = progress
           ),
           warning = function(w) {
             if (conditionMessage(w) == "No downloadable granules found for product='MOD13A1'. Did you mean: MOD13A2, MOD13A3, MOD13A4N, MOD13C1, MOD13C2? Use `getProducts('MOD13')` to list related products.") {

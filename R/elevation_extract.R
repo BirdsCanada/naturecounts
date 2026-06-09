@@ -70,7 +70,15 @@ elevation_extract <- function(
   # If no elevation raster is provided, return error.
   if (missing(elevation_data)) {
     stop(
-      "[Elevation Extraction] no elevation data provided to extract from. Please provide a terra SpatRaster containing the necessary elevation data. Elevation data can be downloaded using elevation_download.",
+      "[Elevation Extraction] no elevation data provided to extract from. Please provide a terra SpatRaster containing the necessary elevation data. Elevation data can be downloaded using elevation_download().",
+      call. = FALSE
+    )
+  }
+  
+  # If elevation_data is provided, but is not a SpatRaster return error.
+  if (!(inherits(elevation_data, "SpatRaster"))) {
+    stop(
+      "[Elevation Extraction] data provided to elevation_data argument is not a SpatRaster. Please provide a terra SpatRaster containing the necessary elevation data. Elevation data can be downloaded using elevation_download().",
       call. = FALSE
     )
   }
@@ -184,6 +192,8 @@ elevation_extract <- function(
     
     # Check if site i falls within the spatial extent of the provided elevation
     # raster. If not, warn. If only partially, warn.
+    
+    #### BECAUSE OF THE EXTRA NANs WILL NEED TO REWORK THIS
     if (!terra::is.related(elev, terra::vect(tmp), relation = "intersects")) {
       warning(
         "[Elevation Extraction] site ",
@@ -192,41 +202,67 @@ elevation_extract <- function(
         " provided. No value will be returned.",
         call. = FALSE
       )
-    } else if (
-      terra::is.related(elev, terra::vect(tmp), relation = "intersects") &
-      !terra::is.related(elev, terra::vect(tmp), relation = "contains")
-    ) {
-      warning(
-        "[Elevation Extraction] site ",
-        i,
-        "'s buffered area is only partially contained by the spatial extent of",
-        " the elevation rasters provided. Returned mean elevation value will",
-        " be derived from the available values.",
-        call. = FALSE
-      )
+    } else if (buffered == TRUE) {
+        if(all(is.nan(terra::values(terra::crop(elev, tmp))))) {
+          warning(
+            "[Elevation Extraction] site ",
+            i,
+            " falls outside of the spatial extent of the elevation rasters",
+            " provided. No value will be returned.",
+            call. = FALSE
+          )
+          } else if (TRUE %in% is.nan(terra::values(terra::crop(elev, tmp)))) { 
+            warning(
+              "[Elevation Extraction] site ",
+              i,
+              "'s buffered area is only partially contained by the spatial extent of",
+              " the elevation rasters provided. Returned mean elevation value will",
+              " be derived from the available values.",
+              call. = FALSE
+            )
+            
+            data[
+              data$SurveyAreaIdentifier == i,
+              "elevation"
+            ] <- exactextractr::exact_extract(
+              x = elev,
+              y = tmp,
+              fun = "mean",
+              progress = FALSE
+            )
+            
+          } else {
+            data[
+              data$SurveyAreaIdentifier == i,
+              "elevation"
+            ] <- exactextractr::exact_extract(
+              x = elev,
+              y = tmp,
+              fun = "mean",
+              progress = FALSE
+            )
+            }
     } else {
-      # If no issues with coverage, proceed to extract. If buffered, extract
-      # using exactextractr::exact_extract(). If not, extract using
-      # terra::extract().
-      if (buffered == FALSE) {
+      if(is.na(terra::extract(elev, tmp)[,2])) {
+        warning(
+          "[Elevation Extraction] site ",
+          i,
+          " falls outside of the spatial extent of the elevation rasters",
+          " provided. No value will be returned.",
+          call. = FALSE
+        )
+      } else {
+        # If no issues with coverage, proceed to extract. If buffered, extract
+        # using exactextractr::exact_extract(). If not, extract using
+        # terra::extract().
         data[data$SurveyAreaIdentifier == i, "elevation"] <- terra::extract(
           x = elev,
           y = tmp,
           fun = "mean"
         )[, names(elev)]
-      } else {
-        data[
-          data$SurveyAreaIdentifier == i,
-          "elevation"
-        ] <- exactextractr::exact_extract(
-          x = elev,
-          y = tmp,
-          fun = "mean",
-          progress = FALSE
-        )
+      }
       }
     }
-  }
   
   # Code to grab nearest raster value for sites outside of raster coverage.
   # Not sure whether to keep this since we are warning users about these sites
