@@ -361,6 +361,8 @@ naturecounts functions.
   Data](https://birdscanada.github.io/naturecounts/dev/articles/4.2-LandCover.md):
 - [Chapter 3 - Downloading and Extracting Vegetation
   Indices](https://birdscanada.github.io/naturecounts/dev/articles/4.3-Vegetation.md):
+- [Chapter 4 - Downloading and Extracting Elevation
+  Data](https://birdscanada.github.io/naturecounts/dev/articles/4.4-Elevation.md):
 
 ### Additional Tutorials
 
