@@ -10,7 +10,7 @@ elevation_extract(data, elevation_data, site_name = NULL)
 \item{data}{An \code{sf} 'POINT' or 'POLYGON' object, or \code{terra} 'points' or
 'polygons' object.}
 
-\item{elevation_data}{\verb{terra SpatRaster}. Terrain Tiles elevation data. We reccommend using
+\item{elevation_data}{\verb{terra SpatRaster}. Terrain Tiles elevation data. We recommend using
 \code{\link[=elevation_download]{elevation_download()}} to ensure that all data necessary to match your
 input data are captured. Direct output of \code{\link[=elevation_download]{elevation_download()}} can be
 supplied here.}

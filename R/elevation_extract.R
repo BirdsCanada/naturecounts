@@ -9,7 +9,7 @@
 #'
 #' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or
 #'   'polygons' object.
-#' @param elevation_data `terra SpatRaster`. Terrain Tiles elevation data. We reccommend using
+#' @param elevation_data `terra SpatRaster`. Terrain Tiles elevation data. We recommend using
 #'   [elevation_download()] to ensure that all data necessary to match your
 #'   input data are captured. Direct output of [elevation_download()] can be
 #'   supplied here.
