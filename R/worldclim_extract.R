@@ -116,6 +116,15 @@ worldclim_extract <- function(
     )
   }
   
+  if(!(((inherits(worldclim_data, "list")) & (inherits(worldclim_data[[1]], "SpatRaster"))) | inherits(worldclim_data, "SpatRaster"))) {
+    stop(
+      "[WorldClim Extraction] no WorldClim rasters provided to extract from.",
+      " Please provide a list of the necessary rasters. Data can be downloaded",
+      " using worldclim_download().",
+      call. = FALSE
+    )
+  }
+  
   # Check data is in the desired format.
   input_fmt <- covariate_fmt_check(data)
   
@@ -285,10 +294,24 @@ worldclim_extract <- function(
   
   clim <- worldclim_data
   
+  if(inherits(worldclim_data, "list")) {
+    loop <- names(worldclim_data)
+  } else if(inherits(worldclim_data, "SpatRaster")) {
+    loop <- gsub(
+      pattern = "worldclim_",
+      replacement = "",
+      grep("worldclim_", covariates, value = TRUE)
+    )
+  }
+  
   # Loop through each requested WorldClim variable.
-  for (i in names(worldclim_data)) {
+  for (i in loop) {
     message("[WorldClim Extraction] extracting WorldClim ", i, ".")
-    
+    if(length(loop) > 1) {
+      source <- clim[[i]]
+    } else {
+      source <- clim
+    }
     # Loop through each site and extract.
     for (j in unique(data$SurveyAreaIdentifier)) {
       # Create temporary object with only point/buffer for site i.
@@ -296,20 +319,21 @@ worldclim_extract <- function(
         dplyr::filter(.data$SurveyAreaIdentifier == j) %>%
         dplyr::select("SurveyAreaIdentifier", "survey_month", "geometry") %>%
         dplyr::distinct() %>%
-        sf::st_transform(terra::crs(clim[[i]]))
-      
+        sf::st_transform(terra::crs(source))
+
       # Loop through each month site i was visited, extract.
       for (k in unique(data$survey_month[data$SurveyAreaIdentifier == j])) {
         # Use variable name and month to pull correct layer from WorldClim
         # raster.
+  
         layername <- paste0(
           substr(
-            names(clim[[i]])[1],
+            names(source)[1],
             start = 1,
-            stop = nchar(names(clim[[i]])[1]) - 1
-          ),
+            stop = nchar(names(source)[1]) - 1
+            ),
           k
-        )
+          )
         
         # In the first iteration of the loop, check that the site falls within
         # or is only partially covered by the spatial extent of the provided
@@ -322,7 +346,7 @@ worldclim_extract <- function(
         ) {
           if (
             !terra::is.related(
-              clim[[i]],
+              source,
               terra::vect(tmp),
               relation = "intersects"
             )
@@ -338,12 +362,12 @@ worldclim_extract <- function(
             )
           } else if (
             terra::is.related(
-              clim[[i]],
+              source,
               terra::vect(tmp),
               relation = "intersects"
             ) &
             !terra::is.related(
-              clim[[i]],
+              source,
               terra::vect(tmp),
               relation = "contains"
             )
@@ -368,7 +392,7 @@ worldclim_extract <- function(
                 data$SurveyAreaIdentifier == j & data$survey_month == k,
                 i
               ] <- exactextractr::exact_extract(
-                x = clim[[i]][[layername]],
+                x = source[[layername]],
                 y = tmp %>% dplyr::filter(.data$survey_month == k),
                 fun = "mean"
               )
@@ -377,7 +401,7 @@ worldclim_extract <- function(
                 data$SurveyAreaIdentifier == j & data$survey_month == k,
                 i
               ] <- terra::extract(
-                x = clim[[i]][[layername]],
+                x = source[[layername]],
                 y = tmp %>% dplyr::filter(.data$survey_month == k),
                 fun = "mean",
                 na.rm = TRUE
@@ -389,7 +413,7 @@ worldclim_extract <- function(
           # WorldClim rasters. Issue no further warnings if not.
           if (
             terra::is.related(
-              clim[[i]],
+              source,
               terra::vect(tmp),
               relation = "intersects"
             )
@@ -399,7 +423,7 @@ worldclim_extract <- function(
                 data$SurveyAreaIdentifier == j & data$survey_month == k,
                 i
               ] <- exactextractr::exact_extract(
-                x = clim[[i]][[layername]],
+                x = source[[layername]],
                 y = tmp %>% dplyr::filter(.data$survey_month == k),
                 fun = "mean"
               )
@@ -408,7 +432,7 @@ worldclim_extract <- function(
                 data$SurveyAreaIdentifier == j & data$survey_month == k,
                 i
               ] <- terra::extract(
-                x = clim[[i]][[layername]],
+                x = source[[layername]],
                 y = tmp %>% dplyr::filter(.data$survey_month == k),
                 fun = "mean",
                 na.rm = TRUE
