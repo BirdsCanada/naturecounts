@@ -192,60 +192,42 @@ test_that("worldclim_extract() succeeds with alternate column names, either pass
   expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
   expect_equal(unname(apply(X = apply(FUN = is.na, X = extracted, MARGIN = 1), FUN = unique, MARGIN = 1)), rep(FALSE, times = 8))
 })
-# 
-# test_that("worldclim_extract() returns appropriate warnings for out of coverage points.", {
-#   bcch_mod <- bcch
-#   bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
-#   bcch_mod$latitude[1] <- 80
-#   bcch_mod$longitude[1] <- -127
-# 
-#   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_mod)))
-#   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod))))
-# 
-#   expect_warning(extracted <- suppressMessages(worldclim_extract(
-#     sf_pt,
-#     worldclim_data = tavg_sf_pt)),
-#     "\\[Elevation Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.")
-#   expect_true(is.na(extracted$elevation[1]))
-# 
-#   expect_warning(extracted <- suppressMessages(elevation_extract(
-#     sf_poly,
-#     elevation_data = elev_sf_poly)),
-#     "\\[Elevation Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.")
-#   expect_true(is.na(extracted$elevation[1]))
-# 
-#   bcch_mod <- bcch
-#   bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
-#   bcch_mod$latitude[1] <- 47.25
-# 
-#   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_mod)))
-#   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod))))
-# 
-#   expect_warning(extracted <- suppressMessages(elevation_extract(
-#     sf_pt,
-#     elevation_data = elev_sf_pt)),
-#     "\\[Elevation Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.")
-#   expect_true(is.na(extracted$elevation[1]))
-# 
-#   expect_warning(extracted <- suppressMessages(elevation_extract(
-#     sf_poly,
-#     elevation_data = elev_sf_poly)),
-#     "\\[Elevation Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.")
-#   expect_true(is.na(extracted$elevation[1]))
-# 
-#   bcch_mod <- bcch
-#   bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
-#   bcch_mod$latitude[1] <- 47.045
-# 
-#   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod),
-#                                                          buffer_distance = 5,
-#                                                          buffer_units = "km")))
-# 
-#   expect_warning(extracted <- suppressMessages(elevation_extract(
-#     sf_poly,
-#     elevation_data = elev_sf_poly)),
-#     "\\[Elevation Extraction\\] site FilledSurveyArea1\\'s buffered area is only partially contained by the spatial extent of the elevation rasters provided. Returned mean elevation value will be derived from the available values.")
-#   expect_true(inherits(extracted$elevation[1], "numeric"))
-# })
+
+test_that("worldclim_extract() returns appropriate warnings for out of coverage points.", {
+  bcch_mod <- bcch
+  bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
+  bcch_mod$latitude[1] <- 80
+  bcch_mod$longitude[1] <- -127
+
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_mod)))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod))))
+
+  expect_warning(extracted <- suppressMessages(worldclim_extract(
+    sf_pt,
+    worldclim_data = tavg_sf_pt)),
+    "\\[WorldClim \\(tavg\\) Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the WorldClim rasters provided. No value will be returned.")
+  expect_true(is.na(extracted$tavg[1]))
+
+  expect_warning(extracted <- suppressMessages(worldclim_extract(
+    sf_poly,
+    worldclim_data = tavg_sf_poly)),
+    "\\[WorldClim \\(tavg\\) Extraction\\] site FilledSurveyArea1 falls outside of the spatial extent of the WorldClim rasters provided. No value will be returned.")
+  expect_true(is.na(extracted$tavg[1]))
+
+  bcch_mod <- bcch[1,]
+  bcch_mod$latitude[1] <- -19.04
+  bcch_mod$longitude[1] <- 44.24
+
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch_mod),
+                                                         buffer_distance = 5,
+                                                         buffer_units = "km")))
+
+  expect_warning(extracted <- suppressMessages(worldclim_extract(
+    sf_poly,
+    covariates = "worldclim_tmin",
+    worldclim_data = other_vars[["tmin"]])),
+    "\\[WorldClim \\(tmin\\) Extraction\\] site FilledSurveyArea1\\'s buffered area is only partially contained by the spatial extent of the WorldClim rasters provided. Returned mean tmin value will be derived from the available values.")
+  expect_true(inherits(extracted$tmin[1], "numeric"))
+})
 
 unlink("./testdir", recursive = TRUE)

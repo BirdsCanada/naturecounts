@@ -304,6 +304,8 @@ worldclim_extract <- function(
     )
   }
   
+  terra::terraOptions(progress = 0)
+  
   # Loop through each requested WorldClim variable.
   for (i in loop) {
     message("[WorldClim Extraction] extracting WorldClim ", i, ".")
@@ -345,11 +347,7 @@ worldclim_extract <- function(
           1
         ) {
           if (
-            !terra::is.related(
-              source,
-              terra::vect(tmp),
-              relation = "intersects"
-            )
+            all(is.na(terra::extract(source[[layername]], tmp)[,layername]))
           ) {
             warning(
               "[WorldClim (",
@@ -361,16 +359,7 @@ worldclim_extract <- function(
               call. = FALSE
             )
           } else if (
-            terra::is.related(
-              source,
-              terra::vect(tmp),
-              relation = "intersects"
-            ) &
-            !terra::is.related(
-              source,
-              terra::vect(tmp),
-              relation = "contains"
-            )
+            TRUE %in% is.na(terra::extract(source[[layername]], tmp)[,layername])
           ) {
             warning(
               "[WorldClim (",
@@ -382,6 +371,15 @@ worldclim_extract <- function(
               i,
               " value will be derived from the available values.",
               call. = FALSE
+            )
+            
+            data[
+              data$SurveyAreaIdentifier == j & data$survey_month == k,
+              i
+            ] <- exactextractr::exact_extract(
+              x = source[[layername]],
+              y = tmp %>% dplyr::filter(.data$survey_month == k),
+              fun = "mean"
             )
           } else {
             # If no issues with coverage, proceed to extract. If buffered,
@@ -412,12 +410,13 @@ worldclim_extract <- function(
           # For all iterations after the first, extract if covered by the
           # WorldClim rasters. Issue no further warnings if not.
           if (
-            terra::is.related(
-              source,
-              terra::vect(tmp),
-              relation = "intersects"
-            )
+            all(is.na(terra::extract(source[[layername]], tmp)[,layername]))
           ) {
+            data[
+              data$SurveyAreaIdentifier == j & data$survey_month == k,
+              i
+            ] <- NA
+          } else {
             if (buffered == TRUE) {
               data[
                 data$SurveyAreaIdentifier == j & data$survey_month == k,
@@ -437,11 +436,13 @@ worldclim_extract <- function(
                 fun = "mean",
                 na.rm = TRUE
               )[, layername]
-            }
+          } 
           }
         }
       }
     }
+    
+    terra::terraOptions(progress = 1)
     
     # Code to grab nearest raster value for sites outside of raster coverage.
     # Not sure whether to keep this since we are warning users about these sites
