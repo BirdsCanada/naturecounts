@@ -36,7 +36,7 @@ library(terra)
 
 # 4.1 MapZen Terrain Tiles Data {#4.1elevation}
 
-The [MapZen Terrain Tiles dataset]() is a globally-composited dataset of gridded elevation data. The product can be accessed at a variety of spatial resolutions and the data has a static temporal resolution. The massive coverage and flexible spatial resolution of these data make them ideal candidates for generalizable use in ecological research, being able to inform analyses at a variety of scales.
+The [MapZen Terrain Tiles dataset](github.com/tilezen/joerd/tree/master/docs) is a globally-composited dataset of gridded elevation data. The product can be accessed at a variety of spatial resolutions and the data has a static temporal resolution. The massive coverage and flexible spatial resolution of these data make them ideal candidates for generalizable use in ecological research, being able to inform analyses at a variety of scales.
 
 These data are composited from a wide variety of DEMs from across the globe. The full list of sources can be found [here](https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#list-of-sources). Generally speaking, when data on land is requested at low spatial resolution data is sourced from [GMTED](https://www.usgs.gov/coastal-changes-and-impacts/gmted2010). At medium-to-high spatial resolutions data for land areas are sourced from [SRTM](https://doi.org/10.5067/MEASURES/SRTM/SRTMGL1.003), except at high (\>60°) latitudes, where GMTED is used. Where higher resolution datasets are available (e.g., [CDEM](https://open.canada.ca/data/en/dataset/7f245e4d-76c2-4caa-951a-45d1d2051333) in Canada), they are used in place of SRTM for medium-to-high resolutions. At all resolutions, [ETOPO1](https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem%3A316/html#) is used to provide bathymetric data. In any specific region, the sources used can be determined from [this table](https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#what-is-sourced-at-what-zooms). Information on appropriate data attribution can be found [here](https://github.com/tilezen/joerd/blob/master/docs/attribution.md#attribution).
 
@@ -67,7 +67,6 @@ bcch %>%
 # We can make a call to data_fmt() to automatically convert this to an sf object
 # ready to work with naturecounts' covariate download and extraction functions. We
 # can ignore the warning as EPSG:4326 is an appropriate CRS for our data.
-
 formatted <- data_fmt(bcch)
 #> [Data Formatting] beginning formatting.
 #> Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.
@@ -104,10 +103,6 @@ elev <- elevation_download(data = formatted,
                             negative_to_na = TRUE,
                             z = 7,
                             dl_path = "./TerrainTiles")
-#> [Elevation Download] downloading data.
-#> Accessing raster elevation [=========================] 100%
-#> Mosaicing & Projecting
-#> Note: Elevation units are in meters.
                             
 elev
 #> class       : SpatRaster
@@ -116,12 +111,12 @@ elev
 #> extent      : 1306489, 1576763, 729231.5, 995687.2  (xmin, xmax, ymin, ymax)
 #> coord. ref. : +proj=aea +lat_0=40 +lon_0=-96 +lat_1=50 +lat_2=70 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs
 #> source(s)   : memory
-#> name        : file2a3c2dd45ca2
+#> name        : file129c32de22c5
 #> min value   :                2
 #> max value   :             1492
 ```
 
-Examining the `elev` object, we can see it is a `terra::SpatRaster` containing our composited data. All downloaded files can be found by default in the created `./TerrainTiles` subdirectory or at a custom path specified using the argument `dl_path`. Files are in `.tif` format, with each file containing raster data for one map tile. The `SpatRaster` output by `elevation_download()` is a merged representation of these files. This could be recreated using `elevatr::merge_rasters()`.
+Examining the `elev` object, we can see it is a `terra::SpatRaster` containing our composited data. All downloaded files can be found by default in the created `./TerrainTiles` subdirectory or at a custom path specified using the argument `dl_path`. Files are in .tif format, with each file containing raster data for one map tile. The `SpatRaster` output by `elevation_download()` is a merged representation of these files. This could be recreated using `elevatr::merge_rasters()`.
 
 # 4.3 Extracting elevation data with `elevation_extract()` {#4.3extract}
 
@@ -188,7 +183,7 @@ We can see that the mean elevation values have been added in the `elevation` col
 
 # 4.4 Tips and tricks
 
-For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names data can be provided directly to `elevation_download()` and `elevation_extract()` via the`site_name`argument. If you have already provided this information in a call to`data_fmt()`and are providing the output of that function as the`data`argument of either `elevation_` function, you do not need to specify this information again.
+For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names data can be provided directly to `elevation_download()` and `elevation_extract()` via the `site_name` argument. If you have already provided this information in a call to `data_fmt()` and are providing the output of that function as the `data` argument of either `elevation_` function, you do not need to specify this information again.
 
 By default, the elevation files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `elevation_extract()`.
 
