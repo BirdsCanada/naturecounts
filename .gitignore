@@ -12,4 +12,5 @@ testdir
 .positai
 vignettes/articles/modis
 vignettes/articles/TerrainTiles
+vignettes/articles/worldclim
 modis
