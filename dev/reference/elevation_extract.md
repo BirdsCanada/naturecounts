@@ -20,7 +20,7 @@ elevation_extract(data, elevation_data, site_name = NULL)
 
 - elevation_data:
 
-  `terra SpatRaster`. Terrain Tiles elevation data. We reccommend using
+  `terra SpatRaster`. Terrain Tiles elevation data. We recommend using
   [`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md)
   to ensure that all data necessary to match your input data are
   captured. Direct output of

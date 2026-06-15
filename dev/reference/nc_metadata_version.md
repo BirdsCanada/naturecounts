@@ -44,5 +44,5 @@ to update
 ``` r
 nc_metadata_version()
 #> metadata_updated 
-#>     "2026-06-10" 
+#>     "2026-06-15" 
 ```

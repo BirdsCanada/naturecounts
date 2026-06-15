@@ -188,8 +188,7 @@ the "Full access?" box in Step 2 of the form.
 # \donttest{
 nc_count()
 #> Without a username, using 'show = "all"'
-#> The server did not respond within 120s. Trying again...
-#> # A tibble: 556 × 4
+#> # A tibble: 557 × 4
 #>    collection    akn_level access     nrecords
 #>    <chr>             <int> <chr>         <int>
 #>  1 ABATLAS1              5 full         122258
@@ -198,11 +197,11 @@ nc_count()
 #>  4 ABOWLS                3 by request    20956
 #>  5 ACCWS                 5 full          27807
 #>  6 ACCWS_HIST            5 full          20461
-#>  7 ATOWLS               NA NA            36231
-#>  8 AWSGS                 3 by request    17968
-#>  9 BBL-1960-1969         5 full       15045208
-#> 10 BBL-1970-1979         5 full       12837516
-#> # ℹ 546 more rows
+#>  7 ATBANS               NA NA              268
+#>  8 ATOWLS               NA NA            36308
+#>  9 AWSGS                 3 by request    17968
+#> 10 BBL-1960-1969         5 full       15045208
+#> # ℹ 547 more rows
 # }
 
 # Count publicly available records for Manitoba, Canada

@@ -133,13 +133,13 @@ Terrain Tiles data for each observation in their data: <a href="#id_4.3extract">
 <div class="section level2">
 <h2 id="id_4-1elevation">4.1 MapZen Terrain Tiles Data<a class="anchor" aria-label="anchor" href="#id_4-1elevation"></a>
 </h2>
-<p>The <a href="">MapZen Terrain Tiles dataset</a> is a
-globally-composited dataset of gridded elevation data. The product can
-be accessed at a variety of spatial resolutions and the data has a
-static temporal resolution. The massive coverage and flexible spatial
-resolution of these data make them ideal candidates for generalizable
-use in ecological research, being able to inform analyses at a variety
-of scales.</p>
+<p>The <a href="github.com/tilezen/joerd/tree/master/docs">MapZen
+Terrain Tiles dataset</a> is a globally-composited dataset of gridded
+elevation data. The product can be accessed at a variety of spatial
+resolutions and the data has a static temporal resolution. The massive
+coverage and flexible spatial resolution of these data make them ideal
+candidates for generalizable use in ecological research, being able to
+inform analyses at a variety of scales.</p>
 <p>These data are composited from a wide variety of DEMs from across the
 globe. The full list of sources can be found <a href="https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#list-of-sources" class="external-link">here</a>.
 Generally speaking, when data on land is requested at low spatial
@@ -194,7 +194,6 @@ the necessary format.</p>
 <span><span class="co"># We can make a call to data_fmt() to automatically convert this to an sf object</span></span>
 <span><span class="co"># ready to work with naturecounts' covariate download and extraction functions. We</span></span>
 <span><span class="co"># can ignore the warning as EPSG:4326 is an appropriate CRS for our data.</span></span>
-<span></span>
 <span><span class="va">formatted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data_fmt.html">data_fmt</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [Data Formatting] beginning formatting.</span></span>
 <span><span class="co">#&gt; Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.</span></span>
@@ -248,10 +247,6 @@ spatial resolution.</p>
 <span>                            negative_to_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                            z <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>                            dl_path <span class="op">=</span> <span class="st">"./TerrainTiles"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [Elevation Download] downloading data.</span></span>
-<span><span class="co">#&gt; Accessing raster elevation [=========================] 100%</span></span>
-<span><span class="co">#&gt; Mosaicing &amp; Projecting</span></span>
-<span><span class="co">#&gt; Note: Elevation units are in meters.</span></span>
 <span>                            </span>
 <span><span class="va">elev</span></span>
 <span><span class="co">#&gt; class       : SpatRaster</span></span>
@@ -260,15 +255,15 @@ spatial resolution.</p>
 <span><span class="co">#&gt; extent      : 1306489, 1576763, 729231.5, 995687.2  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : +proj=aea +lat_0=40 +lon_0=-96 +lat_1=50 +lat_2=70 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs</span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; name        : file2a3c2dd45ca2</span></span>
+<span><span class="co">#&gt; name        : file129c32de22c5</span></span>
 <span><span class="co">#&gt; min value   :                2</span></span>
 <span><span class="co">#&gt; max value   :             1492</span></span></code></pre></div>
 <p>Examining the <code>elev</code> object, we can see it is a
 <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> containing our composited data. All
 downloaded files can be found by default in the created
 <code>./TerrainTiles</code> subdirectory or at a custom path specified
-using the argument <code>dl_path</code>. Files are in <code>.tif</code>
-format, with each file containing raster data for one map tile. The
+using the argument <code>dl_path</code>. Files are in .tif format, with
+each file containing raster data for one map tile. The
 <code>SpatRaster</code> output by <code><a href="../reference/elevation_download.html">elevation_download()</a></code> is a
 merged representation of these files. This could be recreated using
 <code><a href="https://rdrr.io/pkg/elevatr/man/merge_rasters.html" class="external-link">elevatr::merge_rasters()</a></code>.</p>
@@ -360,10 +355,10 @@ observation.</p>
 <p>For users using data in non-BMDE formats (the default column-set
 downloaded via NatureCounts), alternate column names for your site names
 data can be provided directly to <code><a href="../reference/elevation_download.html">elevation_download()</a></code> and
-<code><a href="../reference/elevation_extract.html">elevation_extract()</a></code> via the<code>site_name</code>argument.
-If you have already provided this information in a call
-to<code><a href="../reference/data_fmt.html">data_fmt()</a></code>and are providing the output of that function
-as the<code>data</code>argument of either <code>elevation_</code>
+<code><a href="../reference/elevation_extract.html">elevation_extract()</a></code> via the <code>site_name</code>
+argument. If you have already provided this information in a call to
+<code><a href="../reference/data_fmt.html">data_fmt()</a></code> and are providing the output of that function as
+the <code>data</code> argument of either <code>elevation_</code>
 function, you do not need to specify this information again.</p>
 <p>By default, the elevation files downloaded will be retained until the
 user manually deletes them. However, if the user wishes to save disk

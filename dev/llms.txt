@@ -284,6 +284,10 @@ extraction, as well as for downloading and extracting covariate data
   : Load Terrain Tiles Elevation Data
 - [`elevation_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_extract.md)
   : Extract Terrain Tiles Elevation Data
+- [`worldclim_download()`](https://birdscanada.github.io/naturecounts/dev/reference/worldclim_download.md)
+  : Load WorldClim Climate Data
+- [`worldclim_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/worldclim_extract.md)
+  : Extract WorldClim Climate Data
 
 ## Data
 
@@ -363,6 +367,8 @@ naturecounts functions.
   Indices](https://birdscanada.github.io/naturecounts/dev/articles/4.3-Vegetation.md):
 - [Chapter 4 - Downloading and Extracting Elevation
   Data](https://birdscanada.github.io/naturecounts/dev/articles/4.4-Elevation.md):
+- [Chapter 5 - Downloading and Extracting WorldClim
+  Data](https://birdscanada.github.io/naturecounts/dev/articles/4.5-WorldClim.md):
 
 ### Additional Tutorials
 

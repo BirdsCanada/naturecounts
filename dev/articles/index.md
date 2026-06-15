@@ -65,6 +65,8 @@ naturecounts functions.
   Indices](https://birdscanada.github.io/naturecounts/dev/articles/4.3-Vegetation.md):
 - [Chapter 4 - Downloading and Extracting Elevation
   Data](https://birdscanada.github.io/naturecounts/dev/articles/4.4-Elevation.md):
+- [Chapter 5 - Downloading and Extracting WorldClim
+  Data](https://birdscanada.github.io/naturecounts/dev/articles/4.5-WorldClim.md):
 
 ### Additional Tutorials
 
