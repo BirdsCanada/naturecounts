@@ -46,7 +46,7 @@
 #'
 #' # Load WorldClim data
 #' output <- worldclim_download(data = bcch, 
-#'                              covariates = "worldclim_tavg",
+#'                              covariates = "worldclim_wind",
 #'                              progress = FALSE)
 #'
 #' @seealso [geodata::worldclim_country()] which this function wraps. [worldclim_extract()]

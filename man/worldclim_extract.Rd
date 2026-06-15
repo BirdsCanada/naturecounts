@@ -81,13 +81,13 @@ bcch <- sf::st_as_sf(
 
 # Load WorldClim data
 tavg <- worldclim_download(data = bcch, 
-                           covariates = "worldclim_tavg",
+                           covariates = "worldclim_wind",
                            progress = FALSE)
                            
 # Extract average temperature
 output <- worldclim_extract(data = bcch,
                             worldclim_data = tavg,
-                            covariates = "worldclim_tavg",
+                            covariates = "worldclim_wind",
                             retain = FALSE)
 
 }
