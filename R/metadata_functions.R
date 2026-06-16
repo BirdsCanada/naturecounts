@@ -191,6 +191,7 @@ nc_covariate_table <- function() {
       "worldclim_prec",
       "worldclim_srad",
       "worldclim_wind",
+      "scanfi_age",
       "scanfi_biomass",
       "scanfi_closure",
       "scanfi_height",
@@ -229,20 +230,21 @@ nc_covariate_table <- function() {
       "WorldClim - Monthly Precipitation (mm), 1970-2000",
       "WorldClim - Monthly Solar Radiation (kJ/m^2/day), 1970-2000",
       "WorldClim - Monthly Average Wind Speed (m/s), 1970-2000",
+      "SCANFI - Age (years)",
       "SCANFI - Biomass (tons/ha)",
       "SCANFI - Crown closure (% covered by tree canopy)",
       "SCANFI - Height (m)",
       "SCANFI - NFI land cover class",
-      "SCANFI - Balsam Fir cover proportion of total crown cover",
-      "SCANFI - Black Spruce cover proportion of total crown cover",
-      "SCANFI - Douglas Fir cover proportion of total crown cover",
-      "SCANFI - Jack Pine cover proportion of total crown cover",
-      "SCANFI - Lodgepole Pine cover proportion of total crown cover",
-      "SCANFI - Ponderosa Pine cover proportion of total crown cover",
-      "SCANFI - Tamarack cover proportion of total crown cover",
-      "SCANFI - White and Red Pine cover proportion of total crown cover",
-      "SCANFI - Broadleaf tree species cover proportion of total crown cover",
-      "SCANFI - Other Conifer Species cover proportion of total crown cover",
+      "SCANFI - Balsam Fir cover proportion of pixel",
+      "SCANFI - Black Spruce cover proportion of pixel",
+      "SCANFI - Douglas Fir cover proportion of pixel",
+      "SCANFI - Jack Pine cover proportion of pixel",
+      "SCANFI - Lodgepole Pine cover proportion of pixel",
+      "SCANFI - Ponderosa Pine cover proportion of pixel",
+      "SCANFI - Tamarack cover proportion of pixel",
+      "SCANFI - White and Red Pine cover proportion of pixel",
+      "SCANFI - Broadleaf tree species cover proportion of pixel",
+      "SCANFI - Other Conifer Species cover proportion of pixel",
       "Daymet - Daylength (s/day)",
       "Daymet - Precipitation (mm/day)",
       "Daymet - Shortwave radiation (W/m^2)",
@@ -257,28 +259,29 @@ nc_covariate_table <- function() {
       rep("MOD13A1", times = 2),
       NA,
       rep("WorldClim Ver. 2.1", times = 6),
-      rep("SCANFI Ver. 1.2", times = 14),
+      rep("SCANFI Ver. 1.2", times = 15),
       rep("DAYMET Ver. 004", times = 7)
     ),
     temporal_resolution = c(
       rep("Annual", times = 5),
       "Daily",
       rep("16-Day", times = 2),
-      rep("Static", times = 21),
+      rep("Static", times = 7),
+      rep("5-year snapshot", times = 15),
       rep("Daily", times = 7)
     ),
     spatial_resolution = c(
       rep("500 m", times = 8),
-      "~600-800m",
+      "Variable",
       rep("~1 km^2", times = 6),
-      rep("30 m", times = 14),
+      rep("30 m", times = 15),
       rep("1 km", times = 7)
     ),
     via = c(
       rep("luna", times = 8),
       "elevatr",
       rep("geodata", times = 6),
-      rep("Direct Download", times = 14),
+      rep("Direct Download", times = 15),
       rep("appeears", times = 7)
     ),
     documentation = c(
@@ -288,8 +291,8 @@ nc_covariate_table <- function() {
       "https://github.com/USEPA/elevatr",
       rep("https://worldclim.org/data/worldclim21.html", times = 6),
       rep(
-        "https://doi.org/10.23687/18e6a919-53fd-41ce-b4e2-44a9707c52dc",
-        times = 14
+        "https://open.canada.ca/data/en/dataset/07653869-f303-46c2-a04e-9ab479b73cbf",
+        times = 15
       ),
       rep("https://doi.org/10.3334/ORNLDAAC/1840", times = 7)
     )
