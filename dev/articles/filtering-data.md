@@ -173,8 +173,8 @@ the unique values in the column of interest
 count(boreal_chickadee_db, collection)
 ```
 
-    ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # A query:  ?? x 2
+    ## # Database: sqlite 3.53.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   collection     n
     ##   <chr>      <int>
     ## 1 ABATLAS1     489
@@ -206,8 +206,8 @@ alberta_atlas <- filter(boreal_chickadee_db,
 count(alberta_atlas, collection)
 ```
 
-    ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # A query:  ?? x 2
+    ## # Database: sqlite 3.53.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   collection     n
     ##   <chr>      <int>
     ## 1 ABATLAS1     489
@@ -240,8 +240,8 @@ summarize(
   max = max(survey_year, na.rm = TRUE))
 ```
 
-    ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # A query:  ?? x 2
+    ## # Database: sqlite 3.53.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##     min   max
     ##   <int> <int>
     ## 1  1966  2010
@@ -282,8 +282,8 @@ summarize(
   max = max(survey_year, na.rm = TRUE))
 ```
 
-    ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # A query:  ?? x 2
+    ## # Database: sqlite 3.53.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##     min   max
     ##   <int> <int>
     ## 1  2005  2007
@@ -315,8 +315,8 @@ summarize(boreal_chickadee_db,
           max = max(date, na.rm = TRUE))
 ```
 
-    ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # A query:  ?? x 2
+    ## # Database: sqlite 3.53.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   min        max       
     ##   <chr>      <chr>     
     ## 1 1966-06-02 2010-07-07
@@ -348,8 +348,8 @@ summarize(field_season,
           max = max(date, na.rm = TRUE))
 ```
 
-    ## # Source:   SQL [?? x 2]
-    ## # Database: sqlite 3.53.1 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
+    ## # A query:  ?? x 2
+    ## # Database: sqlite 3.53.2 [/home/runner/work/naturecounts/naturecounts/vignettes/boreal_chickadee.nc]
     ##   min        max       
     ##   <chr>      <chr>     
     ## 1 2010-05-30 2010-06-30

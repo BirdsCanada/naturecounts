@@ -301,7 +301,6 @@ p1042 <- nc_data_dl(project_ids = 1042, username = "testuser",
 #>     Records 60001 to 65000 / 201357
 #>     Records 65001 to 70000 / 201357
 #>     Records 70001 to 75000 / 201357
-#> The server did not respond within 120s. Trying again...
 #>     Records 75001 to 80000 / 201357
 #>     Records 80001 to 85000 / 201357
 #>     Records 85001 to 90000 / 201357
