@@ -67,7 +67,7 @@ bcch <- sf::st_as_sf(
 )
 
 # Load WorldClim data
-output <- worldclim_download(data = bcch, 
+output <- worldclim_download(data = bcch,
                              covariates = "worldclim_wind",
                              progress = FALSE)
 

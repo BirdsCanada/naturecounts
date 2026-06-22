@@ -41,7 +41,7 @@ specified in a call to \code{\link[=data_fmt]{data_fmt()}} or \code{\link[=world
 \item{dl_path}{Character. Path to downloaded files. Only needed if \code{retain = TRUE}
 and custom download filepath used.}
 
-\item{retain}{Logical. Should WorldClim data files be kept after extraction. If
+\item{retain}{Logical. Should WorldClim data files be kept after extraction? If
 \code{FALSE}, files will be deleted.}
 }
 \value{
@@ -80,10 +80,10 @@ bcch <- sf::st_as_sf(
 )
 
 # Load WorldClim data
-tavg <- worldclim_download(data = bcch, 
+tavg <- worldclim_download(data = bcch,
                            covariates = "worldclim_wind",
                            progress = FALSE)
-                           
+
 # Extract average temperature
 output <- worldclim_extract(data = bcch,
                             worldclim_data = tavg,
