@@ -117,6 +117,52 @@ scanfi_extract <- function(
     "terra"
   ))
 
+  # If no SCANFI rasters are provided, return error.
+  if (missing(scanfi_data)) {
+    stop(
+      "[SCANFI Extraction] no SCANFI rasters provided to extract from. Please",
+      " provide a list containing one entry for every snapshot year, each",
+      " containing one raster for each listed SCANFI covariate.",
+      " Data can be downloaded using scanfi_download().",
+      call. = FALSE
+    )
+  }
+
+  if (
+    !((inherits(scanfi_data, "list")) &
+      (inherits(scanfi_data[[1]], "list")) &
+      (inherits(scanfi_data[[1]][[1]], "SpatRaster")))
+  ) {
+    stop(
+      "[SCANFI Extraction] no SCANFI rasters provided to extract from. Please",
+      " provide a list containing one entry for every snapshot year, each",
+      " containing one raster for each listed SCANFI covariate.",
+      " Data can be downloaded using scanfi_download().",
+      call. = FALSE
+    )
+  }
+
+  # Grab covariate names from scanfi_data object if not explicitly specified.
+  if (missing(covariates)) {
+    yrs <- names(scanfi_data)
+    layers <- c()
+
+    for (i in yrs) {
+      layers <- unique(c(layers, names(scanfi_data[[i]])))
+    }
+
+    covariates <- paste0("scanfi_", layers)
+
+    warning(
+      "[SCANFI Extraction] no covariates specified in the covariates",
+      " argument. Proceeding to extract the covariates found in",
+      " scanfi_data layers: ",
+      stringr::str_flatten_comma(covariates),
+      ".",
+      call. = FALSE
+    )
+  }
+
   # Catch misspecified covariates. Return error if any exist.
   if (FALSE %in% (covariates %in% nc_covariate_table()$covariate_name)) {
     stop(
@@ -131,8 +177,23 @@ scanfi_extract <- function(
   if (missing(scanfi_data)) {
     stop(
       "[SCANFI Extraction] no SCANFI rasters provided to extract from. Please",
-      " provide a list containing one raster for each listed SCANFI covariate.",
-      " Data can be downloaded using scanfi_download.",
+      " provide a list containing one entry for every snapshot year, each",
+      " containing one raster for each listed SCANFI covariate.",
+      " Data can be downloaded using scanfi_download().",
+      call. = FALSE
+    )
+  }
+
+  if (
+    !((inherits(scanfi_data, "list")) &
+      (inherits(scanfi_data[[1]], "list")) &
+      (inherits(scanfi_data[[1]][[1]], "SpatRaster")))
+  ) {
+    stop(
+      "[SCANFI Extraction] no SCANFI rasters provided to extract from. Please",
+      " provide a list containing one entry for every snapshot year, each",
+      " containing one raster for each listed SCANFI covariate.",
+      " Data can be downloaded using scanfi_download().",
       call. = FALSE
     )
   }
@@ -198,8 +259,8 @@ scanfi_extract <- function(
   # standardized names has already taken place in data_fmt().
   if (
     !(all(specified_cols %in% data_cols)) &
-      !("SurveyAreaIdentifier" %in% data_cols) |
-      !("survey_year" %in% data_cols)
+      (!("SurveyAreaIdentifier" %in% data_cols) |
+        !("survey_year" %in% data_cols))
   ) {
     stop(
       "[SCANFI Extraction] some specified columns missing from the data: ",
@@ -405,11 +466,15 @@ scanfi_extract <- function(
         )
       }
 
+      terra::terraOptions(progress = 0)
+
       # Crop SCANFI data to study area.
       scanfi_data[[j]][[i]] <- terra::crop(
         scanfi_data[[j]][[i]],
         terra::project(study_area, terra::crs(scanfi_data[[j]][[i]]))
       )
+
+      scanfi_filled <- terra::as.polygons(scanfi_data[[j]][[i]])
 
       # Loop through each site and extract.
       for (k in unique(data$SurveyAreaIdentifier)) {
@@ -427,15 +492,10 @@ scanfi_extract <- function(
             sf::st_transform(terra::crs(scanfi_data[[j]][[i]]))
 
           # Check if the site out of or only partially covered by the spatial
-          # extent of the provided SCANFI data. Warn if so. terra::classify
-          # calls are there to fill NAs internal to the raster (i.e., in
-          # unforested areas with NAs for age) with 0s so that internal NAs
-          # don't mistakenly suggest the site is outside of raster coverage.
+          # extent of the provided SCANFI data. Warn if so.
           if (
-            all(is.na(terra::extract(
-              terra::classify(scanfi_data[[j]][[i]], cbind(NA, 0)),
-              tmp
-            )[, 2]))
+            !terra::is.related(scanfi_filled, terra::vect(tmp), "contains") &
+              !terra::is.related(scanfi_filled, terra::vect(tmp), "overlaps")
           ) {
             warning(
               "[SCANFI (",
@@ -447,11 +507,8 @@ scanfi_extract <- function(
               call. = FALSE
             )
           } else if (
-            TRUE %in%
-              is.na(terra::extract(
-                terra::classify(scanfi_data[[j]][[i]], cbind(NA, 0)),
-                tmp
-              )[, 2])
+            !terra::is.related(scanfi_filled, terra::vect(tmp), "contains") &
+              terra::is.related(scanfi_filled, terra::vect(tmp), "overlaps")
           ) {
             warning(
               "[SCANFI (",
@@ -558,7 +615,7 @@ scanfi_extract <- function(
 
                 # Whether only a single value was extracted (class == "integer") or
                 # multiple values (else) prepare to pass to input data.
-                if (class(extr_table) == "integer") {
+                if (inherits(extr_table, "integer")) {
                   extr_table <- extr_table %>%
                     as.data.frame()
 

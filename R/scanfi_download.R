@@ -120,8 +120,10 @@ scanfi_download <- function(
     )
   }
 
-  # Check data is in the desired format.
-  input_fmt <- covariate_fmt_check(data)
+  if (!missing(data)) {
+    # Check data is in the desired format.
+    input_fmt <- covariate_fmt_check(data)
+  }
 
   # Use user specified snapshot years over automatically selected years
   if (!is.null(snapshot_year) & use_date == TRUE) {
@@ -232,7 +234,8 @@ scanfi_download <- function(
           (necessary_years %in% seq(from = 1985, to = 2025, by = 5)) == FALSE
         ],
         ". Valid snapshot years are ",
-        stringr::str_flatten_comma(seq(from = 1985, to = 2025, by = 5))
+        stringr::str_flatten_comma(seq(from = 1985, to = 2025, by = 5)),
+        "."
       )
     }
   }
