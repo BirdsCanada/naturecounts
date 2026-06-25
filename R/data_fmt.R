@@ -70,41 +70,41 @@
 #' @export
 
 data_fmt <- function(
-    data,
-    site_name = NULL, # optional argument to provide column name containing site
-    # names. Default is assumed to be the BMDE column 'SurveyAreaIdentifier'.
-    coord_lon = NULL, # as in cosewic_ranges
-    coord_lat = NULL, # as in cosewic_ranges
-    date_year = NULL, # optional argument to provide column name containing year
-    # data. Default is assumed to be the BMDE column 'survey_year'.
-    date_month = NULL, # optional argument to provide column name containing month
-    # data. Default is assumed to be the BMDE column 'survey_month'.
-    date_day = NULL, # optional argument to provide column name containing day
-    # data. Default is assumed to be the BMDE column 'survey_day'.
-    date_lubridate = NULL, # optional argument to provide column name containing
-    # 'lubridate' date objects.
-    date_ordinal = NULL, # optional argument to provide column name containing
-    # ordinal dates.
-    crs = NULL # optional argument to provide a Coordinate Reference System for
-    # provided data.
+  data,
+  site_name = NULL, # optional argument to provide column name containing site
+  # names. Default is assumed to be the BMDE column 'SurveyAreaIdentifier'.
+  coord_lon = NULL, # as in cosewic_ranges
+  coord_lat = NULL, # as in cosewic_ranges
+  date_year = NULL, # optional argument to provide column name containing year
+  # data. Default is assumed to be the BMDE column 'survey_year'.
+  date_month = NULL, # optional argument to provide column name containing month
+  # data. Default is assumed to be the BMDE column 'survey_month'.
+  date_day = NULL, # optional argument to provide column name containing day
+  # data. Default is assumed to be the BMDE column 'survey_day'.
+  date_lubridate = NULL, # optional argument to provide column name containing
+  # 'lubridate' date objects.
+  date_ordinal = NULL, # optional argument to provide column name containing
+  # ordinal dates.
+  crs = NULL # optional argument to provide a Coordinate Reference System for
+  # provided data.
 ) {
   message("[Data Formatting] beginning formatting.")
-  
+
   # Check packages
-  
+
   have_pkg_check(c(
     "sf",
     "terra",
     "tidyterra"
   ))
-  
+
   # Check data type - we need either a dataframe, sf points object, sf polygon,
   # or terra SpatVector.
-  
+
   input_fmt <- covariate_fmt_check(data)
-  
+
   # Deal with alternate CRS's
-  
+
   # Check that 'crs' argument has been provided.
   if (!is.null(crs)) {
     # Check if input is an sf object.
@@ -117,9 +117,9 @@ data_fmt <- function(
           " will be set to the alternate CRS specified in the 'crs' argument.",
           call. = FALSE
         )
-        
+
         suppressWarnings(sf::st_crs(data) <- crs)
-        
+
         # If sf object still is missing CRS, suggests that provided CRS is
         # invalid. Return error.
         if (is.na(sf::st_crs(data))) {
@@ -140,11 +140,11 @@ data_fmt <- function(
           " object will be used.",
           call. = FALSE
         )
-        
+
         crs <- sf::st_crs(data)
       }
     }
-    
+
     # Check if input is a terra SpatVector.
     if (input_fmt$type == "terra") {
       # Check if provided terra object has a CRS. If missing, set to provided
@@ -156,19 +156,19 @@ data_fmt <- function(
           " argument.",
           call. = FALSE
         )
-        
+
         # Convert terra warnings associated with invalid CRS inputs into errors.
         tryCatch(
           terra::crs(data) <- crs,
           warning = function(w) {
             if (
               "[crs<-] Cannot set SRS to vector: empty srs" %in%
-              conditionMessage(w) |
-              paste0(
-                "PROJ: proj_create_from_database: crs not found:",
-                " EPSG:234634 (GDAL error 1)"
-              ) %in%
-              conditionMessage(w)
+                conditionMessage(w) |
+                paste0(
+                  "PROJ: proj_create_from_database: crs not found:",
+                  " EPSG:234634 (GDAL error 1)"
+                ) %in%
+                  conditionMessage(w)
             ) {
               stop(
                 "[Data Formatting] the provided CRS is invalid. CRS",
@@ -183,12 +183,12 @@ data_fmt <- function(
           error = function(e) {
             if (
               conditionMessage(e) ==
-              paste0(
-                "[crs] I do not know what",
-                " to do with this argument",
-                " (expected a character",
-                " string)"
-              )
+                paste0(
+                  "[crs] I do not know what",
+                  " to do with this argument",
+                  " (expected a character",
+                  " string)"
+                )
             ) {
               stop(
                 "[Data Formatting] the provided CRS is invalid. CRS",
@@ -210,11 +210,11 @@ data_fmt <- function(
           " terra object will be used.",
           call. = FALSE
         )
-        
+
         crs <- terra::crs(data)
       }
     }
-    
+
     # If provided data is a data.frame, make sure we have the names of columns
     # pointing us to associated coordinate data. If not, return error.
     if (
@@ -230,7 +230,7 @@ data_fmt <- function(
       )
     }
   }
-  
+
   # If no 'crs' argument is provided, and provided sf object lacks a CRS,
   # return error.
   if (is.null(crs) & input_fmt$type == "sf") {
@@ -242,7 +242,7 @@ data_fmt <- function(
       )
     }
   }
-  
+
   # If no 'crs' argument is provided, and provided terra object lacks a CRS,
   # return error.
   if (is.null(crs) & input_fmt$type == "terra") {
@@ -254,7 +254,7 @@ data_fmt <- function(
       )
     }
   }
-  
+
   # If no 'crs' argument is provided, and provided data is a dataframe, assume
   # it is the default NatureCounts format which uses lat/lon and use EPSG:4326.
   # Warn.
@@ -264,17 +264,17 @@ data_fmt <- function(
       " assumed to be EPSG:4326.",
       call. = FALSE
     )
-    
+
     crs <- 4326
   }
-  
+
   # If spatial object is provided and the 'coord_lon'/'coord_lat' arguments
   # have been provided, use the coordinate data included in the spatial object.
   # Warn.
   if (
     input_fmt$type %in%
-    c("sf", "terra") &
-    (!is.null(coord_lon) | !is.null(coord_lat))
+      c("sf", "terra") &
+      (!is.null(coord_lon) | !is.null(coord_lat))
   ) {
     warning(
       "[Data Formatting] sf or terra object provided as well as a lat/lon",
@@ -282,13 +282,13 @@ data_fmt <- function(
       " sf/terra object and specified lat/lon column will be ignored.",
       call. = FALSE
     )
-    
+
     coord_lon <- NULL
     coord_lat <- NULL
   }
-  
+
   # Check that all specified column names are present in the data.
-  
+
   # Gather all potentially specified columns.
   specified_cols <- c(
     site_name,
@@ -300,12 +300,12 @@ data_fmt <- function(
     date_lubridate,
     date_ordinal
   )
-  
+
   # Remove any that haven't been specified.
   specified_cols <- specified_cols[!is.null(specified_cols)]
-  
+
   data_cols <- names(data)
-  
+
   # Compare to columns present in data. Return error if any specified columns
   # are not present.
   if (!(all(specified_cols %in% data_cols))) {
@@ -319,7 +319,7 @@ data_fmt <- function(
       call. = FALSE
     )
   }
-  
+
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
   if (!is.null(site_name)) {
@@ -328,9 +328,9 @@ data_fmt <- function(
     }
     data <- dplyr::rename(data, "SurveyAreaIdentifier" = !!site_name)
   }
-  
+
   data$SurveyAreaIdentifier <- as.character(data$SurveyAreaIdentifier)
-  
+
   if (input_fmt$type == "data.frame") {
     if (!is.null(coord_lon)) {
       # Edge case: there is a col called longitude that isn't coord_lon.
@@ -338,83 +338,82 @@ data_fmt <- function(
       if ("longitude" %in% names(data) & !(coord_lon == "longitude")) {
         data <- dplyr::select(data, -"longitude")
       }
-      
+
       if (input_fmt$type == "sf") {
         data <- sf::st_sf(data)
       }
-      
+
       data <- dplyr::rename(data, "longitude" = !!coord_lon)
     }
-    
+
     data$longitude <- as.numeric(data$longitude)
-    
+
     if (!is.null(coord_lat)) {
       # Edge case: there is a col called latitude that isn't coord_lat. Remove.
       if ("latitude" %in% names(data) & !(coord_lat == "latitude")) {
         data <- dplyr::select(data, -"latitude")
       }
-      
+
       if (input_fmt$type == "sf") {
         data <- sf::st_sf(data)
       }
-      
+
       data <- dplyr::rename(data, "latitude" = !!coord_lat)
     }
-    
+
     data$latitude <- as.numeric(data$latitude)
   }
-  
+
   if (!is.null(date_year)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
-    
+
     data <- dplyr::rename(data, "survey_year" = !!date_year)
   }
-  
+
   # Use year_check() to validate year data. 'if' wrapper needed to handle cases
   # where no year column was provided, and a lubridate column was provided
   # instead.
   if ("survey_year" %in% names(data)) {
     year_corr <- c()
-    
+
     for (i in 1:length(data$survey_year)) {
       year_corr[i] <- year_check(data$survey_year[i])
     }
-    
+
     data$survey_year <- year_corr
   }
-  
-  
+
   if (!is.null(date_month)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
-    
+
     data <- dplyr::rename(data, "survey_month" = !!date_month)
   }
-  
+
   # Use month_check() to validate month data. 'if' wrapper needed to handle
   # cases where no month column was provided, and a lubridate or ordinal date
   # column was provided instead.
   if ("survey_month" %in% names(data)) {
     month_corr <- c()
-    
+
     for (i in 1:length(data$survey_month)) {
       month_corr[i] <- month_check(data$survey_month[i])
     }
-    
+
     data$survey_month <- month_corr
   }
-  
+
   if (!is.null(date_day)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
-    
+
     data <- dplyr::rename(data, "survey_day" = !!date_day)
   }
-  
+
   # Use dom_check() to validate day data. 'if' wrapper needed to handle cases
   # where no month column was provided, and a lubridate or ordinal date column
   # was provided instead.
@@ -423,13 +422,13 @@ data_fmt <- function(
       dom_check(i)
     }
   }
-  
+
   # If a date in lubridate or ordinal format is provided, make year, month and
   # day columns.
   if (!is.null(date_lubridate)) {
     # Standardize date column name
     data <- dplyr::rename(data, "date" = !!date_lubridate)
-    
+
     # Check that provided lubridate data is a date object. If not, return error.
     if (!lubridate::is.Date(data$date)) {
       stop(
@@ -439,7 +438,7 @@ data_fmt <- function(
         call. = FALSE
       )
     }
-    
+
     # Check that provided lubridate data is an instant rather than a duration
     # object. If not, return error.
     if (!lubridate::is.instant(data$date)) {
@@ -450,7 +449,7 @@ data_fmt <- function(
         call. = FALSE
       )
     }
-    
+
     # Check that all dates are either the current date or in the past. If not,
     # return error.
     if (!all(data$date <= as.Date(Sys.Date()))) {
@@ -460,14 +459,14 @@ data_fmt <- function(
         call. = FALSE
       )
     }
-    
+
     # If lubridate column provided alongside other specified date column
     # options, use data from lubridate columns. Warn.
     if (
       !is.null(date_year) |
-      !is.null(date_month) |
-      !is.null(date_day) |
-      !is.null(date_ordinal)
+        !is.null(date_month) |
+        !is.null(date_day) |
+        !is.null(date_ordinal)
     ) {
       date_cols <- c(
         date_lubridate,
@@ -477,7 +476,7 @@ data_fmt <- function(
         date_ordinal
       )
       date_cols <- date_cols[!is.null(date_cols)]
-      
+
       warning(
         paste0(
           "[Data Formatting] multiple date column options provided including ",
@@ -489,27 +488,27 @@ data_fmt <- function(
         call. = FALSE
       )
     }
-    
+
     # Extract year/month/day columns from lubridate date.
     data$survey_year <- lubridate::year(data$date)
-    
+
     data$survey_month <- lubridate::month(data$date)
-    
+
     data$survey_day <- lubridate::day(data$date)
-    
+
     # In case ordinal data has also been provided, set to NULL so dates aren't
     # recalculated using ordinal data.
     date_year <- NULL
-    
+
     date_ordinal <- NULL
   }
-  
+
   # If a date in ordinal format is provided (and a date in lubridate format is
   # not provided, see above), make year, month and day columns.
   if (!is.null(date_ordinal)) {
     # Standardize ordinal date column name
     data <- dplyr::rename(data, "doy" = !!date_ordinal)
-    
+
     # Check that year data has been provided alongside ordinal day data as this
     # is needed to convert to calendar date. If not, return error.
     if (!("survey_year" %in% names(data))) {
@@ -520,12 +519,12 @@ data_fmt <- function(
         call. = FALSE
       )
     }
-    
+
     # Use doy_check() to validate ordinal date data.
     for (i in data$doy) {
       doy_check(i)
     }
-    
+
     # If month or day data has also been provided, warn that ordinal date data
     # will supersede it.
     if (!is.null(date_month) | !is.null(date_day)) {
@@ -535,13 +534,13 @@ data_fmt <- function(
         call. = FALSE
       )
     }
-    
+
     # If ordinal date is numeric, add it to the first day of the associated
     # year to get the calendar date.
     if (is.numeric(data$doy)) {
       data$date <- as.Date(paste0(data$survey_year, "-01-01")) + data$doy - 1
     }
-    
+
     # If ordinal date has been provided as a date object (likely due to
     # misunderstanding of the meaning of ordinal date) convert it to ordinal
     # date and add it to the first day of the associated calendar year.
@@ -550,20 +549,20 @@ data_fmt <- function(
         lubridate::yday(data$doy) -
         1
     }
-    
+
     # Extract month and day data from ordinal-derived date column
     data$survey_month <- lubridate::month(data$date)
-    
+
     data$survey_day <- lubridate::day(data$date)
   }
-  
+
   # Ensure date columns are numeric.
   data$survey_year <- as.numeric(data$survey_year)
-  
+
   data$survey_month <- as.numeric(data$survey_month)
-  
+
   data$survey_day <- as.numeric(data$survey_day)
-  
+
   # If data is a dataframe, ensure that there are no rows missing coordinate
   # data as this would prevent conversion into an sf object. Warn.
   if (input_fmt$type == "data.frame") {
@@ -572,11 +571,14 @@ data_fmt <- function(
         "[Data Formatting] some rows missing coordinate data will be dropped.",
         call. = FALSE
       )
-      
-      data <- dplyr::filter(data, !(is.na(.data$latitude) | is.na(.data$longitude)))
+
+      data <- dplyr::filter(
+        data,
+        !(is.na(.data$latitude) | is.na(.data$longitude))
+      )
     }
   }
-  
+
   # Handle missing SurveyAreaIdentifiers and ensure coordinates are present in
   # the data for later use in nc_covariates_merge().
   if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
@@ -588,19 +590,19 @@ data_fmt <- function(
         dplyr::filter(is.na(.data$SurveyAreaIdentifier)) %>%
         dplyr::distinct()
     }
-    
+
     # For sf objects, create an object containing all X/Y coordinates (derived
     # from geometries) that do not have an associated SurveyAreaIdentifier.
     # Also append coordinates to original data object for later joining.
     if (input_fmt$type == "sf") {
       missing_sitecode <- data %>%
         dplyr::select("SurveyAreaIdentifier", "geometry")
-      
+
       # For polygons, use the centroid as the X/Y coordinates.
       if (input_fmt$geometry == "POLYGON") {
         missing_sitecode <- suppressWarnings(sf::st_centroid(missing_sitecode))
       }
-      
+
       # Extract coordinates and bind to data. Drop geometry and get all
       # unique coordinate combinations with missing SurveyAreaIdentifiers.
       missing_sitecode <- cbind(
@@ -611,33 +613,33 @@ data_fmt <- function(
         sf::st_drop_geometry() %>%
         dplyr::filter(is.na(.data$SurveyAreaIdentifier)) %>%
         dplyr::distinct()
-      
+
       # Edge case: there is a col called X. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("X" %in% names(data)) {
         data <- dplyr::select(data, -"X")
       }
-      
+
       # Edge case: there is a col called Y. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("Y" %in% names(data)) {
         data <- dplyr::select(data, -"Y")
       }
-      
+
       # Edge case: there is a col called longitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("longitude" %in% names(data)) {
         data <- dplyr::select(data, -"longitude")
       }
-      
+
       # Edge case: there is a col called latitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("latitude" %in% names(data)) {
         data <- dplyr::select(data, -"latitude")
       }
-      
+
       # Append coordinates (from centroids if polygons) to provided data object.
       if (input_fmt$geometry == "POLYGON") {
         data <- cbind(
@@ -650,7 +652,7 @@ data_fmt <- function(
           dplyr::rename("longitude" = "X", "latitude" = "Y")
       }
     }
-    
+
     # For terra objects, create an object containing all X/Y coordinates
     # (derived from geometries) that do not have an associated
     # SurveyAreaIdentifier. Also append coordinates to original data object for
@@ -658,12 +660,12 @@ data_fmt <- function(
     if (input_fmt$type == "terra") {
       missing_sitecode <- data %>%
         tidyterra::select("SurveyAreaIdentifier")
-      
+
       # For polygons, use the centroid as the X/Y coordinates.
       if (input_fmt$geometry == "polygons") {
         missing_sitecode <- terra::centroids(missing_sitecode)
       }
-      
+
       # Extract coordinates and bind to data. Drop geometry and get all
       # unique coordinate combinations with missing SurveyAreaIdentifiers.
       missing_sitecode <- cbind(
@@ -674,33 +676,33 @@ data_fmt <- function(
         terra::as.data.frame() %>%
         dplyr::filter(is.na(.data$SurveyAreaIdentifier)) %>%
         dplyr::distinct()
-      
+
       # Edge case: there is a col called x. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("x" %in% names(data)) {
         data <- tidyterra::select(data, -"x")
       }
-      
+
       # Edge case: there is a col called y. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("y" %in% names(data)) {
         data <- tidyterra::select(data, -"y")
       }
-      
+
       # Edge case: there is a col called longitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("longitude" %in% names(data)) {
         data <- dplyr::select(data, -"longitude")
       }
-      
+
       # Edge case: there is a col called latitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("latitude" %in% names(data)) {
         data <- dplyr::select(data, -"latitude")
       }
-      
+
       # Append coordinates (from centroids if polygons) to provided data object.
       if (input_fmt$geometry == "polygons") {
         data <- cbind(data, terra::crds(terra::centroids(data))) %>%
@@ -710,13 +712,13 @@ data_fmt <- function(
           dplyr::rename("longitude" = "x", "latitude" = "y")
       }
     }
-    
+
     # Create a dummy SurveyAreaIdentifier for all unique coordinate combinations
     # which are missing an associated SurveyAreaIdentifier.
     for (i in 1:nrow(missing_sitecode)) {
       missing_sitecode$SurveyAreaIdentifier[i] <- paste0("FilledSurveyArea", i)
     }
-    
+
     # Use coordinates to join dummy SurveyAreaIdentifiers to original data.
     for (i in missing_sitecode$latitude) {
       for (j in missing_sitecode$longitude[missing_sitecode$latitude == i]) {
@@ -736,27 +738,27 @@ data_fmt <- function(
       if ("X" %in% names(data)) {
         data <- dplyr::select(data, -"X")
       }
-      
+
       # Edge case: there is a col called Y. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("Y" %in% names(data)) {
         data <- dplyr::select(data, -"Y")
       }
-      
+
       # Edge case: there is a col called longitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("longitude" %in% names(data)) {
         data <- dplyr::select(data, -"longitude")
       }
-      
+
       # Edge case: there is a col called latitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("latitude" %in% names(data)) {
         data <- dplyr::select(data, -"latitude")
       }
-      
+
       # Append coordinates (from centroids if polygons) to provided data object.
       if (input_fmt$geometry == "POLYGON") {
         data <- cbind(
@@ -769,34 +771,34 @@ data_fmt <- function(
           dplyr::rename("longitude" = "X", "latitude" = "Y")
       }
     }
-    
+
     if (input_fmt$type == "terra") {
       # Edge case: there is a col called x. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("x" %in% names(data)) {
         data <- tidyterra::select(data, -"x")
       }
-      
+
       # Edge case: there is a col called y. This does not lead to the removal
       # of this column in final data when merged using nc_covariates_merge().
       if ("y" %in% names(data)) {
         data <- tidyterra::select(data, -"y")
       }
-      
+
       # Edge case: there is a col called longitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("longitude" %in% names(data)) {
         data <- tidyterra::select(data, -"longitude")
       }
-      
+
       # Edge case: there is a col called latitude. This does not lead to the
       # removal of this column in final data when merged using
       # nc_covariates_merge().
       if ("latitude" %in% names(data)) {
         data <- tidyterra::select(data, -"latitude")
       }
-      
+
       # Append coordinates (from centroids if polygons) to provided data object.
       if (input_fmt$geometry == "polygons") {
         data <- cbind(data, terra::crds(terra::centroids(data))) %>%
@@ -807,15 +809,15 @@ data_fmt <- function(
       }
     }
   }
-  
+
   if (!is.null(date_ordinal)) {
     names(data)[names(data) == "doy"] <- date_ordinal
   }
-  
+
   if (!is.null(date_lubridate)) {
     names(data)[names(data) == "date"] <- date_lubridate
   }
-  
+
   # Create base list of columns to preserve.
   keep_cols <- c(
     "SurveyAreaIdentifier",
@@ -825,19 +827,19 @@ data_fmt <- function(
     "survey_month",
     "survey_day"
   )
-  
+
   # If ordinal date provided, preserve it for later use in
   # nc_covariates_merge().
   if (!is.null(date_ordinal)) {
     keep_cols <- c(keep_cols[1:4], date_ordinal, keep_cols[5:6])
   }
-  
+
   # If lubridate date provided, preserve it for later use in
   # nc_covariates_merge().
   if (!is.null(date_lubridate)) {
     keep_cols <- c(keep_cols[1:3], date_lubridate, keep_cols[4:6])
   }
-  
+
   # For dataframe objects, convert to spatial features object.
   if (input_fmt$type == "data.frame") {
     # Get all distinct combinations of kept columns, convert to sf object.
@@ -850,7 +852,7 @@ data_fmt <- function(
           remove = FALSE
         )
     )
-    
+
     # If created spatial object CRS is missing, provided CRS was invalid.
     # Return error.
     if (is.na(sf::st_crs(data))) {
@@ -862,22 +864,22 @@ data_fmt <- function(
         call. = FALSE
       )
     }
-    
+
     # Convert to CRS with metres as a base unit to facilitate buffering.
     data <- sf::st_transform(data, "ESRI:102001")
   }
-  
+
   # For sf objects, keep all distinct combinations of kept columns.
   if (input_fmt$type == "sf") {
     # Ensure geometry column is retained.
     keep_cols <- c(keep_cols, "geometry")
-    
+
     # Convert to CRS with metres as a base unit to facilitate buffering.
     data <- dplyr::select(data, tidyselect::all_of(keep_cols)) %>%
       dplyr::distinct() %>%
       sf::st_transform("ESRI:102001")
   }
-  
+
   # For terra objects, keep all distinct combinations of kept columns and
   # convert to CRS with metres as a base unit to facilitate buffering.
   if (input_fmt$type == "terra") {
@@ -885,51 +887,51 @@ data_fmt <- function(
       tidyterra::distinct() %>%
       terra::project("ESRI:102001")
   }
-  
+
   # Store specified column names and crs as attributes so that they don't need
   # to be specified any time associated functions are called.
   if (!is.null(site_name)) {
     names(data)[names(data) == "SurveyAreaIdentifier"] <- site_name
     attr(data, "site_name") <- site_name
   }
-  
+
   if (!is.null(coord_lon)) {
     names(data)[names(data) == "longitude"] <- coord_lon
     attr(data, "coord_lon") <- coord_lon
   }
-  
+
   if (!is.null(coord_lat)) {
     names(data)[names(data) == "latitude"] <- coord_lat
     attr(data, "coord_lat") <- coord_lat
   }
-  
+
   if (!is.null(date_year)) {
     names(data)[names(data) == "survey_year"] <- date_year
     attr(data, "date_year") <- date_year
   }
-  
+
   if (!is.null(date_month)) {
     names(data)[names(data) == "survey_month"] <- date_month
     attr(data, "date_month") <- date_month
   }
-  
+
   if (!is.null(date_day)) {
     names(data)[names(data) == "survey_day"] <- date_day
     attr(data, "date_day") <- date_day
   }
-  
+
   if (!is.null(date_ordinal)) {
     attr(data, "date_ordinal") <- date_ordinal
   }
-  
+
   if (!is.null(date_lubridate)) {
     attr(data, "date_lubridate") <- date_lubridate
   }
-  
+
   if (!is.null(crs)) {
     attr(data, "crs") <- crs
   }
-  
+
   # Return formatted data.
   return(data)
 }

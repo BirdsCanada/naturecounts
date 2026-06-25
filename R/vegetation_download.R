@@ -33,7 +33,7 @@
 #'   `survey_month`. Can be left `NULL` and still function properly if originally
 #'   specified in a call to [data_fmt()].
 #' @param date_day Character. Optional argument to provide the name of the
-#'   column containing day-of-month (i.e., a number from 1 to 31) data if not 
+#'   column containing day-of-month (i.e., a number from 1 to 31) data if not
 #'   contained within the BMDE column `survey_day`. Can be left `NULL` and still
 #'   function properly if originally specified in a call to [data_fmt()].
 #' @param dl_path Character. Optional argument to provide path to download data
@@ -50,7 +50,7 @@
 #'
 #' # Using the included, test data on black-capped chickadees
 #' bcch # look at the data
-#' 
+#'
 #' # Grab one year to reduce number of files to download
 #' bcch <- dplyr::filter(bcch, survey_year == 2010)
 #'
@@ -148,19 +148,20 @@ vegetation_download <- function(
             "'."
           )
         )
-        
-        if(is.null(ed_password)) {
-          stop("[MODIS NDVI/EVI Download] EarthData password could not be found",
-               ". Please add line 'EarthData_password = yourpassword' to your",
-               " .Renviron file. This can be accessed using usethis::edit_r_environ().",
-               call. = FALSE)
+
+        if (is.null(ed_password)) {
+          stop(
+            "[MODIS NDVI/EVI Download] EarthData password could not be found",
+            ". Please add line 'EarthData_password = yourpassword' to your",
+            " .Renviron file. This can be accessed using usethis::edit_r_environ().",
+            call. = FALSE
+          )
         }
       } else {
         ed_password <- parent.frame()$ed_password
       }
     }
   }
-
 
   # Check data is in the desired format.
   input_fmt <- covariate_fmt_check(data)
@@ -359,28 +360,28 @@ vegetation_download <- function(
   # user as the 16-day resolution of this data can result in large file batches
   # by setting download = FALSE in luna::getNASA().
   for (i in unique(c(FALSE, ed_transfer))) {
-    
     if (i == TRUE) {
-      if(length(modis_files > 0)) {
+      if (length(modis_files > 0)) {
         message("[MODIS NDVI/EVI Download] downloading data.")
       }
     } else if (i == FALSE & ed_transfer == FALSE) {
       message("[MODIS NDVI/EVI Download] fetching data filenames.")
     }
-    
 
-    dates <- sort(unique(paste0(data$survey_year, 
-                                "-", 
-                                data$survey_month,
-                                "-",
-                                data$survey_day)))
-    
+    dates <- sort(unique(paste0(
+      data$survey_year,
+      "-",
+      data$survey_month,
+      "-",
+      data$survey_day
+    )))
+
     # Open vector to store filenames.
     modis_files <- c()
     warning_dates <- c()
-    
-    for(j in dates) {
-      if(i == FALSE) {
+
+    for (j in dates) {
+      if (i == FALSE) {
         tryCatch(
           tmp <- luna::getNASA(
             product = "MOD13A1",
@@ -392,11 +393,15 @@ vegetation_download <- function(
             path = ifelse(
               is.null(dl_path),
               "./modis/MOD13A1",
-              paste0(dl_path, "/modis/MOD13A1")),
-              verbose = progress
+              paste0(dl_path, "/modis/MOD13A1")
+            ),
+            verbose = progress
           ),
           warning = function(w) {
-            if (conditionMessage(w) == "No downloadable granules found for product='MOD13A1'. Did you mean: MOD13A2, MOD13A3, MOD13A4N, MOD13C1, MOD13C2? Use `getProducts('MOD13')` to list related products.") {
+            if (
+              conditionMessage(w) ==
+                "No downloadable granules found for product='MOD13A1'. Did you mean: MOD13A2, MOD13A3, MOD13A4N, MOD13C1, MOD13C2? Use `getProducts('MOD13')` to list related products."
+            ) {
               warning_dates <<- unique(c(warning_dates, j))
             } else {
               warning(conditionMessage(w))
@@ -422,7 +427,10 @@ vegetation_download <- function(
             verbose = progress
           ),
           warning = function(w) {
-            if (conditionMessage(w) == "No downloadable granules found for product='MOD13A1'. Did you mean: MOD13A2, MOD13A3, MOD13A4N, MOD13C1, MOD13C2? Use `getProducts('MOD13')` to list related products.") {
+            if (
+              conditionMessage(w) ==
+                "No downloadable granules found for product='MOD13A1'. Did you mean: MOD13A2, MOD13A3, MOD13A4N, MOD13C1, MOD13C2? Use `getProducts('MOD13')` to list related products."
+            ) {
               warning_dates <<- unique(c(warning_dates, j))
             } else {
               warning(conditionMessage(w))
@@ -430,21 +438,23 @@ vegetation_download <- function(
           }
         )
       }
-      
-      if(!(j %in% warning_dates)) {
+
+      if (!(j %in% warning_dates)) {
         modis_files <- unique(c(modis_files, tmp))
       }
     }
-    
+
     # Warn of any out of range dates on first iteration only.
-    if(i == FALSE & length(warning_dates > 0)) {
-      warning("Observation on date(s) ", 
-              stringr::str_flatten_comma(warning_dates),
-              " could not be matched to a MODIS vegetation data file. Are they",
-              " outside of the temporal coverage of the data (i.e., before 2000 or in the current year)?",
-               call. = FALSE)
+    if (i == FALSE & length(warning_dates > 0)) {
+      warning(
+        "Observation on date(s) ",
+        stringr::str_flatten_comma(warning_dates),
+        " could not be matched to a MODIS vegetation data file. Are they",
+        " outside of the temporal coverage of the data (i.e., before 2000 or in the current year)?",
+        call. = FALSE
+      )
     }
-    
+
     # On first iteration (if downloading files) send message about expected
     # number of files to download.
     if (i == FALSE & ed_transfer == TRUE & length(modis_files > 0)) {
@@ -454,9 +464,6 @@ vegetation_download <- function(
         " files to download for your data. This may take some time."
       ))
     }
-    
-
-    
   }
 
   # Return character vector of filepaths to downloaded files (if ed_transfer = TRUE)

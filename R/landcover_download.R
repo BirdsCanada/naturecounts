@@ -94,7 +94,7 @@ landcover_download <- function(
     "terra",
     "luna"
   ))
-  
+
   # Check that ed_transfer is logical.
   if (!is.logical(ed_transfer)) {
     stop(
@@ -118,8 +118,8 @@ landcover_download <- function(
   # Check whether user password is stored in .Renviron
   if (ed_transfer == TRUE) {
     ed_password <- Sys.getenv("EarthData_password")
-    
-    # If not available in .Renviron, check whether an EarthData password exists 
+
+    # If not available in .Renviron, check whether an EarthData password exists
     # in the environment (is specified earlier in the nc_covariates() workflow),
     # and if not, request using askpass::askpass().
     if (ed_password == "") {
@@ -132,12 +132,14 @@ landcover_download <- function(
             "'."
           )
         )
-        
-        if(is.null(ed_password)) {
-          stop("[MODIS Landcover Download] EarthData password could not be found",
-               ". Please add line 'EarthData_password = yourpassword' to your",
-               " .Renviron file. This can be accessed using usethis::edit_r_environ().",
-               call. = FALSE)
+
+        if (is.null(ed_password)) {
+          stop(
+            "[MODIS Landcover Download] EarthData password could not be found",
+            ". Please add line 'EarthData_password = yourpassword' to your",
+            " .Renviron file. This can be accessed using usethis::edit_r_environ().",
+            call. = FALSE
+          )
         }
       } else {
         ed_password <- parent.frame()$ed_password
@@ -294,142 +296,163 @@ landcover_download <- function(
   if (ed_transfer == FALSE) {
     modis_files <- c()
     missing_year <- c()
-    
-    # Ensures that the closest year available for years before the start of 
+
+    # Ensures that the closest year available for years before the start of
     # dataset coverage (2001) is listed.
-    if(TRUE %in% (data$survey_year < 2001) & !(2001 %in% data$survey_year)) {
-      modis_files <- c(modis_files, luna::getNASA(
-        product = "MCD12Q1",
-        start = "2001-01-01", # Starting year
-        end = "2001-12-31", # End year
-        aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-        download = FALSE,
-        verbose = progress
-        ))
-    }
-    
-    # Now, gather files for all years 2001 and after.
-    for(i in sort(unique(data$survey_year))) {
-      tmp <- suppressWarnings(luna::getNASA(
+    if (TRUE %in% (data$survey_year < 2001) & !(2001 %in% data$survey_year)) {
+      modis_files <- c(
+        modis_files,
+        luna::getNASA(
           product = "MCD12Q1",
-          start = paste0(i, "-01-01"), # Starting year
-          end = paste0(i, "-12-31"), # End year
+          start = "2001-01-01", # Starting year
+          end = "2001-12-31", # End year
           aoi = terra::ext(terra::project(study_area, "epsg:4326")),
           download = FALSE,
           verbose = progress
-        ))
-        
-      # Record years with no data associated.
-      if(is.null(tmp)) {
-        missing_year <- c(missing_year, i)
-        } else {
-          modis_files <- c(modis_files, tmp)
-        }
+        )
+      )
     }
-      
-    # If nothing found for a year after 2001, indicates that year is current 
+
+    # Now, gather files for all years 2001 and after.
+    for (i in sort(unique(data$survey_year))) {
+      tmp <- suppressWarnings(luna::getNASA(
+        product = "MCD12Q1",
+        start = paste0(i, "-01-01"), # Starting year
+        end = paste0(i, "-12-31"), # End year
+        aoi = terra::ext(terra::project(study_area, "epsg:4326")),
+        download = FALSE,
+        verbose = progress
+      ))
+
+      # Record years with no data associated.
+      if (is.null(tmp)) {
+        missing_year <- c(missing_year, i)
+      } else {
+        modis_files <- c(modis_files, tmp)
+      }
+    }
+
+    # If nothing found for a year after 2001, indicates that year is current
     # year or later. Fetch filename for year - 1.
-      if(FALSE %in% (missing_year < 2001)) {
-        for(i in missing_year[missing_year >= 2001]) {
-          if(!((i - 1) %in% data$survey_year)) {
-            tmp <- suppressWarnings(luna::getNASA(
-              product = "MCD12Q1",
-              start = paste0(i-1, "-01-01"), # Starting year
-              end = paste0(i-1, "-12-31"), # End year
-              aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-              download = FALSE,
-              verbose = progress
-            ))
-            # If nothing found for year - 1, try year - 2.
-            if(is.null(tmp)) {
-              if(!((i-2) %in% data$survey_year)){
-                tmp <- suppressWarnings(luna::getNASA(
-                  product = "MCD12Q1",
-                  start = paste0(i-2, "-01-01"), # Starting year
-                  end = paste0(i-2, "-12-31"), # End year
-                  aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-                  download = FALSE,
-                  verbose = progress
-                ))
-                
-                # Warn if year-2 doesn't return anything.
-                if(is.null(tmp)) {
-                  warning("[MODIS Landcover Download] Year ", i, " is more than 2 ",
-                          "years away from the next ",
-                          "available MODIS data year. This usually indicates an ",
-                          "incorrectly year too far in the future as MODIS data is ",
-                          "rarely more than 2 years behind the current year.",
-                          call. = FALSE)
-                } else {
-                  modis_files <- c(modis_files, tmp)
-                }
+    if (FALSE %in% (missing_year < 2001)) {
+      for (i in missing_year[missing_year >= 2001]) {
+        if (!((i - 1) %in% data$survey_year)) {
+          tmp <- suppressWarnings(luna::getNASA(
+            product = "MCD12Q1",
+            start = paste0(i - 1, "-01-01"), # Starting year
+            end = paste0(i - 1, "-12-31"), # End year
+            aoi = terra::ext(terra::project(study_area, "epsg:4326")),
+            download = FALSE,
+            verbose = progress
+          ))
+          # If nothing found for year - 1, try year - 2.
+          if (is.null(tmp)) {
+            if (!((i - 2) %in% data$survey_year)) {
+              tmp <- suppressWarnings(luna::getNASA(
+                product = "MCD12Q1",
+                start = paste0(i - 2, "-01-01"), # Starting year
+                end = paste0(i - 2, "-12-31"), # End year
+                aoi = terra::ext(terra::project(study_area, "epsg:4326")),
+                download = FALSE,
+                verbose = progress
+              ))
+
+              # Warn if year-2 doesn't return anything.
+              if (is.null(tmp)) {
+                warning(
+                  "[MODIS Landcover Download] Year ",
+                  i,
+                  " is more than 2 ",
+                  "years away from the next ",
+                  "available MODIS data year. This usually indicates an ",
+                  "incorrectly year too far in the future as MODIS data is ",
+                  "rarely more than 2 years behind the current year.",
+                  call. = FALSE
+                )
+              } else {
+                modis_files <- c(modis_files, tmp)
               }
-            } else {
-              modis_files <- c(modis_files, tmp)
             }
+          } else {
+            modis_files <- c(modis_files, tmp)
           }
         }
       }
-    
-    if(length(missing_year) > 0) {
-      if(TRUE %in% (missing_year < 2001)) {
-        if(FALSE %in% (missing_year < 2001)) {
-          warning("[MODIS Landcover Download] MODIS landcover data ",
-                  "unavailable for all years before 2001 as well as ",
-                  stringr::str_flatten_comma(sort(missing_year[missing_year >= 2001])),
-                  ". landcover_extract() will extract landcover data from 2001 ",
-                  "or the nearest year for these observations.",
-                  call. = FALSE)
+    }
+
+    if (length(missing_year) > 0) {
+      if (TRUE %in% (missing_year < 2001)) {
+        if (FALSE %in% (missing_year < 2001)) {
+          warning(
+            "[MODIS Landcover Download] MODIS landcover data ",
+            "unavailable for all years before 2001 as well as ",
+            stringr::str_flatten_comma(sort(missing_year[
+              missing_year >= 2001
+            ])),
+            ". landcover_extract() will extract landcover data from 2001 ",
+            "or the nearest year for these observations.",
+            call. = FALSE
+          )
         } else {
-          warning("[MODIS Landcover Download] MODIS landcover data ",
-                  "unavailable for all years before 2001. landcover_extract() ",
-                  "will extract landcover data from 2001 for these observations.",
-                  call. = FALSE)
+          warning(
+            "[MODIS Landcover Download] MODIS landcover data ",
+            "unavailable for all years before 2001. landcover_extract() ",
+            "will extract landcover data from 2001 for these observations.",
+            call. = FALSE
+          )
         }
       } else {
-        warning("[MODIS Landcover Download] MODIS landcover data ",
-                "unavailable for ",
-                stringr::str_flatten_comma(sort(missing_year)),
-                ". landcover_extract() will extract landcover data from ",
-                "the nearest available year for these observations.",
-                call. = FALSE)
+        warning(
+          "[MODIS Landcover Download] MODIS landcover data ",
+          "unavailable for ",
+          stringr::str_flatten_comma(sort(missing_year)),
+          ". landcover_extract() will extract landcover data from ",
+          "the nearest available year for these observations.",
+          call. = FALSE
+        )
       }
     }
     modis_files <- sort(unique(modis_files))
   } else {
     modis_files <- c()
     missing_year <- c()
-    
-    # Ensures that the closest year available for years before the start of 
+
+    # Ensures that the closest year available for years before the start of
     # dataset coverage (2001) is downloaded.
-    if(TRUE %in% (data$survey_year < 2001)) {
-      modis_files <- c(modis_files, luna::getNASA(
-        product = "MCD12Q1",
-        start = "2001-01-01", # Starting year
-        end = "2001-12-31", # End year
-        aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-        download = TRUE,
-        overwrite = FALSE,
-        path = ifelse(
-          is.null(dl_path),
-          "./modis/MCD12Q1",
-          paste0(dl_path, "/modis/MCD12Q1")
-        ),
-        username = ed_email,
-        password = ed_password,
-        verbose = progress
-      ))
-      
+    if (TRUE %in% (data$survey_year < 2001)) {
+      modis_files <- c(
+        modis_files,
+        luna::getNASA(
+          product = "MCD12Q1",
+          start = "2001-01-01", # Starting year
+          end = "2001-12-31", # End year
+          aoi = terra::ext(terra::project(study_area, "epsg:4326")),
+          download = TRUE,
+          overwrite = FALSE,
+          path = ifelse(
+            is.null(dl_path),
+            "./modis/MCD12Q1",
+            paste0(dl_path, "/modis/MCD12Q1")
+          ),
+          username = ed_email,
+          password = ed_password,
+          verbose = progress
+        )
+      )
+
       # Record years with no data associated.
-      missing_year <- c(missing_year, unique(data$survey_year[data$survey_year < 2001]))
+      missing_year <- c(
+        missing_year,
+        unique(data$survey_year[data$survey_year < 2001])
+      )
     }
-    
+
     # Now, download for years 2001 and after.
-    if(TRUE %in% (data$survey_year >= 2001)) {
-      for(i in sort(unique(data$survey_year[data$survey_year >= 2001]))) {
-        # If 2001 data downloaded above, do nothing. Otherwise, download that 
+    if (TRUE %in% (data$survey_year >= 2001)) {
+      for (i in sort(unique(data$survey_year[data$survey_year >= 2001]))) {
+        # If 2001 data downloaded above, do nothing. Otherwise, download that
         # year's data.
-        if(!(i == 2001 & length(modis_files > 0))) {
+        if (!(i == 2001 & length(modis_files > 0))) {
           tmp <- suppressWarnings(luna::getNASA(
             product = "MCD12Q1",
             start = paste0(i, "-01-01"), # Starting year
@@ -446,20 +469,20 @@ landcover_download <- function(
             password = ed_password,
             verbose = progress
           ))
-          
+
           # Record years with no data associated.
-          if(is.null(tmp)) {
+          if (is.null(tmp)) {
             missing_year <- c(missing_year, i)
           }
-          
+
           # If nothing found, indicates that year is current year or later. Download
           # data for year - 1. If already downloaded, overwrite = FALSE will
           # prevent downloading same file twice.
-          if(is.null(tmp)) {
+          if (is.null(tmp)) {
             tmp <- suppressWarnings(luna::getNASA(
               product = "MCD12Q1",
-              start = paste0(i-1, "-01-01"), # Starting year
-              end = paste0(i-1, "-12-31"), # End year
+              start = paste0(i - 1, "-01-01"), # Starting year
+              end = paste0(i - 1, "-12-31"), # End year
               aoi = terra::ext(terra::project(study_area, "epsg:4326")),
               download = TRUE,
               overwrite = FALSE,
@@ -472,14 +495,14 @@ landcover_download <- function(
               password = ed_password,
               verbose = progress
             ))
-            
+
             # Just in case, try year - 2 if MODIS data upload is really behind for
             # some reason.
-            if(is.null(tmp)) {
+            if (is.null(tmp)) {
               tmp <- suppressWarnings(luna::getNASA(
                 product = "MCD12Q1",
-                start = paste0(i-2, "-01-01"), # Starting year
-                end = paste0(i-2, "-12-31"), # End year
+                start = paste0(i - 2, "-01-01"), # Starting year
+                end = paste0(i - 2, "-12-31"), # End year
                 aoi = terra::ext(terra::project(study_area, "epsg:4326")),
                 download = TRUE,
                 overwrite = FALSE,
@@ -492,15 +515,19 @@ landcover_download <- function(
                 password = ed_password,
                 verbose = progress
               ))
-              
+
               # Warn if year-2 doesn't return anything.
-              if(is.null(tmp)) {
-                warning("[MODIS Landcover Download] Year ", i, " is more than 2 ",
-                        "years away from the next ",
-                        "available MODIS data year. This usually indicates an ",
-                        "incorrectly entered year too far in the future as MODIS data is ",
-                        "rarely more than 2 years behind the current year.",
-                        call. = FALSE)
+              if (is.null(tmp)) {
+                warning(
+                  "[MODIS Landcover Download] Year ",
+                  i,
+                  " is more than 2 ",
+                  "years away from the next ",
+                  "available MODIS data year. This usually indicates an ",
+                  "incorrectly entered year too far in the future as MODIS data is ",
+                  "rarely more than 2 years behind the current year.",
+                  call. = FALSE
+                )
               } else {
                 modis_files <- c(modis_files, tmp)
               }
@@ -513,31 +540,38 @@ landcover_download <- function(
         }
       }
     }
-    
-    if(length(missing_year) > 0) {
-      if(TRUE %in% (missing_year < 2001)) {
-        if(FALSE %in% (missing_year < 2001)) {
-          warning("[MODIS Landcover Download] MODIS landcover data ",
-                  "unavailable for all years before 2001 as well as ",
-                  stringr::str_flatten_comma(sort(missing_year[missing_year >= 2001])),
-                  ". landcover_extract() will extract landcover data from 2001 ",
-                  "or the nearest year for these observations.",
-                  call. = FALSE)
+
+    if (length(missing_year) > 0) {
+      if (TRUE %in% (missing_year < 2001)) {
+        if (FALSE %in% (missing_year < 2001)) {
+          warning(
+            "[MODIS Landcover Download] MODIS landcover data ",
+            "unavailable for all years before 2001 as well as ",
+            stringr::str_flatten_comma(sort(missing_year[
+              missing_year >= 2001
+            ])),
+            ". landcover_extract() will extract landcover data from 2001 ",
+            "or the nearest year for these observations.",
+            call. = FALSE
+          )
         } else {
-          warning("[MODIS Landcover Download] MODIS landcover data ",
-                  "unavailable for all years before 2001. landcover_extract() ",
-                  "will extract landcover data from 2001 for these observations.",
-                  call. = FALSE)
+          warning(
+            "[MODIS Landcover Download] MODIS landcover data ",
+            "unavailable for all years before 2001. landcover_extract() ",
+            "will extract landcover data from 2001 for these observations.",
+            call. = FALSE
+          )
         }
       } else {
-        warning("[MODIS Landcover Download] MODIS landcover data ",
-                "unavailable for ",
-                stringr::str_flatten_comma(sort(missing_year)),
-                ". landcover_extract() will extract landcover data from ",
-                "the nearest available year for these observations.",
-                call. = FALSE)
+        warning(
+          "[MODIS Landcover Download] MODIS landcover data ",
+          "unavailable for ",
+          stringr::str_flatten_comma(sort(missing_year)),
+          ". landcover_extract() will extract landcover data from ",
+          "the nearest available year for these observations.",
+          call. = FALSE
+        )
       }
-      
     }
   }
 
