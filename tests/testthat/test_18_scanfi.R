@@ -756,5 +756,229 @@ test_that("scanfi_extract() returns appropriate warnings for out of coverage poi
     )),
     "\\[SCANFI \\(ponderosapine\\) Extraction\\] site FilledSurveyArea1's buffered area is only partially contained by the spatial extent of the SCANFI rasters provided. Returned ponderosapine value will be derived from the available values."
   )
+
+  bcch_modified <- bcch_restricted[
+    bcch_restricted$survey_year %in% c(2000, 2005),
+  ]
+  bcch_modified$survey_year <- 1990
+
+  sf_pt <- suppressMessages(data_fmt(
+    bcch_modified,
+    coord_lon = "longitude",
+    coord_lat = "latitude",
+    crs = 4326
+  ))
+
+  expect_error(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_pt,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_pt
+    )),
+    "\\[SCANFI Extraction\\] Data does not contain observations within the SCANFI snapshot years \\(2000, 2005\\) in scanfi_data. If wanting to match interceding years to snapshots, use interpolate \\= TRUE."
+  )
+
+  bcch_modified <- bcch_restricted[
+    bcch_restricted$survey_year %in% c(2000, 2005),
+  ]
+  bcch_modified$survey_year[1] <- 1990
+
+  sf_pt <- suppressMessages(data_fmt(
+    bcch_modified,
+    coord_lon = "longitude",
+    coord_lat = "latitude",
+    crs = 4326
+  ))
+
+  expect_warning(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_pt,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_pt,
+      interpolate = TRUE
+    )),
+    "\\[SCANFI Download\\] Data contains years more than 5 years away from nearest SCANFI snapshot \\(1990\\). No value will be returned for observations in these years. Nearby \\(< 5 years away\\) snapshots are available for some data years \\(1990\\), but were not provided via the scanfi_data argument. These can be downloaded with scanfi_download\\(\\)."
+  )
+
+  bcch_modified <- bcch_restricted[
+    bcch_restricted$survey_year %in% c(2000, 2005),
+  ]
+  bcch_modified$survey_year[1] <- 1970
+
+  sf_pt <- suppressMessages(data_fmt(
+    bcch_modified,
+    coord_lon = "longitude",
+    coord_lat = "latitude",
+    crs = 4326
+  ))
+
+  expect_warning(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_pt,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_pt,
+      interpolate = TRUE
+    )),
+    "\\[SCANFI Download\\] Data contains years more than 5 years away from nearest SCANFI snapshot \\(1970\\). No value will be returned for observations in these years."
+  )
 })
+
+# Tests for NFI Landcover - only run locally due to large filesize.
+
+skip("local only")
+
+test_that("scanfi_extract() functionality with NFI landcover data.", {
+  scanfi_lc <- scanfi_download(
+    bcch_restricted,
+    covariates = "scanfi_nfilc",
+    dl_path = "./testdir"
+  )
+
+  sf_pt <- suppressMessages(data_fmt(
+    bcch_restricted,
+    coord_lon = "longitude",
+    coord_lat = "latitude",
+    crs = 4326
+  ))
+
+  expect_silent(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_pt,
+      scanfi_data = scanfi_lc,
+      covariates = "scanfi_nfilc",
+      interpolate = FALSE
+    ))
+  )
+
+  expect_s3_class(extracted, "sf")
+  expect_equal(
+    as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)),
+    "POINT"
+  )
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "geometry",
+      "nfilc_class"
+    )
+  )
+  expect_true(inherits(extracted$nfilc_class, "character"))
+  expect_equal(
+    dplyr::select(extracted, -"nfilc_class"),
+    sf_pt,
+    ignore_attr = TRUE
+  ) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_true(all(is.na(extracted$nfilc_class[
+    !(extracted$survey_year %in% c(2000, 2005))
+  ])))
+  expect_true(all(
+    !is.na(extracted$nfilc_class[
+      extracted$survey_year %in% c(2000, 2005)
+    ])
+  ))
+
+  # Test interpolation
+  expect_silent(
+    extracted <- suppressWarnings(suppressMessages(scanfi_extract(
+      sf_pt,
+      covariates = "scanfi_nfilc",
+      scanfi_data = scanfi_lc,
+      interpolate = TRUE
+    )))
+  )
+
+  expect_true(all(!is.na(extracted$nfilc_class)))
+  expect_true(
+    extracted$nfilc_class[
+      extracted$survey_year == 2003 &
+        extracted$SurveyAreaIdentifier == "FilledSurveyArea8"
+    ] ==
+      extracted$nfilc_class[
+        extracted$survey_year == 2005 &
+          extracted$SurveyAreaIdentifier == "FilledSurveyArea8"
+      ]
+  )
+
+  sf_poly <- suppressMessages(data_buff(sf_pt))
+
+  expect_silent(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_poly,
+      scanfi_data = scanfi_lc,
+      covariates = "scanfi_nfilc",
+      interpolate = FALSE
+    ))
+  )
+
+  expect_s3_class(extracted, "sf")
+  expect_equal(
+    as.character(sf::st_geometry_type(extracted, by_geometry = FALSE)),
+    "POLYGON"
+  )
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "geometry",
+      "nfilc_bryoid",
+      "nfilc_herbs",
+      "nfilc_rock",
+      "nfilc_shrub",
+      "nfilc_treed_broadleaf",
+      "nfilc_treed_conifer",
+      "nfilc_treed_mixed",
+      "nfilc_water"
+    )
+  )
+  expect_true(inherits(extracted$nfilc_bryoid, "numeric"))
+  expect_equal(
+    dplyr::select(extracted, -tidyselect::starts_with("nfilc_")),
+    sf_poly,
+    ignore_attr = TRUE
+  ) # Ignores attributes to confirm that data has not been otherwise modified.
+  expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
+  expect_true(all(is.na(extracted$nfilc_bryoid[
+    !(extracted$survey_year %in% c(2000, 2005))
+  ])))
+  expect_true(all(
+    !is.na(extracted$nfilc_bryoid[
+      extracted$survey_year %in% c(2000, 2005)
+    ])
+  ))
+
+  # Test interpolation
+  expect_silent(
+    extracted <- suppressWarnings(suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_nfilc",
+      scanfi_data = scanfi_lc,
+      interpolate = TRUE
+    )))
+  )
+
+  expect_true(all(!is.na(extracted$nfilc_bryoid)))
+  expect_true(
+    extracted$nfilc_bryoid[
+      extracted$survey_year == 2003 &
+        extracted$SurveyAreaIdentifier == "FilledSurveyArea8"
+    ] ==
+      extracted$nfilc_bryoid[
+        extracted$survey_year == 2005 &
+          extracted$SurveyAreaIdentifier == "FilledSurveyArea8"
+      ]
+  )
+})
+
 unlink("./testdir", recursive = TRUE)

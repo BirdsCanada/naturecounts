@@ -359,8 +359,10 @@ scanfi_extract <- function(
     if (length(match_years) == 0) {
       stop(
         "[SCANFI Extraction] Data does not contain observations within the",
-        " available SCANFI snapshot years (1985, 1990, 1995, ..., 2025). If",
-        " wanting to match interceding years to snapshots, use interpolate",
+        " SCANFI snapshot years (",
+        stringr::str_flatten_comma(sort(as.numeric(names(scanfi_data)))),
+        ") in scanfi_data.",
+        " If wanting to match interceding years to snapshots, use interpolate",
         " = TRUE.",
         call. = FALSE
       )
@@ -474,7 +476,19 @@ scanfi_extract <- function(
         terra::project(study_area, terra::crs(scanfi_data[[j]][[i]]))
       )
 
-      scanfi_filled <- terra::as.polygons(scanfi_data[[j]][[i]])
+      # Create filled extent polygon of cropped scanfi layer.
+      if (i == "nfilc") {
+        scanfi_filled <- terra::as.polygons(terra::subst(
+          scanfi_data[[j]][[i]],
+          from = unname(c(na.omit(unique(terra::values(scanfi_data[[j]][[
+            i
+          ]]))))),
+          to = 1,
+          raw = TRUE
+        ))
+      } else {
+        scanfi_filled <- terra::as.polygons(scanfi_data[[j]][[i]])
+      }
 
       # Loop through each site and extract.
       for (k in unique(data$SurveyAreaIdentifier)) {
@@ -582,7 +596,11 @@ scanfi_extract <- function(
                 ]
 
                 for (l in missing_cols) {
-                  data[, l] <- 0
+                  data[
+                    data$survey_year %in%
+                      closest_year$data_year[closest_year$scanfi_year == j],
+                    l
+                  ] <- 0
                 }
 
                 # Replace NAs present in columns for land cover classes that were
@@ -594,7 +612,12 @@ scanfi_extract <- function(
                     paste0("nfilc_", nfilc_classes$name) %in% names(data)
                   ]
                 )) {
-                  data[is.na(data[, l] %>% sf::st_drop_geometry()), l] <- 0
+                  data[
+                    is.na(data[, l] %>% sf::st_drop_geometry()) &
+                      data$survey_year %in%
+                        closest_year$data_year[closest_year$scanfi_year == j],
+                    l
+                  ] <- 0
                 }
 
                 # Reorder columns to match class order provided in NFILC
