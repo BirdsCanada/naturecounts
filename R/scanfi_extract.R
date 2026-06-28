@@ -477,18 +477,15 @@ scanfi_extract <- function(
       )
 
       # Create filled extent polygon of cropped scanfi layer.
-      if (i == "nfilc") {
-        scanfi_filled <- terra::as.polygons(terra::subst(
-          scanfi_data[[j]][[i]],
-          from = unname(c(na.omit(unique(terra::values(scanfi_data[[j]][[
-            i
-          ]]))))),
-          to = 1,
-          raw = TRUE
-        ))
-      } else {
-        scanfi_filled <- terra::as.polygons(scanfi_data[[j]][[i]])
-      }
+
+      scanfi_filled <- terra::as.polygons(terra::subst(
+        scanfi_data[[j]][[i]],
+        from = unname(c(na.omit(unique(terra::values(scanfi_data[[j]][[
+          i
+        ]]))))),
+        to = 1,
+        raw = TRUE
+      ))
 
       # Loop through each site and extract.
       for (k in unique(data$SurveyAreaIdentifier)) {

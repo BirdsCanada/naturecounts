@@ -110,6 +110,7 @@ articles:
   - '`articles/4.3-Vegetation`'
   - '`articles/4.4-Elevation`'
   - '`articles/4.5-WorldClim`'
+  - '`articles/4.6-SCANFI`'
 - title: Additional Tutorials
   desc: How-to articles describing common tasks
   contents:

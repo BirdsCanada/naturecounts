@@ -1,0 +1,204 @@
+---
+title: "Chapter 6 - Downloading and Extracting SCANFI Data"
+author: "Rory Macklin"
+date: "2026-06-28"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chapter 6 - Downloading and Extracting SCANFI Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Chapter 6: Downloading and Extracting SCANFI Data
+
+##### Author: Rory Macklin
+
+> Forest structure is a key habitat feature for many birds, as well as many other organisms. With detailed information on forest age, height, and species composition in Canada, the SCANFI dataset offers a significant opportunity to gain insight into species' habitat preferences and other ecological relationships.
+
+This tutorial assumes you have a basic understanding of working with spatial data in R. For a good introduction to these kinds of operations, the [NatureCounts Spatial Data Tutorial](https://github.com/BirdsCanada/NatureCounts_SpatialData_Tutorial) can serve as a useful starting point. It explains how to download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers. This tutorial also uses functions demonstrated in [**Chapter 1: Formatting Data for Covariate Download and Extraction**](4.1-CovariateFormatting.html). If you are unfamiliar with these functions, we recommend using the previous tutorial to learn to conform your data to a standardized format used in SCANFI data download and extraction functions.
+
+# 6.0 Learning Objectives
+
+By the end of **Chapter 6 - Downloading and Extracting SCANFI Data**, users will:
+
+- Have a basic understanding of the SCANFI dataset accessed through `scanfi_download()` and `scanfi_extract()`: [SCANFI data](#6.1scanfi).
+- Be able to use `scanfi_download()` to download SCANFI data ready to match to observations in your data: [Downloading SCANFI data with `scanfi_download()`](#6.2download).
+- Be able to use `scanfi_extract()` to extract and summarize SCANFI data for each observation in their data: [Extracting SCANFI data with `scanfi_extract()`](#6.3extract).
+
+This R tutorial requires the following packages:
+
+``` {r}
+library(naturecounts)
+library(tidyverse)
+library(sf)
+library(terra)
+```
+
+# 6.1 SCANFI data {#6.1scanfi}
+
+The [Spatialized CAnadian National Forest Inventory (SCANFI) dataset](https://doi.org/10.23687/07653869-f303-46c2-a04e-9ab479b73cbf) is a wall-to-wall Canadian dataset of gridded forest structure and land cover data at a ~ 30 m resolution, with annual snapshots of a number of variables every 5 years from 1985-2025. The variables available through `naturecounts` include:
+
+- Forest age (years)
+- Forest biomass (tons/ha)
+- Crown closure (% of pixel covered by tree canopy)
+- Forest height (m)
+- National Forest Inventory land cover (NFILC) class
+- Balsam Fir cover (% of pixel)
+- Black Spruce cover (% of pixel)
+- Douglas Fir cover (% of pixel)
+- Jack Pine cover (% of pixel)
+- Lodgepole Pine cover (% of pixel)
+- Ponderosa Pine cover (% of pixel)
+- Tamarack cover (% of pixel)
+- White and Red Pine cover (% of pixel)
+- Broadleaf tree species cover (% of pixel)
+- Other conifer species cover (% of pixel)
+
+These values are modeled from a variety of satellite- and ground-derived data sources and provide useful snapshots of forest structure at different times across the last 4 decades. For more information about the generation of this dataset, see [Guindon et al. (2024)](https://doi.org/10.1139/cjfr-2023-0118) and [Guindon et al. (2026)](https://doi.org/10.23687/07653869-f303-46c2-a04e-9ab479b73cbf).
+
+# 6.2 Downloading SCANFI data with `scanfi_download()` {#6.2download}
+
+SCANFI data can be accessed from freely via an [FTP server](https://ftp.maps.canada.ca/pub/nrcan_rncan/Forests_Foret/SCANFI/v2/). While these data are easily accessible, the filenames can be difficult to read, and users must ensure they download all snapshot years needed for each variable desired. This is a step the `naturecounts` package aims to eliminate to promote ease of access to these fantastic data.
+
+First, lets prep some data from NatureCounts for use in downloading SCANFI data using `data_fmt()`. THe function we will use to download SCANFI data - `scanfi_download()` - needs input data in either `data.frame`, `sf` or `terra` spatial format containing a column for each observation with the year the observation was made, or can be called without input data if the desired snapshot years to be downloaded are provided. If providing input data, you can provide your own data in the required format, or use the built-in `naturecounts::data_fmt()` function to conform your data to the necessary format.
+
+``` {r}
+# This dataset containing Black-capped Chickadee observations included in
+# the naturecounts R package is in a data.frame format, and contains the columns
+# we need (latitude, longitude, and year)!
+# We'll convert it into an sf object for use in scanfi_download().
+bcch %>%
+  select(latitude, longitude, survey_year) %>%
+  head()
+  
+# To reduce the necessary downloads, we will restrict our data to years 2000-2007.
+
+bcch <- bcch[bcch$survey_year %in% c(2000:2007),]
+
+# We can make a call to data_fmt() to automatically convert this to an sf object
+# ready to work with naturecounts' covariate download and extraction functions. We
+# can ignore the warning as EPSG:4326 is an appropriate CRS for our data.
+formatted <- data_fmt(bcch)
+
+head(formatted)
+```
+With our data prepared, we can make a call to `scanfi_download()` to begin downloading SCANFI data. If we provide the spatial data we have generated, `scanfi_download()` will attempt to identify the snapshot year(s) that the data fall closest to. Alternatively, we could specify the years we want the function to download by setting `use_date = FALSE` and `snapshot_year = c(2000, 2005)`.
+
+At this stage, we also need to decide which SCANFI variables we want to download. We can provide the following names to the `covariates` argument to download one or multiple datasets:
+
+- Forest age (years): `scanfi_age`
+- Forest biomass (tons/ha): `scanfi_biomass`
+- Crown closure (% of pixel covered by tree canopy): `scanfi_closure`
+- Forest height (m): `scanfi_height`
+- National Forest Inventory land cover (NFILC) class: `scanfi_nfilc`
+- Balsam Fir cover (% of pixel): `scanfi_balsamfir`
+- Black Spruce cover (% of pixel): `scanfi_blackspruce`
+- Douglas Fir cover (% of pixel): `scanfi_douglasfir`
+- Jack Pine cover (% of pixel): `scanfi_jackpine`
+- Lodgepole Pine cover (% of pixel): `scanfi_lodgepolepine`
+- Ponderosa Pine cover (% of pixel): `scanfi_ponderosapine`
+- Tamarack cover (% of pixel): `scanfi_tamarack`
+- White and Red Pine cover (% of pixel): `scanfi_whiteredpine`
+- Broadleaf tree species cover (% of pixel): `scanfi_broadleaf`
+- Other conifer species cover (% of pixel): `scanfi_otherconifer`
+
+We will download the forest height and NFILC dataset. Users should be aware that SCANFI data files, being at a fine spatial resolution across the entirety of Canada, are large (generally 1-5Gb per snapshot year) and should consider disk space before downloading.
+
+``` {r}
+# Let's download some files! Files will be downloaded into a 'scanfi/' subdirectory in your current working directory.
+
+scanfi_data <- scanfi_download(data = formatted,
+                               covariates = c("scanfi_height", "scanfi_nfilc"),
+                               use_date = TRUE) # this is TRUE by default, telling
+                                                # the function to find the snapshot
+                                                # years needed from the data argument,
+                                                # but we include it here for clarity.
+                                                
+# If we didn't have any input data, but still wanted to download the same files
+# we could do so as follows:
+scanfi_data <- scanfi_download(covariates = c("scanfi_height", "scanfi_nfilc"),
+                               use_date = FALSE,
+                               snapshot_year = c(2000, 2005))
+                                                
+                            
+scanfi_data
+```
+
+Examining the `scanfi_data` object, we can see it is a list containing two sub-lists, each named for the snapshot year the data contained is from. Within each, we can find a `terra::SpatRaster` containing our requested data for that snapshot year. All downloaded files can be found by default in the created `./scanfi` subdirectory or at a custom path specified using the argument `dl_path`.
+
+# 6.3 Extracting SCANFI data with `scanfi_extract()` {#6.3extract}
+
+Once we have gathered the appropriate SCANFI data rasters, using `scanfi_download()` or otherwise, we will want to extract the appropriate values and match them to our observations. Traditionally this might be accomplished with complicated for-loops running through each observation and matching it to the appropriate snapshot year's data files. This could take significant time for the researcher and could be prone to errors for those not experienced with spatial operations in R. In these cases, `scanfi_extract()` can help make the process quicker and easier.
+
+`scanfi_extract()` requires input data in either a `sf` or `terra` spatial format. This function works slightly differently depending on whether the input site data are in point or polygon format (again, either `sf` or `terra` objects are accepted). For point data, the extraction process will return the SCANFI variable value of the raster grid cell that each site point falls within for the appropriate snapshot year in a column named following the name of that variable (e.g., `scanfi_height`). This is carried out via a call to `terra::extract()`. For polygon data, the extraction process will return the mean SCANFI variable value of cells overlapped by each polygon for the appropriate snapshot year, again in a column named following the variable's name. This is carried out via a call to `exactextractr::exact_extract()`. In the case of the NFILC dataset, which contains values representing the land cover type within each 30 m pixel, polygon input data to the function will be passed through `landscapemetrics::calculate_lsm()`, returning a column for each land cover class containing the percent of the polygon area covered by that land cover class.
+
+The input data must also have a column containing the name of the site each observation was made at and the year the observation was made. By default, `scanfi_extract()` searches for this information in the BMDE columns `SurveyAreaIdentifier` and `survey_year` respectively (included by default in data downloaded through `naturecounts`), but alternate site name and year column names can be specified using the `site_name` and `date_year` arguments. By default, `scanfi_extract()` will only extract data for years that match exactly to the snapshot years, but if users want to fill the interceding years with the value from the closest snapshot year, they can do so by setting `interpolate = TRUE`.
+
+To execute these extractions, we will need to point `scanfi_extract()` to the object containing our SCANFI data using the argument `scanfi_data`. Conveniently, this object is exactly the output of `scanfi_download()` that we stored in our `scanfi_data` object.
+
+``` {r}
+# We will start by fetching the SCANFI height data for our point dataset created above.
+output <- scanfi_extract(data = formatted,
+                         covariates = "scanfi_height",
+                         scanfi_data = scanfi_data,
+                         interpolate = FALSE) # this is the default value, but
+                                              # we include it explicitly for clarity.
+
+output[output$survey_year %in% c(2000, 2002, 2005),]
+```
+
+Now let's give it a go with polygon input data. We'll buffer our points to fetch the mean forest height within a 500 m radius of each observation. This time, we'll set `interpolate = TRUE` so that the years between 2000 and 2005 and the years after 2005 are filled with the value from the nearest snapshot year.
+
+``` {r}
+buffered <- data_buff(data = formatted)
+
+output <- scanfi_extract(data = buffered,
+                         covariates = "scanfi_height",
+                         scanfi_data = scanfi_data,
+                         interpolate = TRUE)
+
+output[output$survey_year %in% c(2000, 2002, 2005),]
+```
+
+We can see that the mean height values have been added in the `scanfi_height` column and that the years 2001 and 2002 have been filled with the value from year 2000, and the years 2003, 2004, 2006, and 2007 have been filled with the value from 2005.
+
+To demonstrate the different way that NFILC data are extracted, we'll extract those with our point and polygon data below.
+
+``` {r}
+# Using our point data, we can see that extracting NFILC data returns a column
+# called "nfilc_class" containing the land cover class of the pixel the point
+# lands within.
+
+output <- scanfi_extract(data = formatted,
+                         covariates = "scanfi_nfilc",
+                         scanfi_data = scanfi_data,
+                         interpolate = FALSE)
+                
+output[output$survey_year %in% c(2000, 2002, 2005),]  
+
+# And using our buffered polygons data, we can see that extracting NFILC data
+# returns a column for each land cover class containing the percent of the
+# polygon's area covered by each land cover class.
+
+output <- scanfi_extract(data = buffered,
+                         covariates = "scanfi_nfilc",
+                         scanfi_data = scanfi_data,
+                         interpolate = FALSE)
+                         
+output[output$survey_year %in% c(2000, 2002, 2005),]
+```
+
+# 6.4 Tips and tricks
+
+For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names and year data can be provided directly to `scanfi_download()` and `scanfi_extract()` via the `site_name` and `date_yera` argument respectively. If you have already provided this information in a call to `data_fmt()` and are providing the output of that function as the `data` argument of either `scanfi_` function, you do not need to specify this information again.
+
+By default, the SCANFI files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `scanfi_extract()`.
+
+**Congratulations!** You have now learned how to quickly download and extract the appropriate SCANFI data for your observation data using `scanfi_download()` and `scanfi_extract()`.
