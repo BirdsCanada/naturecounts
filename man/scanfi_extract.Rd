@@ -112,7 +112,7 @@ output <- scanfi_extract(data = bcch,
 
 }
 \references{
-Fick, S.E. and R.J. Hijmans, 2017. WorldClim 2: new 1km spatial resolution climate surfaces for global land areas. International Journal of Climatology 37 (12): 4302-4315.
+Guindon L., Correia D.L.P, Manka F. and Smiley B. 2026. SCANFI v2: Spatialized CAnadian National Forest Inventory data product v2. Natural Resources Canada, Canadian Forest Service, Laurentian Forestry Centre, Quebec, Canada. \url{https://doi.org/10.23687/07653869-f303-46c2-a04e-9ab479b73cbf}.
 }
 \seealso{
 \code{\link[=scanfi_download]{scanfi_download()}} which can be used to download data from SCANFI

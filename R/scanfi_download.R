@@ -81,7 +81,7 @@
 #' @seealso [scanfi_extract()] which can be used to extract data from loaded
 #' SCANFI data files.
 #'
-#' @references Fick, S.E. and R.J. Hijmans, 2017. WorldClim 2: new 1km spatial resolution climate surfaces for global land areas. International Journal of Climatology 37 (12): 4302-4315.
+#' @references Guindon L., Correia D.L.P, Manka F. and Smiley B. 2026. SCANFI v2: Spatialized CAnadian National Forest Inventory data product v2. Natural Resources Canada, Canadian Forest Service, Laurentian Forestry Centre, Quebec, Canada. <https://doi.org/10.23687/07653869-f303-46c2-a04e-9ab479b73cbf>.
 #'
 #' @export
 # Function to download data from the Spatialized Canadian National Forest

@@ -65,6 +65,8 @@ reference:
   - elevation_extract
   - worldclim_download
   - worldclim_extract
+  - scanfi_download
+  - scanfi_extract
 - title: Data
   desc: Included example data sets
   contents:
