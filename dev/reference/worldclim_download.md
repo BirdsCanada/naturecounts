@@ -101,9 +101,10 @@ bcch <- sf::st_as_sf(
 )
 
 # Load WorldClim data
-output <- worldclim_download(data = bcch, 
+output <- worldclim_download(data = bcch,
                              covariates = "worldclim_wind",
                              progress = FALSE)
 #> [Worldclim Download] downloading WorldClim 'wind' data for Canada.
-#> Cached as: ./worldclim/climate/wc2.1_country/CAN_wc2.1_30s_wind.tif
+#> The geodata server is temporary out of service for maintenance. It should be back on 22 June. 
+#> Warning: [WorldClim Download] Download failed for Canada [wind].
 ```

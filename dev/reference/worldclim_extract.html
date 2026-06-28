@@ -120,7 +120,7 @@ and custom download filepath used.</p></dd>
 
 
 <dt id="arg-retain">retain<a class="anchor" aria-label="anchor" href="#arg-retain"></a></dt>
-<dd><p>Logical. Should WorldClim data files be kept after extraction. If
+<dd><p>Logical. Should WorldClim data files be kept after extraction? If
 <code>FALSE</code>, files will be deleted.</p></dd>
 
 </dl></div>
@@ -161,17 +161,19 @@ which can be used to download WorldClim data files.</p></div>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load WorldClim data</span></span></span>
-<span class="r-in"><span><span class="va">tavg</span> <span class="op">&lt;-</span> <span class="fu"><a href="worldclim_download.html">worldclim_download</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bcch</span>, </span></span>
+<span class="r-in"><span><span class="va">tavg</span> <span class="op">&lt;-</span> <span class="fu"><a href="worldclim_download.html">worldclim_download</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bcch</span>,</span></span>
 <span class="r-in"><span>                           covariates <span class="op">=</span> <span class="st">"worldclim_wind"</span>,</span></span>
 <span class="r-in"><span>                           progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span>                           </span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> [Worldclim Download] downloading WorldClim 'wind' data for Canada.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The geodata server is temporary out of service for maintenance. It should be back on 22 June. </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>[WorldClim Download] Download failed for Canada [wind].</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract average temperature</span></span></span>
 <span class="r-in"><span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu">worldclim_extract</span><span class="op">(</span>data <span class="op">=</span> <span class="va">bcch</span>,</span></span>
 <span class="r-in"><span>                            worldclim_data <span class="op">=</span> <span class="va">tavg</span>,</span></span>
 <span class="r-in"><span>                            covariates <span class="op">=</span> <span class="st">"worldclim_wind"</span>,</span></span>
 <span class="r-in"><span>                            retain <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> [WorldClim Extraction] extracting WorldClim wind.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (which(unique(data$survey_month[data$SurveyAreaIdentifier ==     j]) == k) == 1) {    if (all(is.na(terra::extract(source[[layername]], tmp)[,         layername]))) {        warning("[WorldClim (", i, ") Extraction] site ", j,             " falls outside of the spatial extent of the WorldClim rasters",             " provided. No value will be returned.", call. = FALSE)    }    else if (TRUE %in% is.na(terra::extract(source[[layername]],         tmp)[, layername])) {        warning("[WorldClim (", i, ") Extraction] site ", j,             "'s buffered area is only partially contained by the spatial",             " extent of the WorldClim rasters provided. Returned mean ",             i, " value will be derived from the available values.",             call. = FALSE)        data[data$SurveyAreaIdentifier == j &amp; data$survey_month ==             k, i] &lt;- exactextractr::exact_extract(x = source[[layername]],             y = tmp %&gt;% dplyr::filter(.data$survey_month == k),             fun = "mean")    }    else {        if (buffered == TRUE) {            data[data$SurveyAreaIdentifier == j &amp; data$survey_month ==                 k, i] &lt;- exactextractr::exact_extract(x = source[[layername]],                 y = tmp %&gt;% dplyr::filter(.data$survey_month ==                   k), fun = "mean")        }        else {            data[data$SurveyAreaIdentifier == j &amp; data$survey_month ==                 k, i] &lt;- terra::extract(x = source[[layername]],                 y = tmp %&gt;% dplyr::filter(.data$survey_month ==                   k), fun = "mean", na.rm = TRUE)[, layername]        }    }} else {    if (all(is.na(terra::extract(source[[layername]], tmp)[,         layername]))) {        data[data$SurveyAreaIdentifier == j &amp; data$survey_month ==             k, i] &lt;- NA    }    else {        if (buffered == TRUE) {            data[data$SurveyAreaIdentifier == j &amp; data$survey_month ==                 k, i] &lt;- exactextractr::exact_extract(x = source[[layername]],                 y = tmp %&gt;% dplyr::filter(.data$survey_month ==                   k), fun = "mean")        }        else {            data[data$SurveyAreaIdentifier == j &amp; data$survey_month ==                 k, i] &lt;- terra::extract(x = source[[layername]],                 y = tmp %&gt;% dplyr::filter(.data$survey_month ==                   k), fun = "mean", na.rm = TRUE)[, layername]        }    }}:</span> argument is of length zero</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in worldclim_data[[1]]:</span> subscript out of bounds</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

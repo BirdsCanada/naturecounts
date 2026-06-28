@@ -197,8 +197,8 @@ nc_count()
 #>  4 ABOWLS                3 by request    20956
 #>  5 ACCWS                 5 full          27807
 #>  6 ACCWS_HIST            5 full          20461
-#>  7 ATBANS               NA NA              268
-#>  8 ATOWLS               NA NA            36308
+#>  7 ATBANS                3 by request      268
+#>  8 ATOWLS               NA NA            36331
 #>  9 AWSGS                 3 by request    17968
 #> 10 BBL-1960-1969         5 full       15045208
 #> # ℹ 547 more rows

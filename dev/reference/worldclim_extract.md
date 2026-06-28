@@ -73,7 +73,7 @@ worldclim_extract(
 
 - retain:
 
-  Logical. Should WorldClim data files be kept after extraction. If
+  Logical. Should WorldClim data files be kept after extraction? If
   `FALSE`, files will be deleted.
 
 ## Value
@@ -126,15 +126,17 @@ bcch <- sf::st_as_sf(
 )
 
 # Load WorldClim data
-tavg <- worldclim_download(data = bcch, 
+tavg <- worldclim_download(data = bcch,
                            covariates = "worldclim_wind",
                            progress = FALSE)
-                           
+#> [Worldclim Download] downloading WorldClim 'wind' data for Canada.
+#> The geodata server is temporary out of service for maintenance. It should be back on 22 June. 
+#> Warning: [WorldClim Download] Download failed for Canada [wind].
+
 # Extract average temperature
 output <- worldclim_extract(data = bcch,
                             worldclim_data = tavg,
                             covariates = "worldclim_wind",
                             retain = FALSE)
-#> [WorldClim Extraction] extracting WorldClim wind.
-#> Error in if (which(unique(data$survey_month[data$SurveyAreaIdentifier ==     j]) == k) == 1) {    if (all(is.na(terra::extract(source[[layername]], tmp)[,         layername]))) {        warning("[WorldClim (", i, ") Extraction] site ", j,             " falls outside of the spatial extent of the WorldClim rasters",             " provided. No value will be returned.", call. = FALSE)    }    else if (TRUE %in% is.na(terra::extract(source[[layername]],         tmp)[, layername])) {        warning("[WorldClim (", i, ") Extraction] site ", j,             "'s buffered area is only partially contained by the spatial",             " extent of the WorldClim rasters provided. Returned mean ",             i, " value will be derived from the available values.",             call. = FALSE)        data[data$SurveyAreaIdentifier == j & data$survey_month ==             k, i] <- exactextractr::exact_extract(x = source[[layername]],             y = tmp %>% dplyr::filter(.data$survey_month == k),             fun = "mean")    }    else {        if (buffered == TRUE) {            data[data$SurveyAreaIdentifier == j & data$survey_month ==                 k, i] <- exactextractr::exact_extract(x = source[[layername]],                 y = tmp %>% dplyr::filter(.data$survey_month ==                   k), fun = "mean")        }        else {            data[data$SurveyAreaIdentifier == j & data$survey_month ==                 k, i] <- terra::extract(x = source[[layername]],                 y = tmp %>% dplyr::filter(.data$survey_month ==                   k), fun = "mean", na.rm = TRUE)[, layername]        }    }} else {    if (all(is.na(terra::extract(source[[layername]], tmp)[,         layername]))) {        data[data$SurveyAreaIdentifier == j & data$survey_month ==             k, i] <- NA    }    else {        if (buffered == TRUE) {            data[data$SurveyAreaIdentifier == j & data$survey_month ==                 k, i] <- exactextractr::exact_extract(x = source[[layername]],                 y = tmp %>% dplyr::filter(.data$survey_month ==                   k), fun = "mean")        }        else {            data[data$SurveyAreaIdentifier == j & data$survey_month ==                 k, i] <- terra::extract(x = source[[layername]],                 y = tmp %>% dplyr::filter(.data$survey_month ==                   k), fun = "mean", na.rm = TRUE)[, layername]        }    }}: argument is of length zero
+#> Error in worldclim_data[[1]]: subscript out of bounds
 ```

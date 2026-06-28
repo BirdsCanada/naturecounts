@@ -113,6 +113,12 @@ extraction, as well as for downloading and extracting covariate data
   : Load WorldClim Climate Data
 - [`worldclim_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/worldclim_extract.md)
   : Extract WorldClim Climate Data
+- [`scanfi_download()`](https://birdscanada.github.io/naturecounts/dev/reference/scanfi_download.md)
+  : Download and Load Data from the Spatialized Canadian National Forest
+  Inventory (SCANFI)
+- [`scanfi_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/scanfi_extract.md)
+  : Extract Data from the Spatialized Canadian National Forest Inventory
+  (SCANFI)
 
 ## Data
 
