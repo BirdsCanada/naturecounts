@@ -67,6 +67,8 @@ naturecounts functions.
   Data](https://birdscanada.github.io/naturecounts/dev/articles/4.4-Elevation.md):
 - [Chapter 5 - Downloading and Extracting WorldClim
   Data](https://birdscanada.github.io/naturecounts/dev/articles/4.5-WorldClim.md):
+- [Chapter 6 - Downloading and Extracting SCANFI
+  Data](https://birdscanada.github.io/naturecounts/dev/articles/4.6-SCANFI.md):
 
 ### Additional Tutorials
 
