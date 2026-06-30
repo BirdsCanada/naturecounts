@@ -7,8 +7,11 @@
 daymet_check(daymet_reqs, ed_username, verbose = TRUE)
 }
 \arguments{
-\item{daymet_reqs}{Named character vector. A vector of AppEEARS request IDs
-each named with the associated request name. The direct output of
+\item{daymet_reqs}{\code{data.frame}. A \code{data.frame} with columns 1)
+\code{request_name} containing AppEEARS request names, 2) \code{request_id}
+containing AppEEARS request IDs, and optionally 3) \code{date} containing the
+date for which the associated request is downloading data for, or a
+filepath to a \code{.rds} file containing such data. The direct output of
 \code{\link[=daymet_request]{daymet_request()}} can be supplied here.}
 
 \item{ed_username}{Character. The username associated with your EarthData account.}

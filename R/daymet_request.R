@@ -46,6 +46,9 @@
 #' @param covariates Character, vector if multiple Daymet data types desired. By
 #'   default, downloads Daymet precipitation data.
 #' @param ed_username Character. The username associated with your EarthData account.
+#' @param request_name Character. Optional argument to provide informative name
+#'   for the AppEEARS request. This can make file management more intuitive for
+#'   the user.
 #' @param site_name Character. Optional argument to provide the name of the
 #'   column containing site names if not contained within the BMDE column
 #'   `SurveyAreaIdentifier`. Can be left `NULL` and still function properly if
@@ -107,6 +110,7 @@ daymet_request <- function(
   data,
   covariates = "daymet_prcp", # Other options listed in nc_covariate_table().
   ed_username, # users' EarthData account username NOT EMAIL.
+  request_name = NULL,
   site_name = NULL, # optional argument to provide column name containing site
   # names. Default is assumed to be the BMDE column 'SurveyAreaIdentifier'. Can
   # be left NULL and still function properly if originally specified in a call
@@ -384,8 +388,7 @@ daymet_request <- function(
   )
 
   # Build a request for each surveyed year to be submitted to AppEEARS. This
-  # request will download data for every day between the first and last
-  # observation date in each year.
+  # request will download data for every day in the input data.
 
   call_date <- gsub(
     pattern = " ",
@@ -417,7 +420,11 @@ daymet_request <- function(
 
   for (i in dates) {
     tasks[[i]] <- data.frame(
-      task = paste0("naturecounts_rq_", call_date, "_", i),
+      task = ifelse(
+        is.null(request_name),
+        paste0("naturecounts_rq_", call_date, "_", i),
+        paste0(request_name, "_", call_date, "_", i)
+      ),
       subtask = "subtask",
       latitude = mean(sf::st_coordinates(data %>% sf::st_transform(4326))[,
         "Y"
@@ -458,31 +465,43 @@ daymet_request <- function(
     task_ids <- c(
       task_ids,
       tasklist$task_id[
-        tasklist$task_name == paste0("naturecounts_rq_", call_date, "_", i)
+        tasklist$task_name ==
+          ifelse(
+            is.null(request_name),
+            paste0("naturecounts_rq_", call_date, "_", i),
+            paste0(request_name, "_", call_date, "_", i)
+          )
       ]
     )
   }
 
   task_ids <- data.frame(
-    request_name = paste0("naturecounts_rq_", call_date, "_", dates),
+    request_name = `if`(
+      is.null(request_name),
+      paste0("naturecounts_rq_", call_date, "_", dates),
+      paste0(request_name, "_", call_date, "_", dates)
+    ),
     request_id = task_ids,
     date = dates
   )
 
   # Save externally in case user ends R session.
   if (save) {
-    filename <- ifelse(
+    path <- ifelse(
       is.null(dl_path),
-      paste0(
-        "./daymet/daymet_reqs_",
-        call_date,
-        ".RDS"
-      ),
+      "./daymet/",
       paste0(
         dl_path,
-        "/daymet/daymet_reqs_",
-        call_date,
-        ".RDS"
+        "/daymet/"
+      )
+    )
+
+    filename <- paste0(
+      path,
+      ifelse(
+        is.null(request_name),
+        paste0("daymet_reqs_", call_date, ".RDS"),
+        paste0(request_name, ".RDS")
       )
     )
 

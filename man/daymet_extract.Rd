@@ -13,6 +13,7 @@ daymet_extract(
   date_month = NULL,
   date_day = NULL,
   dl_path = NULL,
+  verbose = TRUE,
   retain = TRUE
 )
 }
@@ -23,9 +24,12 @@ observation was made either named the BMDE defaults \code{survey_year}, \code{su
 , and \code{survey_day} respectively or another name specified in arguments
 \code{date_year}, \code{date_month}, and/or \code{date_day}.}
 
-\item{daymet_reqs}{Named list. Each list element should be named after
-a year for which data was requested, and should contain the corresponding
-request ID.}
+\item{daymet_reqs}{\code{data.frame}. A \code{data.frame} with columns 1)
+\code{request_name} containing AppEEARS request names, 2) \code{request_id}
+containing AppEEARS request IDs, and optionally 3) \code{date} containing the
+date for which the associated request is downloading data for, or a
+filepath to a \code{.rds} file containing such data. The direct output of
+\code{\link[=daymet_request]{daymet_request()}} can be supplied here.}
 
 \item{covariates}{Character, vector if multiple Daymet data types desired. By
 default, extracts Daymet precipitation data.}
@@ -52,8 +56,12 @@ function properly if originally specified in a call to \code{\link[=data_fmt]{da
 \code{\link[=daymet_download]{daymet_download()}}.}
 
 \item{dl_path}{Character. Optional argument to provide path to downloaded data.
-By default, data is downloaded to a subfolder \verb{daymet/} in the working
-directory.}
+By default, data is downloaded to a subfolder \verb{daymet/} in the working directory.}
+
+\item{verbose}{Logical. Should messages be displayed?}
+
+\item{retain}{Logical. Should Daymet data files be kept after extraction? If
+\code{FALSE}, files will be deleted.}
 }
 \value{
 For sf 'POINT' or terra 'points' input data, original data with

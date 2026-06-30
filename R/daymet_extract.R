@@ -24,9 +24,12 @@
 #'   observation was made either named the BMDE defaults `survey_year`, `survey_month`
 #'   , and `survey_day` respectively or another name specified in arguments
 #'  `date_year`, `date_month`, and/or `date_day`.
-#' @param daymet_reqs Named list. Each list element should be named after
-#'   a year for which data was requested, and should contain the corresponding
-#'   request ID.
+#' @param daymet_reqs `data.frame`. A `data.frame` with columns 1)
+#'   `request_name` containing AppEEARS request names, 2) `request_id`
+#'   containing AppEEARS request IDs, and optionally 3) `date` containing the
+#'   date for which the associated request is downloading data for, or a
+#'   filepath to a `.rds` file containing such data. The direct output of
+#'   [daymet_request()] can be supplied here.
 #' @param covariates Character, vector if multiple Daymet data types desired. By
 #'   default, extracts Daymet precipitation data.
 #' @param site_name Character. Optional argument to provide the name of the
@@ -47,8 +50,10 @@
 #'   function properly if originally specified in a call to [data_fmt()]  or
 #'   [daymet_download()].
 #' @param dl_path Character. Optional argument to provide path to downloaded data.
-#'  By default, data is downloaded to a subfolder `daymet/` in the working
-#'  directory.
+#'   By default, data is downloaded to a subfolder `daymet/` in the working directory.
+#' @param verbose Logical. Should messages be displayed?
+#' @param retain Logical. Should Daymet data files be kept after extraction? If
+#'   `FALSE`, files will be deleted.
 #'
 #' @returns For sf 'POINT' or terra 'points' input data, original data with
 #'  column(s) appended containing the Daymet data value(s) at each point.
@@ -118,6 +123,7 @@ daymet_extract <- function(
   dl_path = NULL, # optional argument to provide path to download data to. By
   # default, data is downloaded to a subfolder 'daymet/' in the working
   # directory.
+  verbose = TRUE,
   retain = TRUE
 ) {
   # Check packages
@@ -512,6 +518,27 @@ daymet_extract <- function(
             " value will be derived from the available values.",
             call. = FALSE
           )
+
+          if (buffered == TRUE) {
+            data[
+              data$SurveyAreaIdentifier == k & data$date == j_date,
+              i
+            ] <- exactextractr::exact_extract(
+              x = daymet,
+              y = tmp,
+              fun = "mean"
+            )
+          } else {
+            data[
+              data$SurveyAreaIdentifier == k & data$date == j_date,
+              i
+            ] <- terra::extract(
+              x = daymet,
+              y = tmp,
+              fun = "mean",
+              na.rm = TRUE
+            )[, 2]
+          }
         } else {
           # If no issues with coverage, proceed to extraction. If buffered,
           # extract using exactextractr::exact_extract(). If not, extract
@@ -540,15 +567,17 @@ daymet_extract <- function(
       }
 
       # Progress bar.
-      message(paste0(
-        "[Daymet ",
-        i,
-        " Extraction] Date ",
-        which(dates == j),
-        " of ",
-        length(dates),
-        " complete."
-      ))
+      if (verbose) {
+        message(paste0(
+          "[Daymet ",
+          i,
+          " Extraction] Date ",
+          which(dates == j),
+          " of ",
+          length(dates),
+          " complete."
+        ))
+      }
     }
 
     # Code to grab nearest raster value for sites outside of raster coverage.
@@ -635,7 +664,7 @@ daymet_extract <- function(
   }
 
   # Remove temporary date column from original data.
-  data <- dplyr::select(data, -date)
+  data <- dplyr::select(data, -"date")
 
   # Check if attributes were found and stored from input data. If they were
   # found reattach.
@@ -664,7 +693,9 @@ daymet_extract <- function(
 
   # Remove Daymet files if requested.
   if (retain == FALSE) {
-    message(paste0("[Daymet Extraction] task complete. Removing files."))
+    if (verbose) {
+      message("[Daymet Extraction] task complete. Removing files.")
+    }
 
     file.remove(list.files(
       ifelse(is.null(dl_path), "./daymet", paste0(dl_path, "/daymet")),

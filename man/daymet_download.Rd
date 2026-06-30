@@ -7,17 +7,20 @@
 daymet_download(daymet_reqs, ed_username, dl_path = NULL, verbose = TRUE)
 }
 \arguments{
-\item{daymet_reqs}{Named list or path to RDS file containing named list output
-by \code{\link[=daymet_request]{daymet_request()}}. Each list element should be named after
-a year for which data was requested, and should contain the corresponding
-request ID. The direct output of \code{\link[=daymet_request]{daymet_request()}} can be supplied here.}
+\item{daymet_reqs}{\code{data.frame}. A \code{data.frame} with columns 1)
+\code{request_name} containing AppEEARS request names, 2) \code{request_id}
+containing AppEEARS request IDs, and optionally 3) \code{date} containing the
+date for which the associated request is downloading data for, or a
+filepath to a \code{.rds} file containing such data. The direct output of
+\code{\link[=daymet_request]{daymet_request()}} can be supplied here.}
 
 \item{ed_username}{Character. The username associated with your EarthData account.}
 
 \item{dl_path}{Character. Optional argument to provide path to download data
 to. By default, data is downloaded to a subfolder \verb{scanfi/} in the working
-directory.
-@param verbose Logical. Should messages be displayed?}
+directory.}
+
+\item{verbose}{Logical. Should messages be displayed?}
 }
 \value{
 A \code{data.frame} with three columns: 1) \code{request_name} containing

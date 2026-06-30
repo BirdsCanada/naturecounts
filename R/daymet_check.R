@@ -8,8 +8,11 @@
 #' Status checks are facilitated by a call to [appeears::rs_list_task()].
 #'
 #' @inheritParams daymet_request
-#' @param daymet_reqs Named character vector. A vector of AppEEARS request IDs
-#'   each named with the associated request name. The direct output of
+#' @param daymet_reqs `data.frame`. A `data.frame` with columns 1)
+#'   `request_name` containing AppEEARS request names, 2) `request_id`
+#'   containing AppEEARS request IDs, and optionally 3) `date` containing the
+#'   date for which the associated request is downloading data for, or a
+#'   filepath to a `.rds` file containing such data. The direct output of
 #'   [daymet_request()] can be supplied here.
 #'
 #' @returns A `data.frame` containing request status information.
@@ -86,7 +89,7 @@ daymet_check <- function(
 
       if (is.null(ed_password)) {
         stop(
-          "[Daymet Request] EarthData password could not be found",
+          "[Daymet Request Checking] EarthData password could not be found",
           ". Please add line 'EarthData_password = yourpassword' to your",
           " .Renviron file. This can be accessed using usethis::edit_r_environ().",
           call. = FALSE
@@ -103,7 +106,7 @@ daymet_check <- function(
       daymet_reqs <- readRDS(daymet_reqs)
     } else {
       stop(
-        "[Daymet Download] daymet_reqs in an unexpected format. Please",
+        "[Daymet Request Checking] daymet_reqs in an unexpected format. Please",
         " provide either a data.frame with a column for the AppEEARS",
         " request name called request_name and a column for the AppEEARS",
         " request ID called request_id, or a filepath to a .rds file",
@@ -115,7 +118,18 @@ daymet_check <- function(
 
   if (!inherits(daymet_reqs, "data.frame")) {
     stop(
-      "[Daymet Download] daymet_reqs in an unexpected format. Please",
+      "[Daymet Request Checking] daymet_reqs in an unexpected format. Please",
+      " provide either a data.frame with a column for the AppEEARS",
+      " request name called request_name and a column for the AppEEARS",
+      " request ID called request_id, or a filepath to a .rds file",
+      " created by daymet_request() containing such data.",
+      call. = FALSE
+    )
+  }
+
+  if (!(all(c("request_name", "request_id") %in% names(daymet_reqs)))) {
+    stop(
+      "[Daymet Request Checking] daymet_reqs in an unexpected format. Please",
       " provide either a data.frame with a column for the AppEEARS",
       " request name called request_name and a column for the AppEEARS",
       " request ID called request_id, or a filepath to a .rds file",
@@ -153,7 +167,7 @@ daymet_check <- function(
         ])
   ) {
     stop(
-      "[Daymet Download] request(s) ",
+      "[Daymet Request Checking] request(s) ",
       stringr::str_flatten_comma(daymet_reqs$request_name[
         daymet_reqs$request_id %in%
           task_list$task_id[
@@ -178,7 +192,7 @@ daymet_check <- function(
 
   output$date <- substr(
     output$task_name,
-    start = 35,
+    start = nchar(output$task_name) - 9,
     stop = nchar(output$task_name)
   )
 

@@ -23,15 +23,17 @@
 #'
 #' Downloads are facilitated by a call to [appeears::rs_transfer()].
 #'
-#' @param daymet_reqs Named list or path to RDS file containing named list output
-#'   by [daymet_request()]. Each list element should be named after
-#'   a year for which data was requested, and should contain the corresponding
-#'   request ID. The direct output of [daymet_request()] can be supplied here.
+#' @param daymet_reqs `data.frame`. A `data.frame` with columns 1)
+#'   `request_name` containing AppEEARS request names, 2) `request_id`
+#'   containing AppEEARS request IDs, and optionally 3) `date` containing the
+#'   date for which the associated request is downloading data for, or a
+#'   filepath to a `.rds` file containing such data. The direct output of
+#'   [daymet_request()] can be supplied here.
 #' @param ed_username Character. The username associated with your EarthData account.
 #' @param dl_path Character. Optional argument to provide path to download data
 #'   to. By default, data is downloaded to a subfolder `scanfi/` in the working
 #'   directory.
-#'  @param verbose Logical. Should messages be displayed?
+#' @param verbose Logical. Should messages be displayed?
 #'
 #' @returns A `data.frame` with three columns: 1) `request_name` containing
 #'   AppEEARS request names, 2) `request_id` containing AppEEARS request IDs,
@@ -128,15 +130,6 @@ daymet_download <- function(
     }
   }
 
-  # Create download path if it doesn't already exist.
-  if (is.null(dl_path) & !dir.exists("./daymet")) {
-    dir.create("./daymet", recursive = TRUE)
-  }
-
-  if (!is.null(dl_path) & !dir.exists(paste0(dl_path, "/daymet"))) {
-    dir.create(paste0(dl_path, "/daymet"), recursive = TRUE)
-  }
-
   # Set EarthData username and password in user Keyring.
   options(keyring_backend = "file")
 
@@ -169,6 +162,17 @@ daymet_download <- function(
   }
 
   if (!inherits(daymet_reqs, "data.frame")) {
+    stop(
+      "[Daymet Download] daymet_reqs in an unexpected format. Please",
+      " provide either a data.frame with a column for the AppEEARS",
+      " request name called request_name and a column for the AppEEARS",
+      " request ID called request_id, or a filepath to a .rds file",
+      " created by daymet_request() containing such data.",
+      call. = FALSE
+    )
+  }
+
+  if (!(all(c("request_name", "request_id") %in% names(daymet_reqs)))) {
     stop(
       "[Daymet Download] daymet_reqs in an unexpected format. Please",
       " provide either a data.frame with a column for the AppEEARS",
@@ -215,7 +219,7 @@ daymet_download <- function(
   for (i in 1:nrow(daymet_reqs)) {
     status <- task_list$status[task_list$task_id == daymet_reqs$request_id[i]]
 
-    if (status %in% c("queued", "processing")) {
+    if (status %in% c("pending", "queued", "processing")) {
       incomplete_tasks <- c(incomplete_tasks, daymet_reqs$request_name[i])
     }
   }
@@ -239,6 +243,15 @@ daymet_download <- function(
       ".",
       call. = FALSE
     )
+  }
+
+  # Create download path if it doesn't already exist.
+  if (is.null(dl_path) & !dir.exists("./daymet")) {
+    dir.create("./daymet", recursive = TRUE)
+  }
+
+  if (!is.null(dl_path) & !dir.exists(paste0(dl_path, "/daymet"))) {
+    dir.create(paste0(dl_path, "/daymet"), recursive = TRUE)
   }
 
   # Loop through each year and download respective request if not already

@@ -8,6 +8,7 @@ daymet_request(
   data,
   covariates = "daymet_prcp",
   ed_username,
+  request_name = NULL,
   site_name = NULL,
   date_year = NULL,
   date_month = NULL,
@@ -28,6 +29,10 @@ observation was made either named the BMDE defaults \code{survey_year}, \code{su
 default, downloads Daymet precipitation data.}
 
 \item{ed_username}{Character. The username associated with your EarthData account.}
+
+\item{request_name}{Character. Optional argument to provide informative name
+for the AppEEARS request. This can make file management more intuitive for
+the user.}
 
 \item{site_name}{Character. Optional argument to provide the name of the
 column containing site names if not contained within the BMDE column
