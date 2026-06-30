@@ -67,6 +67,9 @@ reference:
   - worldclim_extract
   - scanfi_download
   - scanfi_extract
+  - daymet_request
+  - daymet_download
+  - daymet_extract
 - title: Data
   desc: Included example data sets
   contents:
