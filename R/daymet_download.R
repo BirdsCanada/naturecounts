@@ -17,8 +17,8 @@
 #' - Precipitation (mm/day): `daymet_prcp`
 #' - Shortwave radiation (W/m^2): `dayment_srad`
 #' - Snow water equivalent (kg/m^2): `daymet_swe`
-#' - Maximum air temperature (degrees C): `daymet_tmax`
-#' - Minimum air temperature (degrees C): `daymet_tmin`
+#' - Maximum air temperature (°C): `daymet_tmax`
+#' - Minimum air temperature (°C): `daymet_tmin`
 #' - Water vapor pressure (Pa): `daymet_vp`
 #'
 #' Downloads are facilitated by a call to [appeears::rs_transfer()].
@@ -303,6 +303,52 @@ daymet_download <- function(
     suppressMessages(appeears::rs_logout(token))
   } else {
     appeears::rs_logout(token)
+  }
+
+  daymet_reqs$success <- NA
+
+  for (i in daymet_reqs$request_name) {
+    path <- ifelse(
+      is.null(dl_path),
+      paste0("./daymet/", i),
+      paste0(dl_path, "/daymet/", i)
+    )
+
+    if (file.exists(paste0(path, "/Daymet-004-Statistics.csv"))) {
+      daymet_stats <- readr::read_csv(
+        paste0(path, "/Daymet-004-Statistics.csv"),
+        show_col_types = FALSE
+      )
+
+      tifs_exist <- c()
+
+      for (j in unique(daymet_stats$Dataset)) {
+        for (k in unique(daymet_stats$Date[daymet_stats$Dataset == j])) {
+          filename <- gsub(
+            pattern = "DAYMET_",
+            replacement = "DAYMET.",
+            daymet_stats$`File Name`[
+              daymet_stats$Date == k &
+                daymet_stats$Dataset == j
+            ]
+          )
+
+          if (file.exists(paste0(path, "/", filename, ".tif"))) {
+            tifs_exist <- c(tifs_exist, TRUE)
+          } else {
+            tifs_exist <- c(tifs_exist, FALSE)
+          }
+        }
+      }
+
+      if (all(tifs_exist)) {
+        daymet_reqs$success[daymet_reqs$request_name == i] <- TRUE
+      } else {
+        daymet_reqs$success[daymet_reqs$request_name == i] <- FALSE
+      }
+    } else {
+      daymet_reqs$success[daymet_reqs$request_name == i] <- FALSE
+    }
   }
 
   # Return request ID object.

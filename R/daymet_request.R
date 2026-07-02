@@ -15,8 +15,8 @@
 #' - Precipitation (mm/day): `daymet_prcp`
 #' - Shortwave radiation (W/m^2): `dayment_srad`
 #' - Snow water equivalent (kg/m^2): `daymet_swe`
-#' - Maximum air temperature (degrees C): `daymet_tmax`
-#' - Minimum air temperature (degrees C): `daymet_tmin`
+#' - Maximum air temperature (°C): `daymet_tmax`
+#' - Minimum air temperature (°C): `daymet_tmin`
 #' - Water vapor pressure (Pa): `daymet_vp`
 #'
 #' Due to API limitations, one request will be submitted for each day in `data`.
@@ -440,19 +440,36 @@ daymet_request <- function(
   }
 
   # Final build and submission.
-  for (i in dates) {
-    task <- appeears::rs_build_task(
-      df = tasks[[i]],
-      roi = sf::st_as_sf(study_area),
-      format = "geotiff"
-    )
+  if (verbose) {
+    for (i in dates) {
+      task <- appeears::rs_build_task(
+        df = tasks[[i]],
+        roi = sf::st_as_sf(study_area),
+        format = "geotiff"
+      )
 
-    appeears::rs_request(
-      request = task,
-      user = ed_username,
-      transfer = FALSE,
-      verbose = verbose
-    )
+      appeears::rs_request(
+        request = task,
+        user = ed_username,
+        transfer = FALSE,
+        verbose = verbose
+      )
+    }
+  } else {
+    for (i in dates) {
+      task <- appeears::rs_build_task(
+        df = tasks[[i]],
+        roi = sf::st_as_sf(study_area),
+        format = "geotiff"
+      )
+
+      suppressMessages(appeears::rs_request(
+        request = task,
+        user = ed_username,
+        transfer = FALSE,
+        verbose = verbose
+      ))
+    }
   }
 
   # Open vector to store request IDs.

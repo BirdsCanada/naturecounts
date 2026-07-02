@@ -15,8 +15,8 @@
 #' - Precipitation (mm/day): `daymet_prcp`
 #' - Shortwave radiation (W/m^2): `dayment_srad`
 #' - Snow water equivalent (kg/m^2): `daymet_swe`
-#' - Maximum air temperature (degrees C): `daymet_tmax`
-#' - Minimum air temperature (degrees C): `daymet_tmin`
+#' - Maximum air temperature (°C): `daymet_tmax`
+#' - Minimum air temperature (°C): `daymet_tmin`
 #' - Water vapor pressure (Pa): `daymet_vp`
 #'
 #' @param data A `data.frame`, `sf` 'POINT' or 'POLYGON' object, or `terra` 'points'

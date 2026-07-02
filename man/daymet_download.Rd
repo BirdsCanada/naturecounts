@@ -47,8 +47,8 @@ values to the \code{covariates} argument in \code{\link[=daymet_request]{daymet_
 \item Precipitation (mm/day): \code{daymet_prcp}
 \item Shortwave radiation (W/m^2): \code{dayment_srad}
 \item Snow water equivalent (kg/m^2): \code{daymet_swe}
-\item Maximum air temperature (degrees C): \code{daymet_tmax}
-\item Minimum air temperature (degrees C): \code{daymet_tmin}
+\item Maximum air temperature (°C): \code{daymet_tmax}
+\item Minimum air temperature (°C): \code{daymet_tmin}
 \item Water vapor pressure (Pa): \code{daymet_vp}
 }
 

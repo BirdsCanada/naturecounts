@@ -13,6 +13,7 @@ testdir
 vignettes/articles/modis
 vignettes/articles/TerrainTiles
 vignettes/articles/worldclim
+vignettes/articles/daymet
 modis
 scanfi
 daymet
