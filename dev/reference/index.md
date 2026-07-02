@@ -119,6 +119,14 @@ extraction, as well as for downloading and extracting covariate data
 - [`scanfi_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/scanfi_extract.md)
   : Extract Data from the Spatialized Canadian National Forest Inventory
   (SCANFI)
+- [`daymet_request()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_request.md)
+  : Submit Request for Daymet Data.
+- [`daymet_check()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_check.md)
+  : Check the status of Daymet Data Requests
+- [`daymet_download()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_download.md)
+  : Download Data from Daymet.
+- [`daymet_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_extract.md)
+  : Extract Data from Daymet.
 
 ## Data
 

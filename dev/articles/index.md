@@ -69,6 +69,8 @@ naturecounts functions.
   Data](https://birdscanada.github.io/naturecounts/dev/articles/4.5-WorldClim.md):
 - [Chapter 6 - Downloading and Extracting SCANFI
   Data](https://birdscanada.github.io/naturecounts/dev/articles/4.6-SCANFI.md):
+- [Chapter 7 - Downloading and Extracting Daymet
+  Data](https://birdscanada.github.io/naturecounts/dev/articles/4.7-Daymet.md):
 
 ### Additional Tutorials
 
