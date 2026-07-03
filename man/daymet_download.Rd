@@ -75,7 +75,7 @@ requests <- daymet_request(data = bcch,
                             ed_username = ed_username)
 # Once email is received confirming that request has been processed, execute
 # download!
-downloaded <- daymet_download(daymet_reqs = requests
+downloaded <- daymet_download(daymet_reqs = requests,
                               covariates = "daymet_prcp",
                               ed_username = ed_username)
 
