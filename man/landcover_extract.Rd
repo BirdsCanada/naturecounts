@@ -106,10 +106,10 @@ output <- landcover_extract(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[terra:extract]{terra::extract()}} which is used to extract values from MODIS data
-for \code{sf} 'POINT' and \code{terra} 'points' input data.
+\code{\link[=landcover_download]{landcover_download()}} which can be used to download data from
+the MODIS Landcover dataset.
 
-\code{\link[landscapemetrics:calculate_lsm]{landscapemetrics::calculate_lsm()}} which is used to extract proportions of
-each land cover type within provided \code{sf} 'POLYGON' or \code{terra} 'polygons'
-polygons.
+\code{\link[=nc_covariates_merge]{nc_covariates_merge()}} to merge extracted
+covariate data into data originally provided to the \code{data} argument of
+\code{\link[=data_fmt]{data_fmt()}}.
 }

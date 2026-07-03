@@ -80,12 +80,12 @@
 #'   retain = FALSE
 #' )
 #'
-#' @seealso [terra::extract()] which is used to extract values from MODIS data
-#'   for `sf` 'POINT' and `terra` 'points' input data.
+#' @seealso [landcover_download()] which can be used to download data from
+#'   the MODIS Landcover dataset.
 #'
-#'   [landscapemetrics::calculate_lsm()] which is used to extract proportions of
-#'   each land cover type within provided `sf` 'POLYGON' or `terra` 'polygons'
-#'   polygons.
+#'   [nc_covariates_merge()] to merge extracted
+#'   covariate data into data originally provided to the `data` argument of
+#'   [data_fmt()].
 #'
 #' @export
 

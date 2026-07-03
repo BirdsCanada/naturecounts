@@ -99,11 +99,12 @@
 #'   retain = FALSE
 #' )
 #'
-#' @seealso [terra::extract()] which is used to extract values from MODIS data
-#'   for `sf` 'POINT' and `terra` 'points' input data.
+#' @seealso [vegetation_download()] which can be used to download data from
+#'   the MODIS Vegetation Indices database.
 #'
-#'   [exactextractr::exact_extract()] which is used to extract values from MODIS
-#'   data for `sf` 'POLYGON' or `terra` 'polygons' input data.
+#'   [nc_covariates_merge()] to merge extracted
+#'   covariate data into data originally provided to the `data` argument of
+#'   [data_fmt()].
 #'
 #' @export
 

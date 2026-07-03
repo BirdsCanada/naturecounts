@@ -66,7 +66,11 @@
 #'
 #'
 #' @seealso [daymet_request()] which can be used to submit requests for Dayment
-#' data. [daymet_extract()] which can be used to extract data from downloaded
+#' data.
+#'
+#' [daymet_check()] to check the status of existing requests.
+#'
+#' [daymet_extract()] which can be used to extract data from downloaded
 #' Daymet files.
 #'
 #' @export

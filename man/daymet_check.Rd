@@ -57,7 +57,11 @@ status_check <- daymet_check(daymet_reqs = requests,
 }
 \seealso{
 \code{\link[=daymet_request]{daymet_request()}} which can be used to submit requests for Dayment
-data. \code{\link[=daymet_download]{daymet_download()}} to execute downloads once requests have been
-submitted and are complete. \code{\link[=daymet_extract]{daymet_extract()}} which can be used to extract data
+data.
+
+\code{\link[=daymet_download]{daymet_download()}} to execute downloads once requests have been
+submitted and are complete.
+
+\code{\link[=daymet_extract]{daymet_extract()}} which can be used to extract data
 from downloaded Daymet files.
 }

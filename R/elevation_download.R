@@ -44,7 +44,9 @@
 #' # Load Terrain Tiles data
 #' output <- elevation_download(data = bcch)
 #'
-#' @seealso [elevatr::get_elev_raster()] which this function wraps. [elevation_extract()]
+#' @seealso [elevatr::get_elev_raster()] which this function wraps.
+#'
+#' [elevation_extract()]
 #' which can be used to extract data from loaded elevation data files.
 #'
 #' @export

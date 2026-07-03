@@ -85,7 +85,11 @@
 #'                          interpolate = TRUE)
 #'
 #' @seealso [scanfi_download()] which can be used to download data from SCANFI
-#' data files and load them into the environment.
+#'   data files and load them into the environment.
+#'
+#'   [nc_covariates_merge()] to merge extracted
+#'   covariate data into data originally provided to the `data` argument of
+#'   [data_fmt()].
 #'
 #' @references Guindon L., Correia D.L.P, Manka F. and Smiley B. 2026. SCANFI v2: Spatialized CAnadian National Forest Inventory data product v2. Natural Resources Canada, Canadian Forest Service, Laurentian Forestry Centre, Quebec, Canada. <https://doi.org/10.23687/07653869-f303-46c2-a04e-9ab479b73cbf>.
 #'

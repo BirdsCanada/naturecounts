@@ -68,6 +68,8 @@ output <- elevation_download(data = bcch)
 
 }
 \seealso{
-\code{\link[elevatr:get_elev_raster]{elevatr::get_elev_raster()}} which this function wraps. \code{\link[=elevation_extract]{elevation_extract()}}
+\code{\link[elevatr:get_elev_raster]{elevatr::get_elev_raster()}} which this function wraps.
+
+\code{\link[=elevation_extract]{elevation_extract()}}
 which can be used to extract data from loaded elevation data files.
 }

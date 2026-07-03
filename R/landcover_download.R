@@ -64,7 +64,9 @@
 #' #  ed_email = ed_email
 #' #)
 #'
-#' @seealso [luna::getNASA()] which this function wraps. [landcover_extract()]
+#' @seealso [luna::getNASA()] which this function wraps.
+#'
+#' [landcover_extract()]
 #' which can be used to extract data from downloaded landcover data files.
 #'
 #' @export

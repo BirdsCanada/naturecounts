@@ -128,6 +128,12 @@ extracted <- daymet_extract(data = bcch,
 }
 \seealso{
 \code{\link[=daymet_request]{daymet_request()}} which can be used to submit requests for Dayment
-data. \code{\link[=daymet_download]{daymet_download()}} to execute downloads once requests have been
+data.
+
+\code{\link[=daymet_download]{daymet_download()}} to execute downloads once requests have been
 submitted and are complete.
+
+\code{\link[=nc_covariates_merge]{nc_covariates_merge()}} to merge extracted
+covariate data into data originally provided to the \code{data} argument of
+\code{\link[=data_fmt]{data_fmt()}}.
 }

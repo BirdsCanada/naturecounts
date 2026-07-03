@@ -89,6 +89,8 @@ ed_email <- "your EarthData email"
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[luna:getNASA]{luna::getNASA()}} which this function wraps. \code{\link[=landcover_extract]{landcover_extract()}}
+\code{\link[luna:getNASA]{luna::getNASA()}} which this function wraps.
+
+\code{\link[=landcover_extract]{landcover_extract()}}
 which can be used to extract data from downloaded landcover data files.
 }

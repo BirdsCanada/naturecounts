@@ -63,8 +63,11 @@
 #'                             covariates = "worldclim_wind",
 #'                             retain = FALSE)
 #'
-#' @seealso [geodata::worldclim_country()] which this function wraps. [worldclim_download()]
-#' which can be used to download WorldClim data files.
+#' @seealso [worldclim_download()] which can be used to download WorldClim data files.
+#'
+#'   [nc_covariates_merge()] to merge extracted
+#'   covariate data into data originally provided to the `data` argument of
+#'   [data_fmt()].
 #'
 #' @references Fick, S.E. and R.J. Hijmans, 2017. WorldClim 2: new 1km spatial resolution climate surfaces for global land areas. International Journal of Climatology 37 (12): 4302-4315.
 #'

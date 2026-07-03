@@ -132,9 +132,10 @@ output <- vegetation_extract(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[terra:extract]{terra::extract()}} which is used to extract values from MODIS data
-for \code{sf} 'POINT' and \code{terra} 'points' input data.
+\code{\link[=vegetation_download]{vegetation_download()}} which can be used to download data from
+the MODIS Vegetation Indices database.
 
-\code{\link[exactextractr:exact_extract]{exactextractr::exact_extract()}} which is used to extract values from MODIS
-data for \code{sf} 'POLYGON' or \code{terra} 'polygons' input data.
+\code{\link[=nc_covariates_merge]{nc_covariates_merge()}} to merge extracted
+covariate data into data originally provided to the \code{data} argument of
+\code{\link[=data_fmt]{data_fmt()}}.
 }

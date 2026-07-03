@@ -117,4 +117,8 @@ Guindon L., Correia D.L.P, Manka F. and Smiley B. 2026. SCANFI v2: Spatialized C
 \seealso{
 \code{\link[=scanfi_download]{scanfi_download()}} which can be used to download data from SCANFI
 data files and load them into the environment.
+
+\code{\link[=nc_covariates_merge]{nc_covariates_merge()}} to merge extracted
+covariate data into data originally provided to the \code{data} argument of
+\code{\link[=data_fmt]{data_fmt()}}.
 }

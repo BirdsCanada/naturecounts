@@ -93,8 +93,14 @@
 #'
 #'
 #' @seealso [daymet_request()] which can be used to submit requests for Dayment
-#' data. [daymet_download()] to execute downloads once requests have been
+#' data.
+#'
+#' [daymet_download()] to execute downloads once requests have been
 #' submitted and are complete.
+#'
+#' [nc_covariates_merge()] to merge extracted
+#' covariate data into data originally provided to the `data` argument of
+#' [data_fmt()].
 #'
 #' @export
 

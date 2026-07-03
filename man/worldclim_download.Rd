@@ -76,6 +76,8 @@ output <- worldclim_download(data = bcch,
 Fick, S.E. and R.J. Hijmans, 2017. WorldClim 2: new 1km spatial resolution climate surfaces for global land areas. International Journal of Climatology 37 (12): 4302-4315.
 }
 \seealso{
-\code{\link[geodata:worldclim]{geodata::worldclim_country()}} which this function wraps. \code{\link[=worldclim_extract]{worldclim_extract()}}
+\code{\link[geodata:worldclim]{geodata::worldclim_country()}} which this function wraps.
+
+\code{\link[=worldclim_extract]{worldclim_extract()}}
 which can be used to extract data from loaded WorldClim data files.
 }

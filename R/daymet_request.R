@@ -99,8 +99,12 @@
 #'
 #'
 #' @seealso [daymet_download()] to execute downloads once requests have been
-#' submitted and are complete. [daymet_check()] to check the status of existing
-#' requests. [daymet_extract()] which can be used to extract data
+#' submitted and are complete.
+#'
+#' [daymet_check()] to check the status of existing
+#' requests.
+#'
+#' [daymet_extract()] which can be used to extract data
 #' from downloaded Daymet files.
 #'
 #' @export

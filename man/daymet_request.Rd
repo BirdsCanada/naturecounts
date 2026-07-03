@@ -135,7 +135,11 @@ requests <- daymet_request(data = bcch,
 }
 \seealso{
 \code{\link[=daymet_download]{daymet_download()}} to execute downloads once requests have been
-submitted and are complete. \code{\link[=daymet_check]{daymet_check()}} to check the status of existing
-requests. \code{\link[=daymet_extract]{daymet_extract()}} which can be used to extract data
+submitted and are complete.
+
+\code{\link[=daymet_check]{daymet_check()}} to check the status of existing
+requests.
+
+\code{\link[=daymet_extract]{daymet_extract()}} which can be used to extract data
 from downloaded Daymet files.
 }

@@ -105,6 +105,8 @@ ed_email <- "your EarthData email"
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[luna:getNASA]{luna::getNASA()}} which this function wraps. \code{\link[=vegetation_extract]{vegetation_extract()}}
-which can be used to extract data from downloaded vegetation data files.
+\code{\link[luna:getNASA]{luna::getNASA()}} which this function wraps.
+
+\code{\link[=vegetation_extract]{vegetation_extract()}} which can be used to extract data from downloaded
+vegetation data files.
 }

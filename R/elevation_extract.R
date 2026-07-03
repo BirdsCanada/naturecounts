@@ -43,11 +43,12 @@
 #' # Extract Terrain Tiles data
 #' output <- elevation_extract(data = bcch, elevation_data = elev)
 #'
-#' @seealso [terra::extract()] which is used to extract values from Terrain Tiles
-#'   data for `sf` 'POINT' and `terra` 'points' input data.
+#' @seealso [elevation_download()] which can be used to download data from
+#'   the MapZen Terrain Tiles database.
 #'
-#'   [exactextractr::exact_extract()] which is used to extract values from Terrain
-#'   Tiles data for sf 'POLYGON' or terra 'polygons' input data.
+#'   [nc_covariates_merge()] to merge extracted
+#'   covariate data into data originally provided to the `data` argument of
+#'   [data_fmt()].
 #'
 #' @export
 
