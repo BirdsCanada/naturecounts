@@ -82,3 +82,31 @@ which can be used to submit requests for Dayment data.
 which can be used to extract data from downloaded Daymet files.
 
 ## Examples
+
+``` r
+if (FALSE) { # interactive()
+# Convert included test data on black-capped chickadees to sf POINT object
+bcch <- sf::st_as_sf(
+  bcch,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+)
+
+# Grab data from a single year
+bcch <- bcch[bcch$survey_year == 2011,]
+
+# Enter EarthData username
+ed_username <- "your EarthData username"
+
+# Submit Daymet requests
+requests <- daymet_request(data = bcch,
+                            covariates = "daymet_prcp",
+                            ed_username = ed_username)
+# Once email is received confirming that request has been processed, execute
+# download!
+downloaded <- daymet_download(daymet_reqs = requests,
+                              covariates = "daymet_prcp",
+                              ed_username = ed_username)
+
+}
+```

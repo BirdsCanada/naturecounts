@@ -127,6 +127,8 @@ extraction, as well as for downloading and extracting covariate data
   : Download Data from Daymet.
 - [`daymet_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_extract.md)
   : Extract Data from Daymet.
+- [`nc_covariates_merge()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_covariates_merge.md)
+  : Merge Extracted Covariate Data into Original Input Data
 
 ## Data
 

@@ -42,6 +42,8 @@ house_finches <- nc_data_dl(
 
     ## Collecting available records...
 
+    ## The server did not respond within 120s. Trying again...
+
     ##      collection nrecords
     ## 1      ABATLAS1        5
     ## 2      ABATLAS2      202
@@ -1125,4 +1127,4 @@ unlink("alberta_parks/", recursive = TRUE)
     Published by Bird Studies Canada on behalf of the North American
     Bird Conservation Initiative.
     <https://birdscanada.org/bird-science/nabci-bird-conservation-regions>
-    Accessed: 2026-07-02
+    Accessed: 2026-07-03
