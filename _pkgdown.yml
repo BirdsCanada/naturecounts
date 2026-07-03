@@ -71,6 +71,7 @@ reference:
   - daymet_check
   - daymet_download
   - daymet_extract
+  - nc_covariate_merge
 - title: Data
   desc: Included example data sets
   contents:
