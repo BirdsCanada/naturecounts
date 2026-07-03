@@ -446,8 +446,9 @@ nc_covariates_merge <- function(
 
     # Reorder columns to match original data.
     matched_data <- matched_data[, c(
-      original_cols,
-      setdiff(original_cols, names(matched_data))
+      original_cols[!(original_cols == "geometry")],
+      names(matched_data)[!(names(matched_data) %in% original_cols)],
+      "geometry"
     )]
   }
 
@@ -624,7 +625,7 @@ nc_covariates_merge <- function(
     # Reorder columns to match original data.
     matched_data <- matched_data[, c(
       original_cols,
-      setdiff(original_cols, names(matched_data))
+      names(matched_data)[!(names(matched_data) %in% original_cols)]
     )]
   }
 
