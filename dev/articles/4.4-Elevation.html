@@ -184,33 +184,41 @@ the necessary format.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">latitude</span>, <span class="va">longitude</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   latitude longitude</span></span>
-<span><span class="co">#&gt; 1 45.51110 -77.50533</span></span>
-<span><span class="co">#&gt; 2 45.63436 -77.07484</span></span>
-<span><span class="co">#&gt; 3 45.82732 -77.12012</span></span>
-<span><span class="co">#&gt; 4 45.48730 -77.74651</span></span>
-<span><span class="co">#&gt; 5 45.61956 -77.23577</span></span>
-<span><span class="co">#&gt; 6 45.82851 -77.11430</span></span>
+<span><span class="co">#&gt; 1 45.81553 -77.14251</span></span>
+<span><span class="co">#&gt; 2 45.81553 -77.14251</span></span>
+<span><span class="co">#&gt; 3 45.55757 -77.41739</span></span>
+<span><span class="co">#&gt; 4 45.55757 -77.41739</span></span>
+<span><span class="co">#&gt; 5 45.79170 -76.90276</span></span>
+<span><span class="co">#&gt; 6 45.79170 -76.90276</span></span>
 <span></span>
 <span><span class="co"># We can make a call to data_fmt() to automatically convert this to an sf object</span></span>
 <span><span class="co"># ready to work with naturecounts' covariate download and extraction functions. We</span></span>
 <span><span class="co"># can ignore the warning as EPSG:4326 is an appropriate CRS for our data.</span></span>
 <span><span class="va">formatted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data_fmt.html">data_fmt</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [Data Formatting] beginning formatting.</span></span>
-<span><span class="co">#&gt; Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.</span></span>
+<span><span class="co">#&gt; Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be</span></span>
+<span><span class="co">#&gt; EPSG:4326.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">formatted</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 6 features and 6 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: 1426543 ymin: 792053.4 xmax: 1473174 ymax: 841722.6</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 geometry</span></span>
-<span><span class="co">#&gt; 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12 POINT (1444206 799722.4)</span></span>
-<span><span class="co">#&gt; 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3 POINT (1473174 822088.3)</span></span>
-<span><span class="co">#&gt; 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19 POINT (1463861 841469.8)</span></span>
-<span><span class="co">#&gt; 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5 POINT (1426543 792053.4)</span></span>
-<span><span class="co">#&gt; 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16 POINT (1461424 817010.6)</span></span>
-<span><span class="co">#&gt; 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2 POINT (1464264 841722.6)</span></span></code></pre></div>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19</span></span>
+<span><span class="co">#&gt; 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19</span></span>
+<span><span class="co">#&gt; 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15</span></span>
+<span><span class="co">#&gt; 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17</span></span>
+<span><span class="co">#&gt;                   geometry</span></span>
+<span><span class="co">#&gt; 1 POINT (1462530 839736.7)</span></span>
+<span><span class="co">#&gt; 2 POINT (1462530 839736.7)</span></span>
+<span><span class="co">#&gt; 3 POINT (1449503 806527.6)</span></span>
+<span><span class="co">#&gt; 4 POINT (1449503 806527.6)</span></span>
+<span><span class="co">#&gt; 5 POINT (1481359 842474.9)</span></span>
+<span><span class="co">#&gt; 6 POINT (1481359 842474.9)</span></span></code></pre></div>
 <p>With our data prepared, we can make a call to elevation_download() to
 begin downloading elevation data. There are a few important decisions to
 make at this stage. First using the <code>negative_to_na</code>
@@ -247,6 +255,7 @@ spatial resolution.</p>
 <span>                            negative_to_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                            z <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>                            dl_path <span class="op">=</span> <span class="st">"./TerrainTiles"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [Elevation Download] downloading data.</span></span>
 <span>                            </span>
 <span><span class="va">elev</span></span>
 <span><span class="co">#&gt; class       : SpatRaster</span></span>
@@ -255,9 +264,9 @@ spatial resolution.</p>
 <span><span class="co">#&gt; extent      : 1306489, 1576763, 729231.5, 995687.2  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : +proj=aea +lat_0=40 +lon_0=-96 +lat_1=50 +lat_2=70 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs</span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; name        : file129c32de22c5</span></span>
-<span><span class="co">#&gt; min value   :                2</span></span>
-<span><span class="co">#&gt; max value   :             1492</span></span></code></pre></div>
+<span><span class="co">#&gt; name        : file823050c4cc9</span></span>
+<span><span class="co">#&gt; min value   :               2</span></span>
+<span><span class="co">#&gt; max value   :            1492</span></span></code></pre></div>
 <p>Examining the <code>elev</code> object, we can see it is a
 <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> containing our composited data. All
 downloaded files can be found by default in the created
@@ -306,15 +315,22 @@ we stored in our <code>elev</code> object.</p>
 <span><span class="co">#&gt; Simple feature collection with 6 features and 7 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: 1426543 ymin: 792053.4 xmax: 1473174 ymax: 841722.6</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 geometry elevation</span></span>
-<span><span class="co">#&gt; 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12 POINT (1444206 799722.4)       344</span></span>
-<span><span class="co">#&gt; 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3 POINT (1473174 822088.3)       169</span></span>
-<span><span class="co">#&gt; 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19 POINT (1463861 841469.8)       112</span></span>
-<span><span class="co">#&gt; 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5 POINT (1426543 792053.4)       331</span></span>
-<span><span class="co">#&gt; 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16 POINT (1461424 817010.6)       208</span></span>
-<span><span class="co">#&gt; 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2 POINT (1464264 841722.6)       108</span></span></code></pre></div>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19</span></span>
+<span><span class="co">#&gt; 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19</span></span>
+<span><span class="co">#&gt; 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15</span></span>
+<span><span class="co">#&gt; 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17</span></span>
+<span><span class="co">#&gt;                   geometry elevation</span></span>
+<span><span class="co">#&gt; 1 POINT (1462530 839736.7)       136</span></span>
+<span><span class="co">#&gt; 2 POINT (1462530 839736.7)       136</span></span>
+<span><span class="co">#&gt; 3 POINT (1449503 806527.6)       179</span></span>
+<span><span class="co">#&gt; 4 POINT (1449503 806527.6)       179</span></span>
+<span><span class="co">#&gt; 5 POINT (1481359 842474.9)       108</span></span>
+<span><span class="co">#&gt; 6 POINT (1481359 842474.9)       108</span></span></code></pre></div>
 <p>Now let’s give it a go with polygon input data. We’ll buffer our
 points to fetch the mean elevation within a 500 m radius of each
 observation.</p>
@@ -330,22 +346,22 @@ observation.</p>
 <span><span class="co">#&gt; Simple feature collection with 6 features and 7 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: 1426043 ymin: 791553.4 xmax: 1473674 ymax: 842222.6</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1449003 ymin: 806027.6 xmax: 1481859 ymax: 842974.9</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                       geometry</span></span>
-<span><span class="co">#&gt; 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12 POLYGON ((1444706 799722.4,...</span></span>
-<span><span class="co">#&gt; 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3 POLYGON ((1473674 822088.3,...</span></span>
-<span><span class="co">#&gt; 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19 POLYGON ((1464361 841469.8,...</span></span>
-<span><span class="co">#&gt; 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5 POLYGON ((1427043 792053.4,...</span></span>
-<span><span class="co">#&gt; 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16 POLYGON ((1461924 817010.6,...</span></span>
-<span><span class="co">#&gt; 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2 POLYGON ((1464764 841722.6,...</span></span>
-<span><span class="co">#&gt;   elevation</span></span>
-<span><span class="co">#&gt; 1  344.1860</span></span>
-<span><span class="co">#&gt; 2  171.5716</span></span>
-<span><span class="co">#&gt; 3  113.5238</span></span>
-<span><span class="co">#&gt; 4  337.7812</span></span>
-<span><span class="co">#&gt; 5  205.1039</span></span>
-<span><span class="co">#&gt; 6  112.9722</span></span></code></pre></div>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19</span></span>
+<span><span class="co">#&gt; 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19</span></span>
+<span><span class="co">#&gt; 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15</span></span>
+<span><span class="co">#&gt; 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17</span></span>
+<span><span class="co">#&gt;                         geometry elevation</span></span>
+<span><span class="co">#&gt; 1 POLYGON ((1463030 839736.7,...  132.5853</span></span>
+<span><span class="co">#&gt; 2 POLYGON ((1463030 839736.7,...  132.5853</span></span>
+<span><span class="co">#&gt; 3 POLYGON ((1450003 806527.6,...  179.8404</span></span>
+<span><span class="co">#&gt; 4 POLYGON ((1450003 806527.6,...  179.8404</span></span>
+<span><span class="co">#&gt; 5 POLYGON ((1481859 842474.9,...  110.5203</span></span>
+<span><span class="co">#&gt; 6 POLYGON ((1481859 842474.9,...  110.5203</span></span></code></pre></div>
 <p>We can see that the mean elevation values have been added in the
 <code>elevation</code> column.</p>
 </div>
@@ -365,6 +381,10 @@ user manually deletes them. However, if the user wishes to save disk
 space and reduce clutter, the files can be automatically deleted by
 setting <code>retain = FALSE</code> in
 <code><a href="../reference/elevation_extract.html">elevation_extract()</a></code>.</p>
+<p>Once you’ve extracted your elevation data, you may want to merge it
+back into the data you originally supplied to the <code>data</code>
+argument of <code><a href="../reference/data_fmt.html">data_fmt()</a></code>. You can do so using
+<code><a href="../reference/nc_covariates_merge.html">nc_covariates_merge()</a></code>.</p>
 <p><strong>Congratulations!</strong> You have now learned how to quickly
 download and extract the appropriate elevation data for your observation
 data using <code><a href="../reference/elevation_download.html">elevation_download()</a></code> and

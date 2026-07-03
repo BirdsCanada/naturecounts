@@ -197,12 +197,12 @@ the necessary format.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">latitude</span>, <span class="va">longitude</span>, <span class="va">survey_year</span>, <span class="va">survey_month</span>, <span class="va">survey_day</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   latitude longitude survey_year survey_month survey_day</span></span>
-<span><span class="co">#&gt; 1 45.81553 -77.14251        1999           11         18</span></span>
-<span><span class="co">#&gt; 2 45.81553 -77.14251        2000           12         16</span></span>
-<span><span class="co">#&gt; 3 45.55757 -77.41739        1999           12         19</span></span>
-<span><span class="co">#&gt; 4 45.55757 -77.41739        2000           12         19</span></span>
-<span><span class="co">#&gt; 5 45.79170 -76.90276        2000            4         15</span></span>
-<span><span class="co">#&gt; 6 45.79170 -76.90276        1999            4         17</span></span>
+<span><span class="co">#&gt; 1 45.51110 -77.50533        2011            2         12</span></span>
+<span><span class="co">#&gt; 2 45.63436 -77.07484        2010            7          3</span></span>
+<span><span class="co">#&gt; 3 45.82732 -77.12012        2010            6         19</span></span>
+<span><span class="co">#&gt; 4 45.48730 -77.74651        2011            5          5</span></span>
+<span><span class="co">#&gt; 5 45.61956 -77.23577        2010            6         16</span></span>
+<span><span class="co">#&gt; 6 45.82851 -77.11430        2011           10          2</span></span>
 <span></span>
 <span><span class="co"># As 16-day resolution vegetation can result in the downloading of a lot of data, we will restrict our data to the years 1999-2000.</span></span>
 <span></span>
@@ -213,7 +213,8 @@ the necessary format.</p>
 <span><span class="co"># can ignore the warning as EPSG:4326 is an appropriate CRS for our data.</span></span>
 <span><span class="va">formatted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data_fmt.html">data_fmt</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [Data Formatting] beginning formatting.</span></span>
-<span><span class="co">#&gt; Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.</span></span>
+<span><span class="co">#&gt; Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be</span></span>
+<span><span class="co">#&gt; EPSG:4326.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">formatted</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 6 features and 6 fields</span></span>
@@ -221,13 +222,20 @@ the necessary format.</p>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 geometry</span></span>
-<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18 POINT (1462530 839736.7)</span></span>
-<span><span class="co">#&gt; 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16 POINT (1462530 839736.7)</span></span>
-<span><span class="co">#&gt; 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19 POINT (1449503 806527.6)</span></span>
-<span><span class="co">#&gt; 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19 POINT (1449503 806527.6)</span></span>
-<span><span class="co">#&gt; 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15 POINT (1481359 842474.9)</span></span>
-<span><span class="co">#&gt; 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17 POINT (1481359 842474.9)</span></span></code></pre></div>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19</span></span>
+<span><span class="co">#&gt; 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19</span></span>
+<span><span class="co">#&gt; 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15</span></span>
+<span><span class="co">#&gt; 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17</span></span>
+<span><span class="co">#&gt;                   geometry</span></span>
+<span><span class="co">#&gt; 1 POINT (1462530 839736.7)</span></span>
+<span><span class="co">#&gt; 2 POINT (1462530 839736.7)</span></span>
+<span><span class="co">#&gt; 3 POINT (1449503 806527.6)</span></span>
+<span><span class="co">#&gt; 4 POINT (1449503 806527.6)</span></span>
+<span><span class="co">#&gt; 5 POINT (1481359 842474.9)</span></span>
+<span><span class="co">#&gt; 6 POINT (1481359 842474.9)</span></span></code></pre></div>
 <p>The only other prerequisite here is an <a href="https://urs.earthdata.nasa.gov/users/new" class="external-link">EarthData</a> account,
 which is necessary to access MODIS data stored in the NASA EarthData
 Archive. Users can register at the link above.</p>
@@ -246,10 +254,12 @@ securely using the <code>askpass</code> package used in
 <code class="sourceCode R"><span><span class="co"># Let's see which files would be downloaded for our data</span></span>
 <span></span>
 <span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vegetation_download.html">vegetation_download</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">formatted</span>,</span>
-<span>                             ed_transfer <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                             ed_transfer <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                             progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [MODIS NDVI/EVI Download] fetching data filenames.</span></span>
-<span><span class="co">#&gt; Warning: Observation on date(s) 1999-11-18, 1999-12-19, 1999-4-17, 1999-5-16 could not be matched to a</span></span>
-<span><span class="co">#&gt; MODIS vegetation data file. Are they outside of the temporal coverage of the data (i.e., before 2000)?</span></span>
+<span><span class="co">#&gt; Warning: Observation on date(s) 1999-11-18, 1999-12-19, 1999-4-17, 1999-5-16 could not be matched</span></span>
+<span><span class="co">#&gt; to a MODIS vegetation data file. Are they outside of the temporal coverage of the data (i.e.,</span></span>
+<span><span class="co">#&gt; before 2000 or in the current year)?</span></span>
 <span></span>
 <span><span class="va">files</span></span>
 <span><span class="co">#&gt; [1] "MOD13A1.A2000337.h12v04.061.2020057055433.hdf" "MOD13A1.A2000353.h12v04.061.2020058160551.hdf"</span></span>
@@ -257,17 +267,18 @@ securely using the <code>askpass</code> package used in
 <span></span>
 <span><span class="co"># Now, by providing an EarthData login email, we can execute the download. Files will be downloaded into a 'modis/' subdirectory in your current working directory. </span></span>
 <span></span>
-<span><span class="va">ed_email</span> <span class="op">&lt;-</span> <span class="st">"your EarthData email here"</span></span>
+<span><span class="va">ed_email</span> <span class="op">&lt;-</span> <span class="st">"your EarthData email"</span></span>
 <span></span>
 <span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vegetation_download.html">vegetation_download</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">formatted</span>,</span>
 <span>                             ed_email <span class="op">=</span> <span class="va">ed_email</span>,</span>
-<span>                             ed_transfer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># We don't need to specify this                                                   # as TRUE is the default, but we </span></span>
+<span>                             progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                             ed_transfer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># We don't need to specify this                                              # as TRUE is the default, but we </span></span>
 <span>                                                 <span class="co"># have done so for clarity.</span></span>
-<span><span class="co">#&gt; Warning: Observation on date(s) 1999-11-18, 1999-12-19, 1999-4-17, 1999-5-16 could not be matched to a</span></span>
-<span><span class="co">#&gt; MODIS vegetation data file. Are they outside of the temporal coverage of the data (i.e., before 2000)?</span></span>
+<span><span class="co">#&gt; Warning: Observation on date(s) 1999-11-18, 1999-12-19, 1999-4-17, 1999-5-16 could not be matched</span></span>
+<span><span class="co">#&gt; to a MODIS vegetation data file. Are they outside of the temporal coverage of the data (i.e.,</span></span>
+<span><span class="co">#&gt; before 2000 or in the current year)?</span></span>
 <span><span class="co">#&gt; [MODIS NDVI/EVI Download] data products are at a 16 day resolution, resulting in 3 files to download for your data. This may take some time.</span></span>
 <span><span class="co">#&gt; [MODIS NDVI/EVI Download] downloading data.</span></span>
-<span>                                                 </span>
 <span></span>
 <span><span class="va">files</span></span>
 <span><span class="co">#&gt; [1] "./modis/MOD13A1/MOD13A1.A2000337.h12v04.061.2020057055433.hdf"</span></span>
@@ -329,9 +340,9 @@ Conveniently, this is exactly the output of
 <span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vegetation_extract.html">vegetation_extract</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">formatted</span>,</span>
 <span>                             covariates <span class="op">=</span> <span class="st">"modis_ndvi"</span>,</span>
 <span>                             vegetation_files <span class="op">=</span> <span class="va">files</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: [MODIS NDVI/EVI Extraction] observations from year 1999 fall outside of the temporal extent of</span></span>
-<span><span class="co">#&gt; the files provided. Is it in a year where data is unavailable from this dataset? No value will be</span></span>
-<span><span class="co">#&gt; returned.</span></span>
+<span><span class="co">#&gt; Warning: [MODIS NDVI/EVI Extraction] observations from year 1999 fall outside of the temporal</span></span>
+<span><span class="co">#&gt; extent of the files provided. Is it in a year where data is unavailable from this dataset? No</span></span>
+<span><span class="co">#&gt; value will be returned.</span></span>
 <span><span class="co">#&gt; [MODIS NDVI/EVI Extraction] calculating MODIS NDVI.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output</span><span class="op">)</span></span>
@@ -375,9 +386,9 @@ measurements for that grid cell.</p>
 <span>                             covariates <span class="op">=</span> <span class="st">"modis_ndvi"</span>,</span>
 <span>                             vegetation_files <span class="op">=</span> <span class="va">files</span>,</span>
 <span>                             reliability <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: [MODIS NDVI/EVI Extraction] observations from year 1999 fall outside of the temporal extent of</span></span>
-<span><span class="co">#&gt; the files provided. Is it in a year where data is unavailable from this dataset? No value will be</span></span>
-<span><span class="co">#&gt; returned.</span></span>
+<span><span class="co">#&gt; Warning: [MODIS NDVI/EVI Extraction] observations from year 1999 fall outside of the temporal</span></span>
+<span><span class="co">#&gt; extent of the files provided. Is it in a year where data is unavailable from this dataset? No</span></span>
+<span><span class="co">#&gt; value will be returned.</span></span>
 <span><span class="co">#&gt; [MODIS NDVI/EVI Extraction] calculating MODIS NDVI.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output</span><span class="op">)</span></span>
@@ -418,9 +429,9 @@ ignore the same warnings as in the previous example.</p>
 <span>                             covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"modis_ndvi"</span>, <span class="st">"modis_evi"</span><span class="op">)</span>,</span>
 <span>                             vegetation_files <span class="op">=</span> <span class="va">files</span>,</span>
 <span>                             reliability <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: [MODIS NDVI/EVI Extraction] observations from year 1999 fall outside of the temporal extent of</span></span>
-<span><span class="co">#&gt; the files provided. Is it in a year where data is unavailable from this dataset? No value will be</span></span>
-<span><span class="co">#&gt; returned.</span></span>
+<span><span class="co">#&gt; Warning: [MODIS NDVI/EVI Extraction] observations from year 1999 fall outside of the temporal</span></span>
+<span><span class="co">#&gt; extent of the files provided. Is it in a year where data is unavailable from this dataset? No</span></span>
+<span><span class="co">#&gt; value will be returned.</span></span>
 <span><span class="co">#&gt; [MODIS NDVI/EVI Extraction] calculating MODIS NDVI.</span></span>
 <span><span class="co">#&gt; [MODIS NDVI/EVI Extraction] calculating MODIS EVI.</span></span>
 <span></span>
@@ -472,6 +483,10 @@ user manually deletes them. However, if the user wishes to save disk
 space and reduce clutter, the files can be automatically deleted by
 setting <code>retain = FALSE</code> in
 <code><a href="../reference/vegetation_extract.html">vegetation_extract()</a></code>.</p>
+<p>Once you’ve extracted your vegetation index data, you may want to
+merge it back into the data you originally supplied to the
+<code>data</code> argument of <code><a href="../reference/data_fmt.html">data_fmt()</a></code>. You can do so
+using <code><a href="../reference/nc_covariates_merge.html">nc_covariates_merge()</a></code>.</p>
 <p><strong>Congratulations!</strong> You have now learned how to quickly
 download and extract the appropriate vegetation index data for your
 observation data using <code><a href="../reference/vegetation_download.html">vegetation_download()</a></code> and

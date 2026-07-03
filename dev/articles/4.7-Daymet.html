@@ -526,6 +526,10 @@ user manually deletes them. However, if the user wishes to save disk
 space and reduce clutter, the files can be automatically deleted by
 setting <code>retain = FALSE</code> in
 <code><a href="../reference/daymet_extract.html">daymet_extract()</a></code>.</p>
+<p>Once you’ve extracted your Daymet data, you may want to merge it back
+into the data you originally supplied to the <code>data</code> argument
+of <code><a href="../reference/data_fmt.html">data_fmt()</a></code>. You can do so using
+<code><a href="../reference/nc_covariates_merge.html">nc_covariates_merge()</a></code>.</p>
 <p><strong>Congratulations!</strong> You have now learned how to
 request, download, and extract the appropriate Daymet data for your
 observation data using <code><a href="../reference/daymet_request.html">daymet_request()</a></code>,

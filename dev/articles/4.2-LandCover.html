@@ -225,7 +225,8 @@ the necessary format.</p>
 <span><span class="co"># can ignore the warning as EPSG:4326 is an appropriate CRS for our data.</span></span>
 <span><span class="va">formatted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data_fmt.html">data_fmt</a></span><span class="op">(</span><span class="va">bcch</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [Data Formatting] beginning formatting.</span></span>
-<span><span class="co">#&gt; Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.</span></span>
+<span><span class="co">#&gt; Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be</span></span>
+<span><span class="co">#&gt; EPSG:4326.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">formatted</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 6 features and 6 fields</span></span>
@@ -233,13 +234,20 @@ the necessary format.</p>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: 1426543 ymin: 792053.4 xmax: 1473174 ymax: 841722.6</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 geometry</span></span>
-<span><span class="co">#&gt; 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12 POINT (1444206 799722.4)</span></span>
-<span><span class="co">#&gt; 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3 POINT (1473174 822088.3)</span></span>
-<span><span class="co">#&gt; 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19 POINT (1463861 841469.8)</span></span>
-<span><span class="co">#&gt; 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5 POINT (1426543 792053.4)</span></span>
-<span><span class="co">#&gt; 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16 POINT (1461424 817010.6)</span></span>
-<span><span class="co">#&gt; 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2 POINT (1464264 841722.6)</span></span></code></pre></div>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19</span></span>
+<span><span class="co">#&gt; 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5</span></span>
+<span><span class="co">#&gt; 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16</span></span>
+<span><span class="co">#&gt; 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2</span></span>
+<span><span class="co">#&gt;                   geometry</span></span>
+<span><span class="co">#&gt; 1 POINT (1444206 799722.4)</span></span>
+<span><span class="co">#&gt; 2 POINT (1473174 822088.3)</span></span>
+<span><span class="co">#&gt; 3 POINT (1463861 841469.8)</span></span>
+<span><span class="co">#&gt; 4 POINT (1426543 792053.4)</span></span>
+<span><span class="co">#&gt; 5 POINT (1461424 817010.6)</span></span>
+<span><span class="co">#&gt; 6 POINT (1464264 841722.6)</span></span></code></pre></div>
 <p>The only other prerequisite here is an <a href="https://urs.earthdata.nasa.gov/users/new" class="external-link">EarthData</a> account,
 which is necessary to access MODIS data stored in the NASA EarthData
 Archive. Users can register at the link above.</p>
@@ -258,7 +266,8 @@ securely using the <code>askpass</code> package used in
 <code class="sourceCode R"><span><span class="co"># Let's see which files would be downloaded for our data</span></span>
 <span></span>
 <span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/landcover_download.html">landcover_download</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">formatted</span>,</span>
-<span>                            ed_transfer <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                            ed_transfer <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                            progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [MODIS Landcover Download] fetching data filenames.</span></span>
 <span><span class="co">#&gt; Warning: [MODIS Landcover Download] MODIS landcover data unavailable for all years before 2001.</span></span>
 <span><span class="co">#&gt; landcover_extract() will extract landcover data from 2001 for these observations.</span></span>
@@ -270,14 +279,17 @@ securely using the <code>askpass</code> package used in
 <span></span>
 <span><span class="co"># Now, by providing an EarthData login email, we can execute the download. Files will be downloaded into a 'modis/' subdirectory in your current working directory. </span></span>
 <span></span>
-<span><span class="va">ed_email</span> <span class="op">&lt;-</span> <span class="st">"your Earthdata email here"</span></span>
+<span><span class="va">ed_email</span> <span class="op">&lt;-</span> <span class="st">"your EarthData email"</span></span>
 <span></span>
 <span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/landcover_download.html">landcover_download</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">formatted</span>,</span>
 <span>                            ed_email <span class="op">=</span> <span class="va">ed_email</span>,</span>
+<span>                            progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                            ed_transfer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># We don't need to specify this as</span></span>
-<span><span class="co">#&gt; [MODIS Landcover Download] downloading data.</span></span>
 <span>                                                <span class="co"># TRUE is the default, but we have</span></span>
 <span>                                                <span class="co"># done so for clarity.</span></span>
+<span><span class="co">#&gt; [MODIS Landcover Download] downloading data.</span></span>
+<span><span class="co">#&gt; Warning: [MODIS Landcover Download] MODIS landcover data unavailable for all years before 2001.</span></span>
+<span><span class="co">#&gt; landcover_extract() will extract landcover data from 2001 for these observations.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">files</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "./modis/MCD12Q1/MCD12Q1.A2001001.h12v04.061.2022146050354.hdf"</span></span>
@@ -339,9 +351,9 @@ Conveniently, this is exactly the output of
 <span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/landcover_extract.html">landcover_extract</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">formatted</span>,</span>
 <span>                            covariates <span class="op">=</span> <span class="st">"modis_lctype3"</span>,</span>
 <span>                            landcover_files <span class="op">=</span> <span class="va">files</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: [MODIS Landcover Extraction]: MODIS data not available for 1978, 1979, 1980, 1981, 1982, 1983,</span></span>
-<span><span class="co">#&gt; 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000 -</span></span>
-<span><span class="co">#&gt; using data from nearest year(s) (2001).</span></span>
+<span><span class="co">#&gt; Warning: [MODIS Landcover Extraction]: MODIS data not available for 1978, 1979, 1980, 1981, 1982,</span></span>
+<span><span class="co">#&gt; 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998,</span></span>
+<span><span class="co">#&gt; 1999, 2000 - using data from nearest year(s) (2001).</span></span>
 <span><span class="co">#&gt; [MODIS Landcover Extraction] calculating MODIS LC Type3.</span></span></code></pre></div>
 <p>Woah! That’s a lot of warnings. These warnings are ultimately
 harmless but are important to consider. The MODIS Landcover dataset only
@@ -365,20 +377,20 @@ landcover category from the previous year and warn the user.</p>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: 1426543 ymin: 792053.4 xmax: 1473174 ymax: 841722.6</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 geometry</span></span>
-<span><span class="co">#&gt; 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12 POINT (1444206 799722.4)</span></span>
-<span><span class="co">#&gt; 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3 POINT (1473174 822088.3)</span></span>
-<span><span class="co">#&gt; 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19 POINT (1463861 841469.8)</span></span>
-<span><span class="co">#&gt; 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5 POINT (1426543 792053.4)</span></span>
-<span><span class="co">#&gt; 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16 POINT (1461424 817010.6)</span></span>
-<span><span class="co">#&gt; 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2 POINT (1464264 841722.6)</span></span>
-<span><span class="co">#&gt;                LC_Type3_Class</span></span>
-<span><span class="co">#&gt; 1 deciduous_broadleaf_forests</span></span>
-<span><span class="co">#&gt; 2                    savannas</span></span>
-<span><span class="co">#&gt; 3         urban_builtup_lands</span></span>
-<span><span class="co">#&gt; 4 deciduous_broadleaf_forests</span></span>
-<span><span class="co">#&gt; 5 deciduous_broadleaf_forests</span></span>
-<span><span class="co">#&gt; 6         urban_builtup_lands</span></span>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19</span></span>
+<span><span class="co">#&gt; 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5</span></span>
+<span><span class="co">#&gt; 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16</span></span>
+<span><span class="co">#&gt; 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2</span></span>
+<span><span class="co">#&gt;                   geometry              LC_Type3_Class</span></span>
+<span><span class="co">#&gt; 1 POINT (1444206 799722.4) deciduous_broadleaf_forests</span></span>
+<span><span class="co">#&gt; 2 POINT (1473174 822088.3)                    savannas</span></span>
+<span><span class="co">#&gt; 3 POINT (1463861 841469.8)         urban_builtup_lands</span></span>
+<span><span class="co">#&gt; 4 POINT (1426543 792053.4) deciduous_broadleaf_forests</span></span>
+<span><span class="co">#&gt; 5 POINT (1461424 817010.6) deciduous_broadleaf_forests</span></span>
+<span><span class="co">#&gt; 6 POINT (1464264 841722.6)         urban_builtup_lands</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">output</span><span class="op">$</span><span class="va">LC_Type3_Class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -397,9 +409,9 @@ example.</p>
 <span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/landcover_extract.html">landcover_extract</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">buffered</span>,</span>
 <span>                            covariates <span class="op">=</span> <span class="st">"modis_lctype3"</span>,</span>
 <span>                            landcover_files <span class="op">=</span> <span class="va">files</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: [MODIS Landcover Extraction]: MODIS data not available for 1978, 1979, 1980, 1981, 1982, 1983,</span></span>
-<span><span class="co">#&gt; 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000 -</span></span>
-<span><span class="co">#&gt; using data from nearest year(s) (2001).</span></span>
+<span><span class="co">#&gt; Warning: [MODIS Landcover Extraction]: MODIS data not available for 1978, 1979, 1980, 1981, 1982,</span></span>
+<span><span class="co">#&gt; 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998,</span></span>
+<span><span class="co">#&gt; 1999, 2000 - using data from nearest year(s) (2001).</span></span>
 <span><span class="co">#&gt; [MODIS Landcover Extraction] calculating MODIS LC Type3.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output</span><span class="op">)</span></span>
@@ -471,6 +483,10 @@ user manually deletes them. However, if the user wishes to save disk
 space and reduce clutter, the files can be automatically deleted by
 setting <code>retain = FALSE</code> in
 <code><a href="../reference/landcover_extract.html">landcover_extract()</a></code>.</p>
+<p>Once you’ve extracted your landcover data, you may want to merge it
+back into the data you originally supplied to the <code>data</code>
+argument of <code><a href="../reference/data_fmt.html">data_fmt()</a></code>. You can do so using
+<code><a href="../reference/nc_covariates_merge.html">nc_covariates_merge()</a></code>.</p>
 <p><strong>Congratulations!</strong> You have now learned how to quickly
 download and extract the appropriate landcover data for your observation
 data using <code><a href="../reference/landcover_download.html">landcover_download()</a></code> and

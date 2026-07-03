@@ -186,13 +186,13 @@ data to the necessary format.</p>
 <span><span class="va">bcch</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">latitude</span>, <span class="va">longitude</span>, <span class="va">survey_year</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    latitude longitude survey_year</span></span>
-<span><span class="co">#&gt; 10 45.79141 -76.90451        2002</span></span>
-<span><span class="co">#&gt; 11 45.81554 -77.14251        2002</span></span>
-<span><span class="co">#&gt; 13 45.88427 -77.24522        2002</span></span>
-<span><span class="co">#&gt; 14 45.82732 -77.12012        2002</span></span>
-<span><span class="co">#&gt; 17 45.88427 -77.24522        2003</span></span>
-<span><span class="co">#&gt; 22 45.82165 -77.30006        2007</span></span>
+<span><span class="co">#&gt;   latitude longitude survey_year</span></span>
+<span><span class="co">#&gt; 1 45.81553 -77.14251        1999</span></span>
+<span><span class="co">#&gt; 2 45.81553 -77.14251        2000</span></span>
+<span><span class="co">#&gt; 3 45.55757 -77.41739        1999</span></span>
+<span><span class="co">#&gt; 4 45.55757 -77.41739        2000</span></span>
+<span><span class="co">#&gt; 5 45.79170 -76.90276        2000</span></span>
+<span><span class="co">#&gt; 6 45.79170 -76.90276        1999</span></span>
 <span>  </span>
 <span><span class="co"># To reduce the necessary downloads, we will restrict our data to years 2000-2007.</span></span>
 <span></span>
@@ -207,25 +207,19 @@ data to the necessary format.</p>
 <span><span class="co">#&gt; EPSG:4326.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">formatted</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 6 features and 6 fields</span></span>
+<span><span class="co">#&gt; Simple feature collection with 3 features and 6 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: 1450445 ymin: 836967.1 xmax: 1481236 ymax: 844771.5</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
 <span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
-<span><span class="co">#&gt; 1    FilledSurveyArea1 45.79141 -76.90451        2002            4         20</span></span>
-<span><span class="co">#&gt; 2    FilledSurveyArea2 45.81554 -77.14251        2002           12         14</span></span>
-<span><span class="co">#&gt; 3    FilledSurveyArea3 45.88427 -77.24522        2002            5         12</span></span>
-<span><span class="co">#&gt; 4    FilledSurveyArea4 45.82732 -77.12012        2002            8         17</span></span>
-<span><span class="co">#&gt; 5    FilledSurveyArea3 45.88427 -77.24522        2003            5         18</span></span>
-<span><span class="co">#&gt; 6    FilledSurveyArea5 45.82165 -77.30006        2007            2         18</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        2000           12         16</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea2 45.55757 -77.41739        2000           12         19</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea3 45.79170 -76.90276        2000            4         15</span></span>
 <span><span class="co">#&gt;                   geometry</span></span>
-<span><span class="co">#&gt; 1 POINT (1481236 842405.3)</span></span>
-<span><span class="co">#&gt; 2 POINT (1462530 839737.5)</span></span>
-<span><span class="co">#&gt; 3 POINT (1452691 844771.5)</span></span>
-<span><span class="co">#&gt; 4 POINT (1463861 841469.8)</span></span>
-<span><span class="co">#&gt; 5 POINT (1452691 844771.5)</span></span>
-<span><span class="co">#&gt; 6 POINT (1450445 836967.1)</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 POINT (1462530 839736.7)</span></span>
+<span><span class="co">#&gt; 2 POINT (1449503 806527.6)</span></span>
+<span><span class="co">#&gt; 3 POINT (1481359 842474.9)</span></span></code></pre></div>
 <p>With our data prepared, we can make a call to
 <code><a href="../reference/scanfi_download.html">scanfi_download()</a></code> to begin downloading SCANFI data. If we
 provide the spatial data we have generated,
@@ -401,36 +395,23 @@ in our <code>scanfi_data</code> object.</p>
 <span>                         scanfi_data <span class="op">=</span> <span class="va">scanfi_data</span>,</span>
 <span>                         interpolate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># this is the default value, but</span></span>
 <span>                                              <span class="co"># we include it explicitly for clarity.</span></span>
+<span><span class="co">#&gt; [SCANFI Extraction] extracting SCANFI height.</span></span>
+<span></span>
 <span></span>
 <span><span class="va">output</span><span class="op">[</span><span class="va">output</span><span class="op">$</span><span class="va">survey_year</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2002</span>, <span class="fl">2005</span><span class="op">)</span>,<span class="op">]</span></span>
-<span><span class="co">#&gt; Simple feature collection with 12 features and 7 fields</span></span>
+<span><span class="co">#&gt; Simple feature collection with 3 features and 7 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 844771.5</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt; First 10 features:</span></span>
-<span><span class="co">#&gt;    SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
-<span><span class="co">#&gt; 1     FilledSurveyArea1 45.79141 -76.90451        2002            4         20</span></span>
-<span><span class="co">#&gt; 2     FilledSurveyArea2 45.81554 -77.14251        2002           12         14</span></span>
-<span><span class="co">#&gt; 3     FilledSurveyArea3 45.88427 -77.24522        2002            5         12</span></span>
-<span><span class="co">#&gt; 4     FilledSurveyArea4 45.82732 -77.12012        2002            8         17</span></span>
-<span><span class="co">#&gt; 7     FilledSurveyArea6 45.81553 -77.14251        2000           12         16</span></span>
-<span><span class="co">#&gt; 9     FilledSurveyArea6 45.81553 -77.14251        2002           12         14</span></span>
-<span><span class="co">#&gt; 12    FilledSurveyArea6 45.81553 -77.14251        2005           12         17</span></span>
-<span><span class="co">#&gt; 15    FilledSurveyArea7 45.82732 -77.12013        2002            8         17</span></span>
-<span><span class="co">#&gt; 18    FilledSurveyArea8 45.79170 -76.90276        2005            4         23</span></span>
-<span><span class="co">#&gt; 21   FilledSurveyArea10 45.55757 -77.41739        2000           12         19</span></span>
-<span><span class="co">#&gt;                    geometry scanfi_height</span></span>
-<span><span class="co">#&gt; 1  POINT (1481236 842405.3)            NA</span></span>
-<span><span class="co">#&gt; 2  POINT (1462530 839737.5)            NA</span></span>
-<span><span class="co">#&gt; 3  POINT (1452691 844771.5)            NA</span></span>
-<span><span class="co">#&gt; 4  POINT (1463861 841469.8)            NA</span></span>
-<span><span class="co">#&gt; 7  POINT (1462530 839736.7)             0</span></span>
-<span><span class="co">#&gt; 9  POINT (1462530 839736.7)            NA</span></span>
-<span><span class="co">#&gt; 12 POINT (1462530 839736.7)             0</span></span>
-<span><span class="co">#&gt; 15 POINT (1463861 841469.2)            NA</span></span>
-<span><span class="co">#&gt; 18 POINT (1481359 842474.9)             0</span></span>
-<span><span class="co">#&gt; 21 POINT (1449503 806527.6)             0</span></span></code></pre></div>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        2000           12         16</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea2 45.55757 -77.41739        2000           12         19</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea3 45.79170 -76.90276        2000            4         15</span></span>
+<span><span class="co">#&gt;                   geometry scanfi_height</span></span>
+<span><span class="co">#&gt; 1 POINT (1462530 839736.7)             0</span></span>
+<span><span class="co">#&gt; 2 POINT (1449503 806527.6)             0</span></span>
+<span><span class="co">#&gt; 3 POINT (1481359 842474.9)             0</span></span></code></pre></div>
 <p>Now let’s give it a go with polygon input data. We’ll buffer our
 points to fetch the mean forest height within a 500 m radius of each
 observation. This time, we’ll set <code>interpolate = TRUE</code> so
@@ -445,37 +426,21 @@ with the value from the nearest snapshot year.</p>
 <span>                         scanfi_data <span class="op">=</span> <span class="va">scanfi_data</span>,</span>
 <span>                         interpolate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [SCANFI Extraction] extracting SCANFI height.</span></span>
-<span><span class="co">#&gt; [SCANFI Extraction] extracting SCANFI height.</span></span>
 <span></span>
 <span><span class="va">output</span><span class="op">[</span><span class="va">output</span><span class="op">$</span><span class="va">survey_year</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2002</span>, <span class="fl">2005</span><span class="op">)</span>,<span class="op">]</span></span>
-<span><span class="co">#&gt; Simple feature collection with 12 features and 7 fields</span></span>
+<span><span class="co">#&gt; Simple feature collection with 3 features and 7 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: 1449003 ymin: 806027.6 xmax: 1481859 ymax: 845271.5</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1449003 ymin: 806027.6 xmax: 1481859 ymax: 842974.9</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt; First 10 features:</span></span>
-<span><span class="co">#&gt;    SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
-<span><span class="co">#&gt; 1     FilledSurveyArea1 45.79141 -76.90451        2002            4         20</span></span>
-<span><span class="co">#&gt; 2     FilledSurveyArea2 45.81554 -77.14251        2002           12         14</span></span>
-<span><span class="co">#&gt; 3     FilledSurveyArea3 45.88427 -77.24522        2002            5         12</span></span>
-<span><span class="co">#&gt; 4     FilledSurveyArea4 45.82732 -77.12012        2002            8         17</span></span>
-<span><span class="co">#&gt; 7     FilledSurveyArea6 45.81553 -77.14251        2000           12         16</span></span>
-<span><span class="co">#&gt; 9     FilledSurveyArea6 45.81553 -77.14251        2002           12         14</span></span>
-<span><span class="co">#&gt; 12    FilledSurveyArea6 45.81553 -77.14251        2005           12         17</span></span>
-<span><span class="co">#&gt; 15    FilledSurveyArea7 45.82732 -77.12013        2002            8         17</span></span>
-<span><span class="co">#&gt; 18    FilledSurveyArea8 45.79170 -76.90276        2005            4         23</span></span>
-<span><span class="co">#&gt; 21   FilledSurveyArea10 45.55757 -77.41739        2000           12         19</span></span>
-<span><span class="co">#&gt;                          geometry scanfi_height</span></span>
-<span><span class="co">#&gt; 1  POLYGON ((1481736 842405.3,...     5.4004602</span></span>
-<span><span class="co">#&gt; 2  POLYGON ((1463030 839737.5,...     1.9455338</span></span>
-<span><span class="co">#&gt; 3  POLYGON ((1453191 844771.5,...     7.1419897</span></span>
-<span><span class="co">#&gt; 4  POLYGON ((1464361 841469.8,...     0.8401152</span></span>
-<span><span class="co">#&gt; 7  POLYGON ((1463030 839736.7,...     1.9461026</span></span>
-<span><span class="co">#&gt; 9  POLYGON ((1463030 839736.7,...     1.9461026</span></span>
-<span><span class="co">#&gt; 12 POLYGON ((1463030 839736.7,...     2.2919743</span></span>
-<span><span class="co">#&gt; 15 POLYGON ((1464361 841469.2,...     0.8416255</span></span>
-<span><span class="co">#&gt; 18 POLYGON ((1481859 842474.9,...     4.5236492</span></span>
-<span><span class="co">#&gt; 21 POLYGON ((1450003 806527.6,...     4.1533647</span></span></code></pre></div>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        2000           12         16</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea2 45.55757 -77.41739        2000           12         19</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea3 45.79170 -76.90276        2000            4         15</span></span>
+<span><span class="co">#&gt;                         geometry scanfi_height</span></span>
+<span><span class="co">#&gt; 1 POLYGON ((1463030 839736.7,...      1.946103</span></span>
+<span><span class="co">#&gt; 2 POLYGON ((1450003 806527.6,...      4.153365</span></span>
+<span><span class="co">#&gt; 3 POLYGON ((1481859 842474.9,...      4.461547</span></span></code></pre></div>
 <p>We can see that the mean height values have been added in the
 <code>scanfi_height</code> column and that the years 2001 and 2002 have
 been filled with the value from year 2000, and the years 2003, 2004,
@@ -492,37 +457,21 @@ extract those with our point and polygon data below.</p>
 <span>                         scanfi_data <span class="op">=</span> <span class="va">scanfi_data</span>,</span>
 <span>                         interpolate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [SCANFI Extraction] extracting SCANFI nfilc.</span></span>
-<span><span class="co">#&gt; [SCANFI Extraction] extracting SCANFI nfilc.</span></span>
 <span>                </span>
 <span><span class="va">output</span><span class="op">[</span><span class="va">output</span><span class="op">$</span><span class="va">survey_year</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2002</span>, <span class="fl">2005</span><span class="op">)</span>,<span class="op">]</span>  </span>
-<span><span class="co">#&gt; Simple feature collection with 12 features and 7 fields</span></span>
+<span><span class="co">#&gt; Simple feature collection with 3 features and 7 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 844771.5</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt; First 10 features:</span></span>
-<span><span class="co">#&gt;    SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
-<span><span class="co">#&gt; 1     FilledSurveyArea1 45.79141 -76.90451        2002            4         20</span></span>
-<span><span class="co">#&gt; 2     FilledSurveyArea2 45.81554 -77.14251        2002           12         14</span></span>
-<span><span class="co">#&gt; 3     FilledSurveyArea3 45.88427 -77.24522        2002            5         12</span></span>
-<span><span class="co">#&gt; 4     FilledSurveyArea4 45.82732 -77.12012        2002            8         17</span></span>
-<span><span class="co">#&gt; 7     FilledSurveyArea6 45.81553 -77.14251        2000           12         16</span></span>
-<span><span class="co">#&gt; 9     FilledSurveyArea6 45.81553 -77.14251        2002           12         14</span></span>
-<span><span class="co">#&gt; 12    FilledSurveyArea6 45.81553 -77.14251        2005           12         17</span></span>
-<span><span class="co">#&gt; 15    FilledSurveyArea7 45.82732 -77.12013        2002            8         17</span></span>
-<span><span class="co">#&gt; 18    FilledSurveyArea8 45.79170 -76.90276        2005            4         23</span></span>
-<span><span class="co">#&gt; 21   FilledSurveyArea10 45.55757 -77.41739        2000           12         19</span></span>
-<span><span class="co">#&gt;                    geometry nfilc_class</span></span>
-<span><span class="co">#&gt; 1  POINT (1481236 842405.3)        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2  POINT (1462530 839737.5)        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3  POINT (1452691 844771.5)        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4  POINT (1463861 841469.8)        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 7  POINT (1462530 839736.7)        rock</span></span>
-<span><span class="co">#&gt; 9  POINT (1462530 839736.7)        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 12 POINT (1462530 839736.7)        rock</span></span>
-<span><span class="co">#&gt; 15 POINT (1463861 841469.2)        &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 18 POINT (1481359 842474.9)       herbs</span></span>
-<span><span class="co">#&gt; 21 POINT (1449503 806527.6)        rock</span></span>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        2000           12         16</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea2 45.55757 -77.41739        2000           12         19</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea3 45.79170 -76.90276        2000            4         15</span></span>
+<span><span class="co">#&gt;                   geometry nfilc_class</span></span>
+<span><span class="co">#&gt; 1 POINT (1462530 839736.7)        rock</span></span>
+<span><span class="co">#&gt; 2 POINT (1449503 806527.6)        rock</span></span>
+<span><span class="co">#&gt; 3 POINT (1481359 842474.9)       herbs</span></span>
 <span></span>
 <span><span class="co"># And using our buffered polygons data, we can see that extracting NFILC data</span></span>
 <span><span class="co"># returns a column for each land cover class containing the percent of the</span></span>
@@ -533,48 +482,25 @@ extract those with our point and polygon data below.</p>
 <span>                         scanfi_data <span class="op">=</span> <span class="va">scanfi_data</span>,</span>
 <span>                         interpolate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [SCANFI Extraction] extracting SCANFI nfilc.</span></span>
-<span><span class="co">#&gt; [SCANFI Extraction] extracting SCANFI nfilc.</span></span>
 <span>                         </span>
 <span><span class="va">output</span><span class="op">[</span><span class="va">output</span><span class="op">$</span><span class="va">survey_year</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2002</span>, <span class="fl">2005</span><span class="op">)</span>,<span class="op">]</span></span>
-<span><span class="co">#&gt; Simple feature collection with 12 features and 14 fields</span></span>
+<span><span class="co">#&gt; Simple feature collection with 3 features and 14 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: 1449003 ymin: 806027.6 xmax: 1481859 ymax: 845271.5</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 1449003 ymin: 806027.6 xmax: 1481859 ymax: 842974.9</span></span>
 <span><span class="co">#&gt; Projected CRS: Canada_Albers_Equal_Area_Conic</span></span>
-<span><span class="co">#&gt; First 10 features:</span></span>
-<span><span class="co">#&gt;    SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
-<span><span class="co">#&gt; 1     FilledSurveyArea1 45.79141 -76.90451        2002            4         20</span></span>
-<span><span class="co">#&gt; 2     FilledSurveyArea2 45.81554 -77.14251        2002           12         14</span></span>
-<span><span class="co">#&gt; 3     FilledSurveyArea3 45.88427 -77.24522        2002            5         12</span></span>
-<span><span class="co">#&gt; 4     FilledSurveyArea4 45.82732 -77.12012        2002            8         17</span></span>
-<span><span class="co">#&gt; 7     FilledSurveyArea6 45.81553 -77.14251        2000           12         16</span></span>
-<span><span class="co">#&gt; 9     FilledSurveyArea6 45.81553 -77.14251        2002           12         14</span></span>
-<span><span class="co">#&gt; 12    FilledSurveyArea6 45.81553 -77.14251        2005           12         17</span></span>
-<span><span class="co">#&gt; 15    FilledSurveyArea7 45.82732 -77.12013        2002            8         17</span></span>
-<span><span class="co">#&gt; 18    FilledSurveyArea8 45.79170 -76.90276        2005            4         23</span></span>
-<span><span class="co">#&gt; 21   FilledSurveyArea10 45.55757 -77.41739        2000           12         19</span></span>
-<span><span class="co">#&gt;                          geometry nfilc_bryoid nfilc_herbs  nfilc_rock nfilc_shrub</span></span>
-<span><span class="co">#&gt; 1  POLYGON ((1481736 842405.3,...           NA          NA          NA          NA</span></span>
-<span><span class="co">#&gt; 2  POLYGON ((1463030 839737.5,...           NA          NA          NA          NA</span></span>
-<span><span class="co">#&gt; 3  POLYGON ((1453191 844771.5,...           NA          NA          NA          NA</span></span>
-<span><span class="co">#&gt; 4  POLYGON ((1464361 841469.8,...           NA          NA          NA          NA</span></span>
-<span><span class="co">#&gt; 7  POLYGON ((1463030 839736.7,...    0.0000000   23.010381 56.83391003    3.546713</span></span>
-<span><span class="co">#&gt; 9  POLYGON ((1463030 839736.7,...           NA          NA          NA          NA</span></span>
-<span><span class="co">#&gt; 12 POLYGON ((1463030 839736.7,...    0.0000000   22.058824 57.43944637    2.335640</span></span>
-<span><span class="co">#&gt; 15 POLYGON ((1464361 841469.2,...           NA          NA          NA          NA</span></span>
-<span><span class="co">#&gt; 18 POLYGON ((1481859 842474.9,...    0.2673797   41.087344  0.08912656    9.625668</span></span>
-<span><span class="co">#&gt; 21 POLYGON ((1450003 806527.6,...    0.0000000    5.793226 61.14081996    4.010695</span></span>
-<span><span class="co">#&gt;    nfilc_treed_broadleaf nfilc_treed_conifer nfilc_treed_mixed nfilc_water</span></span>
-<span><span class="co">#&gt; 1                     NA                  NA                NA          NA</span></span>
-<span><span class="co">#&gt; 2                     NA                  NA                NA          NA</span></span>
-<span><span class="co">#&gt; 3                     NA                  NA                NA          NA</span></span>
-<span><span class="co">#&gt; 4                     NA                  NA                NA          NA</span></span>
-<span><span class="co">#&gt; 7               11.50519            1.211073          3.892734     0.00000</span></span>
-<span><span class="co">#&gt; 9                     NA                  NA                NA          NA</span></span>
-<span><span class="co">#&gt; 12              13.40830            1.643599          3.114187     0.00000</span></span>
-<span><span class="co">#&gt; 15                    NA                  NA                NA          NA</span></span>
-<span><span class="co">#&gt; 18              27.27273            2.762923          6.327986    12.56684</span></span>
-<span><span class="co">#&gt; 21              16.66667            3.475936          8.912656     0.00000</span></span></code></pre></div>
+<span><span class="co">#&gt;   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day</span></span>
+<span><span class="co">#&gt; 1    FilledSurveyArea1 45.81553 -77.14251        2000           12         16</span></span>
+<span><span class="co">#&gt; 2    FilledSurveyArea2 45.55757 -77.41739        2000           12         19</span></span>
+<span><span class="co">#&gt; 3    FilledSurveyArea3 45.79170 -76.90276        2000            4         15</span></span>
+<span><span class="co">#&gt;                         geometry nfilc_bryoid nfilc_herbs  nfilc_rock nfilc_shrub</span></span>
+<span><span class="co">#&gt; 1 POLYGON ((1463030 839736.7,...   0.00000000   23.010381 56.83391003    3.546713</span></span>
+<span><span class="co">#&gt; 2 POLYGON ((1450003 806527.6,...   0.00000000    5.793226 61.14081996    4.010695</span></span>
+<span><span class="co">#&gt; 3 POLYGON ((1481859 842474.9,...   0.08912656   36.987522  0.08912656   12.299465</span></span>
+<span><span class="co">#&gt;   nfilc_treed_broadleaf nfilc_treed_conifer nfilc_treed_mixed nfilc_water</span></span>
+<span><span class="co">#&gt; 1              11.50519            1.211073          3.892734     0.00000</span></span>
+<span><span class="co">#&gt; 2              16.66667            3.475936          8.912656     0.00000</span></span>
+<span><span class="co">#&gt; 3              26.11408            2.762923          7.843137    13.81462</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="tips-and-tricks">6.4 Tips and tricks<a class="anchor" aria-label="anchor" href="#tips-and-tricks"></a>
@@ -593,6 +519,10 @@ user manually deletes them. However, if the user wishes to save disk
 space and reduce clutter, the files can be automatically deleted by
 setting <code>retain = FALSE</code> in
 <code><a href="../reference/scanfi_extract.html">scanfi_extract()</a></code>.</p>
+<p>Once you’ve extracted your SCANFI data, you may want to merge it back
+into the data you originally supplied to the <code>data</code> argument
+of <code><a href="../reference/data_fmt.html">data_fmt()</a></code>. You can do so using
+<code><a href="../reference/nc_covariates_merge.html">nc_covariates_merge()</a></code>.</p>
 <p><strong>Congratulations!</strong> You have now learned how to quickly
 download and extract the appropriate SCANFI data for your observation
 data using <code><a href="../reference/scanfi_download.html">scanfi_download()</a></code> and
