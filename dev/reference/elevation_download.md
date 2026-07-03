@@ -80,6 +80,7 @@ Downloads are facilitated by a call to
 
 [`elevatr::get_elev_raster()`](https://rdrr.io/pkg/elevatr/man/get_elev_raster.html)
 which this function wraps.
+
 [`elevation_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_extract.md)
 which can be used to extract data from loaded elevation data files.
 

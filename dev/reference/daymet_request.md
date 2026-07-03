@@ -157,8 +157,10 @@ Requests are facilitated by a call to
 
 [`daymet_download()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_download.md)
 to execute downloads once requests have been submitted and are complete.
+
 [`daymet_check()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_check.md)
 to check the status of existing requests.
+
 [`daymet_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_extract.md)
 which can be used to extract data from downloaded Daymet files.
 

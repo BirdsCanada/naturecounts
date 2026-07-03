@@ -85,6 +85,7 @@ Downloads are facilitated by a call to
 
 [`luna::getNASA()`](https://rdrr.io/pkg/luna/man/getNASA.html) which
 this function wraps.
+
 [`landcover_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/landcover_extract.md)
 which can be used to extract data from downloaded landcover data files.
 

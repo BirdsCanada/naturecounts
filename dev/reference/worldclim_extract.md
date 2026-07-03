@@ -110,10 +110,13 @@ of Climatology 37 (12): 4302-4315.
 
 ## See also
 
-[`geodata::worldclim_country()`](https://rspatial.github.io/geodata/reference/worldclim.html)
-which this function wraps.
 [`worldclim_download()`](https://birdscanada.github.io/naturecounts/dev/reference/worldclim_download.md)
 which can be used to download WorldClim data files.
+
+[`nc_covariates_merge()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_covariates_merge.md)
+to merge extracted covariate data into data originally provided to the
+`data` argument of
+[`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md).
 
 ## Examples
 

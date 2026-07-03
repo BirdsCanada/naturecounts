@@ -138,13 +138,14 @@ requested.
 
 ## See also
 
-[`terra::extract()`](https://rspatial.github.io/terra/reference/extract.html)
-which is used to extract values from MODIS data for `sf` 'POINT' and
-`terra` 'points' input data.
+[`vegetation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/vegetation_download.md)
+which can be used to download data from the MODIS Vegetation Indices
+database.
 
-[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html)
-which is used to extract values from MODIS data for `sf` 'POLYGON' or
-`terra` 'polygons' input data.
+[`nc_covariates_merge()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_covariates_merge.md)
+to merge extracted covariate data into data originally provided to the
+`data` argument of
+[`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md).
 
 ## Examples
 

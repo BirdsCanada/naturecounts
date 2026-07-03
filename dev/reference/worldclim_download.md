@@ -87,6 +87,7 @@ of Climatology 37 (12): 4302-4315.
 
 [`geodata::worldclim_country()`](https://rspatial.github.io/geodata/reference/worldclim.html)
 which this function wraps.
+
 [`worldclim_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/worldclim_extract.md)
 which can be used to extract data from loaded WorldClim data files.
 

@@ -104,6 +104,7 @@ Downloads are facilitated by a call to
 
 [`luna::getNASA()`](https://rdrr.io/pkg/luna/man/getNASA.html) which
 this function wraps.
+
 [`vegetation_extract()`](https://birdscanada.github.io/naturecounts/dev/reference/vegetation_extract.md)
 which can be used to extract data from downloaded vegetation data files.
 

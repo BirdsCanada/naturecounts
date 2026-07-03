@@ -104,13 +104,13 @@ appropriately.
 
 ## See also
 
-[`terra::extract()`](https://rspatial.github.io/terra/reference/extract.html)
-which is used to extract values from MODIS data for `sf` 'POINT' and
-`terra` 'points' input data.
+[`landcover_download()`](https://birdscanada.github.io/naturecounts/dev/reference/landcover_download.md)
+which can be used to download data from the MODIS Landcover dataset.
 
-[`landscapemetrics::calculate_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html)
-which is used to extract proportions of each land cover type within
-provided `sf` 'POLYGON' or `terra` 'polygons' polygons.
+[`nc_covariates_merge()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_covariates_merge.md)
+to merge extracted covariate data into data originally provided to the
+`data` argument of
+[`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md).
 
 ## Examples
 

@@ -138,6 +138,11 @@ Quebec, Canada.
 which can be used to download data from SCANFI data files and load them
 into the environment.
 
+[`nc_covariates_merge()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_covariates_merge.md)
+to merge extracted covariate data into data originally provided to the
+`data` argument of
+[`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md).
+
 ## Examples
 
 ``` r

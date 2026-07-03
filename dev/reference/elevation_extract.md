@@ -57,13 +57,14 @@ This can be accessed using
 
 ## See also
 
-[`terra::extract()`](https://rspatial.github.io/terra/reference/extract.html)
-which is used to extract values from Terrain Tiles data for `sf` 'POINT'
-and `terra` 'points' input data.
+[`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md)
+which can be used to download data from the MapZen Terrain Tiles
+database.
 
-[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html)
-which is used to extract values from Terrain Tiles data for sf 'POLYGON'
-or terra 'polygons' input data.
+[`nc_covariates_merge()`](https://birdscanada.github.io/naturecounts/dev/reference/nc_covariates_merge.md)
+to merge extracted covariate data into data originally provided to the
+`data` argument of
+[`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md).
 
 ## Examples
 
