@@ -42,8 +42,6 @@ house_finches <- nc_data_dl(
 
     ## Collecting available records...
 
-    ## The server did not respond within 120s. Trying again...
-
     ##      collection nrecords
     ## 1      ABATLAS1        5
     ## 2      ABATLAS2      202

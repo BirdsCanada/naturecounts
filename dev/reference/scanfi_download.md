@@ -149,9 +149,12 @@ output <- scanfi_download(data = bcch,
                           progress = FALSE)
 #> Warning: [SCANFI Download] Data contains years more than 5 years away from nearest SCANFI snapshot (1978, 1979). No value will be returned for observations in these years.
 #> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
-#> Warning: downloaded length 13500416 != reported length 79904721
-#> Warning: URL 'https://ftp.maps.canada.ca/pub/nrcan_rncan/Forests_Foret/SCANFI/v2/SCANFI_spsCC_ponderosaPine_1985_v2_20260119.tif': status was 'Transferred a partial file'
-#> Error: download from 'https://ftp.maps.canada.ca/pub/nrcan_rncan/Forests_Foret/SCANFI/v2/SCANFI_spsCC_ponderosaPine_1985_v2_20260119.tif' failed
+#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
+#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
+#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
+#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
+#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
+#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
 
 # We can also manually specify the snapshot years to download with no input
 # data required like this:
@@ -159,7 +162,6 @@ output <- scanfi_download(covariates = "scanfi_ponderosapine",
                           use_date = FALSE,
                           snapshot_year = c(2015, 2020),
                           progress = FALSE)
-#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
 #> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
 
 ```

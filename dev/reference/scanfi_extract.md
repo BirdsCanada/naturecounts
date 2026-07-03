@@ -154,11 +154,6 @@ scanfi <- scanfi_download(data = bcch,
                           covariates = "scanfi_ponderosapine",
                           progress = FALSE)
 #> Warning: [SCANFI Download] Data contains years more than 5 years away from nearest SCANFI snapshot (1978, 1979). No value will be returned for observations in these years.
-#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
-#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
-#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
-#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
-#> [SCANFI Download] downloading SCANFI ponderosapine. Files are large and may require a fair bit of download and processing time.
 
 # Create sf object to use in extraction.
 bcch <- data_fmt(bcch)
@@ -169,10 +164,12 @@ output <- scanfi_extract(data = bcch,
                          scanfi_data = scanfi)
 #> Warning: [SCANFI Extraction] no covariates specified in the covariates argument. Proceeding to extract the covariates found in scanfi_data layers: scanfi_ponderosapine.
 #> [SCANFI Extraction] extracting SCANFI ponderosapine.
-#> Warning: GDAL Error 1: TIFFFillTile:Read error at row 4294967295, col 4294967295, tile 268821; got 0 bytes, expected 84
-#> Warning: GDAL Error 1: TIFFReadEncodedTile() failed.
-#> Warning: GDAL Error 1: /home/runner/work/naturecounts/naturecounts/docs/dev/reference/scanfi/SCANFI_spsCC_ponderosaPine_1985_v2_20260119.tif, band 1: IReadBlock failed at X offset 476, Y offset 385: TIFFReadEncodedTile() failed.
-#> Error: [crop] too few values for writing: 0 < 21132009
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
 
 # Extract with interpolation for interceding years.
 output <- scanfi_extract(data = bcch,
@@ -181,8 +178,10 @@ output <- scanfi_extract(data = bcch,
 #> Warning: [SCANFI Extraction] no covariates specified in the covariates argument. Proceeding to extract the covariates found in scanfi_data layers: scanfi_ponderosapine.
 #> Warning: [SCANFI Download] Data contains years more than 5 years away from nearest SCANFI snapshot (1978, 1979). No value will be returned for observations in these years.
 #> [SCANFI Extraction] extracting SCANFI ponderosapine.
-#> Warning: GDAL Error 1: TIFFFillTile:Read error at row 4294967295, col 4294967295, tile 268821; got 0 bytes, expected 84
-#> Warning: GDAL Error 1: TIFFReadEncodedTile() failed.
-#> Warning: GDAL Error 1: /home/runner/work/naturecounts/naturecounts/docs/dev/reference/scanfi/SCANFI_spsCC_ponderosaPine_1985_v2_20260119.tif, band 1: IReadBlock failed at X offset 476, Y offset 385: TIFFReadEncodedTile() failed.
-#> Error: [crop] too few values for writing: 0 < 21132009
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
+#> [SCANFI Extraction] extracting SCANFI ponderosapine.
 ```
