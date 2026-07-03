@@ -113,7 +113,7 @@ The input data must also have a column containing the month in which each observ
 To execute these extractions, we will need to point `worldclim_extract()` to the object containing our WorldClim data using the argument `worldclim_data`. Conveniently, this object is exactly the output of `worldclim_download()` that we stored in our `climate_data` object.
 
 ``` {r}
-# We will start by fetching the elevation data for our point dataset created above.
+# We will start by fetching the WorldClim data for our point dataset created above.
 output <- worldclim_extract(data = formatted,
                             covariates = c("worldclim_tmax", "worldclim_tmin"),
                             worldclim_data = climate_data)
@@ -139,6 +139,8 @@ We can see that the mean minimum and maximum temperature values have been added 
 
 For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names and month data can be provided directly to `worldclim_download()` and `worldclim_extract()` via the `site_name` and `date_month` argument respectively. If you have already provided this information in a call to `data_fmt()` and are providing the output of that function as the `data` argument of either `worldclim_` function, you do not need to specify this information again.
 
-By default, the WorldClim files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `elevation_extract()`.
+By default, the WorldClim files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `worldclim_extract()`.
+
+Once you've extracted your WorldClim data, you may want to merge it back into the data you originally supplied to the `data` argument of `data_fmt()`. You can do so using `nc_covariates_merge()`.
 
 **Congratulations!** You have now learned how to quickly download and extract the appropriate WorldClim data for your observation data using `worldclim_download()` and `worldclim_extract()`.

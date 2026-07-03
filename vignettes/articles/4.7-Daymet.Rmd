@@ -302,4 +302,6 @@ For users using data in non-BMDE formats (the default column-set downloaded via 
 
 By default, the Daymet files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `daymet_extract()`.
 
+Once you've extracted your Daymet data, you may want to merge it back into the data you originally supplied to the `data` argument of `data_fmt()`. You can do so using `nc_covariates_merge()`.
+
 **Congratulations!** You have now learned how to request, download, and extract the appropriate Daymet data for your observation data using `daymet_request()`, `daymet_download()` and `daymet_extract()`.

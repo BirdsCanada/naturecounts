@@ -87,7 +87,8 @@ Supplying our formatted data and EarthData account email to `landcover_download(
 # Let's see which files would be downloaded for our data
 
 files <- landcover_download(data = formatted,
-                            ed_transfer = FALSE)
+                            ed_transfer = FALSE,
+                            progress = FALSE)
 
 head(files)
 
@@ -97,6 +98,7 @@ ed_email <- "rmacklin@birdscanada.org"
 
 files <- landcover_download(data = formatted,
                             ed_email = ed_email,
+                            progress = FALSE,
                             ed_transfer = TRUE) # We don't need to specify this as
                                                 # TRUE is the default, but we have
                                                 # done so for clarity.
@@ -151,5 +153,7 @@ We can see that we have gained a number of columns, each with the percentage of 
 For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names and year data can be provided directly to `landcover_download()` and `landcover_extract()` via the `site_name` and `date_year` columns. If you have already provided this information in a call to `data_fmt()` and are providing the output of that function as the `data` argument of either landcover function, you do not need to specify this information again.
 
 By default, the MODIS files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `landcover_extract()`.
+
+Once you've extracted your landcover data, you may want to merge it back into the data you originally supplied to the `data` argument of `data_fmt()`. You can do so using `nc_covariates_merge()`.
 
 **Congratulations!** You have now learned how to quickly download and extract the appropriate landcover data for your observation data using `landcover_download()` and `landcover_extract()`.

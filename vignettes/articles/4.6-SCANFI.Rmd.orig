@@ -201,4 +201,6 @@ For users using data in non-BMDE formats (the default column-set downloaded via 
 
 By default, the SCANFI files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `scanfi_extract()`.
 
+Once you've extracted your SCANFI data, you may want to merge it back into the data you originally supplied to the `data` argument of `data_fmt()`. You can do so using `nc_covariates_merge()`.
+
 **Congratulations!** You have now learned how to quickly download and extract the appropriate SCANFI data for your observation data using `scanfi_download()` and `scanfi_extract()`.
