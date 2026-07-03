@@ -726,10 +726,10 @@ vegetation_extract <- function(
           data[
             data$SurveyAreaIdentifier == k &
               data$survey_year ==
-                modis_match$survey_year[
+                unique(modis_match$survey_year[
                   modis_match$filename == j &
                     modis_match$SurveyAreaIdentifier == k
-                ] &
+                ]) &
               data$yday %in%
                 modis_match$yday[
                   modis_match$filename == j &
@@ -798,10 +798,10 @@ vegetation_extract <- function(
           data[
             data$SurveyAreaIdentifier == k &
               data$survey_year ==
-                modis_match$survey_year[
+                unique(modis_match$survey_year[
                   modis_match$filename == j &
                     modis_match$SurveyAreaIdentifier == k
-                ] &
+                ]) &
               data$yday %in%
                 modis_match$yday[
                   modis_match$filename == j &

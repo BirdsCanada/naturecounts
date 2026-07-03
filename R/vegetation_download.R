@@ -161,6 +161,13 @@ vegetation_download <- function(
         ed_password <- parent.frame()$ed_password
       }
     }
+
+    # Attempt EarthData authentication
+    auth <- luna::earthdataLogin(
+      username = ed_email,
+      password = ed_password,
+      verbose = progress
+    )
   }
 
   # Check data is in the desired format.
@@ -422,8 +429,7 @@ vegetation_download <- function(
               "./modis/MOD13A1",
               paste0(dl_path, "/modis/MOD13A1")
             ),
-            username = ed_email,
-            password = ed_password,
+            auth = auth,
             verbose = progress
           ),
           warning = function(w) {

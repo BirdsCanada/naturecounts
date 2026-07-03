@@ -165,7 +165,7 @@ daymet_request <- function(
         prompt = paste0(
           "Please enter password for ",
           "EarthData user '",
-          ed_email,
+          ed_username,
           "'."
         )
       )

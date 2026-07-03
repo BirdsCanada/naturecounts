@@ -480,7 +480,7 @@ scanfi_extract <- function(
 
       scanfi_filled <- terra::as.polygons(terra::subst(
         scanfi_data[[j]][[i]],
-        from = unname(c(na.omit(unique(terra::values(scanfi_data[[j]][[
+        from = unname(c(stats::na.omit(unique(terra::values(scanfi_data[[j]][[
           i
         ]]))))),
         to = 1,

@@ -428,7 +428,7 @@ daymet_extract <- function(
       j_date <- as.Date(j)
 
       # Grab all observations needing data from date j.
-      pts_to_fill <- dplyr::filter(data, date == j_date)
+      pts_to_fill <- dplyr::filter(data, .data$date == j_date)
 
       request_name <- grep(
         pattern = j,
@@ -469,8 +469,8 @@ daymet_extract <- function(
       # Loop through each site and extract.
       for (k in unique(pts_to_fill$SurveyAreaIdentifier)) {
         tmp <- pts_to_fill %>%
-          dplyr::filter(SurveyAreaIdentifier == k) %>%
-          dplyr::select(SurveyAreaIdentifier, geometry) %>%
+          dplyr::filter(.data$SurveyAreaIdentifier == k) %>%
+          dplyr::select("SurveyAreaIdentifier", "geometry") %>%
           dplyr::distinct() %>%
           sf::st_transform(sf::st_crs(daymet))
 

@@ -60,7 +60,7 @@
 #'                             ed_username = ed_username)
 #' # Once email is received confirming that request has been processed, execute
 #' # download!
-#' downloaded <- daymet_download(daymet_reqs = requests
+#' downloaded <- daymet_download(daymet_reqs = requests,
 #'                               covariates = "daymet_prcp",
 #'                               ed_username = ed_username)
 #'
@@ -112,7 +112,7 @@ daymet_download <- function(
         prompt = paste0(
           "Please enter password for ",
           "EarthData user '",
-          ed_email,
+          ed_username,
           "'."
         )
       )

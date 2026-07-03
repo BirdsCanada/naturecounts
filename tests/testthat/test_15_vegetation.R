@@ -684,5 +684,3 @@ test_that("vegetation_extract() succeeds with alternate column names, either pas
     rep(FALSE, times = 8)
   )
 })
-
-unlink("./testdir", recursive = TRUE)

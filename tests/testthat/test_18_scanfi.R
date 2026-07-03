@@ -177,14 +177,14 @@ test_that("Results downloaded from scanfi_download() have expected features.", {
     ),
     "contains"
   ))
-})
 
-test_that("scanfi_download() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
   file.remove(
     "./testdir/scanfi/SCANFI_spsCC_ponderosaPine_2000_v2_20260119.tif",
     "./testdir/scanfi/SCANFI_spsCC_ponderosaPine_2005_v2_20260119.tif"
   )
+})
 
+test_that("scanfi_download() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
   expect_silent(
     ponderosa_attr <- suppressMessages(scanfi_download(
       data_fmt(

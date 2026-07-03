@@ -145,6 +145,13 @@ landcover_download <- function(
         ed_password <- parent.frame()$ed_password
       }
     }
+
+    # Attempt EarthData authentication
+    auth <- luna::earthdataLogin(
+      username = ed_email,
+      password = ed_password,
+      verbose = progress
+    )
   }
 
   # Check data is in the desired format.
@@ -434,8 +441,7 @@ landcover_download <- function(
             "./modis/MCD12Q1",
             paste0(dl_path, "/modis/MCD12Q1")
           ),
-          username = ed_email,
-          password = ed_password,
+          auth = auth,
           verbose = progress
         )
       )
@@ -465,8 +471,7 @@ landcover_download <- function(
               "./modis/MCD12Q1",
               paste0(dl_path, "/modis/MCD12Q1")
             ),
-            username = ed_email,
-            password = ed_password,
+            auth = auth,
             verbose = progress
           ))
 
@@ -491,8 +496,7 @@ landcover_download <- function(
                 "./modis/MCD12Q1",
                 paste0(dl_path, "/modis/MCD12Q1")
               ),
-              username = ed_email,
-              password = ed_password,
+              auth = auth,
               verbose = progress
             ))
 
@@ -511,8 +515,7 @@ landcover_download <- function(
                   "./modis/MCD12Q1",
                   paste0(dl_path, "/modis/MCD12Q1")
                 ),
-                username = ed_email,
-                password = ed_password,
+                auth = auth,
                 verbose = progress
               ))
 
