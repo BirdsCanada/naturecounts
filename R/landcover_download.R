@@ -454,7 +454,7 @@ landcover_download <- function(
         ) {
           stop(modis_files, call. = FALSE)
         } else if (
-          stringr::str_detect(mod, "could not reach Earthdata Login")
+          stringr::str_detect(modis_files, "could not reach Earthdata Login")
         ) {
           modis_files <- try(
             luna::getNASA(
