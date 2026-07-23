@@ -54,7 +54,7 @@ nc_count(region = list(statprov = "NB"))
     ## # A tibble: 93 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS               NA NA            16873
+    ##  1 ATOWLS                3 by request    16908
     ##  2 BBL-1960-1969         5 full          56578
     ##  3 BBL-1970-1979         5 full          68636
     ##  4 BBL-1980-1989         5 full          82650
@@ -63,7 +63,7 @@ nc_count(region = list(statprov = "NB"))
     ##  7 BBL-2010-2019         5 full          57888
     ##  8 BBL-2020-2029         5 full          26199
     ##  9 BBS                   5 full          54578
-    ## 10 BBS50-CAN             3 by request   227236
+    ## 10 BBS50-CAN             3 by request   247843
     ## # ℹ 83 more rows
 
 You can only use **one** type of region, but you can filter to multiple
@@ -81,7 +81,7 @@ nc_count(region = list(statprov = c("PE", "NB")))
     ## # A tibble: 95 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS               NA NA            23066
+    ##  1 ATOWLS                3 by request    23111
     ##  2 BBL-1960-1969         5 full          63292
     ##  3 BBL-1970-1979         5 full          85997
     ##  4 BBL-1980-1989         5 full          92092
@@ -90,7 +90,7 @@ nc_count(region = list(statprov = c("PE", "NB")))
     ##  7 BBL-2010-2019         5 full          67261
     ##  8 BBL-2020-2029         5 full          33123
     ##  9 BBS                   5 full          61249
-    ## 10 BBS50-CAN             3 by request   261366
+    ## 10 BBS50-CAN             3 by request   285733
     ## # ℹ 85 more rows
 
 ## In Detail - Codes
@@ -160,8 +160,8 @@ nc_count(species = 13210, region = list(country = "US"))
     ##  7 BBL-2010-2019         5 full           2978
     ##  8 BBL-2020-2029         5 full           1625
     ##  9 BBS                   5 full          23090
-    ## 10 BBS50-US-EAST         3 by request    13639
-    ## 11 BBS50-US-WEST         3 by request    17809
+    ## 10 BBS50-US-EAST         3 by request    14234
+    ## 11 BBS50-US-WEST         3 by request    19138
     ## 12 BCN                   5 full              8
     ## 13 CBC                   3 by request    30348
     ## 14 GBIF_50C9509D         5 full              1

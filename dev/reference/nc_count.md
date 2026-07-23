@@ -198,7 +198,7 @@ nc_count()
 #>  5 ACCWS                 5 full          27807
 #>  6 ACCWS_HIST            5 full          20461
 #>  7 ATBANS                3 by request      268
-#>  8 ATOWLS               NA NA            36331
+#>  8 ATOWLS                3 by request    36376
 #>  9 AWSGS                 3 by request    17968
 #> 10 BBL-1960-1969         5 full       15045208
 #> # ℹ 547 more rows
@@ -222,7 +222,7 @@ nc_count(region = list(statprov = "MB"))
 #>  7 BBL-2010-2019         5 full         175584
 #>  8 BBL-2020-2029         5 full          74702
 #>  9 BBS                   5 full          86997
-#> 10 BBS50-CAN             3 by request   536767
+#> 10 BBS50-CAN             3 by request   578992
 #> # ℹ 103 more rows
 # }
 
