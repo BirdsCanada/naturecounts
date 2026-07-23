@@ -70,3 +70,21 @@ respectively, as follows:
   - Locally password can be stored in .Renviron as naturecounts_testuser
     = PASSWORD
   - For remote testing, password is supplied as encrypted values
+- Tests for covariate download and extraction functions are run using
+  the EarthData user with email `rmacklin@birdscanada.org` and username
+  `rdjmacklin_bc`. If Rory Macklin can’t be contacted to access
+  credentials, a new user can be made with necessary changes to
+  `ed_email` argument in tests for
+  [`landcover_download()`](https://birdscanada.github.io/naturecounts/dev/reference/landcover_download.md)
+  and
+  [`vegetation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/vegetation_download.md)
+  and to `ed_username` argument in tests for
+  [`daymet_download()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_download.md)
+  ,
+  [`daymet_request()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_request.md)
+  and
+  [`daymet_check()`](https://birdscanada.github.io/naturecounts/dev/reference/daymet_check.md).
+  - Locally, password can be stored in .Renviron as EarthData_password =
+    PASSWORD or supplied via
+    [`askpass::askpass()`](https://r-lib.r-universe.dev/askpass/reference/askpass.html)
+    built into functions.

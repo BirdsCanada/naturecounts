@@ -153,3 +153,37 @@ to merge extracted covariate data into data originally provided to the
 [`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md).
 
 ## Examples
+
+``` r
+if (FALSE) { # interactive()
+# Convert included test data on black-capped chickadees to sf POINT object
+bcch <- sf::st_as_sf(
+  bcch,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+)
+
+# Grab data from a single year
+bcch <- bcch[bcch$survey_year == 2011,]
+
+# Enter EarthData username
+ed_username <- "your EarthData username"
+
+# Submit Daymet requests
+requests <- daymet_download(data = bcch,
+                            covariates = "daymet_prcp",
+                            ed_username = ed_username)
+
+# Once email is received confirming that request has been processed, execute
+# download!
+downloaded <- daymet_download(daymet_reqs = requests,
+                              covariates = "daymet_prcp",
+                              ed_username = ed_username)
+
+# Once download is complete, extract!
+extracted <- daymet_extract(data = bcch,
+                            daymet_reqs = requests,
+                            covariates = "daymet_prcp")
+
+}
+```

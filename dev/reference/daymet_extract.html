@@ -182,7 +182,38 @@ covariate data into data originally provided to the <code>data</code> argument o
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="co"># Convert included test data on black-capped chickadees to sf POINT object</span></span></span>
+<span class="r-in"><span><span class="va">bcch</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">bcch</span>,</span></span>
+<span class="r-in"><span>  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  crs <span class="op">=</span> <span class="fl">4326</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Grab data from a single year</span></span></span>
+<span class="r-in"><span><span class="va">bcch</span> <span class="op">&lt;-</span> <span class="va">bcch</span><span class="op">[</span><span class="va">bcch</span><span class="op">$</span><span class="va">survey_year</span> <span class="op">==</span> <span class="fl">2011</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Enter EarthData username</span></span></span>
+<span class="r-in"><span><span class="va">ed_username</span> <span class="op">&lt;-</span> <span class="st">"your EarthData username"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Submit Daymet requests</span></span></span>
+<span class="r-in"><span><span class="va">requests</span> <span class="op">&lt;-</span> <span class="fu"><a href="daymet_download.html">daymet_download</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bcch</span>,</span></span>
+<span class="r-in"><span>                            covariates <span class="op">=</span> <span class="st">"daymet_prcp"</span>,</span></span>
+<span class="r-in"><span>                            ed_username <span class="op">=</span> <span class="va">ed_username</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Once email is received confirming that request has been processed, execute</span></span></span>
+<span class="r-in"><span><span class="co"># download!</span></span></span>
+<span class="r-in"><span><span class="va">downloaded</span> <span class="op">&lt;-</span> <span class="fu"><a href="daymet_download.html">daymet_download</a></span><span class="op">(</span>daymet_reqs <span class="op">=</span> <span class="va">requests</span>,</span></span>
+<span class="r-in"><span>                              covariates <span class="op">=</span> <span class="st">"daymet_prcp"</span>,</span></span>
+<span class="r-in"><span>                              ed_username <span class="op">=</span> <span class="va">ed_username</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Once download is complete, extract!</span></span></span>
+<span class="r-in"><span><span class="va">extracted</span> <span class="op">&lt;-</span> <span class="fu">daymet_extract</span><span class="op">(</span>data <span class="op">=</span> <span class="va">bcch</span>,</span></span>
+<span class="r-in"><span>                            daymet_reqs <span class="op">=</span> <span class="va">requests</span>,</span></span>
+<span class="r-in"><span>                            covariates <span class="op">=</span> <span class="st">"daymet_prcp"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

@@ -68,7 +68,7 @@
 <div class="section level4">
 <h4 id="desired-behaviour">Desired behaviour<a class="anchor" aria-label="anchor" href="#desired-behaviour"></a></h4>
 <p>Required and extra fields returned by the API are expected and treated, respectively, as follows:</p>
-<table class="table"><colgroup><col width="21%"><col width="31%"><col width="31%"><col width="14%"></colgroup><thead><tr><th>Function</th>
+<table class="table"><colgroup><col width="22%"><col width="27%"><col width="27%"><col width="22%"></colgroup><thead><tr><th>Function</th>
 <th>API Entry Point</th>
 <th>Required fields</th>
 <th>Extra fields</th>
@@ -143,6 +143,9 @@ Some API entry points return data in a container, for example,</p>
 <ul><li>Tests are run using the user “testuser”
 <ul><li>Locally password can be stored in .Renviron as naturecounts_testuser = PASSWORD</li>
 <li>For remote testing, password is supplied as encrypted values</li>
+</ul></li>
+<li>Tests for covariate download and extraction functions are run using the EarthData user with email <code>rmacklin@birdscanada.org</code> and username <code>rdjmacklin_bc</code>. If Rory Macklin can’t be contacted to access credentials, a new user can be made with necessary changes to <code>ed_email</code> argument in tests for <code><a href="reference/landcover_download.html">landcover_download()</a></code> and <code><a href="reference/vegetation_download.html">vegetation_download()</a></code> and to <code>ed_username</code> argument in tests for <code><a href="reference/daymet_download.html">daymet_download()</a></code> , <code><a href="reference/daymet_request.html">daymet_request()</a></code> and <code><a href="reference/daymet_check.html">daymet_check()</a></code>.
+<ul><li>Locally, password can be stored in .Renviron as EarthData_password = PASSWORD or supplied via <code><a href="https://r-lib.r-universe.dev/askpass/reference/askpass.html" class="external-link">askpass::askpass()</a></code> built into functions.</li>
 </ul></li>
 </ul></div>
 </div>
