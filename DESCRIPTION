@@ -43,7 +43,7 @@ Suggests:
     here,
     knitr,
     landscapemetrics,
-    luna,
+    luna (>= 0.4-1),
     mapview,
     measurements,
     patchwork,

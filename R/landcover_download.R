@@ -429,8 +429,7 @@ landcover_download <- function(
     # Ensures that the closest year available for years before the start of
     # dataset coverage (2001) is downloaded.
     if (TRUE %in% (data$survey_year < 2001)) {
-      modis_files <- c(
-        modis_files,
+      modis_files <- try(
         luna::getNASA(
           product = "MCD12Q1",
           start = "2001-01-01", # Starting year
@@ -445,8 +444,41 @@ landcover_download <- function(
           ),
           auth = auth,
           verbose = progress
-        )
+        ),
+        silent = TRUE
       )
+
+      if (inherits(modis_files, "try-error")) {
+        if (
+          stringr::str_detect(modis_files, "aborted by an application callback")
+        ) {
+          stop(modis_files, call. = FALSE)
+        } else if (
+          stringr::str_detect(mod, "could not reach Earthdata Login")
+        ) {
+          modis_files <- try(
+            luna::getNASA(
+              product = "MCD12Q1",
+              start = "2001-01-01", # Starting year
+              end = "2001-12-31", # End year
+              aoi = terra::ext(terra::project(study_area, "epsg:4326")),
+              download = TRUE,
+              overwrite = FALSE,
+              path = ifelse(
+                is.null(dl_path),
+                "./modis/MCD12Q1",
+                paste0(dl_path, "/modis/MCD12Q1")
+              ),
+              auth = auth,
+              verbose = progress
+            ),
+            silent = TRUE
+          )
+          if (inherits(modis_files, "try-error")) {
+            stop(modis_files, call. = FALSE)
+          }
+        }
+      }
 
       # Record years with no data associated.
       missing_year <- c(
