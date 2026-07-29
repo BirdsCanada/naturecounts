@@ -183,25 +183,25 @@ the "Full access?" box in Step 2 of the form.
 ## Examples
 
 ``` r
+
 # Count all publicly available records:
 # \donttest{
 nc_count()
 #> Without a username, using 'show = "all"'
-#> The server did not respond within 120s. Trying again...
-#> # A tibble: 544 × 4
+#> # A tibble: 557 × 4
 #>    collection    akn_level access     nrecords
 #>    <chr>             <int> <chr>         <int>
 #>  1 ABATLAS1              5 full         122258
 #>  2 ABATLAS2              5 full         201357
 #>  3 ABBIRDRECS            5 full         357264
 #>  4 ABOWLS                3 by request    20956
-#>  5 ACCWS                 3 by request    27801
+#>  5 ACCWS                 5 full          27807
 #>  6 ACCWS_HIST            5 full          20461
 #>  7 ATBANS                3 by request      268
-#>  8 ATOWLS                3 by request    35458
+#>  8 ATOWLS                3 by request    36376
 #>  9 AWSGS                 3 by request    17968
 #> 10 BBL-1960-1969         5 full       15045208
-#> # ℹ 534 more rows
+#> # ℹ 547 more rows
 # }
 
 # Count publicly available records for Manitoba, Canada
@@ -222,7 +222,7 @@ nc_count(region = list(statprov = "MB"))
 #>  7 BBL-2010-2019         5 full         175584
 #>  8 BBL-2020-2029         5 full          74702
 #>  9 BBS                   5 full          86997
-#> 10 BBS50-CAN             3 by request   536767
+#> 10 BBS50-CAN             3 by request   578992
 #> # ℹ 103 more rows
 # }
 

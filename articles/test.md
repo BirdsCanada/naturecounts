@@ -59,6 +59,7 @@ prevent duplicates.
 > **Note**: Must use `fig.alt` and set `fig.cap = ""`
 
 ``` r
+
 library(naturecounts)
 library(ggplot2)
 
@@ -79,6 +80,7 @@ With **`include_graphics()`**
 > Use `fig.alt = "Test of birds canada logo", fig.cap = ""`
 
 ``` r
+
 include_graphics("figures_other/logo.png")
 ```
 

@@ -10,6 +10,7 @@ use the `sf` package for working with spatial data, and the
 `rnaturalearth` package to get example spatial data.
 
 ``` r
+
 library(naturecounts)
 library(dplyr)
 library(ggplot2)
@@ -24,6 +25,7 @@ transformed from CRS EPSG code 4326 (unprojected lat/lon) to 3347 (NAD83
 Statistics Canada).
 
 ``` r
+
 na <- ne_countries(continent = "north america", returnclass = "sf") |>
   st_transform(3347)
 
@@ -41,6 +43,7 @@ object. Because the data contains lat/lon, we assign it to CRS 4326 for
 GPS lat/lon data, and then convert it to match the crs of our maps.
 
 ``` r
+
 iba <- meta_iba_codes() |>
   st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
   st_transform(3347)
@@ -58,18 +61,21 @@ If you want to narrow in on only one province,
 1.  filter the IBA data frame
 
 ``` r
+
 iba_nwt <- filter(iba, statprov == "NT")
 ```
 
 2.  get the limits of the Northwest Territories
 
 ``` r
+
 limits <- st_bbox(filter(canada, name == "Northwest Territories"))
 ```
 
 Put it all together
 
 ``` r
+
 ggplot() + 
   theme_bw() +
   geom_sf(data = canada) +
@@ -84,6 +90,7 @@ For a more detailed view of IBAs, we can also grab the shape files from
 Birds Canada.
 
 ``` r
+
 iba <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=atlas:iba&outputFormat=application%2Fjson") |>
   st_transform(3347)
 ```
@@ -98,6 +105,7 @@ iba <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&
     ## Geodetic CRS:  WGS 84
 
 ``` r
+
 iba <- filter(iba, Status == "confirmed") # Omit historical areas
 
 ggplot() +
@@ -113,6 +121,7 @@ Note that you can move the map, zoom in and out, and click on specific
 IBAs for more information.
 
 ``` r
+
 mapview(iba)
 ```
 
@@ -121,6 +130,7 @@ mapview(iba)
 Bird Conservation Regions are also available from Birds Canada.
 
 ``` r
+
 bcr <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=atlas:bcr&outputFormat=application%2Fjson") |>
   st_transform(3347)
 ```
@@ -135,6 +145,7 @@ bcr <- st_read("https://birdmap.birdscanada.org/geoserver/atlas/ows?service=WFS&
     ## Geodetic CRS:  WGS 84
 
 ``` r
+
 ggplot() +
   theme_bw() +
   geom_sf(data = na, colour = "grey80") +
@@ -147,5 +158,6 @@ ggplot() +
 And again, interactive maps can be really useful.
 
 ``` r
+
 mapview(bcr)
 ```

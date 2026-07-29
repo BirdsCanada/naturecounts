@@ -49,6 +49,7 @@ data.frame()
 ## Examples
 
 ``` r
+
 # What tables are available? What 'filters' do they take? Are any 'required'?
 
 nc_query_table(username = "sample")

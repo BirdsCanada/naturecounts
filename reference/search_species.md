@@ -36,6 +36,7 @@ Data frame of species ids and taxonomic information
 ## Examples
 
 ``` r
+
 # Show all ids
 search_species()
 #> # A tibble: 41,479 × 5
@@ -105,18 +106,18 @@ search_species("black-capped chickadee", show = "all")
 nc_count(species = 14280)
 #> Without a username, using 'show = "all"'
 #> Using filters: species (14280)
-#> # A tibble: 325 × 4
-#>    collection    akn_level access     nrecords
-#>    <chr>             <int> <chr>         <int>
-#>  1 ABATLAS1              5 full           1314
-#>  2 ABATLAS2              5 full           3772
-#>  3 ABBIRDRECS            5 full           2931
-#>  4 ACCWS                 3 by request       17
-#>  5 BBL-1960-1969         5 full         108205
-#>  6 BBL-1970-1979         5 full         114970
-#>  7 BBL-1980-1989         5 full         158692
-#>  8 BBL-1990-1999         5 full         149381
-#>  9 BBL-2000-2009         5 full         156289
-#> 10 BBL-2010-2019         5 full         138297
-#> # ℹ 315 more rows
+#> # A tibble: 338 × 4
+#>    collection    akn_level access nrecords
+#>    <chr>             <int> <chr>     <int>
+#>  1 ABATLAS1              5 full       1314
+#>  2 ABATLAS2              5 full       3772
+#>  3 ABBIRDRECS            5 full       2931
+#>  4 ACCWS                 5 full         17
+#>  5 BBL-1960-1969         5 full     108205
+#>  6 BBL-1970-1979         5 full     114970
+#>  7 BBL-1980-1989         5 full     158692
+#>  8 BBL-1990-1999         5 full     149381
+#>  9 BBL-2000-2009         5 full     156289
+#> 10 BBL-2010-2019         5 full     138297
+#> # ℹ 328 more rows
 ```

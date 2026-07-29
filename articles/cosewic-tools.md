@@ -1,6 +1,7 @@
 # COSEWIC Tools
 
 ``` r
+
 library(naturecounts)
 library(dplyr) # For manipulating data frames
 library(patchwork) # For combining plots
@@ -33,6 +34,7 @@ your own data](#using-your-own-data)).
 First we’ll calculate the ranges using default arguments and call `r`.
 
 ``` r
+
 r <- cosewic_ranges(bcch)
 ```
 
@@ -44,6 +46,7 @@ object is a list with two items:
 - `eoo` which is also an sf or spatial data frame.
 
 ``` r
+
 r
 #> $iao
 #> Simple feature collection with 475 features and 11 fields
@@ -98,6 +101,7 @@ You can access either of these items with the `$` to pull out just what
 you’re interested in.
 
 ``` r
+
 r$eoo
 #> Simple feature collection with 1 feature and 4 fields
 #> Geometry type: POLYGON
@@ -117,6 +121,7 @@ The values you are likely to be especially interested in are the `iao`
 and the `eoo` columns within these spatial dataframes
 
 ``` r
+
 r$iao$iao[1]
 #> 132 [km^2]
 r$eoo$eoo[1]
@@ -137,6 +142,7 @@ If this is too much information, omit the spatial data from the range
 calculations.
 
 ``` r
+
 cosewic_ranges(bcch, spatial = FALSE)
 #> # A tibble: 1 × 10
 #>   species_id n_records_total min_record max_record median_record grid_size_km
@@ -155,6 +161,7 @@ includes the spatial data so we can easily create figures of these
 ranges.
 
 ``` r
+
 r <- cosewic_ranges(bcch)
 cosewic_plot(r, title = "Black-capped Chickadee")
 #> Zoom: 9
@@ -175,6 +182,7 @@ You can try any map tile listed in
 note that not all may work for your region and many require an API key.
 
 ``` r
+
 r <- cosewic_ranges(bcch)
 cosewic_plot(r, map = "cartolight", title = "Black-capped Chickadee")
 #> Zoom: 9
@@ -199,6 +207,7 @@ naturecounts. We’ll use the
 find the path to the csv file.
 
 ``` r
+
 # Assign the path or location
 path <- system.file("extdata", "bcch.csv", package = "naturecounts")
 path
@@ -214,6 +223,7 @@ for more details.
 Now we’ll read the data and take a quick look.
 
 ``` r
+
 bc <- read.csv(path)
 head(bc)
 #>          id      lat       lon n
@@ -234,6 +244,7 @@ In our example we also specify `group = NULL` to tell the function that
 we’re not using a grouping column.
 
 ``` r
+
 r <- cosewic_ranges(
   bc,
   record = "id",
@@ -250,6 +261,7 @@ would like to work with. We’ll use the built in `pops` data set for
 this.
 
 ``` r
+
 head(pops)
 #>   record_id latitude longitude   population
 #> 1 968039498 45.51110 -77.50533 Population 1
@@ -265,6 +277,7 @@ option to tell the function which column contains the groups. Then
 calculations are performed separately for each group.
 
 ``` r
+
 r <- cosewic_ranges(pops, group = "population")
 r$eoo
 #> Simple feature collection with 2 features and 4 fields
@@ -286,6 +299,7 @@ r$eoo
 And we get a list of plots, one for each group.
 
 ``` r
+
 p <- cosewic_plot(r, group = "population")
 p[[1]]
 #> Zoom: 9
@@ -294,6 +308,7 @@ p[[1]]
 ![](cosewic-tools_files/figure-html/unnamed-chunk-14-1.png)
 
 ``` r
+
 p[[2]]
 #> Zoom: 6
 #> Fetching 4 missing tiles
@@ -308,6 +323,7 @@ For a combined plot, we can use the
 function from the patchwork package to combine these figures.
 
 ``` r
+
 wrap_plots(p)
 #> Zoom: 9
 #> Zoom: 6
@@ -332,6 +348,7 @@ First, use the sf package to read in your IAO grid. Here we’ll use a
 mini example IAO grid stored in the package
 
 ``` r
+
 path <- system.file("extdata", "iao_bcch_grid.gpkg", package = "naturecounts")
 path
 #> [1] "/home/runner/work/_temp/Library/naturecounts/extdata/iao_bcch_grid.gpkg"
@@ -350,6 +367,7 @@ grid <- sf::st_read(path)
 This is what our example grid looks like
 
 ``` r
+
 ggplot(data = grid) + geom_sf()
 ```
 
@@ -360,6 +378,7 @@ Next we’ll pass this as an argument to our
 function.
 
 ``` r
+
 r <- cosewic_ranges(bcch, iao_grid = grid)
 #> User-provided grid has cell size of 2 [km]
 ```
@@ -367,6 +386,7 @@ r <- cosewic_ranges(bcch, iao_grid = grid)
 And take a look at the figure of these calculations.
 
 ``` r
+
 cosewic_plot(r)
 #> Zoom: 9
 ```
@@ -379,6 +399,7 @@ when using
 default grid.
 
 ``` r
+
 r0 <- cosewic_ranges(bcch)
 cosewic_plot(r0)
 #> Zoom: 9
@@ -393,6 +414,7 @@ cosewic_plot(r0)
 These examples all use the `bcch` dataset.
 
 ``` r
+
 r <- cosewic_ranges(bcch)
 ```
 
@@ -402,6 +424,7 @@ Note that this adds *all* observation points (regardless of whether some
 were omitted from the analyses).
 
 ``` r
+
 cosewic_plot(r, points = bcch)
 #> Zoom: 9
 ```
@@ -411,6 +434,7 @@ cosewic_plot(r, points = bcch)
 #### Plot only either EOO or IAO
 
 ``` r
+
 cosewic_plot(r, which = "eoo", points = bcch)
 #> Zoom: 9
 ```
@@ -418,6 +442,7 @@ cosewic_plot(r, which = "eoo", points = bcch)
 ![](cosewic-tools_files/figure-html/unnamed-chunk-23-1.png)
 
 ``` r
+
 cosewic_plot(r, which = "iao")
 #> Zoom: 9
 ```
@@ -432,6 +457,7 @@ changed.
 No change
 
 ``` r
+
 cosewic_plot(r, crs = 3347)
 #> 'crs' is only applicable when not using map tiles. Map tiles always use CRS of EPSG:3857.
 #> Loading required namespace: raster
@@ -443,6 +469,7 @@ cosewic_plot(r, crs = 3347)
 Using a custom polygon, we can change the CRS.
 
 ``` r
+
 cosewic_plot(r, map = map_canada(), crs = 3347)
 ```
 
@@ -451,6 +478,7 @@ cosewic_plot(r, map = map_canada(), crs = 3347)
 #### Move the scale/arrow
 
 ``` r
+
 r <- cosewic_ranges(hofi)
 cosewic_plot(r, arrow_location = "br", scale_location = "br")
 #> Zoom: 6
@@ -464,6 +492,7 @@ When the cells are really small, it can be helpful to summarize over a
 larger grid for better visibility of the patterns.
 
 ``` r
+
 cosewic_plot(
   r,
   grid = grid_canada(25),
@@ -481,6 +510,7 @@ cosewic_plot(
 These examples all use the `pops` dataset.
 
 ``` r
+
 r <- cosewic_ranges(pops, group = "population")
 ```
 
@@ -490,6 +520,7 @@ When plotting multiple DUs the IAO scales may be different enough that
 it would be better use IAO proportions rather than absolute values.
 
 ``` r
+
 p <- cosewic_plot(r, group = "population", iao_prop = TRUE)
 
 wrap_plots(p) +
@@ -506,6 +537,7 @@ As for single plots, when the cells are really small, it can be helpful
 to summarize over a larger grid for better visibility of the patterns.
 
 ``` r
+
 p <- cosewic_plot(
   r,
   group = "population",
@@ -532,6 +564,7 @@ your own data”).
 We’ll use `group = "population` to ensure correct titles.
 
 ``` r
+
 # Split the two populations
 pops1 <- dplyr::filter(pops, population == "Population 1")
 pops2 <- dplyr::filter(pops, population == "Population 2")
@@ -553,6 +586,7 @@ p2 <- cosewic_plot(
 Now arrange your plots how you like.
 
 ``` r
+
 p1 +
   p2 +
   plot_layout(guides = "collect") +
@@ -564,6 +598,7 @@ p1 +
 ![](cosewic-tools_files/figure-html/unnamed-chunk-32-1.png)
 
 ``` r
+
 p1 /
   p2 +
   plot_layout(guides = "collect") +

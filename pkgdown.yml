@@ -1,5 +1,5 @@
-pandoc: 3.1.11
-pkgdown: 2.2.0
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   articles/1.1-Introduction: 1.1-Introduction.html
@@ -30,7 +30,7 @@ articles:
   selecting-fields: selecting-fields.html
   species-codes: species-codes.html
   articles/test: test.html
-last_built: 2026-03-31T17:57Z
+last_built: 2026-07-29T17:15Z
 urls:
   reference: https://birdscanada.github.io/naturecounts/reference
   article: https://birdscanada.github.io/naturecounts/articles

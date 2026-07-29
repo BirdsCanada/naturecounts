@@ -11,6 +11,7 @@ Website](https://birdscanada.github.io/naturecounts)
 You can install the main version of `naturecounts` from our R-Universe
 
 ``` r
+
 install.packages("naturecounts", 
                  repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
                            CRAN = 'https://cloud.r-project.org'))
@@ -19,6 +20,7 @@ install.packages("naturecounts",
 ## Usage
 
 ``` r
+
 library(naturecounts)
 ```
 
@@ -31,6 +33,7 @@ for which you have access (here returns all collections associated with
 username **sample**).
 
 ``` r
+
 nc_count(username = "sample")
 #> # A tibble: 2 × 4
 #>   collection akn_level access nrecords
@@ -43,6 +46,7 @@ Use the `show = "all"` argument to show counts for all collections
 available (public or otherwise).
 
 ``` r
+
 nc_count(show = "all") %>%
   head()
 #> # A tibble: 6 × 4
@@ -64,6 +68,7 @@ into a local data frame.
 First find the species id
 
 ``` r
+
 search_species("American Bittern")
 #> # A tibble: 1 × 5
 #>   species_id scientific_name       english_name     french_name      taxon_group
@@ -77,6 +82,7 @@ The `info` parameter is a short description of what the data is being
 downloaded for.
 
 ``` r
+
 bittern <- nc_data_dl(species = 2490, username = "sample", 
                     info = "readme_example")
 #> Using filters: species (2490); fields_set (BMDE2.00-ext)
@@ -94,6 +100,7 @@ Alternatively, save the downloaded data as a SQLite database
 (`bittern`).
 
 ``` r
+
 bittern <- nc_data_dl(species = 2490, sql_db = "bittern", username = "sample", 
                     info = "readme_example")
 #> Using filters: species (2490); fields_set (BMDE2.00-ext)
@@ -123,6 +130,7 @@ and
 which will then return a different set of records.
 
 ``` r
+
 nc_count(username = "my_user_name")
 bittern <- nc_data_dl(species = 2490, username = "my_user_name", info = "readme_example")
 ```

@@ -1,6 +1,7 @@
 # Species codes
 
 ``` r
+
 library(naturecounts)
 ```
 
@@ -39,6 +40,7 @@ English or French name and returns a data frame of taxonomic information
 for all related hits:
 
 ``` r
+
 search_species("moose")
 #> # A tibble: 1 × 5
 #>   species_id scientific_name english_name french_name taxon_group
@@ -79,6 +81,7 @@ search_species("mésange à tête noire")
 These species ids can then be used to download data either directly:
 
 ``` r
+
 moose <- nc_data_dl(
   species = 133990,
   verbose = FALSE,
@@ -90,6 +93,7 @@ moose <- nc_data_dl(
 Or by saving and referencing the data frame:
 
 ``` r
+
 moose_id <- search_species("moose")$species_id
 moose <- nc_data_dl(
   species = moose_id,
@@ -103,6 +107,7 @@ This might be considered overkill for a single species, but is useful
 when you want to download data for multiple species:
 
 ``` r
+
 chickadee_ids <- search_species("chickadee")
 chickadee_ids
 #> # A tibble: 23 × 5
@@ -125,6 +130,7 @@ Now we could download all observations for the first three (this is a
 lot of data!)
 
 ``` r
+
 chickadees <- nc_data_dl(
   species = chickadee_ids$species_id[1:3],
   verbose = FALSE,
@@ -149,6 +155,7 @@ The default taxonomic authority used is `BSCDATA`, which uses 4-letter
 alpha codes:
 
 ``` r
+
 search_species_code("BCCH")
 #> # A tibble: 1 × 5
 #>   species_id BSCDATA scientific_name      english_name           french_name    
@@ -159,6 +166,7 @@ search_species_code("BCCH")
 The search function is case insensitive:
 
 ``` r
+
 search_species_code("bcch")
 #> # A tibble: 1 × 5
 #>   species_id BSCDATA scientific_name      english_name           french_name    
@@ -170,6 +178,7 @@ However, you can search by codes for different authorities, by
 specifying the appropriate `authority` argument:
 
 ``` r
+
 search_species_code(8868, authority = "CBC")
 #> # A tibble: 1 × 5
 #>   species_id CBC   scientific_name      english_name           french_name      
@@ -187,6 +196,7 @@ subspecies of the yellow-rumped warbler (`YRWA`) returns both subspecies
 and the parent species.
 
 ``` r
+
 search_species_code("MYWA")
 #> # A tibble: 3 × 5
 #>   species_id BSCDATA scientific_name             english_name        french_name
@@ -201,6 +211,7 @@ search_species_code("MYWA")
 For example, `BSCDATA` recognizes 4 groups for dark-eyed juncos:
 
 ``` r
+
 search_species_code("DEJU")
 #> # A tibble: 4 × 5
 #>   species_id BSCDATA scientific_name                    english_name french_name
@@ -215,6 +226,7 @@ Whereas `CBC` also recognizes sub group hybrids (and the Guadalupe
 junco):
 
 ``` r
+
 search_species_code("12385", authority = "CBC")
 #> # A tibble: 11 × 5
 #>    species_id CBC   scientific_name                     english_name french_name
@@ -237,6 +249,7 @@ your search term only needs to match one authority (not both), and that
 the information returned reflects both authorities combined.
 
 ``` r
+
 search_species_code("DEJU", authority = c("BSCDATA", "CBC"))
 #> # A tibble: 12 × 6
 #>    species_id BSCDATA CBC   scientific_name             english_name french_name
@@ -261,6 +274,7 @@ If you do not want all subgroups, you can use the `results = "exact"`
 argument to return only an exact match.
 
 ``` r
+
 search_species_code("DEJU", results = "exact")
 #> # A tibble: 1 × 5
 #>   species_id BSCDATA scientific_name english_name    french_name  
@@ -281,6 +295,7 @@ better off using the
 from the `dplyr` package.
 
 ``` r
+
 library(dplyr)
 ```
 
@@ -292,6 +307,7 @@ return all taxonomic information available with the `show = "all"`
 argument.
 
 ``` r
+
 all <- search_species(show = "all")
 all
 #> # A tibble: 41,479 × 17
@@ -317,6 +333,7 @@ all
 Now we can search for the order
 
 ``` r
+
 chipmunk_ids <- filter(all, family_name == "Tamiini")
 chipmunk_ids
 #> # A tibble: 28 × 17
@@ -348,6 +365,7 @@ species, by passing the `species_id`s to the
 function.
 
 ``` r
+
 chipmunks <- nc_data_dl(
   species = chipmunk_ids$species_id,
   verbose = TRUE,

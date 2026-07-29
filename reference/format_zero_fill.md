@@ -85,7 +85,6 @@ individual species.
 # Download data
 sample <- nc_data_dl(collection = c("SAMPLE1", "SAMPLE2"),
                      username = "sample", info = "nc_example")
-#> The server did not respond within 30s. Trying again...
 #> Using filters: collections (SAMPLE1, SAMPLE2); fields_set (BMDE2.00-ext)
 #> Collecting available records...
 #>   collection nrecords

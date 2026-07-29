@@ -1,6 +1,7 @@
 # Region Codes
 
 ``` r
+
 library(naturecounts)
 ```
 
@@ -42,6 +43,7 @@ For more details regarding spatial limits to regions, see the articles:
 To use the `region` argument:
 
 ``` r
+
 nc_count(region = list(statprov = "NB"))
 ```
 
@@ -52,7 +54,7 @@ nc_count(region = list(statprov = "NB"))
     ## # A tibble: 93 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS                3 by request    16518
+    ##  1 ATOWLS                3 by request    16908
     ##  2 BBL-1960-1969         5 full          56578
     ##  3 BBL-1970-1979         5 full          68636
     ##  4 BBL-1980-1989         5 full          82650
@@ -61,13 +63,14 @@ nc_count(region = list(statprov = "NB"))
     ##  7 BBL-2010-2019         5 full          57888
     ##  8 BBL-2020-2029         5 full          26199
     ##  9 BBS                   5 full          54578
-    ## 10 BBS50-CAN             3 by request   227236
+    ## 10 BBS50-CAN             3 by request   247843
     ## # ℹ 83 more rows
 
 You can only use **one** type of region, but you can filter to multiple
 regions of that type:
 
 ``` r
+
 nc_count(region = list(statprov = c("PE", "NB")))
 ```
 
@@ -78,7 +81,7 @@ nc_count(region = list(statprov = c("PE", "NB")))
     ## # A tibble: 95 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS                3 by request    22483
+    ##  1 ATOWLS                3 by request    23111
     ##  2 BBL-1960-1969         5 full          63292
     ##  3 BBL-1970-1979         5 full          85997
     ##  4 BBL-1980-1989         5 full          92092
@@ -87,7 +90,7 @@ nc_count(region = list(statprov = c("PE", "NB")))
     ##  7 BBL-2010-2019         5 full          67261
     ##  8 BBL-2020-2029         5 full          33123
     ##  9 BBS                   5 full          61249
-    ## 10 BBS50-CAN             3 by request   261366
+    ## 10 BBS50-CAN             3 by request   285733
     ## # ℹ 85 more rows
 
 ## In Detail - Codes
@@ -101,6 +104,7 @@ long to download.
 **Browse the code list**
 
 ``` r
+
 meta_country_codes()
 ```
 
@@ -122,6 +126,7 @@ meta_country_codes()
 **Search by name** (English or French)
 
 ``` r
+
 search_region("États-Unis", type = "country")
 ```
 
@@ -135,6 +140,7 @@ search_region("États-Unis", type = "country")
 **Use the resulting code(s)**
 
 ``` r
+
 nc_count(species = 13210, region = list(country = "US"))
 ```
 
@@ -154,8 +160,8 @@ nc_count(species = 13210, region = list(country = "US"))
     ##  7 BBL-2010-2019         5 full           2978
     ##  8 BBL-2020-2029         5 full           1625
     ##  9 BBS                   5 full          23090
-    ## 10 BBS50-US-EAST         3 by request    13639
-    ## 11 BBS50-US-WEST         3 by request    17809
+    ## 10 BBS50-US-EAST         3 by request    14234
+    ## 11 BBS50-US-WEST         3 by request    19138
     ## 12 BCN                   5 full              8
     ## 13 CBC                   3 by request    30348
     ## 14 GBIF_50C9509D         5 full              1
@@ -168,6 +174,7 @@ nc_count(species = 13210, region = list(country = "US"))
 **Browse the code list**
 
 ``` r
+
 meta_statprov_codes()
 ```
 
@@ -189,6 +196,7 @@ meta_statprov_codes()
 **Search by name** (English, French, or Spanish)
 
 ``` r
+
 search_region("Distrito de Colombia", type = "statprov")
 ```
 
@@ -200,6 +208,7 @@ search_region("Distrito de Colombia", type = "statprov")
 **Use the resulting code(s)**
 
 ``` r
+
 nc_count(region = list(statprov = "DC"))
 ```
 
@@ -227,6 +236,7 @@ nc_count(region = list(statprov = "DC"))
 **Browse the code list**
 
 ``` r
+
 meta_subnational2_codes()
 ```
 
@@ -250,6 +260,7 @@ Language depends on location: - Mexico = Spanish - USA = English -
 Quebec = French - Rest of Canada = English
 
 ``` r
+
 search_region("Montreal", type = "subnational2")
 ```
 
@@ -261,6 +272,7 @@ search_region("Montreal", type = "subnational2")
 **Use the resulting code(s)**
 
 ``` r
+
 nc_count(species = 7450, region = list(subnational2 = "CA.QC.MR"))
 ```
 
@@ -287,6 +299,7 @@ nc_count(species = 7450, region = list(subnational2 = "CA.QC.MR"))
 **Browse the code list**
 
 ``` r
+
 meta_iba_codes()
 ```
 
@@ -309,6 +322,7 @@ meta_iba_codes()
 **Search by name** (English or French)
 
 ``` r
+
 search_region("oak hammock", type = "iba")
 ```
 
@@ -321,6 +335,7 @@ search_region("oak hammock", type = "iba")
 **Use the resulting code(s)**
 
 ``` r
+
 nc_count(region = list(iba = "MB010"))
 ```
 
@@ -355,6 +370,7 @@ nc_count(region = list(iba = "MB010"))
 **Browse the code list**
 
 ``` r
+
 meta_bcr_codes()
 ```
 
@@ -376,6 +392,7 @@ meta_bcr_codes()
 **Search by name** (English, French, or Spanish)
 
 ``` r
+
 search_region("rainforest", type = "bcr")
 ```
 
@@ -387,6 +404,7 @@ search_region("rainforest", type = "bcr")
 **Use the resulting code(s)**
 
 ``` r
+
 nc_count(species = 7450, region = list(bcr = 5))
 ```
 
@@ -414,6 +432,7 @@ nc_count(species = 7450, region = list(bcr = 5))
 **Browse the code list**
 
 ``` r
+
 meta_utm_squares()
 ```
 
@@ -441,6 +460,7 @@ meta_utm_squares()
 **Use the resulting code(s)**
 
 ``` r
+
 nc_count(species = 7450, region = list(utm_squares = "18TUR35"))
 ```
 
@@ -452,7 +472,7 @@ nc_count(species = 7450, region = list(utm_squares = "18TUR35"))
     ##   collection    akn_level access     nrecords
     ##   <chr>             <int> <chr>         <int>
     ## 1 EBIRD-CA-ON           3 by request        7
-    ## 2 ONATLAS3BE_DO         3 by request        2
+    ## 2 ONATLAS3BE_DO         3 by request        1
 
 ### Bounding Box
 
@@ -461,6 +481,7 @@ Bounding box reflects latitude and longitude limits.
 **Use a bounding box**
 
 ``` r
+
 nc_count(
   species = 7450,
   region = list(bbox = c(left = -125, bottom = 45, right = -100, top = 50))
