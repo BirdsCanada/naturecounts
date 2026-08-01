@@ -20,7 +20,7 @@
 Required and extra fields returned by the API are expected and treated, respectively, as follows:
 
 | Function | API Entry Point | Required fields | Extra fields |
-|----------------|--------------------|--------------------|----------------|
+|----|----|----|----|
 | `nc_count()` | `data/list_collections` | `collection`, `nrecords` | Ignored |
 | `nc_count()` | `data/list_permissions` | `collection`, `akn_level` | Ignored |
 | `nc_count()` | `metadata/collections` | `collection`, `akn_level` | Ignored |
