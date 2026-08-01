@@ -148,12 +148,51 @@ landcover_download <- function(
       }
     }
 
-    # Attempt EarthData authentication
-    auth <- luna::earthdataLogin(
+    # Attempt EarthData authentication three times to avoid errant API
+    # connect failures.
+    auth <- try(luna::earthdataLogin(
       username = ed_email,
       password = ed_password,
       verbose = progress
-    )
+    ),
+    silent = TRUE)
+    
+    if (inherits(auth, "try-error")) {
+      if (
+        stringr::str_detect(auth, "aborted by an application callback")
+      ) {
+        stop(auth, call. = FALSE)
+      } else if (
+        stringr::str_detect(auth, "could not reach Earthdata Login")
+      ) {
+        auth <- try(luna::earthdataLogin(
+          username = ed_email,
+          password = ed_password,
+          verbose = progress
+        ),
+        silent = TRUE
+        )
+        if (inherits(auth, "try-error")) {
+          if (
+            stringr::str_detect(auth, "aborted by an application callback")
+          ) {
+            stop(auth, call. = FALSE)
+          } else if (
+            stringr::str_detect(auth, "could not reach Earthdata Login")
+          ) {
+            auth <- try(luna::earthdataLogin(
+              username = ed_email,
+              password = ed_password,
+              verbose = progress
+            ),
+            silent = TRUE
+            )
+            if (inherits(auth, "try-error")) {
+              stop(auth, call. = FALSE)
+            }
+        }
+      }
+    }
   }
 
   # Check data is in the desired format.
@@ -429,7 +468,7 @@ landcover_download <- function(
     # Ensures that the closest year available for years before the start of
     # dataset coverage (2001) is downloaded.
     if (TRUE %in% (data$survey_year < 2001)) {
-      modis_files <- try(
+      modis_files <-
         luna::getNASA(
           product = "MCD12Q1",
           start = "2001-01-01", # Starting year
@@ -444,41 +483,7 @@ landcover_download <- function(
           ),
           auth = auth,
           verbose = progress
-        ),
-        silent = TRUE
-      )
-
-      if (inherits(modis_files, "try-error")) {
-        if (
-          stringr::str_detect(modis_files, "aborted by an application callback")
-        ) {
-          stop(modis_files, call. = FALSE)
-        } else if (
-          stringr::str_detect(modis_files, "could not reach Earthdata Login")
-        ) {
-          modis_files <- try(
-            luna::getNASA(
-              product = "MCD12Q1",
-              start = "2001-01-01", # Starting year
-              end = "2001-12-31", # End year
-              aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-              download = TRUE,
-              overwrite = FALSE,
-              path = ifelse(
-                is.null(dl_path),
-                "./modis/MCD12Q1",
-                paste0(dl_path, "/modis/MCD12Q1")
-              ),
-              auth = auth,
-              verbose = progress
-            ),
-            silent = TRUE
-          )
-          if (inherits(modis_files, "try-error")) {
-            stop(modis_files, call. = FALSE)
-          }
-        }
-      }
+        )
 
       # Record years with no data associated.
       missing_year <- c(
@@ -493,7 +498,6 @@ landcover_download <- function(
         # If 2001 data downloaded above, do nothing. Otherwise, download that
         # year's data.
         if (!(i == 2001 & length(modis_files > 0))) {
-          try(
             tmp <- suppressWarnings(luna::getNASA(
               product = "MCD12Q1",
               start = paste0(i, "-01-01"), # Starting year
@@ -508,41 +512,7 @@ landcover_download <- function(
               ),
               auth = auth,
               verbose = progress
-            )),
-            silent = TRUE
-          )
-
-          if (inherits(tmp, "try-error")) {
-            if (
-              stringr::str_detect(tmp, "aborted by an application callback")
-            ) {
-              stop(tmp, call. = FALSE)
-            } else if (
-              stringr::str_detect(tmp, "could not reach Earthdata Login")
-            ) {
-              try(
-                tmp <- suppressWarnings(luna::getNASA(
-                  product = "MCD12Q1",
-                  start = paste0(i, "-01-01"), # Starting year
-                  end = paste0(i, "-12-31"), # End year
-                  aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-                  download = TRUE,
-                  overwrite = FALSE,
-                  path = ifelse(
-                    is.null(dl_path),
-                    "./modis/MCD12Q1",
-                    paste0(dl_path, "/modis/MCD12Q1")
-                  ),
-                  auth = auth,
-                  verbose = progress
-                )),
-                silent = TRUE
-              )
-              if (inherits(tmp, "try-error")) {
-                stop(tmp, call. = FALSE)
-              }
-            }
-          }
+            ))
 
           # Record years with no data associated.
           if (is.null(tmp)) {
@@ -553,7 +523,6 @@ landcover_download <- function(
           # data for year - 1. If already downloaded, overwrite = FALSE will
           # prevent downloading same file twice.
           if (is.null(tmp)) {
-            try(
               tmp <- suppressWarnings(luna::getNASA(
                 product = "MCD12Q1",
                 start = paste0(i - 1, "-01-01"), # Starting year
@@ -568,46 +537,11 @@ landcover_download <- function(
                 ),
                 auth = auth,
                 verbose = progress
-              )),
-              silent = TRUE
-            )
-
-            if (inherits(tmp, "try-error")) {
-              if (
-                stringr::str_detect(tmp, "aborted by an application callback")
-              ) {
-                stop(tmp, call. = FALSE)
-              } else if (
-                stringr::str_detect(tmp, "could not reach Earthdata Login")
-              ) {
-                try(
-                  tmp <- suppressWarnings(luna::getNASA(
-                    product = "MCD12Q1",
-                    start = paste0(i - 1, "-01-01"), # Starting year
-                    end = paste0(i - 1, "-12-31"), # End year
-                    aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-                    download = TRUE,
-                    overwrite = FALSE,
-                    path = ifelse(
-                      is.null(dl_path),
-                      "./modis/MCD12Q1",
-                      paste0(dl_path, "/modis/MCD12Q1")
-                    ),
-                    auth = auth,
-                    verbose = progress
-                  )),
-                  silent = TRUE
-                )
-                if (inherits(tmp, "try-error")) {
-                  stop(tmp, call. = FALSE)
-                }
-              }
-            }
+              ))
 
             # Just in case, try year - 2 if MODIS data upload is really behind for
             # some reason.
             if (is.null(tmp)) {
-              try(
                 tmp <- suppressWarnings(luna::getNASA(
                   product = "MCD12Q1",
                   start = paste0(i - 2, "-01-01"), # Starting year
@@ -622,42 +556,8 @@ landcover_download <- function(
                   ),
                   auth = auth,
                   verbose = progress
-                )),
-                silent = TRUE
-              )
-
-              if (inherits(tmp, "try-error")) {
-                if (
-                  stringr::str_detect(tmp, "aborted by an application callback")
-                ) {
-                  stop(tmp, call. = FALSE)
-                } else if (
-                  stringr::str_detect(tmp, "could not reach Earthdata Login")
-                ) {
-                  try(
-                    tmp <- suppressWarnings(luna::getNASA(
-                      product = "MCD12Q1",
-                      start = paste0(i - 2, "-01-01"), # Starting year
-                      end = paste0(i - 2, "-12-31"), # End year
-                      aoi = terra::ext(terra::project(study_area, "epsg:4326")),
-                      download = TRUE,
-                      overwrite = FALSE,
-                      path = ifelse(
-                        is.null(dl_path),
-                        "./modis/MCD12Q1",
-                        paste0(dl_path, "/modis/MCD12Q1")
-                      ),
-                      auth = auth,
-                      verbose = progress
-                    )),
-                    silent = TRUE
-                  )
-                  if (inherits(tmp, "try-error")) {
-                    stop(tmp, call. = FALSE)
-                  }
-                }
-              }
-
+                ))
+                
               # Warn if year-2 doesn't return anything.
               if (is.null(tmp)) {
                 warning(
