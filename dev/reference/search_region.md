@@ -163,7 +163,6 @@ search_region(type = "bcr")
 nc_count(region = list(statprov = "AB"), years = 2010)
 #> Without a username, using 'show = "all"'
 #> Using filters: start_year (2010); end_year (2010); statprov (AB)
-#> The server did not respond within 120s. Trying again...
 #> # A tibble: 20 × 4
 #>    collection     akn_level access     nrecords
 #>    <chr>              <int> <chr>         <int>
