@@ -210,6 +210,7 @@ nc_count(region = list(statprov = "MB"))
 #> Without a username, using 'show = "all"'
 #> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: statprov (MB)
+#> The server did not respond within 120s. Trying again...
 #> # A tibble: 113 × 4
 #>    collection    akn_level access     nrecords
 #>    <chr>             <int> <chr>         <int>
