@@ -162,7 +162,10 @@ landcover_download <- function(
     if (inherits(auth, "try-error")) {
       if (stringr::str_detect(auth, "aborted by an application callback")) {
         stop(auth, call. = FALSE)
-      } else if (stringr::str_detect(auth, "could not reach Earthdata Login")) {
+      } else if (
+        stringr::str_detect(auth, "could not reach Earthdata Login") |
+          stringr::str_detect(auth, "Timeout was reached")
+      ) {
         auth <- try(
           luna::earthdataLogin(
             username = ed_email,
@@ -175,7 +178,8 @@ landcover_download <- function(
           if (stringr::str_detect(auth, "aborted by an application callback")) {
             stop(auth, call. = FALSE)
           } else if (
-            stringr::str_detect(auth, "could not reach Earthdata Login")
+            stringr::str_detect(auth, "could not reach Earthdata Login") |
+              stringr::str_detect(auth, "Timeout was reached")
           ) {
             auth <- try(
               luna::earthdataLogin(
