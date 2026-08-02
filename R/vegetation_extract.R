@@ -809,7 +809,7 @@ vegetation_extract <- function(
                     modis_match$SurveyAreaIdentifier == k
                 ],
             ifelse(i == "modis_ndvi", "ndvi", "evi")
-          ] <- terra::extract(modis, tmp)[, index]
+          ] <- terra::extract(modis, tmp)[, 2]
 
           # Extract pixel reliability information if requested.
           if (reliability == TRUE) {
