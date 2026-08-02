@@ -586,6 +586,8 @@ landcover_extract <- function(
           # so handle that possibility below.
           extr_table <- terra::extract(modis, tmp, fun = unique)[, index]
 
+          print(extr_table)
+
           # Whether only a single value was extracted (class == "integer") or
           # multiple values (else) prepare to pass to input data.
           if (inherits(extr_table, "integer")) {
