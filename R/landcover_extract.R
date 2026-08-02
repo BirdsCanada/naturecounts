@@ -505,6 +505,8 @@ landcover_extract <- function(
       # Open the requested layer in file j.
       modis <- terra::rast(j)[index]
 
+      modis
+
       # Loop through each site matched to file j and extract.
       for (k in unique(pts_to_fill$SurveyAreaIdentifier)) {
         # If buffered, extract using landscapemetrics::calculate_lsm(). If not,
@@ -585,8 +587,6 @@ landcover_extract <- function(
           # that a point falls such that it extracts from two raster tiles,
           # so handle that possibility below.
           extr_table <- terra::extract(modis, tmp, fun = unique)[, index]
-
-          print(extr_table)
 
           # Whether only a single value was extracted (class == "integer") or
           # multiple values (else) prepare to pass to input data.
