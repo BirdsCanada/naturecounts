@@ -603,8 +603,9 @@ landcover_extract <- function(
             )
           } else {
             extr_table <- extr_table %>%
-              as.data.frame() %>%
-              dplyr::select(dplyr::all_of(index))
+              as.data.frame()
+
+            extr_table <- extr_table[, 2]
 
             names(extr_table) <- "class"
 
@@ -626,7 +627,7 @@ landcover_extract <- function(
               paste0(index, "_Class")
             ] <- modis_classes[[i]]$name[
               modis_classes[[i]]$class ==
-                terra::extract(modis, tmp, fun = unique)[, index]
+                terra::extract(modis, tmp, fun = unique)[, 2]
             ],
             warning = function(w) {
               if (
@@ -649,7 +650,7 @@ landcover_extract <- function(
                     " touches multiple cells. Extraction returned `",
                     suppressWarnings(modis_classes[[i]]$name[
                       modis_classes[[i]]$class ==
-                        terra::extract(modis, tmp, fun = unique)[, index]
+                        terra::extract(modis, tmp, fun = unique)[, 2]
                     ]),
                     "` but possible values were `",
                     stringr::str_flatten(extr_table$name, collapse = "`, `"),
