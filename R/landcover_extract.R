@@ -586,7 +586,9 @@ landcover_extract <- function(
           # Extract point value from MODIS raster. It appears to be possible
           # that a point falls such that it extracts from two raster tiles,
           # so handle that possibility below.
-          extr_table <- terra::extract(modis, tmp, fun = unique)[, index]
+          extr_table <- terra::extract(modis, tmp, fun = unique)[,
+            modis$varname
+          ]
 
           # Whether only a single value was extracted (class == "integer") or
           # multiple values (else) prepare to pass to input data.
