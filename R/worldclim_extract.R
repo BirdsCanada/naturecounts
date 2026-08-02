@@ -18,6 +18,8 @@
 #'
 #' @inheritParams worldclim_download
 #'
+#' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or
+#'   'polygons' object.
 #' @param worldclim_data `terra SpatRaster` or `list` of `terra SpatRaster`s if
 #'  extracting multiple climate variables. We recommend using
 #'   [worldclim_download()] to ensure that all data necessary to match your
@@ -53,13 +55,13 @@
 #' )
 #'
 #' # Load WorldClim data
-#' tavg <- worldclim_download(data = bcch,
+#' wind <- worldclim_download(data = bcch,
 #'                            covariates = "worldclim_wind",
 #'                            progress = FALSE)
 #'
 #' # Extract average temperature
 #' output <- worldclim_extract(data = bcch,
-#'                             worldclim_data = tavg,
+#'                             worldclim_data = wind,
 #'                             covariates = "worldclim_wind",
 #'                             retain = FALSE)
 #'

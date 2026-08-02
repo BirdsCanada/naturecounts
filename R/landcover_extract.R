@@ -590,7 +590,7 @@ landcover_extract <- function(
 
           # Whether only a single value was extracted (class == "integer") or
           # multiple values (else) prepare to pass to input data.
-          if (inherits(extr_table, "integer")) {
+          if (length(extr_table) == 1) {
             extr_table <- extr_table %>%
               as.data.frame()
 
@@ -604,8 +604,6 @@ landcover_extract <- function(
           } else {
             extr_table <- extr_table %>%
               as.data.frame()
-
-            extr_table <- extr_table[, 2]
 
             names(extr_table) <- "class"
 
