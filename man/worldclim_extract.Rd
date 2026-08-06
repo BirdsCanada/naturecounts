@@ -16,8 +16,7 @@ worldclim_extract(
 }
 \arguments{
 \item{data}{An \code{sf} 'POINT' or 'POLYGON' object, or \code{terra} 'points' or
-'polygons' object. Not required if \code{countries} is specified, but must be
-specified if \code{countries} is left unspecified.}
+'polygons' object.}
 
 \item{worldclim_data}{\verb{terra SpatRaster} or \code{list} of \verb{terra SpatRaster}s if
 extracting multiple climate variables. We recommend using
@@ -79,14 +78,16 @@ bcch <- sf::st_as_sf(
   crs = 4326
 )
 
+bcch <- data_fmt(bcch)
+
 # Load WorldClim data
-tavg <- worldclim_download(data = bcch,
+wind <- worldclim_download(data = bcch,
                            covariates = "worldclim_wind",
                            progress = FALSE)
 
 # Extract average temperature
 output <- worldclim_extract(data = bcch,
-                            worldclim_data = tavg,
+                            worldclim_data = wind,
                             covariates = "worldclim_wind",
                             retain = FALSE)
 

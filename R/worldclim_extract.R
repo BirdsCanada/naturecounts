@@ -16,8 +16,6 @@
 #' - Solar radiation: `wordclim_srad`
 #' - Wind speed: `worldclim_wind`
 #'
-#' @inheritParams worldclim_download
-#'
 #' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or
 #'   'polygons' object.
 #' @param worldclim_data `terra SpatRaster` or `list` of `terra SpatRaster`s if
@@ -53,6 +51,8 @@
 #'   coords = c("longitude", "latitude"),
 #'   crs = 4326
 #' )
+#'
+#' bcch <- data_fmt(bcch)
 #'
 #' # Load WorldClim data
 #' wind <- worldclim_download(data = bcch,
@@ -323,6 +323,7 @@ worldclim_extract <- function(
     } else {
       source <- clim
     }
+
     # Loop through each site and extract.
     for (j in unique(data$SurveyAreaIdentifier)) {
       # Create temporary object with only point/buffer for site i.

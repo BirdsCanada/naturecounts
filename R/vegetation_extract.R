@@ -689,10 +689,15 @@ vegetation_extract <- function(
 
       # Open the requested layer in file j. `raw` argument is to avoid erroneous
       # scaling factor specified in file. See https://github.com/rspatial/terra/issues/1620.
-      modis <- terra::rast(j, raw = TRUE)[index]
+      if (packageVersion("terra") == "1.9.34") {
+        md <- FALSE
+      } else {
+        md <- TRUE
+      }
+      modis <- terra::rast(j, md = md, raw = TRUE)[index]
 
       if (reliability == TRUE) {
-        modis_reliability <- terra::rast(j)[
+        modis_reliability <- terra::rast(j, md = md)[
           "\"500m 16 days pixel reliability\""
         ]
       }
