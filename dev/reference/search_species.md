@@ -106,6 +106,7 @@ search_species("black-capped chickadee", show = "all")
 nc_count(species = 14280)
 #> Without a username, using 'show = "all"'
 #> Using filters: species (14280)
+#> The server did not respond within 120s. Trying again...
 #> # A tibble: 338 × 4
 #>    collection    akn_level access nrecords
 #>    <chr>             <int> <chr>     <int>

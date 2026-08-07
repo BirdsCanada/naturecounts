@@ -58,7 +58,9 @@ nc_query_table(username = "sample")
 #> 2 bmde_filter_bad_dates project_id,SiteCode,species_id       NA
 #> 3                 Rnest                           <NA>       NA
 #> 4         RnestMetadata                           <NA>       NA
-#> 5    SpeciesLifeHistory                           <NA>       NA
+#> 5           SocbSpecies                           <NA>       NA
+#> 6       SocbTrendGroups                        include       NA
+#> 7    SpeciesLifeHistory                           <NA>       NA
 
 # Query the bmdefilter_bad_dates table
 
