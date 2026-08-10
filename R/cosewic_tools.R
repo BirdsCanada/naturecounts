@@ -54,11 +54,17 @@
 #' @param iao_grid_size_km Numeric. Size of grid (km) to use when calculating
 #'   IAO. Default is COSEWIC requirement (2km, meaning 2x2km grids of 4km2). Use
 #'   caution if changing.
+#' @param iao_grid sf Polygon. Supply your own IAO grid rather than creating
+#'   one. The CRS of this grid must be the same as `crs`.
+#' @param iao_buffer Numeric. Only relevant if `iao_grid = NULL`. The number of
+#'   km to buffer the map of Canada by before creating the IAO grid (defaults to
+#'   500km). Helps to ensure that all observations are included, but that any
+#'   clearly external observations are omitted. Note this may need to be set
+#'   quite high to include oceanic islands not captured by Natural Earth's map
+#'   of Canada.
 #' @param eoo_clip sf (Multi)Polygon. A spatial object to clip the EOO to. May
 #'   be relevant when calculating EOOs for complex regions (i.e. long curved
 #'   areas) to avoid including area which cannot have observations.
-#' @param iao_grid sf Polygon. Supply your own IAO grid rather than creating
-#'   one. The CRS of this grid must be the same as `crs`.
 #' @param filter_unique Logical. Whether to filter observations to unique
 #'   locations. Use this only if there are too many data points to work with.
 #'   This changes the nature of what an observation is, and may also affect
@@ -140,6 +146,17 @@
 #' r <- cosewic_ranges(bcch)
 #' cosewic_plot(r)
 #'
+#' # Adjust the buffer for Oceanic islands not included in Natural Earth's map
+#' # of Canada
+#' auklet <- data.frame(
+#'   record_id = 1:5,
+#'   latitude = 50.85,
+#'   longitude = -145.07,
+#'   species_id = "auklet"
+#' )
+#'
+#' # r <- cosewic_ranges(auklet)  # Errors
+#' r <- cosewic_ranges(auklet, iao_buffer = 1000)  # No error
 #' @export
 
 cosewic_ranges <- function(
@@ -151,6 +168,7 @@ cosewic_ranges <- function(
   prop_include = 1,
   iao_grid_size_km = 2,
   iao_grid = NULL,
+  iao_buffer = 500,
   eoo_clip = NULL,
   crs = "ESRI:102001",
   which = c("eoo", "iao"),
@@ -329,6 +347,7 @@ cosewic_ranges <- function(
             cell_size,
             record,
             spatial,
+            buffer = .env$iao_buffer,
             crs = .env$crs,
             grid = iao_grid
           )
@@ -411,20 +430,39 @@ cosewic_ranges <- function(
 }
 
 # Faster grids https://github.com/r-spatial/sf/issues/1579
-cosewic_iao <- function(df_sf, cell_size, record, spatial, crs, grid = NULL) {
+cosewic_iao <- function(
+  df_sf,
+  cell_size,
+  record,
+  spatial,
+  buffer,
+  crs,
+  grid = NULL
+) {
   if (is.null(grid)) {
-    grid_ca <- grid_canada(buffer = 500, crs = crs)
+    grid_ca <- grid_canada(buffer = buffer, crs = crs)
 
     # Check if all points in grid
     missing <- !sf::st_within(df_sf, sf::st_union(grid_ca), sparse = FALSE)
     if (any(missing)) {
       ids <- df_sf[[record]][which(missing)]
       message(
-        "  Some observations not within the limits of Canada and a 500km buffer",
-        "\n  Omitting record(s): ",
+        paste0(
+          "  Some observations not within the limits of Canada and a ",
+          buffer,
+          "km buffer",
+          "\n  Omitting record(s) for IAO calculations: "
+        ),
         paste0(ids, collapse = ", ")
       )
       df_sf <- dplyr::filter(df_sf, !.data[[record]] %in% ids)
+
+      if (nrow(df_sf) == 0) {
+        stop(
+          "No observations remaining. Consider increasing `iao_buffer`",
+          call. = FALSE
+        )
+      }
     }
 
     grid_lg <- grid_filter(grid_ca, df_sf, cell_size = cell_size * 5) %>%
@@ -494,7 +532,7 @@ cosewic_eoo <- function(df_sf, clip, spatial) {
     )
     if (nrow(eoo_clipped) == 0) {
       warning(
-        "Clipping EOO results in no EOO, using non-clipped EOO instead",
+        "Clipping the EOO results in no EOO, using non-clipped EOO instead",
         call. = FALSE
       )
     } else {
