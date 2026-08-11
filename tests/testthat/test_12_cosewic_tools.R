@@ -322,7 +322,10 @@ test_that("cosewic_iao() buffer is adjustable", {
 
 test_that("cosewic_ranges()", {
   # Expect message about change in defaults
-  expect_message(cosewic_ranges(bcch), "now uses `prop_include = 1`")
+  rlang::with_options(
+    rlib_message_verbosity = "verbose",
+    expect_message(cosewic_ranges(bcch), "now uses `prop_include = 1`")
+  )
 
   # Lambert
   expect_silent(r <- cosewic_ranges(bcch, crs = 3347))

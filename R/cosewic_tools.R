@@ -435,7 +435,7 @@ cosewic_iao <- function(
   cell_size,
   record,
   spatial,
-  buffer,
+  buffer = 500,
   crs,
   grid = NULL
 ) {
