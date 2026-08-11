@@ -330,7 +330,7 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
       "elevation",
       "ndvi"
     ) %>%
-    distinct() %>%
+    dplyr::distinct() %>%
     dplyr::arrange(
       .data$latitude,
       .data$longitude,
