@@ -163,8 +163,28 @@ search_region(type = "bcr")
 nc_count(region = list(statprov = "AB"), years = 2010)
 #> Without a username, using 'show = "all"'
 #> Using filters: start_year (2010); end_year (2010); statprov (AB)
-#> The server did not respond within 120s. Trying again...
-#> Error: The server has not respond within the 'timeout' specified.
-#> Either try again later or increase the 'timeout' period.
+#> # A tibble: 20 × 4
+#>    collection     akn_level access     nrecords
+#>    <chr>              <int> <chr>         <int>
+#>  1 ABOWLS                 3 by request     1139
+#>  2 BBL-2010-2019          5 full          36263
+#>  3 BBS                    5 full           9550
+#>  4 BBS50-CAN              3 by request    31774
+#>  5 CBC                    3 by request     1155
+#>  6 CMMN-DET-BBO           3 by request     1654
+#>  7 CMMN-DET-IBS           3 by request      846
+#>  8 CMMN-DET-LSLBO         3 by request     5332
+#>  9 EBIRD-CA-PR            3 by request    79131
+#> 10 EBIRD-CA-SENS          3 by request      107
+#> 11 EBUTTERFLY             5 full              2
+#> 12 GBBC                   3 by request     2477
+#> 13 GBIF_3E7837D0          5 full              1
+#> 14 GBIF_50C9509D          5 full            198
+#> 15 GBIF_61BF28A5          5 full             94
+#> 16 GBIF_8A863029          5 full            151
+#> 17 GBIF_D99823CA          5 full              1
+#> 18 NESTWATCH              3 by request        3
+#> 19 OISEAUXQC              2 no access         2
+#> 20 PFW                    5 full           7872
 # }
 ```
