@@ -13,12 +13,12 @@ Source:
 
 LaZerte S, Lepage D (2026). *naturecounts: Access and download data on
 plant and animal populations from NatureCounts*. R package version
-0.5.0, <https://github.com/BirdsCanada/naturecounts>.
+0.5.1, <https://github.com/BirdsCanada/naturecounts>.
 
     @Manual{,
       title = {naturecounts: Access and download data on plant and animal populations from NatureCounts},
       author = {Steffi LaZerte and Denis Lepage},
       year = {2026},
-      note = {R package version 0.5.0},
+      note = {R package version 0.5.1},
       url = {https://github.com/BirdsCanada/naturecounts},
     }

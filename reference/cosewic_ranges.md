@@ -17,6 +17,7 @@ cosewic_ranges(
   prop_include = 1,
   iao_grid_size_km = 2,
   iao_grid = NULL,
+  iao_buffer = 500,
   eoo_clip = NULL,
   crs = "ESRI:102001",
   which = c("eoo", "iao"),
@@ -69,6 +70,15 @@ cosewic_ranges(
 
   sf Polygon. Supply your own IAO grid rather than creating one. The CRS
   of this grid must be the same as `crs`.
+
+- iao_buffer:
+
+  Numeric. Only relevant if `iao_grid = NULL`. The number of km to
+  buffer the map of Canada by before creating the IAO grid (defaults to
+  500km). Helps to ensure that all observations are included, but that
+  any clearly external observations are omitted. Note this may need to
+  be set quite high to include oceanic islands not captured by Natural
+  Earth's map of Canada.
 
 - eoo_clip:
 
@@ -303,4 +313,21 @@ cosewic_plot(r)
 r <- cosewic_ranges(bcch)
 cosewic_plot(r)
 #> Zoom: 9
+
+
+# Adjust the buffer for Oceanic islands not included in Natural Earth's map
+# of Canada
+auklet <- data.frame(
+  record_id = 1:5,
+  latitude = 50.85,
+  longitude = -145.07,
+  species_id = "auklet"
+)
+
+# r <- cosewic_ranges(auklet)  # Errors
+r <- cosewic_ranges(auklet, iao_buffer = 1000)  # No error
+#> EOO is less than IAO for group auklet.
+#> This can occur if there are very few, clustered records.
+#> Making EOO equal to IAO.
+#> (see 'Instructions for preparing COSEWIC status reports' in ?cosewic_ranges)
 ```

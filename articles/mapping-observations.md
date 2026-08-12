@@ -38,8 +38,6 @@ house_finches <- nc_data_dl(
 )
 ```
 
-    ## The server did not respond within 30s. Trying again...
-
     ## Using filters: species (20350); fields_set (BMDE2.00-ext); statprov (AB)
 
     ## Collecting available records...
@@ -1127,4 +1125,4 @@ unlink("alberta_parks/", recursive = TRUE)
     Published by Bird Studies Canada on behalf of the North American
     Bird Conservation Initiative.
     <https://birdscanada.org/bird-science/nabci-bird-conservation-regions>
-    Accessed: 2026-07-29
+    Accessed: 2026-08-12

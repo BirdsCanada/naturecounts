@@ -41,8 +41,6 @@ rc <- nc_data_dl(collections = "RCBIOTABASE", fields_set = "core",
                  username = "testuser", info = "nc_vignette")
 ```
 
-    ## The server did not respond within 30s. Trying again...
-
     ## Using filters: collections (RCBIOTABASE); species (252456, 252494, 252491); fields_set (BMDE2.00)
 
     ## Collecting available records...
