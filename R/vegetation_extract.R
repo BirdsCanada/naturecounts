@@ -15,6 +15,71 @@
 #' Details on the calculation of these indices can be found in the
 #' [MOD13 user guide](https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf).
 #'
+#' By default, for `sf` 'POLYGON' or `terra` 'polygons' input data the mean NDVI
+#' and/or EVI value will be returned. Other summary statistics can be extracted
+#' by specifying the `fun` argument, which is passed to
+#' [exactextractr::exact_extract()]. The available summary statistics are:
+#'
+#'  * `min` - the minimum non-`NA` value in any raster cell wholly or
+#'            partially covered by the polygon
+#'  * `max` - the maximum non-`NA` value in any raster cell wholly or
+#'            partially covered by the polygon
+#'  * `count` - the sum of fractions of raster cells with non-`NA`
+#'              values covered by the polygon
+#'  * `sum`   - the sum of non-`NA` raster cell values, multiplied by
+#'              the fraction of the cell that is covered by the polygon
+#'  * `mean` - the mean cell value, weighted by the fraction of each cell
+#'             that is covered by the polygon
+#'  * `median` - the median cell value, weighted by the fraction of each cell
+#'               that is covered by the polygon
+#'  * `quantile` - arbitrary quantile(s) of cell values, specified in
+#'                 `quantiles`, weighted by the fraction of each cell that is
+#'                  covered by the polygon
+#'  * `mode` - the most common cell value, weighted by the fraction of
+#'             each cell that is covered by the polygon. Where multiple
+#'             values occupy the same maximum number of weighted cells,
+#'             the largest value will be returned.
+#'  * `majority` - synonym for `mode`
+#'  * `minority` - the least common cell value, weighted by the fraction
+#'                 of each cell that is covered by the polygon. Where
+#'                 multiple values occupy the same minimum number of
+#'                 weighted cells, the smallest value will be returned.
+#'  * `variety` - the number of distinct values in cells that are wholly or
+#'                partially covered by the polygon.
+#'  * `variance` - the population variance of cell values, weighted by the
+#'                 fraction of each cell that is covered by the polygon.
+#'  * `stdev` - the population standard deviation of cell values, weighted by
+#'              the fraction of each cell that is covered by the polygon.
+#'  * `coefficient_of_variation` - the population coefficient of variation of
+#'                                 cell values, weighted by the fraction of each
+#'                                 cell that is covered by the polygon.
+#'  * `weighted_mean` - the mean cell value, weighted by the product of
+#'                      the fraction of each cell covered by the polygon
+#'                      and the value of a second weighting raster provided
+#'                      as `weights`
+#'  * `weighted_sum` - the sum of defined raster cell values, multiplied by
+#'                     the fraction of each cell that is covered by the polygon
+#'                     and the value of a second weighting raster provided
+#'                     as `weights`
+#'  * `weighted_stdev` - the population standard deviation of cell values,
+#'                       weighted by the product of the fraction of each cell
+#'                       covered by the polygon and the value of a second
+#'                       weighting raster provided as `weights`
+#'  * `weighted_variance` - the population variance of cell values, weighted by
+#'                          the product of the fraction of each cell covered by
+#'                          the polygon and the value of a second weighting
+#'                          raster provided as `weights`
+#'  * `frac` - returns one column for each possible value of `x`, with the
+#'             the fraction of defined raster cells that are equal to that
+#'             value.
+#'  * `weighted_frac` - returns one column for each possible value of `x`,
+#'                      with the fraction of defined cells that are equal
+#'                      to that value, weighted by `weights.
+#'
+#' User defined functions can also be passed to `fun`, but these must return a
+#' single value. More information can be found in the documentation for
+#' [exactextractr::exact_extract()].
+#'
 #' NDVI/EVI calculations are sensitive to the presence of snow/ice and cloudiness.
 #' So users can assess the quality of data extracted at each site, we have included
 #' the option to extract pixel reliability assessments included in these NDVI/EVI
@@ -52,6 +117,11 @@
 #'   [vegetation_download()].
 #' @param retain Logical. Should MODIS data files be kept after extraction. If
 #'   `FALSE`, files will be deleted.
+#' @param ... Other arguments passed to [terra::extract()] for
+#'   `sf` 'POINT' or `terra` 'points' input data or
+#'   [exactextractr::exact_extract()] `sf` 'POLYGON' or `terra` 'polygons' input
+#'   data. Primarily useful for specifying alternate summary statistics to
+#'   extract for `sf` 'POLYGON' or `terra` 'polygons' input data.
 #'
 #' @returns For `sf` 'POINT' or `terra` 'points' input data, original data with
 #'   numeric column(s) `ndvi` and/or `evi` appended containing the NDVI/EVI value
@@ -61,7 +131,7 @@
 #'   [product's user manual](https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf).
 #'
 #'   For `sf` 'POLYGON' or `terra` 'polygons' input data, original data with
-#'   numeric column(s) `ndvi` and/or `evi` appended containing the mean NDVI/EVI
+#'   numeric column(s) appended containing the requested NDVI/EVI
 #'   value within each polygon. If reliability information requested, an additional
 #'   `vegetation_reliability` column is appended containing the percentage of
 #'   pixels overlapped by each polygon in each reliability assessment as defined in table 4 of the
@@ -131,7 +201,8 @@ vegetation_extract <- function(
   # data. Default is assumed to be the BMDE column 'survey_day'. Can
   # be left NULL and still function properly if originally specified in a call
   # to data_fmt().
-  retain = TRUE # Should data files be kept after extraction?
+  retain = TRUE, # Should data files be kept after extraction?\
+  ...
 ) {
   # Check packages
   have_pkg_check(c(
@@ -312,9 +383,43 @@ vegetation_extract <- function(
     # terra for terra data.
   }
 
-  # If buffered, check for packages necessary in buffered workflow.
+  # If buffered, check for packages necessary in buffered workflow and check
+  # that all arguments necessary for certain exactextractr::exact_extract()
+  # calls are present.
   if (buffered == TRUE) {
     have_pkg_check("exactextractr")
+
+    if (hasArg("fun") & !is.function(list(...)[["fun"]])) {
+      if ("quantile" %in% list(...)[["fun"]] & !hasArg("quantiles")) {
+        stop(
+          "[MODIS NDVI/EVI Extraction] quantile summary requested but",
+          " no quantiles supplied to the 'quantiles' argument. Please",
+          " supply numeric value(s) of desired quantiles.",
+          call. = FALSE
+        )
+      }
+
+      if (
+        TRUE %in%
+          (c(
+            "weighted_mean",
+            "weighted_sum",
+            "weighted_stdev",
+            "weighted_variance",
+            "weighted_frac"
+          ) %in%
+            list(...)[["fun"]]) &
+          !hasArg("weights")
+      ) {
+        stop(
+          "[MODIS NDVI/EVI Extraction] weighted summary requested but no",
+          " weights supplied via the 'weights' argument. Please supply",
+          " either a weighting raster or 'area' to use the cell areas of",
+          " the MODIS raster as weights.",
+          call. = FALSE
+        )
+      }
+    }
   }
 
   # Remove any observations missing year, month, or day data.
@@ -728,21 +833,197 @@ vegetation_extract <- function(
             modis_reliability_clip <- terra::crop(modis_reliability, tmp)
           }
 
-          # Extract using exactextractr::exact_extract().
-          data[
-            data$SurveyAreaIdentifier == k &
-              data$survey_year ==
-                unique(modis_match$survey_year[
-                  modis_match$filename == j &
-                    modis_match$SurveyAreaIdentifier == k
-                ]) &
-              data$yday %in%
-                modis_match$yday[
-                  modis_match$filename == j &
-                    modis_match$SurveyAreaIdentifier == k
-                ],
-            ifelse(i == "modis_ndvi", "ndvi", "evi")
-          ] <- exactextractr::exact_extract(modis_clip, tmp, fun = "mean")
+          # Check if function information is stored in ...
+          if (!hasArg("fun")) {
+            funs <- "mean"
+          } else {
+            funs <- list(...)[["fun"]]
+          }
+
+          # Check whether fun = NULL. In exactextractr::exact_extract() this is
+          # used to extract cell values and coverage fractions. fun = 'frac' is
+          # a valid alternative that works here.
+          if (is.null(funs)) {
+            stop(
+              "[MODIS NDVI/EVI Extraction] support is not provided for fun",
+              " = NULL. If wanting to extract cell values and coverage",
+              " fractions consider fun = 'frac'. Keep in mind that this can",
+              " produce a lot of columns. Direct use of",
+              " exactextractr::exact_extract() may be more useful here.",
+              call. = FALSE
+            )
+          } else if (is.function(funs)) {
+            # If fun is a user-specified function, attempt to run.
+            val <- exactextractr::exact_extract(modis_clip, tmp, ...)
+
+            # If function returns more than one value or a data.frame, stop.
+            if (
+              length(val) > 1 |
+                is.data.frame(val)
+            ) {
+              stop(
+                "[MODIS NDVI/EVI Extraction] support for custom summary",
+                " functions is currently limited to functions returning a",
+                " single value (not stored in a data.frame) to allow accurate",
+                " joining to input data.",
+                call. = FALSE
+              )
+            }
+
+            # If user-defined function returns acceptable value, join to data.
+            data[
+              data$SurveyAreaIdentifier == k &
+                data$survey_year ==
+                  unique(modis_match$survey_year[
+                    modis_match$filename == j &
+                      modis_match$SurveyAreaIdentifier == k
+                  ]) &
+                data$yday %in%
+                  modis_match$yday[
+                    modis_match$filename == j &
+                      modis_match$SurveyAreaIdentifier == k
+                  ],
+              paste0(
+                ifelse(i == "modis_ndvi", "ndvi", "evi"),
+                "_user_defined_function"
+              )
+            ] <- val
+          } else {
+            # If fun is one or more pre-defined summary functions (see
+            # ?exactextractr::exact_extract()), loop through options and extract.
+            for (l in funs) {
+              # Check if any summary functions requested required tailored
+              # joining.
+              if (
+                l == "quantile" &
+                  length(list(...)[["quantiles"]]) > 1
+              ) {
+                # Multiple quantiles cause exactextractr::exact_extract() to
+                # return a data.frame with a column for each requested quantile,
+                # and so must be joined in a tailored way.
+
+                # Build arguments so that calls with multiple functions
+                # requested in fun don't try and extract all requested functions
+                # on each loop iteration.
+                args <- list(...)
+                args$x <- modis_clip
+                args$y <- tmp
+                args$fun <- l
+
+                # Overwrite redundant args.
+                args$append_cols <- NULL
+                args$force_df <- FALSE
+
+                # Extract.
+                q_table <- do.call(exactextractr::exact_extract, args)
+
+                # Join each requested quantile to original data.
+                for (m in names(q_table)) {
+                  data[
+                    data$SurveyAreaIdentifier == k &
+                      data$survey_year ==
+                        unique(modis_match$survey_year[
+                          modis_match$filename == j &
+                            modis_match$SurveyAreaIdentifier == k
+                        ]) &
+                      data$yday %in%
+                        modis_match$yday[
+                          modis_match$filename == j &
+                            modis_match$SurveyAreaIdentifier == k
+                        ],
+                    paste0(
+                      ifelse(i == "modis_ndvi", "ndvi", "evi"),
+                      "_",
+                      l,
+                      "_",
+                      sub(pattern = "q", replacement = "", x = m)
+                    )
+                  ] <- q_table[, m]
+                }
+              } else if (l %in% c("frac", "weighted_frac")) {
+                # Extracting fraction or weighted fraction causes
+                # exactextractr::exact_extract() to return a data.frame with a
+                # column for each unique cell value, and so must be joined in a
+                # tailored way.
+
+                # Build arguments so that calls with multiple functions
+                # requested in fun don't try and extract all requested functions
+                # on each loop iteration.
+                args <- list(...)
+                args$x <- modis_clip
+                args$y <- tmp
+                args$fun <- l
+
+                # Overwrite redundant args.
+                args$append_cols <- NULL
+                args$force_df <- FALSE
+
+                # Extract.
+                frac_table <- do.call(exactextractr::exact_extract, args)
+
+                # Join each fractional value to original data.
+                for (m in names(frac_table)) {
+                  data[
+                    data$SurveyAreaIdentifier == k &
+                      data$survey_year ==
+                        unique(modis_match$survey_year[
+                          modis_match$filename == j &
+                            modis_match$SurveyAreaIdentifier == k
+                        ]) &
+                      data$yday %in%
+                        modis_match$yday[
+                          modis_match$filename == j &
+                            modis_match$SurveyAreaIdentifier == k
+                        ],
+                    paste0(
+                      ifelse(i == "modis_ndvi", "ndvi", "evi"),
+                      "_",
+                      l,
+                      "_",
+                      as.numeric(sub(
+                        pattern = "frac_",
+                        replacement = "",
+                        x = m
+                      )) *
+                        0.0001 # Apply scaling value to column names.
+                    )
+                  ] <- frac_table[, m]
+                }
+              } else {
+                # If no tailored joining needed, just build arguments so that
+                # calls with multiple functions requested in fun don't try and
+                # extract all requested functions on each loop iteration.
+                args <- list(...)
+                args$x <- modis_clip
+                args$y <- tmp
+                args$fun <- l
+
+                # Overwrite redundant args.
+                args$append_cols <- NULL
+                args$force_df <- FALSE
+
+                # Extract and join requested value to input data.
+                data[
+                  data$SurveyAreaIdentifier == k &
+                    data$survey_year ==
+                      unique(modis_match$survey_year[
+                        modis_match$filename == j &
+                          modis_match$SurveyAreaIdentifier == k
+                      ]) &
+                    data$yday %in%
+                      modis_match$yday[
+                        modis_match$filename == j &
+                          modis_match$SurveyAreaIdentifier == k
+                      ],
+                  paste0(
+                    ifelse(i == "modis_ndvi", "ndvi", "evi"),
+                    "_",
+                    l
+                  )
+                ] <- do.call(exactextractr::exact_extract, args)
+              }
+            }
+          }
 
           # Extract pixel reliability information if requested.
           if (reliability == TRUE) {
@@ -814,7 +1095,11 @@ vegetation_extract <- function(
                     modis_match$SurveyAreaIdentifier == k
                 ],
             ifelse(i == "modis_ndvi", "ndvi", "evi")
-          ] <- terra::extract(modis, tmp)[, 2]
+          ] <- terra::extract(modis, tmp, ...)[, `if`(
+            hasArg("layer"),
+            "value",
+            terra::names(modis)
+          )]
 
           # Extract pixel reliability information if requested.
           if (reliability == TRUE) {
@@ -844,7 +1129,9 @@ vegetation_extract <- function(
               "vegetation_reliability"
             ] <- labels$label[
               labels$value ==
-                unique(terra::extract(modis_reliability, tmp)[, 2])
+                unique(terra::extract(modis_reliability, tmp)[, terra::names(
+                  modis_reliability
+                )])
             ]
           }
         }
@@ -854,11 +1141,23 @@ vegetation_extract <- function(
 
   # Apply scaling factor.
   if ("modis_ndvi" %in% covariates) {
-    data$ndvi <- data$ndvi * 0.0001
+    if (buffered == TRUE) {
+      for (i in grep(pattern = "ndvi_", x = names(data), value = TRUE)) {
+        data[, i] <- sf::st_drop_geometry(data[, i]) * 0.0001
+      }
+    } else {
+      data$ndvi <- data$ndvi * 0.0001
+    }
   }
 
   if ("modis_evi" %in% covariates) {
-    data$evi <- data$evi * 0.0001
+    if (buffered == TRUE) {
+      for (i in grep(pattern = "evi_", x = names(data), value = TRUE)) {
+        data[, i] <- sf::st_drop_geometry(data[, i]) * 0.0001
+      }
+    } else {
+      data$evi <- data$evi * 0.0001
+    }
   }
 
   # Remove ordinal date column from original data.
@@ -871,6 +1170,17 @@ vegetation_extract <- function(
 
     rm(yday_storage)
     rm(yday_before)
+  }
+
+  # If reliability information requested, ensure it is in the last column
+  # position so it doesn't end up stuck between NDVI/EVI columns if both
+  # requested.
+  if (reliability == TRUE) {
+    data <- dplyr::relocate(
+      data,
+      "vegetation_reliability",
+      .before = "geometry"
+    )
   }
 
   # Check if attributes were found and stored from input data. If they were

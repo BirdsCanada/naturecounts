@@ -166,7 +166,7 @@ test_that("vegetation_download() returns correct warning with out of coverage da
       ),
       ed_transfer = FALSE
     )),
-    "Observation on date\\(s\\) 1998-12-19 could not be matched to a MODIS vegetation data file. Are they outside of the temporal coverage of the data \\(i.e., before 2000 or in the current year\\)\\?"
+    "Observation on date\\(s\\) 1998-12-19 could not be matched to a MODIS vegetation data file. Are they outside of the temporal coverage of the data \\(i.e., before 2000 or in the current year\\)?"
   )
 })
 
@@ -262,13 +262,13 @@ test_that("vegetation_extract() basic functionality with all expected data input
       "survey_year",
       "survey_month",
       "survey_day",
-      "ndvi",
-      "evi",
+      "ndvi_mean",
+      "evi_mean",
       "geometry"
     )
   )
   expect_equal(
-    dplyr::select(extracted, -"ndvi", -"evi"),
+    dplyr::select(extracted, -"ndvi_mean", -"evi_mean"),
     sf_poly,
     ignore_attr = TRUE
   ) # Ignores attributes to confirm that data has not been otherwise modified.
@@ -358,13 +358,13 @@ test_that("vegetation_extract() basic functionality with all expected data input
       "survey_year",
       "survey_month",
       "survey_day",
-      "ndvi",
-      "evi",
+      "ndvi_mean",
+      "evi_mean",
       "geometry"
     )
   )
   expect_equal(
-    dplyr::select(extracted, -"ndvi", -"evi"),
+    dplyr::select(extracted, -"ndvi_mean", -"evi_mean"),
     sf_poly,
     ignore_attr = TRUE
   ) # Ignores attributes to confirm that data has not been otherwise modified.
@@ -453,13 +453,13 @@ test_that("vegetation_extract() successfully returns reliability information.", 
       "survey_year",
       "survey_month",
       "survey_day",
-      "ndvi",
+      "ndvi_mean",
       "vegetation_reliability",
       "geometry"
     )
   )
   expect_equal(
-    dplyr::select(extracted, -"ndvi", -"vegetation_reliability"),
+    dplyr::select(extracted, -"ndvi_mean", -"vegetation_reliability"),
     sf_poly,
     ignore_attr = TRUE
   ) # Ignores attributes to confirm that data has not been otherwise modified.
@@ -527,7 +527,7 @@ test_that("vegetation_extract() returns appropriate warnings for out of coverage
         full.names = TRUE
       )
     )),
-    "\\[MODIS NDVI/EVI Extraction\\] observations from year 1999 fall outside of the temporal extent of the files provided. Is it in a year where data is unavailable from this dataset\\? No value will be returned."
+    "\\[MODIS NDVI\\/EVI Extraction\\] observations from year 1999 fall outside of the temporal extent of the files provided. Is it in a year where data is unavailable from this dataset\\? No value will be returned."
   )
   expect_true(is.na(extracted$ndvi[1]))
 
@@ -540,7 +540,7 @@ test_that("vegetation_extract() returns appropriate warnings for out of coverage
       ),
       reliability = TRUE
     )), # bonus test of whether reliability is returned as NA.
-    "\\[MODIS NDVI/EVI Extraction\\] observations from year 1999 fall outside of the temporal extent of the files provided. Is it in a year where data is unavailable from this dataset\\? No value will be returned."
+    "\\[MODIS NDVI\\/EVI Extraction\\] observations from year 1999 fall outside of the temporal extent of the files provided. Is it in a year where data is unavailable from this dataset\\? No value will be returned."
   )
   expect_true(is.na(extracted$ndvi[1]))
   expect_true(is.na(extracted$vegetation_reliability[1]))
@@ -561,7 +561,7 @@ test_that("vegetation_extract() returns appropriate warnings for out of coverage
         full.names = TRUE
       )
     )),
-    "\\[MODIS NDVI/EVI Extraction\\] observations on 2007-01-10 fall outside of the temporal extent of the files provided. You have provided data for this year but not this 16-day window. No value will be returned."
+    "\\[MODIS NDVI\\/EVI Extraction\\] observations on 2007-01-10 fall outside of the temporal extent of the files provided. You have provided data for this year but not this 16-day window. No value will be returned."
   )
   expect_true(is.na(extracted$ndvi[1]))
 
@@ -574,7 +574,7 @@ test_that("vegetation_extract() returns appropriate warnings for out of coverage
       ),
       reliability = TRUE
     )), # bonus test of whether reliability is returned as NA.
-    "\\[MODIS NDVI/EVI Extraction\\] observations on 2007-01-10 fall outside of the temporal extent of the files provided. You have provided data for this year but not this 16-day window. No value will be returned."
+    "\\[MODIS NDVI\\/EVI Extraction\\] observations on 2007-01-10 fall outside of the temporal extent of the files provided. You have provided data for this year but not this 16-day window. No value will be returned."
   )
   expect_true(is.na(extracted$ndvi[1]))
   expect_true(is.na(extracted$vegetation_reliability[1]))
@@ -684,3 +684,250 @@ test_that("vegetation_extract() succeeds with alternate column names, either pas
     rep(FALSE, times = 8)
   )
 })
+
+test_that("landcover_extract() succeeds with alternate landscape metrics, and throws error for patch scale metrics.", {
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(
+    bcch[bcch$survey_year == 2007, ]
+  )))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(
+    bcch[bcch$survey_year == 2007, ]
+  ))))
+
+  expect_silent(
+    extracted <- suppressMessages(vegetation_extract(
+      sf_pt,
+      vegetation_files = list.files(
+        "./testdir/modis/MOD13A1",
+        full.names = TRUE
+      ),
+      method = "bilinear", # Add some arguments of terra::extract() to check
+      # for errors.
+      layer = 1
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "ndvi",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$ndvi, "numeric"))
+
+  # Test a few standard functions.
+  expect_silent(
+    extracted <- suppressMessages(vegetation_extract(
+      sf_poly,
+      vegetation_files = list.files(
+        "./testdir/modis/MOD13A1",
+        full.names = TRUE
+      ),
+      fun = c("median", "max", "stdev")
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "ndvi_median",
+      "ndvi_max",
+      "ndvi_stdev",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$ndvi_median, "numeric"))
+  expect_true(inherits(extracted$ndvi_max, "numeric"))
+  expect_true(inherits(extracted$ndvi_stdev, "numeric"))
+
+  # Test functions with specific requirements
+
+  # Check that quantile requires quantiles argument.
+  expect_error(
+    extracted <- suppressMessages(vegetation_extract(
+      sf_poly,
+      vegetation_files = list.files(
+        "./testdir/modis/MOD13A1",
+        full.names = TRUE
+      ),
+      fun = "quantile"
+    )),
+    "\\[MODIS NDVI\\/EVI Extraction\\] quantile summary requested but no quantiles supplied to the 'quantiles' argument. Please supply numeric value\\(s\\) of desired quantiles."
+  )
+
+  # Check that one or more quantile joins correctly.
+  expect_silent(
+    extracted <- suppressMessages(vegetation_extract(
+      sf_poly,
+      vegetation_files = list.files(
+        "./testdir/modis/MOD13A1",
+        full.names = TRUE
+      ),
+      fun = "quantile",
+      quantiles = c(0.25)
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "ndvi_quantile",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$ndvi_quantile, "numeric"))
+
+  expect_silent(
+    extracted <- suppressMessages(vegetation_extract(
+      sf_poly,
+      vegetation_files = list.files(
+        "./testdir/modis/MOD13A1",
+        full.names = TRUE
+      ),
+      fun = "quantile",
+      quantiles = c(0.25, 0.75)
+    ))
+  )
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "ndvi_quantile_25",
+      "ndvi_quantile_75",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$ndvi_quantile_25, "numeric"))
+  expect_true(inherits(extracted$ndvi_quantile_75, "numeric"))
+
+  # Check that weighted functions require weights argument.
+  expect_error(
+    extracted <- suppressMessages(vegetation_extract(
+      sf_poly,
+      vegetation_files = list.files(
+        "./testdir/modis/MOD13A1",
+        full.names = TRUE
+      ),
+      fun = "weighted_mean"
+    )),
+    "\\[MODIS NDVI\\/EVI Extraction\\] weighted summary requested but no weights supplied via the 'weights' argument. Please supply either a weighting raster or 'area' to use the cell areas of the MODIS raster as weights."
+  )
+
+  # Check that fractions join correctly.
+  expect_silent(
+    extracted <- suppressMessages(vegetation_extract(
+      sf_poly,
+      vegetation_files = list.files(
+        "./testdir/modis/MOD13A1",
+        full.names = TRUE
+      ),
+      fun = "frac"
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "ndvi_frac_0.0815",
+      "ndvi_frac_0.0941",
+      "ndvi_frac_0.1185",
+      "ndvi_frac_0.1321",
+      "ndvi_frac_0.1876",
+      "ndvi_frac_0.033",
+      "ndvi_frac_0.0359",
+      "ndvi_frac_0.0383",
+      "ndvi_frac_0.0425",
+      "ndvi_frac_0.143",
+      "ndvi_frac_0.282",
+      "ndvi_frac_0.2892",
+      "ndvi_frac_0.3175",
+      "ndvi_frac_0.3895",
+      "ndvi_frac_0.5015",
+      "ndvi_frac_0.0886",
+      "ndvi_frac_0.1905",
+      "ndvi_frac_0.6719",
+      "ndvi_frac_0.6869",
+      "ndvi_frac_0.791",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$ndvi_frac_0.033, "numeric"))
+
+  # Test that user specified functions work.
+  my_function <- function(value, cov_frac) {
+    mean(value * cov_frac)
+  }
+
+  expect_silent(
+    extracted <- suppressMessages(vegetation_extract(
+      sf_poly,
+      vegetation_files = list.files(
+        "./testdir/modis/MOD13A1",
+        full.names = TRUE
+      ),
+      fun = my_function
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "ndvi_user_defined_function",
+      "geometry"
+    )
+  )
+
+  # Test that functions that return more than one value throw error.
+  my_function <- function(value, cov_frac) {
+    value * cov_frac
+  }
+
+  expect_error(
+    extracted <- suppressMessages(vegetation_extract(
+      sf_poly,
+      vegetation_files = list.files(
+        "./testdir/modis/MOD13A1",
+        full.names = TRUE
+      ),
+      fun = my_function
+    )),
+    "\\[MODIS NDVI\\/EVI Extraction\\] support for custom summary functions is currently limited to functions returning a single value \\(not stored in a data.frame\\) to allow accurate joining to input data."
+  )
+})
+
+unlink("./testdir", recursive = TRUE)
