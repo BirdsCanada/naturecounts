@@ -106,6 +106,5 @@ output <- worldclim_download(data = bcch,
                              covariates = "worldclim_wind",
                              progress = FALSE)
 #> [Worldclim Download] downloading WorldClim 'wind' data for Canada.
-#> The geodata server seems to be temporary out of service. Please try again later. 
-#> Warning: [WorldClim Download] Download failed for Canada [wind].
+#> Cached as: ./worldclim/climate/wc2.1_country/CAN_wc2.1_30s_wind.tif
 ```

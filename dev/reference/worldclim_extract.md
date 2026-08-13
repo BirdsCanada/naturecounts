@@ -134,14 +134,12 @@ bcch <- data_fmt(bcch)
 wind <- worldclim_download(data = bcch,
                            covariates = "worldclim_wind",
                            progress = FALSE)
-#> [Worldclim Download] downloading WorldClim 'wind' data for Canada.
-#> The geodata server seems to be temporary out of service. Please try again later. 
-#> Warning: [WorldClim Download] Download failed for Canada [wind].
 
 # Extract average temperature
 output <- worldclim_extract(data = bcch,
                             worldclim_data = wind,
                             covariates = "worldclim_wind",
                             retain = FALSE)
-#> Error in worldclim_data[[1]]: subscript out of bounds
+#> [WorldClim Extraction] extracting WorldClim wind.
+#> [WorldClim Extraction] task complete. Removing files.
 ```

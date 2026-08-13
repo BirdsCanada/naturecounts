@@ -72,7 +72,11 @@ landcover_extract(
 
   Other arguments passed to
   [`landscapemetrics::calculate_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html)
-  for buffered input data.
+  for `sf` 'POLYGON' or `terra` 'polygons' input data. Primarily useful
+  for specifying metrics other than the proportional cover of each
+  landcover class. See
+  [`landscapemetrics::list_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html)
+  for other options.
 
 ## Value
 
