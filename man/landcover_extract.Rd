@@ -10,7 +10,8 @@ landcover_extract(
   landcover_files,
   site_name = NULL,
   date_year = NULL,
-  retain = TRUE
+  retain = TRUE,
+  ...
 )
 }
 \arguments{
@@ -39,6 +40,9 @@ specified in a call to \code{\link[=data_fmt]{data_fmt()}} or \code{\link[=landc
 
 \item{retain}{Logical. Should MODIS data files be kept after extraction. If
 \code{FALSE}, files will be deleted.}
+
+\item{...}{Other arguments passed to \code{\link[landscapemetrics:calculate_lsm]{landscapemetrics::calculate_lsm()}} for
+buffered input data.}
 }
 \value{
 For \code{sf} 'POINT' or \code{terra} 'points' input data, original data with
@@ -46,7 +50,9 @@ a character column \code{lctype1} appended containing the name of the landcover
 class that point falls within.
 
 For \code{sf} 'POLYGON' or \code{terra} 'polygons' input data, original data with
-numeric columns containing the proportion of each polygon that is covered
+numeric columns containing the requested landscape metrics (see
+\code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} for options). By default, returns columns
+containing the proportion of each polygon that is covered
 by each landcover type.
 }
 \description{
@@ -76,7 +82,6 @@ choose their desired classification scheme appropriately.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
 # Using the included, test data on black-capped chickadees
 bcch # look at the data
 
@@ -112,4 +117,7 @@ the MODIS Landcover dataset.
 \code{\link[=nc_covariates_merge]{nc_covariates_merge()}} to merge extracted
 covariate data into data originally provided to the \code{data} argument of
 \code{\link[=data_fmt]{data_fmt()}}.
+
+\code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} to view options for landscape metrics that
+can be calculated for buffered input data.
 }

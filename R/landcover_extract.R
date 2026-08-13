@@ -42,17 +42,20 @@
 #'   specified in a call to [data_fmt()] or [landcover_download()].
 #' @param retain Logical. Should MODIS data files be kept after extraction. If
 #'   `FALSE`, files will be deleted.
+#' @param ... Other arguments passed to [landscapemetrics::calculate_lsm()] for
+#'   buffered input data.
 #'
 #' @returns For `sf` 'POINT' or `terra` 'points' input data, original data with
 #'   a character column `lctype1` appended containing the name of the landcover
 #'   class that point falls within.
 #'
 #'   For `sf` 'POLYGON' or `terra` 'polygons' input data, original data with
-#'   numeric columns containing the proportion of each polygon that is covered
+#'   numeric columns containing the requested landscape metrics (see
+#'   [landscapemetrics::list_lsm()] for options). By default, returns columns
+#'   containing the proportion of each polygon that is covered
 #'   by each landcover type.
 #'
 #' @examplesIf interactive()
-#'
 #' # Using the included, test data on black-capped chickadees
 #' bcch # look at the data
 #'
@@ -87,6 +90,9 @@
 #'   covariate data into data originally provided to the `data` argument of
 #'   [data_fmt()].
 #'
+#'   [landscapemetrics::list_lsm()] to view options for landscape metrics that
+#'   can be calculated for buffered input data.
+#'
 #' @export
 
 # Function to extract land cover data from provided MODIS MCD12Q1 data files.
@@ -102,7 +108,8 @@ landcover_extract <- function(
   # data. Default is assumed to be the BMDE column 'survey_year'. Can
   # be left NULL and still function properly if originally specified in a call
   # to data_fmt().
-  retain = TRUE # Should data files be kept after extraction?
+  retain = TRUE, # Should data files be kept after extraction?
+  ...
 ) {
   # Check packages
   have_pkg_check(c(
@@ -526,58 +533,174 @@ landcover_extract <- function(
           # Crop MODIS data file to site k's buffer.
           modis_clip <- terra::crop(modis, tmp)
 
-          # Use landscapemetrics::calculate_lsm() to calculate the proportion
-          # of each land cover type present in the cropped raster ("pland").
-          modis_pland <- landscapemetrics::calculate_lsm(
-            modis_clip,
-            metric = "pland"
-          )
+          # Check if landscapemetrics::calculate_lsm() arguments are stored in
+          # ..., if not then set defaults.
+          if (
+            !hasArg("level") &
+              !hasArg("metric") &
+              !hasArg("name") &
+              !hasArg("type")
+          ) {
+            # Use landscapemetrics::calculate_lsm() to calculate the proportion
+            # of each land cover type present in the cropped raster ("pland").
+            modis_lsm <- landscapemetrics::calculate_lsm(
+              modis_clip,
+              metric = "pland",
+              ...
+            )
+          } else {
+            # Use landscapemetrics::calculate_lsm() to calculate requested
+            # landscape metrics stored in ...
+            modis_lsm <- landscapemetrics::calculate_lsm(
+              modis_clip,
+              ...
+            )
+          }
 
-          # Loop through each land cover type present in the cropped raster
+          # Throw error if metrics requested at the patch scale.
+          if ("patch" %in% unique(modis_lsm$level)) {
+            stop(
+              "[MODIS Landcover Extraction] landscape metrics requested at",
+              " the patch scale, which is currently incompatible with",
+              " landcover_extract(). Consult",
+              " landscapemetrics::list_lsm(level = 'patch') to determine",
+              " which metrics are patch scale.",
+              call. = FALSE
+            )
+          }
+
+          # Check if metrics at the landscape scale were requested. If so,
+          # append metric at site k in the appropriate year to input data.
+          if ("landscape" %in% unique(modis_lsm$level)) {
+            for (l in unique(modis_lsm$metric[
+              modis_lsm$level == "landscape"
+            ])) {
+              {
+                data[
+                  data$SurveyAreaIdentifier == k &
+                    data$survey_year %in%
+                      modis_match$survey_year[modis_match$filename == j],
+                  paste0(index, "_", l, "_landscape")
+                ] <- modis_lsm$value[
+                  modis_lsm$level == "landscape" & modis_lsm$metric == l
+                ]
+              }
+            }
+          }
+
+          # Check if metrics at the class scale were requested. If so, loop
+          # through each land cover type present in the cropped raster
           # and append proportion at site k in the appropriate year to input
           # data. Create parseable column names using names for each
-          # class listed above.
-          for (l in modis_pland$class) {
-            data[
-              data$SurveyAreaIdentifier == k &
-                data$survey_year %in%
-                  modis_match$survey_year[modis_match$filename == j],
-              paste0(
+          # class listed above
+          if ("class" %in% unique(modis_lsm$level)) {
+            for (l in modis_lsm$metric[modis_lsm$level == "class"]) {
+              for (m in modis_lsm$class[
+                modis_lsm$level == "class" & modis_lsm$metric == l
+              ]) {
+                data[
+                  data$SurveyAreaIdentifier == k &
+                    data$survey_year %in%
+                      modis_match$survey_year[modis_match$filename == j],
+                  paste0(
+                    index,
+                    "_",
+                    l,
+                    "_",
+                    modis_classes[[i]]$name[modis_classes[[i]]$class == m]
+                  )
+                ] <- modis_lsm$value[
+                  modis_lsm$level == "class" &
+                    modis_lsm$metric == l &
+                    modis_lsm$class == m
+                ]
+              }
+
+              # Check whether any land cover classes were never in the cropped
+              # raster. For certain metrics these are true zeros, but would be
+              # left out otherwise. Add these columns in with 0 values. If not
+              # necessarily a true 0, fill with NA.
+              missing_cols <- paste0(
                 index,
                 "_",
-                modis_classes[[i]]$name[modis_classes[[i]]$class == l]
-              )
-            ] <- modis_pland$value[modis_pland$class == l]
+                l,
+                "_",
+                modis_classes[[i]]$name
+              )[
+                !(paste0(index, "_", l, "_", modis_classes[[i]]$name) %in%
+                  names(data))
+              ]
+              if (
+                l %in%
+                  c(
+                    "area_cv",
+                    "area_mn",
+                    "area_sd",
+                    "ca",
+                    "core_cv",
+                    "core_mn",
+                    "core_sd",
+                    "cpland",
+                    "dcad",
+                    "dcore_cv",
+                    "dcore_mn",
+                    "dcore_sd",
+                    "ed",
+                    "ndca",
+                    "np",
+                    "pd",
+                    "pland",
+                    "tca",
+                    "te"
+                  )
+              ) {
+                for (m in missing_cols) {
+                  data[, m] <- 0
+                }
+
+                # Replace NAs present in columns for land cover classes that were
+                # found at some sites but not others with the true zeros they
+                # represent.
+                for (m in paste0(index, "_", l, "_", modis_classes[[i]]$name)) {
+                  data[
+                    is.na(data[, m] %>% sf::st_drop_geometry()) &
+                      !(data$SurveyAreaIdentifier %in% out_of_range),
+                    m
+                  ] <- 0
+                }
+              } else {
+                for (m in missing_cols) {
+                  data[, m] <- NA
+                }
+              }
+
+              # Reorder columns to match class order provided in MODIS
+              # documentation.
+              data <- data[, c(
+                grep(
+                  paste0("_", l, "_"),
+                  names(data),
+                  value = TRUE,
+                  invert = TRUE
+                ),
+                `if`(
+                  "landscape" %in%
+                    modis_lsm$level &
+                    l %in% modis_lsm$metric[modis_lsm$level == "landscape"],
+                  c(
+                    paste0(index, "_", l, "_landscape"),
+                    paste0(index, "_", l, "_", modis_classes[[i]]$name)
+                  ),
+                  paste0(index, "_", l, "_", modis_classes[[i]]$name)
+                )
+              )]
+            }
           }
 
-          # Check whether any land cover classes were never in the cropped
-          # raster. These are true zeros, but would be left out otherwise.
-          # Add these columns in with 0 values.
-          missing_cols <- paste0(index, "_", modis_classes[[i]]$name)[
-            !(paste0(index, "_", modis_classes[[i]]$name) %in% names(data))
-          ]
-
-          for (l in missing_cols) {
-            data[, l] <- 0
+          # Remove false zeroes for any sites that fall outside of data coverage.
+          for (l in grep(pattern = index, x = names(data))) {
+            data[data$SurveyAreaIdentifier %in% out_of_range, l] <- NA
           }
-
-          # Replace NAs present in columns for land cover classes that were
-          # found at some sites but not others with the true zeros they
-          # represent.
-          for (l in paste0(index, "_", modis_classes[[i]]$name)) {
-            data[
-              is.na(data[, l] %>% sf::st_drop_geometry()) &
-                !(data$SurveyAreaIdentifier %in% out_of_range),
-              l
-            ] <- 0
-          }
-
-          # Reorder columns to match class order provided in MODIS
-          # documentation.
-          data <- data[, c(
-            grep(index, names(data), value = TRUE, invert = TRUE),
-            paste0(index, "_", modis_classes[[i]]$name)
-          )]
         } else {
           # Create temporary object containing only the point for site k.
           tmp <- data %>%
@@ -668,13 +791,6 @@ landcover_extract <- function(
             }
           )
         }
-      }
-    }
-
-    # Remove false zeroes for any sites that fall outside of data coverage.
-    if (buffered == TRUE) {
-      for (j in paste0(index, "_", modis_classes[[i]]$name)) {
-        data[data$SurveyAreaIdentifier %in% out_of_range, j] <- NA
       }
     }
   }
