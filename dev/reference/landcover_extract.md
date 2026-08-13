@@ -15,7 +15,8 @@ landcover_extract(
   landcover_files,
   site_name = NULL,
   date_year = NULL,
-  retain = TRUE
+  retain = TRUE,
+  ...
 )
 ```
 
@@ -67,6 +68,12 @@ landcover_extract(
   Logical. Should MODIS data files be kept after extraction. If `FALSE`,
   files will be deleted.
 
+- ...:
+
+  Other arguments passed to
+  [`landscapemetrics::calculate_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html)
+  for buffered input data.
+
 ## Value
 
 For `sf` 'POINT' or `terra` 'points' input data, original data with a
@@ -74,8 +81,10 @@ character column `lctype1` appended containing the name of the landcover
 class that point falls within.
 
 For `sf` 'POLYGON' or `terra` 'polygons' input data, original data with
-numeric columns containing the proportion of each polygon that is
-covered by each landcover type.
+numeric columns containing the requested landscape metrics (see
+[`landscapemetrics::list_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html)
+for options). By default, returns columns containing the proportion of
+each polygon that is covered by each landcover type.
 
 ## Details
 
@@ -112,11 +121,14 @@ to merge extracted covariate data into data originally provided to the
 `data` argument of
 [`data_fmt()`](https://birdscanada.github.io/naturecounts/dev/reference/data_fmt.md).
 
+[`landscapemetrics::list_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html)
+to view options for landscape metrics that can be calculated for
+buffered input data.
+
 ## Examples
 
 ``` r
 if (FALSE) { # interactive()
-
 # Using the included, test data on black-capped chickadees
 bcch # look at the data
 

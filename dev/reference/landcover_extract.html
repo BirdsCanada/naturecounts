@@ -66,7 +66,8 @@ approximately 500 m spatial resolution. This data can be downloaded using
 <span>  <span class="va">landcover_files</span>,</span>
 <span>  site_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  date_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  retain <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  retain <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -111,6 +112,11 @@ specified in a call to <code><a href="data_fmt.html">data_fmt()</a></code> or <c
 <dd><p>Logical. Should MODIS data files be kept after extraction. If
 <code>FALSE</code>, files will be deleted.</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Other arguments passed to <code><a href="https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html" class="external-link">landscapemetrics::calculate_lsm()</a></code> for
+buffered input data.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -118,7 +124,9 @@ specified in a call to <code><a href="data_fmt.html">data_fmt()</a></code> or <c
 a character column <code>lctype1</code> appended containing the name of the landcover
 class that point falls within.</p>
 <p>For <code>sf</code> 'POLYGON' or <code>terra</code> 'polygons' input data, original data with
-numeric columns containing the proportion of each polygon that is covered
+numeric columns containing the requested landscape metrics (see
+<code><a href="https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html" class="external-link">landscapemetrics::list_lsm()</a></code> for options). By default, returns columns
+containing the proportion of each polygon that is covered
 by each landcover type.</p>
     </div>
     <div class="section level2">
@@ -143,13 +151,14 @@ choose their desired classification scheme appropriately.</p>
 the MODIS Landcover dataset.</p>
 <p><code><a href="nc_covariates_merge.html">nc_covariates_merge()</a></code> to merge extracted
 covariate data into data originally provided to the <code>data</code> argument of
-<code><a href="data_fmt.html">data_fmt()</a></code>.</p></div>
+<code><a href="data_fmt.html">data_fmt()</a></code>.</p>
+<p><code><a href="https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html" class="external-link">landscapemetrics::list_lsm()</a></code> to view options for landscape metrics that
+can be calculated for buffered input data.</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using the included, test data on black-capped chickadees</span></span></span>
 <span class="r-in"><span><span class="va">bcch</span> <span class="co"># look at the data</span></span></span>
 <span class="r-in"><span></span></span>
