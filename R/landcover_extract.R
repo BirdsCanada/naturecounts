@@ -43,7 +43,9 @@
 #' @param retain Logical. Should MODIS data files be kept after extraction. If
 #'   `FALSE`, files will be deleted.
 #' @param ... Other arguments passed to [landscapemetrics::calculate_lsm()] for
-#'   buffered input data.
+#'   `sf` 'POLYGON' or `terra` 'polygons' input data. Primarily useful for
+#'   specifying metrics other than the proportional cover of each landcover
+#'   class. See [landscapemetrics::list_lsm()] for other options.
 #'
 #' @returns For `sf` 'POINT' or `terra` 'points' input data, original data with
 #'   a character column `lctype1` appended containing the name of the landcover

@@ -42,7 +42,9 @@ specified in a call to \code{\link[=data_fmt]{data_fmt()}} or \code{\link[=landc
 \code{FALSE}, files will be deleted.}
 
 \item{...}{Other arguments passed to \code{\link[landscapemetrics:calculate_lsm]{landscapemetrics::calculate_lsm()}} for
-buffered input data.}
+\code{sf} 'POLYGON' or \code{terra} 'polygons' input data. Primarily useful for
+specifying metrics other than the proportional cover of each landcover
+class. See \code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} for other options.}
 }
 \value{
 For \code{sf} 'POINT' or \code{terra} 'points' input data, original data with
