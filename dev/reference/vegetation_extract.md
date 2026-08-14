@@ -20,7 +20,8 @@ vegetation_extract(
   date_year = NULL,
   date_month = NULL,
   date_day = NULL,
-  retain = TRUE
+  retain = TRUE,
+  ...
 )
 ```
 
@@ -96,6 +97,16 @@ vegetation_extract(
   Logical. Should MODIS data files be kept after extraction. If `FALSE`,
   files will be deleted.
 
+- ...:
+
+  Other arguments passed to
+  [`terra::extract()`](https://rspatial.github.io/terra/reference/extract.html)
+  for `sf` 'POINT' or `terra` 'points' input data or
+  [`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html)
+  `sf` 'POLYGON' or `terra` 'polygons' input data. Primarily useful for
+  specifying alternate summary statistics to extract for `sf` 'POLYGON'
+  or `terra` 'polygons' input data.
+
 ## Value
 
 For `sf` 'POINT' or `terra` 'points' input data, original data with
@@ -106,11 +117,11 @@ assessment as defined in table 4 of the [product's user
 manual](https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf).
 
 For `sf` 'POLYGON' or `terra` 'polygons' input data, original data with
-numeric column(s) `ndvi` and/or `evi` appended containing the mean
-NDVI/EVI value within each polygon. If reliability information
-requested, an additional `vegetation_reliability` column is appended
-containing the percentage of pixels overlapped by each polygon in each
-reliability assessment as defined in table 4 of the [product's user
+numeric column(s) appended containing the requested NDVI/EVI value
+within each polygon. If reliability information requested, an additional
+`vegetation_reliability` column is appended containing the percentage of
+pixels overlapped by each polygon in each reliability assessment as
+defined in table 4 of the [product's user
 manual](https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf).
 
 ## Details
@@ -126,6 +137,88 @@ argument:
 Details on the calculation of these indices can be found in the [MOD13
 user
 guide](https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf).
+
+By default, for `sf` 'POLYGON' or `terra` 'polygons' input data the mean
+NDVI and/or EVI value will be returned. Other summary statistics can be
+extracted by specifying the `fun` argument, which is passed to
+[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html).
+The available summary statistics are:
+
+- `min` - the minimum non-`NA` value in any raster cell wholly or
+  partially covered by the polygon
+
+- `max` - the maximum non-`NA` value in any raster cell wholly or
+  partially covered by the polygon
+
+- `count` - the sum of fractions of raster cells with non-`NA` values
+  covered by the polygon
+
+- `sum` - the sum of non-`NA` raster cell values, multiplied by the
+  fraction of the cell that is covered by the polygon
+
+- `mean` - the mean cell value, weighted by the fraction of each cell
+  that is covered by the polygon
+
+- `median` - the median cell value, weighted by the fraction of each
+  cell that is covered by the polygon
+
+- `quantile` - arbitrary quantile(s) of cell values, specified in
+  `quantiles`, weighted by the fraction of each cell that is covered by
+  the polygon
+
+- `mode` - the most common cell value, weighted by the fraction of each
+  cell that is covered by the polygon. Where multiple values occupy the
+  same maximum number of weighted cells, the largest value will be
+  returned.
+
+- `majority` - synonym for `mode`
+
+- `minority` - the least common cell value, weighted by the fraction of
+  each cell that is covered by the polygon. Where multiple values occupy
+  the same minimum number of weighted cells, the smallest value will be
+  returned.
+
+- `variety` - the number of distinct values in cells that are wholly or
+  partially covered by the polygon.
+
+- `variance` - the population variance of cell values, weighted by the
+  fraction of each cell that is covered by the polygon.
+
+- `stdev` - the population standard deviation of cell values, weighted
+  by the fraction of each cell that is covered by the polygon.
+
+- `coefficient_of_variation` - the population coefficient of variation
+  of cell values, weighted by the fraction of each cell that is covered
+  by the polygon.
+
+- `weighted_mean` - the mean cell value, weighted by the product of the
+  fraction of each cell covered by the polygon and the value of a second
+  weighting raster provided as `weights`
+
+- `weighted_sum` - the sum of defined raster cell values, multiplied by
+  the fraction of each cell that is covered by the polygon and the value
+  of a second weighting raster provided as `weights`
+
+- `weighted_stdev` - the population standard deviation of cell values,
+  weighted by the product of the fraction of each cell covered by the
+  polygon and the value of a second weighting raster provided as
+  `weights`
+
+- `weighted_variance` - the population variance of cell values, weighted
+  by the product of the fraction of each cell covered by the polygon and
+  the value of a second weighting raster provided as `weights`
+
+- `frac` - returns one column for each possible value of `x`, with the
+  the fraction of defined raster cells that are equal to that value.
+
+- `weighted_frac` - returns one column for each possible value of `x`,
+  with the fraction of defined cells that are equal to that value,
+  weighted by \`weights.
+
+User defined functions can also be passed to `fun`, but these must
+return a single value. More information can be found in the
+documentation for
+[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html).
 
 NDVI/EVI calculations are sensitive to the presence of snow/ice and
 cloudiness. So users can assess the quality of data extracted at each
