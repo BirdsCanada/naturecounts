@@ -23,6 +23,80 @@
 #' - Broadleaf tree species cover (% of pixel): `scanfi_broadleaf`
 #' - Other conifer species cover (% of pixel): `scanfi_otherconifer`
 #'
+#' By default, for `sf` 'POLYGON' or `terra` 'polygons' input data the mean SCANFI
+#' variable value will be returned, or the proportion of polygon area covered
+#' by each NFI Landcover class (`pland`) will be returned if `scanfi_nfilc` requested.
+#' Other summary statistics can be extracted for non-NFI Landcover variables
+#' by specifying the `fun` argument, which is passed to
+#' [exactextractr::exact_extract()]. The available summary statistics are:
+#'
+#'  * `min` - the minimum non-`NA` value in any raster cell wholly or
+#'            partially covered by the polygon
+#'  * `max` - the maximum non-`NA` value in any raster cell wholly or
+#'            partially covered by the polygon
+#'  * `count` - the sum of fractions of raster cells with non-`NA`
+#'              values covered by the polygon
+#'  * `sum`   - the sum of non-`NA` raster cell values, multiplied by
+#'              the fraction of the cell that is covered by the polygon
+#'  * `mean` - the mean cell value, weighted by the fraction of each cell
+#'             that is covered by the polygon
+#'  * `median` - the median cell value, weighted by the fraction of each cell
+#'               that is covered by the polygon
+#'  * `quantile` - arbitrary quantile(s) of cell values, specified in
+#'                 `quantiles`, weighted by the fraction of each cell that is
+#'                  covered by the polygon
+#'  * `mode` - the most common cell value, weighted by the fraction of
+#'             each cell that is covered by the polygon. Where multiple
+#'             values occupy the same maximum number of weighted cells,
+#'             the largest value will be returned.
+#'  * `majority` - synonym for `mode`
+#'  * `minority` - the least common cell value, weighted by the fraction
+#'                 of each cell that is covered by the polygon. Where
+#'                 multiple values occupy the same minimum number of
+#'                 weighted cells, the smallest value will be returned.
+#'  * `variety` - the number of distinct values in cells that are wholly or
+#'                partially covered by the polygon.
+#'  * `variance` - the population variance of cell values, weighted by the
+#'                 fraction of each cell that is covered by the polygon.
+#'  * `stdev` - the population standard deviation of cell values, weighted by
+#'              the fraction of each cell that is covered by the polygon.
+#'  * `coefficient_of_variation` - the population coefficient of variation of
+#'                                 cell values, weighted by the fraction of each
+#'                                 cell that is covered by the polygon.
+#'  * `weighted_mean` - the mean cell value, weighted by the product of
+#'                      the fraction of each cell covered by the polygon
+#'                      and the value of a second weighting raster provided
+#'                      as `weights`
+#'  * `weighted_sum` - the sum of defined raster cell values, multiplied by
+#'                     the fraction of each cell that is covered by the polygon
+#'                     and the value of a second weighting raster provided
+#'                     as `weights`
+#'  * `weighted_stdev` - the population standard deviation of cell values,
+#'                       weighted by the product of the fraction of each cell
+#'                       covered by the polygon and the value of a second
+#'                       weighting raster provided as `weights`
+#'  * `weighted_variance` - the population variance of cell values, weighted by
+#'                          the product of the fraction of each cell covered by
+#'                          the polygon and the value of a second weighting
+#'                          raster provided as `weights`
+#'  * `frac` - returns one column for each possible value of `x`, with the
+#'             the fraction of defined raster cells that are equal to that
+#'             value.
+#'  * `weighted_frac` - returns one column for each possible value of `x`,
+#'                      with the fraction of defined cells that are equal
+#'                      to that value, weighted by `weights.
+#'
+#' User defined functions can also be passed to `fun`, but these must return a
+#' single value. More information can be found in the documentation for
+#' [exactextractr::exact_extract()].
+#'
+#' For extraction of NFI Landcover data with `sf` 'POLYGON' or `terra`
+#' 'polygons' input data, other summary metrics can be requested by specifying
+#' the `level`, `class`, `metric`, or `name` arguments, which are passed to
+#' [landscapemetrics::calculate_lsm()]. See [landscapemetrics::list_lsm()] for
+#' metric options. At this time, only metrics at the `landscape` or `class`
+#' level are accepted.
+#'
 #' @param data A sf` 'POINT' or 'POLYGON' object, or `terra` 'points'
 #'   or 'polygons' object containing a column with observation years either named
 #'   the BMDE default `survey_year` or another name specified in argument `date_year`.
@@ -49,14 +123,19 @@
 #'   directory.
 #' @param retain Logical. Should SCANFI data files be kept after extraction? If
 #'   `FALSE`, files will be deleted.
+#' @param ... Other arguments passed to [landscapemetrics::calculate_lsm()] if
+#'   NFI Landcover data requested, or [exactextractr::exact_extract()] or
+#'   for other requested variables with `sf` 'POLYGON' or `terra` 'polygons'
+#'   input data. Primarily useful for specifying metrics other than the
+#'   proportional cover of each landcover class when NFI Landcover requested
+#'   (see [landscapemetrics::list_lsm()] for other options) or the mean
+#'   for other SCANFI variables.
 #'
 #' @returns For sf 'POINT' or terra 'points' input data, original data with
 #'  column(s) appended containing the SCANFI data value(s) at each point.
 #'
 #'  For sf 'POLYGON' or terra 'polygons' input data, original data with column(s)
-#'   appended containing the mean SCANFI data value(s) within each polygon or,
-#'   if NFI Landcover requested, the proportion the polygon area covered by of
-#'   each land cover class.
+#'   appended containing the requested SCANFI data value(s) within each polygon.
 #'
 #' @examples
 #' # Convert included test data on black-capped chickadees to sf POINT object
@@ -113,7 +192,8 @@ scanfi_extract <- function(
   # to data_fmt().
   dl_path = NULL, # Path to downloaded files. Only needed if retain = TRUE and
   # custom dl_path is used.
-  retain = TRUE # Should data files be kept after extraction?
+  retain = TRUE, # Should data files be kept after extraction?
+  ...
 ) {
   # Check packages
   have_pkg_check(c(
@@ -173,17 +253,6 @@ scanfi_extract <- function(
       "[SCANFI Extraction] covariates either not listed or one or more are",
       " invalid. Please provide covariate names as listed under",
       " `covariate_name` in nc_covariate_table().",
-      call. = FALSE
-    )
-  }
-
-  # If no SCANFI rasters are provided, return error.
-  if (missing(scanfi_data)) {
-    stop(
-      "[SCANFI Extraction] no SCANFI rasters provided to extract from. Please",
-      " provide a list containing one entry for every snapshot year, each",
-      " containing one raster for each listed SCANFI covariate.",
-      " Data can be downloaded using scanfi_download().",
       call. = FALSE
     )
   }
@@ -457,6 +526,38 @@ scanfi_extract <- function(
 
       if (buffered == TRUE & !(i == "nfilc")) {
         have_pkg_check("exactextractr")
+
+        if (hasArg("fun") & !is.function(list(...)[["fun"]])) {
+          if ("quantile" %in% list(...)[["fun"]] & !hasArg("quantiles")) {
+            stop(
+              "[SCANFI Extraction] quantile summary requested but",
+              " no quantiles supplied to the 'quantiles' argument. Please",
+              " supply numeric value(s) of desired quantiles.",
+              call. = FALSE
+            )
+          }
+
+          if (
+            TRUE %in%
+              (c(
+                "weighted_mean",
+                "weighted_sum",
+                "weighted_stdev",
+                "weighted_variance",
+                "weighted_frac"
+              ) %in%
+                list(...)[["fun"]]) &
+              !hasArg("weights")
+          ) {
+            stop(
+              "[SCANFI Extraction] weighted summary requested but no",
+              " weights supplied via the 'weights' argument. Please supply",
+              " either a weighting raster or 'area' to use the cell areas of",
+              " the SCANFI raster as weights.",
+              call. = FALSE
+            )
+          }
+        }
       }
 
       # Check that required raster is available.
@@ -521,6 +622,8 @@ scanfi_extract <- function(
               " No value will be returned.",
               call. = FALSE
             )
+
+            range <- "out"
           } else if (
             !terra::is.related(scanfi_filled, terra::vect(tmp), "contains") &
               terra::is.related(scanfi_filled, terra::vect(tmp), "overlaps")
@@ -536,8 +639,15 @@ scanfi_extract <- function(
               " value will be derived from the available values.",
               call. = FALSE
             )
+
+            range <- "overlap"
           } else {
-            # If no issues with coverage, proceed to extract. For NFI Land Cover,
+            range <- "in"
+          }
+
+          # If no issues with coverage, proceed to extract.
+          if (range %in% c("overlap", "in")) {
+            # For NFI Land Cover,
             # extract with landscapemetrics::calculate_lsm() if buffered and with
             # terra::extract() if not. Otherwise, extract with
             # exactextractr::exact_extract() if buffered, and terra::extract()
@@ -567,66 +677,198 @@ scanfi_extract <- function(
                 # Crop SCANFI data to site buffer.
                 scanfi_clip <- terra::crop(scanfi_data[[j]][[i]], tmp)
 
-                # Use landscapemetrics::calculate_lsm() to calculate the proportion
-                # of each land cover type present in the cropped raster ("pland").
-                scanfi_pland <- landscapemetrics::calculate_lsm(
-                  scanfi_clip,
-                  metric = "pland"
-                )
-
-                # Loop through each land cover type present in the cropped raster
-                # and append proportion at site k to input data. Create parseable
-                # column names using names for each class listed above.
-                for (l in scanfi_pland$class) {
-                  data[
-                    data$SurveyAreaIdentifier == k &
-                      data$survey_year %in%
-                        closest_year$data_year[closest_year$scanfi_year == j],
-                    paste0(
-                      "nfilc_",
-                      nfilc_classes$name[nfilc_classes$class == l]
-                    )
-                  ] <- scanfi_pland$value[scanfi_pland$class == l]
-                }
-
-                # Check whether any land cover classes were never in the cropped
-                # raster. These are true zeros, but would be left out otherwise.
-                # Add these columns in with 0 values.
-                missing_cols <- paste0("nfilc_", nfilc_classes$name)[
-                  !(paste0("nfilc_", nfilc_classes$name) %in% names(data))
-                ]
-
-                for (l in missing_cols) {
-                  data[
-                    data$survey_year %in%
-                      closest_year$data_year[closest_year$scanfi_year == j],
-                    l
-                  ] <- 0
-                }
-
-                # Replace NAs present in columns for land cover classes that were
-                # found at some sites but not others with the true zeros they
-                # represent.
-                for (l in paste0(
-                  "nfilc_",
-                  nfilc_classes$name[
-                    paste0("nfilc_", nfilc_classes$name) %in% names(data)
+                # Check if landscapemetrics::calculate_lsm() arguments are stored in
+                # ..., if not then set defaults.
+                if (
+                  !hasArg("level") &
+                    !hasArg("metric") &
+                    !hasArg("name") &
+                    !hasArg("type")
+                ) {
+                  # Ensure that we only grab arguments from ... that are
+                  # arguments for landscapemetrics::calculate_lsm().
+                  args <- list(...)[
+                    names(list(...)) %in%
+                      names(formals(landscapemetrics::calculate_lsm))
                   ]
-                )) {
-                  data[
-                    is.na(data[, l] %>% sf::st_drop_geometry()) &
-                      data$survey_year %in%
-                        closest_year$data_year[closest_year$scanfi_year == j],
-                    l
-                  ] <- 0
+                  args$landscape <- scanfi_clip
+                  args$metric <- "pland"
+
+                  # Use landscapemetrics::calculate_lsm() to calculate the proportion
+                  # of each land cover type present in the cropped raster ("pland").
+                  scanfi_lsm <- do.call(landscapemetrics::calculate_lsm, args)
+                } else {
+                  # Ensure that we only grab arguments from ... that are
+                  # arguments for landscapemetrics::calculate_lsm().
+                  args <- list(...)[
+                    names(list(...)) %in%
+                      names(formals(landscapemetrics::calculate_lsm))
+                  ]
+                  args$landscape <- scanfi_clip
+
+                  # Use landscapemetrics::calculate_lsm() to calculate requested
+                  # landscape metrics stored in ...
+                  scanfi_lsm <- do.call(landscapemetrics::calculate_lsm, args)
                 }
 
-                # Reorder columns to match class order provided in NFILC
-                # documentation.
-                data <- data[, c(
-                  grep("nfilc_", names(data), value = TRUE, invert = TRUE),
-                  paste0("nfilc_", nfilc_classes$name)
-                )]
+                # Throw error if metrics requested at the patch scale.
+                if ("patch" %in% unique(scanfi_lsm$level)) {
+                  stop(
+                    "[SCANFI Extraction] landscape metrics requested at",
+                    " the patch scale, which is currently incompatible with",
+                    " scanfi_extract(). Consult",
+                    " landscapemetrics::list_lsm(level = 'patch') to determine",
+                    " which metrics are patch scale.",
+                    call. = FALSE
+                  )
+                }
+
+                # Check if metrics at the landscape scale were requested. If so,
+                # append metric at site k in the appropriate year to input data.
+                if ("landscape" %in% unique(scanfi_lsm$level)) {
+                  for (l in unique(scanfi_lsm$metric[
+                    scanfi_lsm$level == "landscape"
+                  ])) {
+                    {
+                      data[
+                        data$SurveyAreaIdentifier == k &
+                          data$survey_year %in%
+                            closest_year$data_year[
+                              closest_year$scanfi_year == j
+                            ],
+                        paste0(l, "_landscape")
+                      ] <- scanfi_lsm$value[
+                        scanfi_lsm$level == "landscape" & scanfi_lsm$metric == l
+                      ]
+                    }
+                  }
+                }
+
+                # Check if metrics at the class scale were requested. If so, loop
+                # through each land cover type present in the cropped raster
+                # and append proportion at site k in the appropriate year to input
+                # data. Create parseable column names using names for each
+                # class listed above
+                if ("class" %in% unique(scanfi_lsm$level)) {
+                  for (l in unique(scanfi_lsm$metric[
+                    scanfi_lsm$level == "class"
+                  ])) {
+                    for (m in scanfi_lsm$class[
+                      scanfi_lsm$level == "class" & scanfi_lsm$metric == l
+                    ]) {
+                      data[
+                        data$SurveyAreaIdentifier == k &
+                          data$survey_year %in%
+                            closest_year$data_year[
+                              closest_year$scanfi_year == j
+                            ],
+                        paste0(
+                          "nfilc_",
+                          l,
+                          "_",
+                          nfilc_classes$name[nfilc_classes$class == m]
+                        )
+                      ] <- scanfi_lsm$value[
+                        scanfi_lsm$level == "class" &
+                          scanfi_lsm$metric == l &
+                          scanfi_lsm$class == m
+                      ]
+                    }
+
+                    # Check whether any land cover classes were never in the cropped
+                    # raster. For certain metrics these are true zeros, but would be
+                    # left out otherwise. Add these columns in with 0 values. If not
+                    # necessarily a true 0, fill with NA.
+                    missing_cols <- paste0(
+                      "nfilc_",
+                      l,
+                      "_",
+                      nfilc_classes$name
+                    )[
+                      !(paste0("nfilc_", l, "_", nfilc_classes$name) %in%
+                        names(data))
+                    ]
+                    if (
+                      l %in%
+                        c(
+                          "area_cv",
+                          "area_mn",
+                          "area_sd",
+                          "ca",
+                          "core_cv",
+                          "core_mn",
+                          "core_sd",
+                          "cpland",
+                          "dcad",
+                          "dcore_cv",
+                          "dcore_mn",
+                          "dcore_sd",
+                          "ed",
+                          "ndca",
+                          "np",
+                          "pd",
+                          "pland",
+                          "tca",
+                          "te"
+                        )
+                    ) {
+                      for (m in missing_cols) {
+                        data[
+                          data$survey_year %in%
+                            closest_year$data_year[
+                              closest_year$scanfi_year == j
+                            ],
+                          m
+                        ] <- 0
+                      }
+
+                      # Replace NAs present in columns for land cover classes that were
+                      # found at some sites but not others with the true zeros they
+                      # represent.
+                      for (m in paste0(
+                        "nfilc_",
+                        l,
+                        "_",
+                        nfilc_classes$name
+                      )) {
+                        data[
+                          is.na(data[, m] %>% sf::st_drop_geometry()) &
+                            data$survey_year %in%
+                              closest_year$data_year[
+                                closest_year$scanfi_year == j
+                              ],
+                          m
+                        ] <- 0
+                      }
+                    } else {
+                      for (m in missing_cols) {
+                        data[, m] <- NA
+                      }
+                    }
+
+                    # Reorder columns to match class order provided in MODIS
+                    # documentation.
+                    data <- data[, c(
+                      grep(
+                        paste0(l, "_"),
+                        names(data),
+                        value = TRUE,
+                        invert = TRUE
+                      ),
+                      `if`(
+                        "landscape" %in%
+                          scanfi_lsm$level &
+                          l %in%
+                            scanfi_lsm$metric[scanfi_lsm$level == "landscape"],
+                        c(
+                          paste0(l, "_landscape"),
+                          paste0("nfilc_", l, "_", nfilc_classes$name)
+                        ),
+                        paste0("nfilc_", l, "_", nfilc_classes$name)
+                      )
+                    )]
+                  }
+                }
               } else {
                 # Extract point value from SCANFI raster. It appears to be possible
                 # that a point falls such that it extracts from two raster tiles,
@@ -723,28 +965,238 @@ scanfi_extract <- function(
               # exactextractr::exact_extract(). If not, extract using
               # terra::extract().
               if (buffered == TRUE) {
-                data[
-                  data$SurveyAreaIdentifier == k &
-                    data$survey_year %in%
-                      closest_year$data_year[closest_year$scanfi_year == j],
-                  paste0("scanfi_", i)
-                ] <- exactextractr::exact_extract(
-                  x = scanfi_data[[j]][[i]],
-                  y = tmp,
-                  fun = "mean"
-                )
+                # Check if function information is stored in ...
+                if (!hasArg("fun")) {
+                  funs <- "mean"
+                } else {
+                  funs <- list(...)[["fun"]]
+                }
+
+                # Check whether fun = NULL. In exactextractr::exact_extract() this is
+                # used to extract cell values and coverage fractions. fun = 'frac' is
+                # a valid alternative that works here.
+                if (is.null(funs)) {
+                  stop(
+                    "[SCANFI Extraction] support is not provided for fun",
+                    " = NULL. If wanting to extract cell values and coverage",
+                    " fractions consider fun = 'frac'. Keep in mind that this can",
+                    " produce a lot of columns. Direct use of",
+                    " exactextractr::exact_extract() may be more useful here.",
+                    call. = FALSE
+                  )
+                } else if (is.function(funs)) {
+                  # Ensure that we only grab arguments from ... that are
+                  # arguments for exactextractr::exact_extract().
+                  args <- list(...)[
+                    names(list(...)) %in%
+                      names(formals(exactextractr::exact_extract))
+                  ]
+                  args$x <- scanfi_data[[j]][[i]]
+                  args$y <- tmp
+
+                  # If fun is a user-specified function, attempt to run.
+                  val <- do.call(exactextractr::exact_extract, args)
+
+                  # If function returns more than one value or a data.frame, stop.
+                  if (
+                    length(val) > 1 |
+                      is.data.frame(val)
+                  ) {
+                    stop(
+                      "[SCANFI Extraction] support for custom summary",
+                      " functions is currently limited to functions returning a",
+                      " single value (not stored in a data.frame) to allow accurate",
+                      " joining to input data.",
+                      call. = FALSE
+                    )
+                  }
+
+                  # If user-defined function returns acceptable value, join to data.
+                  data[
+                    data$SurveyAreaIdentifier == k &
+                      data$survey_year %in%
+                        closest_year$data_year[closest_year$scanfi_year == j],
+                    paste0(
+                      "scanfi_",
+                      i,
+                      "_user_defined_function"
+                    )
+                  ] <- val
+                } else {
+                  # If fun is one or more pre-defined summary functions (see
+                  # ?exactextractr::exact_extract()), loop through options and extract.
+                  for (l in funs) {
+                    # Check if any summary functions requested required tailored
+                    # joining.
+                    if (
+                      l == "quantile" &
+                        length(list(...)[["quantiles"]]) > 1
+                    ) {
+                      # Multiple quantiles cause exactextractr::exact_extract() to
+                      # return a data.frame with a column for each requested quantile,
+                      # and so must be joined in a tailored way.
+
+                      # Build arguments so that calls with multiple functions
+                      # requested in fun don't try and extract all requested functions
+                      # on each loop iteration. Make sure we only grab arguments
+                      # that are arguments for exactextractr::exact_extract().
+                      args <- list(...)[
+                        names(list(...)) %in%
+                          names(formals(exactextractr::exact_extract))
+                      ]
+                      args$x <- scanfi_data[[j]][[i]]
+                      args$y <- tmp
+                      args$fun <- l
+
+                      # Overwrite redundant args.
+                      args$append_cols <- NULL
+                      args$force_df <- FALSE
+
+                      # Extract.
+                      q_table <- do.call(exactextractr::exact_extract, args)
+
+                      # Join each requested quantile to original data.
+                      for (m in names(q_table)) {
+                        data[
+                          data$SurveyAreaIdentifier == k &
+                            data$survey_year %in%
+                              closest_year$data_year[
+                                closest_year$scanfi_year == j
+                              ],
+                          paste0(
+                            "scanfi_",
+                            i,
+                            "_",
+                            l,
+                            "_",
+                            sub(pattern = "q", replacement = "", x = m)
+                          )
+                        ] <- q_table[, m]
+                      }
+                    } else if (l %in% c("frac", "weighted_frac")) {
+                      # Extracting fraction or weighted fraction causes
+                      # exactextractr::exact_extract() to return a data.frame with a
+                      # column for each unique cell value, and so must be joined in a
+                      # tailored way.
+
+                      # Build arguments so that calls with multiple functions
+                      # requested in fun don't try and extract all requested functions
+                      # on each loop iteration. Make sure we only grab arguments
+                      # that are arguments for exactextractr::exact_extract().
+                      args <- list(...)[
+                        names(list(...)) %in%
+                          names(formals(exactextractr::exact_extract))
+                      ]
+                      args$x <- scanfi_data[[j]][[i]]
+                      args$y <- tmp
+                      args$fun <- l
+
+                      # Overwrite redundant args.
+                      args$append_cols <- NULL
+                      args$force_df <- FALSE
+
+                      # Extract.
+                      frac_table <- do.call(exactextractr::exact_extract, args)
+
+                      if (frac_table == 1) {
+                        value <- unique(terra::values(terra::crop(
+                          scanfi_data[[j]][[i]],
+                          tmp
+                        )))
+
+                        data[
+                          data$SurveyAreaIdentifier == k &
+                            data$survey_year %in%
+                              closest_year$data_year[
+                                closest_year$scanfi_year == j
+                              ],
+                          paste0(
+                            "scanfi_",
+                            i,
+                            "_",
+                            l,
+                            "_",
+                            value
+                          )
+                        ] <- 1
+                      } else {
+                        # Join each fractional value to original data.
+                        for (m in names(frac_table)) {
+                          data[
+                            data$SurveyAreaIdentifier == k &
+                              data$survey_year %in%
+                                closest_year$data_year[
+                                  closest_year$scanfi_year == j
+                                ],
+                            paste0(
+                              "scanfi_",
+                              i,
+                              "_",
+                              l,
+                              "_",
+                              as.numeric(sub(
+                                pattern = "frac_",
+                                replacement = "",
+                                x = m
+                              ))
+                            )
+                          ] <- frac_table[, m]
+                        }
+                      }
+                    } else {
+                      # If no tailored joining needed, just build arguments so that
+                      # calls with multiple functions requested in fun don't try and
+                      # extract all requested functions on each loop iteration.
+                      #Make sure we only grab arguments
+                      # that are arguments for exactextractr::exact_extract().
+                      args <- list(...)[
+                        names(list(...)) %in%
+                          names(formals(exactextractr::exact_extract))
+                      ]
+                      args$x <- scanfi_data[[j]][[i]]
+                      args$y <- tmp
+                      args$fun <- l
+
+                      # Overwrite redundant args.
+                      args$append_cols <- NULL
+                      args$force_df <- FALSE
+
+                      # Extract and join requested value to input data.
+                      data[
+                        data$SurveyAreaIdentifier == k &
+                          data$survey_year %in%
+                            closest_year$data_year[
+                              closest_year$scanfi_year == j
+                            ],
+                        paste0(
+                          "scanfi_",
+                          i,
+                          "_",
+                          l
+                        )
+                      ] <- do.call(exactextractr::exact_extract, args)
+                    }
+                  }
+                }
               } else {
+                # Ensure that we only grab arguments from ... that are
+                # arguments for terra::extract().
+                args <- list(...)[
+                  names(list(...)) %in% names(formals(terra::extract))
+                ]
+                args$x <- scanfi_data[[j]][[i]]
+                args$y <- tmp
+
                 data[
                   data$SurveyAreaIdentifier == k &
                     data$survey_year %in%
                       closest_year$data_year[closest_year$scanfi_year == j],
                   paste0("scanfi_", i)
-                ] <- terra::extract(
-                  x = scanfi_data[[j]][[i]],
-                  y = tmp,
-                  fun = "mean",
-                  na.rm = TRUE
-                )[, 2]
+                ] <- do.call(terra::extract, args)[, `if`(
+                  hasArg("layer"),
+                  "value",
+                  terra::names(scanfi_data[[j]][[i]])
+                )]
               }
             }
           }
@@ -752,6 +1204,13 @@ scanfi_extract <- function(
       }
     }
   }
+
+  # Ensure geometry column is in the last column position.
+  data <- dplyr::relocate(
+    data,
+    "geometry",
+    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+  )
 
   # Check if attributes were found and stored from input data. If they were
   # found reattach.

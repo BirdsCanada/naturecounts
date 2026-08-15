@@ -380,8 +380,8 @@ test_that("scanfi_extract() basic functionality with all expected data inputs.",
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "scanfi_ponderosapine"
+      "scanfi_ponderosapine",
+      "geometry"
     )
   )
   expect_true(inherits(extracted$scanfi_ponderosapine, "integer"))
@@ -439,13 +439,13 @@ test_that("scanfi_extract() basic functionality with all expected data inputs.",
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "scanfi_ponderosapine"
+      "scanfi_ponderosapine_mean",
+      "geometry"
     )
   )
   expect_true(inherits(extracted$scanfi_ponderosapine, "numeric"))
   expect_equal(
-    dplyr::select(extracted, -"scanfi_ponderosapine"),
+    dplyr::select(extracted, -"scanfi_ponderosapine_mean"),
     sf_poly,
     ignore_attr = TRUE
   ) # Ignores attributes to confirm that data has not been otherwise modified.
@@ -498,8 +498,8 @@ test_that("scanfi_extract() basic functionality with all expected data inputs.",
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "scanfi_ponderosapine"
+      "scanfi_ponderosapine",
+      "geometry"
     )
   )
   expect_true(inherits(extracted$scanfi_ponderosapine, "integer"))
@@ -557,13 +557,13 @@ test_that("scanfi_extract() basic functionality with all expected data inputs.",
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "scanfi_ponderosapine"
+      "scanfi_ponderosapine_mean",
+      "geometry"
     )
   )
   expect_true(inherits(extracted$scanfi_ponderosapine, "numeric"))
   expect_equal(
-    dplyr::select(extracted, -"scanfi_ponderosapine"),
+    dplyr::select(extracted, -"scanfi_ponderosapine_mean"),
     sf_poly,
     ignore_attr = TRUE
   ) # Ignores attributes to confirm that data has not been otherwise modified.
@@ -631,8 +631,8 @@ test_that("scanfi_extract() succeeds with alternate column names, either passed 
       "yr",
       "survey_month",
       "survey_day",
-      "geometry",
-      "scanfi_ponderosapine"
+      "scanfi_ponderosapine",
+      "geometry"
     )
   )
   expect_true(inherits(extracted$scanfi_ponderosapine, "integer"))
@@ -685,8 +685,8 @@ test_that("scanfi_extract() succeeds with alternate column names, either passed 
       "yr",
       "survey_month",
       "survey_day",
-      "geometry",
-      "scanfi_ponderosapine"
+      "scanfi_ponderosapine",
+      "geometry"
     )
   )
   expect_true(inherits(extracted$scanfi_ponderosapine, "integer"))
@@ -864,8 +864,8 @@ test_that("scanfi_extract() functionality with NFI landcover data.", {
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "nfilc_class"
+      "nfilc_class",
+      "geometry"
     )
   )
   expect_true(inherits(extracted$nfilc_class, "character"))
@@ -931,29 +931,29 @@ test_that("scanfi_extract() functionality with NFI landcover data.", {
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "nfilc_bryoid",
-      "nfilc_herbs",
-      "nfilc_rock",
-      "nfilc_shrub",
-      "nfilc_treed_broadleaf",
-      "nfilc_treed_conifer",
-      "nfilc_treed_mixed",
-      "nfilc_water"
+      "nfilc_pland_bryoid",
+      "nfilc_pland_herbs",
+      "nfilc_pland_rock",
+      "nfilc_pland_shrub",
+      "nfilc_pland_treed_broadleaf",
+      "nfilc_pland_treed_conifer",
+      "nfilc_pland_treed_mixed",
+      "nfilc_pland_water",
+      "geometry"
     )
   )
-  expect_true(inherits(extracted$nfilc_bryoid, "numeric"))
+  expect_true(inherits(extracted$nfilc_pland_bryoid, "numeric"))
   expect_equal(
     dplyr::select(extracted, -tidyselect::starts_with("nfilc_")),
     sf_poly,
     ignore_attr = TRUE
   ) # Ignores attributes to confirm that data has not been otherwise modified.
   expect_equal(format(sf::st_crs(extracted)), "Canada_Albers_Equal_Area_Conic")
-  expect_true(all(is.na(extracted$nfilc_bryoid[
+  expect_true(all(is.na(extracted$nfilc_pland_bryoid[
     !(extracted$survey_year %in% c(2000, 2005))
   ])))
   expect_true(all(
-    !is.na(extracted$nfilc_bryoid[
+    !is.na(extracted$nfilc_pland_bryoid[
       extracted$survey_year %in% c(2000, 2005)
     ])
   ))
@@ -968,16 +968,275 @@ test_that("scanfi_extract() functionality with NFI landcover data.", {
     )))
   )
 
-  expect_true(all(!is.na(extracted$nfilc_bryoid)))
+  expect_true(all(!is.na(extracted$nfilc_pland_bryoid)))
   expect_true(
-    extracted$nfilc_bryoid[
+    extracted$nfilc_pland_bryoid[
       extracted$survey_year == 2003 &
         extracted$SurveyAreaIdentifier == "FilledSurveyArea8"
     ] ==
-      extracted$nfilc_bryoid[
+      extracted$nfilc_pland_bryoid[
         extracted$survey_year == 2005 &
           extracted$SurveyAreaIdentifier == "FilledSurveyArea8"
       ]
+  )
+
+  # Test alternate metric
+  expect_silent(
+    extracted <- suppressWarnings(suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_nfilc",
+      scanfi_data = scanfi_lc,
+      metric = c("ed", "pland")
+    )))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "ed_landscape",
+      "nfilc_ed_bryoid",
+      "nfilc_ed_herbs",
+      "nfilc_ed_rock",
+      "nfilc_ed_shrub",
+      "nfilc_ed_treed_broadleaf",
+      "nfilc_ed_treed_conifer",
+      "nfilc_ed_treed_mixed",
+      "nfilc_ed_water",
+      "nfilc_pland_bryoid",
+      "nfilc_pland_herbs",
+      "nfilc_pland_rock",
+      "nfilc_pland_shrub",
+      "nfilc_pland_treed_broadleaf",
+      "nfilc_pland_treed_conifer",
+      "nfilc_pland_treed_mixed",
+      "nfilc_pland_water",
+      "geometry"
+    )
+  )
+
+  expect_true(inherits(extracted$nfilc_pland_bryoid, "numeric"))
+
+  expect_error(
+    extracted <- suppressWarnings(suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_nfilc",
+      scanfi_data = scanfi_lc,
+      level = "patch"
+    ))),
+    "\\[SCANFI Extraction\\] landscape metrics requested at the patch scale, which is currently incompatible with scanfi_extract\\(\\). Consult landscapemetrics::list_lsm\\(level = 'patch'\\) to determine which metrics are patch scale."
+  )
+})
+
+test_that("scanfi_extract() succeeds with alternate summary statistics, and throws error when needed.", {
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_restricted)))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(
+    bcch_restricted
+  ))))
+
+  expect_silent(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_pt,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_pt,
+      method = "bilinear", # Add some arguments of terra::extract() to check
+      # for errors.
+      layer = 1
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "scanfi_ponderosapine",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$scanfi_ponderosapine, "numeric"))
+
+  # Test a few standard functions.
+  expect_silent(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_poly,
+      fun = c("median", "max", "stdev"),
+      interpolate = TRUE
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "scanfi_ponderosapine_median",
+      "scanfi_ponderosapine_max",
+      "scanfi_ponderosapine_stdev",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$scanfi_ponderosapine_median, "numeric"))
+  expect_true(inherits(extracted$scanfi_ponderosapine_max, "numeric"))
+  expect_true(inherits(extracted$scanfi_ponderosapine_stdev, "numeric"))
+
+  # Test functions with specific requirements
+
+  # Check that quantile requires quantiles argument.
+  expect_error(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_poly,
+      fun = "quantile"
+    )),
+    "\\[SCANFI Extraction\\] quantile summary requested but no quantiles supplied to the 'quantiles' argument. Please supply numeric value\\(s\\) of desired quantiles."
+  )
+
+  # Check that one or more quantile joins correctly.
+  expect_silent(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_poly,
+      fun = "quantile",
+      quantiles = 0.25,
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "scanfi_ponderosapine_quantile",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$scanfi_ponderosapine_quantile, "numeric"))
+
+  expect_silent(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_poly,
+      fun = "quantile",
+      quantiles = c(0.25, 0.75),
+    ))
+  )
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "scanfi_ponderosapine_quantile_25",
+      "scanfi_ponderosapine_quantile_75",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$scanfi_ponderosapine_quantile_25, "numeric"))
+  expect_true(inherits(extracted$scanfi_ponderosapine_quantile_75, "numeric"))
+
+  # Check that weighted functions require weights argument.
+  expect_error(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_poly,
+      fun = "weighted_mean"
+    )),
+    "\\[SCANFI Extraction\\] weighted summary requested but no weights supplied via the 'weights' argument. Please supply either a weighting raster or 'area' to use the cell areas of the SCANFI raster as weights."
+  )
+
+  # Check that fractions join correctly.
+  expect_silent(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_poly[7, ],
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_poly,
+      fun = "frac"
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "scanfi_ponderosapine_frac_0",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$scanfi_ponderosapine_frac_0, "numeric"))
+
+  # Test that user specified functions work.
+  my_function <- function(value, cov_frac) {
+    mean(value * cov_frac)
+  }
+
+  expect_silent(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_poly,
+      fun = my_function
+    ))
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "scanfi_ponderosapine_user_defined_function",
+      "geometry"
+    )
+  )
+
+  # Test that functions that return more than one value throw error.
+  my_function <- function(value, cov_frac) {
+    value * cov_frac
+  }
+
+  expect_error(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_poly,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_poly,
+      fun = my_function
+    )),
+    "\\[SCANFI Extraction\\] support for custom summary functions is currently limited to functions returning a single value \\(not stored in a data.frame\\) to allow accurate joining to input data."
   )
 })
 
