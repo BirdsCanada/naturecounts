@@ -68,7 +68,8 @@ a 30 m resolution. Necessary files can be downloaded and loaded with <code><a hr
 <span>  site_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  date_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dl_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  retain <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  retain <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -123,15 +124,23 @@ directory.</p></dd>
 <dd><p>Logical. Should SCANFI data files be kept after extraction? If
 <code>FALSE</code>, files will be deleted.</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Other arguments passed to <code><a href="https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html" class="external-link">landscapemetrics::calculate_lsm()</a></code> if
+NFI Landcover data requested, or <code><a href="https://isciences.gitlab.io/exactextractr/reference/exact_extract.html" class="external-link">exactextractr::exact_extract()</a></code> or
+for other requested variables with <code>sf</code> 'POLYGON' or <code>terra</code> 'polygons'
+input data. Primarily useful for specifying metrics other than the
+proportional cover of each landcover class when NFI Landcover requested
+(see <code><a href="https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html" class="external-link">landscapemetrics::list_lsm()</a></code> for other options) or the mean
+for other SCANFI variables.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>For sf 'POINT' or terra 'points' input data, original data with
 column(s) appended containing the SCANFI data value(s) at each point.</p>
 <p>For sf 'POLYGON' or terra 'polygons' input data, original data with column(s)
-appended containing the mean SCANFI data value(s) within each polygon or,
-if NFI Landcover requested, the proportion the polygon area covered by of
-each land cover class.</p>
+appended containing the requested SCANFI data value(s) within each polygon.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -151,7 +160,76 @@ values to the <code>covariates</code> argument:</p><ul><li><p>Forest age (years)
 <li><p>White and Red Pine cover (% of pixel): <code>scanfi_whiteredpine</code></p></li>
 <li><p>Broadleaf tree species cover (% of pixel): <code>scanfi_broadleaf</code></p></li>
 <li><p>Other conifer species cover (% of pixel): <code>scanfi_otherconifer</code></p></li>
-</ul></div>
+</ul><p>By default, for <code>sf</code> 'POLYGON' or <code>terra</code> 'polygons' input data the mean SCANFI
+variable value will be returned, or the proportion of polygon area covered
+by each NFI Landcover class (<code>pland</code>) will be returned if <code>scanfi_nfilc</code> requested.
+Other summary statistics can be extracted for non-NFI Landcover variables
+by specifying the <code>fun</code> argument, which is passed to
+<code><a href="https://isciences.gitlab.io/exactextractr/reference/exact_extract.html" class="external-link">exactextractr::exact_extract()</a></code>. The available summary statistics are:</p><ul><li><p><code>min</code> - the minimum non-<code>NA</code> value in any raster cell wholly or
+partially covered by the polygon</p></li>
+<li><p><code>max</code> - the maximum non-<code>NA</code> value in any raster cell wholly or
+partially covered by the polygon</p></li>
+<li><p><code>count</code> - the sum of fractions of raster cells with non-<code>NA</code>
+values covered by the polygon</p></li>
+<li><p><code>sum</code>   - the sum of non-<code>NA</code> raster cell values, multiplied by
+the fraction of the cell that is covered by the polygon</p></li>
+<li><p><code>mean</code> - the mean cell value, weighted by the fraction of each cell
+that is covered by the polygon</p></li>
+<li><p><code>median</code> - the median cell value, weighted by the fraction of each cell
+that is covered by the polygon</p></li>
+<li><p><code>quantile</code> - arbitrary quantile(s) of cell values, specified in
+<code>quantiles</code>, weighted by the fraction of each cell that is
+covered by the polygon</p></li>
+<li><p><code>mode</code> - the most common cell value, weighted by the fraction of
+each cell that is covered by the polygon. Where multiple
+values occupy the same maximum number of weighted cells,
+the largest value will be returned.</p></li>
+<li><p><code>majority</code> - synonym for <code>mode</code></p></li>
+<li><p><code>minority</code> - the least common cell value, weighted by the fraction
+of each cell that is covered by the polygon. Where
+multiple values occupy the same minimum number of
+weighted cells, the smallest value will be returned.</p></li>
+<li><p><code>variety</code> - the number of distinct values in cells that are wholly or
+partially covered by the polygon.</p></li>
+<li><p><code>variance</code> - the population variance of cell values, weighted by the
+fraction of each cell that is covered by the polygon.</p></li>
+<li><p><code>stdev</code> - the population standard deviation of cell values, weighted by
+the fraction of each cell that is covered by the polygon.</p></li>
+<li><p><code>coefficient_of_variation</code> - the population coefficient of variation of
+cell values, weighted by the fraction of each
+cell that is covered by the polygon.</p></li>
+<li><p><code>weighted_mean</code> - the mean cell value, weighted by the product of
+the fraction of each cell covered by the polygon
+and the value of a second weighting raster provided
+as <code>weights</code></p></li>
+<li><p><code>weighted_sum</code> - the sum of defined raster cell values, multiplied by
+the fraction of each cell that is covered by the polygon
+and the value of a second weighting raster provided
+as <code>weights</code></p></li>
+<li><p><code>weighted_stdev</code> - the population standard deviation of cell values,
+weighted by the product of the fraction of each cell
+covered by the polygon and the value of a second
+weighting raster provided as <code>weights</code></p></li>
+<li><p><code>weighted_variance</code> - the population variance of cell values, weighted by
+the product of the fraction of each cell covered by
+the polygon and the value of a second weighting
+raster provided as <code>weights</code></p></li>
+<li><p><code>frac</code> - returns one column for each possible value of <code>x</code>, with the
+the fraction of defined raster cells that are equal to that
+value.</p></li>
+<li><p><code>weighted_frac</code> - returns one column for each possible value of <code>x</code>,
+with the fraction of defined cells that are equal
+to that value, weighted by `weights.</p></li>
+</ul><p>User defined functions can also be passed to <code>fun</code>, but these must return a
+single value. More information can be found in the documentation for
+<code><a href="https://isciences.gitlab.io/exactextractr/reference/exact_extract.html" class="external-link">exactextractr::exact_extract()</a></code>.</p>
+<p>For extraction of NFI Landcover data with <code>sf</code> 'POLYGON' or <code>terra</code>
+'polygons' input data, other summary metrics can be requested by specifying
+the <code>level</code>, <code>class</code>, <code>metric</code>, or <code>name</code> arguments, which are passed to
+<code><a href="https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html" class="external-link">landscapemetrics::calculate_lsm()</a></code>. See <code><a href="https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html" class="external-link">landscapemetrics::list_lsm()</a></code> for
+metric options. At this time, only metrics at the <code>landscape</code> or <code>class</code>
+level are accepted.</p>
+    </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Guindon L., Correia D.L.P, Manka F. and Smiley B. 2026. SCANFI v2: Spatialized CAnadian National Forest Inventory data product v2. Natural Resources Canada, Canadian Forest Service, Laurentian Forestry Centre, Quebec, Canada. <a href="https://doi.org/10.23687/07653869-f303-46c2-a04e-9ab479b73cbf" class="external-link">https://doi.org/10.23687/07653869-f303-46c2-a04e-9ab479b73cbf</a>.</p>

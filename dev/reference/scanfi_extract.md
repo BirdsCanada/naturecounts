@@ -18,7 +18,8 @@ scanfi_extract(
   site_name = NULL,
   date_year = NULL,
   dl_path = NULL,
-  retain = TRUE
+  retain = TRUE,
+  ...
 )
 ```
 
@@ -79,15 +80,27 @@ scanfi_extract(
   Logical. Should SCANFI data files be kept after extraction? If
   `FALSE`, files will be deleted.
 
+- ...:
+
+  Other arguments passed to
+  [`landscapemetrics::calculate_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html)
+  if NFI Landcover data requested, or
+  [`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html)
+  or for other requested variables with `sf` 'POLYGON' or `terra`
+  'polygons' input data. Primarily useful for specifying metrics other
+  than the proportional cover of each landcover class when NFI Landcover
+  requested (see
+  [`landscapemetrics::list_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html)
+  for other options) or the mean for other SCANFI variables.
+
 ## Value
 
 For sf 'POINT' or terra 'points' input data, original data with
 column(s) appended containing the SCANFI data value(s) at each point.
 
 For sf 'POLYGON' or terra 'polygons' input data, original data with
-column(s) appended containing the mean SCANFI data value(s) within each
-polygon or, if NFI Landcover requested, the proportion the polygon area
-covered by of each land cover class.
+column(s) appended containing the requested SCANFI data value(s) within
+each polygon.
 
 ## Details
 
@@ -123,6 +136,101 @@ following values to the `covariates` argument:
 - Broadleaf tree species cover (% of pixel): `scanfi_broadleaf`
 
 - Other conifer species cover (% of pixel): `scanfi_otherconifer`
+
+By default, for `sf` 'POLYGON' or `terra` 'polygons' input data the mean
+SCANFI variable value will be returned, or the proportion of polygon
+area covered by each NFI Landcover class (`pland`) will be returned if
+`scanfi_nfilc` requested. Other summary statistics can be extracted for
+non-NFI Landcover variables by specifying the `fun` argument, which is
+passed to
+[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html).
+The available summary statistics are:
+
+- `min` - the minimum non-`NA` value in any raster cell wholly or
+  partially covered by the polygon
+
+- `max` - the maximum non-`NA` value in any raster cell wholly or
+  partially covered by the polygon
+
+- `count` - the sum of fractions of raster cells with non-`NA` values
+  covered by the polygon
+
+- `sum` - the sum of non-`NA` raster cell values, multiplied by the
+  fraction of the cell that is covered by the polygon
+
+- `mean` - the mean cell value, weighted by the fraction of each cell
+  that is covered by the polygon
+
+- `median` - the median cell value, weighted by the fraction of each
+  cell that is covered by the polygon
+
+- `quantile` - arbitrary quantile(s) of cell values, specified in
+  `quantiles`, weighted by the fraction of each cell that is covered by
+  the polygon
+
+- `mode` - the most common cell value, weighted by the fraction of each
+  cell that is covered by the polygon. Where multiple values occupy the
+  same maximum number of weighted cells, the largest value will be
+  returned.
+
+- `majority` - synonym for `mode`
+
+- `minority` - the least common cell value, weighted by the fraction of
+  each cell that is covered by the polygon. Where multiple values occupy
+  the same minimum number of weighted cells, the smallest value will be
+  returned.
+
+- `variety` - the number of distinct values in cells that are wholly or
+  partially covered by the polygon.
+
+- `variance` - the population variance of cell values, weighted by the
+  fraction of each cell that is covered by the polygon.
+
+- `stdev` - the population standard deviation of cell values, weighted
+  by the fraction of each cell that is covered by the polygon.
+
+- `coefficient_of_variation` - the population coefficient of variation
+  of cell values, weighted by the fraction of each cell that is covered
+  by the polygon.
+
+- `weighted_mean` - the mean cell value, weighted by the product of the
+  fraction of each cell covered by the polygon and the value of a second
+  weighting raster provided as `weights`
+
+- `weighted_sum` - the sum of defined raster cell values, multiplied by
+  the fraction of each cell that is covered by the polygon and the value
+  of a second weighting raster provided as `weights`
+
+- `weighted_stdev` - the population standard deviation of cell values,
+  weighted by the product of the fraction of each cell covered by the
+  polygon and the value of a second weighting raster provided as
+  `weights`
+
+- `weighted_variance` - the population variance of cell values, weighted
+  by the product of the fraction of each cell covered by the polygon and
+  the value of a second weighting raster provided as `weights`
+
+- `frac` - returns one column for each possible value of `x`, with the
+  the fraction of defined raster cells that are equal to that value.
+
+- `weighted_frac` - returns one column for each possible value of `x`,
+  with the fraction of defined cells that are equal to that value,
+  weighted by \`weights.
+
+User defined functions can also be passed to `fun`, but these must
+return a single value. More information can be found in the
+documentation for
+[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html).
+
+For extraction of NFI Landcover data with `sf` 'POLYGON' or `terra`
+'polygons' input data, other summary metrics can be requested by
+specifying the `level`, `class`, `metric`, or `name` arguments, which
+are passed to
+[`landscapemetrics::calculate_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html).
+See
+[`landscapemetrics::list_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html)
+for metric options. At this time, only metrics at the `landscape` or
+`class` level are accepted.
 
 ## References
 

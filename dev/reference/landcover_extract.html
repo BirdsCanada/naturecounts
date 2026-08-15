@@ -146,6 +146,13 @@ default, the function extracts the University of Maryland scheme
 (<code>modis_lctype1</code>), but we strongly recommend users consider the strengths and
 weaknesses of each classification scheme in the context of their analysis and
 choose their desired classification scheme appropriately.</p>
+<p>With <code>sf</code> 'POLYGON' or <code>terra</code> polygons' input data, the proportion of
+polygon area covered by each MODIS Landcover class (<code>pland</code>) is returned by default.
+Other summary metrics can be requested by specifying
+the <code>level</code>, <code>class</code>, <code>metric</code>, or <code>name</code> arguments, which are passed to
+<code><a href="https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html" class="external-link">landscapemetrics::calculate_lsm()</a></code>. See <code><a href="https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html" class="external-link">landscapemetrics::list_lsm()</a></code> for
+metric options. At this time, only metrics at the <code>landscape</code> or <code>class</code>
+level are accepted.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

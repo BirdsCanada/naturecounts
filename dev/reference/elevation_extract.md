@@ -8,7 +8,7 @@ data](https://github.com/tilezen/joerd/tree/master/docs) from a
 ## Usage
 
 ``` r
-elevation_extract(data, elevation_data, site_name = NULL)
+elevation_extract(data, elevation_data, site_name = NULL, ...)
 ```
 
 ## Arguments
@@ -37,6 +37,16 @@ elevation_extract(data, elevation_data, site_name = NULL)
   or
   [`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md).
 
+- ...:
+
+  Other arguments passed to
+  [`terra::extract()`](https://rspatial.github.io/terra/reference/extract.html)
+  for `sf` 'POINT' or `terra` 'points' input data or
+  [`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html)
+  `sf` 'POLYGON' or `terra` 'polygons' input data. Primarily useful for
+  specifying alternate summary statistics to extract for `sf` 'POLYGON'
+  or `terra` 'polygons' input data.
+
 ## Value
 
 For sf 'POINT' or terra 'points' input data, original data with numeric
@@ -44,7 +54,7 @@ column `elevation` appended containing the elevation value (metres above
 sea level) at each point.
 
 For sf 'POLYGON' or terra 'polygons' input data, original data with
-numeric column `elevation` appended containing the mean elevation value
+numeric column(s) appended containing the requested elevation value(s)
 (metres above sea level) within each polygon.
 
 ## Details
@@ -54,6 +64,88 @@ elevation data, as this varies by latitude and zoom level specified in
 [`elevation_download()`](https://birdscanada.github.io/naturecounts/dev/reference/elevation_download.md).
 This can be accessed using
 [`terra::res()`](https://rspatial.github.io/terra/reference/dimensions.html).
+
+\#' By default, for `sf` 'POLYGON' or `terra` 'polygons' input data the
+mean elevation value will be returned. Other summary statistics can be
+extracted by specifying the `fun` argument, which is passed to
+[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html).
+The available summary statistics are:
+
+- `min` - the minimum non-`NA` value in any raster cell wholly or
+  partially covered by the polygon
+
+- `max` - the maximum non-`NA` value in any raster cell wholly or
+  partially covered by the polygon
+
+- `count` - the sum of fractions of raster cells with non-`NA` values
+  covered by the polygon
+
+- `sum` - the sum of non-`NA` raster cell values, multiplied by the
+  fraction of the cell that is covered by the polygon
+
+- `mean` - the mean cell value, weighted by the fraction of each cell
+  that is covered by the polygon
+
+- `median` - the median cell value, weighted by the fraction of each
+  cell that is covered by the polygon
+
+- `quantile` - arbitrary quantile(s) of cell values, specified in
+  `quantiles`, weighted by the fraction of each cell that is covered by
+  the polygon
+
+- `mode` - the most common cell value, weighted by the fraction of each
+  cell that is covered by the polygon. Where multiple values occupy the
+  same maximum number of weighted cells, the largest value will be
+  returned.
+
+- `majority` - synonym for `mode`
+
+- `minority` - the least common cell value, weighted by the fraction of
+  each cell that is covered by the polygon. Where multiple values occupy
+  the same minimum number of weighted cells, the smallest value will be
+  returned.
+
+- `variety` - the number of distinct values in cells that are wholly or
+  partially covered by the polygon.
+
+- `variance` - the population variance of cell values, weighted by the
+  fraction of each cell that is covered by the polygon.
+
+- `stdev` - the population standard deviation of cell values, weighted
+  by the fraction of each cell that is covered by the polygon.
+
+- `coefficient_of_variation` - the population coefficient of variation
+  of cell values, weighted by the fraction of each cell that is covered
+  by the polygon.
+
+- `weighted_mean` - the mean cell value, weighted by the product of the
+  fraction of each cell covered by the polygon and the value of a second
+  weighting raster provided as `weights`
+
+- `weighted_sum` - the sum of defined raster cell values, multiplied by
+  the fraction of each cell that is covered by the polygon and the value
+  of a second weighting raster provided as `weights`
+
+- `weighted_stdev` - the population standard deviation of cell values,
+  weighted by the product of the fraction of each cell covered by the
+  polygon and the value of a second weighting raster provided as
+  `weights`
+
+- `weighted_variance` - the population variance of cell values, weighted
+  by the product of the fraction of each cell covered by the polygon and
+  the value of a second weighting raster provided as `weights`
+
+- `frac` - returns one column for each possible value of `x`, with the
+  the fraction of defined raster cells that are equal to that value.
+
+- `weighted_frac` - returns one column for each possible value of `x`,
+  with the fraction of defined cells that are equal to that value,
+  weighted by \`weights.
+
+User defined functions can also be passed to `fun`, but these must
+return a single value. More information can be found in the
+documentation for
+[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html).
 
 ## See also
 

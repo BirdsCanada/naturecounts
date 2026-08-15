@@ -115,6 +115,16 @@ strengths and weaknesses of each classification scheme in the context of
 their analysis and choose their desired classification scheme
 appropriately.
 
+With `sf` 'POLYGON' or `terra` polygons' input data, the proportion of
+polygon area covered by each MODIS Landcover class (`pland`) is returned
+by default. Other summary metrics can be requested by specifying the
+`level`, `class`, `metric`, or `name` arguments, which are passed to
+[`landscapemetrics::calculate_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/calculate_lsm.html).
+See
+[`landscapemetrics::list_lsm()`](https://r-spatialecology.github.io/landscapemetrics/reference/list_lsm.html)
+for metric options. At this time, only metrics at the `landscape` or
+`class` level are accepted.
+
 ## See also
 
 [`landcover_download()`](https://birdscanada.github.io/naturecounts/dev/reference/landcover_download.md)
