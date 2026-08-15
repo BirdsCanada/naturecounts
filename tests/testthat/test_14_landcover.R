@@ -440,8 +440,8 @@ test_that("landcover_extract() basic functionality with all expected data inputs
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "LC_Type1_Class"
+      "LC_Type1_Class",
+      "geometry"
     )
   )
   expect_equal(
@@ -479,7 +479,6 @@ test_that("landcover_extract() basic functionality with all expected data inputs
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
       "LC_Type1_pland_evergreen_needleleaf_forests",
       "LC_Type1_pland_evergreen_broadleaf_forests",
       "LC_Type1_pland_decidious_needleleaf_forests",
@@ -497,7 +496,8 @@ test_that("landcover_extract() basic functionality with all expected data inputs
       "LC_Type1_pland_permanent_snow_ice",
       "LC_Type1_pland_barren",
       "LC_Type1_pland_water_bodies",
-      "LC_Type1_pland_unclassified"
+      "LC_Type1_pland_unclassified",
+      "geometry"
     )
   )
   expect_equal(
@@ -545,8 +545,8 @@ test_that("landcover_extract() basic functionality with all expected data inputs
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "LC_Type1_Class"
+      "LC_Type1_Class",
+      "geometry"
     )
   )
   expect_equal(
@@ -584,7 +584,6 @@ test_that("landcover_extract() basic functionality with all expected data inputs
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
       "LC_Type1_pland_evergreen_needleleaf_forests",
       "LC_Type1_pland_evergreen_broadleaf_forests",
       "LC_Type1_pland_decidious_needleleaf_forests",
@@ -602,7 +601,8 @@ test_that("landcover_extract() basic functionality with all expected data inputs
       "LC_Type1_pland_permanent_snow_ice",
       "LC_Type1_pland_barren",
       "LC_Type1_pland_water_bodies",
-      "LC_Type1_pland_unclassified"
+      "LC_Type1_pland_unclassified",
+      "geometry"
     )
   )
   expect_equal(
@@ -658,8 +658,8 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "LC_Type2_Class"
+      "LC_Type2_Class",
+      "geometry"
     )
   )
   expect_equal(
@@ -698,7 +698,6 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
       "LC_Type2_pland_water_bodies",
       "LC_Type2_pland_evergreen_needleleaf_forests",
       "LC_Type2_pland_evergreen_broadleaf_forests",
@@ -715,7 +714,8 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "LC_Type2_pland_urban_builtup_lands",
       "LC_Type2_pland_cropland_natural_vegetation_mosaic",
       "LC_Type2_pland_nonvegetated_lands",
-      "LC_Type2_pland_unclassified"
+      "LC_Type2_pland_unclassified",
+      "geometry"
     )
   )
   expect_equal(
@@ -765,8 +765,8 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "LC_Type3_Class"
+      "LC_Type3_Class",
+      "geometry"
     )
   )
   expect_equal(
@@ -805,7 +805,6 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
       "LC_Type3_pland_water_bodies",
       "LC_Type3_pland_grasslands",
       "LC_Type3_pland_shrublands",
@@ -817,7 +816,8 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "LC_Type3_pland_deciduous_needleleaf_forests",
       "LC_Type3_pland_nonvegetated_lands",
       "LC_Type3_pland_urban_builtup_lands",
-      "LC_Type3_pland_unclassified"
+      "LC_Type3_pland_unclassified",
+      "geometry"
     )
   )
   expect_equal(
@@ -867,8 +867,8 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "LC_Type4_Class"
+      "LC_Type4_Class",
+      "geometry"
     )
   )
   expect_equal(
@@ -907,7 +907,6 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
       "LC_Type4_pland_water_bodies",
       "LC_Type4_pland_evergreen_needleleaf_vegetation",
       "LC_Type4_pland_evergreen_broadleaf_vegetation",
@@ -917,7 +916,8 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "LC_Type4_pland_annual_grass_vegetation",
       "LC_Type4_pland_nonvegetated_lands",
       "LC_Type4_pland_urban_builtup_lands",
-      "LC_Type4_pland_unclassified"
+      "LC_Type4_pland_unclassified",
+      "geometry"
     )
   )
   expect_equal(
@@ -967,8 +967,8 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
-      "LC_Type5_Class"
+      "LC_Type5_Class",
+      "geometry"
     )
   )
   expect_equal(
@@ -1007,7 +1007,6 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
       "LC_Type5_pland_water_bodies",
       "LC_Type5_pland_evergreen_needleleaf_trees",
       "LC_Type5_pland_evergreen_broadleaf_trees",
@@ -1020,7 +1019,8 @@ test_that("landcover_extract() succeeds with all landcover classification schema
       "LC_Type5_pland_urban_builtup_lands",
       "LC_Type5_pland_permanent_snow_ice",
       "LC_Type5_pland_barren",
-      "LC_Type5_pland_unclassified"
+      "LC_Type5_pland_unclassified",
+      "geometry"
     )
   )
   expect_equal(
@@ -1144,8 +1144,8 @@ test_that("landcover_extract() succeeds with alternate column names, either pass
       "yr",
       "survey_month",
       "survey_day",
-      "geometry",
-      "LC_Type1_Class"
+      "LC_Type1_Class",
+      "geometry"
     )
   )
   expect_equal(
@@ -1199,8 +1199,8 @@ test_that("landcover_extract() succeeds with alternate column names, either pass
       "yr",
       "survey_month",
       "survey_day",
-      "geometry",
-      "LC_Type1_Class"
+      "LC_Type1_Class",
+      "geometry"
     )
   )
   expect_equal(
@@ -1246,10 +1246,10 @@ test_that("landcover_extract() succeeds with alternate landscape metrics, and th
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
       "LC_Type1_area_cv_landscape",
       "LC_Type1_area_mn_landscape",
-      "LC_Type1_area_sd_landscape"
+      "LC_Type1_area_sd_landscape",
+      "geometry"
     )
   )
   expect_true(inherits(extracted$LC_Type1_area_cv_landscape, "numeric"))
@@ -1277,7 +1277,6 @@ test_that("landcover_extract() succeeds with alternate landscape metrics, and th
       "survey_year",
       "survey_month",
       "survey_day",
-      "geometry",
       "LC_Type1_ed_evergreen_needleleaf_forests",
       "LC_Type1_ed_evergreen_broadleaf_forests",
       "LC_Type1_ed_decidious_needleleaf_forests",
@@ -1313,7 +1312,8 @@ test_that("landcover_extract() succeeds with alternate landscape metrics, and th
       "LC_Type1_pland_permanent_snow_ice",
       "LC_Type1_pland_barren",
       "LC_Type1_pland_water_bodies",
-      "LC_Type1_pland_unclassified"
+      "LC_Type1_pland_unclassified",
+      "geometry"
     )
   )
 

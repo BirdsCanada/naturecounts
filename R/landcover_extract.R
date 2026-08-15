@@ -797,6 +797,13 @@ landcover_extract <- function(
     }
   }
 
+  # Ensure geometry column is in the last column position.
+  data <- dplyr::relocate(
+    data,
+    "geometry",
+    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+  )
+
   # Check if attributes were found and stored from input data. If they were
   # found reattach.
   if (exists("attrs")) {

@@ -685,7 +685,7 @@ test_that("vegetation_extract() succeeds with alternate column names, either pas
   )
 })
 
-test_that("landcover_extract() succeeds with alternate landscape metrics, and throws error for patch scale metrics.", {
+test_that("vegetation_extract() succeeds with alternate summary statistics, and throws error when needed.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(
     bcch[bcch$survey_year == 2007, ]
   )))

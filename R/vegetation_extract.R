@@ -1172,6 +1172,13 @@ vegetation_extract <- function(
     rm(yday_before)
   }
 
+  # Ensure geometry column is in the last column position.
+  data <- dplyr::relocate(
+    data,
+    "geometry",
+    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+  )
+
   # If reliability information requested, ensure it is in the last column
   # position so it doesn't end up stuck between NDVI/EVI columns if both
   # requested.
