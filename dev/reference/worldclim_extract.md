@@ -19,7 +19,8 @@ worldclim_extract(
   site_name = NULL,
   date_month = NULL,
   dl_path = NULL,
-  retain = TRUE
+  retain = TRUE,
+  ...
 )
 ```
 
@@ -75,14 +76,24 @@ worldclim_extract(
   Logical. Should WorldClim data files be kept after extraction? If
   `FALSE`, files will be deleted.
 
+- ...:
+
+  Other arguments passed to
+  [`terra::extract()`](https://rspatial.github.io/terra/reference/extract.html)
+  for `sf` 'POINT' or `terra` 'points' input data or
+  [`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html)
+  `sf` 'POLYGON' or `terra` 'polygons' input data. Primarily useful for
+  specifying alternate summary statistics to extract for `sf` 'POLYGON'
+  or `terra` 'polygons' input data.
+
 ## Value
 
 For sf 'POINT' or terra 'points' input data, original data with numeric
 column(s) appended containing the climate data value(s) at each point.
 
 For sf 'POLYGON' or terra 'polygons' input data, original data with
-numeric column(s) appended containing the mean climate data value(s)
-within each polygon.
+numeric column(s) appended containing the requested climate data
+value(s) within each polygon.
 
 ## Details
 
@@ -100,6 +111,88 @@ following values to the `covariates` argument
 - Solar radiation: `wordclim_srad`
 
 - Wind speed: `worldclim_wind`
+
+By default, for `sf` 'POLYGON' or `terra` 'polygons' input data the mean
+NDVI and/or EVI value will be returned. Other summary statistics can be
+extracted by specifying the `fun` argument, which is passed to
+[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html).
+The available summary statistics are:
+
+- `min` - the minimum non-`NA` value in any raster cell wholly or
+  partially covered by the polygon
+
+- `max` - the maximum non-`NA` value in any raster cell wholly or
+  partially covered by the polygon
+
+- `count` - the sum of fractions of raster cells with non-`NA` values
+  covered by the polygon
+
+- `sum` - the sum of non-`NA` raster cell values, multiplied by the
+  fraction of the cell that is covered by the polygon
+
+- `mean` - the mean cell value, weighted by the fraction of each cell
+  that is covered by the polygon
+
+- `median` - the median cell value, weighted by the fraction of each
+  cell that is covered by the polygon
+
+- `quantile` - arbitrary quantile(s) of cell values, specified in
+  `quantiles`, weighted by the fraction of each cell that is covered by
+  the polygon
+
+- `mode` - the most common cell value, weighted by the fraction of each
+  cell that is covered by the polygon. Where multiple values occupy the
+  same maximum number of weighted cells, the largest value will be
+  returned.
+
+- `majority` - synonym for `mode`
+
+- `minority` - the least common cell value, weighted by the fraction of
+  each cell that is covered by the polygon. Where multiple values occupy
+  the same minimum number of weighted cells, the smallest value will be
+  returned.
+
+- `variety` - the number of distinct values in cells that are wholly or
+  partially covered by the polygon.
+
+- `variance` - the population variance of cell values, weighted by the
+  fraction of each cell that is covered by the polygon.
+
+- `stdev` - the population standard deviation of cell values, weighted
+  by the fraction of each cell that is covered by the polygon.
+
+- `coefficient_of_variation` - the population coefficient of variation
+  of cell values, weighted by the fraction of each cell that is covered
+  by the polygon.
+
+- `weighted_mean` - the mean cell value, weighted by the product of the
+  fraction of each cell covered by the polygon and the value of a second
+  weighting raster provided as `weights`
+
+- `weighted_sum` - the sum of defined raster cell values, multiplied by
+  the fraction of each cell that is covered by the polygon and the value
+  of a second weighting raster provided as `weights`
+
+- `weighted_stdev` - the population standard deviation of cell values,
+  weighted by the product of the fraction of each cell covered by the
+  polygon and the value of a second weighting raster provided as
+  `weights`
+
+- `weighted_variance` - the population variance of cell values, weighted
+  by the product of the fraction of each cell covered by the polygon and
+  the value of a second weighting raster provided as `weights`
+
+- `frac` - returns one column for each possible value of `x`, with the
+  the fraction of defined raster cells that are equal to that value.
+
+- `weighted_frac` - returns one column for each possible value of `x`,
+  with the fraction of defined cells that are equal to that value,
+  weighted by \`weights.
+
+User defined functions can also be passed to `fun`, but these must
+return a single value. More information can be found in the
+documentation for
+[`exactextractr::exact_extract()`](https://isciences.gitlab.io/exactextractr/reference/exact_extract.html).
 
 ## References
 
@@ -135,13 +228,12 @@ wind <- worldclim_download(data = bcch,
                            covariates = "worldclim_wind",
                            progress = FALSE)
 #> [Worldclim Download] downloading WorldClim 'wind' data for Canada.
-#> The geodata server seems to be temporary out of service. Please try again later. 
-#> Warning: [WorldClim Download] Download failed for Canada [wind].
+#> Error: [WorldClim Download] Download failed for Canada [wind]. The geodata server appears to be temporarily down. Try again later.
 
 # Extract average temperature
 output <- worldclim_extract(data = bcch,
                             worldclim_data = wind,
                             covariates = "worldclim_wind",
                             retain = FALSE)
-#> Error in worldclim_data[[1]]: subscript out of bounds
+#> Error: object 'wind' not found
 ```
