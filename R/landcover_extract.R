@@ -596,7 +596,7 @@ landcover_extract <- function(
           # data. Create parseable column names using names for each
           # class listed above
           if ("class" %in% unique(modis_lsm$level)) {
-            for (l in modis_lsm$metric[modis_lsm$level == "class"]) {
+            for (l in unique(modis_lsm$metric[modis_lsm$level == "class"])) {
               for (m in modis_lsm$class[
                 modis_lsm$level == "class" & modis_lsm$metric == l
               ]) {

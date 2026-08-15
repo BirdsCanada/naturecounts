@@ -321,6 +321,8 @@ elevation_extract <- function(
           " provided. No value will be returned.",
           call. = FALSE
         )
+
+        range <- "out"
       } else if (TRUE %in% is.nan(terra::values(terra::crop(elev, tmp)))) {
         warning(
           "[Elevation Extraction] site ",
@@ -331,144 +333,12 @@ elevation_extract <- function(
           call. = FALSE
         )
 
-        # Check whether fun = NULL. In exactextractr::exact_extract() this is
-        # used to extract cell values and coverage fractions. fun = 'frac' is
-        # a valid alternative that works here.
-        if (is.null(funs)) {
-          stop(
-            "[Elevation Extraction] support is not provided for fun",
-            " = NULL. If wanting to extract cell values and coverage",
-            " fractions consider fun = 'frac'. Keep in mind that this can",
-            " produce a lot of columns. Direct use of",
-            " exactextractr::exact_extract() may be more useful here.",
-            call. = FALSE
-          )
-        } else if (is.function(funs)) {
-          # If fun is a user-specified function, attempt to run.
-          val <- exactextractr::exact_extract(elev, tmp, ...)
-
-          # If function returns more than one value or a data.frame, stop.
-          if (
-            length(val) > 1 |
-              is.data.frame(val)
-          ) {
-            stop(
-              "[Elevation Extraction] support for custom summary",
-              " functions is currently limited to functions returning a",
-              " single value (not stored in a data.frame) to allow accurate",
-              " joining to input data.",
-              call. = FALSE
-            )
-          }
-
-          # If user-defined function returns acceptable value, join to data.
-          data[
-            data$SurveyAreaIdentifier == i,
-            "elevation_user_defined_function"
-          ] <- val
-        } else {
-          # If fun is one or more pre-defined summary functions (see
-          # ?exactextractr::exact_extract()), loop through options and extract.
-          for (j in funs) {
-            # Check if any summary functions requested required tailored
-            # joining.
-            if (
-              j == "quantile" &
-                length(list(...)[["quantiles"]]) > 1
-            ) {
-              # Multiple quantiles cause exactextractr::exact_extract() to
-              # return a data.frame with a column for each requested quantile,
-              # and so must be joined in a tailored way.
-
-              # Build arguments so that calls with multiple functions
-              # requested in fun don't try and extract all requested functions
-              # on each loop iteration.
-              args <- list(...)
-              args$x <- elev
-              args$y <- tmp
-              args$fun <- j
-
-              # Overwrite redundant args.
-              args$append_cols <- NULL
-              args$force_df <- FALSE
-
-              # Extract.
-              q_table <- do.call(exactextractr::exact_extract, args)
-
-              # Join each requested quantile to original data.
-              for (k in names(q_table)) {
-                data[
-                  data$SurveyAreaIdentifier == i,
-                  paste0(
-                    "elevation_",
-                    j,
-                    "_",
-                    sub(pattern = "q", replacement = "", x = k)
-                  )
-                ] <- q_table[, k]
-              }
-            } else if (j %in% c("frac", "weighted_frac")) {
-              # Extracting fraction or weighted fraction causes
-              # exactextractr::exact_extract() to return a data.frame with a
-              # column for each unique cell value, and so must be joined in a
-              # tailored way.
-
-              # Build arguments so that calls with multiple functions
-              # requested in fun don't try and extract all requested functions
-              # on each loop iteration.
-              args <- list(...)
-              args$x <- elev
-              args$y <- tmp
-              args$fun <- j
-
-              # Overwrite redundant args.
-              args$append_cols <- NULL
-              args$force_df <- FALSE
-
-              # Extract.
-              frac_table <- do.call(exactextractr::exact_extract, args)
-
-              # Join each fractional value to original data.
-              for (k in names(frac_table)) {
-                data[
-                  data$SurveyAreaIdentifier == i,
-                  paste0(
-                    "elevation_",
-                    j,
-                    "_",
-                    as.numeric(sub(
-                      pattern = "frac_",
-                      replacement = "",
-                      x = k
-                    ))
-                  )
-                ] <- frac_table[, k]
-              }
-            } else {
-              # If no tailored joining needed, just build arguments so that
-              # calls with multiple functions requested in fun don't try and
-              # extract all requested functions on each loop iteration.
-              args <- list(...)
-              args$x <- elev
-              args$y <- tmp
-              args$fun <- j
-
-              # Overwrite redundant args.
-              args$append_cols <- NULL
-              args$force_df <- FALSE
-
-              # Extract and join requested value to input data.
-              data[
-                data$SurveyAreaIdentifier == i,
-                paste0(
-                  "elevation_",
-                  j
-                )
-              ] <- do.call(exactextractr::exact_extract, args)
-            }
-          }
-        }
+        range <- "overlap"
       } else {
+        range <- "in"
+      }
+
+      if (range %in% c("overlap", "in")) {
         # Check whether fun = NULL. In exactextractr::exact_extract() this is
         # used to extract cell values and coverage fractions. fun = 'frac' is
         # a valid alternative that works here.
