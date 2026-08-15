@@ -81,6 +81,14 @@ default, the function extracts the University of Maryland scheme
 (\code{modis_lctype1}), but we strongly recommend users consider the strengths and
 weaknesses of each classification scheme in the context of their analysis and
 choose their desired classification scheme appropriately.
+
+With \code{sf} 'POLYGON' or \code{terra} polygons' input data, the proportion of
+polygon area covered by each MODIS Landcover class (\code{pland}) is returned by default.
+Other summary metrics can be requested by specifying
+the \code{level}, \code{class}, \code{metric}, or \code{name} arguments, which are passed to
+\code{\link[landscapemetrics:calculate_lsm]{landscapemetrics::calculate_lsm()}}. See \code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} for
+metric options. At this time, only metrics at the \code{landscape} or \code{class}
+level are accepted.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
