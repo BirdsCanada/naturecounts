@@ -201,27 +201,37 @@ worldclim_download <- function(
           "."
         )
 
-        clim[[i]][[j]] <- geodata::worldclim_country(
-          var = i,
-          country = j,
-          path = ifelse(
-            is.null(dl_path),
-            "./worldclim",
-            paste0(dl_path, "/worldclim")
+        tryCatch(
+          clim[[i]][[j]] <- geodata::worldclim_country(
+            var = i,
+            country = j,
+            path = ifelse(
+              is.null(dl_path),
+              "./worldclim",
+              paste0(dl_path, "/worldclim")
+            ),
+            quiet = !progress
           ),
-          quiet = !progress
+          message = function(m) {
+            if (
+              stringr::str_detect(
+                string = conditionMessage(m),
+                pattern = "geodata server seems to be temporary out of service."
+              )
+            ) {
+              stop(
+                "[WorldClim Download] Download failed for ",
+                j,
+                " [",
+                i,
+                "]. The geodata server appears to be temporarily down. Try again later.",
+                call. = FALSE
+              )
+            } else {
+              message(conditionMessage(m), call. = FALSE)
+            }
+          }
         )
-
-        if (is.null(clim[[i]][[j]])) {
-          warning(
-            "[WorldClim Download] Download failed for ",
-            j,
-            " [",
-            i,
-            "].",
-            call. = FALSE
-          )
-        }
       } else {
         clim[[i]][[j]] <- terra::rast(ifelse(
           is.null(dl_path),

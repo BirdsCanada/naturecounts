@@ -16,6 +16,71 @@
 #' - Solar radiation: `wordclim_srad`
 #' - Wind speed: `worldclim_wind`
 #'
+#' By default, for `sf` 'POLYGON' or `terra` 'polygons' input data the mean NDVI
+#' and/or EVI value will be returned. Other summary statistics can be extracted
+#' by specifying the `fun` argument, which is passed to
+#' [exactextractr::exact_extract()]. The available summary statistics are:
+#'
+#'  * `min` - the minimum non-`NA` value in any raster cell wholly or
+#'            partially covered by the polygon
+#'  * `max` - the maximum non-`NA` value in any raster cell wholly or
+#'            partially covered by the polygon
+#'  * `count` - the sum of fractions of raster cells with non-`NA`
+#'              values covered by the polygon
+#'  * `sum`   - the sum of non-`NA` raster cell values, multiplied by
+#'              the fraction of the cell that is covered by the polygon
+#'  * `mean` - the mean cell value, weighted by the fraction of each cell
+#'             that is covered by the polygon
+#'  * `median` - the median cell value, weighted by the fraction of each cell
+#'               that is covered by the polygon
+#'  * `quantile` - arbitrary quantile(s) of cell values, specified in
+#'                 `quantiles`, weighted by the fraction of each cell that is
+#'                  covered by the polygon
+#'  * `mode` - the most common cell value, weighted by the fraction of
+#'             each cell that is covered by the polygon. Where multiple
+#'             values occupy the same maximum number of weighted cells,
+#'             the largest value will be returned.
+#'  * `majority` - synonym for `mode`
+#'  * `minority` - the least common cell value, weighted by the fraction
+#'                 of each cell that is covered by the polygon. Where
+#'                 multiple values occupy the same minimum number of
+#'                 weighted cells, the smallest value will be returned.
+#'  * `variety` - the number of distinct values in cells that are wholly or
+#'                partially covered by the polygon.
+#'  * `variance` - the population variance of cell values, weighted by the
+#'                 fraction of each cell that is covered by the polygon.
+#'  * `stdev` - the population standard deviation of cell values, weighted by
+#'              the fraction of each cell that is covered by the polygon.
+#'  * `coefficient_of_variation` - the population coefficient of variation of
+#'                                 cell values, weighted by the fraction of each
+#'                                 cell that is covered by the polygon.
+#'  * `weighted_mean` - the mean cell value, weighted by the product of
+#'                      the fraction of each cell covered by the polygon
+#'                      and the value of a second weighting raster provided
+#'                      as `weights`
+#'  * `weighted_sum` - the sum of defined raster cell values, multiplied by
+#'                     the fraction of each cell that is covered by the polygon
+#'                     and the value of a second weighting raster provided
+#'                     as `weights`
+#'  * `weighted_stdev` - the population standard deviation of cell values,
+#'                       weighted by the product of the fraction of each cell
+#'                       covered by the polygon and the value of a second
+#'                       weighting raster provided as `weights`
+#'  * `weighted_variance` - the population variance of cell values, weighted by
+#'                          the product of the fraction of each cell covered by
+#'                          the polygon and the value of a second weighting
+#'                          raster provided as `weights`
+#'  * `frac` - returns one column for each possible value of `x`, with the
+#'             the fraction of defined raster cells that are equal to that
+#'             value.
+#'  * `weighted_frac` - returns one column for each possible value of `x`,
+#'                      with the fraction of defined cells that are equal
+#'                      to that value, weighted by `weights.
+#'
+#' User defined functions can also be passed to `fun`, but these must return a
+#' single value. More information can be found in the documentation for
+#' [exactextractr::exact_extract()].
+#'
 #' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or
 #'   'polygons' object.
 #' @param worldclim_data `terra SpatRaster` or `list` of `terra SpatRaster`s if
@@ -37,12 +102,18 @@
 #'   and custom download filepath used.
 #' @param retain Logical. Should WorldClim data files be kept after extraction? If
 #'   `FALSE`, files will be deleted.
+#' @param ... Other arguments passed to [terra::extract()] for
+#'   `sf` 'POINT' or `terra` 'points' input data or
+#'   [exactextractr::exact_extract()] `sf` 'POLYGON' or `terra` 'polygons' input
+#'   data. Primarily useful for specifying alternate summary statistics to
+#'   extract for `sf` 'POLYGON' or `terra` 'polygons' input data.
 #'
 #' @returns For sf 'POINT' or terra 'points' input data, original data with
 #' numeric column(s) appended containing the climate data value(s) at each point.
 #'
 #' For sf 'POLYGON' or terra 'polygons' input data, original data with numeric
-#' column(s) appended containing the mean climate data value(s) within each polygon.
+#' column(s) appended containing the requested climate data value(s) within each
+#' polygon.
 #'
 #' @examples
 #' # Convert included test data on black-capped chickadees to sf POINT object
@@ -93,7 +164,8 @@ worldclim_extract <- function(
   # to data_fmt().
   dl_path = NULL, # Path to downloaded files. Only needed if retain = TRUE and
   # custom dl_path is used.
-  retain = TRUE # Should data files be kept after extraction?
+  retain = TRUE, # Should data files be kept after extraction?
+  ...
 ) {
   # Check packages
   have_pkg_check(c(
@@ -299,6 +371,38 @@ worldclim_extract <- function(
   # If buffered, check for packages necessary in buffered workflow.
   if (buffered == TRUE) {
     have_pkg_check("exactextractr")
+
+    if (hasArg("fun") & !is.function(list(...)[["fun"]])) {
+      if ("quantile" %in% list(...)[["fun"]] & !hasArg("quantiles")) {
+        stop(
+          "[WorldClim Extraction] quantile summary requested but",
+          " no quantiles supplied to the 'quantiles' argument. Please",
+          " supply numeric value(s) of desired quantiles.",
+          call. = FALSE
+        )
+      }
+
+      if (
+        TRUE %in%
+          (c(
+            "weighted_mean",
+            "weighted_sum",
+            "weighted_stdev",
+            "weighted_variance",
+            "weighted_frac"
+          ) %in%
+            list(...)[["fun"]]) &
+          !hasArg("weights")
+      ) {
+        stop(
+          "[WorldClim Extraction] weighted summary requested but no",
+          " weights supplied via the 'weights' argument. Please supply",
+          " either a weighting raster or 'area' to use the cell areas of",
+          " the WorldClim raster as weights.",
+          call. = FALSE
+        )
+      }
+    }
   }
 
   clim <- worldclim_data
@@ -335,6 +439,13 @@ worldclim_extract <- function(
 
       # Loop through each month site i was visited, extract.
       for (k in unique(data$survey_month[data$SurveyAreaIdentifier == j])) {
+        # Check if function information is stored in ...
+        if (!hasArg("fun")) {
+          funs <- "mean"
+        } else {
+          funs <- list(...)[["fun"]]
+        }
+
         # Use variable name and month to pull correct layer from WorldClim
         # raster.
 
@@ -384,27 +495,303 @@ worldclim_extract <- function(
               call. = FALSE
             )
 
-            data[
-              data$SurveyAreaIdentifier == j & data$survey_month == k,
-              i
-            ] <- exactextractr::exact_extract(
-              x = source[[layername]],
-              y = tmp %>% dplyr::filter(.data$survey_month == k),
-              fun = "mean"
-            )
+            # Check whether fun = NULL. In exactextractr::exact_extract() this is
+            # used to extract cell values and coverage fractions. fun = 'frac' is
+            # a valid alternative that works here.
+            if (is.null(funs)) {
+              stop(
+                "[WorldClim (",
+                i,
+                ") Extraction] support is not provided for fun",
+                " = NULL. If wanting to extract cell values and coverage",
+                " fractions consider fun = 'frac'. Keep in mind that this can",
+                " produce a lot of columns. Direct use of",
+                " exactextractr::exact_extract() may be more useful here.",
+                call. = FALSE
+              )
+            } else if (is.function(funs)) {
+              # If fun is a user-specified function, attempt to run.
+              val <- exactextractr::exact_extract(source[[layername]], tmp, ...)
+
+              # If function returns more than one value or a data.frame, stop.
+              if (
+                length(val) > 1 |
+                  is.data.frame(val)
+              ) {
+                stop(
+                  "[WorldClim (",
+                  i,
+                  ") Extraction] support for custom summary",
+                  " functions is currently limited to functions returning a",
+                  " single value (not stored in a data.frame) to allow accurate",
+                  " joining to input data.",
+                  call. = FALSE
+                )
+              }
+
+              # If user-defined function returns acceptable value, join to data.
+              data[
+                data$SurveyAreaIdentifier == j & data$survey_month == k,
+                paste0(i, "_user_defined_function")
+              ] <- val
+            } else {
+              # If fun is one or more pre-defined summary functions (see
+              # ?exactextractr::exact_extract()), loop through options and extract.
+              for (l in funs) {
+                # Check if any summary functions requested required tailored
+                # joining.
+                if (
+                  l == "quantile" &
+                    length(list(...)[["quantiles"]]) > 1
+                ) {
+                  # Multiple quantiles cause exactextractr::exact_extract() to
+                  # return a data.frame with a column for each requested quantile,
+                  # and so must be joined in a tailored way.
+
+                  # Build arguments so that calls with multiple functions
+                  # requested in fun don't try and extract all requested functions
+                  # on each loop iteration.
+                  args <- list(...)
+                  args$x <- source[[layername]]
+                  args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
+                  args$fun <- l
+
+                  # Overwrite redundant args.
+                  args$append_cols <- NULL
+                  args$force_df <- FALSE
+
+                  # Extract.
+                  q_table <- do.call(exactextractr::exact_extract, args)
+
+                  # Join each requested quantile to original data.
+                  for (m in names(q_table)) {
+                    data[
+                      data$SurveyAreaIdentifier == j & data$survey_month == k,
+                      paste0(
+                        i,
+                        "_",
+                        l,
+                        "_",
+                        sub(pattern = "q", replacement = "", x = m)
+                      )
+                    ] <- q_table[, m]
+                  }
+                } else if (l %in% c("frac", "weighted_frac")) {
+                  # Extracting fraction or weighted fraction causes
+                  # exactextractr::exact_extract() to return a data.frame with a
+                  # column for each unique cell value, and so must be joined in a
+                  # tailored way.
+
+                  # Build arguments so that calls with multiple functions
+                  # requested in fun don't try and extract all requested functions
+                  # on each loop iteration.
+                  args <- list(...)
+                  args$x <- source[[layername]]
+                  args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
+                  args$fun <- l
+
+                  # Overwrite redundant args.
+                  args$append_cols <- NULL
+                  args$force_df <- FALSE
+
+                  # Extract.
+                  frac_table <- do.call(exactextractr::exact_extract, args)
+
+                  # Join each fractional value to original data.
+                  for (m in names(frac_table)) {
+                    data[
+                      data$SurveyAreaIdentifier == j & data$survey_month == k,
+                      paste0(
+                        i,
+                        "_",
+                        l,
+                        "_",
+                        as.numeric(sub(
+                          pattern = "frac_",
+                          replacement = "",
+                          x = m
+                        ))
+                      )
+                    ] <- frac_table[, m]
+                  }
+                } else {
+                  # If no tailored joining needed, just build arguments so that
+                  # calls with multiple functions requested in fun don't try and
+                  # extract all requested functions on each loop iteration.
+                  args <- list(...)
+                  args$x <- modis_clip
+                  args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
+                  args$fun <- l
+
+                  # Overwrite redundant args.
+                  args$append_cols <- NULL
+                  args$force_df <- FALSE
+
+                  # Extract and join requested value to input data.
+                  data[
+                    data$SurveyAreaIdentifier == j & data$survey_month == k,
+                    paste0(
+                      i,
+                      "_",
+                      l
+                    )
+                  ] <- do.call(exactextractr::exact_extract, args)
+                }
+              }
+            }
           } else {
             # If no issues with coverage, proceed to extract. If buffered,
             # extract using exactextractr::exact_extract(). If not, extract
             # using terra::extract().
             if (buffered == TRUE) {
-              data[
-                data$SurveyAreaIdentifier == j & data$survey_month == k,
-                i
-              ] <- exactextractr::exact_extract(
-                x = source[[layername]],
-                y = tmp %>% dplyr::filter(.data$survey_month == k),
-                fun = "mean"
-              )
+              # Check whether fun = NULL. In exactextractr::exact_extract() this is
+              # used to extract cell values and coverage fractions. fun = 'frac' is
+              # a valid alternative that works here.
+              if (is.null(funs)) {
+                stop(
+                  "[WorldClim (",
+                  i,
+                  ") Extraction] support is not provided for fun",
+                  " = NULL. If wanting to extract cell values and coverage",
+                  " fractions consider fun = 'frac'. Keep in mind that this can",
+                  " produce a lot of columns. Direct use of",
+                  " exactextractr::exact_extract() may be more useful here.",
+                  call. = FALSE
+                )
+              } else if (is.function(funs)) {
+                # If fun is a user-specified function, attempt to run.
+                val <- exactextractr::exact_extract(
+                  source[[layername]],
+                  tmp,
+                  ...
+                )
+
+                # If function returns more than one value or a data.frame, stop.
+                if (
+                  length(val) > 1 |
+                    is.data.frame(val)
+                ) {
+                  stop(
+                    "[WorldClim (",
+                    i,
+                    ") Extraction] support for custom summary",
+                    " functions is currently limited to functions returning a",
+                    " single value (not stored in a data.frame) to allow accurate",
+                    " joining to input data.",
+                    call. = FALSE
+                  )
+                }
+
+                # If user-defined function returns acceptable value, join to data.
+                data[
+                  data$SurveyAreaIdentifier == j & data$survey_month == k,
+                  paste0(i, "_user_defined_function")
+                ] <- val
+              } else {
+                # If fun is one or more pre-defined summary functions (see
+                # ?exactextractr::exact_extract()), loop through options and extract.
+                for (l in funs) {
+                  # Check if any summary functions requested required tailored
+                  # joining.
+                  if (
+                    l == "quantile" &
+                      length(list(...)[["quantiles"]]) > 1
+                  ) {
+                    # Multiple quantiles cause exactextractr::exact_extract() to
+                    # return a data.frame with a column for each requested quantile,
+                    # and so must be joined in a tailored way.
+
+                    # Build arguments so that calls with multiple functions
+                    # requested in fun don't try and extract all requested functions
+                    # on each loop iteration.
+                    args <- list(...)
+                    args$x <- source[[layername]]
+                    args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
+                    args$fun <- l
+
+                    # Overwrite redundant args.
+                    args$append_cols <- NULL
+                    args$force_df <- FALSE
+
+                    # Extract.
+                    q_table <- do.call(exactextractr::exact_extract, args)
+
+                    # Join each requested quantile to original data.
+                    for (m in names(q_table)) {
+                      data[
+                        data$SurveyAreaIdentifier == j & data$survey_month == k,
+                        paste0(
+                          i,
+                          "_",
+                          l,
+                          "_",
+                          sub(pattern = "q", replacement = "", x = m)
+                        )
+                      ] <- q_table[, m]
+                    }
+                  } else if (l %in% c("frac", "weighted_frac")) {
+                    # Extracting fraction or weighted fraction causes
+                    # exactextractr::exact_extract() to return a data.frame with a
+                    # column for each unique cell value, and so must be joined in a
+                    # tailored way.
+
+                    # Build arguments so that calls with multiple functions
+                    # requested in fun don't try and extract all requested functions
+                    # on each loop iteration.
+                    args <- list(...)
+                    args$x <- source[[layername]]
+                    args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
+                    args$fun <- l
+
+                    # Overwrite redundant args.
+                    args$append_cols <- NULL
+                    args$force_df <- FALSE
+
+                    # Extract.
+                    frac_table <- do.call(exactextractr::exact_extract, args)
+
+                    # Join each fractional value to original data.
+                    for (m in names(frac_table)) {
+                      data[
+                        data$SurveyAreaIdentifier == j & data$survey_month == k,
+                        paste0(
+                          i,
+                          "_",
+                          l,
+                          "_",
+                          as.numeric(sub(
+                            pattern = "frac_",
+                            replacement = "",
+                            x = m
+                          ))
+                        )
+                      ] <- frac_table[, m]
+                    }
+                  } else {
+                    # If no tailored joining needed, just build arguments so that
+                    # calls with multiple functions requested in fun don't try and
+                    # extract all requested functions on each loop iteration.
+                    args <- list(...)
+                    args$x <- modis_clip
+                    args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
+                    args$fun <- l
+
+                    # Overwrite redundant args.
+                    args$append_cols <- NULL
+                    args$force_df <- FALSE
+
+                    # Extract and join requested value to input data.
+                    data[
+                      data$SurveyAreaIdentifier == j & data$survey_month == k,
+                      paste0(
+                        i,
+                        "_",
+                        l
+                      )
+                    ] <- do.call(exactextractr::exact_extract, args)
+                  }
+                }
+              }
             } else {
               data[
                 data$SurveyAreaIdentifier == j & data$survey_month == k,
@@ -412,9 +799,8 @@ worldclim_extract <- function(
               ] <- terra::extract(
                 x = source[[layername]],
                 y = tmp %>% dplyr::filter(.data$survey_month == k),
-                fun = "mean",
-                na.rm = TRUE
-              )[, layername]
+                ...
+              )[, `if`(hasArg("layer"), "value", layername)]
             }
           }
         } else {
@@ -429,14 +815,154 @@ worldclim_extract <- function(
             ] <- NA
           } else {
             if (buffered == TRUE) {
-              data[
-                data$SurveyAreaIdentifier == j & data$survey_month == k,
-                i
-              ] <- exactextractr::exact_extract(
-                x = source[[layername]],
-                y = tmp %>% dplyr::filter(.data$survey_month == k),
-                fun = "mean"
-              )
+              # Check whether fun = NULL. In exactextractr::exact_extract() this is
+              # used to extract cell values and coverage fractions. fun = 'frac' is
+              # a valid alternative that works here.
+              if (is.null(funs)) {
+                stop(
+                  "[WorldClim (",
+                  i,
+                  ") Extraction] support is not provided for fun",
+                  " = NULL. If wanting to extract cell values and coverage",
+                  " fractions consider fun = 'frac'. Keep in mind that this can",
+                  " produce a lot of columns. Direct use of",
+                  " exactextractr::exact_extract() may be more useful here.",
+                  call. = FALSE
+                )
+              } else if (is.function(funs)) {
+                # If fun is a user-specified function, attempt to run.
+                val <- exactextractr::exact_extract(
+                  source[[layername]],
+                  tmp,
+                  ...
+                )
+
+                # If function returns more than one value or a data.frame, stop.
+                if (
+                  length(val) > 1 |
+                    is.data.frame(val)
+                ) {
+                  stop(
+                    "[WorldClim (",
+                    i,
+                    ") Extraction] support for custom summary",
+                    " functions is currently limited to functions returning a",
+                    " single value (not stored in a data.frame) to allow accurate",
+                    " joining to input data.",
+                    call. = FALSE
+                  )
+                }
+
+                # If user-defined function returns acceptable value, join to data.
+                data[
+                  data$SurveyAreaIdentifier == j & data$survey_month == k,
+                  paste0(i, "_user_defined_function")
+                ] <- val
+              } else {
+                # If fun is one or more pre-defined summary functions (see
+                # ?exactextractr::exact_extract()), loop through options and extract.
+                for (l in funs) {
+                  # Check if any summary functions requested required tailored
+                  # joining.
+                  if (
+                    l == "quantile" &
+                      length(list(...)[["quantiles"]]) > 1
+                  ) {
+                    # Multiple quantiles cause exactextractr::exact_extract() to
+                    # return a data.frame with a column for each requested quantile,
+                    # and so must be joined in a tailored way.
+
+                    # Build arguments so that calls with multiple functions
+                    # requested in fun don't try and extract all requested functions
+                    # on each loop iteration.
+                    args <- list(...)
+                    args$x <- source[[layername]]
+                    args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
+                    args$fun <- l
+
+                    # Overwrite redundant args.
+                    args$append_cols <- NULL
+                    args$force_df <- FALSE
+
+                    # Extract.
+                    q_table <- do.call(exactextractr::exact_extract, args)
+
+                    # Join each requested quantile to original data.
+                    for (m in names(q_table)) {
+                      data[
+                        data$SurveyAreaIdentifier == j & data$survey_month == k,
+                        paste0(
+                          i,
+                          "_",
+                          l,
+                          "_",
+                          sub(pattern = "q", replacement = "", x = m)
+                        )
+                      ] <- q_table[, m]
+                    }
+                  } else if (l %in% c("frac", "weighted_frac")) {
+                    # Extracting fraction or weighted fraction causes
+                    # exactextractr::exact_extract() to return a data.frame with a
+                    # column for each unique cell value, and so must be joined in a
+                    # tailored way.
+
+                    # Build arguments so that calls with multiple functions
+                    # requested in fun don't try and extract all requested functions
+                    # on each loop iteration.
+                    args <- list(...)
+                    args$x <- source[[layername]]
+                    args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
+                    args$fun <- l
+
+                    # Overwrite redundant args.
+                    args$append_cols <- NULL
+                    args$force_df <- FALSE
+
+                    # Extract.
+                    frac_table <- do.call(exactextractr::exact_extract, args)
+
+                    # Join each fractional value to original data.
+                    for (m in names(frac_table)) {
+                      data[
+                        data$SurveyAreaIdentifier == j & data$survey_month == k,
+                        paste0(
+                          i,
+                          "_",
+                          l,
+                          "_",
+                          as.numeric(sub(
+                            pattern = "frac_",
+                            replacement = "",
+                            x = m
+                          ))
+                        )
+                      ] <- frac_table[, m]
+                    }
+                  } else {
+                    # If no tailored joining needed, just build arguments so that
+                    # calls with multiple functions requested in fun don't try and
+                    # extract all requested functions on each loop iteration.
+                    args <- list(...)
+                    args$x <- modis_clip
+                    args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
+                    args$fun <- l
+
+                    # Overwrite redundant args.
+                    args$append_cols <- NULL
+                    args$force_df <- FALSE
+
+                    # Extract and join requested value to input data.
+                    data[
+                      data$SurveyAreaIdentifier == j & data$survey_month == k,
+                      paste0(
+                        i,
+                        "_",
+                        l
+                      )
+                    ] <- do.call(exactextractr::exact_extract, args)
+                  }
+                }
+              }
             } else {
               data[
                 data$SurveyAreaIdentifier == j & data$survey_month == k,
@@ -444,9 +970,8 @@ worldclim_extract <- function(
               ] <- terra::extract(
                 x = source[[layername]],
                 y = tmp %>% dplyr::filter(.data$survey_month == k),
-                fun = "mean",
-                na.rm = TRUE
-              )[, layername]
+                ...
+              )[, `if`(hasArg("layer"), "value", layername)]
             }
           }
         }
@@ -527,6 +1052,13 @@ worldclim_extract <- function(
     #     }
     #   }
   }
+
+  # Ensure geometry column is in the last column position.
+  data <- dplyr::relocate(
+    data,
+    "geometry",
+    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+  )
 
   # Check if attributes were found and stored from input data. If they were
   # found reattach.
