@@ -4,7 +4,7 @@
 \alias{elevation_extract}
 \title{Extract Terrain Tiles Elevation Data}
 \usage{
-elevation_extract(data, elevation_data, site_name = NULL)
+elevation_extract(data, elevation_data, site_name = NULL, ...)
 }
 \arguments{
 \item{data}{An \code{sf} 'POINT' or 'POLYGON' object, or \code{terra} 'points' or
@@ -19,6 +19,12 @@ supplied here.}
 column containing site names if not contained within the BMDE column
 \code{SurveyAreaIdentifier}. Can be left \code{NULL} and still function properly if
 originally specified in a call to \code{\link[=data_fmt]{data_fmt()}} or \code{\link[=elevation_download]{elevation_download()}}.}
+
+\item{...}{Other arguments passed to \code{\link[terra:extract]{terra::extract()}} for
+\code{sf} 'POINT' or \code{terra} 'points' input data or
+\code{\link[exactextractr:exact_extract]{exactextractr::exact_extract()}} \code{sf} 'POLYGON' or \code{terra} 'polygons' input
+data. Primarily useful for specifying alternate summary statistics to
+extract for \code{sf} 'POLYGON' or \code{terra} 'polygons' input data.}
 }
 \value{
 For sf 'POINT' or terra 'points' input data, original data with
@@ -26,7 +32,7 @@ numeric column \code{elevation} appended containing the elevation value (metres
 above sea level) at each point.
 
 For sf 'POLYGON' or terra 'polygons' input data, original data with numeric
-column \code{elevation} appended containing the mean elevation value (metres above
+column(s) appended containing the requested elevation value(s) (metres above
 sea level) within each polygon.
 }
 \description{
@@ -37,6 +43,72 @@ from a \verb{terra SpatRaster}, as delivered by \code{\link[=elevation_download]
 Users should be conscious of the final spatial resolution of their elevation data,
 as this varies by latitude and zoom level specified in \code{\link[=elevation_download]{elevation_download()}}.
 This can be accessed using \code{\link[terra:dimensions]{terra::res()}}.
+
+#' By default, for \code{sf} 'POLYGON' or \code{terra} 'polygons' input data the mean
+elevation value will be returned. Other summary statistics can be extracted
+by specifying the \code{fun} argument, which is passed to
+\code{\link[exactextractr:exact_extract]{exactextractr::exact_extract()}}. The available summary statistics are:
+\itemize{
+\item \code{min} - the minimum non-\code{NA} value in any raster cell wholly or
+partially covered by the polygon
+\item \code{max} - the maximum non-\code{NA} value in any raster cell wholly or
+partially covered by the polygon
+\item \code{count} - the sum of fractions of raster cells with non-\code{NA}
+values covered by the polygon
+\item \code{sum}   - the sum of non-\code{NA} raster cell values, multiplied by
+the fraction of the cell that is covered by the polygon
+\item \code{mean} - the mean cell value, weighted by the fraction of each cell
+that is covered by the polygon
+\item \code{median} - the median cell value, weighted by the fraction of each cell
+that is covered by the polygon
+\item \code{quantile} - arbitrary quantile(s) of cell values, specified in
+\code{quantiles}, weighted by the fraction of each cell that is
+covered by the polygon
+\item \code{mode} - the most common cell value, weighted by the fraction of
+each cell that is covered by the polygon. Where multiple
+values occupy the same maximum number of weighted cells,
+the largest value will be returned.
+\item \code{majority} - synonym for \code{mode}
+\item \code{minority} - the least common cell value, weighted by the fraction
+of each cell that is covered by the polygon. Where
+multiple values occupy the same minimum number of
+weighted cells, the smallest value will be returned.
+\item \code{variety} - the number of distinct values in cells that are wholly or
+partially covered by the polygon.
+\item \code{variance} - the population variance of cell values, weighted by the
+fraction of each cell that is covered by the polygon.
+\item \code{stdev} - the population standard deviation of cell values, weighted by
+the fraction of each cell that is covered by the polygon.
+\item \code{coefficient_of_variation} - the population coefficient of variation of
+cell values, weighted by the fraction of each
+cell that is covered by the polygon.
+\item \code{weighted_mean} - the mean cell value, weighted by the product of
+the fraction of each cell covered by the polygon
+and the value of a second weighting raster provided
+as \code{weights}
+\item \code{weighted_sum} - the sum of defined raster cell values, multiplied by
+the fraction of each cell that is covered by the polygon
+and the value of a second weighting raster provided
+as \code{weights}
+\item \code{weighted_stdev} - the population standard deviation of cell values,
+weighted by the product of the fraction of each cell
+covered by the polygon and the value of a second
+weighting raster provided as \code{weights}
+\item \code{weighted_variance} - the population variance of cell values, weighted by
+the product of the fraction of each cell covered by
+the polygon and the value of a second weighting
+raster provided as \code{weights}
+\item \code{frac} - returns one column for each possible value of \code{x}, with the
+the fraction of defined raster cells that are equal to that
+value.
+\item \code{weighted_frac} - returns one column for each possible value of \code{x},
+with the fraction of defined cells that are equal
+to that value, weighted by `weights.
+}
+
+User defined functions can also be passed to \code{fun}, but these must return a
+single value. More information can be found in the documentation for
+\code{\link[exactextractr:exact_extract]{exactextractr::exact_extract()}}.
 }
 \examples{
 # Using the included, test data on black-capped chickadees

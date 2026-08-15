@@ -7,6 +7,71 @@
 #' as this varies by latitude and zoom level specified in [elevation_download()].
 #' This can be accessed using [terra::res()].
 #'
+#' #' By default, for `sf` 'POLYGON' or `terra` 'polygons' input data the mean
+#' elevation value will be returned. Other summary statistics can be extracted
+#' by specifying the `fun` argument, which is passed to
+#' [exactextractr::exact_extract()]. The available summary statistics are:
+#'
+#'  * `min` - the minimum non-`NA` value in any raster cell wholly or
+#'            partially covered by the polygon
+#'  * `max` - the maximum non-`NA` value in any raster cell wholly or
+#'            partially covered by the polygon
+#'  * `count` - the sum of fractions of raster cells with non-`NA`
+#'              values covered by the polygon
+#'  * `sum`   - the sum of non-`NA` raster cell values, multiplied by
+#'              the fraction of the cell that is covered by the polygon
+#'  * `mean` - the mean cell value, weighted by the fraction of each cell
+#'             that is covered by the polygon
+#'  * `median` - the median cell value, weighted by the fraction of each cell
+#'               that is covered by the polygon
+#'  * `quantile` - arbitrary quantile(s) of cell values, specified in
+#'                 `quantiles`, weighted by the fraction of each cell that is
+#'                  covered by the polygon
+#'  * `mode` - the most common cell value, weighted by the fraction of
+#'             each cell that is covered by the polygon. Where multiple
+#'             values occupy the same maximum number of weighted cells,
+#'             the largest value will be returned.
+#'  * `majority` - synonym for `mode`
+#'  * `minority` - the least common cell value, weighted by the fraction
+#'                 of each cell that is covered by the polygon. Where
+#'                 multiple values occupy the same minimum number of
+#'                 weighted cells, the smallest value will be returned.
+#'  * `variety` - the number of distinct values in cells that are wholly or
+#'                partially covered by the polygon.
+#'  * `variance` - the population variance of cell values, weighted by the
+#'                 fraction of each cell that is covered by the polygon.
+#'  * `stdev` - the population standard deviation of cell values, weighted by
+#'              the fraction of each cell that is covered by the polygon.
+#'  * `coefficient_of_variation` - the population coefficient of variation of
+#'                                 cell values, weighted by the fraction of each
+#'                                 cell that is covered by the polygon.
+#'  * `weighted_mean` - the mean cell value, weighted by the product of
+#'                      the fraction of each cell covered by the polygon
+#'                      and the value of a second weighting raster provided
+#'                      as `weights`
+#'  * `weighted_sum` - the sum of defined raster cell values, multiplied by
+#'                     the fraction of each cell that is covered by the polygon
+#'                     and the value of a second weighting raster provided
+#'                     as `weights`
+#'  * `weighted_stdev` - the population standard deviation of cell values,
+#'                       weighted by the product of the fraction of each cell
+#'                       covered by the polygon and the value of a second
+#'                       weighting raster provided as `weights`
+#'  * `weighted_variance` - the population variance of cell values, weighted by
+#'                          the product of the fraction of each cell covered by
+#'                          the polygon and the value of a second weighting
+#'                          raster provided as `weights`
+#'  * `frac` - returns one column for each possible value of `x`, with the
+#'             the fraction of defined raster cells that are equal to that
+#'             value.
+#'  * `weighted_frac` - returns one column for each possible value of `x`,
+#'                      with the fraction of defined cells that are equal
+#'                      to that value, weighted by `weights.
+#'
+#' User defined functions can also be passed to `fun`, but these must return a
+#' single value. More information can be found in the documentation for
+#' [exactextractr::exact_extract()].
+#'
 #' @param data An `sf` 'POINT' or 'POLYGON' object, or `terra` 'points' or
 #'   'polygons' object.
 #' @param elevation_data `terra SpatRaster`. Terrain Tiles elevation data. We recommend using
@@ -17,13 +82,18 @@
 #'   column containing site names if not contained within the BMDE column
 #'   `SurveyAreaIdentifier`. Can be left `NULL` and still function properly if
 #'   originally specified in a call to [data_fmt()] or [elevation_download()].
+#' @param ... Other arguments passed to [terra::extract()] for
+#'   `sf` 'POINT' or `terra` 'points' input data or
+#'   [exactextractr::exact_extract()] `sf` 'POLYGON' or `terra` 'polygons' input
+#'   data. Primarily useful for specifying alternate summary statistics to
+#'   extract for `sf` 'POLYGON' or `terra` 'polygons' input data.
 #'
 #' @returns For sf 'POINT' or terra 'points' input data, original data with
 #' numeric column `elevation` appended containing the elevation value (metres
 #' above sea level) at each point.
 #'
 #' For sf 'POLYGON' or terra 'polygons' input data, original data with numeric
-#' column `elevation` appended containing the mean elevation value (metres above
+#' column(s) appended containing the requested elevation value(s) (metres above
 #' sea level) within each polygon.
 #'
 #' @examples
@@ -57,10 +127,11 @@ elevation_extract <- function(
   data,
   elevation_data, # SpatRaster derived from elevatr::get_elev_raster(),
   # downloadable via elevation_download().
-  site_name = NULL # optional argument to provide column name containing site
+  site_name = NULL, # optional argument to provide column name containing site
   # names. Default is assumed to be the BMDE column 'SurveyAreaIdentifier'. Can
   # be left NULL and still function properly if originally specified in a call
   # to data_fmt().
+  ...
 ) {
   # Check packages
   have_pkg_check(c(
@@ -177,6 +248,38 @@ elevation_extract <- function(
   # If buffered, check for packages necessary in buffered workflow.
   if (buffered == TRUE) {
     have_pkg_check("exactextractr")
+
+    if (hasArg("fun") & !is.function(list(...)[["fun"]])) {
+      if ("quantile" %in% list(...)[["fun"]] & !hasArg("quantiles")) {
+        stop(
+          "[Elevation Extraction] quantile summary requested but",
+          " no quantiles supplied to the 'quantiles' argument. Please",
+          " supply numeric value(s) of desired quantiles.",
+          call. = FALSE
+        )
+      }
+
+      if (
+        TRUE %in%
+          (c(
+            "weighted_mean",
+            "weighted_sum",
+            "weighted_stdev",
+            "weighted_variance",
+            "weighted_frac"
+          ) %in%
+            list(...)[["fun"]]) &
+          !hasArg("weights")
+      ) {
+        stop(
+          "[Elevation Extraction] weighted summary requested but no",
+          " weights supplied via the 'weights' argument. Please supply",
+          " either a weighting raster or 'area' to use the cell areas of",
+          " the elevation raster as weights.",
+          call. = FALSE
+        )
+      }
+    }
   }
 
   elev <- elevation_data
@@ -194,7 +297,6 @@ elevation_extract <- function(
     # Check if site i falls within the spatial extent of the provided elevation
     # raster. If not, warn. If only partially, warn.
 
-    #### BECAUSE OF THE EXTRA NANs WILL NEED TO REWORK THIS
     if (!terra::is.related(elev, terra::vect(tmp), relation = "intersects")) {
       warning(
         "[Elevation Extraction] site ",
@@ -204,6 +306,13 @@ elevation_extract <- function(
         call. = FALSE
       )
     } else if (buffered == TRUE) {
+      # Check if function information is stored in ...
+      if (!hasArg("fun")) {
+        funs <- "mean"
+      } else {
+        funs <- list(...)[["fun"]]
+      }
+
       if (all(is.nan(terra::values(terra::crop(elev, tmp))))) {
         warning(
           "[Elevation Extraction] site ",
@@ -217,33 +326,295 @@ elevation_extract <- function(
           "[Elevation Extraction] site ",
           i,
           "'s buffered area is only partially contained by the spatial extent of",
-          " the elevation rasters provided. Returned mean elevation value will",
+          " the elevation rasters provided. Returned elevation value will",
           " be derived from the available values.",
           call. = FALSE
         )
 
-        data[
-          data$SurveyAreaIdentifier == i,
-          "elevation"
-        ] <- exactextractr::exact_extract(
-          x = elev,
-          y = tmp,
-          fun = "mean",
-          progress = FALSE
-        )
+        # Check whether fun = NULL. In exactextractr::exact_extract() this is
+        # used to extract cell values and coverage fractions. fun = 'frac' is
+        # a valid alternative that works here.
+        if (is.null(funs)) {
+          stop(
+            "[Elevation Extraction] support is not provided for fun",
+            " = NULL. If wanting to extract cell values and coverage",
+            " fractions consider fun = 'frac'. Keep in mind that this can",
+            " produce a lot of columns. Direct use of",
+            " exactextractr::exact_extract() may be more useful here.",
+            call. = FALSE
+          )
+        } else if (is.function(funs)) {
+          # If fun is a user-specified function, attempt to run.
+          val <- exactextractr::exact_extract(elev, tmp, ...)
+
+          # If function returns more than one value or a data.frame, stop.
+          if (
+            length(val) > 1 |
+              is.data.frame(val)
+          ) {
+            stop(
+              "[Elevation Extraction] support for custom summary",
+              " functions is currently limited to functions returning a",
+              " single value (not stored in a data.frame) to allow accurate",
+              " joining to input data.",
+              call. = FALSE
+            )
+          }
+
+          # If user-defined function returns acceptable value, join to data.
+          data[
+            data$SurveyAreaIdentifier == i,
+            "elevation_user_defined_function"
+          ] <- val
+        } else {
+          # If fun is one or more pre-defined summary functions (see
+          # ?exactextractr::exact_extract()), loop through options and extract.
+          for (j in funs) {
+            # Check if any summary functions requested required tailored
+            # joining.
+            if (
+              j == "quantile" &
+                length(list(...)[["quantiles"]]) > 1
+            ) {
+              # Multiple quantiles cause exactextractr::exact_extract() to
+              # return a data.frame with a column for each requested quantile,
+              # and so must be joined in a tailored way.
+
+              # Build arguments so that calls with multiple functions
+              # requested in fun don't try and extract all requested functions
+              # on each loop iteration.
+              args <- list(...)
+              args$x <- elev
+              args$y <- tmp
+              args$fun <- j
+
+              # Overwrite redundant args.
+              args$append_cols <- NULL
+              args$force_df <- FALSE
+
+              # Extract.
+              q_table <- do.call(exactextractr::exact_extract, args)
+
+              # Join each requested quantile to original data.
+              for (k in names(q_table)) {
+                data[
+                  data$SurveyAreaIdentifier == i,
+                  paste0(
+                    "elevation_",
+                    j,
+                    "_",
+                    sub(pattern = "q", replacement = "", x = k)
+                  )
+                ] <- q_table[, k]
+              }
+            } else if (j %in% c("frac", "weighted_frac")) {
+              # Extracting fraction or weighted fraction causes
+              # exactextractr::exact_extract() to return a data.frame with a
+              # column for each unique cell value, and so must be joined in a
+              # tailored way.
+
+              # Build arguments so that calls with multiple functions
+              # requested in fun don't try and extract all requested functions
+              # on each loop iteration.
+              args <- list(...)
+              args$x <- elev
+              args$y <- tmp
+              args$fun <- j
+
+              # Overwrite redundant args.
+              args$append_cols <- NULL
+              args$force_df <- FALSE
+
+              # Extract.
+              frac_table <- do.call(exactextractr::exact_extract, args)
+
+              # Join each fractional value to original data.
+              for (k in names(frac_table)) {
+                data[
+                  data$SurveyAreaIdentifier == i,
+                  paste0(
+                    "elevation_",
+                    j,
+                    "_",
+                    as.numeric(sub(
+                      pattern = "frac_",
+                      replacement = "",
+                      x = k
+                    ))
+                  )
+                ] <- frac_table[, k]
+              }
+            } else {
+              # If no tailored joining needed, just build arguments so that
+              # calls with multiple functions requested in fun don't try and
+              # extract all requested functions on each loop iteration.
+              args <- list(...)
+              args$x <- elev
+              args$y <- tmp
+              args$fun <- j
+
+              # Overwrite redundant args.
+              args$append_cols <- NULL
+              args$force_df <- FALSE
+
+              # Extract and join requested value to input data.
+              data[
+                data$SurveyAreaIdentifier == i,
+                paste0(
+                  "elevation_",
+                  j
+                )
+              ] <- do.call(exactextractr::exact_extract, args)
+            }
+          }
+        }
       } else {
-        data[
-          data$SurveyAreaIdentifier == i,
-          "elevation"
-        ] <- exactextractr::exact_extract(
-          x = elev,
-          y = tmp,
-          fun = "mean",
-          progress = FALSE
-        )
+        # Check whether fun = NULL. In exactextractr::exact_extract() this is
+        # used to extract cell values and coverage fractions. fun = 'frac' is
+        # a valid alternative that works here.
+        if (is.null(funs)) {
+          stop(
+            "[Elevation Extraction] support is not provided for fun",
+            " = NULL. If wanting to extract cell values and coverage",
+            " fractions consider fun = 'frac'. Keep in mind that this can",
+            " produce a lot of columns. Direct use of",
+            " exactextractr::exact_extract() may be more useful here.",
+            call. = FALSE
+          )
+        } else if (is.function(funs)) {
+          # If fun is a user-specified function, attempt to run.
+          val <- exactextractr::exact_extract(elev, tmp, ...)
+
+          # If function returns more than one value or a data.frame, stop.
+          if (
+            length(val) > 1 |
+              is.data.frame(val)
+          ) {
+            stop(
+              "[Elevation Extraction] support for custom summary",
+              " functions is currently limited to functions returning a",
+              " single value (not stored in a data.frame) to allow accurate",
+              " joining to input data.",
+              call. = FALSE
+            )
+          }
+
+          # If user-defined function returns acceptable value, join to data.
+          data[
+            data$SurveyAreaIdentifier == i,
+            "elevation_user_defined_function"
+          ] <- val
+        } else {
+          # If fun is one or more pre-defined summary functions (see
+          # ?exactextractr::exact_extract()), loop through options and extract.
+          for (j in funs) {
+            # Check if any summary functions requested required tailored
+            # joining.
+            if (
+              j == "quantile" &
+                length(list(...)[["quantiles"]]) > 1
+            ) {
+              # Multiple quantiles cause exactextractr::exact_extract() to
+              # return a data.frame with a column for each requested quantile,
+              # and so must be joined in a tailored way.
+
+              # Build arguments so that calls with multiple functions
+              # requested in fun don't try and extract all requested functions
+              # on each loop iteration.
+              args <- list(...)
+              args$x <- elev
+              args$y <- tmp
+              args$fun <- j
+
+              # Overwrite redundant args.
+              args$append_cols <- NULL
+              args$force_df <- FALSE
+
+              # Extract.
+              q_table <- do.call(exactextractr::exact_extract, args)
+
+              # Join each requested quantile to original data.
+              for (k in names(q_table)) {
+                data[
+                  data$SurveyAreaIdentifier == i,
+                  paste0(
+                    "elevation_",
+                    j,
+                    "_",
+                    sub(pattern = "q", replacement = "", x = k)
+                  )
+                ] <- q_table[, k]
+              }
+            } else if (j %in% c("frac", "weighted_frac")) {
+              # Extracting fraction or weighted fraction causes
+              # exactextractr::exact_extract() to return a data.frame with a
+              # column for each unique cell value, and so must be joined in a
+              # tailored way.
+
+              # Build arguments so that calls with multiple functions
+              # requested in fun don't try and extract all requested functions
+              # on each loop iteration.
+              args <- list(...)
+              args$x <- elev
+              args$y <- tmp
+              args$fun <- j
+
+              # Overwrite redundant args.
+              args$append_cols <- NULL
+              args$force_df <- FALSE
+
+              # Extract.
+              frac_table <- do.call(exactextractr::exact_extract, args)
+
+              # Join each fractional value to original data.
+              for (k in names(frac_table)) {
+                data[
+                  data$SurveyAreaIdentifier == i,
+                  paste0(
+                    "elevation_",
+                    j,
+                    "_",
+                    as.numeric(sub(
+                      pattern = "frac_",
+                      replacement = "",
+                      x = k
+                    ))
+                  )
+                ] <- frac_table[, k]
+              }
+            } else {
+              # If no tailored joining needed, just build arguments so that
+              # calls with multiple functions requested in fun don't try and
+              # extract all requested functions on each loop iteration.
+              args <- list(...)
+              args$x <- elev
+              args$y <- tmp
+              args$fun <- j
+
+              # Overwrite redundant args.
+              args$append_cols <- NULL
+              args$force_df <- FALSE
+
+              # Extract and join requested value to input data.
+              data[
+                data$SurveyAreaIdentifier == i,
+                paste0(
+                  "elevation_",
+                  j
+                )
+              ] <- do.call(exactextractr::exact_extract, args)
+            }
+          }
+        }
       }
     } else {
-      if (is.na(terra::extract(elev, tmp)[, 2])) {
+      if (
+        is.na(terra::extract(elev, tmp, ...)[, `if`(
+          hasArg("layer"),
+          "value",
+          terra::names(elev)
+        )])
+      ) {
         warning(
           "[Elevation Extraction] site ",
           i,
@@ -258,8 +629,12 @@ elevation_extract <- function(
         data[data$SurveyAreaIdentifier == i, "elevation"] <- terra::extract(
           x = elev,
           y = tmp,
-          fun = "mean"
-        )[, names(elev)]
+          ...
+        )[, `if`(
+          hasArg("layer"),
+          "value",
+          terra::names(elev)
+        )]
       }
     }
   }
@@ -293,6 +668,13 @@ elevation_extract <- function(
   #     }
   #   }
   # }
+
+  # Ensure geometry column is in the last column position.
+  data <- dplyr::relocate(
+    data,
+    "geometry",
+    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+  )
 
   # Check if attributes were found and stored from input data. If they were
   # found reattach.
