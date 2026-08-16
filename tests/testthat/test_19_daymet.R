@@ -191,7 +191,7 @@ test_that("daymet_request() succeeds with alternate column names, either passed 
   )
 
   expect_silent(
-    requests_explicit <- suppressMessages(daymet_request(
+    requests_explicit <<- suppressMessages(daymet_request(
       dplyr::rename(
         data_fmt(
           bcch_restricted,
@@ -390,31 +390,34 @@ test_that("daymet_download() fails when a request is incomplete.", {
 skip("local only")
 
 test_that("daymet_extract() basic functionality with all expected inputs.", {
-  expect_silent(
+  expect_output(
     downloads_sf_poly <<- daymet_download(
       daymet_reqs = requests_sf_poly,
       ed_username = "rdjmacklin_bc",
       dl_path = "./testdir",
       verbose = FALSE
-    )
+    ),
+    "\n"
   )
 
-  expect_silent(
+  expect_output(
     downloads_terra_pt <<- daymet_download(
       daymet_reqs = requests_terra_pt,
       ed_username = "rdjmacklin_bc",
       dl_path = "./testdir",
       verbose = FALSE
-    )
+    ),
+    "\n"
   )
 
-  expect_silent(
+  expect_output(
     downloads_terra_poly <<- daymet_download(
       daymet_reqs = requests_terra_poly,
       ed_username = "rdjmacklin_bc",
       dl_path = "./testdir",
       verbose = FALSE
-    )
+    ),
+    "\n"
   )
 
   expect_output(
@@ -518,7 +521,7 @@ test_that("daymet_extract() basic functionality with all expected inputs.", {
       "survey_year",
       "survey_month",
       "survey_day",
-      "prcp",
+      "prcp_mean",
       "geometry"
     )
   )
@@ -571,7 +574,7 @@ test_that("daymet_extract() basic functionality with all expected inputs.", {
       "survey_year",
       "survey_month",
       "survey_day",
-      "prcp",
+      "prcp_mean",
       "geometry"
     )
   )
@@ -645,6 +648,230 @@ test_that("daymet_extract() returns warnings and errors for out of coverage date
       verbose = FALSE
     ),
     "\\[Daymet \\(prcp\\) Extraction\\] site FilledSurveyArea1's buffered area is only partially contained by the spatial extent of the DAYMET rasters provided. Returned prcp value will be derived from the available values."
+  )
+})
+
+skip("local only")
+
+test_that("daymet_extract() succeeds with alternate summary statistics, and throws error when needed.", {
+  sf_pt <- suppressWarnings(suppressMessages(data_fmt(
+    bcch_restricted[1, ],
+    coord_lon = "longitude",
+    coord_lat = "latitude",
+    crs = 4326
+  )))
+  sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(
+    bcch_restricted[1, ],
+    coord_lon = "longitude",
+    coord_lat = "latitude",
+    crs = 4326
+  ))))
+
+  expect_output(
+    extracted <- suppressMessages(daymet_extract(
+      sf_pt,
+      daymet_reqs = downloads_sf_pt,
+      dl_path = "./testdir",
+      method = "bilinear", # Add some arguments of terra::extract() to check
+      # for errors.
+      layer = 1
+    )),
+    "\n"
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "prcp",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$prcp, "numeric"))
+
+  # Test a few standard functions.
+  expect_output(
+    extracted <- suppressMessages(daymet_extract(
+      sf_poly,
+      daymet_reqs = downloads_sf_poly,
+      dl_path = "./testdir",
+      fun = c("median", "max", "stdev")
+    )),
+    "\n"
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "prcp_median",
+      "prcp_max",
+      "prcp_stdev",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$prcp_median, "numeric"))
+  expect_true(inherits(extracted$prcp_max, "numeric"))
+  expect_true(inherits(extracted$prcp_stdev, "numeric"))
+
+  # Test functions with specific requirements
+
+  # Check that quantile requires quantiles argument.
+  expect_error(
+    extracted <- suppressMessages(daymet_extract(
+      sf_poly,
+      daymet_reqs = downloads_sf_poly,
+      dl_path = "./testdir",
+      fun = "quantile"
+    )),
+    "\\[Daymet Extraction\\] quantile summary requested but no quantiles supplied to the 'quantiles' argument. Please supply numeric value\\(s\\) of desired quantiles."
+  )
+
+  # Check that one or more quantile joins correctly.
+  expect_output(
+    extracted <- suppressMessages(daymet_extract(
+      sf_poly,
+      daymet_reqs = downloads_sf_poly,
+      dl_path = "./testdir",
+      fun = "quantile",
+      quantiles = c(0.25)
+    )),
+    "\n"
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "prcp_quantile",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$prcp_quantile, "numeric"))
+
+  expect_output(
+    extracted <- suppressMessages(daymet_extract(
+      sf_poly,
+      daymet_reqs = downloads_sf_poly,
+      dl_path = "./testdir",
+      fun = "quantile",
+      quantiles = c(0.25, 0.75)
+    )),
+    "\n"
+  )
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "prcp_quantile_25",
+      "prcp_quantile_75",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$prcp_quantile_25, "numeric"))
+  expect_true(inherits(extracted$prcp_quantile_75, "numeric"))
+
+  # Check that weighted functions require weights argument.
+  expect_error(
+    extracted <- suppressMessages(daymet_extract(
+      sf_poly,
+      daymet_reqs = downloads_sf_poly,
+      dl_path = "./testdir",
+      fun = "weighted_mean"
+    )),
+    "\\[Daymet Extraction\\] weighted summary requested but no weights supplied via the 'weights' argument. Please supply either a weighting raster or 'area' to use the cell areas of the Daymet raster as weights."
+  )
+
+  # Check that fractions join correctly.
+  expect_output(
+    extracted <- suppressMessages(daymet_extract(
+      sf_poly,
+      daymet_reqs = downloads_sf_poly,
+      dl_path = "./testdir",
+      fun = "frac"
+    )),
+    "\n"
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "prcp_frac_0.790000021457672",
+      "prcp_frac_0.810000002384186",
+      "prcp_frac_0.819999992847443",
+      "geometry"
+    )
+  )
+  expect_true(inherits(extracted$prcp_frac_0.790000021457672, "numeric"))
+
+  # Test that user specified functions work.
+  my_function <- function(value, cov_frac) {
+    mean(value * cov_frac)
+  }
+
+  expect_output(
+    extracted <- suppressMessages(daymet_extract(
+      sf_poly,
+      daymet_reqs = downloads_sf_poly,
+      dl_path = "./testdir",
+      fun = my_function
+    )),
+    "\n"
+  )
+
+  expect_named(
+    extracted,
+    c(
+      "SurveyAreaIdentifier",
+      "latitude",
+      "longitude",
+      "survey_year",
+      "survey_month",
+      "survey_day",
+      "prcp_user_defined_function",
+      "geometry"
+    )
+  )
+
+  # Test that functions that return more than one value throw error.
+  my_function <- function(value, cov_frac) {
+    value * cov_frac
+  }
+
+  expect_error(
+    extracted <- suppressMessages(daymet_extract(
+      sf_poly,
+      daymet_reqs = downloads_sf_poly,
+      dl_path = "./testdir",
+      fun = my_function
+    )),
+    "\\[Daymet Extraction\\] support for custom summary functions is currently limited to functions returning a single value \\(not stored in a data.frame\\) to allow accurate joining to input data."
   )
 })
 
