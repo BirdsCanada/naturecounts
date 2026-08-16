@@ -76,7 +76,8 @@ NASA AppEEARS service using <code><a href="daymet_request.html">daymet_request()
 <span>  date_day <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dl_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  retain <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  retain <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -148,13 +149,21 @@ By default, data is downloaded to a subfolder <code>daymet/</code> in the workin
 <dd><p>Logical. Should Daymet data files be kept after extraction? If
 <code>FALSE</code>, files will be deleted.</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Other arguments passed to <code><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">terra::extract()</a></code> for
+<code>sf</code> 'POINT' or <code>terra</code> 'points' input data or
+<code><a href="https://isciences.gitlab.io/exactextractr/reference/exact_extract.html" class="external-link">exactextractr::exact_extract()</a></code> <code>sf</code> 'POLYGON' or <code>terra</code> 'polygons' input
+data. Primarily useful for specifying alternate summary statistics to
+extract for <code>sf</code> 'POLYGON' or <code>terra</code> 'polygons' input data.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>For sf 'POINT' or terra 'points' input data, original data with
 column(s) appended containing the Daymet data value(s) at each point.</p>
 <p>For sf 'POLYGON' or terra 'polygons' input data, original data with column(s)
-appended containing the mean Daymet data value(s) within each polygon.</p>
+appended containing the requested Daymet data value(s) within each polygon.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -168,10 +177,71 @@ via <code><a href="daymet_request.html">daymet_request()</a></code> and download
 <li><p>Maximum air temperature (°C): <code>daymet_tmax</code></p></li>
 <li><p>Minimum air temperature (°C): <code>daymet_tmin</code></p></li>
 <li><p>Water vapor pressure (Pa): <code>daymet_vp</code></p></li>
-</ul></div>
+</ul><p>By default, for <code>sf</code> 'POLYGON' or <code>terra</code> 'polygons' input data the mean Daymet
+variable value will be returned. Other summary statistics can be extracted
+by specifying the <code>fun</code> argument, which is passed to
+<code><a href="https://isciences.gitlab.io/exactextractr/reference/exact_extract.html" class="external-link">exactextractr::exact_extract()</a></code>. The available summary statistics are:</p><ul><li><p><code>min</code> - the minimum non-<code>NA</code> value in any raster cell wholly or
+partially covered by the polygon</p></li>
+<li><p><code>max</code> - the maximum non-<code>NA</code> value in any raster cell wholly or
+partially covered by the polygon</p></li>
+<li><p><code>count</code> - the sum of fractions of raster cells with non-<code>NA</code>
+values covered by the polygon</p></li>
+<li><p><code>sum</code>   - the sum of non-<code>NA</code> raster cell values, multiplied by
+the fraction of the cell that is covered by the polygon</p></li>
+<li><p><code>mean</code> - the mean cell value, weighted by the fraction of each cell
+that is covered by the polygon</p></li>
+<li><p><code>median</code> - the median cell value, weighted by the fraction of each cell
+that is covered by the polygon</p></li>
+<li><p><code>quantile</code> - arbitrary quantile(s) of cell values, specified in
+<code>quantiles</code>, weighted by the fraction of each cell that is
+covered by the polygon</p></li>
+<li><p><code>mode</code> - the most common cell value, weighted by the fraction of
+each cell that is covered by the polygon. Where multiple
+values occupy the same maximum number of weighted cells,
+the largest value will be returned.</p></li>
+<li><p><code>majority</code> - synonym for <code>mode</code></p></li>
+<li><p><code>minority</code> - the least common cell value, weighted by the fraction
+of each cell that is covered by the polygon. Where
+multiple values occupy the same minimum number of
+weighted cells, the smallest value will be returned.</p></li>
+<li><p><code>variety</code> - the number of distinct values in cells that are wholly or
+partially covered by the polygon.</p></li>
+<li><p><code>variance</code> - the population variance of cell values, weighted by the
+fraction of each cell that is covered by the polygon.</p></li>
+<li><p><code>stdev</code> - the population standard deviation of cell values, weighted by
+the fraction of each cell that is covered by the polygon.</p></li>
+<li><p><code>coefficient_of_variation</code> - the population coefficient of variation of
+cell values, weighted by the fraction of each
+cell that is covered by the polygon.</p></li>
+<li><p><code>weighted_mean</code> - the mean cell value, weighted by the product of
+the fraction of each cell covered by the polygon
+and the value of a second weighting raster provided
+as <code>weights</code></p></li>
+<li><p><code>weighted_sum</code> - the sum of defined raster cell values, multiplied by
+the fraction of each cell that is covered by the polygon
+and the value of a second weighting raster provided
+as <code>weights</code></p></li>
+<li><p><code>weighted_stdev</code> - the population standard deviation of cell values,
+weighted by the product of the fraction of each cell
+covered by the polygon and the value of a second
+weighting raster provided as <code>weights</code></p></li>
+<li><p><code>weighted_variance</code> - the population variance of cell values, weighted by
+the product of the fraction of each cell covered by
+the polygon and the value of a second weighting
+raster provided as <code>weights</code></p></li>
+<li><p><code>frac</code> - returns one column for each possible value of <code>x</code>, with the
+the fraction of defined raster cells that are equal to that
+value.</p></li>
+<li><p><code>weighted_frac</code> - returns one column for each possible value of <code>x</code>,
+with the fraction of defined cells that are equal
+to that value, weighted by `weights.</p></li>
+</ul><p>User defined functions can also be passed to <code>fun</code>, but these must return a
+single value. More information can be found in the documentation for
+<code><a href="https://isciences.gitlab.io/exactextractr/reference/exact_extract.html" class="external-link">exactextractr::exact_extract()</a></code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="daymet_request.html">daymet_request()</a></code> which can be used to submit requests for Dayment
+    <div class="dont-index"><p><code><a href="daymet_request.html">daymet_request()</a></code> which can be used to submit requests for Daymet
 data.</p>
 <p><code><a href="daymet_download.html">daymet_download()</a></code> to execute downloads once requests have been
 submitted and are complete.</p>
