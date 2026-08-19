@@ -227,13 +227,12 @@ bcch <- data_fmt(bcch)
 wind <- worldclim_download(data = bcch,
                            covariates = "worldclim_wind",
                            progress = FALSE)
-#> [Worldclim Download] downloading WorldClim 'wind' data for Canada.
-#> Error: [WorldClim Download] Download failed for Canada [wind]. The geodata server appears to be temporarily down. Try again later.
 
 # Extract average temperature
 output <- worldclim_extract(data = bcch,
                             worldclim_data = wind,
                             covariates = "worldclim_wind",
                             retain = FALSE)
-#> Error: object 'wind' not found
+#> [WorldClim Extraction] extracting WorldClim wind.
+#> [WorldClim Extraction] task complete. Removing files.
 ```
