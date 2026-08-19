@@ -436,21 +436,38 @@ elevation_extract <- function(
               # Extract.
               frac_table <- do.call(exactextractr::exact_extract, args)
 
-              # Join each fractional value to original data.
-              for (k in names(frac_table)) {
+              if (frac_table == 1) {
+                value <- unique(terra::values(terra::crop(
+                  elev,
+                  tmp
+                )))
+
                 data[
                   data$SurveyAreaIdentifier == i,
                   paste0(
                     "elevation_",
                     j,
                     "_",
-                    as.numeric(sub(
-                      pattern = "frac_",
-                      replacement = "",
-                      x = k
-                    ))
+                    value
                   )
-                ] <- frac_table[, k]
+                ] <- 1
+              } else {
+                # Join each fractional value to original data.
+                for (k in names(frac_table)) {
+                  data[
+                    data$SurveyAreaIdentifier == i,
+                    paste0(
+                      "elevation_",
+                      j,
+                      "_",
+                      as.numeric(sub(
+                        pattern = "frac_",
+                        replacement = "",
+                        x = k
+                      ))
+                    )
+                  ] <- frac_table[, k]
+                }
               }
             } else {
               # If no tailored joining needed, just build arguments so that

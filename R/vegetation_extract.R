@@ -961,8 +961,9 @@ vegetation_extract <- function(
                 # Extract.
                 frac_table <- do.call(exactextractr::exact_extract, args)
 
-                # Join each fractional value to original data.
-                for (m in names(frac_table)) {
+                if (frac_table == 1) {
+                  value <- unique(terra::values(modis_clip))
+
                   data[
                     data$SurveyAreaIdentifier == k &
                       data$survey_year ==
@@ -980,14 +981,39 @@ vegetation_extract <- function(
                       "_",
                       l,
                       "_",
-                      as.numeric(sub(
-                        pattern = "frac_",
-                        replacement = "",
-                        x = m
-                      )) *
+                      value *
                         0.0001 # Apply scaling value to column names.
                     )
-                  ] <- frac_table[, m]
+                  ] <- 1
+                } else {
+                  # Join each fractional value to original data.
+                  for (m in names(frac_table)) {
+                    data[
+                      data$SurveyAreaIdentifier == k &
+                        data$survey_year ==
+                          unique(modis_match$survey_year[
+                            modis_match$filename == j &
+                              modis_match$SurveyAreaIdentifier == k
+                          ]) &
+                        data$yday %in%
+                          modis_match$yday[
+                            modis_match$filename == j &
+                              modis_match$SurveyAreaIdentifier == k
+                          ],
+                      paste0(
+                        ifelse(i == "modis_ndvi", "ndvi", "evi"),
+                        "_",
+                        l,
+                        "_",
+                        as.numeric(sub(
+                          pattern = "frac_",
+                          replacement = "",
+                          x = m
+                        )) *
+                          0.0001 # Apply scaling value to column names.
+                      )
+                    ] <- frac_table[, m]
+                  }
                 }
               } else {
                 # If no tailored joining needed, just build arguments so that

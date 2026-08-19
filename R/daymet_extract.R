@@ -744,8 +744,12 @@ daymet_extract <- function(
                   # Extract.
                   frac_table <- do.call(exactextractr::exact_extract, args)
 
-                  # Join each fractional value to original data.
-                  for (m in names(frac_table)) {
+                  if (frac_table == 1) {
+                    value <- unique(terra::values(terra::crop(
+                      daymet,
+                      tmp
+                    )))
+
                     data[
                       data$SurveyAreaIdentifier == k & data$date == j_date,
                       paste0(
@@ -753,13 +757,27 @@ daymet_extract <- function(
                         "_",
                         l,
                         "_",
-                        as.numeric(sub(
-                          pattern = "frac_",
-                          replacement = "",
-                          x = m
-                        ))
+                        value
                       )
-                    ] <- frac_table[, m]
+                    ] <- 1
+                  } else {
+                    # Join each fractional value to original data.
+                    for (m in names(frac_table)) {
+                      data[
+                        data$SurveyAreaIdentifier == k & data$date == j_date,
+                        paste0(
+                          i,
+                          "_",
+                          l,
+                          "_",
+                          as.numeric(sub(
+                            pattern = "frac_",
+                            replacement = "",
+                            x = m
+                          ))
+                        )
+                      ] <- frac_table[, m]
+                    }
                   }
                 } else {
                   # If no tailored joining needed, just build arguments so that
