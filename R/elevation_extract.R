@@ -230,6 +230,16 @@ elevation_extract <- function(
 
   data$SurveyAreaIdentifier <- as.character(data$SurveyAreaIdentifier)
 
+  # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
+  # SurveyAreaIdentifiers if so.
+  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+    # Store original SurveyAreaIdentifiers
+    SAI_storage <- data$SurveyAreaIdentifier
+
+    # Create dummy SurveyAreaIdentifiers
+    data <- create_SAI(data = data, input_fmt = input_fmt)
+  }
+
   # Check whether sf object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "sf") {
@@ -555,6 +565,11 @@ elevation_extract <- function(
   #     }
   #   }
   # }
+
+  # Reinstate original SurveyAreaIdentifiers if dummies needed to be created
+  if (exists("SAI_storage")) {
+    data$SurveyAreaIdentifier <- SAI_storage
+  }
 
   # Ensure geometry column is in the last column position.
   data <- dplyr::relocate(

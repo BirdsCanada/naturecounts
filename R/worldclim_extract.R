@@ -292,6 +292,16 @@ worldclim_extract <- function(
 
   data$SurveyAreaIdentifier <- as.character(data$SurveyAreaIdentifier)
 
+  # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
+  # SurveyAreaIdentifiers if so.
+  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+    # Store original SurveyAreaIdentifiers
+    SAI_storage <- data$SurveyAreaIdentifier
+
+    # Create dummy SurveyAreaIdentifiers
+    data <- create_SAI(data = data, input_fmt = input_fmt)
+  }
+
   if (!is.null(date_month) & !("survey_month" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
@@ -1069,6 +1079,11 @@ worldclim_extract <- function(
     #       }
     #     }
     #   }
+  }
+
+  # Reinstate original SurveyAreaIdentifiers if dummies needed to be created
+  if (exists("SAI_storage")) {
+    data$SurveyAreaIdentifier <- SAI_storage
   }
 
   # Ensure geometry column is in the last column position.

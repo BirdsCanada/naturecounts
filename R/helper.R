@@ -410,3 +410,208 @@ find_unique <- function(df, by, extra) {
     nrow(unique(cbind(df[by], df[x]))) == nrow(unique(df[by]))
   })]
 }
+
+# Create SurveyAreaIdentifiers for all unique locations in a dataset.
+# Handle missing SurveyAreaIdentifiers and ensure coordinates are present in
+# the data for later use in nc_covariates_merge().
+create_SAI <- function(data, input_fmt) {
+  # Save column order for later use.
+  col_order <- names(data)
+
+  # For dataframe objects create an object containing all X/Y coordinates
+  # that do not have an associated SurveyAreaIdentifier.
+  if (input_fmt$type == "data.frame") {
+    missing_sitecode <- data %>%
+      dplyr::select("SurveyAreaIdentifier", "latitude", "longitude") %>%
+      dplyr::filter(is.na(.data$SurveyAreaIdentifier)) %>%
+      dplyr::distinct()
+  }
+
+  # For sf objects, create an object containing all X/Y coordinates (derived
+  # from geometries) that do not have an associated SurveyAreaIdentifier.
+  # Also append coordinates to original data object for later joining.
+  if (input_fmt$type == "sf") {
+    missing_sitecode <- data %>%
+      dplyr::select("SurveyAreaIdentifier", "geometry")
+
+    # For polygons, use the centroid as the X/Y coordinates.
+    if (input_fmt$geometry == "POLYGON") {
+      missing_sitecode <- suppressWarnings(sf::st_centroid(missing_sitecode))
+    }
+
+    # Extract coordinates and bind to data. Drop geometry and get all
+    # unique coordinate combinations with missing SurveyAreaIdentifiers.
+    missing_sitecode <- cbind(
+      missing_sitecode,
+      sf::st_coordinates(missing_sitecode)
+    ) %>%
+      dplyr::rename("longitude" = "X", "latitude" = "Y") %>%
+      sf::st_drop_geometry() %>%
+      dplyr::filter(is.na(.data$SurveyAreaIdentifier)) %>%
+      dplyr::distinct()
+
+    # Edge case: there is a col called X. This does not lead to the removal
+    # of this column in final data when merged using nc_covariates_merge().
+    if ("X" %in% names(data)) {
+      X_storage <- data$X
+
+      data <- dplyr::select(data, -"X")
+    }
+
+    # Edge case: there is a col called Y. This does not lead to the removal
+    # of this column in final data when merged using nc_covariates_merge().
+    if ("Y" %in% names(data)) {
+      Y_storage <- data$Y
+
+      data <- dplyr::select(data, -"Y")
+    }
+
+    # Edge case: there is a col called longitude. This does not lead to the
+    # removal of this column in final data when merged using
+    # nc_covariates_merge().
+    if ("longitude" %in% names(data)) {
+      longitude_storage <- data$longitude
+
+      data <- dplyr::select(data, -"longitude")
+    }
+
+    # Edge case: there is a col called latitude. This does not lead to the
+    # removal of this column in final data when merged using
+    # nc_covariates_merge().
+    if ("latitude" %in% names(data)) {
+      latitude_storage <- data$latitude
+
+      data <- dplyr::select(data, -"latitude")
+    }
+
+    # Append coordinates (from centroids if polygons) to provided data object.
+    if (input_fmt$geometry == "POLYGON") {
+      data <- cbind(
+        data,
+        sf::st_coordinates(suppressWarnings(sf::st_centroid(data)))
+      ) %>%
+        dplyr::rename("longitude" = "X", "latitude" = "Y")
+    } else {
+      data <- cbind(data, sf::st_coordinates(data)) %>%
+        dplyr::rename("longitude" = "X", "latitude" = "Y")
+    }
+  }
+
+  # For terra objects, create an object containing all X/Y coordinates
+  # (derived from geometries) that do not have an associated
+  # SurveyAreaIdentifier. Also append coordinates to original data object for
+  # later joining.
+  if (input_fmt$type == "terra") {
+    missing_sitecode <- data %>%
+      tidyterra::select("SurveyAreaIdentifier")
+
+    # For polygons, use the centroid as the X/Y coordinates.
+    if (input_fmt$geometry == "polygons") {
+      missing_sitecode <- terra::centroids(missing_sitecode)
+    }
+
+    # Extract coordinates and bind to data. Drop geometry and get all
+    # unique coordinate combinations with missing SurveyAreaIdentifiers.
+    missing_sitecode <- cbind(
+      missing_sitecode,
+      terra::crds(missing_sitecode)
+    ) %>%
+      tidyterra::rename("longitude" = "x", "latitude" = "y") %>%
+      terra::as.data.frame() %>%
+      dplyr::filter(is.na(.data$SurveyAreaIdentifier)) %>%
+      dplyr::distinct()
+
+    # Edge case: there is a col called x. This does not lead to the removal
+    # of this column in final data when merged using nc_covariates_merge().
+    if ("x" %in% names(data)) {
+      x_storage <- data$x
+
+      data <- tidyterra::select(data, -"x")
+    }
+
+    # Edge case: there is a col called y. This does not lead to the removal
+    # of this column in final data when merged using nc_covariates_merge().
+    if ("y" %in% names(data)) {
+      y_storage <- data$y
+
+      data <- tidyterra::select(data, -"y")
+    }
+
+    # Edge case: there is a col called longitude. This does not lead to the
+    # removal of this column in final data when merged using
+    # nc_covariates_merge().
+    if ("longitude" %in% names(data)) {
+      longitude_storage <- data$longitude
+
+      data <- dplyr::select(data, -"longitude")
+    }
+
+    # Edge case: there is a col called latitude. This does not lead to the
+    # removal of this column in final data when merged using
+    # nc_covariates_merge().
+    if ("latitude" %in% names(data)) {
+      latitude_storage <- data$latitude
+
+      data <- dplyr::select(data, -"latitude")
+    }
+
+    # Append coordinates (from centroids if polygons) to provided data object.
+    if (input_fmt$geometry == "polygons") {
+      data <- cbind(data, terra::crds(terra::centroids(data))) %>%
+        dplyr::rename("longitude" = "x", "latitude" = "y")
+    } else {
+      data <- cbind(data, terra::crds(data)) %>%
+        dplyr::rename("longitude" = "x", "latitude" = "y")
+    }
+  }
+
+  # Create a dummy SurveyAreaIdentifier for all unique coordinate combinations
+  # which are missing an associated SurveyAreaIdentifier.
+  for (i in 1:nrow(missing_sitecode)) {
+    missing_sitecode$SurveyAreaIdentifier[i] <- paste0("FilledSurveyArea", i)
+  }
+
+  # Use coordinates to join dummy SurveyAreaIdentifiers to original data.
+  for (i in missing_sitecode$latitude) {
+    for (j in missing_sitecode$longitude[missing_sitecode$latitude == i]) {
+      data$SurveyAreaIdentifier[
+        data$latitude == i & data$longitude == j
+      ] <- missing_sitecode$SurveyAreaIdentifier[
+        missing_sitecode$latitude == i & missing_sitecode$longitude == j
+      ]
+    }
+  }
+
+  # Remove added columns
+  data <- dplyr::select(data, -"longitude", -"latitude")
+
+  if (exists("X_storage")) {
+    data$X <- X_storage
+  }
+
+  if (exists("Y_storage")) {
+    data$Y <- Y_storage
+  }
+
+  if (exists("x_storage")) {
+    data$x <- x_storage
+  }
+
+  if (exists("y_storage")) {
+    data$y <- y_storage
+  }
+
+  if (exists("longitude_storage")) {
+    data$longitude <- longitude_storage
+  }
+
+  if (exists("latitude_storage")) {
+    data$latitude <- latitude_storage
+  }
+
+  # Reorder columns
+  data <- data[, col_order]
+
+  # Return
+  return(data)
+}
