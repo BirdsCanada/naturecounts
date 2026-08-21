@@ -2756,6 +2756,46 @@ elev <- elevation_download(data = bcch)
 # Extract Terrain Tiles data
 output <- elevation_extract(data = bcch, elevation_data = elev)
 #> [Elevation Extraction] extracting elevation data.
-#> Warning: [SpatVector from sf] empty SpatVector
-#> Warning: [Elevation Extraction] site NA falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea1 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea2 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea3 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea4 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea5 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea6 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea7 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea8 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea9 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea10 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea11 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea12 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea13 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea14 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea15 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea16 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea17 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea18 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea19 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea20 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea21 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea22 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea23 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea24 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea25 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea26 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea27 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea28 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea29 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea30 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea31 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea32 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea33 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea34 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea35 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea36 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea37 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea38 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea39 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea40 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea41 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
+#> Warning: [Elevation Extraction] site FilledSurveyArea42 falls outside of the spatial extent of the elevation rasters provided. No value will be returned.
 ```

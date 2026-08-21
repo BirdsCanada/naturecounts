@@ -106,7 +106,7 @@ search_species("black-capped chickadee", show = "all")
 nc_count(species = 14280)
 #> Without a username, using 'show = "all"'
 #> Using filters: species (14280)
-#> # A tibble: 338 × 4
+#> # A tibble: 337 × 4
 #>    collection    akn_level access nrecords
 #>    <chr>             <int> <chr>     <int>
 #>  1 ABATLAS1              5 full       1314
@@ -119,5 +119,5 @@ nc_count(species = 14280)
 #>  8 BBL-1990-1999         5 full     149381
 #>  9 BBL-2000-2009         5 full     156289
 #> 10 BBL-2010-2019         5 full     138297
-#> # ℹ 328 more rows
+#> # ℹ 327 more rows
 ```

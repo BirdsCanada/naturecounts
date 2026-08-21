@@ -163,7 +163,7 @@ search_region(type = "bcr")
 nc_count(region = list(statprov = "AB"), years = 2010)
 #> Without a username, using 'show = "all"'
 #> Using filters: start_year (2010); end_year (2010); statprov (AB)
-#> # A tibble: 20 × 4
+#> # A tibble: 19 × 4
 #>    collection     akn_level access     nrecords
 #>    <chr>              <int> <chr>         <int>
 #>  1 ABOWLS                 3 by request     1139
@@ -183,8 +183,7 @@ nc_count(region = list(statprov = "AB"), years = 2010)
 #> 15 GBIF_61BF28A5          5 full             94
 #> 16 GBIF_8A863029          5 full            151
 #> 17 GBIF_D99823CA          5 full              1
-#> 18 NESTWATCH              3 by request        3
-#> 19 OISEAUXQC              2 no access         2
-#> 20 PFW                    5 full           7872
+#> 18 OISEAUXQC              2 no access         2
+#> 19 PFW                    5 full           7872
 # }
 ```

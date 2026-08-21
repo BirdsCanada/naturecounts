@@ -51,10 +51,10 @@ nc_count(region = list(statprov = "NB"))
 
     ## Using filters: statprov (NB)
 
-    ## # A tibble: 93 × 4
+    ## # A tibble: 92 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS                3 by request    16919
+    ##  1 ATOWLS                3 by request    17038
     ##  2 BBL-1960-1969         5 full          56578
     ##  3 BBL-1970-1979         5 full          68636
     ##  4 BBL-1980-1989         5 full          82650
@@ -64,7 +64,7 @@ nc_count(region = list(statprov = "NB"))
     ##  8 BBL-2020-2029         5 full          26199
     ##  9 BBS                   5 full          54578
     ## 10 BBS50-CAN             3 by request   247843
-    ## # ℹ 83 more rows
+    ## # ℹ 82 more rows
 
 You can only use **one** type of region, but you can filter to multiple
 regions of that type:
@@ -78,10 +78,10 @@ nc_count(region = list(statprov = c("PE", "NB")))
 
     ## Using filters: statprov (PE, NB)
 
-    ## # A tibble: 95 × 4
+    ## # A tibble: 94 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
-    ##  1 ATOWLS                3 by request    23122
+    ##  1 ATOWLS                3 by request    23245
     ##  2 BBL-1960-1969         5 full          63292
     ##  3 BBL-1970-1979         5 full          85997
     ##  4 BBL-1980-1989         5 full          92092
@@ -91,7 +91,7 @@ nc_count(region = list(statprov = c("PE", "NB")))
     ##  8 BBL-2020-2029         5 full          33123
     ##  9 BBS                   5 full          61249
     ## 10 BBS50-CAN             3 by request   285733
-    ## # ℹ 85 more rows
+    ## # ℹ 84 more rows
 
 ## In Detail - Codes
 
@@ -148,7 +148,7 @@ nc_count(species = 13210, region = list(country = "US"))
 
     ## Using filters: species (13210); country (US)
 
-    ## # A tibble: 17 × 4
+    ## # A tibble: 16 × 4
     ##    collection    akn_level access     nrecords
     ##    <chr>             <int> <chr>         <int>
     ##  1 ABBIRDRECS            5 full              1
@@ -165,9 +165,8 @@ nc_count(species = 13210, region = list(country = "US"))
     ## 12 BCN                   5 full              8
     ## 13 CBC                   3 by request    30348
     ## 14 GBIF_50C9509D         5 full              1
-    ## 15 NESTWATCH             3 by request        2
-    ## 16 PFW-US-EAST           2 no access       497
-    ## 17 PFW-US-WEST           2 no access       760
+    ## 15 PFW-US-EAST           2 no access       497
+    ## 16 PFW-US-WEST           2 no access       760
 
 ### State/Province
 
@@ -343,7 +342,7 @@ nc_count(region = list(iba = "MB010"))
 
     ## Using filters: iba (IBA.MB010)
 
-    ## # A tibble: 18 × 4
+    ## # A tibble: 17 × 4
     ##    collection      akn_level access     nrecords
     ##    <chr>               <int> <chr>         <int>
     ##  1 BBL-2000-2009           5 full           1453
@@ -363,7 +362,6 @@ nc_count(region = list(iba = "MB010"))
     ## 15 MBATLAS1BE_SUMM         5 full            208
     ## 16 MBATLAS1PC              5 full            381
     ## 17 MBATLAS1RC              3 by request       23
-    ## 18 NESTWATCH               3 by request        2
 
 ### Bird Conservation Regions (BCR)
 
