@@ -1,5 +1,12 @@
 # Changelog
 
+## naturecounts 0.5.1
+
+- Expose `iao_buffer` argument to allow users to change from the 500 km
+  buffer to a custom amount. Useful for oceanic islands out of the range
+  of Natural Earth’s map of Canada (fixes
+  [\#53](https://github.com/BirdsCanada/naturecounts/issues/53)).
+
 ## naturecounts 0.5.0
 
 - Generalize

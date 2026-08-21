@@ -3,7 +3,12 @@
 AOO by the IUCN) and Extent of Occurrence (EOO; IUCN as well) are metrics
 used to support status assessments for potentially endangered species."><meta property="og:description" content="The COSEWIC Index of Area of Occupancy (IAO; also called Area of Occupancy,
 AOO by the IUCN) and Extent of Occurrence (EOO; IUCN as well) are metrics
-used to support status assessments for potentially endangered species."><meta name="robots" content="noindex"></head><body>
+used to support status assessments for potentially endangered species."><meta name="robots" content="noindex"><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-ELB7WM1YQK"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ELB7WM1YQK');
+</script><!-- Google tag (gtag.js) --></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -66,6 +71,7 @@ used to support status assessments for potentially endangered species.</p>
 <span>  prop_include <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  iao_grid_size_km <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  iao_grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  iao_buffer <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>  eoo_clip <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  crs <span class="op">=</span> <span class="st">"ESRI:102001"</span>,</span>
 <span>  which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"eoo"</span>, <span class="st">"iao"</span><span class="op">)</span>,</span>
@@ -119,6 +125,15 @@ caution if changing.</p></dd>
 <dt id="arg-iao-grid">iao_grid<a class="anchor" aria-label="anchor" href="#arg-iao-grid"></a></dt>
 <dd><p>sf Polygon. Supply your own IAO grid rather than creating
 one. The CRS of this grid must be the same as <code>crs</code>.</p></dd>
+
+
+<dt id="arg-iao-buffer">iao_buffer<a class="anchor" aria-label="anchor" href="#arg-iao-buffer"></a></dt>
+<dd><p>Numeric. Only relevant if <code>iao_grid = NULL</code>. The number of
+km to buffer the map of Canada by before creating the IAO grid (defaults to
+500km). Helps to ensure that all observations are included, but that any
+clearly external observations are omitted. Note this may need to be set
+quite high to include oceanic islands not captured by Natural Earth's map
+of Canada.</p></dd>
 
 
 <dt id="arg-eoo-clip">eoo_clip<a class="anchor" aria-label="anchor" href="#arg-eoo-clip"></a></dt>
@@ -321,6 +336,22 @@ See examples.</p>
 <span class="r-in"><span><span class="fu"><a href="cosewic_plot.html">cosewic_plot</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Zoom: 9</span>
 <span class="r-plt img"><img src="cosewic_ranges-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Adjust the buffer for Oceanic islands not included in Natural Earth's map</span></span></span>
+<span class="r-in"><span><span class="co"># of Canada</span></span></span>
+<span class="r-in"><span><span class="va">auklet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  record_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,</span></span>
+<span class="r-in"><span>  latitude <span class="op">=</span> <span class="fl">50.85</span>,</span></span>
+<span class="r-in"><span>  longitude <span class="op">=</span> <span class="op">-</span><span class="fl">145.07</span>,</span></span>
+<span class="r-in"><span>  species_id <span class="op">=</span> <span class="st">"auklet"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># r &lt;- cosewic_ranges(auklet)  # Errors</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">cosewic_ranges</span><span class="op">(</span><span class="va">auklet</span>, iao_buffer <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>  <span class="co"># No error</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> EOO is less than IAO for group auklet.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> This can occur if there are very few, clustered records.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Making EOO equal to IAO.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (see 'Instructions for preparing COSEWIC status reports' in ?cosewic_ranges)</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
