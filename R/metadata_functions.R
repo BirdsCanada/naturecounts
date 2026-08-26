@@ -169,13 +169,14 @@ meta_bmde_fields <- function(version = "minimum") {
 }
 
 #' Metadata for data sources for the covariate download and extraction functions.
-#' 
-#' @returns `data.frame` containing information on the resolution and source for 
+#'
+#' @returns `data.frame` containing information on the resolution and source for
 #' the covariate data available through `naturecounts`.
 
 nc_covariate_table <- function() {
   cov.table <- data.frame(
     covariate_name = c(
+      "nalcms_landcover",
       "modis_lctype1",
       "modis_lctype2",
       "modis_lctype3",
@@ -215,6 +216,7 @@ nc_covariate_table <- function() {
       "daymet_vp"
     ),
     covariate_source = c(
+      "North American Land Change Monitoring System Land Cover",
       "MODIS Land Cover - IGBP global vegetation classification scheme",
       "MODIS Land Cover - University of Maryland (UMD) scheme",
       "MODIS Land Cover - MODIS-derived LAI/fPAR scheme",
@@ -254,6 +256,7 @@ nc_covariate_table <- function() {
       "Daymet - Water vapor pressure (Pa)"
     ),
     covariate_source_specific = c(
+      "North American Land Cover 2010 (v3), 2015 (v4), 2020 (v2)",
       rep("MCD12Q1", times = 5),
       "MOD10A1",
       rep("MOD13A1", times = 2),
@@ -263,14 +266,16 @@ nc_covariate_table <- function() {
       rep("DAYMET Ver. 004", times = 7)
     ),
     temporal_resolution = c(
+      "5-year snapshot 2010-2020",
       rep("Annual", times = 5),
       "Daily",
       rep("16-Day", times = 2),
       rep("Static", times = 7),
-      rep("5-year snapshot", times = 15),
+      rep("5-year snapshot 1985-2025", times = 15),
       rep("Daily", times = 7)
     ),
     spatial_resolution = c(
+      "30 m",
       rep("500 m", times = 8),
       "Variable",
       rep("~1 km^2", times = 6),
@@ -278,6 +283,7 @@ nc_covariate_table <- function() {
       rep("1 km", times = 7)
     ),
     via = c(
+      "Direct Download",
       rep("luna", times = 8),
       "elevatr",
       rep("geodata", times = 6),
@@ -285,6 +291,7 @@ nc_covariate_table <- function() {
       rep("appeears", times = 7)
     ),
     documentation = c(
+      "https://www.cec.org/north-american-environmental-atlas/",
       rep("https://doi.org/10.5067/MODIS/MCD12Q1.061", times = 5),
       "http://doi.org/10.5067/MODIS/MOD10A1.061",
       rep("https://doi.org/10.5067/MODIS/MOD13A1.061", times = 2),
@@ -297,6 +304,6 @@ nc_covariate_table <- function() {
       rep("https://doi.org/10.3334/ORNLDAAC/1840", times = 7)
     )
   )
-  
+
   return(cov.table)
 }
