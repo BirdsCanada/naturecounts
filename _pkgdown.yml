@@ -6,6 +6,17 @@ development:
 template:
   bootstrap: 5
   bootswatch: sandstone
+  includes:
+    in_header: |
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+       <script async src="https://www.googletagmanager.com/gtag/js?id=G-ELB7WM1YQK"></script>
+       <script>
+         window.dataLayer = window.dataLayer || []; 
+         function gtag(){dataLayer.push(arguments);} 
+         gtag('js', new Date()); 
+         gtag('config', 'G-ELB7WM1YQK'); 
+       </script>
+       <!-- Google tag (gtag.js) -->
 
 navbar:
   bg: dark
