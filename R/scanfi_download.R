@@ -35,6 +35,9 @@
 #' @param use_date Logical. Should the function use year data provided in `data`
 #'   to choose which snapshot to download? If `FALSE`, `snapshot_year` can be used
 #'   to specify which snapshot(s) should be downloaded and used.
+#' @param interpolate Logical. Should only the snapshots for snapshot years that
+#'   exist within `data` be downloaded (`FALSE`), or should all snapshots within 5 years
+#'   of any year in `data` be downloaded (`TRUE`)? Only applicable when `use_date = TRUE`.
 #' @param snapshot_year Numeric, vector if multiple snapshots desired. Snapshot
 #'   years to download. Options include: 1985, 1990, 1995, 2000, 2005, 2010, 2015,
 #'   2020, and 2025. If specified, takes precedent over dates from `data` when
@@ -95,6 +98,7 @@ scanfi_download <- function(
   use_date = TRUE, # Should the most recent snapshot be downloaded (FALSE), or
   # should all relevant snapshots be downloaded for extraction (TRUE). Can
   # result in multiple large downloads.
+  interpolate = FALSE,
   snapshot_year = NULL, # If use_date = FALSE, the desired snapshot year to be
   # used. If not specified, the most recent (2025) is used.
   date_year = NULL, # optional argument to provide column name containing year
@@ -135,6 +139,15 @@ scanfi_download <- function(
       " set as TRUE, suggesting function should determine necessary",
       " snapshots to download from years in data argument. Overriding",
       " and proceeding to download snapshots requested in snapshot_year.",
+      call. = FALSE
+    )
+  }
+
+  # Warn if interpolate = TRUE and use_date = FALSE.
+  if (interpolate == TRUE & use_date == FALSE) {
+    warning(
+      "[SCANFI Download] when use_date = FALSE, interpolate is ignored.",
+      "Snapshots specified in snapshot_year will be downloaded.",
       call. = FALSE
     )
   }
@@ -193,37 +206,55 @@ scanfi_download <- function(
 
     available_years <- seq(from = 1985, to = 2025, by = 5)
 
-    closest_year <- data.frame(data_year = sort(unique(data$survey_year)))
+    if (interpolate == TRUE) {
+      closest_year <- data.frame(data_year = sort(unique(data$survey_year)))
 
-    outside_years <- c(
-      closest_year$data_year[closest_year$data_year < 1980],
-      closest_year$data_year[closest_year$data_year > 2030]
-    )
-
-    if (length(outside_years) > 0) {
-      warning(
-        "[SCANFI Download] Data contains years more than 5 years away",
-        " from nearest SCANFI snapshot (",
-        stringr::str_flatten_comma(outside_years),
-        "). No value will be returned for observations in these years.",
-        call. = FALSE
+      outside_years <- c(
+        closest_year$data_year[closest_year$data_year < 1980],
+        closest_year$data_year[closest_year$data_year > 2030]
       )
+
+      if (length(outside_years) > 0) {
+        warning(
+          "[SCANFI Download] Data contains years more than 5 years away",
+          " from nearest SCANFI snapshot (",
+          stringr::str_flatten_comma(outside_years),
+          "). No value will be returned for observations in these years.",
+          call. = FALSE
+        )
+      }
+
+      closest_year <- dplyr::filter(
+        closest_year,
+        !(.data$data_year %in% outside_years)
+      )
+
+      for (i in closest_year$data_year) {
+        closest_year$scanfi_year[
+          closest_year$data_year == i
+        ] <- available_years[which(
+          abs(i - available_years) == min(abs(i - available_years))
+        )]
+      }
+
+      necessary_years <- unique(closest_year$scanfi_year)
+    } else {
+      if (!any(available_years %in% data$survey_year)) {
+        stop(
+          "[SCANFI Download] Data provided to data argument does not contain",
+          " observations within the NALCMS snapshot years (",
+          stringr::str_flatten_comma(available_years),
+          ").",
+          " If wanting to match interceding years to snapshots, use interpolate",
+          " = TRUE.",
+          call. = FALSE
+        )
+      }
+
+      necessary_years <- sort(unique(available_years[
+        available_years %in% data$survey_year
+      ]))
     }
-
-    closest_year <- dplyr::filter(
-      closest_year,
-      !(.data$data_year %in% outside_years)
-    )
-
-    for (i in closest_year$data_year) {
-      closest_year$scanfi_year[
-        closest_year$data_year == i
-      ] <- available_years[which(
-        abs(i - available_years) == min(abs(i - available_years))
-      )]
-    }
-
-    necessary_years <- unique(closest_year$scanfi_year)
   } else {
     necessary_years <- `if`(is.null(snapshot_year), 2025, snapshot_year)
 

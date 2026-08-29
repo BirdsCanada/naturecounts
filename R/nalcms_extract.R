@@ -437,7 +437,7 @@ nalcms_extract <- function(
     # the snapshot years.
     if (!any(c(2010, 2015, 2020) %in% data$survey_year)) {
       stop(
-        "[NALCMS Extraction] Data provided to data argument does not contain",
+        "[NALCMS Landcover Extraction] Data provided to data argument does not contain",
         " observations within the NALCMS snapshot years (2010, 2015, 2020).",
         " If wanting to match interceding years to snapshots, use interpolate",
         " = TRUE.",

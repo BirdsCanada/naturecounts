@@ -16,6 +16,9 @@
 #' @param use_date Logical. Should the function use year data provided in `data`
 #'   to choose which snapshot(s) to download? If `FALSE`, `snapshot_year` can be used
 #'   to specify which snapshot(s) should be downloaded and used.
+#' @param interpolate Logical. Should only the snapshots for snapshot years that
+#'   exist within `data` be downloaded (`FALSE`), or should all snapshots within 5 years
+#'   of any year in `data` be downloaded (`TRUE`)? Only applicable when `use_date = TRUE`.
 #' @param snapshot_year Numeric, vector if multiple snapshots desired. Snapshot
 #'   years to download. Options include: 2010, 2015, and 2020. If specified,
 #'   takes precedent over dates from `data` when `use_date = TRUE`.
@@ -69,6 +72,7 @@ nalcms_download <- function(
   use_date = TRUE, # Should the most recent snapshot be downloaded (FALSE), or
   # should all relevant snapshots be downloaded for extraction (TRUE). Can
   # result in multiple large downloads.
+  interpolate = FALSE,
   snapshot_year = NULL, # If use_date = FALSE, the desired snapshot year to be
   # used. If not specified, the most recent (2025) is used.
   countries = NULL, # Character vector of country names or ISO3 codes. If left
@@ -101,6 +105,15 @@ nalcms_download <- function(
       " set as TRUE, suggesting function should determine necessary",
       " snapshots to download from years in data argument. Overriding",
       " and proceeding to download snapshots requested in snapshot_year.",
+      call. = FALSE
+    )
+  }
+
+  # Warn if interpolate = TRUE and use_date = FALSE.
+  if (interpolate == TRUE & use_date == FALSE) {
+    warning(
+      "[NALCMS Download] when use_date = FALSE, interpolate is ignored.",
+      "Snapshots specified in snapshot_year will be downloaded.",
       call. = FALSE
     )
   }
@@ -159,37 +172,53 @@ nalcms_download <- function(
 
     available_years <- seq(from = 2010, to = 2020, by = 5)
 
-    closest_year <- data.frame(data_year = sort(unique(data$survey_year)))
+    if (interpolate == TRUE) {
+      closest_year <- data.frame(data_year = sort(unique(data$survey_year)))
 
-    outside_years <- c(
-      closest_year$data_year[closest_year$data_year < 2005],
-      closest_year$data_year[closest_year$data_year > 2025]
-    )
-
-    if (length(outside_years) > 0) {
-      warning(
-        "[NALCMS Landcover Download] Data contains years more than 5 years away",
-        " from nearest NALCMS snapshot (",
-        stringr::str_flatten_comma(outside_years),
-        "). No value will be returned for observations in these years.",
-        call. = FALSE
+      outside_years <- c(
+        closest_year$data_year[closest_year$data_year < 2005],
+        closest_year$data_year[closest_year$data_year > 2025]
       )
+
+      if (length(outside_years) > 0) {
+        warning(
+          "[NALCMS Landcover Download] Data contains years more than 5 years away",
+          " from nearest NALCMS snapshot (",
+          stringr::str_flatten_comma(outside_years),
+          "). No value will be returned for observations in these years.",
+          call. = FALSE
+        )
+      }
+
+      closest_year <- dplyr::filter(
+        closest_year,
+        !(.data$data_year %in% outside_years)
+      )
+
+      for (i in closest_year$data_year) {
+        closest_year$nalcms_year[
+          closest_year$data_year == i
+        ] <- available_years[which(
+          abs(i - available_years) == min(abs(i - available_years))
+        )]
+      }
+
+      necessary_years <- unique(closest_year$nalcms_year)
+    } else {
+      if (!any(available_years %in% data$survey_year)) {
+        stop(
+          "[NALCMS Landcover Download] Data provided to data argument does not contain",
+          " observations within the NALCMS snapshot years (2010, 2015, 2020).",
+          " If wanting to match interceding years to snapshots, use interpolate",
+          " = TRUE.",
+          call. = FALSE
+        )
+      }
+
+      necessary_years <- sort(unique(available_years[
+        available_years %in% data$survey_year
+      ]))
     }
-
-    closest_year <- dplyr::filter(
-      closest_year,
-      !(.data$data_year %in% outside_years)
-    )
-
-    for (i in closest_year$data_year) {
-      closest_year$nalcms_year[
-        closest_year$data_year == i
-      ] <- available_years[which(
-        abs(i - available_years) == min(abs(i - available_years))
-      )]
-    }
-
-    necessary_years <- unique(closest_year$nalcms_year)
   } else {
     necessary_years <- `if`(is.null(snapshot_year), 2020, snapshot_year)
 

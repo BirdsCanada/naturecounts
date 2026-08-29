@@ -14,6 +14,7 @@ test_that("scanfi_download() downloads correct files with all expected inputs.",
         crs = 4326
       ),
       covariates = "scanfi_ponderosapine",
+      interpolate = TRUE,
       dl_path = "./testdir",
       progress = FALSE
     ))
@@ -33,6 +34,7 @@ test_that("scanfi_download() downloads correct files with all expected inputs.",
         crs = 4326
       )),
       covariates = "scanfi_ponderosapine",
+      interpolate = TRUE,
       dl_path = "./testdir",
       progress = FALSE
     ))
@@ -51,6 +53,7 @@ test_that("scanfi_download() downloads correct files with all expected inputs.",
         geom = c("longitude", "latitude")
       )),
       covariates = "scanfi_ponderosapine",
+      interpolate = TRUE,
       dl_path = "./testdir",
       progress = FALSE
     ))
@@ -69,6 +72,7 @@ test_that("scanfi_download() downloads correct files with all expected inputs.",
         geom = c("longitude", "latitude")
       ))),
       covariates = "scanfi_ponderosapine",
+      interpolate = TRUE,
       dl_path = "./testdir",
       progress = FALSE
     ))
@@ -195,6 +199,7 @@ test_that("scanfi_download() succeeds with alternate column names, either passed
         crs = 4326
       ),
       covariates = "scanfi_ponderosapine",
+      interpolate = TRUE,
       dl_path = "./testdir",
       progress = FALSE
     ))
@@ -238,6 +243,7 @@ test_that("scanfi_download() succeeds with alternate column names, either passed
         "yr" = "survey_year"
       ),
       covariates = "scanfi_ponderosapine",
+      interpolate = TRUE,
       date_year = "yr",
       dl_path = "./testdir",
       progress = FALSE
@@ -327,6 +333,7 @@ test_that("scanfi_download() returns appropriate warnings and errors for misspec
       ),
       use_date = TRUE,
       covariates = "scanfi_ponderosapine",
+      interpolate = TRUE,
       dl_path = "./testdir",
       progress = FALSE
     )),
