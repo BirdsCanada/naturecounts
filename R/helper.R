@@ -415,6 +415,10 @@ find_unique <- function(df, by, extra) {
 # Handle missing SurveyAreaIdentifiers and ensure coordinates are present in
 # the data for later use in nc_covariates_merge().
 create_SAI <- function(data, input_fmt) {
+  if (!("SurveyAreaIdentifier" %in% names(data))) {
+    data$SurveyAreaIdentifier <- NA
+  }
+
   # Save column order for later use.
   col_order <- names(data)
 
