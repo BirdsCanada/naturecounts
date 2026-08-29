@@ -70,6 +70,8 @@ reference:
   - data_buff
   - landcover_download
   - landcover_extract
+  - nalcms_download
+  - nalcms_extract
   - vegetation_download
   - vegetation_extract
   - elevation_download
