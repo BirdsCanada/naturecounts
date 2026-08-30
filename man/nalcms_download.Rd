@@ -7,8 +7,10 @@
 nalcms_download(
   data = NULL,
   use_date = TRUE,
+  interpolate = FALSE,
   snapshot_year = NULL,
   countries = NULL,
+  site_name = NULL,
   date_year = NULL,
   timeout = 10000,
   dl_path = NULL,
@@ -26,12 +28,21 @@ or \code{countries = NULL}.}
 to choose which snapshot(s) to download? If \code{FALSE}, \code{snapshot_year} can be used
 to specify which snapshot(s) should be downloaded and used.}
 
+\item{interpolate}{Logical. Should only the snapshots for snapshot years that
+exist within \code{data} be downloaded (\code{FALSE}), or should all snapshots within 5 years
+of any year in \code{data} be downloaded (\code{TRUE})? Only applicable when \code{use_date = TRUE}.}
+
 \item{snapshot_year}{Numeric, vector if multiple snapshots desired. Snapshot
 years to download. Options include: 2010, 2015, and 2020. If specified,
 takes precedent over dates from \code{data} when \code{use_date = TRUE}.
 @param countries Character, \code{"Canada"}, \code{"United States"},
 \code{"Mexico"} or multiple of these. If left \code{NULL}, function will attempt to
 identify countries needed based on locations in \code{data}.}
+
+\item{site_name}{Character. Optional argument to provide the name of the
+column containing site names if not contained within the BMDE column
+\code{SurveyAreaIdentifier}. Can be left \code{NULL} and still function properly if
+originally specified in a call to \code{\link[=data_fmt]{data_fmt()}}.}
 
 \item{date_year}{Character. Optional argument to provide the name of the
 column containing year data if not contained within the BMDE column

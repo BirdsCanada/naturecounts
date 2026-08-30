@@ -111,6 +111,15 @@ nalcms_extract <- function(
     )
   }
 
+  if (!inherits(nalcms_files, "character")) {
+    stop(
+      "[NALCMS Extraction] no filepaths to NALCMS rasters provided to extract",
+      " from. Please provide a vector of filepaths to NALCMS rasters.",
+      " Data can be downloaded using nalcms_download().",
+      call. = FALSE
+    )
+  }
+
   # Check that all provided files exist.
   if (!all(file.exists(nalcms_files))) {
     stop(
@@ -263,7 +272,92 @@ nalcms_extract <- function(
       )
     )
 
-  # nalcms_files$country[nalcms_files$country == "ASK"] <- "USA"
+  # Match observations in the data to the NALCMS snapshot year data should be
+  # extracted from.
+  if (interpolate == FALSE) {
+    # If interpolate = FALSE, check that some observations have been made in
+    # the snapshot years.
+    if (!any(c(2010, 2015, 2020) %in% data$survey_year)) {
+      stop(
+        "[NALCMS Landcover Extraction] Data provided to data argument does not contain",
+        " observations within the NALCMS snapshot years (2010, 2015, 2020).",
+        " If wanting to match interceding years to snapshots, use interpolate",
+        " = TRUE.",
+        call. = FALSE
+      )
+    }
+    # For non-interpolated data, build object only containing NALCMS snapshot \
+    # years which observations are made in.
+    closest_year <- data.frame(
+      data_year = sort(unique(data$survey_year[
+        data$survey_year %in% unique(nalcms_files$year)
+      ]))
+    )
+
+    closest_year$nalcms_year <- closest_year$data_year
+  } else {
+    # For interpolated data, match years in data to closest NALCMS snapshot,
+    # within 5 years.
+    closest_year <- data.frame(
+      data_year = sort(unique(data$survey_year)),
+      nalcms_year = NA
+    )
+
+    for (i in closest_year$data_year) {
+      closest_year$nalcms_year[
+        closest_year$data_year == i
+      ] <- unique(nalcms_files$year)[which(
+        abs(i - unique(nalcms_files$year)) ==
+          min(abs(i - unique(nalcms_files$year)))
+      )]
+    }
+
+    outside_years <- closest_year$data_year[
+      abs(closest_year$nalcms_year - closest_year$data_year) > 5
+    ]
+
+    if (length(outside_years) > 0) {
+      # If interpolate = TRUE, check that some observations have been made within
+      # 5 years of a snapshot year
+      if (all(unique(closest_year$data_year) %in% outside_years)) {
+        stop(
+          "[NALCMS Landcover Extraction] Data provided to data argument does not contain",
+          " observations within 5 years of the NALCMS snapshot years (2010, 2015, 2020).",
+          call. = FALSE
+        )
+      }
+
+      if (any(outside_years %in% 2005:2025)) {
+        warning(
+          "[NALCMS Landcover Extraction] Data contains years more than 5 years away",
+          " from nearest NALCMS snapshot (",
+          stringr::str_flatten_comma(outside_years),
+          "). No value will be returned for observations in these years.",
+          " Nearby (< 5 years away) snapshots are available for data",
+          " years (",
+          stringr::str_flatten_comma(outside_years[
+            outside_years %in% 2005:2025
+          ]),
+          "), but were not provided via the nalcms_files argument. These can be",
+          " downloaded with nalcms_download().",
+          call. = FALSE
+        )
+      } else {
+        warning(
+          "[NALCMS Landcover Extraction] Data contains years more than 5 years away",
+          " from nearest NALCMS snapshot (",
+          stringr::str_flatten_comma(outside_years),
+          "). No value will be returned for observations in these years.",
+          call. = FALSE
+        )
+      }
+    }
+
+    closest_year <- dplyr::filter(
+      closest_year,
+      !(.data$data_year %in% outside_years)
+    )
+  }
 
   # Assign country each data geometry stems from.
 
@@ -290,8 +384,8 @@ nalcms_extract <- function(
     ])
   }
 
-  for (i in 1:nrow(data)) {
-    tmp <- terra::vect(data[i, ]) %>%
+  for (i in unique(data$SurveyAreaIdentifier)) {
+    tmp <- terra::vect(data[data$SurveyAreaIdentifier == i, ]) %>%
       terra::project(terra::crs(nalcms_compare[[1]]))
 
     countries <- c()
@@ -313,9 +407,11 @@ nalcms_extract <- function(
     }
 
     if (rlang::is_empty(countries)) {
-      data$country[i] <- "NONE"
+      data$country[data$SurveyAreaIdentifier == i] <- "NONE"
     } else {
-      data$country[i] <- stringr::str_flatten_comma(countries)
+      data$country[
+        data$SurveyAreaIdentifier == i
+      ] <- stringr::str_flatten_comma(countries)
     }
 
     if (buffered == TRUE) {
@@ -332,7 +428,7 @@ nalcms_extract <- function(
       countries <- unique(world$name_long)
 
       if (rlang::is_empty(countries)) {
-        data$relationship[i] <- "out"
+        data$relationship[data$SurveyAreaIdentifier == i] <- "out"
       } else if (
         !terra::is.related(
           terra::buffer(terra::aggregate(terra::union(world)), 1),
@@ -345,12 +441,10 @@ nalcms_extract <- function(
             "overlaps"
           )
       ) {
-        data$relationship[i] <- "overlap"
+        data$relationship[data$SurveyAreaIdentifier == i] <- "overlap"
       } else {
-        data$relationship[i] <- "in"
+        data$relationship[data$SurveyAreaIdentifier == i] <- "in"
       }
-    } else {
-      data$country
     }
   }
 
@@ -428,83 +522,6 @@ nalcms_extract <- function(
         call. = FALSE
       )
     }
-  }
-
-  # Match observations in the data to the NALCMS snapshot year data should be
-  # extracted from.
-  if (interpolate == FALSE) {
-    # If interpolate = FALSE, check that some observations have been made in
-    # the snapshot years.
-    if (!any(c(2010, 2015, 2020) %in% data$survey_year)) {
-      stop(
-        "[NALCMS Landcover Extraction] Data provided to data argument does not contain",
-        " observations within the NALCMS snapshot years (2010, 2015, 2020).",
-        " If wanting to match interceding years to snapshots, use interpolate",
-        " = TRUE.",
-        call. = FALSE
-      )
-    }
-    # For non-interpolated data, build object only containing NALCMS snapshot \
-    # years which observations are made in.
-    closest_year <- data.frame(
-      data_year = sort(unique(data$survey_year[
-        data$survey_year %in% unique(nalcms_files$year)
-      ]))
-    )
-
-    closest_year$nalcms_year <- closest_year$data_year
-  } else {
-    # For interpolated data, match years in data to closest NALCMS snapshot,
-    # within 5 years.
-    closest_year <- data.frame(
-      data_year = sort(unique(data$survey_year)),
-      nalcms_year = NA
-    )
-
-    for (i in closest_year$data_year) {
-      closest_year$nalcms_year[
-        closest_year$data_year == i
-      ] <- unique(nalcms_files$year)[which(
-        abs(i - unique(nalcms_files$year)) ==
-          min(abs(i - unique(nalcms_files$year)))
-      )]
-    }
-
-    outside_years <- closest_year$data_year[
-      abs(closest_year$nalcms_year - closest_year$data_year) > 5
-    ]
-
-    if (length(outside_years) > 0) {
-      if (any(outside_years %in% 2005:2025)) {
-        warning(
-          "[NALCMS Download] Data contains years more than 5 years away",
-          " from nearest NALCMS snapshot (",
-          stringr::str_flatten_comma(outside_years),
-          "). No value will be returned for observations in these years.",
-          " Nearby (< 5 years away) snapshots are available for data",
-          " years (",
-          stringr::str_flatten_comma(outside_years[
-            outside_years %in% 2005:2025
-          ]),
-          "), but were not provided via the nalcms_files argument. These can be",
-          " downloaded with nalcms_download().",
-          call. = FALSE
-        )
-      } else {
-        warning(
-          "[NALCMS Download] Data contains years more than 5 years away",
-          " from nearest NALCMS snapshot (",
-          stringr::str_flatten_comma(outside_years),
-          "). No value will be returned for observations in these years.",
-          call. = FALSE
-        )
-      }
-    }
-
-    closest_year <- dplyr::filter(
-      closest_year,
-      !(.data$data_year %in% outside_years)
-    )
   }
 
   # If buffered, check for packages necessary in buffered workflow.
@@ -689,7 +706,7 @@ nalcms_extract <- function(
                         closest_year$data_year[
                           closest_year$nalcms_year == j
                         ],
-                    paste0(l, "_landscape")
+                    paste0("nalcms_", l, "_landscape")
                   ] <- nalcms_lsm$value[
                     nalcms_lsm$level == "landscape" & nalcms_lsm$metric == l
                   ]
@@ -816,7 +833,7 @@ nalcms_extract <- function(
                       l %in%
                         nalcms_lsm$metric[nalcms_lsm$level == "landscape"],
                     c(
-                      paste0(l, "_landscape"),
+                      paste0("nalcms_", l, "_landscape"),
                       paste0("nalcms_", l, "_", nalcms_classes$name)
                     ),
                     paste0("nalcms_", l, "_", nalcms_classes$name)

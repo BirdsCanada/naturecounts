@@ -25,6 +25,10 @@
 #'   @param countries Character, `"Canada"`, `"United States"`,
 #'   `"Mexico"` or multiple of these. If left `NULL`, function will attempt to
 #'   identify countries needed based on locations in `data`.
+#' @param site_name Character. Optional argument to provide the name of the
+#'   column containing site names if not contained within the BMDE column
+#'   `SurveyAreaIdentifier`. Can be left `NULL` and still function properly if
+#'   originally specified in a call to [data_fmt()].
 #' @param date_year Character. Optional argument to provide the name of the
 #'   column containing year data if not contained within the BMDE column
 #'   `survey_year`. Can be left `NULL` and still function properly if originally
@@ -77,6 +81,7 @@ nalcms_download <- function(
   # used. If not specified, the most recent (2025) is used.
   countries = NULL, # Character vector of country names or ISO3 codes. If left
   # NULL, country will be auto-detected.
+  site_name = NULL,
   date_year = NULL, # optional argument to provide column name containing year
   # data. Default is assumed to be the BMDE column 'survey_year'. Can
   # be left NULL and still function properly if originally specified in a call
@@ -122,6 +127,10 @@ nalcms_download <- function(
     # Check whether information on alternate column names has been stored
     # in the attributes by data_fmt(). However, prioritize alternate column names
     # specified in the current call.
+    if (is.null(site_name) & !is.null(attr(data, "site_name"))) {
+      site_name <- attr(data, "site_name")
+    }
+
     if (is.null(date_year) & !is.null(attr(data, "date_year"))) {
       date_year <- attr(data, "date_year")
     }
@@ -129,7 +138,7 @@ nalcms_download <- function(
     # Check that all specified column names are present in the data.
 
     # Gather all potentially specified columns.
-    specified_cols <- c(date_year)
+    specified_cols <- c(site_name, date_year)
 
     # Remove any that haven't been specified.
     specified_cols <- specified_cols[!is.null(specified_cols)]
@@ -142,7 +151,8 @@ nalcms_download <- function(
     # standardized names has already taken place in data_fmt().
     if (
       !(all(specified_cols %in% data_cols)) &
-        !("survey_year" %in% data_cols)
+        (!("survey_year" %in% data_cols) |
+          !("SurveyAreaIdentifier" %in% data_cols))
     ) {
       stop(
         "[NALCMS Landcover Download] some specified columns missing from the",
@@ -156,8 +166,33 @@ nalcms_download <- function(
       )
     }
 
+    # Create SurveyAreaIdentifiers if none exist and no site name specified.
+    if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+      data <- create_SAI(data = data, input_fmt = input_fmt)
+    }
+
     # Conform specified columns to naturecounts default column names. Calls to
     # st_sf() needed to avoid sf specific issue with attributes.
+    if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+      if (input_fmt$type == "sf") {
+        data <- sf::st_sf(data)
+      }
+
+      data <- dplyr::rename(data, "SurveyAreaIdentifier" = !!site_name)
+    }
+
+    data$SurveyAreaIdentifier <- as.character(data$SurveyAreaIdentifier)
+
+    # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
+    # SurveyAreaIdentifiers if so.
+    if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+      # Store original SurveyAreaIdentifiers
+      SAI_storage <- data$SurveyAreaIdentifier
+
+      # Create dummy SurveyAreaIdentifiers
+      data <- create_SAI(data = data, input_fmt = input_fmt)
+    }
+
     if (!is.null(date_year) & !("survey_year" %in% data_cols)) {
       if (input_fmt$type == "sf") {
         data <- sf::st_sf(data)
@@ -274,35 +309,35 @@ nalcms_download <- function(
       )
     }
 
-    # For sf input, compare to country data from spData package.
-    if (input_fmt$type == "sf") {
+    countries <- c()
+
+    # Loop across all sites and identify the country that each falls within.
+    for (i in unique(data$SurveyAreaIdentifier)) {
       world <- sf::st_read(
         system.file("shapes/world.gpkg", package = "spData"),
         quiet = TRUE
-      )
+      ) %>%
+        terra::vect()
 
-      data <- sf::st_transform(data, sf::st_crs(world))
+      if (input_fmt$type == "sf") {
+        tmp <- terra::vect(data[data$SurveyAreaIdentifier == i, ]) %>%
+          terra::project(terra::crs(world))
+      } else {
+        tmp <- data[data$SurveyAreaIdentifier == i, ] %>%
+          terra::project(terra::crs(world))
+      }
 
-      world <- suppressWarnings(sf::st_intersection(world, data))
+      world <- suppressWarnings(terra::intersect(world, terra::buffer(tmp, 1)))
 
-      countries <- unique(world$name_long)
-    }
+      country <- unique(world$name_long)
 
-    # For terra input, convert to sf and  compare to country data from spData
-    # package.
-    if (input_fmt$type == "terra") {
-      data <- sf::st_as_sf(data)
+      data$country[
+        data$SurveyAreaIdentifier == i
+      ] <- stringr::str_flatten_comma(country)
 
-      world <- sf::st_read(
-        system.file("shapes/world.gpkg", package = "spData"),
-        quiet = TRUE
-      )
-
-      data <- sf::st_transform(data, sf::st_crs(world))
-
-      world <- suppressWarnings(sf::st_intersection(world, data))
-
-      countries <- unique(world$name_long)
+      countries <- unique(c(countries, country))[
+        !(unique(c(countries, country)) == "")
+      ]
     }
   }
 
@@ -310,8 +345,8 @@ nalcms_download <- function(
   # are, warn and only download Canada, US, or Mexico. If none are, return
   # error.
   if (
-    TRUE %in%
-      (c(
+    any(
+      c(
         "Canada",
         "CAN",
         "United States",
@@ -321,7 +356,8 @@ nalcms_download <- function(
         "Mexico",
         "MEX"
       ) %in%
-        countries)
+        countries
+    )
   ) {
     if (
       !all(
@@ -340,7 +376,7 @@ nalcms_download <- function(
     ) {
       warning(
         "[NALCMS Landcover Download] data from countries other than",
-        " Canada, the United States, and Mexico found in data provided to",
+        " Canada, the United States, and Mexico found in the data provided to",
         " data argument. NALCMS Landcover data is only available for",
         " Canada, the United States, or Mexico. Download will proceed,",
         " but NALCMS Landcover data will be unavailable for some objects",
@@ -357,11 +393,38 @@ nalcms_download <- function(
     )
   }
 
-  # Create vector of download links for each requested NALCMS landcover year.
-  filename <- data.frame(
-    year = rep(necessary_years, times = length(countries)),
-    country = rep(countries, each = length(necessary_years))
-  )
+  if (use_date == TRUE) {
+    # Create vector of download links for each requested NALCMS landcover year.
+    filename <- list()
+
+    for (i in countries) {
+      filename[[i]] <- if (interpolate == TRUE) {
+        data.frame(
+          year = unique(closest_year$nalcms_year[
+            closest_year$data_year %in%
+              data$survey_year[stringr::str_detect(data$country, i)]
+          ])
+        )
+      } else {
+        data.frame(
+          year = unique(necessary_years[
+            necessary_years %in%
+              data$survey_year[stringr::str_detect(data$country, i)]
+          ])
+        )
+      }
+      if (nrow(filename[[i]]) > 0) {
+        filename[[i]]$country <- i
+      }
+    }
+
+    filename <- purrr::list_rbind(filename)
+  } else {
+    filename <- data.frame(
+      country = rep(countries, each = length(necessary_years)),
+      year = rep(necessary_years, times = length(countries))
+    )
+  }
 
   filename <- filename %>%
     dplyr::mutate(
@@ -498,7 +561,7 @@ nalcms_download <- function(
           "./nalcms/",
           paste0(
             dl_path,
-            "/nalcms/",
+            "/nalcms/"
           )
         )
       )
@@ -600,7 +663,7 @@ nalcms_download <- function(
           ),
           "_30m/data/",
           ifelse(
-            filename$country[filename$filename == i] == "Canada",
+            filename$country[filename$filename == i] %in% c("Canada", "CAN"),
             "CAN",
             ifelse(
               filename$country[filename$filename == i] %in%
