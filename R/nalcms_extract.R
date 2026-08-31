@@ -7,7 +7,7 @@
 #' files can be downloaded and loaded with [nalcms_download()].
 #'
 #' With `sf` 'POLYGON' or `terra` polygons' input data, the proportion of
-#' polygon area covered by each MODIS Landcover class (`pland`) is returned by default.
+#' polygon area covered by each NALCMS Landcover class (`pland`) is returned by default.
 #' Other summary metrics can be requested by specifying
 #' the `level`, `class`, `metric`, or `name` arguments, which are passed to
 #' [landscapemetrics::calculate_lsm()]. See [landscapemetrics::list_lsm()] for
@@ -19,11 +19,15 @@
 #'   the BMDE default `survey_year` or another name specified in argument `date_year`.
 #' @param nalcms_files Character, vector if multiple files. File-path(s) to
 #'   downloaded NALCMS landcover data file(s). We recommend using
-#'   [nalcms_download()] to download MODIS files to ensure all files
+#'   [nalcms_download()] to download NALCMS files to ensure all files
 #'   necessary for your data are captured. Direct output of
 #'   [nalcms_download()] can be supplied here.
 #' @param interpolate Logical. Should years in between snapshots be assigned the
 #'   nearest snapshot's value?
+#' @param interpolate_method Character. One of 1) "closest" to match interceding
+#'   years to the nearest snapshot, 2) "next" to match interceding years to the
+#'   next snapshot, or 3) "previous" to match interceding years to the previous
+#'   snapshot. Ignored if `interpolate = FALSE`.
 #' @param site_name Character. Optional argument to provide the name of the
 #'   column containing site names if not contained within the BMDE column
 #'   `SurveyAreaIdentifier`. Can be left `NULL` and still function properly if
@@ -83,6 +87,7 @@ nalcms_extract <- function(
   nalcms_files, # Filepaths of NALCMS rasters.
   interpolate = FALSE, # should years between snapshots be filled with values
   # from nearest snapshot.
+  interpolate_method = "closest",
   site_name = NULL, # optional argument to provide column name containing site
   # names. Default is assumed to be the BMDE column 'SurveyAreaIdentifier'. Can
   # be left NULL and still function properly if originally specified in a call
@@ -303,13 +308,38 @@ nalcms_extract <- function(
       nalcms_year = NA
     )
 
-    for (i in closest_year$data_year) {
-      closest_year$nalcms_year[
-        closest_year$data_year == i
-      ] <- unique(nalcms_files$year)[which(
-        abs(i - unique(nalcms_files$year)) ==
-          min(abs(i - unique(nalcms_files$year)))
-      )]
+    if (interpolate_method == "closest") {
+      for (i in closest_year$data_year) {
+        closest_year$nalcms_year[
+          closest_year$data_year == i
+        ] <- unique(nalcms_files$year)[which(
+          abs(i - unique(nalcms_files$year)) ==
+            min(abs(i - unique(nalcms_files$year)))
+        )]
+      }
+    } else if (interpolate_method == "previous") {
+      for (i in closest_year$data_year) {
+        if (!(i < min(unique(nalcms_files$year)))) {
+          closest_year$nalcms_year[
+            closest_year$data_year == i
+          ] <- max(unique(nalcms_files$year)[unique(nalcms_files$year) <= i])
+        }
+      }
+    } else if (interpolate_method == "next") {
+      for (i in closest_year$data_year) {
+        if (!(i > max(unique(nalcms_files$year)))) {
+          closest_year$nalcms_year[
+            closest_year$data_year == i
+          ] <- min(unique(nalcms_files$year)[unique(nalcms_files$year) >= i])
+        }
+      }
+    } else {
+      stop(
+        "[NALCMS Landcover Extraction] invalid option provided to",
+        " interpolate_method. Please supply one of 'closest', 'near', or",
+        "'previous'. See documentations for more details on each.",
+        call. = FALSE
+      )
     }
 
     outside_years <- closest_year$data_year[
@@ -355,7 +385,8 @@ nalcms_extract <- function(
 
     closest_year <- dplyr::filter(
       closest_year,
-      !(.data$data_year %in% outside_years)
+      !(.data$data_year %in% outside_years),
+      !(is.na(.data$nalcms_year))
     )
   }
 

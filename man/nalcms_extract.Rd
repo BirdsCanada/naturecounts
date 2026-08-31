@@ -8,6 +8,7 @@ nalcms_extract(
   data,
   nalcms_files,
   interpolate = FALSE,
+  interpolate_method = "closest",
   site_name = NULL,
   date_year = NULL,
   retain = TRUE,
@@ -21,12 +22,17 @@ the BMDE default \code{survey_year} or another name specified in argument \code{
 
 \item{nalcms_files}{Character, vector if multiple files. File-path(s) to
 downloaded NALCMS landcover data file(s). We recommend using
-\code{\link[=nalcms_download]{nalcms_download()}} to download MODIS files to ensure all files
+\code{\link[=nalcms_download]{nalcms_download()}} to download NALCMS files to ensure all files
 necessary for your data are captured. Direct output of
 \code{\link[=nalcms_download]{nalcms_download()}} can be supplied here.}
 
 \item{interpolate}{Logical. Should years in between snapshots be assigned the
 nearest snapshot's value?}
+
+\item{interpolate_method}{Character. One of 1) "closest" to match interceding
+years to the nearest snapshot, 2) "next" to match interceding years to the
+next snapshot, or 3) "previous" to match interceding years to the previous
+snapshot. Ignored if \code{interpolate = FALSE}.}
 
 \item{site_name}{Character. Optional argument to provide the name of the
 column containing site names if not contained within the BMDE column
@@ -66,7 +72,7 @@ files can be downloaded and loaded with \code{\link[=nalcms_download]{nalcms_dow
 }
 \details{
 With \code{sf} 'POLYGON' or \code{terra} polygons' input data, the proportion of
-polygon area covered by each MODIS Landcover class (\code{pland}) is returned by default.
+polygon area covered by each NALCMS Landcover class (\code{pland}) is returned by default.
 Other summary metrics can be requested by specifying
 the \code{level}, \code{class}, \code{metric}, or \code{name} arguments, which are passed to
 \code{\link[landscapemetrics:calculate_lsm]{landscapemetrics::calculate_lsm()}}. See \code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} for

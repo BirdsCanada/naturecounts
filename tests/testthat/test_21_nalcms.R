@@ -82,6 +82,26 @@ test_that("nalcms_download() downloads correct files with all expected inputs.",
   )
 
   expect_silent(
+    nalcms_next <<- suppressMessages(nalcms_download(
+      data_fmt(bcch),
+      interpolate = TRUE,
+      interpolate_method = "next",
+      dl_path = "./testdir",
+      progress = FALSE
+    ))
+  )
+
+  expect_silent(
+    nalcms_previous <<- suppressMessages(nalcms_download(
+      data_fmt(bcch),
+      interpolate = TRUE,
+      interpolate_method = "previous",
+      dl_path = "./testdir",
+      progress = FALSE
+    ))
+  )
+
+  expect_silent(
     nalcms_manualyear <<- suppressMessages(nalcms_download(
       use_date = FALSE,
       snapshot_year = c(2010, 2015, 2020),
@@ -156,6 +176,31 @@ test_that("Results downloaded from nalcms_download() have expected features.", {
 
   expect_true(identical(
     nalcms_terra_poly,
+    c(
+      "./testdir/nalcms/usa_land_cover_2010v3_30m_tif/USA_NALCMS_landcover_2010v3_30m/data/USA_NALCMS_landcover_2010v3_30m.tif",
+      "./testdir/nalcms/usa_land_cover_2010v3_30m_tif/ASK_NALCMS_landcover_2010v3_30m/data/ASK_NALCMS_landcover_2010v3_30m.tif",
+      "./testdir/nalcms/usa_land_cover_2015v4_30m_tif/USA_NALCMS_landcover_2015v4_30m/data/USA_NALCMS_landcover_2015v4_30m.tif",
+      "./testdir/nalcms/usa_land_cover_2015v4_30m_tif/ASK_NALCMS_landcover_2015v4_30m/data/ASK_NALCMS_landcover_2015v4_30m.tif",
+      "./testdir/nalcms/mex_land_cover_2010v3_30m_tif/MEX_NALCMS_landcover_2010v3_30m/data/MEX_NALCMS_landcover_2010v3_30m.tif",
+      "./testdir/nalcms/can_land_cover_2015v4_30m_tif/CAN_NALCMS_landcover_2015v4_30m/data/CAN_NALCMS_landcover_2015v4_30m.tif",
+      "./testdir/nalcms/can_land_cover_2020v2_30m_tif/CAN_NALCMS_landcover_2020v2_30m/data/CAN_NALCMS_landcover_2020v2_30m.tif"
+    )
+  ))
+
+  expect_true(identical(
+    nalcms_next,
+    c(
+      "./testdir/nalcms/usa_land_cover_2010v3_30m_tif/USA_NALCMS_landcover_2010v3_30m/data/USA_NALCMS_landcover_2010v3_30m.tif",
+      "./testdir/nalcms/usa_land_cover_2010v3_30m_tif/ASK_NALCMS_landcover_2010v3_30m/data/ASK_NALCMS_landcover_2010v3_30m.tif",
+      "./testdir/nalcms/usa_land_cover_2015v4_30m_tif/USA_NALCMS_landcover_2015v4_30m/data/USA_NALCMS_landcover_2015v4_30m.tif",
+      "./testdir/nalcms/usa_land_cover_2015v4_30m_tif/ASK_NALCMS_landcover_2015v4_30m/data/ASK_NALCMS_landcover_2015v4_30m.tif",
+      "./testdir/nalcms/mex_land_cover_2015v4_30m_tif/MEX_NALCMS_landcover_2015v4_30m/data/MEX_NALCMS_landcover_2015v4_30m.tif",
+      "./testdir/nalcms/can_land_cover_2020v2_30m_tif/CAN_NALCMS_landcover_2020v2_30m/data/CAN_NALCMS_landcover_2020v2_30m.tif"
+    )
+  ))
+
+  expect_true(identical(
+    nalcms_next,
     c(
       "./testdir/nalcms/usa_land_cover_2010v3_30m_tif/USA_NALCMS_landcover_2010v3_30m/data/USA_NALCMS_landcover_2010v3_30m.tif",
       "./testdir/nalcms/usa_land_cover_2010v3_30m_tif/ASK_NALCMS_landcover_2010v3_30m/data/ASK_NALCMS_landcover_2010v3_30m.tif",
@@ -589,6 +634,52 @@ test_that("nalcms_extract() basic functionality with all expected data inputs.",
   expect_true(
     unique(extracted$nalcms_pland_cropland[extracted$survey_year == 2023]) ==
       unique(extracted$nalcms_pland_cropland[extracted$survey_year == 2020])
+  )
+
+  # Test other methods of interpolation
+
+  # Change sf_pt to demonstrate "next" interpolation method
+  sf_pt$survey_year[5] <- 2017
+  expect_silent(
+    extracted <- suppressWarnings(suppressMessages(nalcms_extract(
+      sf_pt,
+      nalcms_files = nalcms_next,
+      interpolate = TRUE,
+      interpolate_method = "next"
+    )))
+  )
+
+  expect_true(all(
+    !is.na(extracted$nalcms_class)
+  ))
+  expect_true(
+    unique(extracted$nalcms_class[extracted$survey_year == 2017]) ==
+      unique(extracted$nalcms_class[extracted$survey_year == 2020])
+  )
+
+  # Change sf_pt to demonstrate "previous" interpolation method
+  sf_pt$survey_year[6] <- 2015
+  expect_silent(
+    extracted <- suppressWarnings(suppressMessages(nalcms_extract(
+      sf_pt,
+      nalcms_files = nalcms_previous,
+      interpolate = TRUE,
+      interpolate_method = "previous"
+    )))
+  )
+
+  expect_true(all(
+    !is.na(extracted$nalcms_class)
+  ))
+  expect_true(
+    unique(extracted$nalcms_class[
+      extracted$survey_year == 2017 &
+        extracted$SurveyAreaIdentifier == "FilledSurveyArea7"
+    ]) ==
+      unique(extracted$nalcms_class[
+        extracted$survey_year == 2015 &
+          extracted$SurveyAreaIdentifier == "FilledSurveyArea7"
+      ])
   )
 })
 

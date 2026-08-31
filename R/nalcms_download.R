@@ -19,10 +19,14 @@
 #' @param interpolate Logical. Should only the snapshots for snapshot years that
 #'   exist within `data` be downloaded (`FALSE`), or should all snapshots within 5 years
 #'   of any year in `data` be downloaded (`TRUE`)? Only applicable when `use_date = TRUE`.
+#' @param interpolate_method Character. One of 1) "closest" to match interceding
+#'   years to the nearest snapshot, 2) "next" to match interceding years to the
+#'   next snapshot, or 3) "previous" to match interceding years to the previous
+#'   snapshot. Ignored if `use_date = FALSE` or `interpolate = FALSE`.
 #' @param snapshot_year Numeric, vector if multiple snapshots desired. Snapshot
 #'   years to download. Options include: 2010, 2015, and 2020. If specified,
 #'   takes precedent over dates from `data` when `use_date = TRUE`.
-#'   @param countries Character, `"Canada"`, `"United States"`,
+#' @param countries Character, `"Canada"`, `"United States"`,
 #'   `"Mexico"` or multiple of these. If left `NULL`, function will attempt to
 #'   identify countries needed based on locations in `data`.
 #' @param site_name Character. Optional argument to provide the name of the
@@ -77,6 +81,7 @@ nalcms_download <- function(
   # should all relevant snapshots be downloaded for extraction (TRUE). Can
   # result in multiple large downloads.
   interpolate = FALSE,
+  interpolate_method = "closest",
   snapshot_year = NULL, # If use_date = FALSE, the desired snapshot year to be
   # used. If not specified, the most recent (2025) is used.
   countries = NULL, # Character vector of country names or ISO3 codes. If left
@@ -230,15 +235,40 @@ nalcms_download <- function(
         !(.data$data_year %in% outside_years)
       )
 
-      for (i in closest_year$data_year) {
-        closest_year$nalcms_year[
-          closest_year$data_year == i
-        ] <- available_years[which(
-          abs(i - available_years) == min(abs(i - available_years))
-        )]
+      if (interpolate_method == "closest") {
+        for (i in closest_year$data_year) {
+          closest_year$nalcms_year[
+            closest_year$data_year == i
+          ] <- available_years[which(
+            abs(i - available_years) == min(abs(i - available_years))
+          )]
+        }
+      } else if (interpolate_method == "previous") {
+        for (i in closest_year$data_year) {
+          if (!(i < min(available_years))) {
+            closest_year$nalcms_year[
+              closest_year$data_year == i
+            ] <- max(available_years[available_years <= i])
+          }
+        }
+      } else if (interpolate_method == "next") {
+        for (i in closest_year$data_year) {
+          if (!(i > max(available_years))) {
+            closest_year$nalcms_year[
+              closest_year$data_year == i
+            ] <- min(available_years[available_years >= i])
+          }
+        }
+      } else {
+        stop(
+          "[NALCMS Landcover Download] invalid option provided to",
+          " interpolate_method. Please supply one of 'closest', 'near', or",
+          "'previous'. See documentations for more details on each.",
+          call. = FALSE
+        )
       }
 
-      necessary_years <- unique(closest_year$nalcms_year)
+      necessary_years <- na.omit(unique(closest_year$nalcms_year))
     } else {
       if (!any(available_years %in% data$survey_year)) {
         stop(
@@ -400,10 +430,10 @@ nalcms_download <- function(
     for (i in countries) {
       filename[[i]] <- if (interpolate == TRUE) {
         data.frame(
-          year = unique(closest_year$nalcms_year[
+          year = na.omit(unique(closest_year$nalcms_year[
             closest_year$data_year %in%
               data$survey_year[stringr::str_detect(data$country, i)]
-          ])
+          ]))
         )
       } else {
         data.frame(

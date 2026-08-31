@@ -8,6 +8,7 @@ nalcms_download(
   data = NULL,
   use_date = TRUE,
   interpolate = FALSE,
+  interpolate_method = "closest",
   snapshot_year = NULL,
   countries = NULL,
   site_name = NULL,
@@ -32,10 +33,16 @@ to specify which snapshot(s) should be downloaded and used.}
 exist within \code{data} be downloaded (\code{FALSE}), or should all snapshots within 5 years
 of any year in \code{data} be downloaded (\code{TRUE})? Only applicable when \code{use_date = TRUE}.}
 
+\item{interpolate_method}{Character. One of 1) "closest" to match interceding
+years to the nearest snapshot, 2) "next" to match interceding years to the
+next snapshot, or 3) "previous" to match interceding years to the previous
+snapshot. Ignored if \code{use_date = FALSE} or \code{interpolate = FALSE}.}
+
 \item{snapshot_year}{Numeric, vector if multiple snapshots desired. Snapshot
 years to download. Options include: 2010, 2015, and 2020. If specified,
-takes precedent over dates from \code{data} when \code{use_date = TRUE}.
-@param countries Character, \code{"Canada"}, \code{"United States"},
+takes precedent over dates from \code{data} when \code{use_date = TRUE}.}
+
+\item{countries}{Character, \code{"Canada"}, \code{"United States"},
 \code{"Mexico"} or multiple of these. If left \code{NULL}, function will attempt to
 identify countries needed based on locations in \code{data}.}
 
