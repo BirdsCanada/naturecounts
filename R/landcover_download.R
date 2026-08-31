@@ -297,9 +297,14 @@ landcover_download <- function(
     )
   }
 
+  # Create SurveyAreaIdentifiers if none exist and no site name specified.
+  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+    data <- create_SAI(data = data, input_fmt = input_fmt)
+  }
+
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
-  if (!is.null(site_name) & !("SurveyAreaIdentifier") %in% data_cols) {
+  if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -308,6 +313,16 @@ landcover_download <- function(
   }
 
   data$SurveyAreaIdentifier <- as.character(data$SurveyAreaIdentifier)
+
+  # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
+  # SurveyAreaIdentifiers if so.
+  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+    # Store original SurveyAreaIdentifiers
+    SAI_storage <- data$SurveyAreaIdentifier
+
+    # Create dummy SurveyAreaIdentifiers
+    data <- create_SAI(data = data, input_fmt = input_fmt)
+  }
 
   if (!is.null(date_year) & !("survey_year") %in% data_cols) {
     if (input_fmt$type == "sf") {

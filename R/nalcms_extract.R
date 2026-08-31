@@ -992,6 +992,11 @@ nalcms_extract <- function(
     }
   }
 
+  # If there was no country column initially, remove it.
+  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+    data$SurveyAreaIdentifier <- NULL
+  }
+
   # Reinstate original SurveyAreaIdentifiers if dummies needed to be created
   if (exists("SAI_storage")) {
     data$SurveyAreaIdentifier <- SAI_storage

@@ -129,6 +129,18 @@ nalcms_download <- function(
   }
 
   if (use_date == TRUE) {
+    # Check data is in the desired format.
+    input_fmt <- covariate_fmt_check(data)
+
+    # If not an sf or terra object, return error and point towards data_fmt().
+    if (input_fmt$type == "data.frame") {
+      stop(
+        "[NALCMS Extraction] extraction requires an sf or terra object as input",
+        " in this workflow. Consider using `data_fmt` to conform data first.",
+        call. = FALSE
+      )
+    }
+
     # Check whether information on alternate column names has been stored
     # in the attributes by data_fmt(). However, prioritize alternate column names
     # specified in the current call.

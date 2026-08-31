@@ -311,6 +311,11 @@ vegetation_extract <- function(
     )
   }
 
+  # Create SurveyAreaIdentifiers if none exist and no site name specified.
+  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+    data <- create_SAI(data = data, input_fmt = input_fmt)
+  }
+
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
   if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
@@ -1206,6 +1211,11 @@ vegetation_extract <- function(
 
     rm(yday_storage)
     rm(yday_before)
+  }
+
+  # If there was no country column initially, remove it.
+  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+    data$SurveyAreaIdentifier <- NULL
   }
 
   # Reinstate original SurveyAreaIdentifiers if dummies needed to be created
