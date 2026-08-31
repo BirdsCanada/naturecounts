@@ -535,12 +535,7 @@ landcover_extract <- function(
       ]
 
       # Open the requested layer in file j.
-      if (packageVersion("terra") == "1.9.34") {
-        md <- FALSE
-      } else {
-        md <- TRUE
-      }
-      modis <- terra::rast(j, md = md)[index]
+      modis <- terra::rast(j, md = FALSE)[index]
 
       # Loop through each site matched to file j and extract.
       for (k in unique(pts_to_fill$SurveyAreaIdentifier)) {
