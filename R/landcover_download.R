@@ -148,7 +148,7 @@ landcover_download <- function(
       }
     }
 
-    # Attempt EarthData authentication three times to avoid errant API
+    # Attempt EarthData authentication five times to avoid errant API
     # connect failures.
     auth <- try(
       luna::earthdataLogin(
@@ -190,7 +190,51 @@ landcover_download <- function(
               silent = TRUE
             )
             if (inherits(auth, "try-error")) {
-              stop(auth, call. = FALSE)
+              if (
+                stringr::str_detect(auth, "aborted by an application callback")
+              ) {
+                stop(auth, call. = FALSE)
+              } else if (
+                stringr::str_detect(auth, "could not reach Earthdata Login") |
+                  stringr::str_detect(auth, "Timeout was reached")
+              ) {
+                auth <- try(
+                  luna::earthdataLogin(
+                    username = ed_email,
+                    password = ed_password,
+                    verbose = progress
+                  ),
+                  silent = TRUE
+                )
+                if (inherits(auth, "try-error")) {
+                  if (
+                    stringr::str_detect(
+                      auth,
+                      "aborted by an application callback"
+                    )
+                  ) {
+                    stop(auth, call. = FALSE)
+                  } else if (
+                    stringr::str_detect(
+                      auth,
+                      "could not reach Earthdata Login"
+                    ) |
+                      stringr::str_detect(auth, "Timeout was reached")
+                  ) {
+                    auth <- try(
+                      luna::earthdataLogin(
+                        username = ed_email,
+                        password = ed_password,
+                        verbose = progress
+                      ),
+                      silent = TRUE
+                    )
+                    if (inherits(auth, "try-error")) {
+                      stop(auth, call. = FALSE)
+                    }
+                  }
+                }
+              }
             }
           }
         }

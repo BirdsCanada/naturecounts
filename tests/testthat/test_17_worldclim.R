@@ -11,7 +11,11 @@ tryCatch(
   }
 )
 
-if(serverdown) {
+if (!exists("serverdown")) {
+  serverdown <- FALSE
+}
+
+if (serverdown) {
   skip("Geodata server down.")
 }
 

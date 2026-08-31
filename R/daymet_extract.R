@@ -754,7 +754,7 @@ daymet_extract <- function(
                   # Extract.
                   frac_table <- do.call(exactextractr::exact_extract, args)
 
-                  if (frac_table == 1) {
+                  if (identical(frac_table, 1)) {
                     value <- unique(terra::values(terra::crop(
                       daymet,
                       tmp
