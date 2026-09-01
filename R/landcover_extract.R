@@ -556,10 +556,10 @@ landcover_extract <- function(
           # Check if landscapemetrics::calculate_lsm() arguments are stored in
           # ..., if not then set defaults.
           if (
-            !hasArg("level") &
-              !hasArg("metric") &
-              !hasArg("name") &
-              !hasArg("type")
+            !methods::hasArg("level") &
+              !methods::hasArg("metric") &
+              !methods::hasArg("name") &
+              !methods::hasArg("type")
           ) {
             # Use landscapemetrics::calculate_lsm() to calculate the proportion
             # of each land cover type present in the cropped raster ("pland").

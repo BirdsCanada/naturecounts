@@ -576,7 +576,7 @@ nalcms_extract <- function(
     # Grab input data that falls within appropriate country.
     country_data <- dplyr::filter(
       data,
-      country == i
+      .data$country == i
     )
 
     # Grab needed years for each country.
@@ -681,10 +681,10 @@ nalcms_extract <- function(
             # Check if landscapemetrics::calculate_lsm() arguments are stored in
             # ..., if not then set defaults.
             if (
-              !hasArg("level") &
-                !hasArg("metric") &
-                !hasArg("name") &
-                !hasArg("type")
+              !methods::hasArg("level") &
+                !methods::hasArg("metric") &
+                !methods::hasArg("name") &
+                !methods::hasArg("type")
             ) {
               # Ensure that we only grab arguments from ... that are
               # arguments for landscapemetrics::calculate_lsm().

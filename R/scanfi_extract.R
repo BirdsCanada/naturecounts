@@ -542,8 +542,10 @@ scanfi_extract <- function(
       if (buffered == TRUE & !(i == "nfilc")) {
         have_pkg_check("exactextractr")
 
-        if (hasArg("fun") & !is.function(list(...)[["fun"]])) {
-          if ("quantile" %in% list(...)[["fun"]] & !hasArg("quantiles")) {
+        if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
+          if (
+            "quantile" %in% list(...)[["fun"]] & !methods::hasArg("quantiles")
+          ) {
             stop(
               "[SCANFI Extraction] quantile summary requested but",
               " no quantiles supplied to the 'quantiles' argument. Please",
@@ -562,7 +564,7 @@ scanfi_extract <- function(
                 "weighted_frac"
               ) %in%
                 list(...)[["fun"]]) &
-              !hasArg("weights")
+              !methods::hasArg("weights")
           ) {
             stop(
               "[SCANFI Extraction] weighted summary requested but no",
@@ -695,10 +697,10 @@ scanfi_extract <- function(
                 # Check if landscapemetrics::calculate_lsm() arguments are stored in
                 # ..., if not then set defaults.
                 if (
-                  !hasArg("level") &
-                    !hasArg("metric") &
-                    !hasArg("name") &
-                    !hasArg("type")
+                  !methods::hasArg("level") &
+                    !methods::hasArg("metric") &
+                    !methods::hasArg("name") &
+                    !methods::hasArg("type")
                 ) {
                   # Ensure that we only grab arguments from ... that are
                   # arguments for landscapemetrics::calculate_lsm().
@@ -981,7 +983,7 @@ scanfi_extract <- function(
               # terra::extract().
               if (buffered == TRUE) {
                 # Check if function information is stored in ...
-                if (!hasArg("fun")) {
+                if (!methods::hasArg("fun")) {
                   funs <- "mean"
                 } else {
                   funs <- list(...)[["fun"]]
@@ -1208,7 +1210,7 @@ scanfi_extract <- function(
                       closest_year$data_year[closest_year$scanfi_year == j],
                   paste0("scanfi_", i)
                 ] <- do.call(terra::extract, args)[, `if`(
-                  hasArg("layer"),
+                  methods::hasArg("layer"),
                   "value",
                   terra::names(scanfi_data[[j]][[i]])
                 )]

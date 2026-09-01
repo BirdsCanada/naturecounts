@@ -387,8 +387,8 @@ worldclim_extract <- function(
   if (buffered == TRUE) {
     have_pkg_check("exactextractr")
 
-    if (hasArg("fun") & !is.function(list(...)[["fun"]])) {
-      if ("quantile" %in% list(...)[["fun"]] & !hasArg("quantiles")) {
+    if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
+      if ("quantile" %in% list(...)[["fun"]] & !methods::hasArg("quantiles")) {
         stop(
           "[WorldClim Extraction] quantile summary requested but",
           " no quantiles supplied to the 'quantiles' argument. Please",
@@ -407,7 +407,7 @@ worldclim_extract <- function(
             "weighted_frac"
           ) %in%
             list(...)[["fun"]]) &
-          !hasArg("weights")
+          !methods::hasArg("weights")
       ) {
         stop(
           "[WorldClim Extraction] weighted summary requested but no",
@@ -455,7 +455,7 @@ worldclim_extract <- function(
       # Loop through each month site i was visited, extract.
       for (k in unique(data$survey_month[data$SurveyAreaIdentifier == j])) {
         # Check if function information is stored in ...
-        if (!hasArg("fun")) {
+        if (!methods::hasArg("fun")) {
           funs <- "mean"
         } else {
           funs <- list(...)[["fun"]]
@@ -652,7 +652,7 @@ worldclim_extract <- function(
                   # calls with multiple functions requested in fun don't try and
                   # extract all requested functions on each loop iteration.
                   args <- list(...)
-                  args$x <- modis_clip
+                  args$x <- source[[layername]]
                   args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
                   args$fun <- l
 
@@ -695,7 +695,7 @@ worldclim_extract <- function(
                 # If fun is a user-specified function, attempt to run.
                 val <- exactextractr::exact_extract(
                   source[[layername]],
-                  tmp,
+                  tmp %>% dplyr::filter(.data$survey_month == k),
                   ...
                 )
 
@@ -805,7 +805,7 @@ worldclim_extract <- function(
                     # calls with multiple functions requested in fun don't try and
                     # extract all requested functions on each loop iteration.
                     args <- list(...)
-                    args$x <- modis_clip
+                    args$x <- source[[layername]]
                     args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
                     args$fun <- l
 
@@ -833,7 +833,7 @@ worldclim_extract <- function(
                 x = source[[layername]],
                 y = tmp %>% dplyr::filter(.data$survey_month == k),
                 ...
-              )[, `if`(hasArg("layer"), "value", layername)]
+              )[, `if`(methods::hasArg("layer"), "value", layername)]
             }
           }
         } else {
@@ -976,7 +976,7 @@ worldclim_extract <- function(
                     # calls with multiple functions requested in fun don't try and
                     # extract all requested functions on each loop iteration.
                     args <- list(...)
-                    args$x <- modis_clip
+                    args$x <- source[[layername]]
                     args$y <- tmp %>% dplyr::filter(.data$survey_month == k)
                     args$fun <- l
 
@@ -1004,7 +1004,7 @@ worldclim_extract <- function(
                 x = source[[layername]],
                 y = tmp %>% dplyr::filter(.data$survey_month == k),
                 ...
-              )[, `if`(hasArg("layer"), "value", layername)]
+              )[, `if`(methods::hasArg("layer"), "value", layername)]
             }
           }
         }

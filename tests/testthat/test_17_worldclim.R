@@ -3,7 +3,10 @@ if (!dir.exists("./testdir")) {
 }
 
 tryCatch(
-  suppressMessages(worldclim_download(suppressWarnings(data_fmt(bcch)))),
+  suppressMessages(worldclim_download(suppressWarnings(
+    data_fmt(bcch),
+    progress = FALSE
+  ))),
   error = function(e) {
     if (stringr::str_detect(conditionMessage(e), "temporarily down")) {
       serverdown <<- TRUE
@@ -528,6 +531,9 @@ if (!serverdown) {
   })
 
   test_that("worldclim_extract() succeeds with alternate summary statistics, and throws error when needed.", {
+    sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch)))
+    sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch))))
+
     expect_silent(
       extracted <- suppressMessages(worldclim_extract(
         sf_pt,
@@ -655,14 +661,13 @@ if (!serverdown) {
 
     # Check that fractions join correctly.
     expect_silent(
-      extracted <- suppressMessages(vegetation_extract(
+      extracted <- suppressMessages(worldclim_extract(
         sf_poly[1, ],
         worldclim_data = tavg_sf_poly,
         fun = "frac"
       ))
     )
 
-    #Expecting failure here until I can update it once geodata servers return.
     expect_named(
       extracted,
       c(
@@ -672,30 +677,15 @@ if (!serverdown) {
         "survey_year",
         "survey_month",
         "survey_day",
-        "tavg_frac_0.0815",
-        "tavg_frac_0.0941",
-        "tavg_frac_0.1185",
-        "tavg_frac_0.1321",
-        "tavg_frac_0.1876",
-        "tavg_frac_0.033",
-        "tavg_frac_0.0359",
-        "tavg_frac_0.0383",
-        "tavg_frac_0.0425",
-        "tavg_frac_0.143",
-        "tavg_frac_0.282",
-        "tavg_frac_0.2892",
-        "tavg_frac_0.3175",
-        "tavg_frac_0.3895",
-        "tavg_frac_0.5015",
-        "tavg_frac_0.0886",
-        "tavg_frac_0.1905",
-        "tavg_frac_0.6719",
-        "tavg_frac_0.6869",
-        "tavg_frac_0.791",
+        "tavg_frac_-11.1000003814697",
+        "tavg_frac_-11",
         "geometry"
       )
     )
-    expect_true(inherits(extracted$tavg_frac_0.033, "numeric"))
+    expect_true(inherits(
+      sf::st_drop_geometry(extracted)[, "tavg_frac_-11.1000003814697"],
+      "numeric"
+    ))
 
     # Test that user specified functions work.
     my_function <- function(value, cov_frac) {

@@ -280,7 +280,7 @@ nalcms_download <- function(
         )
       }
 
-      necessary_years <- na.omit(unique(closest_year$nalcms_year))
+      necessary_years <- stats::na.omit(unique(closest_year$nalcms_year))
     } else {
       if (!any(available_years %in% data$survey_year)) {
         stop(
@@ -442,7 +442,7 @@ nalcms_download <- function(
     for (i in countries) {
       filename[[i]] <- if (interpolate == TRUE) {
         data.frame(
-          year = na.omit(unique(closest_year$nalcms_year[
+          year = stats::na.omit(unique(closest_year$nalcms_year[
             closest_year$data_year %in%
               data$survey_year[stringr::str_detect(data$country, i)]
           ]))
@@ -579,7 +579,7 @@ nalcms_download <- function(
       message("[NALCMS Download] Unzipping.")
 
       # Unzip downloaded file.
-      unzip(
+      utils::unzip(
         zipfile = ifelse(
           is.null(dl_path),
           paste0(

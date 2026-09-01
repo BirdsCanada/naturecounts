@@ -264,8 +264,8 @@ elevation_extract <- function(
   if (buffered == TRUE) {
     have_pkg_check("exactextractr")
 
-    if (hasArg("fun") & !is.function(list(...)[["fun"]])) {
-      if ("quantile" %in% list(...)[["fun"]] & !hasArg("quantiles")) {
+    if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
+      if ("quantile" %in% list(...)[["fun"]] & !methods::hasArg("quantiles")) {
         stop(
           "[Elevation Extraction] quantile summary requested but",
           " no quantiles supplied to the 'quantiles' argument. Please",
@@ -284,7 +284,7 @@ elevation_extract <- function(
             "weighted_frac"
           ) %in%
             list(...)[["fun"]]) &
-          !hasArg("weights")
+          !methods::hasArg("weights")
       ) {
         stop(
           "[Elevation Extraction] weighted summary requested but no",
@@ -322,7 +322,7 @@ elevation_extract <- function(
       )
     } else if (buffered == TRUE) {
       # Check if function information is stored in ...
-      if (!hasArg("fun")) {
+      if (!methods::hasArg("fun")) {
         funs <- "mean"
       } else {
         funs <- list(...)[["fun"]]
@@ -512,7 +512,7 @@ elevation_extract <- function(
     } else {
       if (
         is.na(terra::extract(elev, tmp, ...)[, `if`(
-          hasArg("layer"),
+          methods::hasArg("layer"),
           "value",
           terra::names(elev)
         )])
@@ -533,7 +533,7 @@ elevation_extract <- function(
           y = tmp,
           ...
         )[, `if`(
-          hasArg("layer"),
+          methods::hasArg("layer"),
           "value",
           terra::names(elev)
         )]

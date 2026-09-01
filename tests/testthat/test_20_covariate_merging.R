@@ -2,6 +2,8 @@ if (!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
+bcch <- dplyr::filter(bcch, survey_year %in% c(2010:2011))
+
 test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra point inputs.", {
   # Test with original_data = data.frame
   formatted <- suppressWarnings(suppressMessages(data_fmt(bcch)))
@@ -318,7 +320,7 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
     )
   )
 
-  expect_equal(c(names(bcch), "elevation", "ndvi"), names(merged))
+  expect_equal(c(names(bcch), "elevation_mean", "ndvi_mean"), names(merged))
 
   original_match <- merged %>%
     dplyr::select(
@@ -327,8 +329,8 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
       "survey_year",
       "survey_month",
       "survey_day",
-      "elevation",
-      "ndvi"
+      "elevation_mean",
+      "ndvi_mean"
     ) %>%
     dplyr::distinct() %>%
     dplyr::arrange(
@@ -346,8 +348,8 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
       "survey_year",
       "survey_month",
       "survey_day",
-      "elevation",
-      "ndvi"
+      "elevation_mean",
+      "ndvi_mean"
     ) %>%
     dplyr::arrange(
       .data$latitude,
@@ -409,8 +411,8 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
         coords = c("longitude", "latitude"),
         crs = 4326
       ))))),
-      "elevation",
-      "ndvi",
+      "elevation_mean",
+      "ndvi_mean",
       "geometry"
     ),
     names(merged)
@@ -426,8 +428,8 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
       "survey_year",
       "survey_month",
       "survey_day",
-      "elevation",
-      "ndvi"
+      "elevation_mean",
+      "ndvi_mean"
     ) %>%
     dplyr::distinct() %>%
     dplyr::arrange(
@@ -445,8 +447,8 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
       "survey_year",
       "survey_month",
       "survey_day",
-      "elevation",
-      "ndvi"
+      "elevation_mean",
+      "ndvi_mean"
     ) %>%
     dplyr::arrange(
       .data$latitude,
@@ -508,8 +510,8 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
         geom = c("longitude", "latitude"),
         crs = "epsg:4326"
       )),
-      "elevation",
-      "ndvi"
+      "elevation_mean",
+      "ndvi_mean"
     ),
     names(merged)
   )
@@ -531,8 +533,8 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
       "survey_year",
       "survey_month",
       "survey_day",
-      "elevation",
-      "ndvi"
+      "elevation_mean",
+      "ndvi_mean"
     ) %>%
     dplyr::distinct() %>%
     dplyr::arrange(
@@ -550,8 +552,8 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
       "survey_year",
       "survey_month",
       "survey_day",
-      "elevation",
-      "ndvi"
+      "elevation_mean",
+      "ndvi_mean"
     ) %>%
     dplyr::arrange(
       .data$latitude,

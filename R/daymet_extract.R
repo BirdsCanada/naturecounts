@@ -398,8 +398,8 @@ daymet_extract <- function(
   if (buffered == TRUE) {
     have_pkg_check("exactextractr")
 
-    if (hasArg("fun") & !is.function(list(...)[["fun"]])) {
-      if ("quantile" %in% list(...)[["fun"]] & !hasArg("quantiles")) {
+    if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
+      if ("quantile" %in% list(...)[["fun"]] & !methods::hasArg("quantiles")) {
         stop(
           "[Daymet Extraction] quantile summary requested but",
           " no quantiles supplied to the 'quantiles' argument. Please",
@@ -418,7 +418,7 @@ daymet_extract <- function(
             "weighted_frac"
           ) %in%
             list(...)[["fun"]]) &
-          !hasArg("weights")
+          !methods::hasArg("weights")
       ) {
         stop(
           "[Daymet Extraction] weighted summary requested but no",
@@ -655,7 +655,7 @@ daymet_extract <- function(
           # using terra::extract().
           if (buffered == TRUE) {
             # Check if function information is stored in ...
-            if (!hasArg("fun")) {
+            if (!methods::hasArg("fun")) {
               funs <- "mean"
             } else {
               funs <- list(...)[["fun"]]
@@ -827,7 +827,7 @@ daymet_extract <- function(
               x = daymet,
               y = tmp,
               ...
-            )[, `if`(hasArg("layer"), "value", terra::names(daymet))]
+            )[, `if`(methods::hasArg("layer"), "value", terra::names(daymet))]
           }
         }
       }

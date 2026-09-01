@@ -404,8 +404,8 @@ vegetation_extract <- function(
   if (buffered == TRUE) {
     have_pkg_check("exactextractr")
 
-    if (hasArg("fun") & !is.function(list(...)[["fun"]])) {
-      if ("quantile" %in% list(...)[["fun"]] & !hasArg("quantiles")) {
+    if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
+      if ("quantile" %in% list(...)[["fun"]] & !methods::hasArg("quantiles")) {
         stop(
           "[MODIS NDVI/EVI Extraction] quantile summary requested but",
           " no quantiles supplied to the 'quantiles' argument. Please",
@@ -424,7 +424,7 @@ vegetation_extract <- function(
             "weighted_frac"
           ) %in%
             list(...)[["fun"]]) &
-          !hasArg("weights")
+          !methods::hasArg("weights")
       ) {
         stop(
           "[MODIS NDVI/EVI Extraction] weighted summary requested but no",
@@ -844,7 +844,7 @@ vegetation_extract <- function(
           }
 
           # Check if function information is stored in ...
-          if (!hasArg("fun")) {
+          if (!methods::hasArg("fun")) {
             funs <- "mean"
           } else {
             funs <- list(...)[["fun"]]
@@ -1132,7 +1132,7 @@ vegetation_extract <- function(
                 ],
             ifelse(i == "modis_ndvi", "ndvi", "evi")
           ] <- terra::extract(modis, tmp, ...)[, `if`(
-            hasArg("layer"),
+            methods::hasArg("layer"),
             "value",
             terra::names(modis)
           )]
