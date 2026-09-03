@@ -828,6 +828,25 @@ test_that("scanfi_extract() returns appropriate warnings for out of coverage poi
     )),
     "\\[SCANFI Download\\] Data contains years more than 5 years away from nearest SCANFI snapshot \\(1970\\). No value will be returned for observations in these years."
   )
+
+  bcch_modified$survey_year <- 1970
+
+  sf_pt <- suppressMessages(data_fmt(
+    bcch_modified,
+    coord_lon = "longitude",
+    coord_lat = "latitude",
+    crs = 4326
+  ))
+
+  expect_error(
+    extracted <- suppressMessages(scanfi_extract(
+      sf_pt,
+      covariates = "scanfi_ponderosapine",
+      scanfi_data = ponderosa_sf_pt,
+      interpolate = TRUE
+    )),
+    "\\[SCANFI Extraction\\] Data provided to data argument does not contain observations within 5 years of the provided SCANFI snapshot years \\(2000, 2005\\)."
+  )
 })
 
 # Tests for NFI Landcover - only run locally due to large filesize.
