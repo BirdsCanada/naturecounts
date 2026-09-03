@@ -1,0 +1,171 @@
+---
+title: "Chapter 3 - Downloading and Extracting Vegetation Indices"
+author: "Rory Macklin"
+date: "2026-05-30"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chapter 3 - Downloading and Extracting Vegetation Indices}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Chapter 3: Downloading and Extracting Vegetation Indicies
+
+##### Author: Rory Macklin
+
+> As vegetation amount is a key factor in habitat structure and resource availability to animals, it can be a strong predictor of animal presence. With globally available indices of "greenness" like the Normalized Difference Vegetation Index (NDVI) having supported a variety of ecological research for decades (Pettorelli et al. 2011), researchers may consider these metrics an tool worth considering in analyses.
+
+This tutorial assumes you have a basic understanding of working with spatial data in R. For a good introduction to these kinds of operations, the [NatureCounts Spatial Data Tutorial](https://github.com/BirdsCanada/NatureCounts_SpatialData_Tutorial) can serve as a useful starting point. It explains how to download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers. This tutorial also uses functions demonstrated in [**Chapter 1: Formatting Data for Covariate Download and Extraction**](4.1-CovariateFormatting.html). If you are unfamiliar with these functions, we recommend using the previous tutorial to learn to conform your data to a standardized format used in vegetation index download and extraction functions.
+
+# 3.0 Learning Objectives
+
+By the end of **Chapter 3 - Downloading and Extracting Vegetation Data**, users will know how to:
+
+- Have a basic understanding of the MODIS NDVI/EVI product accessed through `vegetation_download()` and `vegetation_extract()`: [MODIS NDVI/EVI Data](#3.1modis)
+- Use `vegetation_download()` to download MODIS NDVI/EVI data ready to match to observations in your data: [Downloading vegetation indices with `vegetation_download()`](#3.2download).
+- Use `vegetation_extract()` to extract and summarize vegetation indices for each observation in their data: [Extracting vegetation indices with `vegetation_extract()`](#3.3extract).
+
+This R tutorial requires the following packages:
+
+``` {r}
+library(naturecounts)
+library(tidyverse)
+library(sf)
+library(terra)
+```
+
+# 3.1 MODIS NDVI/EVI Data {#3.1modis}
+
+The [MODIS MOD13A1 Vegetation Indices product](https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/MOD13A1) is a long-running, global dataset of gridded vegetation index data. Each grid cell is approximately 500 m x 500 m and the data has a 16-day resolution. The massive coverage and fine temporal resolution of these data make them ideal candidates for generalizable use in ecological research, being able to inform a wide variety of ecological questions (Pettorelli et al. 2011).
+
+Two indices are available, derived from raw spectral data collected by the MODIS Terra satellites: the Normalized Difference Vegetation Index (NDVI) and the Enhanced Vegetation Index (EVI). These indices are derived from satellite measurements of reflected light energy, and are calculated using the typical reflective properties of green leaves. This results in indices that are highly correlated to many ground-truthed measures of vegetation activity (Pettorelli et al. 2011). While NDVI is a more standard and widely used metric, the EVI builds upon the foundations of the NDVI to perform better in areas of high vegetative activity and better correct for atmospheric influence. More in-depth information on the calculation of these metrics can be found in the [MOD13 User Guide](https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf).
+
+Both of these metrics hold values between -1 and 1, with negative values typically being associated with water, values close to zero being associated with bare soil, cloud, snow, or concrete, and positive values with green leaves (Pettorelli et al. 2011). In temperate areas, such as Canada, winter measurements of NDVI and EVI (i.e., when deciduous trees have dropped their leaves) will be lower than in the spring a summer (i.e., when deciduous trees have leafed out). Users should be careful to remember that NDVI and EVI are thus not perfect measures of plant presence/absence as a plant may still be present without green leaves, but are instead measures of vegetative (i.e., green leaf) activity.
+
+# 3.2 Downloading vegetation indices with `vegetation_download()` {#3.2download}
+
+Rather than delivering one file covering the entire globe in a given year, MODIS vegetation data is broken up into large tiles that cover a section of the globe, with one file for each tile per 16-day period. This means that a user would typically have to identify which tile(s) their study region falls within and manually download the appropriate files for each 16-day period. This can be a complex and error-prone process, ultimately taking the researcher's time away from doing the research they aim to do.
+
+Identifying this issue, R packages such as [`luna`](https://github.com/rspatial/luna/) have emerged to automate this process. In `vegetation_download()`, we employ functions from `luna` and add quality of life features to further automate the downloading of MODIS vegetation indices.
+
+First, lets prep some data from NatureCounts for use in downloading MODIS data using `data_fmt()`. `vegetation_download()` requires input data in either `sf` or `terra` spatial format with information on observation year, month, and day each stpred in their own column. You can provide your own data in this format, or use the built-in `naturecounts::data_fmt()` function to conform your data to the necessary format.
+
+``` {r}
+# This dataset containing Black-capped Chickadee observations included in
+# the naturecounts R package is in a data.frame format, and contains the columns
+# we need!
+# We'll need to to convert it into an sf object for use in vegetation_download().
+bcch %>%
+  select(latitude, longitude, survey_year, survey_month, survey_day) %>%
+  head()
+
+# As 16-day resolution vegetation can result in the downloading of a lot of data, we will restrict our data to the years 1999-2000.
+
+bcch <- filter(bcch, survey_year %in% c(1999, 2000))
+  
+# We can make a call to data_fmt() to automatically convert this to an sf object
+# ready to work with naturecounts' covariate download and extraction functions. We
+# can ignore the warning as EPSG:4326 is an appropriate CRS for our data.
+formatted <- data_fmt(bcch)
+
+head(formatted)
+```
+
+The only other prerequisite here is an [EarthData](https://urs.earthdata.nasa.gov/users/new) account, which is necessary to access MODIS data stored in the NASA EarthData Archive. Users can register at the link above.
+
+Supplying our formatted data and EarthData account email to `vegetation_download()` will begin the download process. If the user wishes to just see which files would be downloaded without executing the download, they can do so by setting `ed_transfer` to `FALSE`. Your EarthData account password can either be stored in your .Renviron file by adding the line `EarthData_password = "yourpassword"` or can be supplied through the resulting pop-up window if no `Earthdata_password` is found in your .Renviron. This is done securely using the `askpass` package used in `naturecounts` functions.
+
+``` {r}
+# Let's see which files would be downloaded for our data
+
+files <- vegetation_download(data = formatted,
+                             ed_transfer = FALSE,
+                             progress = FALSE)
+
+files
+
+# Now, by providing an EarthData login email, we can execute the download. Files will be downloaded into a 'modis/' subdirectory in your current working directory. 
+
+ed_email <- "rmacklin@birdscanada.org"
+
+files <- vegetation_download(data = formatted,
+                             ed_email = ed_email,
+                             progress = FALSE,
+                             ed_transfer = TRUE) # We don't need to specify this                                                   # as TRUE is the default, but we 
+                                                 # have done so for clarity.
+
+files
+```
+
+Examining the `files` object, we can see it is a character vector containing the paths to all downloaded files. All downloaded files can be found by default in the created `./modis` subdirectory or at a custom path specified using the argument `dl_path`. Files are in .hdf format, with each file containing raster data for one MODIS tile for one of each requested 16-day period. These files can be brought into R using `terra::rast()` to examine, but we will use `vegetation_extract()` to manage the extraction process.
+
+We also note that several warnings arose in the process! They are informing us that MODIS vegetation data files could not be found for some of our observation dates. All of these dates fall in 1999 - before the beginning of this dataset in 2000. Thus, only files associated with observations in the year 2000 were downloaded.
+
+# 3.3 Extracting vegetation indices with `vegetation_extract()` {#3.3extract}
+
+Once we have gathered the appropriate MODIS vegetation data files, using `vegetation_download()` or otherwise, we will want to extract the appropriate values and match them to our observations. Traditionally this might be accomplished with complicated for-loops running through each observation and matching it to the appropriate tile and year. Again, this would take significant time for the researcher and could be prone to errors for those not experienced with spatial operations in R. In these cases, `vegetation_extract()` can help make the process quicker and easier.
+
+This function works slightly differently depending on whether the input site data are in point or polygon format (again, either `sf` or `terra` objects are accepted). For point data, the extraction process will return the NDVI or EVI value of the raster grid cell that each site point falls within in a column named `ndvi` or `evi` respectively. This is carried out via a call to `terra::extract()`. For polygon data, the extraction process will return the mean NDVI or EVI of cells overlapped by each polygon, again in a column called `ndvi` or `evi`. This is carried out via a call to `exactextractr::exact_extract()`
+
+To execute these extractions, we need to select which index we want to use, and specify it in the `covariates` argument. The appropriate covariate codes can be found in the `covariate_name` column of the table called with `nc_covariate_table()`. We will extract NDVI, which is called by setting `covariates = "modis_ndvi"`. We will need to point `vegetation_extract()` to where our MODIS data files are stored by providing a character vector with the filepaths of all applicable files to the argument `vegetation_files`. Conveniently, this is exactly the output of `vegetation_download()` that we stored in our `files` object.
+
+``` {r}
+# We will start by fetching the vegetation data for our point dataset created above.
+output <- vegetation_extract(data = formatted,
+                             covariates = "modis_ndvi",
+                             vegetation_files = files)
+
+head(output)
+```
+
+We have again been warned that some of the observations in our data are from years that are covered by the MODIS vegetation data. Other than that, there are no errors or warnings, so we can take a look at what the function has returned for us! NDVI values have been added for the observations in the year 2000 in the `ndvi` column, while the values for observations in 1999 have been left as NAs.
+
+We can gain additional information about the reliability of the NDVI observations that `vegetation_extract()` returns by setting the argument `reliability = TRUE`. This will extract the reliability value for each site, derived from the grid cell it falls within, giving us a quick-look at whether low NDVI values are driven by confounding factors such as snow, ice, or cloud, or are simply areas of little vegetation. These values will be added in a new column called `vegetation_reliability` and apply to both the NDVI and EVI measurements for that grid cell.
+
+``` {r}
+# Lets try our call again with reliability = TRUE.
+output <- vegetation_extract(data = formatted,
+                             covariates = "modis_ndvi",
+                             vegetation_files = files,
+                             reliability = TRUE)
+
+head(output)
+```
+
+For the observations in the year 2000, we can see that two observations NDVI values are from grid cells with good data, while one is from an area where snow/ice has interfered with NDVI measurement. More information on these quality assessments is available in the [MOD13A1 User Guide](https://lpdaac.usgs.gov/documents/621/MOD13_User_Guide_V61.pdf).
+
+Now let's give it a go with polygon input data. We'll buffer our points to fetch the mean of our selected vegetation index (we'll calculate both NDVI and EVI this time) within a 500 m radius of each observation, as well as reliability information. We will expect and ignore the same warnings as in the previous example.
+
+``` {r}
+buffered <- data_buff(data = formatted)
+
+output <- vegetation_extract(data = buffered,
+                             covariates = c("modis_ndvi", "modis_evi"),
+                             vegetation_files = files,
+                             reliability = TRUE)
+
+head(output)
+```
+
+We can see that the mean NDVI and EVI values have been added in the `ndvi` and `evi` columns respectively. This time, the `vegetation_reliability` column contains a string containing the percentage of all cells overlapped by each observation polygon in each reliability category. Here, we can see that not only has snow interfered with our NDVI and EVI measurements for one of our observations, but clouds have also interfered as well. This information provides users with important decision-making tools to assure the quality of NDVI/EVI data is considered in their analyses.
+
+# 3.4 Tips and tricks
+
+For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names and year, month, and day data can be provided directly to `vegetation_download()` and `vegetation_extract()` via the `site_name`, `date_year`, `date_month`, and `date_day` columns respectively. If you have already provided this information in a call to `data_fmt()` and are providing the output of that function as the `data` argument of either `vegetation_` function, you do not need to specify this information again.
+
+By default, the MODIS files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `vegetation_extract()`.
+
+Once you've extracted your vegetation index data, you may want to merge it back into the data you originally supplied to the `data` argument of `data_fmt()`. You can do so using `nc_covariates_merge()`.
+
+**Congratulations!** You have now learned how to quickly download and extract the appropriate vegetation index data for your observation data using `vegetation_download()` and `vegetation_extract()`.
+
+# 3.5 References
+
+Pettorelli, Nathalie & Ryan, Sadie & Mueller, Thomas & Bunnefeld, Nils & Jedrzejewsk, Bogumila & Lima, Mauricio & Kausrud, Kyrre. (2011). The Normalized Difference Vegetation Index (NDVI): Unforeseen successes in animal ecology. Climate Research. 46. 15-27. 10.3354/cr00936.
