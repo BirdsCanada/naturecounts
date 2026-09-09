@@ -6,6 +6,17 @@ development:
 template:
   bootstrap: 5
   bootswatch: sandstone
+  includes:
+    in_header: |
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+       <script async src="https://www.googletagmanager.com/gtag/js?id=G-ELB7WM1YQK"></script>
+       <script>
+         window.dataLayer = window.dataLayer || []; 
+         function gtag(){dataLayer.push(arguments);} 
+         gtag('js', new Date()); 
+         gtag('config', 'G-ELB7WM1YQK'); 
+       </script>
+       <!-- Google tag (gtag.js) -->
 
 navbar:
   bg: dark
@@ -59,6 +70,8 @@ reference:
   - data_buff
   - landcover_download
   - landcover_extract
+  - nalcms_download
+  - nalcms_extract
   - vegetation_download
   - vegetation_extract
   - elevation_download
@@ -117,6 +130,7 @@ articles:
   - '`articles/4.5-WorldClim`'
   - '`articles/4.6-SCANFI`'
   - '`articles/4.7-Daymet`'
+  - '`articles/4.8-NALCMS`'
 - title: Additional Tutorials
   desc: How-to articles describing common tasks
   contents:

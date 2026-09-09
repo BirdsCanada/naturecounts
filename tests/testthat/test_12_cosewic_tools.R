@@ -302,9 +302,30 @@ test_that("cosewic_iao() custom IAO grid", {
   )
 })
 
+test_that("cosewic_iao() buffer is adjustable", {
+  auklet <- data.frame(
+    record_id = 1:5,
+    latitude = 50.85,
+    longitude = -145.07,
+    species_id = "auklet"
+  )
+  expect_error(
+    expect_message(
+      cosewic_ranges(auklet),
+      "Some observations not within the limits of Canada and a 500km buffer"
+    ),
+    "No observations remaining"
+  )
+  expect_no_error(cosewic_ranges(auklet, iao_buffer = 1000)) |>
+    suppressMessages()
+})
+
 test_that("cosewic_ranges()", {
   # Expect message about change in defaults
-  expect_message(cosewic_ranges(bcch), "now uses `prop_include = 1`")
+  rlang::with_options(
+    rlib_message_verbosity = "verbose",
+    expect_message(cosewic_ranges(bcch), "now uses `prop_include = 1`")
+  )
 
   # Lambert
   expect_silent(r <- cosewic_ranges(bcch, crs = 3347))

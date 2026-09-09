@@ -164,7 +164,7 @@ vegetation_download <- function(
       }
     }
 
-    # Attempt EarthData authentication three times to avoid errant API
+    # Attempt EarthData authentication five times to avoid errant API
     # connect failures.
     auth <- try(
       luna::earthdataLogin(
@@ -178,7 +178,10 @@ vegetation_download <- function(
     if (inherits(auth, "try-error")) {
       if (stringr::str_detect(auth, "aborted by an application callback")) {
         stop(auth, call. = FALSE)
-      } else if (stringr::str_detect(auth, "could not reach Earthdata Login")) {
+      } else if (
+        stringr::str_detect(auth, "could not reach Earthdata Login") |
+          stringr::str_detect(auth, "Timeout was reached")
+      ) {
         auth <- try(
           luna::earthdataLogin(
             username = ed_email,
@@ -191,7 +194,8 @@ vegetation_download <- function(
           if (stringr::str_detect(auth, "aborted by an application callback")) {
             stop(auth, call. = FALSE)
           } else if (
-            stringr::str_detect(auth, "could not reach Earthdata Login")
+            stringr::str_detect(auth, "could not reach Earthdata Login") |
+              stringr::str_detect(auth, "Timeout was reached")
           ) {
             auth <- try(
               luna::earthdataLogin(
@@ -202,7 +206,51 @@ vegetation_download <- function(
               silent = TRUE
             )
             if (inherits(auth, "try-error")) {
-              stop(auth, call. = FALSE)
+              if (
+                stringr::str_detect(auth, "aborted by an application callback")
+              ) {
+                stop(auth, call. = FALSE)
+              } else if (
+                stringr::str_detect(auth, "could not reach Earthdata Login") |
+                  stringr::str_detect(auth, "Timeout was reached")
+              ) {
+                auth <- try(
+                  luna::earthdataLogin(
+                    username = ed_email,
+                    password = ed_password,
+                    verbose = progress
+                  ),
+                  silent = TRUE
+                )
+                if (inherits(auth, "try-error")) {
+                  if (
+                    stringr::str_detect(
+                      auth,
+                      "aborted by an application callback"
+                    )
+                  ) {
+                    stop(auth, call. = FALSE)
+                  } else if (
+                    stringr::str_detect(
+                      auth,
+                      "could not reach Earthdata Login"
+                    ) |
+                      stringr::str_detect(auth, "Timeout was reached")
+                  ) {
+                    auth <- try(
+                      luna::earthdataLogin(
+                        username = ed_email,
+                        password = ed_password,
+                        verbose = progress
+                      ),
+                      silent = TRUE
+                    )
+                    if (inherits(auth, "try-error")) {
+                      stop(auth, call. = FALSE)
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -272,6 +320,11 @@ vegetation_download <- function(
     )
   }
 
+  # Create SurveyAreaIdentifiers if none exist and no site name specified.
+  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+    data <- create_SAI(data = data, input_fmt = input_fmt)
+  }
+
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
   if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
@@ -283,6 +336,16 @@ vegetation_download <- function(
   }
 
   data$SurveyAreaIdentifier <- as.character(data$SurveyAreaIdentifier)
+
+  # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
+  # SurveyAreaIdentifiers if so.
+  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+    # Store original SurveyAreaIdentifiers
+    SAI_storage <- data$SurveyAreaIdentifier
+
+    # Create dummy SurveyAreaIdentifiers
+    data <- create_SAI(data = data, input_fmt = input_fmt)
+  }
 
   if (!is.null(date_year) & !("survey_year" %in% data_cols)) {
     if (input_fmt$type == "sf") {

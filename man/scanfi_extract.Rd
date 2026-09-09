@@ -12,7 +12,8 @@ scanfi_extract(
   site_name = NULL,
   date_year = NULL,
   dl_path = NULL,
-  retain = TRUE
+  retain = TRUE,
+  ...
 )
 }
 \arguments{
@@ -47,15 +48,21 @@ directory.}
 
 \item{retain}{Logical. Should SCANFI data files be kept after extraction? If
 \code{FALSE}, files will be deleted.}
+
+\item{...}{Other arguments passed to \code{\link[landscapemetrics:calculate_lsm]{landscapemetrics::calculate_lsm()}} if
+NFI Landcover data requested, or \code{\link[exactextractr:exact_extract]{exactextractr::exact_extract()}} or
+for other requested variables with \code{sf} 'POLYGON' or \code{terra} 'polygons'
+input data. Primarily useful for specifying metrics other than the
+proportional cover of each landcover class when NFI Landcover requested
+(see \code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} for other options) or the mean
+for other SCANFI variables.}
 }
 \value{
 For sf 'POINT' or terra 'points' input data, original data with
 column(s) appended containing the SCANFI data value(s) at each point.
 
 For sf 'POLYGON' or terra 'polygons' input data, original data with column(s)
-appended containing the mean SCANFI data value(s) within each polygon or,
-if NFI Landcover requested, the proportion the polygon area covered by of
-each land cover class.
+appended containing the requested SCANFI data value(s) within each polygon.
 }
 \description{
 Extracts all available variables from the
@@ -83,6 +90,81 @@ values to the \code{covariates} argument:
 \item Broadleaf tree species cover (\% of pixel): \code{scanfi_broadleaf}
 \item Other conifer species cover (\% of pixel): \code{scanfi_otherconifer}
 }
+
+By default, for \code{sf} 'POLYGON' or \code{terra} 'polygons' input data the mean SCANFI
+variable value will be returned, or the proportion of polygon area covered
+by each NFI Landcover class (\code{pland}) will be returned if \code{scanfi_nfilc} requested.
+Other summary statistics can be extracted for non-NFI Landcover variables
+by specifying the \code{fun} argument, which is passed to
+\code{\link[exactextractr:exact_extract]{exactextractr::exact_extract()}}. The available summary statistics are:
+\itemize{
+\item \code{min} - the minimum non-\code{NA} value in any raster cell wholly or
+partially covered by the polygon
+\item \code{max} - the maximum non-\code{NA} value in any raster cell wholly or
+partially covered by the polygon
+\item \code{count} - the sum of fractions of raster cells with non-\code{NA}
+values covered by the polygon
+\item \code{sum}   - the sum of non-\code{NA} raster cell values, multiplied by
+the fraction of the cell that is covered by the polygon
+\item \code{mean} - the mean cell value, weighted by the fraction of each cell
+that is covered by the polygon
+\item \code{median} - the median cell value, weighted by the fraction of each cell
+that is covered by the polygon
+\item \code{quantile} - arbitrary quantile(s) of cell values, specified in
+\code{quantiles}, weighted by the fraction of each cell that is
+covered by the polygon
+\item \code{mode} - the most common cell value, weighted by the fraction of
+each cell that is covered by the polygon. Where multiple
+values occupy the same maximum number of weighted cells,
+the largest value will be returned.
+\item \code{majority} - synonym for \code{mode}
+\item \code{minority} - the least common cell value, weighted by the fraction
+of each cell that is covered by the polygon. Where
+multiple values occupy the same minimum number of
+weighted cells, the smallest value will be returned.
+\item \code{variety} - the number of distinct values in cells that are wholly or
+partially covered by the polygon.
+\item \code{variance} - the population variance of cell values, weighted by the
+fraction of each cell that is covered by the polygon.
+\item \code{stdev} - the population standard deviation of cell values, weighted by
+the fraction of each cell that is covered by the polygon.
+\item \code{coefficient_of_variation} - the population coefficient of variation of
+cell values, weighted by the fraction of each
+cell that is covered by the polygon.
+\item \code{weighted_mean} - the mean cell value, weighted by the product of
+the fraction of each cell covered by the polygon
+and the value of a second weighting raster provided
+as \code{weights}
+\item \code{weighted_sum} - the sum of defined raster cell values, multiplied by
+the fraction of each cell that is covered by the polygon
+and the value of a second weighting raster provided
+as \code{weights}
+\item \code{weighted_stdev} - the population standard deviation of cell values,
+weighted by the product of the fraction of each cell
+covered by the polygon and the value of a second
+weighting raster provided as \code{weights}
+\item \code{weighted_variance} - the population variance of cell values, weighted by
+the product of the fraction of each cell covered by
+the polygon and the value of a second weighting
+raster provided as \code{weights}
+\item \code{frac} - returns one column for each possible value of \code{x}, with the
+the fraction of defined raster cells that are equal to that
+value.
+\item \code{weighted_frac} - returns one column for each possible value of \code{x},
+with the fraction of defined cells that are equal
+to that value, weighted by `weights.
+}
+
+User defined functions can also be passed to \code{fun}, but these must return a
+single value. More information can be found in the documentation for
+\code{\link[exactextractr:exact_extract]{exactextractr::exact_extract()}}.
+
+For extraction of NFI Landcover data with \code{sf} 'POLYGON' or \code{terra}
+'polygons' input data, other summary metrics can be requested by specifying
+the \code{level}, \code{class}, \code{metric}, or \code{name} arguments, which are passed to
+\code{\link[landscapemetrics:calculate_lsm]{landscapemetrics::calculate_lsm()}}. See \code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} for
+metric options. At this time, only metrics at the \code{landscape} or \code{class}
+level are accepted.
 }
 \examples{
 # Convert included test data on black-capped chickadees to sf POINT object

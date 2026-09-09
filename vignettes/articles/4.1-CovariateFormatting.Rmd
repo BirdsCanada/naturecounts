@@ -15,7 +15,7 @@ vignette: >
 
 ##### Author: Rory Macklin
 
-> Satellite Earth Observation (SEO) data are an increasingly critical tool in ecological analysis, but can be difficult for end-users to access. With the functions we describe in this chapter, we aim to make several commonly used data types easy to download and attach to bird data downloaded from NatureCounts. The first step in this process is often formatting your bird data to prepare it for use in extracting data from covariate data sets.
+> Satellite Earth Observation (SEO) data are an increasingly critical tool in ecological analysis, but can be difficult for end-users to access. With the functions we describe in this chapter, we aim to make several commonly used data types easy to download and merge with bird data downloaded from NatureCounts. The first step in this process is often formatting your bird data to prepare it for use in extracting data from covariate data sets.
 
 This tutorial assumes you have a basic understanding of working with spatial data in R. For a good introduction to these kinds of operations, the [NatureCounts Spatial Data Tutorial](https://github.com/BirdsCanada/NatureCounts_SpatialData_Tutorial) can serve as a useful starting point. It explains how to download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers.
 
@@ -47,17 +47,17 @@ However, these can often be collected and encoded in inconsistent formats. Here,
 
 This function accepts data in five formats:
 
--   A `data.frame` with columns containing the spatial X-coordinate (usually longitude), the spatial Y-coordinate (usually latitude), and date data.
--   An `sf` object, in either `POINT` or `POLYGON` format with coordinate information stored in the `geometry` column inherent to all `sf` objects and column(s) containing date data.
--   A `terra` object, in either `points` or `polygons` format with coordinate information stored in the object structure inherent to `terra` and column(s) containing date data.
+-   A `data.frame` with columns containing the spatial X-coordinate (usually longitude), the spatial Y-coordinate (usually latitude), and date.
+-   An `sf` object, in either `POINT` or `POLYGON` format with coordinate information stored in the `geometry` column inherent to all `sf` objects and column(s) containing date.
+-   A `terra` object, in either `points` or `polygons` format with coordinate information stored in the object structure inherent to `terra` and column(s) containing date.
 
 Date data can be supplied in a variety of formats also. These include:
 
 -   Three columns: one for year, one for month (either month name or a number 1-12), and one for day of the month (1-31).
 -   In one column in the native R `Date` format often manipulated using the `lubridate` package.
--   In two columns, one containing year data, and the other containing the day of the year (1-365), often referred to as Julian or Ordinal date.
+-   In two columns, one containing year, and the other containing the day of the year (1-365), often referred to as Julian or Ordinal date.
 
-This function is designed to work most directly with data downloaded from NatureCounts in the BMDE format, but options have been included to allow great flexibility in input data. Let's run through an example using some data from NatureCounts, and demonstrate how other data inputs can be included.
+This function is designed to work most directly with data downloaded from NatureCounts in the [BMDE](https://naturecounts.ca/nc/default/nc_standards.jsp) format, but options have been included to allow great flexibility in input data. Let's run through an example using some data from NatureCounts, and demonstrate how other data inputs can be included.
 
 
 ``` r
@@ -98,9 +98,9 @@ head(formatted)
 
 Running this call to `data_fmt()` has returned our processed data object with a warning! This warning is simply telling us that as we did not explicitly specify the coordinate reference system (CRS), the function has assumed it is in the [World Geodetic System 1984](https://epsg.io/4326) CRS, the standard latitude/longitude system used in many mapping operations. This is fine for us as this CRS is appropriate for our data!
 
-The outputted object `formatted` has been transformed into an `sf` object in a `POINT` geometry (as previously mentioned, in the WGS84 CRS). All of our original input columns (latitude, longitude, date data) have been left as they were as they are all columns we need down the road for the covariate download and extraction process, and were already in the standardized format we use therein.
+The outputted object `formatted` has been transformed into an `sf` object in a `POINT` geometry (as previously mentioned, in the WGS84 CRS). All of our original input columns (latitude, longitude, date) have been left as they were as they are all columns we need down the road for the covariate download and extraction process, and were already in the standardized format we use therein.
 
-You will also notice that a column with site names has been added! In `bcch`, no site names are provided, and so for convenience, the function has created site names for each unique location in the dataset. In many BMDE datasets, site names will be provided in the `SurveyAreaIdentifier` column, or in columns under other names in non-BMDE data. These are often a more human-readable way of identifying the different locations in a dataset, but are not strictly necessary for our operations here.
+You will also notice that a column with site names has been added. In `bcch`, no site names are provided, and so for convenience, the function has created site names for each unique location in the dataset. In many BMDE datasets, site names will be provided in the `SurveyAreaIdentifier` column, or in columns under other names in non-BMDE data. These are often a more human-readable way of identifying the different locations in a dataset, but are not strictly necessary for our operations here.
 
 So, what if your data is a little less standard than this?
 
@@ -121,7 +121,7 @@ bcch_modified <- st_drop_geometry(bcch_modified)
 # Join the new coordinate data to our original data
 bcch_modified <- cbind(bcch_modified, coordinates)
 
-# Take a look! No more latitude/longitude column, only an X/Y column in a totally
+# Take a look. No more latitude/longitude column, only an X/Y column in a totally
 # different coordinate format!
 bcch_modified %>%
   select(X, Y, survey_year, survey_month, survey_day) %>%
@@ -135,8 +135,8 @@ bcch_modified %>%
 #> 6 1464264 841722.6        2011           10          2
   
 # Now, if we supply this to data_fmt(), it's assumption that the data is in WGS84
-# would be wrong, and it wouldn't know where to look to find the coordinate data!
-# We can use special arguments to get around this!
+# would be wrong, and it wouldn't know where to look to find the coordinate data.
+# We can use special arguments to get around this.
 formatted <- data_fmt(bcch_modified,
                       coord_lon = "X", # Here's the name of the column that
                                        # contains our X-coordinate,
@@ -160,7 +160,7 @@ head(formatted)
 #> 6    FilledSurveyArea6 841722.6 1464264        2011           10          2 POINT (1464264 841722.6)
 ```
 
-Phew, no errors! By telling the function where important information is stored, we can supply data in different formats and still prepare our data for use in covariate download and extraction. Let's see some other customization features we can use.
+Phew, no errors. By telling the function where important information is stored, we can supply data in different formats and still prepare our data for use in covariate download and extraction. Let's see some other customization features we can use.
 
 
 ``` r
@@ -211,7 +211,7 @@ head(formatted)
 #> 6    Site6 45.82851 -77.11430 2011          10          2 POINT (1464264 841722.6)
 ```
 
-As we can see, the function has happily accepted our alternate columns and has used them appropriately! This flexibility allows even those working with data outside of standard BMDE formats present in NatureCounts make use of these functions and those down the line to download and extract covariate data.
+As we can see, the function has happily accepted our alternate columns and has used them appropriately. This flexibility allows even those working with data outside of standard BMDE formats present in NatureCounts make use of these functions and those down the line to download and extract covariate data.
 
 Finally, what if we are using an alternate date format? So far, all examples have used the three column approach - one for year, one for month, and one for day. Below, we demonstrate how other date formats can be accommodated in `data_fmt()`.
 
@@ -255,7 +255,7 @@ head(formatted)
 #> 5 POINT (1461424 817010.6)
 #> 6 POINT (1464264 841722.6)
 
-# Now, lets try using ordinal date!
+# Now, lets try using ordinal date.
 bcch_ordinal <- bcch_date %>%
   mutate(dayofyear = yday(date))
   
@@ -288,7 +288,7 @@ head(formatted)
 #> 6 POINT (1464264 841722.6)
 ```
 
-As we can see, in both cases date data is extracted from the supplied `Date` formatted column or ordinal date data, and is provided alongside the original input format in the output of `data_fmt()`.
+As we can see, in both cases date column(s) is extracted from the supplied `Date` formatted column or ordinal date data, and is provided alongside the original input format in the output of `data_fmt()`.
 
 Finally, spatial data is commonly encoded using `sf` or `terra` objects in R. This function is adaptable to those formats, so long as `sf` objects are `POINTS` or `POLYGONS` geometries, or `terra` objects are `points` or `polygons` geometries. In these cases, `data_fmt()` will return the data in the spatial format it was provided in (i.e., if a `terra` object is provided, the final output data will also be a `terra` object).
 

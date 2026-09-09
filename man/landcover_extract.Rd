@@ -10,7 +10,8 @@ landcover_extract(
   landcover_files,
   site_name = NULL,
   date_year = NULL,
-  retain = TRUE
+  retain = TRUE,
+  ...
 )
 }
 \arguments{
@@ -39,6 +40,11 @@ specified in a call to \code{\link[=data_fmt]{data_fmt()}} or \code{\link[=landc
 
 \item{retain}{Logical. Should MODIS data files be kept after extraction. If
 \code{FALSE}, files will be deleted.}
+
+\item{...}{Other arguments passed to \code{\link[landscapemetrics:calculate_lsm]{landscapemetrics::calculate_lsm()}} for
+\code{sf} 'POLYGON' or \code{terra} 'polygons' input data. Primarily useful for
+specifying metrics other than the proportional cover of each landcover
+class. See \code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} for other options.}
 }
 \value{
 For \code{sf} 'POINT' or \code{terra} 'points' input data, original data with
@@ -46,7 +52,9 @@ a character column \code{lctype1} appended containing the name of the landcover
 class that point falls within.
 
 For \code{sf} 'POLYGON' or \code{terra} 'polygons' input data, original data with
-numeric columns containing the proportion of each polygon that is covered
+numeric columns containing the requested landscape metrics (see
+\code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} for options). By default, returns columns
+containing the proportion of each polygon that is covered
 by each landcover type.
 }
 \description{
@@ -73,10 +81,17 @@ default, the function extracts the University of Maryland scheme
 (\code{modis_lctype1}), but we strongly recommend users consider the strengths and
 weaknesses of each classification scheme in the context of their analysis and
 choose their desired classification scheme appropriately.
+
+With \code{sf} 'POLYGON' or \code{terra} polygons' input data, the proportion of
+polygon area covered by each MODIS Landcover class (\code{pland}) is returned by default.
+Other summary metrics can be requested by specifying
+the \code{level}, \code{class}, \code{metric}, or \code{name} arguments, which are passed to
+\code{\link[landscapemetrics:calculate_lsm]{landscapemetrics::calculate_lsm()}}. See \code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} for
+metric options. At this time, only metrics at the \code{landscape} or \code{class}
+level are accepted.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
 # Using the included, test data on black-capped chickadees
 bcch # look at the data
 
@@ -112,4 +127,7 @@ the MODIS Landcover dataset.
 \code{\link[=nc_covariates_merge]{nc_covariates_merge()}} to merge extracted
 covariate data into data originally provided to the \code{data} argument of
 \code{\link[=data_fmt]{data_fmt()}}.
+
+\code{\link[landscapemetrics:list_lsm]{landscapemetrics::list_lsm()}} to view options for landscape metrics that
+can be calculated for buffered input data.
 }

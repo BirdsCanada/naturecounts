@@ -8,6 +8,7 @@ scanfi_download(
   data = NULL,
   covariates = "scanfi_height",
   use_date = TRUE,
+  interpolate = FALSE,
   snapshot_year = NULL,
   date_year = NULL,
   timeout = 32000,
@@ -27,6 +28,10 @@ default, downloads SCANFI forest height data.}
 \item{use_date}{Logical. Should the function use year data provided in \code{data}
 to choose which snapshot to download? If \code{FALSE}, \code{snapshot_year} can be used
 to specify which snapshot(s) should be downloaded and used.}
+
+\item{interpolate}{Logical. Should only the snapshots for snapshot years that
+exist within \code{data} be downloaded (\code{FALSE}), or should all snapshots within 5 years
+of any year in \code{data} be downloaded (\code{TRUE})? Only applicable when \code{use_date = TRUE}.}
 
 \item{snapshot_year}{Numeric, vector if multiple snapshots desired. Snapshot
 years to download. Options include: 1985, 1990, 1995, 2000, 2005, 2010, 2015,

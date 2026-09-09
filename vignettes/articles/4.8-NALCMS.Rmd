@@ -1,0 +1,342 @@
+---
+title: "Chapter 8 - Downloading and Extracting NALCMS Landcover Data"
+author: "Rory Macklin"
+date: "2026-09-03"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chapter 8 - Downloading and Extracting NALCMS Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Chapter 8: Downloading and Extracting NALCMS Data
+
+##### Author: Rory Macklin
+
+> Animal communities are strongly responsive to the landcover composition of an area, as this often determines important factors such as prey availability, available habitat for foraging and breeding, and the presence of certain disturbance types. Landcover data is, however, difficult to summarize from on-the-ground observation, especially at larger spatial scales. Luckily, SEO products are available that summarize land cover composition at fine spatial scales in North America.
+
+This tutorial assumes you have a basic understanding of working with spatial data in R. For a good introduction to these kinds of operations, the [NatureCounts Spatial Data Tutorial](https://github.com/BirdsCanada/NatureCounts_SpatialData_Tutorial) can serve as a useful starting point. It explains how to download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers. This tutorial also uses functions demonstrated in [**Chapter 1: Formatting Data for Covariate Download and Extraction**](4.1-CovariateFormatting.html). If you are unfamiliar with these functions, we recommend using the previous tutorial to learn to conform your data to a standardized format used in NALCMS data download and extraction functions.
+
+# 8.0 Learning Objectives
+
+By the end of **Chapter 8 - Downloading and Extracting NALCMS Landcover Data**, users will:
+
+- Have a basic understanding of the NALCMS landcover dataset accessed through `nalcms_download()` and `nalcms_extract()`: [NALCMS Landcover data](#8.1nalcms).
+- Be able to use `nalcms_download()` to download NALCMS landcover data ready to match to observations in your data: [Downloading NALCMS Landcover data with `nalcms_download()`](#8.2download).
+- Be able to use `nalcms_extract()` to extract and summarize NALCMS landcover data for each observation in their data: [Extracting NALCMS Landcover data with `nalcms_extract()`](#8.3extract).
+
+This R tutorial requires the following packages:
+
+``` r
+library(naturecounts)
+library(tidyverse)
+#> ── Attaching core tidyverse packages ───────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+#> ✔ dplyr     1.1.4     ✔ readr     2.1.6
+#> ✔ forcats   1.0.0     ✔ stringr   1.6.0
+#> ✔ ggplot2   4.0.1     ✔ tibble    3.3.1
+#> ✔ lubridate 1.9.4     ✔ tidyr     1.3.2
+#> ✔ purrr     1.2.0     
+#> ── Conflicts ─────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> ✖ readr::edition_get()   masks testthat::edition_get()
+#> ✖ dplyr::filter()        masks stats::filter()
+#> ✖ dplyr::lag()           masks stats::lag()
+#> ✖ readr::local_edition() masks testthat::local_edition()
+#> ✖ dplyr::sql()           masks naturecounts::sql()
+#> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+library(sf)
+#> Linking to GEOS 3.13.1, GDAL 3.11.4, PROJ 9.7.0; sf_use_s2() is TRUE
+library(terra)
+#> terra 1.9.34
+#> 
+#> Attaching package: 'terra'
+#> 
+#> The following object is masked from 'package:tidyr':
+#> 
+#>     extract
+#> 
+#> The following objects are masked from 'package:testthat':
+#> 
+#>     compare, describe
+```
+
+# 8.1 NALCMS Landcover data {#8.1nalcms}
+
+The [North American Land Change Monitoring System (NALCMS) dataset](https://www.cec.org/north-american-land-change-monitoring-system/) is a wall-to-wall North American dataset of gridded land cover data at a \~ 30 m resolution, with snapshots every 5 years from 2010-2020. This dataset covers Canada, the United States, and Mexico.
+
+These values are modeled from a variety of satellite- and ground-derived data sources and provide useful snapshots of landcover at different times across recent decades. Publication of the 2025 edition of this dataset is expected imminently and the functions herein will be updated to include it upon release. For more information about the generation of this dataset and to access selected publications, see [(CEC 2025)](https://www.cec.org/files/pulications/cec_nalcms-en_final.pdf).
+
+# 8.2 Downloading NALCMS Landcover data with `nalcms_download()` {#8.2download}
+
+NALCMS data can be accessed freely via the Commission for Environmental Cooperation's [North American Environmental Atlas](https://www.cec.org/north-american-environmental-atlas). While these data are easily accessible, users must ensure they download all snapshot years needed for each country desired. This is a step the `naturecounts` package aims to eliminate to promote ease of access to these fantastic data.
+
+First, lets prep some data from NatureCounts for use in downloading NALCMS landcover data using `data_fmt()`. The function we will use to download NALCMS data - `nalcms_download()` - needs input data in either `data.frame`, `sf` or `terra` spatial format containing a column for each observation with the year the observation was made, or can be called without input data if the desired snapshot years and countries to be downloaded are provided. If providing input data, you can provide your own data in the required format, or use the built-in `naturecounts::data_fmt()` function to conform your data to the necessary format.
+
+``` r
+# This dataset containing Black-capped Chickadee observations included in
+# the naturecounts R package is in a data.frame format, and contains the columns
+# we need (latitude, longitude, and year)!
+# We'll convert it into an sf object for use in nalcms_download().
+bcch %>%
+  select(latitude, longitude, survey_year) %>%
+  head()
+#>   latitude longitude survey_year
+#> 1 45.51110 -77.50533        2011
+#> 2 45.63436 -77.07484        2010
+#> 3 45.82732 -77.12012        2010
+#> 4 45.48730 -77.74651        2011
+#> 5 45.61956 -77.23577        2010
+#> 6 45.82851 -77.11430        2011
+  
+# To reduce the necessary downloads, we will restrict our data to years 2010-2015.
+
+bcch <- bcch[bcch$survey_year %in% c(2010:2017),]
+
+# We can make a call to data_fmt() to automatically convert this to an sf object
+# ready to work with naturecounts' covariate download and extraction functions. We
+# can ignore the warning as EPSG:4326 is an appropriate CRS for our data.
+formatted <- data_fmt(bcch)
+#> [Data Formatting] beginning formatting.
+#> Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be EPSG:4326.
+
+head(formatted)
+#> Simple feature collection with 6 features and 6 fields
+#> Geometry type: POINT
+#> Dimension:     XY
+#> Bounding box:  xmin: 1426543 ymin: 792053.4 xmax: 1473174 ymax: 841722.6
+#> Projected CRS: Canada_Albers_Equal_Area_Conic
+#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 geometry
+#> 1    FilledSurveyArea1 45.51110 -77.50533        2011            2         12 POINT (1444206 799722.4)
+#> 2    FilledSurveyArea2 45.63436 -77.07484        2010            7          3 POINT (1473174 822088.3)
+#> 3    FilledSurveyArea3 45.82732 -77.12012        2010            6         19 POINT (1463861 841469.8)
+#> 4    FilledSurveyArea4 45.48730 -77.74651        2011            5          5 POINT (1426543 792053.4)
+#> 5    FilledSurveyArea5 45.61956 -77.23577        2010            6         16 POINT (1461424 817010.6)
+#> 6    FilledSurveyArea6 45.82851 -77.11430        2011           10          2 POINT (1464264 841722.6)
+```
+
+With our data prepared, we can make a call to `nalcms_download()` to begin downloading NALCMS data. If we provide the spatial data we have generated, `nalcms_download()` will attempt to identify the snapshot year(s) and countries that the data fall closest to. Alternatively, we could specify the years and countries we want the function to download by setting `use_date = FALSE` and `snapshot_year = c(2010, 2015)` and `countries = "Canada"`.
+
+`nalcms_download()` will download one file for each country-snapshot year combination requested. Users should be aware that NALCMS data files, being at a fine spatial resolution across entire countries, are large (generally 1-2Gb per country-snapshot year) and should consider disk space before downloading. We will specify interpolate = TRUE to ensure that in the case that no observations were made in 2010 or 2015, those snapshots that are nearest to the other observation dates (i.e., 2011, 2012, 2013, 2014) are downloaded.
+
+``` r
+# Let's download some files! Files will be downloaded into a 'nalcms/' subdirectory in your current working directory.
+
+nalcms_files <- nalcms_download(data = formatted,
+                                use_date = TRUE,# this is TRUE by default, telling
+                                                # the function to find the snapshot
+                                                # years needed from the data argument,
+                                                # but we include it here for clarity.
+                                interpolate = TRUE)
+#> [NALCMS Download] downloading NALCMS Landcover for Canada snapshot year 2010. Files are large and may require a fair bit of download and processing time.
+#> [NALCMS Download] Unzipping.
+#> [NALCMS Download] downloading NALCMS Landcover for Canada snapshot year 2015. Files are large and may require a fair bit of download and processing time.
+#> [NALCMS Download] Unzipping.
+                                                
+# If we didn't have any input data, but still wanted to download the same files
+# we could do so as follows:
+nalcms_files <- nalcms_download(use_date = FALSE,
+                                snapshot_year = c(2010, 2015),
+                                countries = "Canada")
+                                                
+                            
+nalcms_files
+#> [1] "./nalcms/can_land_cover_2010v3_30m_tif/CAN_NALCMS_landcover_2010v3_30m/data/CAN_NALCMS_landcover_2010v3_30m.tif"
+#> [2] "./nalcms/can_land_cover_2015v4_30m_tif/CAN_NALCMS_landcover_2015v4_30m/data/CAN_NALCMS_landcover_2015v4_30m.tif"
+```
+
+Examining the `nalcms_data` object, we can see it is a character vector of filepaths, each pointing to a `.tif` file containing the data for each snapshot year. All downloaded files can be found by default in the created `./nalcms` subdirectory or at a custom path specified using the argument `dl_path`.
+
+# 8.3 Extracting NALCMS Landcover data with `nalcms_extract()` {#8.3extract}
+
+Once we have gathered the appropriate NALCMS landcover data rasters, using `nalcms_download()` or otherwise, we will want to extract the appropriate values and match them to our observations. Traditionally this might be accomplished with complicated for-loops running through each observation and matching it to the appropriate snapshot year's data files. This could take significant time for the researcher and could be prone to errors for those not experienced with spatial operations in R. In these cases, `nalcms_extract()` can help make the process quicker and easier.
+
+`nalcms_extract()` requires input data in either a `sf` or `terra` spatial format. This function works slightly differently depending on whether the input site data are in point or polygon format (again, either `sf` or `terra` objects are accepted). For point data, the extraction process will return the NALCMS landcover class of the raster grid cell that each site point falls within for the appropriate snapshot year in a column named `nalcms_class`. This is carried out via a call to `terra::extract()`. For polygon data, the extraction process will return the the percent of the polygon (for buffered points this means the proportion of the buffered area) that each landcover class takes up with a column for each class, again, derived from the appropriate snapshot year. This is carried out via a call to `landscapemetrics::calculate_lsm()`.
+
+The input data must also have a column containing the year the observation was made. Custom names for each location in the dataset can also be provided to be included in the output for easier readability By default, `nalcms_extract()` searches for this information in the BMDE columns `survey_year` and `SurveyAreaIdentifier` respectively (included by default in data downloaded through `naturecounts`), but alternate year and site name column names can be specified using the `date_year` and `site_name` arguments.
+
+By default, `nalcms_extract()` will only extract data for years that match exactly to the snapshot years, but if users want to fill the interceding years with the value from the closest snapshot year (i.e., observations from 2012 would be matched to data from the 2010 snapshot), they can do so by setting `interpolate = TRUE`. Other interpolation methods can also be used by modifying the `interpolate_method` argument. These include `interpolate_method = "next"`, which matches each interceding year to the next snapshot in the chronology (i.e., observations from 2012 would be matched to data from the 2015 snapshot), and `interpolate_method = "previous"`, which matches each interceding year to the previous snapshot in the chronology (i.e., observations from 2012 would be matched to data from the 2010 snapshot).
+
+To execute these extractions, we will need to point `nalcms_extract()` to the object containing the filepaths to our NALCMS data using the argument `nalcms_files`. Conveniently, this object is exactly the output of `nalcms_download()` that we stored in our `nalcms_files` object.
+
+``` r
+# We will start by fetching landcover data for our point dataset created above.
+output <- nalcms_extract(data = formatted,
+                         nalcms_files = nalcms_files,
+                         interpolate = FALSE) # this is the default value, but
+                                              # we include it explicitly for clarity.
+
+output[output$survey_year %in% c(2010, 2012, 2015, 2017),]
+#> Simple feature collection with 36 features and 7 fields
+#> Geometry type: POINT
+#> Dimension:     XY
+#> Bounding box:  xmin: 1426668 ymin: 799722.4 xmax: 1481359 ymax: 856387.1
+#> Projected CRS: Canada_Albers_Equal_Area_Conic
+#> First 10 features:
+#>    SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day                 nalcms_class
+#> 2     FilledSurveyArea2 45.63436 -77.07484        2010            7          3                 mixed_forest
+#> 3     FilledSurveyArea3 45.82732 -77.12012        2010            6         19 temperate_subpolar_grassland
+#> 5     FilledSurveyArea5 45.61956 -77.23577        2010            6         16                 mixed_forest
+#> 10   FilledSurveyArea10 45.79141 -76.90451        2010            4         17                        water
+#> 13   FilledSurveyArea11 45.82165 -77.30006        2010            2         14                 mixed_forest
+#> 17   FilledSurveyArea13 45.81899 -77.22032        2012            4         22                         <NA>
+#> 18   FilledSurveyArea14 45.79464 -76.91172        2012            4         22                         <NA>
+#> 20   FilledSurveyArea13 45.81899 -77.22032        2012            4         27                         <NA>
+#> 22   FilledSurveyArea17 45.88406 -77.24634        2012            5         20                         <NA>
+#> 23   FilledSurveyArea14 45.79464 -76.91172        2012            7          2                         <NA>
+#>                    geometry
+#> 2  POINT (1473174 822088.3)
+#> 3  POINT (1463861 841469.8)
+#> 5  POINT (1461424 817010.6)
+#> 10 POINT (1481236 842405.3)
+#> 13 POINT (1450445 836967.1)
+#> 17 POINT (1456549 838411.6)
+#> 18 POINT (1480592 842587.3)
+#> 20 POINT (1456549 838411.6)
+#> 22 POINT (1452612 844724.2)
+#> 23 POINT (1480592 842587.3)
+```
+
+Now let's give it a go with polygon input data. We'll buffer our points to fetch the proportion covered by each land cover class within 500 m radius of each observation. This time, we'll set `interpolate = TRUE` so that the years between 2010 and 2015 and the years after 2015 are filled with the value from the nearest snapshot year.
+
+``` r
+buffered <- data_buff(data = formatted)
+#> [Data Buffering] buffering sites by 500m radius (default).
+
+output <- nalcms_extract(data = buffered,
+                         nalcms_files = nalcms_files,
+                         interpolate = TRUE,
+                         interpolate_method = "closest") # This is the default
+                                                         # interpolation behaviour
+                                                         # and does not need to be
+                                                         # specified, but we do so
+                                                         # for clarity.
+
+output[output$survey_year %in% c(2010, 2012, 2015, 2017),]
+#> Simple feature collection with 36 features and 25 fields
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: 1426168 ymin: 799222.4 xmax: 1481859 ymax: 856887.1
+#> Projected CRS: Canada_Albers_Equal_Area_Conic
+#> First 10 features:
+#>    SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day
+#> 2     FilledSurveyArea2 45.63436 -77.07484        2010            7          3
+#> 3     FilledSurveyArea3 45.82732 -77.12012        2010            6         19
+#> 5     FilledSurveyArea5 45.61956 -77.23577        2010            6         16
+#> 10   FilledSurveyArea10 45.79141 -76.90451        2010            4         17
+#> 13   FilledSurveyArea11 45.82165 -77.30006        2010            2         14
+#> 17   FilledSurveyArea13 45.81899 -77.22032        2012            4         22
+#> 18   FilledSurveyArea14 45.79464 -76.91172        2012            4         22
+#> 20   FilledSurveyArea13 45.81899 -77.22032        2012            4         27
+#> 22   FilledSurveyArea17 45.88406 -77.24634        2012            5         20
+#> 23   FilledSurveyArea14 45.79464 -76.91172        2012            7          2
+#>    nalcms_pland_temperate_subpolar_needleleaf_forest nalcms_pland_subpolar_taiga_needleleaf_forest
+#> 2                                          13.327206                                             0
+#> 3                                           0.000000                                             0
+#> 5                                          19.301471                                             0
+#> 10                                          4.595588                                             0
+#> 13                                          1.194853                                             0
+#> 17                                          0.000000                                             0
+#> 18                                         12.500000                                             0
+#> 20                                          0.000000                                             0
+#> 22                                         11.497326                                             0
+#> 23                                         12.500000                                             0
+#>    nalcms_pland_tropical_subtropical_broadleaf_evergreen_forest
+#> 2                                                             0
+#> 3                                                             0
+#> 5                                                             0
+#> 10                                                            0
+#> 13                                                            0
+#> 17                                                            0
+#> 18                                                            0
+#> 20                                                            0
+#> 22                                                            0
+#> 23                                                            0
+#>    nalcms_pland_tropical_subtropical_broadleaf_deciduous_forest
+#> 2                                                             0
+#> 3                                                             0
+#> 5                                                             0
+#> 10                                                            0
+#> 13                                                            0
+#> 17                                                            0
+#> 18                                                            0
+#> 20                                                            0
+#> 22                                                            0
+#> 23                                                            0
+#>    nalcms_pland_temperate_subpolar_broadleaf_deciduous_forest nalcms_pland_mixed_forest
+#> 2                                                   21.783088                 33.915441
+#> 3                                                    3.125000                  4.411765
+#> 5                                                    6.066176                 69.301471
+#> 10                                                   3.676471                 39.613971
+#> 13                                                  56.801471                 33.915441
+#> 17                                                   6.893382                 45.680147
+#> 18                                                   2.481618                 52.113971
+#> 20                                                   6.893382                 45.680147
+#> 22                                                   1.158645                 22.994652
+#> 23                                                   2.481618                 52.113971
+#>    nalcms_pland_tropical_subtropical_shrubland nalcms_pland_temperate_subpolar_shrubland
+#> 2                                            0                                 0.0000000
+#> 3                                            0                                 0.0000000
+#> 5                                            0                                 0.0000000
+#> 10                                           0                                 0.0000000
+#> 13                                           0                                 0.0000000
+#> 17                                           0                                 0.4595588
+#> 18                                           0                                 0.0000000
+#> 20                                           0                                 0.4595588
+#> 22                                           0                                 0.0000000
+#> 23                                           0                                 0.0000000
+#>    nalcms_pland_tropical_subtropical_grassland nalcms_pland_temperate_subpolar_grassland
+#> 2                                            0                                  0.000000
+#> 3                                            0                                  2.022059
+#> 5                                            0                                  0.000000
+#> 10                                           0                                  0.000000
+#> 13                                           0                                  0.000000
+#> 17                                           0                                  0.000000
+#> 18                                           0                                  3.860294
+#> 20                                           0                                  0.000000
+#> 22                                           0                                  0.000000
+#> 23                                           0                                  3.860294
+#>    nalcms_pland_subpolar_polar_shrubland_lichen_moss nalcms_pland_subpolar_polar_grassland_lichen_moss
+#> 2                                                  0                                                 0
+#> 3                                                  0                                                 0
+#> 5                                                  0                                                 0
+#> 10                                                 0                                                 0
+#> 13                                                 0                                                 0
+#> 17                                                 0                                                 0
+#> 18                                                 0                                                 0
+#> 20                                                 0                                                 0
+#> 22                                                 0                                                 0
+#> 23                                                 0                                                 0
+#>    nalcms_pland_subpolar_polar_barren_lichen_moss nalcms_pland_wetland nalcms_pland_cropland nalcms_pland_barren_lands
+#> 2                                               0                    0            14.7977941                         0
+#> 3                                               0                    0             0.6433824                         0
+#> 5                                               0                    0             0.0000000                         0
+#> 10                                              0                    0             1.4705882                         0
+#> 13                                              0                    0             0.0000000                         0
+#> 17                                              0                    0            36.3051471                         0
+#> 18                                              0                    0             0.0000000                         0
+#> 20                                              0                    0            36.3051471                         0
+#> 22                                              0                    0             0.0000000                         0
+#> 23                                              0                    0             0.0000000                         0
+#>    nalcms_pland_urban_built_up nalcms_pland_water nalcms_pland_snow_ice                       geometry
+#> 2                     8.180147           7.996324                     0 POLYGON ((1473674 822088.3,...
+#> 3                    43.566176          46.231618                     0 POLYGON ((1464361 841469.8,...
+#> 5                     5.330882           0.000000                     0 POLYGON ((1461924 817010.6,...
+#> 10                    0.000000          50.643382                     0 POLYGON ((1481736 842405.3,...
+#> 13                    5.882353           2.205882                     0 POLYGON ((1450945 836967.1,...
+#> 17                   10.661765           0.000000                     0 POLYGON ((1457049 838411.6,...
+#> 18                    2.849265          26.194853                     0 POLYGON ((1481092 842587.3,...
+#> 20                   10.661765           0.000000                     0 POLYGON ((1457049 838411.6,...
+#> 22                   64.349376           0.000000                     0 POLYGON ((1453112 844724.2,...
+#> 23                    2.849265          26.194853                     0 POLYGON ((1481092 842587.3,...
+```
+
+We can see that the proportional coverage values have been added in columns representing each land cover class and that the year 2012 has been filled with the value from year 2010, and the year 2017 has been filled with the value from 2015.
+
+# 8.4 Tips and tricks
+
+For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names and year data can be provided directly to `nalcms_download()` and `nalcms_extract()` via the `site_name` and `date_year` argument respectively. If you have already provided this information in a call to `data_fmt()` and are providing the output of that function as the `data` argument of either `nalcms_` function, you do not need to specify this information again.
+
+By default, the NALCMS files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `nalcms_extract()`.
+
+Once you've extracted your NALCMS data, you may want to merge it back into the data you originally supplied to the `data` argument of `data_fmt()`. You can do so using `nc_covariates_merge()`.
+
+**Congratulations!** You have now learned how to quickly download and extract the appropriate NALCMS Landcover data for your observation data using `nalcms_download()` and `nalcms_extract()`.
