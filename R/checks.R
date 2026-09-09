@@ -480,11 +480,17 @@ have_pkg_check <- function(pkgs) {
   failed <- purrr::map_lgl(pkgs, ~ !requireNamespace(.x, quietly = TRUE)) %>%
     suppressPackageStartupMessages()
 
-  if (any(failed)) {
-    if ("sf" %in% pkgs[!failed] && utils::packageVersion("sf") < "1.0-9") {
-      pkgs[pkgs == "sf"] <- "sf (>v1.0-9)"
-    }
+  if ("luna" %in% pkgs[!failed] && utils::packageVersion("luna") < "0.4-1") {
+    pkgs[pkgs == "luna"] <- "luna (>= 0.4-1)"
+    failed[pkgs == "luna"] <- TRUE
+  }
 
+  if ("sf" %in% pkgs[!failed] && utils::packageVersion("sf") < "1.0-9") {
+    pkgs[pkgs == "sf"] <- "sf (>= 1.0-9)"
+    failed[pkgs == "sf"] <- TRUE
+  }
+
+  if (any(failed)) {
     stop(
       "This function requires packages: '",
       paste0(pkgs[failed], collapse = "', '"),
