@@ -172,6 +172,8 @@ meta_bmde_fields <- function(version = "minimum") {
 #'
 #' @returns `data.frame` containing information on the resolution and source for
 #' the covariate data available through `naturecounts`.
+#'
+#' @export
 
 nc_covariate_table <- function() {
   cov.table <- data.frame(
