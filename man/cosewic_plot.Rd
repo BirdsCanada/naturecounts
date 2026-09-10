@@ -17,6 +17,7 @@ cosewic_plot(
   zoomin = -1,
   arrow_location = "tr",
   scale_location = "br",
+  tile_alpha = 0.85,
   verbose = TRUE,
   species
 )
