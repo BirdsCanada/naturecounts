@@ -819,6 +819,7 @@ cosewic_plot <- function(
   zoomin = -1,
   arrow_location = "tr",
   scale_location = "br",
+  tile_alpha = 0.85,
   verbose = TRUE,
   species
 ) {
@@ -922,6 +923,7 @@ cosewic_plot <- function(
         title,
         crs,
         zoomin,
+        tile_alpha,
         arrow_location,
         scale_location,
         verbose
@@ -947,6 +949,7 @@ cosewic_plot_indiv <- function(
   title,
   crs,
   zoomin,
+  tile_alpha,
   arrow_location,
   scale_location,
   verbose
@@ -964,7 +967,7 @@ cosewic_plot_indiv <- function(
       size_a,
       "x",
       size_a,
-      " km grid); ",
+      " km grid)\n",
       a$prop_include[1] * 100,
       "% of total records"
     )
@@ -1070,6 +1073,7 @@ cosewic_plot_indiv <- function(
     g <- g +
       ggplot2::geom_sf(
         data = a,
+        alpha = tile_alpha,
         ggplot2::aes(fill = .data$n_records),
         colour = NA
       ) +

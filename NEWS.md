@@ -1,3 +1,9 @@
+# naturecounts 0.5.2
+
+- Tweak `cosewic_plot()`
+  - allow modifying the tile scale
+  - separate stats to a second line to prevent long descriptions
+
 # naturecounts 0.5.1
 
 - Expose `iao_buffer` argument to allow users to change from the 500 km buffer
