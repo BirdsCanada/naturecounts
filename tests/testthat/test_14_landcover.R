@@ -1,3 +1,4 @@
+skip_if_not_all()
 if (!dir.exists("./testdir")) {
   dir.create("./testdir")
 }

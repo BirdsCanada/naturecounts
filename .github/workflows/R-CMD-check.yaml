@@ -39,6 +39,7 @@ jobs:
           - {os: ubuntu-latest,   r: 'oldrel-1'}
 
     env:
+      TEST_ALL: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'yes' || 'no' }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       naturecounts_testuser: ${{ secrets.naturecounts_testuser }}
       EarthData_password: ${{ secrets.EarthData_password }}
