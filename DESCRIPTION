@@ -22,6 +22,7 @@ Imports:
     httr (>= 1.4.0),
     jsonlite (>= 1.6),
     lubridate (>= 1.7.4),
+    methods,
     magrittr,
     memoise (>= 2.0.1),
     purrr (>= 0.3.2),
