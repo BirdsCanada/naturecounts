@@ -1,9 +1,8 @@
-skip_if_not_all()
-
 if (!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
+skip_if_not_all()
 tryCatch(
   suppressMessages(worldclim_download(suppressWarnings(
     data_fmt(bcch),
@@ -16,14 +15,17 @@ tryCatch(
   }
 )
 
+skip_if_not_all()
 if (!exists("serverdown")) {
   serverdown <- FALSE
 }
 
+skip_if_not_all()
 if (serverdown) {
   skip("Geodata server down.")
 }
 
+skip_if_not_all()
 if (!serverdown) {
   test_that("worldclim_download() hits API with all expected inputs.", {
     expect_silent(
@@ -116,6 +118,7 @@ if (!serverdown) {
     )
   })
 
+  skip_if_not_all()
   test_that("Results downloaded from scanfi_download() have expected features.", {
     expect_true(dir.exists("./testdir/worldclim")) # Bonus test of custom file path specification
     expect_true(all(

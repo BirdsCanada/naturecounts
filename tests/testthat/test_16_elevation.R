@@ -1,9 +1,8 @@
-skip_if_not_all()
-
 if (!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
+skip_if_not_all()
 test_that("elevation_download() hits API with all expected inputs.", {
   expect_silent(
     elev_sf_pt <<- suppressMessages(elevation_download(
@@ -49,6 +48,7 @@ test_that("elevation_download() hits API with all expected inputs.", {
   )
 })
 
+skip_if_not_all()
 test_that("Results downloaded from elevation_download() have expected features.", {
   expect_true(dir.exists("./testdir/TerrainTiles")) # Bonus test of custom file path specification
   expect_true(all(
@@ -100,6 +100,7 @@ test_that("Results downloaded from elevation_download() have expected features."
   ))
 })
 
+skip_if_not_all()
 test_that("elevation_download() succeeds with alternate column names, either
           passed through attributes or specified explicitly.", {
   expect_silent(suppressWarnings(suppressMessages(elevation_download(data_fmt(
@@ -125,6 +126,7 @@ test_that("elevation_download() succeeds with alternate column names, either
   ))))
 })
 
+skip_if_not_all()
 test_that("elevation_extract() throws appropriate error when inappropriate file provided to elevation_data or argument is missing.", {
   expect_error(
     elevation_extract(suppressWarnings(suppressMessages(data_fmt(bcch)))),
@@ -140,6 +142,7 @@ test_that("elevation_extract() throws appropriate error when inappropriate file 
   )
 })
 
+skip_if_not_all()
 test_that("elevation_extract() basic functionality with all expected data inputs.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch)))
   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch))))
@@ -307,6 +310,7 @@ test_that("elevation_extract() basic functionality with all expected data inputs
   )
 })
 
+skip_if_not_all()
 test_that("elevation_extract() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
   sf_pt <- suppressMessages(data_fmt(
     dplyr::rename(bcch, "sites" = "SurveyAreaIdentifier", "yr" = "survey_year"),
@@ -410,6 +414,7 @@ test_that("elevation_extract() succeeds with alternate column names, either pass
   )
 })
 
+skip_if_not_all()
 test_that("elevation_extract() returns appropriate warnings for out of coverage points.", {
   bcch_mod <- bcch
   bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
@@ -481,7 +486,7 @@ test_that("elevation_extract() returns appropriate warnings for out of coverage 
   expect_true(inherits(extracted$elevation[1], "numeric"))
 })
 
-
+skip_if_not_all()
 test_that("elevation_extract() succeeds with alternate summary statistics, and throws error when needed.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(
     bcch

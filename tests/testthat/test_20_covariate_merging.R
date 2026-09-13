@@ -1,11 +1,10 @@
-skip_if_not_all()
-
 if (!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
 bcch <- dplyr::filter(bcch, survey_year %in% c(2010:2011))
 
+skip_if_not_all()
 test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra point inputs.", {
   # Test with original_data = data.frame
   formatted <- suppressWarnings(suppressMessages(data_fmt(bcch)))
@@ -288,6 +287,7 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra point i
   expect_true(identical(original_match, covariate_match))
 })
 
+skip_if_not_all()
 test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon inputs.", {
   formatted <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch))))
 
@@ -569,6 +569,7 @@ test_that("nc_covariates_merge() succeeds with data.frame, sf, and terra polygon
   expect_true(identical(original_match, covariate_match))
 })
 
+skip_if_not_all()
 test_that("nc_covariates_merge() succeeds with alternate column names, either specified explicitly or passed through attributes.", {
   formatted <- suppressWarnings(suppressMessages(data_fmt(
     dplyr::rename(
@@ -771,6 +772,7 @@ test_that("nc_covariates_merge() succeeds with alternate column names, either sp
   expect_true(identical(original_match, covariate_match))
 })
 
+skip_if_not_all()
 test_that("nc_covariates_merge() succeeds with lubridate or ordinal dates.", {
   bcch_lubridate <- bcch %>%
     dplyr::mutate(

@@ -1,11 +1,10 @@
-skip_if_not_all()
-
 if (!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
 bcch_restricted <- bcch[bcch$survey_year %in% c(2000:2007), ]
 
+skip_if_not_all()
 test_that("scanfi_download() downloads correct files with all expected inputs.", {
   expect_silent(
     ponderosa_sf_pt <<- suppressMessages(scanfi_download(
@@ -96,6 +95,7 @@ test_that("scanfi_download() downloads correct files with all expected inputs.",
   )
 })
 
+skip_if_not_all()
 test_that("Results downloaded from scanfi_download() have expected features.", {
   expect_true(dir.exists("./testdir/scanfi")) # Bonus test of custom file path specification
 
@@ -190,6 +190,7 @@ test_that("Results downloaded from scanfi_download() have expected features.", {
   )
 })
 
+skip_if_not_all()
 test_that("scanfi_download() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
   expect_silent(
     ponderosa_attr <- suppressMessages(scanfi_download(
@@ -274,6 +275,7 @@ test_that("scanfi_download() succeeds with alternate column names, either passed
   expect_s4_class(ponderosa_attr$`2005`$ponderosapine, "SpatRaster")
 })
 
+skip_if_not_all()
 test_that("scanfi_download() returns appropriate warnings and errors for misspecifed arguments", {
   expect_error(
     suppressMessages(scanfi_download(
@@ -343,6 +345,7 @@ test_that("scanfi_download() returns appropriate warnings and errors for misspec
   )
 })
 
+skip_if_not_all()
 test_that("scanfi_extract() throws appropriate error when inappropriate object provided to scanfi_data or argument is missing.", {
   expect_error(
     scanfi_extract(suppressWarnings(suppressMessages(data_fmt(bcch)))),
@@ -358,6 +361,7 @@ test_that("scanfi_extract() throws appropriate error when inappropriate object p
   )
 })
 
+skip_if_not_all()
 test_that("scanfi_extract() basic functionality with all expected data inputs.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_restricted)))
   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(
@@ -603,7 +607,7 @@ test_that("scanfi_extract() basic functionality with all expected data inputs.",
   )
 })
 
-
+skip_if_not_all()
 test_that("scanfi_extract() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
   sf_pt <- suppressMessages(data_fmt(
     dplyr::rename(
@@ -715,6 +719,7 @@ test_that("scanfi_extract() succeeds with alternate column names, either passed 
   ))
 })
 
+skip_if_not_all()
 test_that("scanfi_extract() returns appropriate warnings for out of coverage points and dates.", {
   bcch_modified <- bcch_restricted[
     bcch_restricted$survey_year %in% c(2000, 2005),
@@ -1061,6 +1066,7 @@ test_that("scanfi_extract() functionality with NFI landcover data.", {
   )
 })
 
+skip_if_not_all()
 test_that("scanfi_extract() succeeds with alternate summary statistics, and throws error when needed.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch_restricted)))
   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(

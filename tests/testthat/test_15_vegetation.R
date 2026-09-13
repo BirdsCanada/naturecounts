@@ -1,9 +1,8 @@
-skip_if_not_all()
-
 if (!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
+skip_if_not_all()
 test_that("vegetation_download() hits API with all expected inputs. May fail if 
           filename structure is changed server-side.", {
   expected_files <- c(
@@ -61,7 +60,7 @@ test_that("vegetation_download() hits API with all expected inputs. May fail if
   )
 })
 
-
+skip_if_not_all()
 test_that("vegetation_download() successfully downloads requested files with a test user,
           and downloaded files contain all data years and cover all data areas.", {
   expected_files <- c(
@@ -110,6 +109,7 @@ test_that("vegetation_download() successfully downloads requested files with a t
   expect_true(all(bcch_spatial[, "Y"] >= unique(files_extent[, "ymin"])))
 })
 
+skip_if_not_all()
 test_that("vegetation_download() succeeds with alternate column names, either
           passed through attributes or specified explicitly.", {
   expected_files <- c(
@@ -157,6 +157,7 @@ test_that("vegetation_download() succeeds with alternate column names, either
   )
 })
 
+skip_if_not_all()
 test_that("vegetation_download() returns correct warning with out of coverage dates.", {
   expect_warning(
     suppressMessages(vegetation_download(
@@ -172,6 +173,7 @@ test_that("vegetation_download() returns correct warning with out of coverage da
   )
 })
 
+skip_if_not_all()
 test_that("vegetation_extract() throws appropriate error when empty vector provided to vegetation_files.", {
   expect_error(
     vegetation_extract(
@@ -182,6 +184,7 @@ test_that("vegetation_extract() throws appropriate error when empty vector provi
   )
 })
 
+skip_if_not_all()
 test_that("vegetation_extract() basic functionality with all expected data inputs.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch[
     bcch$survey_year == 2007,
@@ -385,6 +388,7 @@ test_that("vegetation_extract() basic functionality with all expected data input
   expect_true(all(extracted$evi > -1))
 })
 
+skip_if_not_all()
 test_that("vegetation_extract() successfully returns reliability information.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch[
     bcch$survey_year == 2007,
@@ -480,6 +484,7 @@ test_that("vegetation_extract() successfully returns reliability information.", 
   )
 })
 
+skip_if_not_all()
 test_that("vegetation_extract() returns appropriate warnings for out of coverage points and dates.", {
   bcch_mod <- bcch
   bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year == 2007)
@@ -582,7 +587,7 @@ test_that("vegetation_extract() returns appropriate warnings for out of coverage
   expect_true(is.na(extracted$vegetation_reliability[1]))
 })
 
-
+skip_if_not_all()
 test_that("vegetation_extract() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
   sf_pt <- suppressMessages(data_fmt(
     dplyr::rename(
@@ -687,6 +692,7 @@ test_that("vegetation_extract() succeeds with alternate column names, either pas
   )
 })
 
+skip_if_not_all()
 test_that("vegetation_extract() succeeds with alternate summary statistics, and throws error when needed.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(
     bcch[bcch$survey_year == 2007, ]
