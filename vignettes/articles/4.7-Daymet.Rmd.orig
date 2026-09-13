@@ -1,0 +1,208 @@
+---
+title: "Chapter 7 - Downloading and Extracting Daymet Data"
+author: "Rory Macklin"
+date: "2026-07-02"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chapter 7 - Downloading and Extracting Daymet Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Chapter 7: Downloading and Extracting Daymet Data
+
+##### Author: Rory Macklin
+
+> Daily weather patterns can induce behavioural changes in many species, with potentially significant outcomes for avian detectability and distributional patterns. This data can be recorded at the time of surveys by observers, but these observations can be spatially limited and may contain some degree of subjectivity. Spatially broad and consistently measured daily climatic data can provide a strong alternative to at-survey approaches.
+
+This tutorial assumes you have a basic understanding of working with spatial data in R. For a good introduction to these kinds of operations, the [NatureCounts Spatial Data Tutorial](https://github.com/BirdsCanada/NatureCounts_SpatialData_Tutorial) can serve as a useful starting point. It explains how to download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers. This tutorial also uses functions demonstrated in [**Chapter 1: Formatting Data for Covariate Download and Extraction**](4.1-CovariateFormatting.html). If you are unfamiliar with these functions, we recommend using the previous tutorial to learn to conform your data to a standardized format used in Daymet data download and extraction functions.
+
+# 7.0 Learning Objectives
+
+By the end of **Chapter 7 - Downloading and Extracting Daymet Data**, users will:
+
+- Have a basic understanding of the Daymet dataset accessed through `daymet_request()`, `daymet_download()` and `daymet_extract()`: [Daymet data](#7.1daymet).
+- Be able to use `daymet_request()`, `daymet_check()`, and `daymet_download()` to download Daymet data ready to match to observations in your data: [Downloading Daymet data with `daymet_request()` and `daymet_download()`](#7.2download).
+- Be able to use `daymet_extract()` to extract and summarize Daymet data for each observation in their data: [Extracting Daymet data with `daymet_extract()`](#7.3extract).
+
+This R tutorial requires the following packages:
+
+``` {r}
+library(naturecounts)
+library(tidyverse)
+library(sf)
+library(terra)
+```
+
+# 7.1 Daymet data {#7.1daymet}
+
+The [Daymet dataset](https://daymet.ornl.gov/) is a long-running dataset interpolating and extrapolating weather station data to generate daily summaries of surface weather at a ~ 1 km resolution, with daily estimates of a number of variables since 1980 for North America and Hawa'ii and since 1950 for Puerto Rico. The variables available through `naturecounts` include:
+
+- Day length (s/day)
+- Precipitation (mm/day)
+- Shortwave radiation (W/m^2)
+- Snow water equivalent (kg/m^2)
+- Maximum air temperature (°C)
+- Minimum air temperature (°C)
+- Water vapor pressure (Pa)
+
+These values are modeled from a variety of satellite- and ground-derived data sources and provide estimates of weather patterns at spatially and temporally fine resolutions. For more information about the generation of this dataset, see Thornton et al. ([1997](https://doi.org/10.1016/S0022-1694(96)03128-9), [2021](https://doi.org/10.1038/s41597-021-00973-0])).
+
+# 7.2 Downloading Daymet data with `daymet_request()` and `daymet_download()` {#7.2download}
+
+Daymet data can be accessed from freely via [NASA's EarthData Download Tools](https://www.earthdata.nasa.gov/data/projects/daymet/data-access-tools). While these data are easily accessible, daily-scale data must be downloaded in files containing all dates in a year and in files containing all data for North America, Hawa'ii, or Puerto Rico. This can lead to very large file downloads. R packages such as [`appeears`](https://cran.r-project.org/web/packages/appeears/index.html) have instead routed users through the [AppEEARS API](https://appeears.earthdatacloud.nasa.gov/) to make finer scale downloads accessible. The `naturecounts` R package builds upon functionality from the `appeears` package and builds in quality-of-life features to create functions tailored to working with NatureCounts data.
+
+To download Daymet data, a request must first be placed with the AppEEARS service. To submit a request, users must have a NASA EarthData Account, which can be made [here](https://urs.earthdata.nasa.gov/users/new). We automate the AppEEARS request process in `daymet_request()`, which requires input data from the user in `data.frame`, `sf` or `terra` spatial format containing location and date data for all observations. The function will then use these data to build a request to download raster data for all locations and dates present in the data.
+
+Due to API limitations, `daymet_request()` will submit one request for each date present in the data. Unfortunately, AppEEARS automatically sends an email upon request receipt and completion for each request, so for users with many observation dates, we recommend considering setting rules in their email client for handling these emails (address <appeears-noreply@nasa.gov>).
+
+First, lets prep some data from NatureCounts for use in build a request for Daymet data using `data_fmt()`.
+
+``` {r}
+# This dataset containing Black-capped Chickadee observations included in
+# the naturecounts R package is in a data.frame format, and contains the columns
+# we need (latitude, longitude, and year, month, and day)!
+# We'll convert it into an sf object for use in scanfi_download().
+bcch %>%
+  select(latitude, longitude, survey_year, survey_month, survey_day) %>%
+  head()
+  
+# To reduce the necessary downloads, we will restrict our data to the first six months of 2011.
+
+bcch <- bcch[bcch$survey_year == 2011 & bcch$survey_month %in% c(1:6),]
+
+# We can make a call to data_fmt() to automatically convert this to an sf object
+# ready to work with naturecounts' covariate download and extraction functions. We
+# can ignore the warning as EPSG:4326 is an appropriate CRS for our data.
+formatted <- data_fmt(bcch)
+
+head(formatted)
+```
+With our data prepared, we can make a call to `daymet_request()` to create a request with AppEEARs for Daymet data. If we provide the spatial data we have generated, `daymet_request()` will identify the necessary locations and dates to create a request for and will return data on the submitted requests upon completion.
+
+At this stage, we also need to decide which Daymet variables we want to request. We can provide the following names to the `covariates` argument to request one or multiple datasets:
+
+- Day length (s/day): `daymet_dayl`
+- Precipitation (mm/day): `daymet_prcp`
+- Shortwave radiation (W/m^2): `daymet_srad`
+- Snow water equivalent (kg/m^2): `daymet_swe`
+- Maximum air temperature (°C): `daymet_tmax`
+- Minimum air temperature (°C): `daymet_tmin`
+- Water vapor pressure (Pa): `daymet_vp`
+
+We will request the day length and precipitation datasets. We have already set up a rule in our email client for the email associated with our EarthData account keeping emails from <appeears-noreply@nasa.gov> out of our inbox, and are ready to go! We can give our requests a readable name so they are easier for us to associate with our purpose for submitting with the `request_name` argument, and we can choose to save an external copy of the request data output by `daymet_request()` in a `.rds` file in case we need to end our R session while requests are processing using the `save` argument.
+
+We note that you will need to provide your EarthData *username* to submit requests to AppEEARs rather than the email associated with your EarthData account, as in other functions such as `landcover_download()` and `vegetation_download()`. Your EarthData account password can either be stored in your .Renviron file by adding the line `EarthData_password = "yourpassword"` or can be supplied through the resulting pop-up window if no `Earthdata_password` is found in your .Renviron. This is done securely using the `askpass` package used in `naturecounts` functions.
+
+In the request process, you may be prompted to input your keychain password to securely store your EarthData login information. If you don't know what this is, try entering your system user password.
+
+``` {r}
+# Let's request some data! Request data will be returned by the function and
+# saved externally into a 'daymet/' subdirectory in your current working directory
+# since we set save = TRUE.
+
+requests <- daymet_request(data = formatted,
+                           covariates = c("daymet_dayl", "daymet_prcp"),
+                           ed_username = "rdjmacklin_bc",
+                           request_name = "daymet_vignette",
+                           save = TRUE, # By setting save = TRUE, we will save
+                                        # an external copy of our request data
+                                        # in a .rds file once submitted.
+                           verbose = FALSE)
+                                                
+                            
+requests
+```
+
+Examining the `requests` object, we can see it is a `data.frame` containing three columns: 1) `request_name`, containing AppEEARS request names, 2) `request_id`, containing AppEEARS request IDs, and 3) `date`, containing the date for which the associated request is requesting data for. 
+
+These requests have now been submitted to AppEEARs for processing. Depending on the size of the area you've requested data for, and the number of dates you have requested, these can take a long time to process before they are ready for downloading. In the meantime, you can check on the status of your active requests using `daymet_check()`.
+
+`daymet_check()` uses the request data output by `daymet_request()` and your EarthData login to grab information on the status of your EarthData requests from the AppEEARs API. This is a simple function only requiring two inputs: request data (i.e. a `data.frame` containing columns of request names and request IDs, as output by `daymet_request()`) and your EarthData login.
+
+If we chose to save our request data externally using `save = TRUE` in `daymet_request()` and have since ended our R session, we can instead provide a file path to the `.rds` file saved by `daymet_request()` containing our request data. This will be true of other cases where request data is required in `daymet_download()` and `daymet_extract()`.
+
+We'll check the status of our requests below!
+
+``` {r}
+status <- daymet_check(daymet_reqs = requests,
+                       ed_username = "rdjmacklin_bc",
+                       verbose = FALSE)
+                       
+status
+
+Sys.sleep(900)
+
+# If we check again after about 15 mins, we can see that our requests are all
+# marked as "done" and are ready for downloading!
+
+status <- daymet_check(daymet_reqs = requests,
+                       ed_username = "rdjmacklin_bc",
+                       verbose = FALSE)
+                       
+status
+```
+Once our requests are complete (i.e., `status` column in the output of `daymet_check()` are all `done`), we can proceed to downloading our data with `daymet_download()`.
+
+Again, we'll supply our request data stored in `requests` to this function as well as our EarthData login information. By default, the data will be downloaded into the created `daymet/` subdirectory in your working directory, and will create a further subdirectory for each request following the request names as in `requests$request_name`. Custom download paths can be specified with the `dl_path` argument.
+
+Executing `daymet_download()` will attempt to download all of the requests supplied in `requests` and will return our request data with an additional column `success`, indicating if the required files have successfully been downloaded.
+
+``` {r}
+downloaded <- daymet_download(daymet_reqs = requests,
+                              ed_username = "rdjmacklin_bc",
+                              verbose = FALSE)
+                              
+downloaded
+```
+We can see that all of the necessary files have been downloaded, and we can proceed to extracting our data!
+
+# 7.3 Extracting Daymet data with `daymet_extract()` {#7.3extract}
+
+Once we have gathered the appropriate Daymet data rasters, using `daymet_download()` or otherwise, we will want to extract the appropriate values and match them to our observations. Traditionally this might be accomplished with complicated for-loops running through each observation and matching it to the appropriate date's data files. This could take significant time for the researcher and could be prone to errors for those not experienced with spatial operations in R. In these cases, `daymet_extract()` can help make the process quicker and easier.
+
+`daymet_extract()` requires input data in either a `sf` or `terra` spatial format. This function works slightly differently depending on whether the input site data are in point or polygon format (again, either `sf` or `terra` objects are accepted). For point data, the extraction process will return the Daymet variable value of the raster grid cell that each site point falls within for the appropriate date in a column named following the abbreviated name of that variable (e.g., `dayl` for `covariates = "daymet_dayl"`). This is carried out via a call to `terra::extract()`. For polygon data, the extraction process will return the mean Daymet variable value of cells overlapped by each polygon for the appropriate date, again in a column named following the variable's name. This is carried out via a call to `exactextractr::exact_extract()`.
+
+The input data must also have a column containing the name of the site each observation was made at and the year, month, and day the observation was made. By default, `daymet_extract()` searches for this information in the BMDE columns `SurveyAreaIdentifier`, `survey_year`, `survey_month` and `survey_day` respectively (included by default in data downloaded through `naturecounts`), but alternate site name, year, month, and day column names can be specified using the `site_name`, `date_year`, `date_month`, and `date_day` arguments.
+
+To execute these extractions, we will need to point `daymet_extract()` to the object containing our Daymet request data using the argument `daymet_reqs`. Conveniently, this object is exactly the output of `daymet_request()` or `daymet_download()` that we stored in our `requests` and `downloaded` objects.
+
+``` {r}
+# We will start by fetching the Daymet dayl and prcp data for our point dataset created above.
+output <- daymet_extract(data = formatted,
+                         daymet_reqs = downloaded,
+                         covariates = c("daymet_dayl", "daymet_prcp"),
+                         verbose = FALSE)
+
+output
+```
+
+Now let's give it a go with polygon input data. We'll buffer our points to fetch the mean day length and precipitation within a 500 m radius of each observation.
+
+``` {r}
+buffered <- data_buff(data = formatted)
+
+output <- daymet_extract(data = buffered,
+                         daymet_reqs = downloaded,
+                         covariates = c("daymet_dayl", "daymet_prcp"),
+                         verbose = FALSE)
+
+output
+```
+
+We can see that the mean day length and precipitation values have been added in the `dayl` and `prcp` columns respectively
+
+# 7.4 Tips and tricks
+
+For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names and year, month and day data can be provided directly to `daymet_request()` and `daymet_extract()` via the `site_name`, `date_year`, `date_month`. and `date_day` arguments respectively. If you have already provided this information in a call to `data_fmt()` and are providing the output of that function as the `data` argument of either `daymet_` function, you do not need to specify this information again.
+
+By default, the Daymet files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `daymet_extract()`.
+
+**Congratulations!** You have now learned how to request, download, and extract the appropriate Daymet data for your observation data using `daymet_request()`, `daymet_download()` and `daymet_extract()`.

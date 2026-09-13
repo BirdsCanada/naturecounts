@@ -12,3 +12,5 @@
 ^misc$
 ^\.vscode$
 ^[.]?air[.]toml$
+^\.positai$
+^\.claude$

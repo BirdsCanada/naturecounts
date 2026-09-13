@@ -93,6 +93,7 @@ cosewic_plot(r, title = "Black-capped Chickadee")
 You can try any map tile listed in `rosm::osm.types()`, but note that not all may work for your region and many require an API key.
 
 ```{r}
+#| eval: false
 r <- cosewic_ranges(bcch)
 cosewic_plot(r, map = "cartolight", title = "Black-capped Chickadee")
 ```

@@ -1,0 +1,214 @@
+---
+title: "Chapter 4 - Downloading and Extracting Elevation Data"
+author: "Rory Macklin"
+date: "2026-06-09"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chapter 4 - Downloading and Extracting Elevation Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+# Chapter 4: Downloading and Extracting Elevation Data
+
+##### Author: Rory Macklin
+
+> While animal populations may not directly respond to changes in elevation, they frequently depend significantly on correlates of elevation (e.g., temperature, habitat type). For this reason, elevation is frequently included in species distribution models, and can be used to proxy a number of difficult-to-map features when correlates are well understood. This is all possible due to the global and broad availability of satellite-derived digital elevation models (DEMs).
+
+This tutorial assumes you have a basic understanding of working with spatial data in R. For a good introduction to these kinds of operations, the [NatureCounts Spatial Data Tutorial](https://github.com/BirdsCanada/NatureCounts_SpatialData_Tutorial) can serve as a useful starting point. It explains how to download, process, and visualize spatial data, including NatureCounts surveys, conservation areas, and environmental layers. This tutorial also uses functions demonstrated in [**Chapter 1: Formatting Data for Covariate Download and Extraction**](4.1-CovariateFormatting.html). If you are unfamiliar with these functions, we recommend using the previous tutorial to learn to conform your data to a standardized format used in elevation data download and extraction functions.
+
+# 4.0 Learning Objectives
+
+By the end of **Chapter 4 - Downloading and Extracting Elevation Data**, users will know how to:
+
+- Have a basic understanding of the MapZen Terrain Tiles dataset accessed through `elevation_download()` and `elevation_extract()`: [MapZen Terrain Tiles Data](#4.1elevation).
+- Use `elevation_download()` to download MapZen Terrain Tiles data ready to match to observations in your data: [Downloading elevation data with `elevation_download()`](#4.2download).
+- Use `elevation_extract()` to extract and summarize MapZen Terrain Tiles data for each observation in their data: [Extracting elevation data with `elevation_extract()`](#4.3extract).
+
+This R tutorial requires the following packages:
+
+
+``` r
+library(naturecounts)
+library(tidyverse)
+library(sf)
+library(terra)
+```
+
+# 4.1 MapZen Terrain Tiles Data {#4.1elevation}
+
+The [MapZen Terrain Tiles dataset](github.com/tilezen/joerd/tree/master/docs) is a globally-composited dataset of gridded elevation data. The product can be accessed at a variety of spatial resolutions and the data has a static temporal resolution. The massive coverage and flexible spatial resolution of these data make them ideal candidates for generalizable use in ecological research, being able to inform analyses at a variety of scales.
+
+These data are composited from a wide variety of DEMs from across the globe. The full list of sources can be found [here](https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#list-of-sources). Generally speaking, when data on land is requested at low spatial resolution data is sourced from [GMTED](https://www.usgs.gov/coastal-changes-and-impacts/gmted2010). At medium-to-high spatial resolutions data for land areas are sourced from [SRTM](https://doi.org/10.5067/MEASURES/SRTM/SRTMGL1.003), except at high (>60°) latitudes, where GMTED is used. Where higher resolution datasets are available (e.g., [CDEM](https://open.canada.ca/data/en/dataset/7f245e4d-76c2-4caa-951a-45d1d2051333) in Canada), they are used in place of SRTM for medium-to-high resolutions. At all resolutions, [ETOPO1](https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem%3A316/html#) is used to provide bathymetric data. In any specific region, the sources used can be determined from [this table](https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#what-is-sourced-at-what-zooms). Information on appropriate data attribution can be found [here](https://github.com/tilezen/joerd/blob/master/docs/attribution.md#attribution).
+
+# 4.2 Downloading elevation data with `elevation_download()` {#4.2download}
+
+MapZen's Terrain Tile dataset is hosted on the [Amazon Web Service (AWS)](https://registry.opendata.aws/terrain-tiles/). Normally, getting data from the AWS into R would be a complicated task on its own. Thankfully, various R packages have taken up the task of easing this process.
+
+The United States Environmental Protection Agency has created the R Package [`elevatr`](https://github.com/USEPA/elevatr), providing easy access to the MapZen Terrain Tiles dataset within R. In `elevation_download()`, we employ functions from `elevatr` and add quality of life features to further automate the downloading of elevation data.
+
+First, lets prep some data from NatureCounts for use in downloading elevation data using `data_fmt()`. `elevation_download()` requires input data in either `sf` or `terra` spatial format. You can provide your own data in this format, or use the built-in `naturecounts::data_fmt()` function to conform your data to the necessary format.
+
+
+``` r
+# This dataset containing Black-capped Chickadee observations included in
+# the naturecounts R package is in a data.frame format, and contains the columns
+# we need (latitude and longitude)!
+# We'll need to to convert it into an sf object for use in elevation_download().
+bcch %>%
+  select(latitude, longitude) %>%
+  head()
+#>   latitude longitude
+#> 1 45.81553 -77.14251
+#> 2 45.81553 -77.14251
+#> 3 45.55757 -77.41739
+#> 4 45.55757 -77.41739
+#> 5 45.79170 -76.90276
+#> 6 45.79170 -76.90276
+
+# We can make a call to data_fmt() to automatically convert this to an sf object
+# ready to work with naturecounts' covariate download and extraction functions. We
+# can ignore the warning as EPSG:4326 is an appropriate CRS for our data.
+formatted <- data_fmt(bcch)
+#> [Data Formatting] beginning formatting.
+#> Warning: [Data Formatting] as the 'crs' argument is not specified, data CRS is assumed to be
+#> EPSG:4326.
+
+head(formatted)
+#> Simple feature collection with 6 features and 6 fields
+#> Geometry type: POINT
+#> Dimension:     XY
+#> Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9
+#> Projected CRS: Canada_Albers_Equal_Area_Conic
+#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day
+#> 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18
+#> 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16
+#> 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19
+#> 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19
+#> 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15
+#> 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17
+#>                   geometry
+#> 1 POINT (1462530 839736.7)
+#> 2 POINT (1462530 839736.7)
+#> 3 POINT (1449503 806527.6)
+#> 4 POINT (1449503 806527.6)
+#> 5 POINT (1481359 842474.9)
+#> 6 POINT (1481359 842474.9)
+```
+With our data prepared, we can make a call to elevation_download() to begin downloading elevation data. There are a few important decisions to make at this stage. First using the `negative_to_na` argument, we can choose whether we want negative elevation values in the datasets to be converted to `NA`. These negative elevation values can represent a few different things:
+
+1. True inland areas with elevations below sea level.
+2. Fill values from certain datasets in the compositing process (i.e., areas of missing data that should be marked with NA).
+3. Bathymetry values representing sea depth in coastal areas.
+
+With these options in mind, users should consider whether it is appropriate to retain the negative elevation values. Since our data is from inland Ontario, Canada, where most areas are above sea level, we will choose to convert negative values to `NA` to ensure that fill values are treated appropriately. We can do this by setting `negative_to_na = TRUE`.
+
+Next, users must consider what spatial resolution would be most appropriate for their analysis. In `elevatr`, the end spatial resolution is determined by the "map zoom" level requested and the latitude of the requested area. An approximate scale comparing map zoom levels to ground resolutions in metres can be found [here](https://github.com/tilezen/joerd/blob/master/docs/data-sources.md#what-is-the-ground-resolution). In `elevation_download()`, the map zoom level is specified using the `z` argument. We recommend checking the resolution of the downloaded rasters after calling `elevation_download()` using `terra::res()`. We will use the default `z = 7`, providing an approximately 400m spatial resolution.
+
+
+``` r
+# Let's download some files! Files will be downloaded into a 'TerrainTiles/' subdirectory in your current working directory. 
+
+elev <- elevation_download(data = formatted,
+                            negative_to_na = TRUE,
+                            z = 7,
+                            dl_path = "./TerrainTiles")
+#> [Elevation Download] downloading data.
+                            
+elev
+#> class       : SpatRaster
+#> size        : 628, 637, 1  (nrow, ncol, nlyr)
+#> resolution  : 424.2925, 424.2925  (x, y)
+#> extent      : 1306489, 1576763, 729231.5, 995687.2  (xmin, xmax, ymin, ymax)
+#> coord. ref. : +proj=aea +lat_0=40 +lon_0=-96 +lat_1=50 +lat_2=70 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs
+#> source(s)   : memory
+#> name        : file823050c4cc9
+#> min value   :               2
+#> max value   :            1492
+```
+
+Examining the `elev` object, we can see it is a `terra::SpatRaster` containing our composited data. All downloaded files can be found by default in the created `./TerrainTiles` subdirectory or at a custom path specified using the argument `dl_path`. Files are in .tif format, with each file containing raster data for one map tile. The `SpatRaster` output by `elevation_download()` is a merged representation of these files. This could be recreated using `elevatr::merge_rasters()`.
+
+# 4.3 Extracting elevation data with `elevation_extract()` {#4.3extract}
+
+Once we have gathered the appropriate elevation data rasters, using `elevation_download()` or otherwise, we will want to extract the appropriate values and match them to our observations. Traditionally this might be accomplished with complicated for-loops running through each observation and matching it to the appropriate tile. This could take significant time for the researcher and could be prone to errors for those not experienced with spatial operations in R. In these cases, `elevation_extract()` can help make the process quicker and easier.
+
+This function works slightly differently depending on whether the input site data are in point or polygon format (again, either `sf` or `terra` objects are accepted). For point data, the extraction process will return the elevation value of the raster grid cell that each site point falls within in a column named `elevation`. This is carried out via a call to `terra::extract()`. For polygon data, the extraction process will return the mean elevation of cells overlapped by each polygon, again in a column called `elevation`. This is carried out via a call to `exactextractr::exact_extract()`.
+
+To execute these extractions, we will need to point `elevation_extract()` to the object containing our elevation data using the argument `elevation_data`. Conveniently, this object is exactly the output of `elevation_download()` that we stored in our `elev` object.
+
+
+``` r
+# We will start by fetching the elevation data for our point dataset created above.
+output <- elevation_extract(data = formatted,
+                            elevation_data = elev)
+#> [Elevation Extraction] extracting elevation data.
+
+head(output)
+#> Simple feature collection with 6 features and 7 fields
+#> Geometry type: POINT
+#> Dimension:     XY
+#> Bounding box:  xmin: 1449503 ymin: 806527.6 xmax: 1481359 ymax: 842474.9
+#> Projected CRS: Canada_Albers_Equal_Area_Conic
+#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day
+#> 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18
+#> 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16
+#> 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19
+#> 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19
+#> 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15
+#> 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17
+#>                   geometry elevation
+#> 1 POINT (1462530 839736.7)       136
+#> 2 POINT (1462530 839736.7)       136
+#> 3 POINT (1449503 806527.6)       179
+#> 4 POINT (1449503 806527.6)       179
+#> 5 POINT (1481359 842474.9)       108
+#> 6 POINT (1481359 842474.9)       108
+```
+
+Now let's give it a go with polygon input data. We'll buffer our points to fetch the mean elevation within a 500 m radius of each observation.
+
+
+``` r
+buffered <- data_buff(data = formatted)
+#> [Data Buffering] buffering sites by 500m radius (default).
+
+output <- elevation_extract(data = buffered,
+                            elevation_data = elev)
+#> [Elevation Extraction] extracting elevation data.
+
+head(output)
+#> Simple feature collection with 6 features and 7 fields
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: 1449003 ymin: 806027.6 xmax: 1481859 ymax: 842974.9
+#> Projected CRS: Canada_Albers_Equal_Area_Conic
+#>   SurveyAreaIdentifier latitude longitude survey_year survey_month survey_day
+#> 1    FilledSurveyArea1 45.81553 -77.14251        1999           11         18
+#> 2    FilledSurveyArea1 45.81553 -77.14251        2000           12         16
+#> 3    FilledSurveyArea2 45.55757 -77.41739        1999           12         19
+#> 4    FilledSurveyArea2 45.55757 -77.41739        2000           12         19
+#> 5    FilledSurveyArea3 45.79170 -76.90276        2000            4         15
+#> 6    FilledSurveyArea3 45.79170 -76.90276        1999            4         17
+#>                         geometry elevation
+#> 1 POLYGON ((1463030 839736.7,...  132.5853
+#> 2 POLYGON ((1463030 839736.7,...  132.5853
+#> 3 POLYGON ((1450003 806527.6,...  179.8404
+#> 4 POLYGON ((1450003 806527.6,...  179.8404
+#> 5 POLYGON ((1481859 842474.9,...  110.5203
+#> 6 POLYGON ((1481859 842474.9,...  110.5203
+```
+
+We can see that the mean elevation values have been added in the `elevation` column.
+
+# 4.4 Tips and tricks
+
+For users using data in non-BMDE formats (the default column-set downloaded via NatureCounts), alternate column names for your site names data can be provided directly to `elevation_download()` and `elevation_extract()` via the `site_name` argument. If you have already provided this information in a call to `data_fmt()` and are providing the output of that function as the `data` argument of either `elevation_` function, you do not need to specify this information again.
+
+By default, the elevation files downloaded will be retained until the user manually deletes them. However, if the user wishes to save disk space and reduce clutter, the files can be automatically deleted by setting `retain = FALSE` in `elevation_extract()`.
+
+Once you've extracted your elevation data, you may want to merge it back into the data you originally supplied to the `data` argument of `data_fmt()`. You can do so using `nc_covariates_merge()`.
+
+**Congratulations!** You have now learned how to quickly download and extract the appropriate elevation data for your observation data using `elevation_download()` and `elevation_extract()`.

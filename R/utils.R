@@ -74,6 +74,20 @@ capture_df <- function(x) {
 }
 
 
+skip_if_not_all <- function() {
+  # Do not run on R-Universe ever (no credentials for API)
+  # On CI run only if set to TEST_ALL
+  # Otherwise always run
+  not_ci <- Sys.getenv("CI") == ""
+  test_all <- Sys.getenv("TEST_ALL") == "yes"
+  on_runiverse <- Sys.getenv("MY_UNIVERSE") != ""
+
+  testthat::skip_if_not(
+    !on_runiverse && (not_ci || test_all),
+    "Not time for a full API test"
+  )
+}
+
 # Pipe operator -------------------------------
 #' Pipe operator
 #'
