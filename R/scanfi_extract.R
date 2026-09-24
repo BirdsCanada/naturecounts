@@ -485,6 +485,18 @@ scanfi_extract <- function(
     ]
 
     if (length(outside_years) > 0) {
+      # If interpolate = TRUE, check that some observations have been made within
+      # 5 years of a snapshot year
+      if (all(unique(closest_year$data_year) %in% outside_years)) {
+        stop(
+          "[SCANFI Extraction] Data provided to data argument does not contain",
+          " observations within 5 years of the provided SCANFI snapshot years (",
+          stringr::str_flatten_comma(available_years),
+          ").",
+          call. = FALSE
+        )
+      }
+
       if (TRUE %in% (outside_years %in% 1980:2030)) {
         warning(
           "[SCANFI Download] Data contains years more than 5 years away",

@@ -866,7 +866,7 @@ worldclim_extract <- function(
                 # If fun is a user-specified function, attempt to run.
                 val <- exactextractr::exact_extract(
                   source[[layername]],
-                  tmp,
+                  tmp %>% dplyr::filter(.data$survey_month == k),
                   ...
                 )
 

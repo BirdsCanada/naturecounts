@@ -130,6 +130,7 @@ articles:
   - '`articles/4.5-WorldClim`'
   - '`articles/4.6-SCANFI`'
   - '`articles/4.7-Daymet`'
+  - '`articles/4.8-NALCMS`'
 - title: Additional Tutorials
   desc: How-to articles describing common tasks
   contents:

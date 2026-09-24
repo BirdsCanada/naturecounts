@@ -2,6 +2,7 @@ if (!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
+skip_if_not_all()
 tryCatch(
   suppressMessages(worldclim_download(suppressWarnings(
     data_fmt(bcch),
@@ -14,14 +15,17 @@ tryCatch(
   }
 )
 
+skip_if_not_all()
 if (!exists("serverdown")) {
   serverdown <- FALSE
 }
 
+skip_if_not_all()
 if (serverdown) {
   skip("Geodata server down.")
 }
 
+skip_if_not_all()
 if (!serverdown) {
   test_that("worldclim_download() hits API with all expected inputs.", {
     expect_silent(
@@ -114,6 +118,7 @@ if (!serverdown) {
     )
   })
 
+  skip_if_not_all()
   test_that("Results downloaded from scanfi_download() have expected features.", {
     expect_true(dir.exists("./testdir/worldclim")) # Bonus test of custom file path specification
     expect_true(all(
@@ -124,19 +129,19 @@ if (!serverdown) {
         100000
     )) # Check files contain a reasonable amount of data
 
-    expect_s4_class(tavg_sf_pt, "SpatRaster")
-    expect_s4_class(tavg_sf_poly, "SpatRaster")
-    expect_s4_class(tavg_terra_pt, "SpatRaster")
-    expect_s4_class(tavg_terra_poly, "SpatRaster")
-    expect_s4_class(tavg_countryname, "SpatRaster")
-    expect_s4_class(tavg_countrycode, "SpatRaster")
-    expect_s4_class(tavg_countries, "SpatRaster")
+    expect_true(inherits(tavg_sf_pt, "SpatRaster"))
+    expect_true(inherits(tavg_sf_poly, "SpatRaster"))
+    expect_true(inherits(tavg_terra_pt, "SpatRaster"))
+    expect_true(inherits(tavg_terra_poly, "SpatRaster"))
+    expect_true(inherits(tavg_countryname, "SpatRaster"))
+    expect_true(inherits(tavg_countrycode, "SpatRaster"))
+    expect_true(inherits(tavg_countries, "SpatRaster"))
     expect_true(inherits(other_vars, "list"))
-    expect_s4_class(other_vars$tmin, "SpatRaster")
-    expect_s4_class(other_vars$tmax, "SpatRaster")
-    expect_s4_class(other_vars$prec, "SpatRaster")
-    expect_s4_class(other_vars$srad, "SpatRaster")
-    expect_s4_class(other_vars$wind, "SpatRaster")
+    expect_true(inherits(other_vars$tmin, "SpatRaster"))
+    expect_true(inherits(other_vars$tmax, "SpatRaster"))
+    expect_true(inherits(other_vars$prec, "SpatRaster"))
+    expect_true(inherits(other_vars$srad, "SpatRaster"))
+    expect_true(inherits(other_vars$wind, "SpatRaster"))
 
     expect_true(terra::is.related(
       tavg_sf_pt,
@@ -725,7 +730,7 @@ if (!serverdown) {
         worldclim_data = tavg_sf_poly,
         fun = my_function
       )),
-      "\\[WorldClim Extraction\\] support for custom summary functions is currently limited to functions returning a single value \\(not stored in a data.frame\\) to allow accurate joining to input data."
+      "\\[WorldClim \\(tavg\\) Extraction\\] support for custom summary functions is currently limited to functions returning a single value \\(not stored in a data.frame\\) to allow accurate joining to input data."
     )
   })
 }

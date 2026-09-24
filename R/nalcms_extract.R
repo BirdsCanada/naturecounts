@@ -266,14 +266,14 @@ nalcms_extract <- function(
   nalcms_files <- data.frame(filename = nalcms_files) %>%
     dplyr::mutate(
       year = dplyr::case_when(
-        stringr::str_detect(filename, "2010v3_30m.tif") ~ 2010,
-        stringr::str_detect(nalcms_files, "2015v4_30m.tif") ~ 2015,
-        stringr::str_detect(nalcms_files, "2020v2_30m.tif") ~ 2020
+        stringr::str_detect(.data$filename, "2010v3_30m.tif") ~ 2010,
+        stringr::str_detect(.data$filename, "2015v4_30m.tif") ~ 2015,
+        stringr::str_detect(.data$filename, "2020v2_30m.tif") ~ 2020
       ),
       country = substr(
-        filename,
-        start = stringr::str_locate(filename, "data/")[, "end"] + 1,
-        stop = stringr::str_locate(filename, "data/")[, "end"] + 3
+        .data$filename,
+        start = stringr::str_locate(.data$filename, "data/")[, "end"] + 1,
+        stop = stringr::str_locate(.data$filename, "data/")[, "end"] + 3
       )
     )
 

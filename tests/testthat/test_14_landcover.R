@@ -2,6 +2,7 @@ if (!dir.exists("./testdir")) {
   dir.create("./testdir")
 }
 
+skip_if_not_all()
 test_that("landcover_download() hits API with all expected inputs. May fail if filename structure is changed server-side.", {
   expected_files <- c(
     "MCD12Q1.A2001001.h12v04.061.2022146050354.hdf",
@@ -69,6 +70,7 @@ test_that("landcover_download() hits API with all expected inputs. May fail if f
   )
 })
 
+skip_if_not_all()
 test_that("landcover_download() successfully downloads requested files with a test user,
           and downloaded files contain all data years and cover all data areas.", {
   expected_files <- c(
@@ -129,6 +131,7 @@ test_that("landcover_download() successfully downloads requested files with a te
   expect_true(all(bcch_spatial[, "Y"] >= unique(files_extent[, "ymin"])))
 })
 
+skip_if_not_all()
 test_that("landcover_download() succeeds with alternate column names, either
           passed through attributes or specified explicitly.", {
   expected_files <- c(
@@ -187,6 +190,7 @@ test_that("landcover_download() succeeds with alternate column names, either
   )
 })
 
+skip_if_not_all()
 test_that("landcover_download() fetches necessary nearest years for out of coverage dates.", {
   outside_dates <- bcch[bcch$survey_year < 2001, ]
   outside_dates$survey_year[1] <- lubridate::year(Sys.Date())
@@ -293,6 +297,7 @@ test_that("landcover_download() fetches necessary nearest years for out of cover
   )
 })
 
+skip_if_not_all()
 test_that("landcover_download() returns appropriate warnings for out of coverage dates.", {
   before <- bcch[bcch$survey_year < 2001, ]
 
@@ -404,6 +409,7 @@ test_that("landcover_download() returns appropriate warnings for out of coverage
   )
 })
 
+skip_if_not_all()
 test_that("landcover_extract() throws appropriate error when empty vector provided to landcover_files.", {
   expect_error(
     landcover_extract(
@@ -414,6 +420,7 @@ test_that("landcover_extract() throws appropriate error when empty vector provid
   )
 })
 
+skip_if_not_all()
 test_that("landcover_extract() basic functionality with all expected data inputs.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch)))
   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch))))
@@ -631,7 +638,7 @@ test_that("landcover_extract() basic functionality with all expected data inputs
   ) # Check that all rows sum to 100%
 })
 
-
+skip_if_not_all()
 test_that("landcover_extract() succeeds with all landcover classification schema.", {
   sf_pt <- suppressWarnings(suppressMessages(data_fmt(bcch)))
   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(bcch))))
@@ -1049,7 +1056,7 @@ test_that("landcover_extract() succeeds with all landcover classification schema
   ) # Check that all rows sum to 100%
 })
 
-
+skip_if_not_all()
 test_that("landcover_extract() returns appropriate warnings for out of coverage points and dates.", {
   bcch_mod <- bcch
   bcch_mod <- dplyr::filter(bcch_mod, .data$survey_year %in% 2005:2015)
@@ -1114,6 +1121,7 @@ test_that("landcover_extract() returns appropriate warnings for out of coverage 
   ))
 })
 
+skip_if_not_all()
 test_that("landcover_extract() succeeds with alternate column names, either passed through attributes or specified explicitly.", {
   sf_pt <- suppressMessages(data_fmt(
     dplyr::rename(bcch, "sites" = "SurveyAreaIdentifier", "yr" = "survey_year"),
@@ -1219,6 +1227,7 @@ test_that("landcover_extract() succeeds with alternate column names, either pass
   )
 })
 
+skip_if_not_all()
 test_that("landcover_extract() succeeds with alternate landscape metrics, and throws error for patch scale metrics.", {
   sf_poly <- suppressWarnings(suppressMessages(data_buff(data_fmt(dplyr::filter(
     bcch,
