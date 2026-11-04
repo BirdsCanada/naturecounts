@@ -17,7 +17,7 @@
 #' Details on these classification schemes can be found in Chapter 5 of the
 #' [MODIS User
 #' Guide](https://lpdaac.usgs.gov/documents/101/MCD12_User_Guide_V6.pdf). By
-#' default, the function extracts the University of Maryland scheme
+#' default, the function extracts the IGBP global vegetation classification scheme
 #' (`modis_lctype1`), but we strongly recommend users consider the strengths and
 #' weaknesses of each classification scheme in the context of their analysis and
 #' choose their desired classification scheme appropriately.
