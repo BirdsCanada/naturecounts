@@ -22,7 +22,7 @@ year_check <- function(y) {
 
 month_check <- function(m) {
   stp <- FALSE
-  
+
   # Convert factor months to characters
   if (inherits(m, "factor")) {
     m <- as.character(m)
@@ -137,7 +137,7 @@ month_check <- function(m) {
 
 dom_check <- function(d) {
   stp <- FALSE
-  
+
   if (stringr::str_detect(d, "^[:digit:]+$")) {
     d <- as.numeric(d)
   }
@@ -560,18 +560,18 @@ sf_check <- function(df_sf, name) {
 covariate_fmt_check <- function(data) {
   # Check packages
   have_pkg_check(c("sf", "terra"))
-  
+
   # Check if input is a simple features object.
   if (inherits(data, "sf")) {
     # Store data type.
     data_type <- "sf"
-    
+
     # Store data geometry.
     data_geometry <- as.character(sf::st_geometry_type(
       data,
       by_geometry = FALSE
     ))
-    
+
     # Handle objects containing mixtures of multiple geometry types.
     if (data_geometry == "GEOMETRY") {
       stop(
@@ -580,7 +580,7 @@ covariate_fmt_check <- function(data) {
         call. = FALSE
       )
     }
-    
+
     # Reject objects that are not point or polygon objects.
     if (!(data_geometry %in% c("POINT", "POLYGON"))) {
       stop(
@@ -589,18 +589,18 @@ covariate_fmt_check <- function(data) {
         call. = FALSE
       )
     }
-    
+
     # Return stored information.
     return(list(type = data_type, geometry = data_geometry))
-    
+
     # Check if input is a terra SpatVector.
   } else if (inherits(data, "SpatVector")) {
     # Store data type.
     data_type <- "terra"
-    
+
     # Store data geometry.
     data_geometry <- terra::geomtype(data)
-    
+
     # Reject objects that are not point or polygon objects.
     if (!(data_geometry %in% c("points", "polygons"))) {
       stop(
@@ -609,18 +609,18 @@ covariate_fmt_check <- function(data) {
         call. = FALSE
       )
     }
-    
+
     # Return stored information.
     return(list(type = data_type, geometry = data_geometry))
-    
+
     # Check if data is a dataframe.
   } else if (is.data.frame(data)) {
     # Store data type.
     data_type <- "data.frame"
-    
+
     # Return stored information.
     return(list(type = data_type))
-    
+
     # Reject all other data types.
   } else {
     stop(
