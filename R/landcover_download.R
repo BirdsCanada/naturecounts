@@ -559,7 +559,7 @@ landcover_download <- function(
       for (i in sort(unique(data$survey_year[data$survey_year >= 2001]))) {
         # If 2001 data downloaded above, do nothing. Otherwise, download that
         # year's data.
-        if (!(i == 2001 & length(modis_files > 0))) {
+        if (!(i == 2001 & length(modis_files) > 0)) {
           tmp <- suppressWarnings(luna::getNASA(
             product = "MCD12Q1",
             start = paste0(i, "-01-01"), # Starting year

@@ -471,7 +471,7 @@ vegetation_download <- function(
   # by setting download = FALSE in luna::getNASA().
   for (i in unique(c(FALSE, ed_transfer))) {
     if (i) {
-      if (length(modis_files > 0)) {
+      if (length(modis_files) > 0) {
         message("[MODIS NDVI/EVI Download] downloading data.")
       }
     } else if (!i & !ed_transfer) {
@@ -554,7 +554,7 @@ vegetation_download <- function(
     }
 
     # Warn of any out of range dates on first iteration only.
-    if (!i & length(warning_dates > 0)) {
+    if (!i & length(warning_dates) > 0) {
       warning(
         "Observation on date(s) ",
         stringr::str_flatten_comma(warning_dates),
@@ -566,7 +566,7 @@ vegetation_download <- function(
 
     # On first iteration (if downloading files) send message about expected
     # number of files to download.
-    if (!i & ed_transfer & length(modis_files > 0)) {
+    if (!i & ed_transfer & length(modis_files) > 0) {
       message(paste0(
         "[MODIS NDVI/EVI Download] data products are at a 16 day resolution, resulting in ",
         length(modis_files),
