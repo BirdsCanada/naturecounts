@@ -297,7 +297,7 @@ daymet_request <- function(
   # Use month_check() to validate month data.
   month_corr <- c()
 
-  for (i in 1:length(data$survey_month)) {
+  for (i in seq_along(data$survey_month)) {
     month_corr[i] <- month_check(data$survey_month[i])
   }
 
@@ -324,14 +324,14 @@ daymet_request <- function(
   if (input_fmt$type == "sf") {
     # Check whether sf object is buffered or not to determine extraction
     # procedure down the line.
-    buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "POINT"
 
     # Store original CRS so data can be returned as provided.
     orig_crs <- terra::crs(data)
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- sf::st_bbox(data) %>%
         sf::st_as_sfc() %>%
         sf::st_transform("ESRI:102001") %>%
@@ -351,14 +351,14 @@ daymet_request <- function(
   if (input_fmt$type == "terra") {
     # Check whether terra object is buffered or not to determine extraction
     # procedure down the line.
-    buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "points"
 
     # Store original CRS so data can be returned as provided.
     orig_crs <- terra::crs(data)
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- terra::ext(data) %>%
         terra::vect(crs = orig_crs) %>%
         terra::project("ESRI:102001") %>%
@@ -387,7 +387,7 @@ daymet_request <- function(
   # Set EarthData username and password in user Keyring.
   options(keyring_backend = "file")
 
-  if (verbose == FALSE) {
+  if (!verbose) {
     suppressMessages(appeears::rs_set_key(
       user = ed_username,
       password = ed_password
@@ -548,7 +548,7 @@ daymet_request <- function(
   }
 
   # End AppEEARS session.
-  if (verbose == FALSE) {
+  if (!verbose) {
     suppressMessages(appeears::rs_logout(token))
   } else {
     appeears::rs_logout(token)

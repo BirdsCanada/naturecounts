@@ -215,14 +215,14 @@ format_zero_fill <- function(
   # All species reported?
   if (
     !"AllSpeciesReported" %in% names(df) ||
-      any(is.na(df$AllSpeciesReported)) ||
+      anyNA(df$AllSpeciesReported) ||
       any(df$AllSpeciesReported != "Yes")
   ) {
     stop("Column 'AllSpeciesReported' must be present and 'Yes'", call. = FALSE)
   }
 
   # Select grouping columns
-  if (any(!by %in% names(df))) {
+  if (!all(by %in% names(df))) {
     stop(
       "'by' columns must be present in the ",
       "data (missing: ",
@@ -238,7 +238,7 @@ format_zero_fill <- function(
 
   # Keep extra columns completely associated with 'by'
   if (!is.null(extra_species)) {
-    if (any(!extra_species %in% names(df))) {
+    if (!all(extra_species %in% names(df))) {
       stop(
         "Some 'extra_species' are not in the data (",
         paste0(extra_species[!extra_species %in% names(df)], collapse = ", "),
@@ -299,7 +299,7 @@ format_zero_fill <- function(
   }
 
   # Check for missing by values
-  if (verbose && any(is.na(df[by]))) {
+  if (verbose && anyNA(df[by])) {
     message(
       " - There are missing values in 'by'. ",
       "These are classified as a single event"
@@ -345,7 +345,7 @@ format_zero_fill <- function(
 
   # Get extra events columns
   if (!is.null(extra_event)) {
-    if (any(!extra_event %in% names(df))) {
+    if (!all(extra_event %in% names(df))) {
       stop(
         "Some 'extra_event' are not in the data (",
         paste0(extra_event[!extra_event %in% names(df)], collapse = ", "),
@@ -571,7 +571,7 @@ create_SAI <- function(data, input_fmt) {
 
   # Create a dummy SurveyAreaIdentifier for all unique coordinate combinations
   # which are missing an associated SurveyAreaIdentifier.
-  for (i in 1:nrow(missing_sitecode)) {
+  for (i in seq_len(nrow(missing_sitecode))) {
     missing_sitecode$SurveyAreaIdentifier[i] <- paste0("FilledSurveyArea", i)
   }
 

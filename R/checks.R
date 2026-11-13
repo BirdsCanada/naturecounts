@@ -33,7 +33,7 @@ month_check <- function(m) {
   }
   # Check numerics are between 1 and 12.
   if (is.numeric(m)) {
-    if (m < 1 | m > 12) {
+    if (m < 1 || m > 12) {
       stp <- TRUE
     }
     # Check numerics are whole numbers
@@ -142,7 +142,7 @@ dom_check <- function(d) {
     d <- as.numeric(d)
   }
   if (is.numeric(d)) {
-    if (d < 1 | d > 31) {
+    if (d < 1 || d > 31) {
       stp <- TRUE
     }
     if (round(d) != d) stp <- TRUE
@@ -169,7 +169,7 @@ doy_check <- function(s) {
     s <- as_numeric(s)
   }
   if (is.numeric(s)) {
-    if (s < 0 | s > 366) {
+    if (s < 0 || s > 366) {
       stp <- TRUE
     }
     if (round(s) != s) stp <- TRUE
@@ -313,7 +313,7 @@ collections_check <- function(c, token = NULL) {
         paste0(c1[c1 %in% meta_collections()$collection], collapse = ", ")
       )
     }
-    if (any(!c1 %in% meta_collections()$collection)) {
+    if (!all(c1 %in% meta_collections()$collection)) {
       msg <- paste0(
         msg,
         "\nNo access or no collection: ",
@@ -405,7 +405,7 @@ codes_check <- function(desc, type = NULL) {
 
 codes_check_each <- function(desc, type, df) {
   # If a two character code, conver to upper, just in case
-  if (type != "species" & stringr::str_detect(desc, "^[:alpha:]{2}$")) {
+  if (type != "species" && stringr::str_detect(desc, "^[:alpha:]{2}$")) {
     desc <- toupper(desc)
     code_column <- paste0(type, "_code")
   } else {
@@ -417,8 +417,8 @@ codes_check_each <- function(desc, type, df) {
 
   # If code, check that correct
   if (
-    (type == "species" & is.numeric(desc)) |
-      (type != "species" & stringr::str_detect(desc, "^[:upper:]{2}$"))
+    (type == "species" && is.numeric(desc)) ||
+      (type != "species" && stringr::str_detect(desc, "^[:upper:]{2}$"))
   ) {
     if (!desc %in% dplyr::pull(df, code_column)) {
       stop(
@@ -434,7 +434,7 @@ codes_check_each <- function(desc, type, df) {
     return(desc)
 
     # If species, and not numeric, stop
-  } else if (type == "species" & !is.numeric(desc)) {
+  } else if (type == "species" && !is.numeric(desc)) {
     stop(
       "'species' code must be a numeric code ",
       "(see documentation)",

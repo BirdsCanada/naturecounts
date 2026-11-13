@@ -49,7 +49,7 @@ db_create_primary <- function(con, df, primary_key) {
     paste0(names(df), collapse = "], ["),
     "]"
   )
-  if (all(!is.na(primary_key))) {
+  if (!anyNA(primary_key)) {
     qry <- paste0(
       qry,
       ", PRIMARY KEY([",

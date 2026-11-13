@@ -248,20 +248,20 @@ elevation_extract <- function(
   # Check whether sf object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "sf") {
-    buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "POINT"
   }
 
   # Check whether terra object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "terra") {
-    buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "points"
 
     # Convert to sf object for use in workflow.
     data <- sf::st_as_sf(data)
   }
 
   # If buffered, check for packages necessary in buffered workflow.
-  if (buffered == TRUE) {
+  if (buffered) {
     have_pkg_check("exactextractr")
 
     if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
@@ -320,7 +320,7 @@ elevation_extract <- function(
         " provided. No value will be returned.",
         call. = FALSE
       )
-    } else if (buffered == TRUE) {
+    } else if (buffered) {
       # Check if function information is stored in ...
       if (!methods::hasArg("fun")) {
         funs <- "mean"
@@ -585,7 +585,7 @@ elevation_extract <- function(
   data <- dplyr::relocate(
     data,
     "geometry",
-    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+    .after = dplyr::last(names(data)[names(data) != "geometry"])
   )
 
   # Check if attributes were found and stored from input data. If they were

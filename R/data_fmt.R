@@ -335,7 +335,7 @@ data_fmt <- function(
     if (!is.null(coord_lon)) {
       # Edge case: there is a col called longitude that isn't coord_lon.
       # Remove.
-      if ("longitude" %in% names(data) & !(coord_lon == "longitude")) {
+      if ("longitude" %in% names(data) & coord_lon != "longitude") {
         data <- dplyr::select(data, -"longitude")
       }
 
@@ -350,7 +350,7 @@ data_fmt <- function(
 
     if (!is.null(coord_lat)) {
       # Edge case: there is a col called latitude that isn't coord_lat. Remove.
-      if ("latitude" %in% names(data) & !(coord_lat == "latitude")) {
+      if ("latitude" %in% names(data) & coord_lat != "latitude") {
         data <- dplyr::select(data, -"latitude")
       }
 
@@ -378,7 +378,7 @@ data_fmt <- function(
   if ("survey_year" %in% names(data)) {
     year_corr <- c()
 
-    for (i in 1:length(data$survey_year)) {
+    for (i in seq_along(data$survey_year)) {
       year_corr[i] <- year_check(data$survey_year[i])
     }
 
@@ -399,7 +399,7 @@ data_fmt <- function(
   if ("survey_month" %in% names(data)) {
     month_corr <- c()
 
-    for (i in 1:length(data$survey_month)) {
+    for (i in seq_along(data$survey_month)) {
       month_corr[i] <- month_check(data$survey_month[i])
     }
 
@@ -566,7 +566,7 @@ data_fmt <- function(
   # If data is a dataframe, ensure that there are no rows missing coordinate
   # data as this would prevent conversion into an sf object. Warn.
   if (input_fmt$type == "data.frame") {
-    if (NA %in% unique(data$latitude) | NA %in% unique(data$longitude)) {
+    if (anyNA(unique(data$latitude)) | anyNA(unique(data$longitude))) {
       warning(
         "[Data Formatting] some rows missing coordinate data will be dropped.",
         call. = FALSE
@@ -715,7 +715,7 @@ data_fmt <- function(
 
     # Create a dummy SurveyAreaIdentifier for all unique coordinate combinations
     # which are missing an associated SurveyAreaIdentifier.
-    for (i in 1:nrow(missing_sitecode)) {
+    for (i in seq_len(nrow(missing_sitecode))) {
       missing_sitecode$SurveyAreaIdentifier[i] <- paste0("FilledSurveyArea", i)
     }
 

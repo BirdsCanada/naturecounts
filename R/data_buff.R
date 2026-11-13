@@ -63,7 +63,7 @@ data_buff <- function(
   }
 
   # Unless buffering requested, do nothing.
-  if (buffer == TRUE) {
+  if (buffer) {
     # Check packages
     have_pkg_check(c("terra", "sf", "measurements"))
 
@@ -136,7 +136,7 @@ data_buff <- function(
       orig_crs <- terra::crs(data)
 
       # If not already in CRS used herein, transform.
-      if (!(orig_crs == terra::crs("ESRI:102001"))) {
+      if (orig_crs != terra::crs("ESRI:102001")) {
         data <- sf::st_transform(data, "ESRI:102001")
       }
 
@@ -165,7 +165,7 @@ data_buff <- function(
       )
 
       # Back-transform to original CRS if it wasn't the CRS used herein.
-      if (!(orig_crs == terra::crs("ESRI:102001"))) {
+      if (orig_crs != terra::crs("ESRI:102001")) {
         data <- sf::st_transform(data, orig_crs)
       }
     }
@@ -176,7 +176,7 @@ data_buff <- function(
       orig_crs <- terra::crs(data)
 
       # If not already in CRS used herein, transform.
-      if (!(orig_crs == terra::crs("ESRI:102001"))) {
+      if (orig_crs != terra::crs("ESRI:102001")) {
         data <- terra::project(data, "ESRI:102001")
       }
 
@@ -205,7 +205,7 @@ data_buff <- function(
       )
 
       # Back-transform to original CRS if it wasn't the CRS used herein.
-      if (!(orig_crs == terra::crs("ESRI:102001"))) {
+      if (orig_crs != terra::crs("ESRI:102001")) {
         data <- terra::project(data, orig_crs)
       }
     }

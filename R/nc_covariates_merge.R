@@ -131,7 +131,7 @@ nc_covariates_merge <- function(
 
   # Covariate data should be the output of an extraction function, which is
   # expected to be an sf object. If not, return error.
-  if (!(output_fmt$type == "sf")) {
+  if (output_fmt$type != "sf") {
     stop(
       "[Data Merging] Provided covariate data not in expected format.",
       " 'sf' object expected as output by NatureCounts covariate extraction",
@@ -143,7 +143,7 @@ nc_covariates_merge <- function(
   # Check whether sf object is buffered or not to determine joining
   # procedure down the line.
   if (output_fmt$type == "sf") {
-    buffer <- ifelse(output_fmt$geometry == "POLYGON", TRUE, FALSE)
+    buffer <- output_fmt$geometry == "POLYGON"
   }
 
   # Check whether information on alternate column names has been stored
@@ -446,7 +446,7 @@ nc_covariates_merge <- function(
 
     # Reorder columns to match original data.
     matched_data <- matched_data[, c(
-      original_cols[!(original_cols == "geometry")],
+      original_cols[original_cols != "geometry"],
       names(matched_data)[!(names(matched_data) %in% original_cols)],
       "geometry"
     )]

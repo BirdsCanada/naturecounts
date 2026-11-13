@@ -142,13 +142,13 @@ elevation_download <- function(
   # Check whether sf object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "sf") {
-    buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "POINT"
   }
 
   # Check whether terra object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "terra") {
-    buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "points"
 
     # Convert to sf object for use in workflow.
     data <- sf::st_as_sf(data)
@@ -166,7 +166,7 @@ elevation_download <- function(
   message("[Elevation Download] downloading data.")
 
   # Call to API using elevatr::get_elev_raster() and store in SpatRaster.
-  if (progress == TRUE) {
+  if (progress) {
     elev <- elevatr::get_elev_raster(
       locations = sf::st_transform(data, "ESRI:102001"),
       z = z,

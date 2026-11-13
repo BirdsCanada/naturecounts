@@ -107,7 +107,7 @@ nc_data_dl <- function(
   if (!is.null(request_id)) {
     info <- NULL # No info if using a previous id
 
-    if (any(!is.null(c(species, years, doy, region, site_type)))) {
+    if (!all(is.null(c(species, years, doy, region, site_type)))) {
       message(
         "Donwloading previously logged request_id ",
         "(ignoring filters 'species', 'years', 'doy', ",
@@ -135,7 +135,7 @@ nc_data_dl <- function(
     }
 
     if (!is.null(collections)) {
-      if (any(!collections %in% requests$collection)) {
+      if (!all(collections %in% requests$collection)) {
         stop(
           "Some 'collections' were not included in the original request and ",
           "cannot be downloaded with this 'request_id'",
@@ -235,7 +235,7 @@ nc_data_dl <- function(
     )
   }
 
-  if (warn == TRUE && sum(records$nrecords) > 1000000) {
+  if (warn && sum(records$nrecords) > 1000000) {
     msg <- "This is a large download (> 1,000,000 records). "
     if (is.null(sql_db)) {
       msg <- paste0(
@@ -267,7 +267,7 @@ nc_data_dl <- function(
   if (verbose) {
     message("\nDownloading records for each collection:")
   }
-  for (c in 1:nrow(records)) {
+  for (c in seq_len(nrow(records))) {
     # Get data for whole collection
     df_db <- nc_coll_dl(
       coll = records[c, ],
@@ -388,7 +388,7 @@ nc_single_dl <- function(query, filter, timeout, token) {
   request$results <- parse_results(request, results = TRUE)
 
   # Make sure all have equal row counts
-  rows <- unique(vapply(request$results, FUN = length, FUN.VALUE = c(11)))
+  rows <- unique(lengths(request$results))
 
   if (length(rows) > 1) {
     stop("Requested data has unequal row counts", call. = FALSE)

@@ -123,7 +123,7 @@ vegetation_download <- function(
 
   # Check that an EarthData account email has been provided. If not, return
   # error.
-  if (missing(ed_email) & ed_transfer == TRUE) {
+  if (missing(ed_email) & ed_transfer) {
     stop(
       "[MODIS NDVI/EVI Download] MODIS data requested but Earthdata system",
       " login information not supplied. Please register at",
@@ -134,7 +134,7 @@ vegetation_download <- function(
   }
 
   # Check whether user password is stored in .Renviron
-  if (ed_transfer == TRUE) {
+  if (ed_transfer) {
     ed_password <- Sys.getenv("EarthData_password")
 
     # If not available in .Renviron, check whether an EarthData password exists
@@ -368,7 +368,7 @@ vegetation_download <- function(
   # Use month_check() to validate month data.
   month_corr <- c()
 
-  for (i in 1:length(data$survey_month)) {
+  for (i in seq_along(data$survey_month)) {
     month_corr[i] <- month_check(data$survey_month[i])
   }
 
@@ -394,7 +394,7 @@ vegetation_download <- function(
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- sf::st_bbox(data) %>%
         sf::st_as_sfc() %>%
         sf::st_transform("ESRI:102001") %>%
@@ -417,7 +417,7 @@ vegetation_download <- function(
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- terra::ext(data) %>%
         terra::vect(crs = orig_crs) %>%
         terra::project("ESRI:102001") %>%
@@ -470,11 +470,11 @@ vegetation_download <- function(
   # user as the 16-day resolution of this data can result in large file batches
   # by setting download = FALSE in luna::getNASA().
   for (i in unique(c(FALSE, ed_transfer))) {
-    if (i == TRUE) {
+    if (i) {
       if (length(modis_files > 0)) {
         message("[MODIS NDVI/EVI Download] downloading data.")
       }
-    } else if (i == FALSE & ed_transfer == FALSE) {
+    } else if (!i & !ed_transfer) {
       message("[MODIS NDVI/EVI Download] fetching data filenames.")
     }
 
@@ -491,7 +491,7 @@ vegetation_download <- function(
     warning_dates <- c()
 
     for (j in dates) {
-      if (i == FALSE) {
+      if (!i) {
         tryCatch(
           tmp <- luna::getNASA(
             product = "MOD13A1",
@@ -554,7 +554,7 @@ vegetation_download <- function(
     }
 
     # Warn of any out of range dates on first iteration only.
-    if (i == FALSE & length(warning_dates > 0)) {
+    if (!i & length(warning_dates > 0)) {
       warning(
         "Observation on date(s) ",
         stringr::str_flatten_comma(warning_dates),
@@ -566,7 +566,7 @@ vegetation_download <- function(
 
     # On first iteration (if downloading files) send message about expected
     # number of files to download.
-    if (i == FALSE & ed_transfer == TRUE & length(modis_files > 0)) {
+    if (!i & ed_transfer & length(modis_files > 0)) {
       message(paste0(
         "[MODIS NDVI/EVI Download] data products are at a 16 day resolution, resulting in ",
         length(modis_files),

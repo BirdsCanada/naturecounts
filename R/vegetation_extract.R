@@ -358,7 +358,7 @@ vegetation_extract <- function(
 
   month_corr <- c()
 
-  for (i in 1:length(data$survey_month)) {
+  for (i in seq_along(data$survey_month)) {
     month_corr[i] <- month_check(data$survey_month[i])
   }
 
@@ -385,13 +385,13 @@ vegetation_extract <- function(
   # Check whether sf object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "sf") {
-    buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "POINT"
   }
 
   # Check whether terra object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "terra") {
-    buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "points"
 
     # Convert to sf object for use in workflow.
     data <- sf::st_as_sf(data) # Maybe down the line write full process out in
@@ -401,7 +401,7 @@ vegetation_extract <- function(
   # If buffered, check for packages necessary in buffered workflow and check
   # that all arguments necessary for certain exactextractr::exact_extract()
   # calls are present.
-  if (buffered == TRUE) {
+  if (buffered) {
     have_pkg_check("exactextractr")
 
     if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
@@ -559,7 +559,7 @@ vegetation_extract <- function(
     sf::st_transform(terra::crs(terra::rast(modis_files$filename[1])))
 
   # If buffered, extract coordinates from centroids. Append coordinates.
-  if (buffered == TRUE) {
+  if (buffered) {
     suppressWarnings(
       modis_match <- cbind(
         modis_match,
@@ -609,35 +609,26 @@ vegetation_extract <- function(
         ) {
           # Do the coordinates fall within the area covered by any of
           # the data files?
-          spatial_check <- ifelse(
+          spatial_check <-
             nrow(modis_files[
               modis_files$xmin < tmp$X &
                 modis_files$xmax > tmp$X &
                 modis_files$ymin < tmp$Y &
                 modis_files$ymax > tmp$Y,
             ]) >
-              0,
-            TRUE,
-            FALSE
-          )
+              0
 
           # Does data exist for the data's year?
-          year_check <- ifelse(
-            nrow(modis_files[modis_files$year == tmp$survey_year, ]) > 0,
-            TRUE,
-            FALSE
-          )
+          year_check <-
+            nrow(modis_files[modis_files$year == tmp$survey_year, ]) > 0
 
           # Does the date fall within the date windows covered by any of the
           # data files?
-          yday_check <- ifelse(
+          yday_check <-
             nrow(modis_files[
               modis_files$date <= tmp$date & modis_files$enddate > tmp$date,
             ]) >
-              0,
-            TRUE,
-            FALSE
-          )
+              0
 
           # If any checks not passed, store for later warning message.
           if (!(spatial_check)) {
@@ -811,7 +802,7 @@ vegetation_extract <- function(
       # scaling factor specified in file. See https://github.com/rspatial/terra/issues/1620.
       modis <- terra::rast(j, md = FALSE, raw = TRUE)[index]
 
-      if (reliability == TRUE) {
+      if (reliability) {
         modis_reliability <- terra::rast(j, md = FALSE)[
           "\"500m 16 days pixel reliability\""
         ]
@@ -824,7 +815,7 @@ vegetation_extract <- function(
       for (k in unique(pts_to_fill$SurveyAreaIdentifier)) {
         # If buffered, extract using exactextractr::exact_extract(). If not,
         # extract using terra::extract().
-        if (buffered == TRUE) {
+        if (buffered) {
           # Create temporary object containing only the buffer for site k.
           tmp <- data %>%
             dplyr::filter(
@@ -839,7 +830,7 @@ vegetation_extract <- function(
           # Crop MODIS data file to site k's buffer.
           modis_clip <- terra::crop(modis, tmp)
 
-          if (reliability == TRUE) {
+          if (reliability) {
             modis_reliability_clip <- terra::crop(modis_reliability, tmp)
           }
 
@@ -1062,7 +1053,7 @@ vegetation_extract <- function(
           }
 
           # Extract pixel reliability information if requested.
-          if (reliability == TRUE) {
+          if (reliability) {
             pixel_vals <- table(
               exactextractr::exact_extract(modis_reliability_clip, tmp)[[
                 1
@@ -1070,7 +1061,7 @@ vegetation_extract <- function(
             )
 
             str_components <- c()
-            for (l in 1:length(pixel_vals)) {
+            for (l in seq_along(pixel_vals)) {
               labels <- data.frame(
                 value = c(-1:3),
                 label = c(
@@ -1138,7 +1129,7 @@ vegetation_extract <- function(
           )]
 
           # Extract pixel reliability information if requested.
-          if (reliability == TRUE) {
+          if (reliability) {
             labels <- data.frame(
               value = c(-1:3),
               label = c(
@@ -1177,7 +1168,7 @@ vegetation_extract <- function(
 
   # Apply scaling factor.
   if ("modis_ndvi" %in% covariates) {
-    if (buffered == TRUE) {
+    if (buffered) {
       for (i in grep(pattern = "ndvi_", x = names(data), value = TRUE)) {
         data[, i] <- sf::st_drop_geometry(data[, i]) * 0.0001
       }
@@ -1187,7 +1178,7 @@ vegetation_extract <- function(
   }
 
   if ("modis_evi" %in% covariates) {
-    if (buffered == TRUE) {
+    if (buffered) {
       for (i in grep(pattern = "evi_", x = names(data), value = TRUE)) {
         data[, i] <- sf::st_drop_geometry(data[, i]) * 0.0001
       }
@@ -1222,13 +1213,13 @@ vegetation_extract <- function(
   data <- dplyr::relocate(
     data,
     "geometry",
-    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+    .after = dplyr::last(names(data)[names(data) != "geometry"])
   )
 
   # If reliability information requested, ensure it is in the last column
   # position so it doesn't end up stuck between NDVI/EVI columns if both
   # requested.
-  if (reliability == TRUE) {
+  if (reliability) {
     data <- dplyr::relocate(
       data,
       "vegetation_reliability",
@@ -1262,7 +1253,7 @@ vegetation_extract <- function(
   }
 
   # If requested, remove MODIS data files.
-  if (retain == FALSE) {
+  if (!retain) {
     message(paste0(
       "[MODIS NDVI/EVI Extraction] task complete. Removing files."
     ))

@@ -137,7 +137,7 @@ daymet_download <- function(
   # Set EarthData username and password in user Keyring.
   options(keyring_backend = "file")
 
-  if (verbose == FALSE) {
+  if (!verbose) {
     suppressMessages(appeears::rs_set_key(
       user = ed_username,
       password = ed_password
@@ -202,12 +202,11 @@ daymet_download <- function(
     stop(
       "[Daymet Download] request ID(s) ",
       stringr::str_flatten_comma(daymet_reqs$request_name[
-        daymet_reqs$request_id %in%
+        !daymet_reqs$request_id %in%
           task_list$task_id[
             lubridate::as_datetime(task_list$expires_on) >
               lubridate::as_datetime(Sys.time())
-          ] ==
-          FALSE
+          ]
       ]),
       " provided in daymet_reqs are not",
       " registered under EarthData user ",
@@ -220,7 +219,7 @@ daymet_download <- function(
   # Check status of requests
   incomplete_tasks <- c()
 
-  for (i in 1:nrow(daymet_reqs)) {
+  for (i in seq_len(nrow(daymet_reqs))) {
     status <- task_list$status[task_list$task_id == daymet_reqs$request_id[i]]
 
     if (status %in% c("pending", "queued", "processing")) {
@@ -230,7 +229,7 @@ daymet_download <- function(
 
   if (length(incomplete_tasks) > 0) {
     # End AppEEARS session.
-    if (verbose == FALSE) {
+    if (!verbose) {
       suppressMessages(appeears::rs_logout(token))
     } else {
       appeears::rs_logout(token)
@@ -260,7 +259,7 @@ daymet_download <- function(
 
   # Loop through each year and download respective request if not already
   # downloaded.
-  for (i in 1:nrow(daymet_reqs)) {
+  for (i in seq_len(nrow(daymet_reqs))) {
     if (
       !dir.exists(ifelse(
         is.null(dl_path),
@@ -303,7 +302,7 @@ daymet_download <- function(
   }
 
   # End AppEEARS session.
-  if (verbose == FALSE) {
+  if (!verbose) {
     suppressMessages(appeears::rs_logout(token))
   } else {
     appeears::rs_logout(token)

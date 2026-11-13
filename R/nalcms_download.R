@@ -107,7 +107,7 @@ nalcms_download <- function(
   }
 
   # Use user specified snapshot years over automatically selected years
-  if (!is.null(snapshot_year) & use_date == TRUE) {
+  if (!is.null(snapshot_year) && use_date) {
     use_date <- FALSE
 
     warning(
@@ -120,7 +120,7 @@ nalcms_download <- function(
   }
 
   # Warn if interpolate = TRUE and use_date = FALSE.
-  if (interpolate == TRUE & use_date == FALSE) {
+  if (interpolate && !use_date) {
     warning(
       "[NALCMS Download] when use_date = FALSE, interpolate is ignored.",
       "Snapshots specified in snapshot_year will be downloaded.",
@@ -128,7 +128,7 @@ nalcms_download <- function(
     )
   }
 
-  if (use_date == TRUE) {
+  if (use_date) {
     # Check data is in the desired format.
     input_fmt <- covariate_fmt_check(data)
 
@@ -224,7 +224,7 @@ nalcms_download <- function(
 
     available_years <- seq(from = 2010, to = 2020, by = 5)
 
-    if (interpolate == TRUE) {
+    if (interpolate) {
       closest_year <- data.frame(data_year = sort(unique(data$survey_year)))
 
       outside_years <- c(
@@ -257,7 +257,7 @@ nalcms_download <- function(
         }
       } else if (interpolate_method == "previous") {
         for (i in closest_year$data_year) {
-          if (!(i < min(available_years))) {
+          if (i >= min(available_years)) {
             closest_year$nalcms_year[
               closest_year$data_year == i
             ] <- max(available_years[available_years <= i])
@@ -265,7 +265,7 @@ nalcms_download <- function(
         }
       } else if (interpolate_method == "next") {
         for (i in closest_year$data_year) {
-          if (!(i > max(available_years))) {
+          if (i <= max(available_years)) {
             closest_year$nalcms_year[
               closest_year$data_year == i
             ] <- min(available_years[available_years >= i])
@@ -304,7 +304,7 @@ nalcms_download <- function(
         "[NALCMS Landcover Download] Invalid snapshot year(s) provided to",
         " snapshot_year argument: ",
         necessary_years[
-          (necessary_years %in% seq(from = 2010, to = 2020, by = 5)) == FALSE
+          !(necessary_years %in% seq(from = 2010, to = 2020, by = 5))
         ],
         ". Valid snapshot years are ",
         stringr::str_flatten_comma(seq(from = 2010, to = 2020, by = 5)),
@@ -378,7 +378,7 @@ nalcms_download <- function(
       ] <- stringr::str_flatten_comma(country)
 
       countries <- unique(c(countries, country))[
-        !(unique(c(countries, country)) == "")
+        unique(c(countries, country)) != ""
       ]
     }
   }
@@ -435,12 +435,12 @@ nalcms_download <- function(
     )
   }
 
-  if (use_date == TRUE) {
+  if (use_date) {
     # Create vector of download links for each requested NALCMS landcover year.
     filename <- list()
 
     for (i in countries) {
-      filename[[i]] <- if (interpolate == TRUE) {
+      filename[[i]] <- if (interpolate) {
         data.frame(
           year = stats::na.omit(unique(closest_year$nalcms_year[
             closest_year$data_year %in%

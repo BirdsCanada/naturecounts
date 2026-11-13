@@ -145,7 +145,7 @@ daymet_check <- function(
   # Set EarthData username and password in user Keyring.
   options(keyring_backend = "file")
 
-  if (verbose == FALSE) {
+  if (!verbose) {
     suppressMessages(appeears::rs_set_key(
       user = ed_username,
       password = ed_password
@@ -173,12 +173,11 @@ daymet_check <- function(
     stop(
       "[Daymet Request Checking] request(s) ",
       stringr::str_flatten_comma(daymet_reqs$request_name[
-        daymet_reqs$request_id %in%
+        !daymet_reqs$request_id %in%
           task_list$task_id[
             lubridate::as_datetime(task_list$expires_on) >
               lubridate::as_datetime(Sys.time())
-          ] ==
-          FALSE
+          ]
       ]),
       " provided in daymet_reqs are not",
       " registered under EarthData user ",
@@ -211,7 +210,7 @@ daymet_check <- function(
   )
 
   # End AppEEARS session.
-  if (verbose == FALSE) {
+  if (!verbose) {
     suppressMessages(appeears::rs_logout(token))
   } else {
     appeears::rs_logout(token)

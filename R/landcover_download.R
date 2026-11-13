@@ -107,7 +107,7 @@ landcover_download <- function(
 
   # Check that an EarthData account email has been provided. If not, return
   # error.
-  if (missing(ed_email) & ed_transfer == TRUE) {
+  if (missing(ed_email) && ed_transfer) {
     stop(
       "[MODIS Landcover Download] MODIS Landcover data requested but Earthdata",
       " system login information not supplied. Please register at",
@@ -118,7 +118,7 @@ landcover_download <- function(
   }
 
   # Check whether user password is stored in .Renviron
-  if (ed_transfer == TRUE) {
+  if (ed_transfer) {
     ed_password <- Sys.getenv("EarthData_password")
 
     # If not available in .Renviron, check whether an EarthData password exists
@@ -341,7 +341,7 @@ landcover_download <- function(
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- sf::st_bbox(data) %>%
         sf::st_as_sfc() %>%
         sf::st_transform("ESRI:102001") %>%
@@ -364,7 +364,7 @@ landcover_download <- function(
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- terra::ext(data) %>%
         terra::vect(crs = orig_crs) %>%
         terra::project("ESRI:102001") %>%
@@ -383,19 +383,19 @@ landcover_download <- function(
   }
 
   # Create download path if it doesn't already exist.
-  if (is.null(dl_path) & !dir.exists("./modis/MCD12Q1") & ed_transfer == TRUE) {
+  if (is.null(dl_path) && !dir.exists("./modis/MCD12Q1") && ed_transfer) {
     dir.create("./modis/MCD12Q1", recursive = TRUE)
   }
 
   if (
-    !is.null(dl_path) &
-      !dir.exists(paste0(dl_path, "/modis/MCD12Q1")) &
-      ed_transfer == TRUE
+    !is.null(dl_path) &&
+      !dir.exists(paste0(dl_path, "/modis/MCD12Q1")) &&
+      ed_transfer
   ) {
     dir.create(paste0(dl_path, "/modis/MCD12Q1"), recursive = TRUE)
   }
 
-  if (ed_transfer == TRUE) {
+  if (ed_transfer) {
     message("[MODIS Landcover Download] downloading data.")
   } else {
     message("[MODIS Landcover Download] fetching data filenames.")
@@ -403,7 +403,7 @@ landcover_download <- function(
 
   # Call to API using luna::getNASA()
 
-  if (ed_transfer == FALSE) {
+  if (!ed_transfer) {
     modis_files <- c()
     missing_year <- c()
 

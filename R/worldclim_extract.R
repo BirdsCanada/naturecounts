@@ -318,7 +318,7 @@ worldclim_extract <- function(
   # Use month_check() to validate month data.
   month_corr <- c()
 
-  for (i in 1:length(data$survey_month)) {
+  for (i in seq_along(data$survey_month)) {
     month_corr[i] <- month_check(data$survey_month[i])
   }
 
@@ -331,14 +331,14 @@ worldclim_extract <- function(
   if (input_fmt$type == "sf") {
     # Check whether sf object is buffered or not to determine extraction
     # procedure down the line.
-    buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "POINT"
 
     # Store original CRS so data can be returned as provided.
     orig_crs <- terra::crs(data)
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- sf::st_bbox(data) %>%
         sf::st_as_sfc() %>%
         sf::st_transform("ESRI:102001") %>%
@@ -359,14 +359,14 @@ worldclim_extract <- function(
   if (input_fmt$type == "terra") {
     # Check whether terra object is buffered or not to determine extraction
     # procedure down the line.
-    buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "points"
 
     # Store original CRS so data can be returned as provided.
     orig_crs <- terra::crs(data)
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- terra::ext(data) %>%
         terra::vect(crs = orig_crs) %>%
         terra::project("ESRI:102001") %>%
@@ -384,7 +384,7 @@ worldclim_extract <- function(
   }
 
   # If buffered, check for packages necessary in buffered workflow.
-  if (buffered == TRUE) {
+  if (buffered) {
     have_pkg_check("exactextractr")
 
     if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
@@ -676,7 +676,7 @@ worldclim_extract <- function(
             # If no issues with coverage, proceed to extract. If buffered,
             # extract using exactextractr::exact_extract(). If not, extract
             # using terra::extract().
-            if (buffered == TRUE) {
+            if (buffered) {
               # Check whether fun = NULL. In exactextractr::exact_extract() this is
               # used to extract cell values and coverage fractions. fun = 'frac' is
               # a valid alternative that works here.
@@ -847,7 +847,7 @@ worldclim_extract <- function(
               i
             ] <- NA
           } else {
-            if (buffered == TRUE) {
+            if (buffered) {
               # Check whether fun = NULL. In exactextractr::exact_extract() this is
               # used to extract cell values and coverage fractions. fun = 'frac' is
               # a valid alternative that works here.
@@ -1100,7 +1100,7 @@ worldclim_extract <- function(
   data <- dplyr::relocate(
     data,
     "geometry",
-    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+    .after = dplyr::last(names(data)[names(data) != "geometry"])
   )
 
   # Check if attributes were found and stored from input data. If they were
@@ -1121,7 +1121,7 @@ worldclim_extract <- function(
   }
 
   # Remove WorldClim files if requested.
-  if (retain == FALSE) {
+  if (!retain) {
     # Check that if default directory doesn't exist an alterate has been
     # specified.
     if (is.null(dl_path) & !dir.exists("./worldclim")) {

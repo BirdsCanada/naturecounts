@@ -387,14 +387,14 @@ scanfi_extract <- function(
   if (input_fmt$type == "sf") {
     # Check whether sf object is buffered or not to determine extraction
     # procedure down the line.
-    buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "POINT"
 
     # Store original CRS so data can be returned as provided.
     orig_crs <- terra::crs(data)
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- sf::st_bbox(data) %>%
         sf::st_as_sfc() %>%
         sf::st_transform("ESRI:102001") %>%
@@ -415,14 +415,14 @@ scanfi_extract <- function(
   if (input_fmt$type == "terra") {
     # Check whether terra object is buffered or not to determine extraction
     # procedure down the line.
-    buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "points"
 
     # Store original CRS so data can be returned as provided.
     orig_crs <- terra::crs(data)
 
     # Convert to CRS used in this workflow if not already in that CRS, create
     # bounding box polygon with generous buffer to ensure data isn't missed.
-    if (!(orig_crs == terra::crs("ESRI:102001"))) {
+    if (orig_crs != terra::crs("ESRI:102001")) {
       study_area <- terra::ext(data) %>%
         terra::vect(crs = orig_crs) %>%
         terra::project("ESRI:102001") %>%
@@ -439,7 +439,7 @@ scanfi_extract <- function(
     data <- sf::st_as_sf(data)
   }
 
-  if (interpolate == FALSE) {
+  if (!interpolate) {
     match_years <- as.character(sort(unique(data$survey_year[
       data$survey_year %in% as.numeric(names(scanfi_data))
     ])))
@@ -547,11 +547,11 @@ scanfi_extract <- function(
       message("[SCANFI Extraction] extracting SCANFI ", i, ".")
 
       # If buffered, check for packages necessary in buffered workflow.
-      if (buffered == TRUE & i == "nfilc") {
+      if (buffered & i == "nfilc") {
         have_pkg_check("landscapemetrics")
       }
 
-      if (buffered == TRUE & !(i == "nfilc")) {
+      if (buffered & i != "nfilc") {
         have_pkg_check("exactextractr")
 
         if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
@@ -624,10 +624,10 @@ scanfi_extract <- function(
       # Loop through each site and extract.
       for (k in unique(data$SurveyAreaIdentifier)) {
         if (
-          (interpolate == FALSE &
+          (!interpolate &
             as.numeric(j) %in%
               data$survey_year[data$SurveyAreaIdentifier == k]) |
-            interpolate == TRUE
+            interpolate
         ) {
           # Create temporary object with only point/buffer for site k.
           tmp <- data %>%
@@ -698,7 +698,7 @@ scanfi_extract <- function(
               )
 
               # If buffered, extract with landscapemetrics::calculate_lsm().
-              if (buffered == TRUE) {
+              if (buffered) {
                 # Convert temporary object to SpatVector to use with terra:crop()
                 tmp <- tmp %>%
                   terra::vect()
@@ -993,7 +993,7 @@ scanfi_extract <- function(
               # For other SCANFI variables, if buffered, extract using
               # exactextractr::exact_extract(). If not, extract using
               # terra::extract().
-              if (buffered == TRUE) {
+              if (buffered) {
                 # Check if function information is stored in ...
                 if (!methods::hasArg("fun")) {
                   funs <- "mean"
@@ -1248,7 +1248,7 @@ scanfi_extract <- function(
   data <- dplyr::relocate(
     data,
     "geometry",
-    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+    .after = dplyr::last(names(data)[names(data) != "geometry"])
   )
 
   # Check if attributes were found and stored from input data. If they were
@@ -1269,7 +1269,7 @@ scanfi_extract <- function(
   }
 
   # Remove SCANFI files if requested.
-  if (retain == FALSE) {
+  if (!retain) {
     # Check that if default directory doesn't exist an alterate has been
     # specified.
     if (is.null(dl_path) & !dir.exists("./scanfi")) {

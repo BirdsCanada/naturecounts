@@ -250,13 +250,13 @@ nalcms_extract <- function(
   if (input_fmt$type == "sf") {
     # Check whether sf object is buffered or not to determine extraction
     # procedure down the line.
-    buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "POINT"
   }
 
   if (input_fmt$type == "terra") {
     # Check whether terra object is buffered or not to determine extraction
     # procedure down the line.
-    buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "points"
 
     # Convert to sf object for use in workflow.
     data <- sf::st_as_sf(data)
@@ -279,7 +279,7 @@ nalcms_extract <- function(
 
   # Match observations in the data to the NALCMS snapshot year data should be
   # extracted from.
-  if (interpolate == FALSE) {
+  if (!interpolate) {
     # If interpolate = FALSE, check that some observations have been made in
     # the snapshot years.
     if (!any(c(2010, 2015, 2020) %in% data$survey_year)) {
@@ -319,7 +319,7 @@ nalcms_extract <- function(
       }
     } else if (interpolate_method == "previous") {
       for (i in closest_year$data_year) {
-        if (!(i < min(unique(nalcms_files$year)))) {
+        if (i >= min(unique(nalcms_files$year))) {
           closest_year$nalcms_year[
             closest_year$data_year == i
           ] <- max(unique(nalcms_files$year)[unique(nalcms_files$year) <= i])
@@ -327,7 +327,7 @@ nalcms_extract <- function(
       }
     } else if (interpolate_method == "next") {
       for (i in closest_year$data_year) {
-        if (!(i > max(unique(nalcms_files$year)))) {
+        if (i <= max(unique(nalcms_files$year))) {
           closest_year$nalcms_year[
             closest_year$data_year == i
           ] <- min(unique(nalcms_files$year)[unique(nalcms_files$year) >= i])
@@ -445,7 +445,7 @@ nalcms_extract <- function(
       ] <- stringr::str_flatten_comma(countries)
     }
 
-    if (buffered == TRUE) {
+    if (buffered) {
       world <- sf::st_read(
         system.file("shapes/world.gpkg", package = "spData"),
         quiet = TRUE
@@ -489,7 +489,7 @@ nalcms_extract <- function(
     # Make sure that warning is only given if it will impact sites that would
     # be given data anyway (i.e., don't warn for sites not in snapshot years
     # if interpolate = FALSE).
-    if (interpolate == FALSE) {
+    if (!interpolate) {
       if (
         any(data$survey_year[data$country == "NONE"] %in% c(2010, 2015, 2020))
       ) {
@@ -523,7 +523,7 @@ nalcms_extract <- function(
     # Make sure that warning is only given if it will impact sites that would
     # be given data anyway (i.e., don't warn for sites not in snapshot years
     # if interpolate = FALSE).
-    if (interpolate == FALSE) {
+    if (!interpolate) {
       if (
         any(
           data$survey_year[data$relationship == "overlap"] %in%
@@ -556,12 +556,12 @@ nalcms_extract <- function(
   }
 
   # If buffered, check for packages necessary in buffered workflow.
-  if (buffered == TRUE) {
+  if (buffered) {
     have_pkg_check("landscapemetrics")
   }
 
   # Loop through all (combinations of) countries that observations fall into.
-  for (i in unique(data$country)[!(unique(data$country) == "NONE")]) {
+  for (i in unique(data$country)[unique(data$country) != "NONE"]) {
     # As polygon input data may overlap multiple countries, detect all countries
     # within the data$country string for this loop iteration. For polygon input
     # countries may be a character vector of > 1 length, for point input data
@@ -623,10 +623,10 @@ nalcms_extract <- function(
       # Loop through each site and extract.
       for (k in unique(country_data$SurveyAreaIdentifier)) {
         if (
-          (interpolate == FALSE &
+          (!interpolate &
             j %in%
               data$survey_year[data$SurveyAreaIdentifier == k]) |
-            interpolate == TRUE
+            interpolate
         ) {
           # Create temporary object with only point/buffer for site k.
           tmp <- data %>%
@@ -663,7 +663,7 @@ nalcms_extract <- function(
 
           # For buffered input data, crop NALCMS snapshots to the area of tmp
           # and extract using landscapemetrics::calculate_lsm().
-          if (buffered == TRUE) {
+          if (buffered) {
             # Open list to store cropped NALCMS rasters for each country needed.
             nalcms_clip <- list()
 
@@ -815,7 +815,7 @@ nalcms_extract <- function(
                 ) {
                   for (m in missing_cols) {
                     data[
-                      !(data$country == "NONE") &
+                      data$country != "NONE" &
                         data$survey_year %in%
                           closest_year$data_year[
                             closest_year$nalcms_year == j
@@ -835,7 +835,7 @@ nalcms_extract <- function(
                   )) {
                     data[
                       is.na(data[, m] %>% sf::st_drop_geometry()) &
-                        !(data$country == "NONE") &
+                        data$country != "NONE" &
                         data$survey_year %in%
                           closest_year$data_year[
                             closest_year$nalcms_year == j
@@ -1026,7 +1026,7 @@ nalcms_extract <- function(
   data <- dplyr::relocate(
     data,
     "geometry",
-    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+    .after = dplyr::last(names(data)[names(data) != "geometry"])
   )
 
   # Check if attributes were found and stored from input data. If they were
@@ -1047,7 +1047,7 @@ nalcms_extract <- function(
   }
 
   # If requested, remove NALCMS data files.
-  if (retain == FALSE) {
+  if (!retain) {
     message(paste0(
       "[NALCMS Landcover Extraction] extraction complete. Removing files."
     ))

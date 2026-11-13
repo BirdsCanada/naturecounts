@@ -261,18 +261,18 @@ landcover_extract <- function(
   # Check whether object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "sf") {
-    buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "POINT"
   }
 
   if (input_fmt$type == "terra") {
-    buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "points"
 
     # Convert to sf object for use in workflow.
     data <- sf::st_as_sf(data) # Maybe down the line write full process out in terra for terra data.
   }
 
   # If buffered, check for packages necessary in buffered workflow.
-  if (buffered == TRUE) {
+  if (buffered) {
     have_pkg_check("landscapemetrics")
   }
 
@@ -292,7 +292,7 @@ landcover_extract <- function(
     sf::st_transform(terra::crs(terra::rast(modis_files$filename[1])))
 
   # If buffered, extract coordinates from centroids. Append coordinates.
-  if (buffered == TRUE) {
+  if (buffered) {
     suppressWarnings(
       modis_match <- cbind(
         modis_match,
@@ -541,7 +541,7 @@ landcover_extract <- function(
       for (k in unique(pts_to_fill$SurveyAreaIdentifier)) {
         # If buffered, extract using landscapemetrics::calculate_lsm(). If not,
         # extract using terra::extract().
-        if (buffered == TRUE) {
+        if (buffered) {
           # Create temporary object containing only the buffer for site k.
           tmp <- data %>%
             dplyr::filter(.data$SurveyAreaIdentifier == k) %>%
@@ -556,9 +556,9 @@ landcover_extract <- function(
           # Check if landscapemetrics::calculate_lsm() arguments are stored in
           # ..., if not then set defaults.
           if (
-            !methods::hasArg("level") &
-              !methods::hasArg("metric") &
-              !methods::hasArg("name") &
+            !methods::hasArg("level") &&
+              !methods::hasArg("metric") &&
+              !methods::hasArg("name") &&
               !methods::hasArg("type")
           ) {
             # Use landscapemetrics::calculate_lsm() to calculate the proportion
@@ -829,7 +829,7 @@ landcover_extract <- function(
   data <- dplyr::relocate(
     data,
     "geometry",
-    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+    .after = dplyr::last(names(data)[names(data) != "geometry"])
   )
 
   # Check if attributes were found and stored from input data. If they were
@@ -849,7 +849,7 @@ landcover_extract <- function(
   }
 
   # If requested, remove MODIS data files.
-  if (retain == FALSE) {
+  if (!retain) {
     message(paste0(
       "[MODIS Landcover Extraction] extraction complete. Removing files."
     ))

@@ -31,7 +31,7 @@ parse_request <- function(request) {
 
 list_to_df <- function(l, type) {
   df <- data.frame()
-  for (i in 1:length(l)) {
+  for (i in seq_along(l)) {
     df <- dplyr::bind_rows(
       df,
       dplyr::mutate(dplyr::as_tibble(l[[i]]), !!type := names(l)[i])
@@ -59,7 +59,7 @@ progress_query <- function(current, max, by) {
 
 as_numeric <- function(x) {
   x1 <- suppressWarnings(as.numeric(as.character(x)))
-  if (any(!is.na(x[is.na(x1)]))) {
+  if (!all(is.na(x[is.na(x1)]))) {
     x1[is.na(x1)] <- x[is.na(x1)]
   }
   x1

@@ -131,7 +131,7 @@ scanfi_download <- function(
   }
 
   # Use user specified snapshot years over automatically selected years
-  if (!is.null(snapshot_year) & use_date == TRUE) {
+  if (!is.null(snapshot_year) & use_date) {
     use_date <- FALSE
 
     warning(
@@ -144,7 +144,7 @@ scanfi_download <- function(
   }
 
   # Warn if interpolate = TRUE and use_date = FALSE.
-  if (interpolate == TRUE & use_date == FALSE) {
+  if (interpolate & !use_date) {
     warning(
       "[SCANFI Download] when use_date = FALSE, interpolate is ignored.",
       "Snapshots specified in snapshot_year will be downloaded.",
@@ -152,7 +152,7 @@ scanfi_download <- function(
     )
   }
 
-  if (use_date == TRUE) {
+  if (use_date) {
     # Check whether information on alternate column names has been stored
     # in the attributes by data_fmt(). However, prioritize alternate column names
     # specified in the current call.
@@ -206,7 +206,7 @@ scanfi_download <- function(
 
     available_years <- seq(from = 1985, to = 2025, by = 5)
 
-    if (interpolate == TRUE) {
+    if (interpolate) {
       closest_year <- data.frame(data_year = sort(unique(data$survey_year)))
 
       outside_years <- c(
@@ -263,7 +263,7 @@ scanfi_download <- function(
         "[SCANFI Download] Invalid snapshot year(s) provided to",
         " snapshot_year argument: ",
         necessary_years[
-          (necessary_years %in% seq(from = 1985, to = 2025, by = 5)) == FALSE
+          !(necessary_years %in% seq(from = 1985, to = 2025, by = 5))
         ],
         ". Valid snapshot years are ",
         stringr::str_flatten_comma(seq(from = 1985, to = 2025, by = 5)),

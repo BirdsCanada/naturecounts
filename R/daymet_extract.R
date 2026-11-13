@@ -356,7 +356,7 @@ daymet_extract <- function(
   # Validate month data using month_check()
   month_corr <- c()
 
-  for (i in 1:length(data$survey_month)) {
+  for (i in seq_along(data$survey_month)) {
     month_corr[i] <- month_check(data$survey_month[i])
   }
 
@@ -382,20 +382,20 @@ daymet_extract <- function(
   # Check whether sf object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "sf") {
-    buffered <- ifelse(input_fmt$geometry == "POINT", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "POINT"
   }
 
   # Check whether terra object is buffered or not to determine extraction
   # procedure down the line.
   if (input_fmt$type == "terra") {
-    buffered <- ifelse(input_fmt$geometry == "points", FALSE, TRUE)
+    buffered <- input_fmt$geometry != "points"
 
     # Convert to sf object for use in workflow.
     data <- sf::st_as_sf(data)
   }
 
   # If buffered, check for packages necessary in buffered workflow.
-  if (buffered == TRUE) {
+  if (buffered) {
     have_pkg_check("exactextractr")
 
     if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
@@ -653,7 +653,7 @@ daymet_extract <- function(
           # If no issues with coverage, proceed to extraction. If buffered,
           # extract using exactextractr::exact_extract(). If not, extract
           # using terra::extract().
-          if (buffered == TRUE) {
+          if (buffered) {
             # Check if function information is stored in ...
             if (!methods::hasArg("fun")) {
               funs <- "mean"
@@ -946,7 +946,7 @@ daymet_extract <- function(
   data <- dplyr::relocate(
     data,
     "geometry",
-    .after = dplyr::last(names(data)[!(names(data) == "geometry")])
+    .after = dplyr::last(names(data)[names(data) != "geometry"])
   )
 
   # Check if attributes were found and stored from input data. If they were
@@ -975,7 +975,7 @@ daymet_extract <- function(
   }
 
   # Remove Daymet files if requested.
-  if (retain == FALSE) {
+  if (!retain) {
     if (verbose) {
       message("[Daymet Extraction] task complete. Removing files.")
     }
