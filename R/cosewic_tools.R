@@ -877,7 +877,7 @@ cosewic_plot <- function(
 
   g <- list()
 
-  if (all(title == "") & sp[1] != "PLACEHOLDER") {
+  if (all(title == "") && sp[1] != "PLACEHOLDER") {
     title <- stats::setNames(nm = sp)
   }
 

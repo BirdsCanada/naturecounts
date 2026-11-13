@@ -82,7 +82,7 @@ elevation_download <- function(
   # Check whether information on alternate column names has been stored
   # in the attributes by data_fmt(). However, prioritize alternate column names
   # specified in the current call.
-  if (is.null(site_name) & !is.null(attr(data, "site_name"))) {
+  if (is.null(site_name) && !is.null(attr(data, "site_name"))) {
     site_name <- attr(data, "site_name")
   }
 
@@ -99,7 +99,7 @@ elevation_download <- function(
   # in the attributes of the data, but conversion of those columns to
   # standardized names has already taken place in data_fmt().
   if (
-    !(all(specified_cols %in% data_cols)) &
+    !(all(specified_cols %in% data_cols)) &&
       !("SurveyAreaIdentifier" %in% data_cols)
   ) {
     stop(
@@ -113,13 +113,13 @@ elevation_download <- function(
   }
 
   # Create SurveyAreaIdentifiers if none exist and no site name specified.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
-  if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (!is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -155,11 +155,11 @@ elevation_download <- function(
   }
 
   # Create download path if it doesn't already exist.
-  if (is.null(dl_path) & !dir.exists("./TerrainTiles")) {
+  if (is.null(dl_path) && !dir.exists("./TerrainTiles")) {
     dir.create("./TerrainTiles", recursive = TRUE)
   }
 
-  if (!is.null(dl_path) & !dir.exists(paste0(dl_path, "/TerrainTiles"))) {
+  if (!is.null(dl_path) && !dir.exists(paste0(dl_path, "/TerrainTiles"))) {
     dir.create(paste0(dl_path, "/TerrainTiles"), recursive = TRUE)
   }
 

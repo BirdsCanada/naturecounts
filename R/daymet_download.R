@@ -249,11 +249,11 @@ daymet_download <- function(
   }
 
   # Create download path if it doesn't already exist.
-  if (is.null(dl_path) & !dir.exists("./daymet")) {
+  if (is.null(dl_path) && !dir.exists("./daymet")) {
     dir.create("./daymet", recursive = TRUE)
   }
 
-  if (!is.null(dl_path) & !dir.exists(paste0(dl_path, "/daymet"))) {
+  if (!is.null(dl_path) && !dir.exists(paste0(dl_path, "/daymet"))) {
     dir.create(paste0(dl_path, "/daymet"), recursive = TRUE)
   }
 

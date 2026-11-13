@@ -172,11 +172,11 @@ nalcms_extract <- function(
   # Check whether information on alternate column names has been stored
   # in the attributes by data_fmt(). However, prioritize alternate column names
   # specified in the current call.
-  if (is.null(site_name) & !is.null(attr(data, "site_name"))) {
+  if (is.null(site_name) && !is.null(attr(data, "site_name"))) {
     site_name <- attr(data, "site_name")
   }
 
-  if (is.null(date_year) & !is.null(attr(data, "date_year"))) {
+  if (is.null(date_year) && !is.null(attr(data, "date_year"))) {
     date_year <- attr(data, "date_year")
   }
 
@@ -195,8 +195,8 @@ nalcms_extract <- function(
   # in the attributes of the data, but conversion of those columns to
   # standardized names has already taken place in data_fmt().
   if (
-    !(all(specified_cols %in% data_cols)) &
-      (!("SurveyAreaIdentifier" %in% data_cols) |
+    !(all(specified_cols %in% data_cols)) &&
+      (!("SurveyAreaIdentifier" %in% data_cols) ||
         !("survey_year" %in% data_cols))
   ) {
     stop(
@@ -211,13 +211,13 @@ nalcms_extract <- function(
   }
 
   # Create SurveyAreaIdentifiers if none exist and no site name specified.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
-  if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (!is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -237,7 +237,7 @@ nalcms_extract <- function(
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
-  if (!is.null(date_year) & !("survey_year" %in% data_cols)) {
+  if (!is.null(date_year) && !("survey_year" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -430,7 +430,7 @@ nalcms_extract <- function(
       )[, terra::names(nalcms_compare[[j]])])
 
       if (
-        !(all(extracted == 0)) &
+        !(all(extracted == 0)) &&
           !(all(is.nan(extracted)))
       ) {
         countries <- c(countries, j)
@@ -465,7 +465,7 @@ nalcms_extract <- function(
           terra::buffer(terra::aggregate(terra::union(world)), 1),
           tmp,
           "contains"
-        ) &
+        ) &&
           terra::is.related(
             terra::buffer(terra::aggregate(terra::union(world)), 1),
             tmp,
@@ -625,7 +625,7 @@ nalcms_extract <- function(
         if (
           (!interpolate &
             j %in%
-              data$survey_year[data$SurveyAreaIdentifier == k]) |
+              data$survey_year[data$SurveyAreaIdentifier == k]) ||
             interpolate
         ) {
           # Create temporary object with only point/buffer for site k.
@@ -681,9 +681,9 @@ nalcms_extract <- function(
             # Check if landscapemetrics::calculate_lsm() arguments are stored in
             # ..., if not then set defaults.
             if (
-              !methods::hasArg("level") &
-                !methods::hasArg("metric") &
-                !methods::hasArg("name") &
+              !methods::hasArg("level") &&
+                !methods::hasArg("metric") &&
+                !methods::hasArg("name") &&
                 !methods::hasArg("type")
             ) {
               # Ensure that we only grab arguments from ... that are
@@ -884,7 +884,7 @@ nalcms_extract <- function(
             )[, terra::names(nalcms[[countries]])]
 
             # Catch sites near the border that fall outside of data coverage.
-            if (extr_table == 0 & j == country_years[1]) {
+            if (extr_table == 0 && j == country_years[1]) {
               warning(
                 "[NALCMS Landcover Extraction] landcover data is",
                 " unavailable at site ",
@@ -993,7 +993,7 @@ nalcms_extract <- function(
   }
 
   # If there was no country column initially, remove it.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data$SurveyAreaIdentifier <- NULL
   }
 

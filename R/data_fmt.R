@@ -163,7 +163,7 @@ data_fmt <- function(
           warning = function(w) {
             if (
               "[crs<-] Cannot set SRS to vector: empty srs" %in%
-                conditionMessage(w) |
+                conditionMessage(w) ||
                 paste0(
                   "PROJ: proj_create_from_database: crs not found:",
                   " EPSG:234634 (GDAL error 1)"
@@ -218,7 +218,7 @@ data_fmt <- function(
     # If provided data is a data.frame, make sure we have the names of columns
     # pointing us to associated coordinate data. If not, return error.
     if (
-      input_fmt$type == "data.frame" & (is.null(coord_lon) | is.null(coord_lat))
+      input_fmt$type == "data.frame" && (is.null(coord_lon) || is.null(coord_lat))
     ) {
       stop(
         "[Data Formatting] alternate CRS provided, but without specified",
@@ -233,7 +233,7 @@ data_fmt <- function(
 
   # If no 'crs' argument is provided, and provided sf object lacks a CRS,
   # return error.
-  if (is.null(crs) & input_fmt$type == "sf") {
+  if (is.null(crs) && input_fmt$type == "sf") {
     if (is.na(sf::st_crs(data))) {
       stop(
         "[Data Formatting] provided sf object lacks a CRS. Please specify",
@@ -245,7 +245,7 @@ data_fmt <- function(
 
   # If no 'crs' argument is provided, and provided terra object lacks a CRS,
   # return error.
-  if (is.null(crs) & input_fmt$type == "terra") {
+  if (is.null(crs) && input_fmt$type == "terra") {
     if (terra::crs(data) == "") {
       stop(
         "[Data Formatting] provided terra object lacks a CRS. Please specify",
@@ -258,7 +258,7 @@ data_fmt <- function(
   # If no 'crs' argument is provided, and provided data is a dataframe, assume
   # it is the default NatureCounts format which uses lat/lon and use EPSG:4326.
   # Warn.
-  if (is.null(crs) & input_fmt$type == "data.frame") {
+  if (is.null(crs) && input_fmt$type == "data.frame") {
     warning(
       "[Data Formatting] as the 'crs' argument is not specified, data CRS is",
       " assumed to be EPSG:4326.",
@@ -273,8 +273,8 @@ data_fmt <- function(
   # Warn.
   if (
     input_fmt$type %in%
-      c("sf", "terra") &
-      (!is.null(coord_lon) | !is.null(coord_lat))
+      c("sf", "terra") &&
+      (!is.null(coord_lon) || !is.null(coord_lat))
   ) {
     warning(
       "[Data Formatting] sf or terra object provided as well as a lat/lon",
@@ -335,7 +335,7 @@ data_fmt <- function(
     if (!is.null(coord_lon)) {
       # Edge case: there is a col called longitude that isn't coord_lon.
       # Remove.
-      if ("longitude" %in% names(data) & coord_lon != "longitude") {
+      if ("longitude" %in% names(data) && coord_lon != "longitude") {
         data <- dplyr::select(data, -"longitude")
       }
 
@@ -350,7 +350,7 @@ data_fmt <- function(
 
     if (!is.null(coord_lat)) {
       # Edge case: there is a col called latitude that isn't coord_lat. Remove.
-      if ("latitude" %in% names(data) & coord_lat != "latitude") {
+      if ("latitude" %in% names(data) && coord_lat != "latitude") {
         data <- dplyr::select(data, -"latitude")
       }
 
@@ -463,9 +463,9 @@ data_fmt <- function(
     # If lubridate column provided alongside other specified date column
     # options, use data from lubridate columns. Warn.
     if (
-      !is.null(date_year) |
-        !is.null(date_month) |
-        !is.null(date_day) |
+      !is.null(date_year) ||
+        !is.null(date_month) ||
+        !is.null(date_day) ||
         !is.null(date_ordinal)
     ) {
       date_cols <- c(
@@ -527,7 +527,7 @@ data_fmt <- function(
 
     # If month or day data has also been provided, warn that ordinal date data
     # will supersede it.
-    if (!is.null(date_month) | !is.null(date_day)) {
+    if (!is.null(date_month) || !is.null(date_day)) {
       warning(
         "[Data Formatting] dates derived from ordinal dates will supersede",
         " provided month and/or day data.",
@@ -566,7 +566,7 @@ data_fmt <- function(
   # If data is a dataframe, ensure that there are no rows missing coordinate
   # data as this would prevent conversion into an sf object. Warn.
   if (input_fmt$type == "data.frame") {
-    if (anyNA(unique(data$latitude)) | anyNA(unique(data$longitude))) {
+    if (anyNA(unique(data$latitude)) || anyNA(unique(data$longitude))) {
       warning(
         "[Data Formatting] some rows missing coordinate data will be dropped.",
         call. = FALSE

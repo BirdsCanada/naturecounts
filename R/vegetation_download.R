@@ -123,7 +123,7 @@ vegetation_download <- function(
 
   # Check that an EarthData account email has been provided. If not, return
   # error.
-  if (missing(ed_email) & ed_transfer) {
+  if (missing(ed_email) && ed_transfer) {
     stop(
       "[MODIS NDVI/EVI Download] MODIS data requested but Earthdata system",
       " login information not supplied. Please register at",
@@ -179,7 +179,7 @@ vegetation_download <- function(
       if (stringr::str_detect(auth, "aborted by an application callback")) {
         stop(auth, call. = FALSE)
       } else if (
-        stringr::str_detect(auth, "could not reach Earthdata Login") |
+        stringr::str_detect(auth, "could not reach Earthdata Login") ||
           stringr::str_detect(auth, "Timeout was reached")
       ) {
         auth <- try(
@@ -194,7 +194,7 @@ vegetation_download <- function(
           if (stringr::str_detect(auth, "aborted by an application callback")) {
             stop(auth, call. = FALSE)
           } else if (
-            stringr::str_detect(auth, "could not reach Earthdata Login") |
+            stringr::str_detect(auth, "could not reach Earthdata Login") ||
               stringr::str_detect(auth, "Timeout was reached")
           ) {
             auth <- try(
@@ -211,7 +211,7 @@ vegetation_download <- function(
               ) {
                 stop(auth, call. = FALSE)
               } else if (
-                stringr::str_detect(auth, "could not reach Earthdata Login") |
+                stringr::str_detect(auth, "could not reach Earthdata Login") ||
                   stringr::str_detect(auth, "Timeout was reached")
               ) {
                 auth <- try(
@@ -234,7 +234,7 @@ vegetation_download <- function(
                     stringr::str_detect(
                       auth,
                       "could not reach Earthdata Login"
-                    ) |
+                    ) ||
                       stringr::str_detect(auth, "Timeout was reached")
                   ) {
                     auth <- try(
@@ -272,19 +272,19 @@ vegetation_download <- function(
   # Check whether information on alternate column names has been stored
   # in the attributes by data_fmt(). However, prioritize alternate column names
   # specified in the current call.
-  if (is.null(site_name) & !is.null(attr(data, "site_name"))) {
+  if (is.null(site_name) && !is.null(attr(data, "site_name"))) {
     site_name <- attr(data, "site_name")
   }
 
-  if (is.null(date_year) & !is.null(attr(data, "date_year"))) {
+  if (is.null(date_year) && !is.null(attr(data, "date_year"))) {
     date_year <- attr(data, "date_year")
   }
 
-  if (is.null(date_month) & !is.null(attr(data, "date_month"))) {
+  if (is.null(date_month) && !is.null(attr(data, "date_month"))) {
     date_month <- attr(data, "date_month")
   }
 
-  if (is.null(date_day) & !is.null(attr(data, "date_day"))) {
+  if (is.null(date_day) && !is.null(attr(data, "date_day"))) {
     date_day <- attr(data, "date_day")
   }
 
@@ -303,10 +303,10 @@ vegetation_download <- function(
   # in the attributes of the data, but conversion of those columns to
   # standardized names has already taken place in data_fmt().
   if (
-    !(all(specified_cols %in% data_cols)) &
-      (!("SurveyAreaIdentifier" %in% data_cols) |
-        !("survey_year" %in% data_cols) |
-        !("survey_month" %in% data_cols) |
+    !(all(specified_cols %in% data_cols)) &&
+      (!("SurveyAreaIdentifier" %in% data_cols) ||
+        !("survey_year" %in% data_cols) ||
+        !("survey_month" %in% data_cols) ||
         !("survey_day" %in% data_cols))
   ) {
     stop(
@@ -321,13 +321,13 @@ vegetation_download <- function(
   }
 
   # Create SurveyAreaIdentifiers if none exist and no site name specified.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
-  if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (!is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -347,7 +347,7 @@ vegetation_download <- function(
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
-  if (!is.null(date_year) & !("survey_year" %in% data_cols)) {
+  if (!is.null(date_year) && !("survey_year" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -438,8 +438,8 @@ vegetation_download <- function(
   # Remove any observations missing year, month, or day data. Warn.
   if (
     TRUE %in%
-      is.na(data$survey_year) |
-      TRUE %in% is.na(data$survey_month) |
+      is.na(data$survey_year) ||
+      TRUE %in% is.na(data$survey_month) ||
       TRUE %in% is.na(data$survey_day)
   ) {
     warning(
@@ -458,11 +458,11 @@ vegetation_download <- function(
   }
 
   # Create download path if it doesn't already exist.
-  if (is.null(dl_path) & !dir.exists("./modis/MOD13A1")) {
+  if (is.null(dl_path) && !dir.exists("./modis/MOD13A1")) {
     dir.create("./modis/MOD13A1", recursive = TRUE)
   }
 
-  if (!is.null(dl_path) & !dir.exists(paste0(dl_path, "/modis/MOD13A1"))) {
+  if (!is.null(dl_path) && !dir.exists(paste0(dl_path, "/modis/MOD13A1"))) {
     dir.create(paste0(dl_path, "/modis/MOD13A1"), recursive = TRUE)
   }
 
@@ -474,7 +474,7 @@ vegetation_download <- function(
       if (length(modis_files) > 0) {
         message("[MODIS NDVI/EVI Download] downloading data.")
       }
-    } else if (!i & !ed_transfer) {
+    } else if (!i && !ed_transfer) {
       message("[MODIS NDVI/EVI Download] fetching data filenames.")
     }
 
@@ -554,7 +554,7 @@ vegetation_download <- function(
     }
 
     # Warn of any out of range dates on first iteration only.
-    if (!i & length(warning_dates) > 0) {
+    if (!i && length(warning_dates) > 0) {
       warning(
         "Observation on date(s) ",
         stringr::str_flatten_comma(warning_dates),
@@ -566,7 +566,7 @@ vegetation_download <- function(
 
     # On first iteration (if downloading files) send message about expected
     # number of files to download.
-    if (!i & ed_transfer & length(modis_files) > 0) {
+    if (!i && ed_transfer && length(modis_files) > 0) {
       message(paste0(
         "[MODIS NDVI/EVI Download] data products are at a 16 day resolution, resulting in ",
         length(modis_files),

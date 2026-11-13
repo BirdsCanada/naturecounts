@@ -69,7 +69,7 @@ format_dates_db <- function(db, overwrite) {
   # Add columns if don't already exist
   if (!"date" %in% col_db) {
     DBI::dbExecute(db, "ALTER TABLE naturecounts ADD COLUMN date TEXT;")
-  } else if ("date" %in% col_db & !overwrite) {
+  } else if ("date" %in% col_db && !overwrite) {
     stop(
       "'date' field already exists, and ",
       "'overwrite' is FALSE",
@@ -81,7 +81,7 @@ format_dates_db <- function(db, overwrite) {
 
   if (!"doy" %in% col_db) {
     DBI::dbExecute(db, "ALTER TABLE naturecounts ADD COLUMN doy NUMERIC;")
-  } else if (!"doy" %in% col_db & !overwrite) {
+  } else if (!"doy" %in% col_db && !overwrite) {
     stop(
       "'doy' field already exists, and ",
       "'overwrite' is FALSE",

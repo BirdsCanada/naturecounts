@@ -163,7 +163,7 @@ landcover_download <- function(
       if (stringr::str_detect(auth, "aborted by an application callback")) {
         stop(auth, call. = FALSE)
       } else if (
-        stringr::str_detect(auth, "could not reach Earthdata Login") |
+        stringr::str_detect(auth, "could not reach Earthdata Login") ||
           stringr::str_detect(auth, "Timeout was reached")
       ) {
         auth <- try(
@@ -178,7 +178,7 @@ landcover_download <- function(
           if (stringr::str_detect(auth, "aborted by an application callback")) {
             stop(auth, call. = FALSE)
           } else if (
-            stringr::str_detect(auth, "could not reach Earthdata Login") |
+            stringr::str_detect(auth, "could not reach Earthdata Login") ||
               stringr::str_detect(auth, "Timeout was reached")
           ) {
             auth <- try(
@@ -195,7 +195,7 @@ landcover_download <- function(
               ) {
                 stop(auth, call. = FALSE)
               } else if (
-                stringr::str_detect(auth, "could not reach Earthdata Login") |
+                stringr::str_detect(auth, "could not reach Earthdata Login") ||
                   stringr::str_detect(auth, "Timeout was reached")
               ) {
                 auth <- try(
@@ -218,7 +218,7 @@ landcover_download <- function(
                     stringr::str_detect(
                       auth,
                       "could not reach Earthdata Login"
-                    ) |
+                    ) ||
                       stringr::str_detect(auth, "Timeout was reached")
                   ) {
                     auth <- try(
@@ -258,11 +258,11 @@ landcover_download <- function(
   # Check whether information on alternate column names has been stored
   # in the attributes by data_fmt(). However, prioritize alternate column names
   # specified in the current call.
-  if (is.null(site_name) & !is.null(attr(data, "site_name"))) {
+  if (is.null(site_name) && !is.null(attr(data, "site_name"))) {
     site_name <- attr(data, "site_name")
   }
 
-  if (is.null(date_year) & !is.null(attr(data, "date_year"))) {
+  if (is.null(date_year) && !is.null(attr(data, "date_year"))) {
     date_year <- attr(data, "date_year")
   }
 
@@ -281,8 +281,8 @@ landcover_download <- function(
   # in the attributes of the data, but conversion of those columns to
   # standardized names has already taken place in data_fmt().
   if (
-    !(all(specified_cols %in% data_cols)) &
-      (!("SurveyAreaIdentifier" %in% data_cols) |
+    !(all(specified_cols %in% data_cols)) &&
+      (!("SurveyAreaIdentifier" %in% data_cols) ||
         !("survey_year" %in% data_cols))
   ) {
     stop(
@@ -298,13 +298,13 @@ landcover_download <- function(
   }
 
   # Create SurveyAreaIdentifiers if none exist and no site name specified.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
-  if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (!is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -324,7 +324,7 @@ landcover_download <- function(
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
-  if (!is.null(date_year) & !("survey_year") %in% data_cols) {
+  if (!is.null(date_year) && !("survey_year" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -409,7 +409,7 @@ landcover_download <- function(
 
     # Ensures that the closest year available for years before the start of
     # dataset coverage (2001) is listed.
-    if (TRUE %in% (data$survey_year < 2001) & !(2001 %in% data$survey_year)) {
+    if (TRUE %in% (data$survey_year < 2001) && !(2001 %in% data$survey_year)) {
       modis_files <- c(
         modis_files,
         luna::getNASA(

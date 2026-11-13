@@ -220,7 +220,7 @@ vegetation_extract <- function(
   }
 
   # If no vegetation files are provided, return error.
-  if (missing(vegetation_files) | length(vegetation_files) == 0) {
+  if (missing(vegetation_files) || length(vegetation_files) == 0) {
     stop(
       "[MODIS NDVI/EVI Extraction] no vegetation files provided to extract from. Please provide a vector containing filepaths of all necessary MODIS files for your data. Data can be downloaded using vegetation_download().",
       call. = FALSE
@@ -264,19 +264,19 @@ vegetation_extract <- function(
   # Check whether information on alternate column names has been stored
   # in the attributes by data_fmt(). However, prioritize alternate column names
   # specified in the current call.
-  if (is.null(site_name) & !is.null(attr(data, "site_name"))) {
+  if (is.null(site_name) && !is.null(attr(data, "site_name"))) {
     site_name <- attr(data, "site_name")
   }
 
-  if (is.null(date_year) & !is.null(attr(data, "date_year"))) {
+  if (is.null(date_year) && !is.null(attr(data, "date_year"))) {
     date_year <- attr(data, "date_year")
   }
 
-  if (is.null(date_month) & !is.null(attr(data, "date_month"))) {
+  if (is.null(date_month) && !is.null(attr(data, "date_month"))) {
     date_month <- attr(data, "date_month")
   }
 
-  if (is.null(date_day) & !is.null(attr(data, "date_day"))) {
+  if (is.null(date_day) && !is.null(attr(data, "date_day"))) {
     date_day <- attr(data, "date_day")
   }
 
@@ -295,10 +295,10 @@ vegetation_extract <- function(
   # in the attributes of the data, but conversion of those columns to
   # standardized names has already taken place in data_fmt().
   if (
-    !(all(specified_cols %in% data_cols)) &
-      (!("SurveyAreaIdentifier" %in% data_cols) |
-        !("survey_year" %in% data_cols) |
-        !("survey_month" %in% data_cols) |
+    !(all(specified_cols %in% data_cols)) &&
+      (!("SurveyAreaIdentifier" %in% data_cols) ||
+        !("survey_year" %in% data_cols) ||
+        !("survey_month" %in% data_cols) ||
         !("survey_day" %in% data_cols))
   ) {
     stop(
@@ -312,13 +312,13 @@ vegetation_extract <- function(
   }
 
   # Create SurveyAreaIdentifiers if none exist and no site name specified.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
-  if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (!is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -338,7 +338,7 @@ vegetation_extract <- function(
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
-  if (!is.null(date_year) & !("survey_year" %in% data_cols)) {
+  if (!is.null(date_year) && !("survey_year" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -348,7 +348,7 @@ vegetation_extract <- function(
 
   data$survey_year <- as.numeric(data$survey_year)
 
-  if (!is.null(date_month) & !("survey_month" %in% data_cols)) {
+  if (!is.null(date_month) && !("survey_month" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -367,7 +367,7 @@ vegetation_extract <- function(
 
   data$survey_month <- as.numeric(data$survey_month)
 
-  if (!is.null(date_day) & !("survey_day" %in% data_cols)) {
+  if (!is.null(date_day) && !("survey_day" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -404,8 +404,8 @@ vegetation_extract <- function(
   if (buffered) {
     have_pkg_check("exactextractr")
 
-    if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
-      if ("quantile" %in% list(...)[["fun"]] & !methods::hasArg("quantiles")) {
+    if (methods::hasArg("fun") && !is.function(list(...)[["fun"]])) {
+      if ("quantile" %in% list(...)[["fun"]] && !methods::hasArg("quantiles")) {
         stop(
           "[MODIS NDVI/EVI Extraction] quantile summary requested but",
           " no quantiles supplied to the 'quantiles' argument. Please",
@@ -423,7 +423,7 @@ vegetation_extract <- function(
             "weighted_variance",
             "weighted_frac"
           ) %in%
-            list(...)[["fun"]]) &
+            list(...)[["fun"]]) &&
           !methods::hasArg("weights")
       ) {
         stop(
@@ -440,8 +440,8 @@ vegetation_extract <- function(
   # Remove any observations missing year, month, or day data.
   if (
     TRUE %in%
-      is.na(data$survey_year) |
-      TRUE %in% is.na(data$survey_month) |
+      is.na(data$survey_year) ||
+      TRUE %in% is.na(data$survey_month) ||
       TRUE %in% is.na(data$survey_day)
   ) {
     warning(
@@ -641,7 +641,7 @@ vegetation_extract <- function(
 
           # Only warn about date if the data is within the spatial extent of
           # the provided MODIS data and is in a year covered by the data.
-          if (spatial_check & year_check & !(yday_check)) {
+          if (spatial_check && year_check && !(yday_check)) {
             warning_dates <- c(warning_dates, k)
           }
         } else {
@@ -858,10 +858,7 @@ vegetation_extract <- function(
             val <- exactextractr::exact_extract(modis_clip, tmp, ...)
 
             # If function returns more than one value or a data.frame, stop.
-            if (
-              length(val) > 1 |
-                is.data.frame(val)
-            ) {
+            if (length(val) > 1 || is.data.frame(val)) {
               stop(
                 "[MODIS NDVI/EVI Extraction] support for custom summary",
                 " functions is currently limited to functions returning a",
@@ -895,10 +892,7 @@ vegetation_extract <- function(
             for (l in funs) {
               # Check if any summary functions requested required tailored
               # joining.
-              if (
-                l == "quantile" &
-                  length(list(...)[["quantiles"]]) > 1
-              ) {
+              if (l == "quantile" && length(list(...)[["quantiles"]]) > 1) {
                 # Multiple quantiles cause exactextractr::exact_extract() to
                 # return a data.frame with a column for each requested quantile,
                 # and so must be joined in a tailored way.
@@ -1200,7 +1194,7 @@ vegetation_extract <- function(
   }
 
   # If there was no country column initially, remove it.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data$SurveyAreaIdentifier <- NULL
   }
 

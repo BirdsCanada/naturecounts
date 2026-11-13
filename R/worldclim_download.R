@@ -88,11 +88,11 @@ worldclim_download <- function(
   }
 
   # Create download path if it doesn't already exist.
-  if (is.null(dl_path) & !dir.exists("./worldclim")) {
+  if (is.null(dl_path) && !dir.exists("./worldclim")) {
     dir.create("./worldclim", recursive = TRUE)
   }
 
-  if (!is.null(dl_path) & !dir.exists(paste0(dl_path, "/worldclim"))) {
+  if (!is.null(dl_path) && !dir.exists(paste0(dl_path, "/worldclim"))) {
     dir.create(paste0(dl_path, "/worldclim"), recursive = TRUE)
   }
 

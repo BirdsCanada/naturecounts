@@ -308,11 +308,11 @@ scanfi_extract <- function(
   # Check whether information on alternate column names has been stored
   # in the attributes by data_fmt(). However, prioritize alternate column names
   # specified in the current call.
-  if (is.null(site_name) & !is.null(attr(data, "site_name"))) {
+  if (is.null(site_name) && !is.null(attr(data, "site_name"))) {
     site_name <- attr(data, "site_name")
   }
 
-  if (is.null(date_year) & !is.null(attr(data, "date_year"))) {
+  if (is.null(date_year) && !is.null(attr(data, "date_year"))) {
     date_year <- attr(data, "date_year")
   }
 
@@ -331,8 +331,8 @@ scanfi_extract <- function(
   # in the attributes of the data, but conversion of those columns to
   # standardized names has already taken place in data_fmt().
   if (
-    !(all(specified_cols %in% data_cols)) &
-      (!("SurveyAreaIdentifier" %in% data_cols) |
+    !(all(specified_cols %in% data_cols)) &&
+      (!("SurveyAreaIdentifier" %in% data_cols) ||
         !("survey_year" %in% data_cols))
   ) {
     stop(
@@ -346,13 +346,13 @@ scanfi_extract <- function(
   }
 
   # Create SurveyAreaIdentifiers if none exist and no site name specified.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
-  if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (!is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -372,7 +372,7 @@ scanfi_extract <- function(
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
-  if (!is.null(date_year) & !("survey_year" %in% data_cols)) {
+  if (!is.null(date_year) && !("survey_year" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -547,16 +547,16 @@ scanfi_extract <- function(
       message("[SCANFI Extraction] extracting SCANFI ", i, ".")
 
       # If buffered, check for packages necessary in buffered workflow.
-      if (buffered & i == "nfilc") {
+      if (buffered && i == "nfilc") {
         have_pkg_check("landscapemetrics")
       }
 
-      if (buffered & i != "nfilc") {
+      if (buffered && i != "nfilc") {
         have_pkg_check("exactextractr")
 
-        if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
+        if (methods::hasArg("fun") && !is.function(list(...)[["fun"]])) {
           if (
-            "quantile" %in% list(...)[["fun"]] & !methods::hasArg("quantiles")
+            "quantile" %in% list(...)[["fun"]] && !methods::hasArg("quantiles")
           ) {
             stop(
               "[SCANFI Extraction] quantile summary requested but",
@@ -575,7 +575,7 @@ scanfi_extract <- function(
                 "weighted_variance",
                 "weighted_frac"
               ) %in%
-                list(...)[["fun"]]) &
+                list(...)[["fun"]]) &&
               !methods::hasArg("weights")
           ) {
             stop(
@@ -626,7 +626,7 @@ scanfi_extract <- function(
         if (
           (!interpolate &
             as.numeric(j) %in%
-              data$survey_year[data$SurveyAreaIdentifier == k]) |
+              data$survey_year[data$SurveyAreaIdentifier == k]) ||
             interpolate
         ) {
           # Create temporary object with only point/buffer for site k.
@@ -639,7 +639,7 @@ scanfi_extract <- function(
           # Check if the site out of or only partially covered by the spatial
           # extent of the provided SCANFI data. Warn if so.
           if (
-            !terra::is.related(scanfi_filled, terra::vect(tmp), "contains") &
+            !terra::is.related(scanfi_filled, terra::vect(tmp), "contains") &&
               !terra::is.related(scanfi_filled, terra::vect(tmp), "overlaps")
           ) {
             warning(
@@ -654,7 +654,7 @@ scanfi_extract <- function(
 
             range <- "out"
           } else if (
-            !terra::is.related(scanfi_filled, terra::vect(tmp), "contains") &
+            !terra::is.related(scanfi_filled, terra::vect(tmp), "contains") &&
               terra::is.related(scanfi_filled, terra::vect(tmp), "overlaps")
           ) {
             warning(
@@ -709,9 +709,9 @@ scanfi_extract <- function(
                 # Check if landscapemetrics::calculate_lsm() arguments are stored in
                 # ..., if not then set defaults.
                 if (
-                  !methods::hasArg("level") &
-                    !methods::hasArg("metric") &
-                    !methods::hasArg("name") &
+                  !methods::hasArg("level") &&
+                    !methods::hasArg("metric") &&
+                    !methods::hasArg("name") &&
                     !methods::hasArg("type")
                 ) {
                   # Ensure that we only grab arguments from ... that are
@@ -1027,10 +1027,7 @@ scanfi_extract <- function(
                   val <- do.call(exactextractr::exact_extract, args)
 
                   # If function returns more than one value or a data.frame, stop.
-                  if (
-                    length(val) > 1 |
-                      is.data.frame(val)
-                  ) {
+                  if (length(val) > 1 || is.data.frame(val)) {
                     stop(
                       "[SCANFI Extraction] support for custom summary",
                       " functions is currently limited to functions returning a",
@@ -1058,8 +1055,7 @@ scanfi_extract <- function(
                     # Check if any summary functions requested required tailored
                     # joining.
                     if (
-                      l == "quantile" &
-                        length(list(...)[["quantiles"]]) > 1
+                      l == "quantile" && length(list(...)[["quantiles"]]) > 1
                     ) {
                       # Multiple quantiles cause exactextractr::exact_extract() to
                       # return a data.frame with a column for each requested quantile,
@@ -1235,7 +1231,7 @@ scanfi_extract <- function(
   }
 
   # If there was no country column initially, remove it.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data$SurveyAreaIdentifier <- NULL
   }
 
@@ -1272,7 +1268,7 @@ scanfi_extract <- function(
   if (!retain) {
     # Check that if default directory doesn't exist an alterate has been
     # specified.
-    if (is.null(dl_path) & !dir.exists("./scanfi")) {
+    if (is.null(dl_path) && !dir.exists("./scanfi")) {
       warning(
         "[SCANFI Extraction] unable to find default SCANFI",
         " directory and no alternate specified using dl_path argument",

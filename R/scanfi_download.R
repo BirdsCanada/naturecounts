@@ -131,7 +131,7 @@ scanfi_download <- function(
   }
 
   # Use user specified snapshot years over automatically selected years
-  if (!is.null(snapshot_year) & use_date) {
+  if (!is.null(snapshot_year) && use_date) {
     use_date <- FALSE
 
     warning(
@@ -144,7 +144,7 @@ scanfi_download <- function(
   }
 
   # Warn if interpolate = TRUE and use_date = FALSE.
-  if (interpolate & !use_date) {
+  if (interpolate && !use_date) {
     warning(
       "[SCANFI Download] when use_date = FALSE, interpolate is ignored.",
       "Snapshots specified in snapshot_year will be downloaded.",
@@ -156,7 +156,7 @@ scanfi_download <- function(
     # Check whether information on alternate column names has been stored
     # in the attributes by data_fmt(). However, prioritize alternate column names
     # specified in the current call.
-    if (is.null(date_year) & !is.null(attr(data, "date_year"))) {
+    if (is.null(date_year) && !is.null(attr(data, "date_year"))) {
       date_year <- attr(data, "date_year")
     }
 
@@ -175,7 +175,7 @@ scanfi_download <- function(
     # in the attributes of the data, but conversion of those columns to
     # standardized names has already taken place in data_fmt().
     if (
-      !(all(specified_cols %in% data_cols)) &
+      !(all(specified_cols %in% data_cols)) &&
         !("survey_year" %in% data_cols)
     ) {
       stop(
@@ -192,7 +192,7 @@ scanfi_download <- function(
 
     # Conform specified columns to naturecounts default column names. Calls to
     # st_sf() needed to avoid sf specific issue with attributes.
-    if (!is.null(date_year) & !("survey_year" %in% data_cols)) {
+    if (!is.null(date_year) && !("survey_year" %in% data_cols)) {
       if (input_fmt$type == "sf") {
         data <- sf::st_sf(data)
       }
@@ -273,11 +273,11 @@ scanfi_download <- function(
   }
 
   # Create download path if it doesn't already exist.
-  if (is.null(dl_path) & !dir.exists("./scanfi")) {
+  if (is.null(dl_path) && !dir.exists("./scanfi")) {
     dir.create("./scanfi", recursive = TRUE)
   }
 
-  if (!is.null(dl_path) & !dir.exists(paste0(dl_path, "/scanfi"))) {
+  if (!is.null(dl_path) && !dir.exists(paste0(dl_path, "/scanfi"))) {
     dir.create(paste0(dl_path, "/scanfi"), recursive = TRUE)
   }
 

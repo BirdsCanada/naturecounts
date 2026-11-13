@@ -149,36 +149,36 @@ nc_covariates_merge <- function(
   # Check whether information on alternate column names has been stored
   # in the attributes by data_fmt(). However, prioritize alternate column names
   # specified in the current call.
-  if (is.null(coord_lon) & !is.null(attr(covariate_data, "coord_lon"))) {
+  if (is.null(coord_lon) && !is.null(attr(covariate_data, "coord_lon"))) {
     coord_lon <- attr(covariate_data, "coord_lon")
   }
 
-  if (is.null(coord_lat) & !is.null(attr(covariate_data, "coord_lat"))) {
+  if (is.null(coord_lat) && !is.null(attr(covariate_data, "coord_lat"))) {
     coord_lat <- attr(covariate_data, "coord_lat")
   }
 
-  if (is.null(site_name) & !is.null(attr(covariate_data, "site_name"))) {
+  if (is.null(site_name) && !is.null(attr(covariate_data, "site_name"))) {
     site_name <- attr(covariate_data, "site_name")
   }
 
-  if (is.null(date_year) & !is.null(attr(covariate_data, "date_year"))) {
+  if (is.null(date_year) && !is.null(attr(covariate_data, "date_year"))) {
     date_year <- attr(covariate_data, "date_year")
   }
 
-  if (is.null(date_month) & !is.null(attr(covariate_data, "date_month"))) {
+  if (is.null(date_month) && !is.null(attr(covariate_data, "date_month"))) {
     date_month <- attr(covariate_data, "date_month")
   }
 
-  if (is.null(date_day) & !is.null(attr(covariate_data, "date_day"))) {
+  if (is.null(date_day) && !is.null(attr(covariate_data, "date_day"))) {
     date_day <- attr(covariate_data, "date_day")
   }
 
-  if (is.null(date_ordinal) & !is.null(attr(covariate_data, "date_ordinal"))) {
+  if (is.null(date_ordinal) && !is.null(attr(covariate_data, "date_ordinal"))) {
     date_ordinal <- attr(covariate_data, "date_ordinal")
   }
 
   if (
-    is.null(date_lubridate) & !is.null(attr(covariate_data, "date_lubridate"))
+    is.null(date_lubridate) && !is.null(attr(covariate_data, "date_lubridate"))
   ) {
     date_lubridate <- attr(covariate_data, "date_lubridate")
   }
@@ -199,7 +199,7 @@ nc_covariates_merge <- function(
     # If lubridate or ordinal date data is present, use to join. If not, use
     # individual date columns. If both lubridate and ordinal date data is
     # present, use lubridate data to join.
-    if (is.null(date_ordinal) & is.null(date_lubridate)) {
+    if (is.null(date_ordinal) && is.null(date_lubridate)) {
       matched_data <- dplyr::left_join(
         original_data,
         covariate_data,
@@ -356,7 +356,7 @@ nc_covariates_merge <- function(
     # If lubridate or ordinal date data is present, use to join. If not, use
     # individual date columns. If both lubridate and ordinal date data is
     # present, use lubridate data to join.
-    if (is.null(date_ordinal) & is.null(date_lubridate)) {
+    if (is.null(date_ordinal) && is.null(date_lubridate)) {
       matched_data <- dplyr::left_join(
         original_data,
         covariate_data,
@@ -534,7 +534,7 @@ nc_covariates_merge <- function(
     # If lubridate or ordinal date data is present, use to join. If not, use
     # individual date columns. If both lubridate and ordinal date data is
     # present, use lubridate data to join.
-    if (is.null(date_ordinal) & is.null(date_lubridate)) {
+    if (is.null(date_ordinal) && is.null(date_lubridate)) {
       matched_data <- tidyterra::left_join(
         original_data,
         covariate_data,

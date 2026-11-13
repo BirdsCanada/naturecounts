@@ -188,7 +188,7 @@ elevation_extract <- function(
   # Check whether information on alternate column names has been stored
   # in the attributes by data_fmt(). However, prioritize alternate column names
   # specified in the current call.
-  if (is.null(site_name) & !is.null(attr(data, "site_name"))) {
+  if (is.null(site_name) && !is.null(attr(data, "site_name"))) {
     site_name <- attr(data, "site_name")
   }
 
@@ -205,7 +205,7 @@ elevation_extract <- function(
   # in the attributes of the data, but conversion of those columns to
   # standardized names has already taken place in data_fmt().
   if (
-    !(all(specified_cols %in% data_cols)) &
+    !(all(specified_cols %in% data_cols)) &&
       !("SurveyAreaIdentifier" %in% data_cols)
   ) {
     stop(
@@ -219,13 +219,13 @@ elevation_extract <- function(
   }
 
   # Create SurveyAreaIdentifiers if none exist and no site name specified.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data <- create_SAI(data = data, input_fmt = input_fmt)
   }
 
   # Conform specified columns to naturecounts default column names. Calls to
   # st_sf() needed to avoid sf specific issue with attributes.
-  if (!is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (!is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     if (input_fmt$type == "sf") {
       data <- sf::st_sf(data)
     }
@@ -264,8 +264,8 @@ elevation_extract <- function(
   if (buffered) {
     have_pkg_check("exactextractr")
 
-    if (methods::hasArg("fun") & !is.function(list(...)[["fun"]])) {
-      if ("quantile" %in% list(...)[["fun"]] & !methods::hasArg("quantiles")) {
+    if (methods::hasArg("fun") && !is.function(list(...)[["fun"]])) {
+      if ("quantile" %in% list(...)[["fun"]] && !methods::hasArg("quantiles")) {
         stop(
           "[Elevation Extraction] quantile summary requested but",
           " no quantiles supplied to the 'quantiles' argument. Please",
@@ -283,7 +283,7 @@ elevation_extract <- function(
             "weighted_variance",
             "weighted_frac"
           ) %in%
-            list(...)[["fun"]]) &
+            list(...)[["fun"]]) &&
           !methods::hasArg("weights")
       ) {
         stop(
@@ -372,7 +372,7 @@ elevation_extract <- function(
 
           # If function returns more than one value or a data.frame, stop.
           if (
-            length(val) > 1 |
+            length(val) > 1 ||
               is.data.frame(val)
           ) {
             stop(
@@ -396,7 +396,7 @@ elevation_extract <- function(
             # Check if any summary functions requested required tailored
             # joining.
             if (
-              j == "quantile" &
+              j == "quantile" &&
                 length(list(...)[["quantiles"]]) > 1
             ) {
               # Multiple quantiles cause exactextractr::exact_extract() to
@@ -572,7 +572,7 @@ elevation_extract <- function(
   # }
 
   # If there was no country column initially, remove it.
-  if (is.null(site_name) & !("SurveyAreaIdentifier" %in% data_cols)) {
+  if (is.null(site_name) && !("SurveyAreaIdentifier" %in% data_cols)) {
     data$SurveyAreaIdentifier <- NULL
   }
 

@@ -124,7 +124,7 @@ nc_data_dl <- function(
     if (nrow(requests) == 0) {
       stop("No approved requests for this id and this user", call. = FALSE)
     }
-    if (nrow(requests0) != nrow(requests) & verbose) {
+    if (nrow(requests0) != nrow(requests) && verbose) {
       message(
         "Not all collections were approved, downloading ",
         nrow(requests),
@@ -506,7 +506,7 @@ nc_count <- function(
 
   # Check/convert project_ids to collections
   collections <- projects_check(project_ids, collections)
-  if (!is.null(token) & show == "available") {
+  if (!is.null(token) && show == "available") {
     collections <- collections_check(collections, token)
   }
 
