@@ -229,7 +229,7 @@ nalcms_extract <- function(
 
   # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
   # SurveyAreaIdentifiers if so.
-  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+  if (anyNA(data$SurveyAreaIdentifier)) {
     # Store original SurveyAreaIdentifiers
     SAI_storage <- data$SurveyAreaIdentifier
 
@@ -593,10 +593,9 @@ nalcms_extract <- function(
       for (k in countries) {
         # Check that file at filepath actually exists.
         if (
-          FALSE %in%
-            file.exists(nalcms_files$filename[
-              nalcms_files$country == k & nalcms_files$year == j
-            ])
+          !all(file.exists(nalcms_files$filename[
+            nalcms_files$country == k & nalcms_files$year == j
+          ]))
         ) {
           stop(
             "[NALCMS Landcover Extraction] file at ",

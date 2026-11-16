@@ -339,7 +339,7 @@ vegetation_download <- function(
 
   # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
   # SurveyAreaIdentifiers if so.
-  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+  if (anyNA(data$SurveyAreaIdentifier)) {
     # Store original SurveyAreaIdentifiers
     SAI_storage <- data$SurveyAreaIdentifier
 
@@ -437,10 +437,9 @@ vegetation_download <- function(
 
   # Remove any observations missing year, month, or day data. Warn.
   if (
-    TRUE %in%
-      is.na(data$survey_year) ||
-      TRUE %in% is.na(data$survey_month) ||
-      TRUE %in% is.na(data$survey_day)
+    anyNA(data$survey_year) ||
+      anyNA(data$survey_month) ||
+      anyNA(data$survey_day)
   ) {
     warning(
       "[MODIS NDVI/EVI Download] missing date data detected. Complete year,",

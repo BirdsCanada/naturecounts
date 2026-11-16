@@ -192,12 +192,13 @@ daymet_download <- function(
   task_list <- appeears::rs_list_task(user = ed_username)
 
   if (
-    FALSE %in%
-      (daymet_reqs$request_id %in%
+    !all(
+      daymet_reqs$request_id %in%
         task_list$task_id[
           lubridate::as_datetime(task_list$expires_on) >
             lubridate::as_datetime(Sys.time())
-        ])
+        ]
+    )
   ) {
     stop(
       "[Daymet Download] request ID(s) ",

@@ -116,7 +116,7 @@ scanfi_download <- function(
   have_pkg_check("terra")
 
   # Catch misspecified covariates. Return error if any exist.
-  if (FALSE %in% (covariates %in% nc_covariate_table()$covariate_name)) {
+  if (!all(covariates %in% nc_covariate_table()$covariate_name)) {
     stop(
       "[SCANFI Download] covariates either not listed or one or more are",
       " invalid. Please provide covariate names as listed under",

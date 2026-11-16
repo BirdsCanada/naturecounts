@@ -248,7 +248,7 @@ scanfi_extract <- function(
   }
 
   # Catch misspecified covariates. Return error if any exist.
-  if (FALSE %in% (covariates %in% nc_covariate_table()$covariate_name)) {
+  if (!all(covariates %in% nc_covariate_table()$covariate_name)) {
     stop(
       "[SCANFI Extraction] covariates either not listed or one or more are",
       " invalid. Please provide covariate names as listed under",
@@ -364,7 +364,7 @@ scanfi_extract <- function(
 
   # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
   # SurveyAreaIdentifiers if so.
-  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+  if (anyNA(data$SurveyAreaIdentifier)) {
     # Store original SurveyAreaIdentifiers
     SAI_storage <- data$SurveyAreaIdentifier
 
@@ -497,7 +497,7 @@ scanfi_extract <- function(
         )
       }
 
-      if (TRUE %in% (outside_years %in% 1980:2030)) {
+      if (any(outside_years %in% 1980:2030)) {
         warning(
           "[SCANFI Download] Data contains years more than 5 years away",
           " from nearest SCANFI snapshot (",
@@ -567,15 +567,16 @@ scanfi_extract <- function(
           }
 
           if (
-            TRUE %in%
-              (c(
+            any(
+              c(
                 "weighted_mean",
                 "weighted_sum",
                 "weighted_stdev",
                 "weighted_variance",
                 "weighted_frac"
               ) %in%
-                list(...)[["fun"]]) &&
+                list(...)[["fun"]]
+            ) &&
               !methods::hasArg("weights")
           ) {
             stop(

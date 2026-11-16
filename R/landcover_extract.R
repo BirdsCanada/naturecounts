@@ -130,7 +130,7 @@ landcover_extract <- function(
   ))
 
   # Catch misspecified covariates. Return error if any exist.
-  if (FALSE %in% (covariates %in% nc_covariate_table()$covariate_name)) {
+  if (!all(covariates %in% nc_covariate_table()$covariate_name)) {
     stop(
       "[MODIS Landcover Extraction] covariates either not listed or one or",
       " more are invalid. Please provide covariate names as listed under",
@@ -240,7 +240,7 @@ landcover_extract <- function(
 
   # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
   # SurveyAreaIdentifiers if so.
-  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+  if (anyNA(data$SurveyAreaIdentifier)) {
     # Store original SurveyAreaIdentifiers
     SAI_storage <- data$SurveyAreaIdentifier
 

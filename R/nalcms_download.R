@@ -202,7 +202,7 @@ nalcms_download <- function(
 
     # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
     # SurveyAreaIdentifiers if so.
-    if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+    if (anyNA(data$SurveyAreaIdentifier)) {
       # Store original SurveyAreaIdentifiers
       SAI_storage <- data$SurveyAreaIdentifier
 

@@ -78,7 +78,7 @@ worldclim_download <- function(
   ))
 
   # Catch misspecified covariates. Return error if any exist.
-  if (FALSE %in% (covariates %in% nc_covariate_table()$covariate_name)) {
+  if (!all(covariates %in% nc_covariate_table()$covariate_name)) {
     stop(
       "[WorldClim Download] covariates either not listed or one or more are",
       " invalid. Please provide covariate names as listed under",

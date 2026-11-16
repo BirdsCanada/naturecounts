@@ -212,7 +212,7 @@ vegetation_extract <- function(
   ))
 
   # Catch misspecified covariates. Return error if any exist.
-  if (FALSE %in% (covariates %in% nc_covariate_table()$covariate_name)) {
+  if (!all(covariates %in% nc_covariate_table()$covariate_name)) {
     stop(
       "[MODIS NDVI/EVI Extraction] covariates either not listed or one or more are invalid. Please provide covariate names as listed under `covariate_name` in nc_covariate_table().",
       call. = FALSE
@@ -330,7 +330,7 @@ vegetation_extract <- function(
 
   # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
   # SurveyAreaIdentifiers if so.
-  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+  if (anyNA(data$SurveyAreaIdentifier)) {
     # Store original SurveyAreaIdentifiers
     SAI_storage <- data$SurveyAreaIdentifier
 
@@ -415,15 +415,16 @@ vegetation_extract <- function(
       }
 
       if (
-        TRUE %in%
-          (c(
+        any(
+          c(
             "weighted_mean",
             "weighted_sum",
             "weighted_stdev",
             "weighted_variance",
             "weighted_frac"
           ) %in%
-            list(...)[["fun"]]) &&
+            list(...)[["fun"]]
+        ) &&
           !methods::hasArg("weights")
       ) {
         stop(
@@ -439,10 +440,9 @@ vegetation_extract <- function(
 
   # Remove any observations missing year, month, or day data.
   if (
-    TRUE %in%
-      is.na(data$survey_year) ||
-      TRUE %in% is.na(data$survey_month) ||
-      TRUE %in% is.na(data$survey_day)
+    anyNA(data$survey_year) ||
+      anyNA(data$survey_month) ||
+      anyNA(data$survey_day)
   ) {
     warning(
       "[MODIS NDVI/EVI Extraction] Missing date data detected. Complete year,",

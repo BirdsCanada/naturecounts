@@ -327,7 +327,7 @@ daymet_extract <- function(
 
   # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
   # SurveyAreaIdentifiers if so.
-  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+  if (anyNA(data$SurveyAreaIdentifier)) {
     # Store original SurveyAreaIdentifiers
     SAI_storage <- data$SurveyAreaIdentifier
 
@@ -409,15 +409,16 @@ daymet_extract <- function(
       }
 
       if (
-        TRUE %in%
-          (c(
+        any(
+          c(
             "weighted_mean",
             "weighted_sum",
             "weighted_stdev",
             "weighted_variance",
             "weighted_frac"
           ) %in%
-            list(...)[["fun"]]) &&
+            list(...)[["fun"]]
+        ) &&
           !methods::hasArg("weights")
       ) {
         stop(
@@ -852,8 +853,7 @@ daymet_extract <- function(
     # (nearest = TRUE)?
     #
     # if (
-    #   TRUE %in%
-    #     is.na(data[
+    #   anyNA(data[
     #       data$date %in% dates & !(data$SurveyAreaIdentifier %in% bad_sites),
     #       i
     #     ])

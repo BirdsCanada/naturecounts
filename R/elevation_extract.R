@@ -237,7 +237,7 @@ elevation_extract <- function(
 
   # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
   # SurveyAreaIdentifiers if so.
-  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+  if (anyNA(data$SurveyAreaIdentifier)) {
     # Store original SurveyAreaIdentifiers
     SAI_storage <- data$SurveyAreaIdentifier
 
@@ -275,15 +275,16 @@ elevation_extract <- function(
       }
 
       if (
-        TRUE %in%
-          (c(
+        any(
+          c(
             "weighted_mean",
             "weighted_sum",
             "weighted_stdev",
             "weighted_variance",
             "weighted_frac"
           ) %in%
-            list(...)[["fun"]]) &&
+            list(...)[["fun"]]
+        ) &&
           !methods::hasArg("weights")
       ) {
         stop(
@@ -338,7 +339,7 @@ elevation_extract <- function(
         )
 
         range <- "out"
-      } else if (TRUE %in% is.nan(terra::values(terra::crop(elev, tmp)))) {
+      } else if (any(is.nan(terra::values(terra::crop(elev, tmp))))) {
         warning(
           "[Elevation Extraction] site ",
           i,
@@ -545,7 +546,7 @@ elevation_extract <- function(
   # Not sure whether to keep this since we are warning users about these sites
   # and saying nothing will be returned. Maybe keep as an option
   # (nearest = TRUE)?
-  # if (TRUE %in% is.na(data$elevation)) {
+  # if (anyNA(data$elevation)) {
   #   warning(
   #     "[Elevation Extraction] some points are close to shore, and so fall into cells with negative elevation (below sea level). For these cells, the nearest positive elevation has been used.",
   #     call. = FALSE

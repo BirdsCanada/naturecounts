@@ -163,12 +163,13 @@ daymet_check <- function(
   # Check that daymet_reqs contains valid request IDs within the user's AppEEARS
   # task ids
   if (
-    FALSE %in%
-      (daymet_reqs$request_id %in%
+    !all(
+      daymet_reqs$request_id %in%
         task_list$task_id[
           lubridate::as_datetime(task_list$expires_on) >
             lubridate::as_datetime(Sys.time())
-        ])
+        ]
+    )
   ) {
     stop(
       "[Daymet Request Checking] request(s) ",

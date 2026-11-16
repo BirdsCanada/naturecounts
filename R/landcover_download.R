@@ -316,7 +316,7 @@ landcover_download <- function(
 
   # Check that SurveyAreaIdentifier does not contain NAs. Create dummy
   # SurveyAreaIdentifiers if so.
-  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+  if (anyNA(data$SurveyAreaIdentifier)) {
     # Store original SurveyAreaIdentifiers
     SAI_storage <- data$SurveyAreaIdentifier
 
@@ -409,7 +409,10 @@ landcover_download <- function(
 
     # Ensures that the closest year available for years before the start of
     # dataset coverage (2001) is listed.
-    if (TRUE %in% (data$survey_year < 2001) && !(2001 %in% data$survey_year)) {
+    if (
+      any(data$survey_year < 2001, na.rm = TRUE) &&
+        !(2001 %in% data$survey_year)
+    ) {
       modis_files <- c(
         modis_files,
         luna::getNASA(
@@ -444,7 +447,7 @@ landcover_download <- function(
 
     # If nothing found for a year after 2001, indicates that year is current
     # year or later. Fetch filename for year - 1.
-    if (FALSE %in% (missing_year < 2001)) {
+    if (!all(missing_year < 2001, na.rm = TRUE)) {
       for (i in missing_year[missing_year >= 2001]) {
         if (!((i - 1) %in% data$survey_year)) {
           tmp <- suppressWarnings(luna::getNASA(
@@ -491,8 +494,8 @@ landcover_download <- function(
     }
 
     if (length(missing_year) > 0) {
-      if (TRUE %in% (missing_year < 2001)) {
-        if (FALSE %in% (missing_year < 2001)) {
+      if (any(missing_year < 2001, na.rm = TRUE)) {
+        if (!all(missing_year < 2001, na.rm = TRUE)) {
           warning(
             "[MODIS Landcover Download] MODIS landcover data ",
             "unavailable for all years before 2001 as well as ",
@@ -529,7 +532,7 @@ landcover_download <- function(
 
     # Ensures that the closest year available for years before the start of
     # dataset coverage (2001) is downloaded.
-    if (TRUE %in% (data$survey_year < 2001)) {
+    if (any(data$survey_year < 2001, na.rm = TRUE)) {
       modis_files <-
         luna::getNASA(
           product = "MCD12Q1",
@@ -555,7 +558,7 @@ landcover_download <- function(
     }
 
     # Now, download for years 2001 and after.
-    if (TRUE %in% (data$survey_year >= 2001)) {
+    if (any(data$survey_year >= 2001, na.rm = TRUE)) {
       for (i in sort(unique(data$survey_year[data$survey_year >= 2001]))) {
         # If 2001 data downloaded above, do nothing. Otherwise, download that
         # year's data.
@@ -646,8 +649,8 @@ landcover_download <- function(
     }
 
     if (length(missing_year) > 0) {
-      if (TRUE %in% (missing_year < 2001)) {
-        if (FALSE %in% (missing_year < 2001)) {
+      if (any(missing_year < 2001, na.rm = TRUE)) {
+        if (!all(missing_year < 2001, na.rm = TRUE)) {
           warning(
             "[MODIS Landcover Download] MODIS landcover data ",
             "unavailable for all years before 2001 as well as ",

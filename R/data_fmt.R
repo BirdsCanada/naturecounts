@@ -581,7 +581,7 @@ data_fmt <- function(
 
   # Handle missing SurveyAreaIdentifiers and ensure coordinates are present in
   # the data for later use in nc_covariates_merge().
-  if (TRUE %in% is.na(data$SurveyAreaIdentifier)) {
+  if (anyNA(data$SurveyAreaIdentifier)) {
     # For dataframe objects create an object containing all X/Y coordinates
     # that do not have an associated SurveyAreaIdentifier.
     if (input_fmt$type == "data.frame") {
