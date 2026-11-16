@@ -293,7 +293,7 @@ daymet_download <- function(
 
       if (verbose) {
         message(paste0(
-          "[Daymet Download] Daymet data for request",
+          "[Daymet Download] Daymet data for request ",
           i,
           " downloaded."
         ))

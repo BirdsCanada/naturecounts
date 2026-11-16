@@ -567,7 +567,7 @@ nalcms_download <- function(
         error = function(e) {
           if (conditionMessage(e) == "'curl' call had nonzero exit status") {
             stop(
-              "[NALCMS Download] 'curl' call had nonzero exist status. Please download files directly from https://www.cec.org/north-american-environmental-atlas/.",
+              "[NALCMS Download] 'curl' call had nonzero exit status. Please download files directly from https://www.cec.org/north-american-environmental-atlas/.",
               call. = FALSE
             )
           } else {
