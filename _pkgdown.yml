@@ -55,13 +55,6 @@ reference:
   contents:
   - format_dates
   - format_zero_fill
-  - map_canada
-  - grid_canada
-- title: COSEWIC functions
-  desc: Functions for helping with COSEWIC assessments
-  contents:
-  - cosewic_ranges
-  - cosewic_plot
 - title: Data
   desc: Included example data sets
   contents:
@@ -119,4 +112,3 @@ articles:
   desc: Internal articles for reference
   contents:
   - '`articles/test`'
-  

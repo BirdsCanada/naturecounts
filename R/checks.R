@@ -390,21 +390,3 @@ df_db_check <- function(df_db, collect = TRUE, verbose = TRUE) {
 
   df_db
 }
-
-which_check <- function(which) {
-  if (!all(which %in% c("iao", "eoo"))) {
-    stop("`which` must be one or both of 'iao' and 'eoo'", call. = FALSE)
-  }
-}
-
-sf_check <- function(df_sf, name) {
-  if (!inherits(df_sf, "sf")) {
-    stop(
-      "`",
-      name,
-      "` must be spatial (i.e. use `spatial = TRUE` in ",
-      "`cosewic_ranges()`)",
-      call. = FALSE
-    )
-  }
-}

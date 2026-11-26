@@ -2,12 +2,8 @@
 
 export("%>%")
 export(.data)
-export(cosewic_plot)
-export(cosewic_ranges)
 export(format_dates)
 export(format_zero_fill)
-export(grid_canada)
-export(map_canada)
 export(meta_bcr_codes)
 export(meta_bmde_fields)
 export(meta_bmde_versions)
@@ -39,9 +35,13 @@ export(search_species_code)
 export(species_code_search)
 export(species_search)
 importFrom(dbplyr,sql)
-importFrom(magrittr,"%>%")
-importFrom(magrittr,"%T>%")
+importFrom(magrittr,
+  "%>%",
+  "%T>%"
+)
 importFrom(memoise,memoise)
-importFrom(rlang,":=")
-importFrom(rlang,.data)
-importFrom(rlang,.env)
+importFrom(rlang,
+  ":=",
+  .data,
+  .env
+)

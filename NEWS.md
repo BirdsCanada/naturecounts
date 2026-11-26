@@ -1,3 +1,9 @@
+# naturecounts 0.5.3
+
+- COSEWIC tools (`cosewic_ranges()`, `cosewic_plot()`, `map_canada()`,
+  `grid_canada()`) have moved to the new
+  [naturetools](https://github.com/BirdsCanada/naturetools) package.
+
 # naturecounts 0.5.2
 
 - Tweak `cosewic_plot()`
