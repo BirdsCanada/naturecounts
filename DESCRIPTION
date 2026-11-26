@@ -3,7 +3,7 @@ Type: Package
 Title: Access and download data on plant and animal populations from NatureCounts
 Version: 0.5.2
 Authors@R: c(
-    person("Birds Canada", role = c("aut", "cre")),
+    person("Birds Canada", role = c("aut", "cre"), email = "dethier@birdscanada.org"),
     person("Steffi", "LaZerte", email = "sel@steffilazerte.ca", role = c("aut"), comment = c(ORCID = "0000-0002-7690-8360")),
     person("Dimitrios", "Markou", email = "dmarkou@birdscanada.org", role = c("aut")),
     person("Denis", "Lepage", email = "dlepage@birdscanada.org", role = c("aut")),
