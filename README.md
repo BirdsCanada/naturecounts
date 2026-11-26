@@ -16,14 +16,22 @@ databases through NatureCounts, a service managed by Birds Canada.
 See tutorials, documentation and articles on the [naturecounts package
 Website](https://birdscanada.github.io/naturecounts)
 
+Looking for tools for COSEWIC assessments (`cosewic_ranges()`,
+`cosewic_plot()`)? These have moved to the
+[naturetools](https://github.com/BirdsCanada/naturetools) package.
+
 ## Installation
 
 You can install the main version of `naturecounts` from our R-Universe
 
 ``` r
-install.packages("naturecounts", 
-                 repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
-                           CRAN = 'https://cloud.r-project.org'))
+install.packages(
+  "naturecounts",
+  repos = c(
+    birdscanada = 'https://birdscanada.r-universe.dev',
+    CRAN = 'https://cloud.r-project.org'
+  )
+)
 ```
 
 ## Usage
@@ -60,8 +68,8 @@ nc_count(show = "all") %>%
 #> 2 ABATLAS2           5 full         201357
 #> 3 ABBIRDRECS         5 full         357264
 #> 4 ABOWLS             3 by request    20956
-#> 5 ACCWS              3 by request    22889
-#> 6 ATBANS             3 by request      267
+#> 5 ACCWS              5 full          27807
+#> 6 ACCWS_HIST         5 full          20461
 ```
 
 ### Fetching data
@@ -73,6 +81,7 @@ First find the species id
 
 ``` r
 search_species("American Bittern")
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> # A tibble: 1 × 5
 #>   species_id scientific_name       english_name     french_name      taxon_group
 #>        <int> <chr>                 <chr>            <chr>            <chr>      
@@ -83,8 +92,12 @@ Use this id with `nc_data_dl()`. The `info` parameter is a short
 description of what the data is being downloaded for.
 
 ``` r
-bittern <- nc_data_dl(species = 2490, username = "sample", 
-                    info = "readme_example")
+bittern <- nc_data_dl(
+  species = 2490,
+  username = "sample",
+  info = "readme_example"
+)
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (2490); fields_set (BMDE2.00-ext)
 #> Collecting available records...
 #>   collection nrecords
@@ -94,14 +107,20 @@ bittern <- nc_data_dl(species = 2490, username = "sample",
 #> Downloading records for each collection:
 #>   SAMPLE1
 #>     Records 1 to 1 / 1
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 ```
 
 Alternatively, save the downloaded data as a SQLite database
 (`bittern`).
 
 ``` r
-bittern <- nc_data_dl(species = 2490, sql_db = "bittern", username = "sample", 
-                    info = "readme_example")
+bittern <- nc_data_dl(
+  species = 2490,
+  sql_db = "bittern",
+  username = "sample",
+  info = "readme_example"
+)
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> Using filters: species (2490); fields_set (BMDE2.00-ext)
 #> Collecting available records...
 #>   collection nrecords
@@ -109,6 +128,16 @@ bittern <- nc_data_dl(species = 2490, sql_db = "bittern", username = "sample",
 #> Total records: 1
 #> 
 #> Database 'bittern.nc' does not exist, creating it...
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
+#> Metadata hasn't been updated in >4 weeks, consider using `nc_metadata()` to update local copies.
 #> 
 #> Downloading records for each collection:
 #>   SAMPLE1
@@ -128,7 +157,11 @@ of records.
 
 ``` r
 nc_count(username = "my_user_name")
-bittern <- nc_data_dl(species = 2490, username = "my_user_name", info = "readme_example")
+bittern <- nc_data_dl(
+  species = 2490,
+  username = "my_user_name",
+  info = "readme_example"
+)
 ```
 
 ### More advanced options

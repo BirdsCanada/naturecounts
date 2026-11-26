@@ -8,6 +8,10 @@
 #' See the vignettes (`vignettes(package = "naturecounts")`, or at
 #' https://birdscanada.github.io/naturecounts for getting started!
 #'
+#' Tools for COSEWIC assessments (`cosewic_ranges()`, `cosewic_plot()`,
+#' `map_canada()`, `grid_canada()`) have moved to the
+#' [naturetools](https://github.com/BirdsCanada/naturetools) package.
+#'
 #' @importFrom memoise memoise
 #' @importFrom dbplyr sql
 "_PACKAGE"

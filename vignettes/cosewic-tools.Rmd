@@ -18,7 +18,8 @@ options("pillar.width" = 120)
 ```
 
 ```{r, message = FALSE}
-library(naturecounts)
+library(naturecounts) # For demo data
+library(naturetools) # For cosewic_ranges() and cosewic_plot()
 library(dplyr) # For manipulating data frames
 library(patchwork) # For combining plots
 library(ggplot2) # For plotting the grid
@@ -93,8 +94,9 @@ cosewic_plot(r, title = "Black-capped Chickadee")
 You can try any map tile listed in `rosm::osm.types()`, but note that not all may work for your region and many require an API key.
 
 ```{r}
-r <- cosewic_ranges(bcch)
-cosewic_plot(r, map = "cartolight", title = "Black-capped Chickadee")
+rosm::osm.types()
+
+cosewic_plot(r, map = "hotstyle", title = "Black-capped Chickadee")
 ```
 
 ## Using your own data
@@ -112,7 +114,7 @@ path <- system.file("extdata", "bcch.csv", package = "naturecounts")
 path
 ```
 
-For your data, you'll a path something like `path <- "location/of/my/data.csv"` depending where your data is stored. See the [R for Data Science chapter on Data import](https://r4ds.hadley.nz/data-import.html#reading-data-from-a-file) for more details.
+For your data, you'll supply a path something like `path <- "location/of/my/data.csv"` depending where your data is stored. See the [R for Data Science chapter on Data import](https://r4ds.hadley.nz/data-import.html#reading-data-from-a-file) for more details.
 
 Now we'll read the data and take a quick look.
 ```{r}
@@ -181,9 +183,9 @@ If this is of concern, you can supply your own IAO grid for these calculations,
 to ensure that there are no discrepancies.
 
 First, use the sf package to read in your IAO grid. 
-Here we'll use a mini example IAO grid stored in the package
+Here we'll use a mini example IAO grid stored in the naturetools package
 ```{r}
-path <- system.file("extdata", "iao_bcch_grid.gpkg", package = "naturecounts")
+path <- system.file("extdata", "iao_bcch_grid.gpkg", package = "naturetools")
 path
 
 grid <- sf::st_read(path)

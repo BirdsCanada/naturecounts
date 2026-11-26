@@ -14,6 +14,10 @@ Studies Canada.
 \details{
 See the vignettes (\code{vignettes(package = "naturecounts")}, or at
 https://birdscanada.github.io/naturecounts for getting started!
+
+Tools for COSEWIC assessments (\code{cosewic_ranges()}, \code{cosewic_plot()},
+\code{map_canada()}, \code{grid_canada()}) have moved to the
+\href{https://github.com/BirdsCanada/naturetools}{naturetools} package.
 }
 \seealso{
 Useful links:
@@ -29,6 +33,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Denis Lepage \email{dlepage@birdscanada.org}
   \item Steffi LaZerte \email{steffi@steffi.ca}
 }
 

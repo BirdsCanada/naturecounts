@@ -24,14 +24,20 @@ Access and download data on plant and animal populations from various databases 
 
 See tutorials, documentation and articles on the [naturecounts package Website](https://birdscanada.github.io/naturecounts)
 
+Looking for tools for COSEWIC assessments (`cosewic_ranges()`, `cosewic_plot()`)? These have moved to the [naturetools](https://github.com/BirdsCanada/naturetools) package.
+
 ## Installation
 
 You can install the main version of `naturecounts` from our R-Universe
 
 ```{r eval = FALSE}
-install.packages("naturecounts", 
-                 repos = c(birdscanada = 'https://birdscanada.r-universe.dev',
-                           CRAN = 'https://cloud.r-project.org'))
+install.packages(
+  "naturecounts",
+  repos = c(
+    birdscanada = 'https://birdscanada.r-universe.dev',
+    CRAN = 'https://cloud.r-project.org'
+  )
+)
 ```
 
 ## Usage
@@ -66,14 +72,21 @@ search_species("American Bittern")
 
 Use this id with `nc_data_dl()`. The `info` parameter is a short description of what the data is being downloaded for.
 ```{r}
-bittern <- nc_data_dl(species = 2490, username = "sample", 
-                    info = "readme_example")
+bittern <- nc_data_dl(
+  species = 2490,
+  username = "sample",
+  info = "readme_example"
+)
 ```
 
 Alternatively, save the downloaded data as a SQLite database (`bittern`).
 ```{r}
-bittern <- nc_data_dl(species = 2490, sql_db = "bittern", username = "sample", 
-                    info = "readme_example")
+bittern <- nc_data_dl(
+  species = 2490,
+  sql_db = "bittern",
+  username = "sample",
+  info = "readme_example"
+)
 ```
 
 ```{r cleanup, include = FALSE}
@@ -86,7 +99,11 @@ To access private/semi-public projects/collections you must [sign up](https://ww
 
 ```{r, eval = FALSE}
 nc_count(username = "my_user_name")
-bittern <- nc_data_dl(species = 2490, username = "my_user_name", info = "readme_example")
+bittern <- nc_data_dl(
+  species = 2490,
+  username = "my_user_name",
+  info = "readme_example"
+)
 ```
 
 ### More advanced options
