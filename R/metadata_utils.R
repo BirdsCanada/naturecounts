@@ -97,7 +97,7 @@ nc_metadata_internal <- function(
   # (either no version file, force = TRUE, or out of date)
 
   if (
-    all(!inherits(try(nc_metadata_version(), silent = TRUE), "try-error")) &&
+    !any(inherits(try(nc_metadata_version(), silent = TRUE), "try-error")) &&
       !force &&
       metadata_up2date()
   ) {

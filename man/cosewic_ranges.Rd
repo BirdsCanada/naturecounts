@@ -167,7 +167,7 @@ r <- cosewic_ranges(mult, spatial = FALSE)
 r2 <- cosewic_ranges(mult, crs = 3162)
 
 # Clip to a specific region
-\dontshow{if (requireNamespace("rnaturalearth", quietly = TRUE) & requireNamespace("rnaturalearthhires", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("rnaturalearth", quietly = TRUE) & requireNamespace("rnaturalearthhires", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 library(rnaturalearth)
 ON <- ne_states("Canada") \%>\%

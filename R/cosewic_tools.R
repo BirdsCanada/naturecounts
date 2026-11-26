@@ -569,7 +569,7 @@ prep_spatial <- function(
       call. = FALSE
     )
   }
-  if (any(is.na(df[coords]))) {
+  if (anyNA(df[coords])) {
     n <- which(is.na(df[[coords[1]]]) | is.na(df[[coords[2]]]))
     if (length(n) > 10) {
       n <- paste0(paste0(n[1:10], collapse = ", "), "...")
@@ -877,7 +877,7 @@ cosewic_plot <- function(
 
   g <- list()
 
-  if (all(title == "") & sp[1] != "PLACEHOLDER") {
+  if (all(title == "") && sp[1] != "PLACEHOLDER") {
     title <- stats::setNames(nm = sp)
   }
 

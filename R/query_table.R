@@ -69,7 +69,7 @@ nc_query_table <- function(
   }
 
   # Check for multiple arguments to a filter
-  f <- vapply(filter, length, FUN.VALUE = 1)
+  f <- lengths(filter)
   if (any(f > 1)) {
     problems <- paste0(names(f)[f > 1], collapse = ", ")
     stop(

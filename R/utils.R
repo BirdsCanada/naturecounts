@@ -31,7 +31,7 @@ parse_request <- function(request) {
 
 list_to_df <- function(l, type) {
   df <- data.frame()
-  for (i in 1:length(l)) {
+  for (i in seq_along(l)) {
     df <- dplyr::bind_rows(
       df,
       dplyr::mutate(dplyr::as_tibble(l[[i]]), !!type := names(l)[i])
@@ -59,7 +59,7 @@ progress_query <- function(current, max, by) {
 
 as_numeric <- function(x) {
   x1 <- suppressWarnings(as.numeric(as.character(x)))
-  if (any(!is.na(x[is.na(x1)]))) {
+  if (!all(is.na(x[is.na(x1)]))) {
     x1[is.na(x1)] <- x[is.na(x1)]
   }
   x1
@@ -73,6 +73,20 @@ capture_df <- function(x) {
   paste0(o, collapse = "\n")
 }
 
+
+skip_if_not_all <- function() {
+  # Do not run on R-Universe ever (no credentials for API)
+  # On CI run only if set to TEST_ALL
+  # Otherwise always run
+  not_ci <- Sys.getenv("CI") == ""
+  test_all <- Sys.getenv("TEST_ALL") == "yes"
+  on_runiverse <- Sys.getenv("MY_UNIVERSE") != ""
+
+  testthat::skip_if_not(
+    !on_runiverse && (not_ci || test_all),
+    "Not time for a full API test"
+  )
+}
 
 # Pipe operator -------------------------------
 #' Pipe operator

@@ -1,6 +1,7 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
+  workflow_dispatch:
   push:
     branches: 
       - main
@@ -38,6 +39,7 @@ jobs:
           - {os: ubuntu-latest,   r: 'oldrel-1'}
 
     env:
+      TEST_ALL: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'yes' || 'no' }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       naturecounts_testuser: ${{ secrets.naturecounts_testuser }}
       EarthData_password: ${{ secrets.EarthData_password }}

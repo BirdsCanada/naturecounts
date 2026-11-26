@@ -8,3 +8,13 @@ misc
 cache
 rosm.cache
 *.zip
+testdir
+.positai
+vignettes/articles/modis
+vignettes/articles/TerrainTiles
+vignettes/articles/worldclim
+vignettes/articles/daymet
+modis
+scanfi
+daymet
+nalcms

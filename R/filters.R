@@ -29,7 +29,7 @@ filter_create <- function(verbose, ...) {
   f <- filter_check(f)
 
   # Check names
-  if (any(!names(f) %in% queries$package_name)) {
+  if (!all(names(f) %in% queries$package_name)) {
     stop("Unknown parameters", call. = FALSE)
   }
 
@@ -86,7 +86,7 @@ filter_unpack <- function(f) {
 filter_dup <- function(i) if (length(i) == 1) i <- rep(i, 2) else i
 
 filter_check <- function(f) {
-  for (i in 1:length(f)) {
+  for (i in seq_along(f)) {
     n <- names(f[i])
     if (n == "fields_set") {
       f[[i]] <- fields_set_check(f[[i]])
