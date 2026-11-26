@@ -1,4 +1,4 @@
-# naturecounts (development version)
+# naturecounts 0.5.3
 
 - COSEWIC tools (`cosewic_ranges()`, `cosewic_plot()`, `map_canada()`,
   `grid_canada()`) have moved to the new
